@@ -323,42 +323,6 @@ func (r RuleAction) IsKnown() bool {
 	return false
 }
 
-type RuleParam struct {
-	// The API resource UUID.
-	ID param.Field[string] `json:"id"`
-	// The action to preform when the associated traffic, identity, and device posture
-	// expressions are either absent or evaluate to `true`.
-	Action param.Field[RuleAction] `json:"action"`
-	// The description of the rule.
-	Description param.Field[string] `json:"description"`
-	// The wirefilter expression used for device posture check matching.
-	DevicePosture param.Field[string] `json:"device_posture"`
-	// True if the rule is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The protocol or layer to evaluate the traffic, identity, and device posture
-	// expressions.
-	Filters param.Field[[]GatewayFilter] `json:"filters"`
-	// The wirefilter expression used for identity matching.
-	Identity param.Field[string] `json:"identity"`
-	// The name of the rule.
-	Name param.Field[string] `json:"name"`
-	// Precedence sets the order of your rules. Lower values indicate higher
-	// precedence. At each processing phase, applicable rules are evaluated in
-	// ascending order of this value.
-	Precedence param.Field[int64] `json:"precedence"`
-	// Additional settings that modify the rule's action.
-	RuleSettings param.Field[RuleSettingParam] `json:"rule_settings"`
-	// The schedule for activating DNS policies. This does not apply to HTTP or network
-	// policies.
-	Schedule param.Field[ScheduleParam] `json:"schedule"`
-	// The wirefilter expression used for traffic matching.
-	Traffic param.Field[string] `json:"traffic"`
-}
-
-func (r RuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // Additional settings that modify the rule's action.
 type RuleSetting struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are

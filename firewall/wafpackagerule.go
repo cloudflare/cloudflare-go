@@ -98,6 +98,23 @@ func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleI
 	return
 }
 
+// When set to `on`, the current WAF rule will be used when evaluating the request.
+// Applies to anomaly detection WAF rules.
+type AllowedModesAnomaly string
+
+const (
+	AllowedModesAnomalyOn  AllowedModesAnomaly = "on"
+	AllowedModesAnomalyOff AllowedModesAnomaly = "off"
+)
+
+func (r AllowedModesAnomaly) IsKnown() bool {
+	switch r {
+	case AllowedModesAnomalyOn, AllowedModesAnomalyOff:
+		return true
+	}
+	return false
+}
+
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
@@ -192,7 +209,7 @@ type RuleWAFManagedRulesAnomalyRule struct {
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule. Applies to anomaly
 	// detection WAF rules.
-	AllowedModes []RuleWAFManagedRulesAnomalyRuleAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AllowedModesAnomaly `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
@@ -230,23 +247,6 @@ func (r ruleWAFManagedRulesAnomalyRuleJSON) RawJSON() string {
 }
 
 func (r RuleWAFManagedRulesAnomalyRule) implementsFirewallRule() {}
-
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
-type RuleWAFManagedRulesAnomalyRuleAllowedMode string
-
-const (
-	RuleWAFManagedRulesAnomalyRuleAllowedModeOn  RuleWAFManagedRulesAnomalyRuleAllowedMode = "on"
-	RuleWAFManagedRulesAnomalyRuleAllowedModeOff RuleWAFManagedRulesAnomalyRuleAllowedMode = "off"
-)
-
-func (r RuleWAFManagedRulesAnomalyRuleAllowedMode) IsKnown() bool {
-	switch r {
-	case RuleWAFManagedRulesAnomalyRuleAllowedModeOn, RuleWAFManagedRulesAnomalyRuleAllowedModeOff:
-		return true
-	}
-	return false
-}
 
 // When set to `on`, the current WAF rule will be used when evaluating the request.
 // Applies to anomaly detection WAF rules.
@@ -477,84 +477,6 @@ func (r RuleMode) IsKnown() bool {
 	return false
 }
 
-// When triggered, anomaly detection WAF rules contribute to an overall threat
-// score that will determine if a request is considered malicious. You can
-// configure the total scoring threshold through the 'sensitivity' property of the
-// WAF package.
-type RuleParam struct {
-	AllowedModes param.Field[interface{}] `json:"allowed_modes"`
-	// When set to `on`, the current WAF rule will be used when evaluating the request.
-	// Applies to anomaly detection WAF rules.
-	Mode        param.Field[RuleMode]    `json:"mode,required"`
-	DefaultMode param.Field[interface{}] `json:"default_mode,required"`
-}
-
-func (r RuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RuleParam) implementsFirewallRuleUnionParam() {}
-
-// When triggered, anomaly detection WAF rules contribute to an overall threat
-// score that will determine if a request is considered malicious. You can
-// configure the total scoring threshold through the 'sensitivity' property of the
-// WAF package.
-//
-// Satisfied by [firewall.RuleWAFManagedRulesAnomalyRuleParam],
-// [firewall.RuleWAFManagedRulesTraditionalDenyRuleParam],
-// [firewall.RuleWAFManagedRulesTraditionalAllowRuleParam], [RuleParam].
-type RuleUnionParam interface {
-	implementsFirewallRuleUnionParam()
-}
-
-// When triggered, anomaly detection WAF rules contribute to an overall threat
-// score that will determine if a request is considered malicious. You can
-// configure the total scoring threshold through the 'sensitivity' property of the
-// WAF package.
-type RuleWAFManagedRulesAnomalyRuleParam struct {
-	// When set to `on`, the current WAF rule will be used when evaluating the request.
-	// Applies to anomaly detection WAF rules.
-	Mode param.Field[RuleWAFManagedRulesAnomalyRuleMode] `json:"mode,required"`
-}
-
-func (r RuleWAFManagedRulesAnomalyRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RuleWAFManagedRulesAnomalyRuleParam) implementsFirewallRuleUnionParam() {}
-
-// When triggered, traditional WAF rules cause the firewall to immediately act upon
-// the request based on the configuration of the rule. A 'deny' rule will
-// immediately respond to the request based on the configured rule action/mode (for
-// example, 'block') and no other rules will be processed.
-type RuleWAFManagedRulesTraditionalDenyRuleParam struct {
-	// The action that the current WAF rule will perform when triggered. Applies to
-	// traditional (deny) WAF rules.
-	Mode param.Field[RuleWAFManagedRulesTraditionalDenyRuleMode] `json:"mode,required"`
-}
-
-func (r RuleWAFManagedRulesTraditionalDenyRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RuleWAFManagedRulesTraditionalDenyRuleParam) implementsFirewallRuleUnionParam() {}
-
-// When triggered, traditional WAF rules cause the firewall to immediately act on
-// the request based on the rule configuration. An 'allow' rule will immediately
-// allow the request and no other rules will be processed.
-type RuleWAFManagedRulesTraditionalAllowRuleParam struct {
-	DefaultMode param.Field[interface{}] `json:"default_mode,required"`
-	// When set to `on`, the current rule will be used when evaluating the request.
-	// Applies to traditional (allow) WAF rules.
-	Mode param.Field[RuleWAFManagedRulesTraditionalAllowRuleMode] `json:"mode,required"`
-}
-
-func (r RuleWAFManagedRulesTraditionalAllowRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RuleWAFManagedRulesTraditionalAllowRuleParam) implementsFirewallRuleUnionParam() {}
-
 // The rule group to which the current WAF rule belongs.
 type UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 struct {
 	// The unique identifier of the rule group.
@@ -677,7 +599,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule struct {
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule. Applies to anomaly
 	// detection WAF rules.
-	AllowedModes []WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AllowedModesAnomaly `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
@@ -715,23 +637,6 @@ func (r wafPackageRuleEditResponseWAFManagedRulesAnomalyRuleJSON) RawJSON() stri
 }
 
 func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleEditResponse() {
-}
-
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
-type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode string
-
-const (
-	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOn  WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode = "on"
-	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOff WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode = "off"
-)
-
-func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode) IsKnown() bool {
-	switch r {
-	case WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOn, WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOff:
-		return true
-	}
-	return false
 }
 
 // When set to `on`, the current WAF rule will be used when evaluating the request.

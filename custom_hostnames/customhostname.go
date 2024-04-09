@@ -123,7 +123,7 @@ type CustomHostname struct {
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// These are per-hostname (customer) settings.
-	CustomMetadata CustomHostnameCustomMetadata `json:"custom_metadata"`
+	CustomMetadata CustomMetadata `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
 	// record.
 	CustomOriginServer string `json:"custom_origin_server"`
@@ -171,29 +171,6 @@ func (r *CustomHostname) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r customHostnameJSON) RawJSON() string {
-	return r.raw
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key  string                           `json:"key"`
-	JSON customHostnameCustomMetadataJSON `json:"-"`
-}
-
-// customHostnameCustomMetadataJSON contains the JSON metadata for the struct
-// [CustomHostnameCustomMetadata]
-type customHostnameCustomMetadataJSON struct {
-	Key         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameCustomMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameCustomMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -595,6 +572,16 @@ func (r CustomHostnameStatus) IsKnown() bool {
 	return false
 }
 
+// These are per-hostname (customer) settings.
+type CustomMetadataParam struct {
+	// Unique metadata for this hostname.
+	Key param.Field[string] `json:"key"`
+}
+
+func (r CustomMetadataParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // A ubiquitous bundle has the highest probability of being verified everywhere,
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
@@ -656,7 +643,7 @@ type CustomHostnameNewParams struct {
 	// SSL properties used when creating the custom hostname.
 	SSL param.Field[CustomHostnameNewParamsSSL] `json:"ssl,required"`
 	// These are per-hostname (customer) settings.
-	CustomMetadata param.Field[CustomHostnameNewParamsCustomMetadata] `json:"custom_metadata"`
+	CustomMetadata param.Field[CustomMetadataParam] `json:"custom_metadata"`
 }
 
 func (r CustomHostnameNewParams) MarshalJSON() (data []byte, err error) {
@@ -791,16 +778,6 @@ func (r CustomHostnameNewParamsSSLSettingsTLS1_3) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameNewParamsCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key param.Field[string] `json:"key"`
-}
-
-func (r CustomHostnameNewParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type CustomHostnameNewResponseEnvelope struct {
@@ -939,7 +916,7 @@ type CustomHostnameEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// These are per-hostname (customer) settings.
-	CustomMetadata param.Field[CustomHostnameEditParamsCustomMetadata] `json:"custom_metadata"`
+	CustomMetadata param.Field[CustomMetadataParam] `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
 	// record.
 	CustomOriginServer param.Field[string] `json:"custom_origin_server"`
@@ -954,16 +931,6 @@ type CustomHostnameEditParams struct {
 }
 
 func (r CustomHostnameEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameEditParamsCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key param.Field[string] `json:"key"`
-}
-
-func (r CustomHostnameEditParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

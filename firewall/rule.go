@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"reflect"
 
+	"github.com/cloudflare/cloudflare-go/v2/filters"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/rate_limits"
 	"github.com/tidwall/gjson"
 )
 
@@ -152,7 +154,7 @@ type Rule struct {
 	ID string `json:"id"`
 	// The action to apply to a matched request. The `log` action is only available on
 	// an Enterprise plan.
-	Action RuleAction `json:"action"`
+	Action rate_limits.Action `json:"action"`
 	// An informative summary of the firewall rule.
 	Description string     `json:"description"`
 	Filter      RuleFilter `json:"filter"`
@@ -188,28 +190,6 @@ func (r *Rule) UnmarshalJSON(data []byte) (err error) {
 
 func (r ruleJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action to apply to a matched request. The `log` action is only available on
-// an Enterprise plan.
-type RuleAction string
-
-const (
-	RuleActionBlock            RuleAction = "block"
-	RuleActionChallenge        RuleAction = "challenge"
-	RuleActionJsChallenge      RuleAction = "js_challenge"
-	RuleActionManagedChallenge RuleAction = "managed_challenge"
-	RuleActionAllow            RuleAction = "allow"
-	RuleActionLog              RuleAction = "log"
-	RuleActionBypass           RuleAction = "bypass"
-)
-
-func (r RuleAction) IsKnown() bool {
-	switch r {
-	case RuleActionBlock, RuleActionChallenge, RuleActionJsChallenge, RuleActionManagedChallenge, RuleActionAllow, RuleActionLog, RuleActionBypass:
-		return true
-	}
-	return false
 }
 
 type RuleFilter struct {
@@ -258,8 +238,7 @@ func (r RuleFilter) AsUnion() RuleFilterUnion {
 	return r.union
 }
 
-// Union satisfied by [firewall.RuleFilterFirewallFilter] or
-// [firewall.DeletedFilter].
+// Union satisfied by [filters.Filter] or [firewall.DeletedFilter].
 type RuleFilterUnion interface {
 	implementsFirewallRuleFilter()
 }
@@ -270,7 +249,7 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RuleFilterFirewallFilter{}),
+			Type:       reflect.TypeOf(filters.Filter{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -278,109 +257,6 @@ func init() {
 		},
 	)
 }
-
-type RuleFilterFirewallFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                       `json:"ref"`
-	JSON ruleFilterFirewallFilterJSON `json:"-"`
-}
-
-// ruleFilterFirewallFilterJSON contains the JSON metadata for the struct
-// [RuleFilterFirewallFilter]
-type ruleFilterFirewallFilterJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleFilterFirewallFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleFilterFirewallFilterJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleFilterFirewallFilter) implementsFirewallRuleFilter() {}
-
-type RuleParam struct {
-	// The action to apply to a matched request. The `log` action is only available on
-	// an Enterprise plan.
-	Action param.Field[RuleAction] `json:"action"`
-	// An informative summary of the firewall rule.
-	Description param.Field[string]               `json:"description"`
-	Filter      param.Field[RuleFilterUnionParam] `json:"filter"`
-	// When true, indicates that the firewall rule is currently paused.
-	Paused param.Field[bool] `json:"paused"`
-	// The priority of the rule. Optional value used to define the processing order. A
-	// lower number indicates a higher priority. If not provided, rules with a defined
-	// priority will be processed before rules without a priority.
-	Priority param.Field[float64]        `json:"priority"`
-	Products param.Field[[]ProductsItem] `json:"products"`
-	// A short reference tag. Allows you to select related firewall rules.
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RuleFilterParam struct {
-	// An informative summary of the filter.
-	Description param.Field[string] `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression param.Field[string] `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused param.Field[bool] `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref param.Field[string] `json:"ref"`
-	// When true, indicates that the firewall rule was deleted.
-	Deleted param.Field[bool] `json:"deleted"`
-}
-
-func (r RuleFilterParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RuleFilterParam) implementsFirewallRuleFilterUnionParam() {}
-
-// Satisfied by [firewall.RuleFilterFirewallFilterParam],
-// [firewall.DeletedFilterParam], [RuleFilterParam].
-type RuleFilterUnionParam interface {
-	implementsFirewallRuleFilterUnionParam()
-}
-
-type RuleFilterFirewallFilterParam struct {
-	// An informative summary of the filter.
-	Description param.Field[string] `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression param.Field[string] `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused param.Field[bool] `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RuleFilterFirewallFilterParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RuleFilterFirewallFilterParam) implementsFirewallRuleFilterUnionParam() {}
 
 type DeletedFilter struct {
 	// The unique identifier of the filter.

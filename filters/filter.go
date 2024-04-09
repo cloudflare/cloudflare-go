@@ -35,7 +35,7 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 }
 
 // Creates one or more filters.
-func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]FilterNewResponse, err error) {
+func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]Filter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters", zoneIdentifier)
@@ -48,7 +48,7 @@ func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body Fil
 }
 
 // Updates an existing filter.
-func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *FilterUpdateResponse, err error) {
+func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *Filter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -62,7 +62,7 @@ func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
-func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FilterListResponse], err error) {
+func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Filter], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -81,12 +81,12 @@ func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query F
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
-func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FilterListResponse] {
+func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Filter] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing filter.
-func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, body FilterDeleteParams, opts ...option.RequestOption) (res *FilterDeleteResponse, err error) {
+func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, body FilterDeleteParams, opts ...option.RequestOption) (res *Filter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -99,7 +99,7 @@ func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a filter.
-func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FilterGetResponse, err error) {
+func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *Filter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -111,42 +111,7 @@ func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id strin
 	return
 }
 
-type FilterNewResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                `json:"ref"`
-	JSON filterNewResponseJSON `json:"-"`
-}
-
-// filterNewResponseJSON contains the JSON metadata for the struct
-// [FilterNewResponse]
-type filterNewResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type FilterUpdateResponse struct {
+type Filter struct {
 	// The unique identifier of the filter.
 	ID string `json:"id"`
 	// An informative summary of the filter.
@@ -157,13 +122,12 @@ type FilterUpdateResponse struct {
 	// When true, indicates that the filter is currently paused.
 	Paused bool `json:"paused"`
 	// A short reference tag. Allows you to select related filters.
-	Ref  string                   `json:"ref"`
-	JSON filterUpdateResponseJSON `json:"-"`
+	Ref  string     `json:"ref"`
+	JSON filterJSON `json:"-"`
 }
 
-// filterUpdateResponseJSON contains the JSON metadata for the struct
-// [FilterUpdateResponse]
-type filterUpdateResponseJSON struct {
+// filterJSON contains the JSON metadata for the struct [Filter]
+type filterJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Expression  apijson.Field
@@ -173,117 +137,30 @@ type filterUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Filter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r filterUpdateResponseJSON) RawJSON() string {
+func (r filterJSON) RawJSON() string {
 	return r.raw
 }
 
-type FilterListResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
+func (r Filter) implementsFirewallRuleFilter() {}
+
+type FilterParam struct {
+	// An informative summary of the filter.
+	Description param.Field[string] `json:"description"`
 	// The filter expression. For more information, refer to
 	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
+	Expression param.Field[string] `json:"expression"`
 	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
+	Paused param.Field[bool] `json:"paused"`
 	// A short reference tag. Allows you to select related filters.
-	Ref  string                 `json:"ref"`
-	JSON filterListResponseJSON `json:"-"`
+	Ref param.Field[string] `json:"ref"`
 }
 
-// filterListResponseJSON contains the JSON metadata for the struct
-// [FilterListResponse]
-type filterListResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type FilterDeleteResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                   `json:"ref"`
-	JSON filterDeleteResponseJSON `json:"-"`
-}
-
-// filterDeleteResponseJSON contains the JSON metadata for the struct
-// [FilterDeleteResponse]
-type filterDeleteResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type FilterGetResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                `json:"ref"`
-	JSON filterGetResponseJSON `json:"-"`
-}
-
-// filterGetResponseJSON contains the JSON metadata for the struct
-// [FilterGetResponse]
-type filterGetResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterGetResponseJSON) RawJSON() string {
-	return r.raw
+func (r FilterParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type FilterNewParams struct {
@@ -297,7 +174,7 @@ func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 type FilterNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []FilterNewResponse                                       `json:"result,required,nullable"`
+	Result   []Filter                                                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    FilterNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo FilterNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -381,7 +258,7 @@ func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
 type FilterUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   FilterUpdateResponse                                      `json:"result,required"`
+	Result   Filter                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
@@ -457,7 +334,7 @@ func (r FilterDeleteParams) MarshalJSON() (data []byte, err error) {
 type FilterDeleteResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   FilterDeleteResponse                                      `json:"result,required"`
+	Result   Filter                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterDeleteResponseEnvelopeJSON    `json:"-"`
@@ -500,7 +377,7 @@ func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type FilterGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   FilterGetResponse                                         `json:"result,required"`
+	Result   Filter                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterGetResponseEnvelopeJSON    `json:"-"`

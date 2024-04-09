@@ -121,6 +121,8 @@ func (r filterJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r Filter) implementsFirewallRuleFilter() {}
+
 // The packet capture filter. When this field is empty, all packets are captured.
 type FilterParam struct {
 	// The destination IP address of the packet.
