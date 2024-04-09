@@ -35,7 +35,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Only available for the Waiting Room Advanced subscription. Creates a rule for a
 // waiting room.
-func (r *RuleService) New(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) (res *[]Rule, err error) {
+func (r *RuleService) New(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
@@ -49,7 +49,7 @@ func (r *RuleService) New(ctx context.Context, waitingRoomID string, params Rule
 
 // Only available for the Waiting Room Advanced subscription. Replaces all rules
 // for a waiting room.
-func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) (res *[]Rule, err error) {
+func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
@@ -62,7 +62,7 @@ func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params R
 }
 
 // Lists rules for a waiting room.
-func (r *RuleService) List(ctx context.Context, waitingRoomID string, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Rule], err error) {
+func (r *RuleService) List(ctx context.Context, waitingRoomID string, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,12 +80,12 @@ func (r *RuleService) List(ctx context.Context, waitingRoomID string, query Rule
 }
 
 // Lists rules for a waiting room.
-func (r *RuleService) ListAutoPaging(ctx context.Context, waitingRoomID string, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Rule] {
+func (r *RuleService) ListAutoPaging(ctx context.Context, waitingRoomID string, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoomRule] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, waitingRoomID, query, opts...))
 }
 
 // Deletes a rule for a waiting room.
-func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, params RuleDeleteParams, opts ...option.RequestOption) (res *[]Rule, err error) {
+func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, params RuleDeleteParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", params.ZoneID, waitingRoomID, ruleID)
@@ -98,7 +98,7 @@ func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID s
 }
 
 // Patches a rule for a waiting room.
-func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *[]Rule, err error) {
+func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", params.ZoneID, waitingRoomID, ruleID)
@@ -110,11 +110,11 @@ func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID str
 	return
 }
 
-type Rule struct {
+type WaitingRoomRule struct {
 	// The ID of the rule.
 	ID string `json:"id"`
 	// The action to take when the expression matches.
-	Action RuleAction `json:"action"`
+	Action WaitingRoomRuleAction `json:"action"`
 	// The description of the rule.
 	Description string `json:"description"`
 	// When set to true, the rule is enabled.
@@ -123,12 +123,12 @@ type Rule struct {
 	Expression  string    `json:"expression"`
 	LastUpdated time.Time `json:"last_updated" format:"date-time"`
 	// The version of the rule.
-	Version string   `json:"version"`
-	JSON    ruleJSON `json:"-"`
+	Version string              `json:"version"`
+	JSON    waitingRoomRuleJSON `json:"-"`
 }
 
-// ruleJSON contains the JSON metadata for the struct [Rule]
-type ruleJSON struct {
+// waitingRoomRuleJSON contains the JSON metadata for the struct [WaitingRoomRule]
+type waitingRoomRuleJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -140,24 +140,24 @@ type ruleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Rule) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleJSON) RawJSON() string {
+func (r waitingRoomRuleJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to take when the expression matches.
-type RuleAction string
+type WaitingRoomRuleAction string
 
 const (
-	RuleActionBypassWaitingRoom RuleAction = "bypass_waiting_room"
+	WaitingRoomRuleActionBypassWaitingRoom WaitingRoomRuleAction = "bypass_waiting_room"
 )
 
-func (r RuleAction) IsKnown() bool {
+func (r WaitingRoomRuleAction) IsKnown() bool {
 	switch r {
-	case RuleActionBypassWaitingRoom:
+	case WaitingRoomRuleActionBypassWaitingRoom:
 		return true
 	}
 	return false
@@ -198,7 +198,7 @@ func (r RuleNewParamsAction) IsKnown() bool {
 type RuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Rule                `json:"result,required,nullable"`
+	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -314,7 +314,7 @@ func (r RuleUpdateParamsBodyAction) IsKnown() bool {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Rule                `json:"result,required,nullable"`
+	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -405,7 +405,7 @@ func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Rule                `json:"result,required,nullable"`
+	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -559,7 +559,7 @@ func (r RuleEditParamsPositionObject) implementsWaitingRoomsRuleEditParamsPositi
 type RuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Rule                `json:"result,required,nullable"`
+	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`

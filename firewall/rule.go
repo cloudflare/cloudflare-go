@@ -39,7 +39,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 }
 
 // Create one or more firewall rules.
-func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *[]Rule, err error) {
+func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
@@ -52,7 +52,7 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 }
 
 // Updates an existing firewall rule.
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id string, body RuleUpdateParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id string, body RuleUpdateParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
@@ -66,7 +66,7 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id stri
 
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Rule], err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -85,12 +85,12 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query Rul
 
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
-func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Rule] {
+func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallRule] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing firewall rule.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, body RuleDeleteParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, body RuleDeleteParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
@@ -103,7 +103,7 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id stri
 }
 
 // Updates the priority of an existing firewall rule.
-func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body RuleEditParams, opts ...option.RequestOption) (res *[]Rule, err error) {
+func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body RuleEditParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
@@ -116,7 +116,7 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string
 }
 
 // Fetches the details of a firewall rule.
-func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, params.PathID)
@@ -126,6 +126,116 @@ func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params Rul
 	}
 	res = &env.Result
 	return
+}
+
+type FirewallRule struct {
+	// The unique identifier of the firewall rule.
+	ID string `json:"id"`
+	// The action to apply to a matched request. The `log` action is only available on
+	// an Enterprise plan.
+	Action rate_limits.Action `json:"action"`
+	// An informative summary of the firewall rule.
+	Description string             `json:"description"`
+	Filter      FirewallRuleFilter `json:"filter"`
+	// When true, indicates that the firewall rule is currently paused.
+	Paused bool `json:"paused"`
+	// The priority of the rule. Optional value used to define the processing order. A
+	// lower number indicates a higher priority. If not provided, rules with a defined
+	// priority will be processed before rules without a priority.
+	Priority float64    `json:"priority"`
+	Products []Products `json:"products"`
+	// A short reference tag. Allows you to select related firewall rules.
+	Ref  string           `json:"ref"`
+	JSON firewallRuleJSON `json:"-"`
+}
+
+// firewallRuleJSON contains the JSON metadata for the struct [FirewallRule]
+type firewallRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Description apijson.Field
+	Filter      apijson.Field
+	Paused      apijson.Field
+	Priority    apijson.Field
+	Products    apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+type FirewallRuleFilter struct {
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression"`
+	// The unique identifier of the filter.
+	ID string `json:"id"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused"`
+	// A short reference tag. Allows you to select related filters.
+	Ref string `json:"ref"`
+	// When true, indicates that the firewall rule was deleted.
+	Deleted bool                   `json:"deleted"`
+	JSON    firewallRuleFilterJSON `json:"-"`
+	union   FirewallRuleFilterUnion
+}
+
+// firewallRuleFilterJSON contains the JSON metadata for the struct
+// [FirewallRuleFilter]
+type firewallRuleFilterJSON struct {
+	Description apijson.Field
+	Expression  apijson.Field
+	ID          apijson.Field
+	Paused      apijson.Field
+	Ref         apijson.Field
+	Deleted     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r firewallRuleFilterJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *FirewallRuleFilter) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r FirewallRuleFilter) AsUnion() FirewallRuleFilterUnion {
+	return r.union
+}
+
+// Union satisfied by [filters.FirewallFilter] or [firewall.DeletedFilter].
+type FirewallRuleFilterUnion interface {
+	implementsFirewallFirewallRuleFilter()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallRuleFilterUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(filters.FirewallFilter{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DeletedFilter{}),
+		},
+	)
 }
 
 // A list of products to bypass for a request when using the `bypass` action.
@@ -147,115 +257,6 @@ func (r Products) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type Rule struct {
-	// The unique identifier of the firewall rule.
-	ID string `json:"id"`
-	// The action to apply to a matched request. The `log` action is only available on
-	// an Enterprise plan.
-	Action rate_limits.Action `json:"action"`
-	// An informative summary of the firewall rule.
-	Description string     `json:"description"`
-	Filter      RuleFilter `json:"filter"`
-	// When true, indicates that the firewall rule is currently paused.
-	Paused bool `json:"paused"`
-	// The priority of the rule. Optional value used to define the processing order. A
-	// lower number indicates a higher priority. If not provided, rules with a defined
-	// priority will be processed before rules without a priority.
-	Priority float64    `json:"priority"`
-	Products []Products `json:"products"`
-	// A short reference tag. Allows you to select related firewall rules.
-	Ref  string   `json:"ref"`
-	JSON ruleJSON `json:"-"`
-}
-
-// ruleJSON contains the JSON metadata for the struct [Rule]
-type ruleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Description apijson.Field
-	Filter      apijson.Field
-	Paused      apijson.Field
-	Priority    apijson.Field
-	Products    apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Rule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleFilter struct {
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression"`
-	// The unique identifier of the filter.
-	ID string `json:"id"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref string `json:"ref"`
-	// When true, indicates that the firewall rule was deleted.
-	Deleted bool           `json:"deleted"`
-	JSON    ruleFilterJSON `json:"-"`
-	union   RuleFilterUnion
-}
-
-// ruleFilterJSON contains the JSON metadata for the struct [RuleFilter]
-type ruleFilterJSON struct {
-	Description apijson.Field
-	Expression  apijson.Field
-	ID          apijson.Field
-	Paused      apijson.Field
-	Ref         apijson.Field
-	Deleted     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r ruleFilterJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *RuleFilter) UnmarshalJSON(data []byte) (err error) {
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-func (r RuleFilter) AsUnion() RuleFilterUnion {
-	return r.union
-}
-
-// Union satisfied by [filters.Filter] or [firewall.DeletedFilter].
-type RuleFilterUnion interface {
-	implementsFirewallRuleFilter()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RuleFilterUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(filters.Filter{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DeletedFilter{}),
-		},
-	)
 }
 
 type DeletedFilter struct {
@@ -282,7 +283,7 @@ func (r deletedFilterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DeletedFilter) implementsFirewallRuleFilter() {}
+func (r DeletedFilter) implementsFirewallFirewallRuleFilter() {}
 
 type RuleNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
@@ -295,7 +296,7 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 type RuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Rule                `json:"result,required,nullable"`
+	Result   []FirewallRule        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -379,7 +380,7 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required"`
+	Result   FirewallRule          `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -455,7 +456,7 @@ func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required"`
+	Result   FirewallRule          `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -506,7 +507,7 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 type RuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Rule                `json:"result,required,nullable"`
+	Result   []FirewallRule        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`
@@ -597,7 +598,7 @@ func (r RuleGetParams) URLQuery() (v url.Values) {
 type RuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required"`
+	Result   FirewallRule          `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`

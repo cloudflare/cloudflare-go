@@ -35,7 +35,7 @@ func NewGatewayRuleService(opts ...option.RequestOption) (r *GatewayRuleService)
 }
 
 // Creates a new Zero Trust Gateway rule.
-func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/rules", params.AccountID)
@@ -48,7 +48,7 @@ func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParam
 }
 
 // Updates a configured Zero Trust Gateway rule.
-func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params GatewayRuleUpdateParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params GatewayRuleUpdateParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", params.AccountID, ruleID)
@@ -61,7 +61,7 @@ func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params G
 }
 
 // Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Rule], err error) {
+func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListPara
 }
 
 // Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Rule] {
+func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayRule] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -97,7 +97,7 @@ func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, params G
 }
 
 // Fetches a single Zero Trust Gateway rule.
-func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query GatewayRuleGetParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query GatewayRuleGetParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", query.AccountID, ruleID)
@@ -227,13 +227,13 @@ func (r GatewayFilter) IsKnown() bool {
 	return false
 }
 
-type Rule struct {
+type GatewayRule struct {
 	// The API resource UUID.
 	ID string `json:"id"`
 	// The action to preform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
-	Action    RuleAction `json:"action"`
-	CreatedAt time.Time  `json:"created_at" format:"date-time"`
+	Action    GatewayRuleAction `json:"action"`
+	CreatedAt time.Time         `json:"created_at" format:"date-time"`
 	// Date of deletion, if any.
 	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
 	// The description of the rule.
@@ -259,13 +259,13 @@ type Rule struct {
 	// policies.
 	Schedule Schedule `json:"schedule"`
 	// The wirefilter expression used for traffic matching.
-	Traffic   string    `json:"traffic"`
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	JSON      ruleJSON  `json:"-"`
+	Traffic   string          `json:"traffic"`
+	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
+	JSON      gatewayRuleJSON `json:"-"`
 }
 
-// ruleJSON contains the JSON metadata for the struct [Rule]
-type ruleJSON struct {
+// gatewayRuleJSON contains the JSON metadata for the struct [GatewayRule]
+type gatewayRuleJSON struct {
 	ID            apijson.Field
 	Action        apijson.Field
 	CreatedAt     apijson.Field
@@ -285,39 +285,39 @@ type ruleJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *Rule) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleJSON) RawJSON() string {
+func (r gatewayRuleJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to preform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
-type RuleAction string
+type GatewayRuleAction string
 
 const (
-	RuleActionOn           RuleAction = "on"
-	RuleActionOff          RuleAction = "off"
-	RuleActionAllow        RuleAction = "allow"
-	RuleActionBlock        RuleAction = "block"
-	RuleActionScan         RuleAction = "scan"
-	RuleActionNoscan       RuleAction = "noscan"
-	RuleActionSafesearch   RuleAction = "safesearch"
-	RuleActionYtrestricted RuleAction = "ytrestricted"
-	RuleActionIsolate      RuleAction = "isolate"
-	RuleActionNoisolate    RuleAction = "noisolate"
-	RuleActionOverride     RuleAction = "override"
-	RuleActionL4Override   RuleAction = "l4_override"
-	RuleActionEgress       RuleAction = "egress"
-	RuleActionAuditSSH     RuleAction = "audit_ssh"
-	RuleActionResolve      RuleAction = "resolve"
+	GatewayRuleActionOn           GatewayRuleAction = "on"
+	GatewayRuleActionOff          GatewayRuleAction = "off"
+	GatewayRuleActionAllow        GatewayRuleAction = "allow"
+	GatewayRuleActionBlock        GatewayRuleAction = "block"
+	GatewayRuleActionScan         GatewayRuleAction = "scan"
+	GatewayRuleActionNoscan       GatewayRuleAction = "noscan"
+	GatewayRuleActionSafesearch   GatewayRuleAction = "safesearch"
+	GatewayRuleActionYtrestricted GatewayRuleAction = "ytrestricted"
+	GatewayRuleActionIsolate      GatewayRuleAction = "isolate"
+	GatewayRuleActionNoisolate    GatewayRuleAction = "noisolate"
+	GatewayRuleActionOverride     GatewayRuleAction = "override"
+	GatewayRuleActionL4Override   GatewayRuleAction = "l4_override"
+	GatewayRuleActionEgress       GatewayRuleAction = "egress"
+	GatewayRuleActionAuditSSH     GatewayRuleAction = "audit_ssh"
+	GatewayRuleActionResolve      GatewayRuleAction = "resolve"
 )
 
-func (r RuleAction) IsKnown() bool {
+func (r GatewayRuleAction) IsKnown() bool {
 	switch r {
-	case RuleActionOn, RuleActionOff, RuleActionAllow, RuleActionBlock, RuleActionScan, RuleActionNoscan, RuleActionSafesearch, RuleActionYtrestricted, RuleActionIsolate, RuleActionNoisolate, RuleActionOverride, RuleActionL4Override, RuleActionEgress, RuleActionAuditSSH, RuleActionResolve:
+	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionAuditSSH, GatewayRuleActionResolve:
 		return true
 	}
 	return false
@@ -1037,7 +1037,7 @@ func (r GatewayRuleNewParamsAction) IsKnown() bool {
 type GatewayRuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required"`
+	Result   GatewayRule           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -1145,7 +1145,7 @@ func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 type GatewayRuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required"`
+	Result   GatewayRule           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1248,7 +1248,7 @@ type GatewayRuleGetParams struct {
 type GatewayRuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required"`
+	Result   GatewayRule           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`

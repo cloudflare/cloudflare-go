@@ -153,7 +153,7 @@ type Override struct {
 	// action. Unless you are disabling a rule, ensure that you also enable the rule
 	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
 	// you must provide a `groups` object or a `rules` object.
-	Rules Rules `json:"rules"`
+	Rules WAFRule `json:"rules"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
@@ -253,30 +253,28 @@ func (r RewriteActionDisable) IsKnown() bool {
 	return false
 }
 
-type Rules map[string]Rule
+type URLs = string
+
+type WAFRule map[string]WAFRuleItem
 
 // The WAF rule action to apply.
-type Rule string
+type WAFRuleItem string
 
 const (
-	RuleChallenge Rule = "challenge"
-	RuleBlock     Rule = "block"
-	RuleSimulate  Rule = "simulate"
-	RuleDisable   Rule = "disable"
-	RuleDefault   Rule = "default"
+	WAFRuleItemChallenge WAFRuleItem = "challenge"
+	WAFRuleItemBlock     WAFRuleItem = "block"
+	WAFRuleItemSimulate  WAFRuleItem = "simulate"
+	WAFRuleItemDisable   WAFRuleItem = "disable"
+	WAFRuleItemDefault   WAFRuleItem = "default"
 )
 
-func (r Rule) IsKnown() bool {
+func (r WAFRuleItem) IsKnown() bool {
 	switch r {
-	case RuleChallenge, RuleBlock, RuleSimulate, RuleDisable, RuleDefault:
+	case WAFRuleItemChallenge, WAFRuleItemBlock, WAFRuleItemSimulate, WAFRuleItemDisable, WAFRuleItemDefault:
 		return true
 	}
 	return false
 }
-
-type RulesParam map[string]Rule
-
-type URLs = string
 
 type WAFOverrideDeleteResponse struct {
 	// The unique identifier of the WAF override.
