@@ -39,7 +39,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // Rules consist of a set of criteria for matching emails (such as an email being
 // sent to a specific custom email address) plus a set of actions to take on the
 // email (like forwarding it to a specific destination address).
-func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *EmailRule, err error) {
+func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules", zoneIdentifier)
@@ -52,7 +52,7 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 }
 
 // Update actions and matches, or enable/disable specific routing rules.
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, ruleIdentifier string, body RuleUpdateParams, opts ...option.RequestOption) (res *EmailRule, err error) {
+func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, ruleIdentifier string, body RuleUpdateParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", zoneIdentifier, ruleIdentifier)
@@ -65,7 +65,7 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, ruleIde
 }
 
 // Lists existing routing rules.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EmailRule], err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EmailRoutingRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,12 +83,12 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query Rul
 }
 
 // Lists existing routing rules.
-func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EmailRule] {
+func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EmailRoutingRule] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Delete a specific routing rule.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", zoneIdentifier, ruleIdentifier)
@@ -101,7 +101,7 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, ruleIde
 }
 
 // Get information for a specific routing rule already created.
-func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRule, err error) {
+func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", zoneIdentifier, ruleIdentifier)
@@ -165,13 +165,13 @@ func (r ActionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type EmailRule struct {
+type EmailRoutingRule struct {
 	// Routing rule identifier.
 	ID string `json:"id"`
 	// List actions patterns.
 	Actions []Action `json:"actions"`
 	// Routing rule status.
-	Enabled EmailRuleEnabled `json:"enabled"`
+	Enabled EmailRoutingRuleEnabled `json:"enabled"`
 	// Matching patterns to forward to your actions.
 	Matchers []Matcher `json:"matchers"`
 	// Routing rule name.
@@ -179,12 +179,13 @@ type EmailRule struct {
 	// Priority of the routing rule.
 	Priority float64 `json:"priority"`
 	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
-	Tag  string        `json:"tag"`
-	JSON emailRuleJSON `json:"-"`
+	Tag  string               `json:"tag"`
+	JSON emailRoutingRuleJSON `json:"-"`
 }
 
-// emailRuleJSON contains the JSON metadata for the struct [EmailRule]
-type emailRuleJSON struct {
+// emailRoutingRuleJSON contains the JSON metadata for the struct
+// [EmailRoutingRule]
+type emailRoutingRuleJSON struct {
 	ID          apijson.Field
 	Actions     apijson.Field
 	Enabled     apijson.Field
@@ -196,144 +197,29 @@ type emailRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRule) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailRuleJSON) RawJSON() string {
+func (r emailRoutingRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EmailRule) implementsZeroTrustAccessRule() {}
-
 // Routing rule status.
-type EmailRuleEnabled bool
+type EmailRoutingRuleEnabled bool
 
 const (
-	EmailRuleEnabledTrue  EmailRuleEnabled = true
-	EmailRuleEnabledFalse EmailRuleEnabled = false
+	EmailRoutingRuleEnabledTrue  EmailRoutingRuleEnabled = true
+	EmailRoutingRuleEnabledFalse EmailRoutingRuleEnabled = false
 )
 
-func (r EmailRuleEnabled) IsKnown() bool {
+func (r EmailRoutingRuleEnabled) IsKnown() bool {
 	switch r {
-	case EmailRuleEnabledTrue, EmailRuleEnabledFalse:
+	case EmailRoutingRuleEnabledTrue, EmailRoutingRuleEnabledFalse:
 		return true
 	}
 	return false
 }
-
-type EmailRuleParam struct {
-	// List actions patterns.
-	Actions param.Field[[]ActionParam] `json:"actions"`
-	// Routing rule status.
-	Enabled param.Field[EmailRuleEnabled] `json:"enabled"`
-	// Matching patterns to forward to your actions.
-	Matchers param.Field[[]MatcherParam] `json:"matchers"`
-	// Routing rule name.
-	Name param.Field[string] `json:"name"`
-	// Priority of the routing rule.
-	Priority param.Field[float64] `json:"priority"`
-}
-
-func (r EmailRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 // Matching pattern to forward your actions.
 type Matcher struct {
@@ -443,7 +329,7 @@ func (r RuleNewParamsEnabled) IsKnown() bool {
 type RuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   EmailRule             `json:"result,required"`
+	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
@@ -519,7 +405,7 @@ func (r RuleUpdateParamsEnabled) IsKnown() bool {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   EmailRule             `json:"result,required"`
+	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -595,7 +481,7 @@ func (r RuleListParamsEnabled) IsKnown() bool {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   EmailRule             `json:"result,required"`
+	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -638,7 +524,7 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type RuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   EmailRule             `json:"result,required"`
+	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
