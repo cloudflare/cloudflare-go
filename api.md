@@ -3698,7 +3698,7 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/request_tracers">request_tracers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/request_tracers#RequestTracerTrace">RequestTracerTrace</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/request_tracers">request_tracers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/request_tracers#Trace">Trace</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/request_tracers">request_tracers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/request_tracers#TraceNewResponse">TraceNewResponse</a>
 
 Methods:
