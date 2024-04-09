@@ -44,8 +44,10 @@ func (r *TraceService) New(ctx context.Context, accountIdentifier string, body T
 	return
 }
 
+type Trace []TraceItem
+
 // List of steps acting on request/response
-type Trace struct {
+type TraceItem struct {
 	// If step type is rule, then action performed by this rule
 	Action string `json:"action"`
 	// If step type is rule, then action parameters of this rule as JSON
@@ -61,15 +63,15 @@ type Trace struct {
 	// If step type is ruleset, then name of this ruleset
 	Name string `json:"name"`
 	// Tracing step identifying name
-	StepName string  `json:"step_name"`
-	Trace    []Trace `json:"trace"`
+	StepName string `json:"step_name"`
+	Trace    Trace  `json:"trace"`
 	// Tracing step type
-	Type string    `json:"type"`
-	JSON traceJSON `json:"-"`
+	Type string        `json:"type"`
+	JSON traceItemJSON `json:"-"`
 }
 
-// traceJSON contains the JSON metadata for the struct [Trace]
-type traceJSON struct {
+// traceItemJSON contains the JSON metadata for the struct [TraceItem]
+type traceItemJSON struct {
 	Action           apijson.Field
 	ActionParameters apijson.Field
 	Description      apijson.Field
@@ -84,11 +86,11 @@ type traceJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *Trace) UnmarshalJSON(data []byte) (err error) {
+func (r *TraceItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r traceJSON) RawJSON() string {
+func (r traceItemJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -96,7 +98,7 @@ func (r traceJSON) RawJSON() string {
 type TraceNewResponse struct {
 	// HTTP Status code of zone response
 	StatusCode int64                `json:"status_code"`
-	Trace      []Trace              `json:"trace"`
+	Trace      Trace                `json:"trace"`
 	JSON       traceNewResponseJSON `json:"-"`
 }
 
