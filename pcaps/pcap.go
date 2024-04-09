@@ -87,65 +87,11 @@ func (r *PCAPService) Get(ctx context.Context, pcapID string, query PCAPGetParam
 	return
 }
 
-// The packet capture filter. When this field is empty, all packets are captured.
-type Filter struct {
-	// The destination IP address of the packet.
-	DestinationAddress string `json:"destination_address"`
-	// The destination port of the packet.
-	DestinationPort float64 `json:"destination_port"`
-	// The protocol number of the packet.
-	Protocol float64 `json:"protocol"`
-	// The source IP address of the packet.
-	SourceAddress string `json:"source_address"`
-	// The source port of the packet.
-	SourcePort float64    `json:"source_port"`
-	JSON       filterJSON `json:"-"`
-}
-
-// filterJSON contains the JSON metadata for the struct [Filter]
-type filterJSON struct {
-	DestinationAddress apijson.Field
-	DestinationPort    apijson.Field
-	Protocol           apijson.Field
-	SourceAddress      apijson.Field
-	SourcePort         apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *Filter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r Filter) implementsFirewallRuleFilter() {}
-
-// The packet capture filter. When this field is empty, all packets are captured.
-type FilterParam struct {
-	// The destination IP address of the packet.
-	DestinationAddress param.Field[string] `json:"destination_address"`
-	// The destination port of the packet.
-	DestinationPort param.Field[float64] `json:"destination_port"`
-	// The protocol number of the packet.
-	Protocol param.Field[float64] `json:"protocol"`
-	// The source IP address of the packet.
-	SourceAddress param.Field[string] `json:"source_address"`
-	// The source port of the packet.
-	SourcePort param.Field[float64] `json:"source_port"`
-}
-
-func (r FilterParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type PCAP struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 Filter `json:"filter_v1"`
+	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The status of the packet capture request.
 	Status PCAPStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
@@ -241,9 +187,61 @@ func (r PCAPType) IsKnown() bool {
 	return false
 }
 
+// The packet capture filter. When this field is empty, all packets are captured.
+type PCAPFilter struct {
+	// The destination IP address of the packet.
+	DestinationAddress string `json:"destination_address"`
+	// The destination port of the packet.
+	DestinationPort float64 `json:"destination_port"`
+	// The protocol number of the packet.
+	Protocol float64 `json:"protocol"`
+	// The source IP address of the packet.
+	SourceAddress string `json:"source_address"`
+	// The source port of the packet.
+	SourcePort float64        `json:"source_port"`
+	JSON       pcapFilterJSON `json:"-"`
+}
+
+// pcapFilterJSON contains the JSON metadata for the struct [PCAPFilter]
+type pcapFilterJSON struct {
+	DestinationAddress apijson.Field
+	DestinationPort    apijson.Field
+	Protocol           apijson.Field
+	SourceAddress      apijson.Field
+	SourcePort         apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *PCAPFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapFilterJSON) RawJSON() string {
+	return r.raw
+}
+
+// The packet capture filter. When this field is empty, all packets are captured.
+type PCAPFilterParam struct {
+	// The destination IP address of the packet.
+	DestinationAddress param.Field[string] `json:"destination_address"`
+	// The destination port of the packet.
+	DestinationPort param.Field[float64] `json:"destination_port"`
+	// The protocol number of the packet.
+	Protocol param.Field[float64] `json:"protocol"`
+	// The source IP address of the packet.
+	SourceAddress param.Field[string] `json:"source_address"`
+	// The source port of the packet.
+	SourcePort param.Field[float64] `json:"source_port"`
+}
+
+func (r PCAPFilterParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type PCAPNewResponse struct {
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 Filter `json:"filter_v1"`
+	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The status of the packet capture request.
@@ -343,7 +341,7 @@ type PCAPNewResponseMagicVisibilityPCAPsResponseFull struct {
 	// applies to `full` packet captures.
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 Filter `json:"filter_v1"`
+	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The status of the packet capture request.
 	Status PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
@@ -496,7 +494,7 @@ func (r PCAPNewResponseType) IsKnown() bool {
 
 type PCAPListResponse struct {
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 Filter `json:"filter_v1"`
+	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The status of the packet capture request.
@@ -597,7 +595,7 @@ type PCAPListResponseMagicVisibilityPCAPsResponseFull struct {
 	// applies to `full` packet captures.
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 Filter `json:"filter_v1"`
+	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The status of the packet capture request.
 	Status PCAPListResponseMagicVisibilityPCAPsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
@@ -750,7 +748,7 @@ func (r PCAPListResponseType) IsKnown() bool {
 
 type PCAPGetResponse struct {
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 Filter `json:"filter_v1"`
+	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The status of the packet capture request.
@@ -850,7 +848,7 @@ type PCAPGetResponseMagicVisibilityPCAPsResponseFull struct {
 	// applies to `full` packet captures.
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 Filter `json:"filter_v1"`
+	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The status of the packet capture request.
 	Status PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
@@ -1023,7 +1021,7 @@ type PCAPNewParamsMagicVisibilityPCAPsRequestSimple struct {
 	// captures entire payloads and non-sampled packets.
 	Type param.Field[PCAPNewParamsMagicVisibilityPCAPsRequestSimpleType] `json:"type,required"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 param.Field[FilterParam] `json:"filter_v1"`
+	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
 }
 
 func (r PCAPNewParamsMagicVisibilityPCAPsRequestSimple) MarshalJSON() (data []byte, err error) {
@@ -1090,7 +1088,7 @@ type PCAPNewParamsMagicVisibilityPCAPsRequestFull struct {
 	// captures.
 	ByteLimit param.Field[float64] `json:"byte_limit"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 param.Field[FilterParam] `json:"filter_v1"`
+	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
 	// The limit of packets contained in a packet capture.
 	PacketLimit param.Field[float64] `json:"packet_limit"`
 }

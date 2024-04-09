@@ -36,7 +36,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Create network monitoring rules for account. Currently only supports creating a
 // single rule per API request.
-func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/rules", params.AccountID)
@@ -49,7 +49,7 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 }
 
 // Update network monitoring rules for account.
-func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/rules", params.AccountID)
@@ -62,7 +62,7 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 }
 
 // Lists network monitoring rules for account.
-func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Rule], err error) {
+func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MagicNetworkMonitoringRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,12 +80,12 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 }
 
 // Lists network monitoring rules for account.
-func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Rule] {
+func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MagicNetworkMonitoringRule] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a network monitoring rule for account.
-func (r *RuleService) Delete(ctx context.Context, ruleID string, params RuleDeleteParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *RuleService) Delete(ctx context.Context, ruleID string, params RuleDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", params.AccountID, ruleID)
@@ -98,7 +98,7 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, params RuleDele
 }
 
 // Update a network monitoring rule for account.
-func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", params.AccountID, ruleID)
@@ -111,7 +111,7 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditPa
 }
 
 // List a single network monitoring rule for account.
-func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *Rule, err error) {
+func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", query.AccountID, ruleID)
@@ -123,7 +123,7 @@ func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParam
 	return
 }
 
-type Rule struct {
+type MagicNetworkMonitoringRule struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
@@ -145,12 +145,13 @@ type Rule struct {
 	BandwidthThreshold float64 `json:"bandwidth_threshold"`
 	// The number of packets per second for the rule. When this value is exceeded for
 	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	PacketThreshold float64  `json:"packet_threshold"`
-	JSON            ruleJSON `json:"-"`
+	PacketThreshold float64                        `json:"packet_threshold"`
+	JSON            magicNetworkMonitoringRuleJSON `json:"-"`
 }
 
-// ruleJSON contains the JSON metadata for the struct [Rule]
-type ruleJSON struct {
+// magicNetworkMonitoringRuleJSON contains the JSON metadata for the struct
+// [MagicNetworkMonitoringRule]
+type magicNetworkMonitoringRuleJSON struct {
 	AutomaticAdvertisement apijson.Field
 	Duration               apijson.Field
 	Name                   apijson.Field
@@ -162,11 +163,11 @@ type ruleJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *Rule) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicNetworkMonitoringRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleJSON) RawJSON() string {
+func (r magicNetworkMonitoringRuleJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -180,9 +181,9 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
@@ -232,9 +233,9 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -288,9 +289,9 @@ func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -340,9 +341,9 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleEditResponseEnvelopeJSON    `json:"-"`
@@ -387,9 +388,9 @@ type RuleGetParams struct {
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Rule                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
