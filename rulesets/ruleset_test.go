@@ -33,10 +33,10 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		Kind:  cloudflare.F(rulesets.RulesetNewParamsKindRoot),
 		Name:  cloudflare.F("My ruleset"),
 		Phase: cloudflare.F(rulesets.RulesetNewParamsPhaseHTTPRequestFirewallCustom),
-		Rules: cloudflare.F([]rulesets.RequestRuleUnionParam{rulesets.BlockRuleParam{
-			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
-			ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
-				Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
+		Rules: cloudflare.F([]rulesets.RulesetNewParamsRuleUnion{rulesets.RulesetNewParamsRulesRulesetsBlockRule{
+			Action: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionBlock),
+			ActionParameters: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParameters{
+				Response: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParametersResponse{
 					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 					ContentType: cloudflare.F("application/json"),
 					StatusCode:  cloudflare.F(int64(400)),
@@ -50,10 +50,10 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
-		}, rulesets.BlockRuleParam{
-			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
-			ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
-				Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
+		}, rulesets.RulesetNewParamsRulesRulesetsBlockRule{
+			Action: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionBlock),
+			ActionParameters: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParameters{
+				Response: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParametersResponse{
 					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 					ContentType: cloudflare.F("application/json"),
 					StatusCode:  cloudflare.F(int64(400)),
@@ -67,10 +67,10 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
-		}, rulesets.BlockRuleParam{
-			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
-			ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
-				Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
+		}, rulesets.RulesetNewParamsRulesRulesetsBlockRule{
+			Action: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionBlock),
+			ActionParameters: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParameters{
+				Response: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParametersResponse{
 					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 					ContentType: cloudflare.F("application/json"),
 					StatusCode:  cloudflare.F(int64(400)),
@@ -116,10 +116,10 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetUpdateParams{
-			Rules: cloudflare.F([]rulesets.RequestRuleUnionParam{rulesets.BlockRuleParam{
-				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
-					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
+			Rules: cloudflare.F([]rulesets.RulesetUpdateParamsRuleUnion{rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
+				Action: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters{
+					Response: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
@@ -133,10 +133,10 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}, rulesets.BlockRuleParam{
-				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
-					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
+			}, rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
+				Action: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters{
+					Response: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
@@ -150,10 +150,10 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}, rulesets.BlockRuleParam{
-				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
-					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
+			}, rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
+				Action: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters{
+					Response: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
