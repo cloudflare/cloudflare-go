@@ -112,21 +112,21 @@ func (r *RouteService) Get(ctx context.Context, routeIdentifier string, query Ro
 	return
 }
 
-type ColoNamesItem = string
+type ColoName = string
 
-type ColoNamesItemParam = string
+type ColoNameParam = string
 
-type ColoRegionsItem = string
+type ColoRegion = string
 
-type ColoRegionsItemParam = string
+type ColoRegionParam = string
 
 // Used only for ECMP routes.
 type Scope struct {
 	// List of colo names for the ECMP scope.
-	ColoNames []ColoNamesItem `json:"colo_names"`
+	ColoNames []ColoName `json:"colo_names"`
 	// List of colo regions for the ECMP scope.
-	ColoRegions []ColoRegionsItem `json:"colo_regions"`
-	JSON        scopeJSON         `json:"-"`
+	ColoRegions []ColoRegion `json:"colo_regions"`
+	JSON        scopeJSON    `json:"-"`
 }
 
 // scopeJSON contains the JSON metadata for the struct [Scope]
@@ -148,9 +148,9 @@ func (r scopeJSON) RawJSON() string {
 // Used only for ECMP routes.
 type ScopeParam struct {
 	// List of colo names for the ECMP scope.
-	ColoNames param.Field[[]ColoNamesItemParam] `json:"colo_names"`
+	ColoNames param.Field[[]ColoNameParam] `json:"colo_names"`
 	// List of colo regions for the ECMP scope.
-	ColoRegions param.Field[[]ColoRegionsItemParam] `json:"colo_regions"`
+	ColoRegions param.Field[[]ColoRegionParam] `json:"colo_regions"`
 }
 
 func (r ScopeParam) MarshalJSON() (data []byte, err error) {

@@ -30,19 +30,19 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Pagerules.New(context.TODO(), pagerules.PageruleNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Actions: cloudflare.F([]pagerules.ActionItemParam{{
-			Name: cloudflare.F(pagerules.ActionItemNameForwardURL),
-			Value: cloudflare.F(pagerules.ActionItemValueParam{
-				Type: cloudflare.F(pagerules.ActionItemValueTypeTemporary),
+		Actions: cloudflare.F([]pagerules.RouteParam{{
+			Name: cloudflare.F(pagerules.RouteNameForwardURL),
+			Value: cloudflare.F(pagerules.RouteValueParam{
+				Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
 				URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
 			}),
 		}}),
-		Targets: cloudflare.F([]pagerules.TargesItemParam{{
-			Constraint: cloudflare.F(pagerules.TargesItemConstraintParam{
-				Operator: cloudflare.F(pagerules.TargesItemConstraintOperatorMatches),
+		Targets: cloudflare.F([]pagerules.TargesParam{{
+			Constraint: cloudflare.F(pagerules.TargesConstraintParam{
+				Operator: cloudflare.F(pagerules.TargesConstraintOperatorMatches),
 				Value:    cloudflare.F("*example.com/images/*"),
 			}),
-			Target: cloudflare.F(pagerules.TargesItemTargetURL),
+			Target: cloudflare.F(pagerules.TargesTargetURL),
 		}}),
 		Priority: cloudflare.F(int64(0)),
 		Status:   cloudflare.F(pagerules.PageruleNewParamsStatusActive),
@@ -75,19 +75,19 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pagerules.PageruleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Actions: cloudflare.F([]pagerules.ActionItemParam{{
-				Name: cloudflare.F(pagerules.ActionItemNameForwardURL),
-				Value: cloudflare.F(pagerules.ActionItemValueParam{
-					Type: cloudflare.F(pagerules.ActionItemValueTypeTemporary),
+			Actions: cloudflare.F([]pagerules.RouteParam{{
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
 					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
 				}),
 			}}),
-			Targets: cloudflare.F([]pagerules.TargesItemParam{{
-				Constraint: cloudflare.F(pagerules.TargesItemConstraintParam{
-					Operator: cloudflare.F(pagerules.TargesItemConstraintOperatorMatches),
+			Targets: cloudflare.F([]pagerules.TargesParam{{
+				Constraint: cloudflare.F(pagerules.TargesConstraintParam{
+					Operator: cloudflare.F(pagerules.TargesConstraintOperatorMatches),
 					Value:    cloudflare.F("*example.com/images/*"),
 				}),
-				Target: cloudflare.F(pagerules.TargesItemTargetURL),
+				Target: cloudflare.F(pagerules.TargesTargetURL),
 			}}),
 			Priority: cloudflare.F(int64(0)),
 			Status:   cloudflare.F(pagerules.PageruleUpdateParamsStatusActive),
@@ -182,21 +182,21 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pagerules.PageruleEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Actions: cloudflare.F([]pagerules.ActionItemParam{{
-				Name: cloudflare.F(pagerules.ActionItemNameForwardURL),
-				Value: cloudflare.F(pagerules.ActionItemValueParam{
-					Type: cloudflare.F(pagerules.ActionItemValueTypeTemporary),
+			Actions: cloudflare.F([]pagerules.RouteParam{{
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
 					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
 				}),
 			}}),
 			Priority: cloudflare.F(int64(0)),
 			Status:   cloudflare.F(pagerules.PageruleEditParamsStatusActive),
-			Targets: cloudflare.F([]pagerules.TargesItemParam{{
-				Constraint: cloudflare.F(pagerules.TargesItemConstraintParam{
-					Operator: cloudflare.F(pagerules.TargesItemConstraintOperatorMatches),
+			Targets: cloudflare.F([]pagerules.TargesParam{{
+				Constraint: cloudflare.F(pagerules.TargesConstraintParam{
+					Operator: cloudflare.F(pagerules.TargesConstraintOperatorMatches),
 					Value:    cloudflare.F("*example.com/images/*"),
 				}),
-				Target: cloudflare.F(pagerules.TargesItemTargetURL),
+				Target: cloudflare.F(pagerules.TargesTargetURL),
 			}}),
 		},
 	)

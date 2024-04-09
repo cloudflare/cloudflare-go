@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
@@ -55,32 +54,6 @@ func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query Load
 // List origin health changes.
 func (r *LoadBalancerAnalyticsEventService) ListAutoPaging(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Analytics] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
-}
-
-type Analytics struct {
-	ID        int64         `json:"id"`
-	Origins   []interface{} `json:"origins"`
-	Pool      interface{}   `json:"pool"`
-	Timestamp time.Time     `json:"timestamp" format:"date-time"`
-	JSON      analyticsJSON `json:"-"`
-}
-
-// analyticsJSON contains the JSON metadata for the struct [Analytics]
-type analyticsJSON struct {
-	ID          apijson.Field
-	Origins     apijson.Field
-	Pool        apijson.Field
-	Timestamp   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Analytics) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsJSON) RawJSON() string {
-	return r.raw
 }
 
 type LoadBalancerAnalyticsEventListParams struct {

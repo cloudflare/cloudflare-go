@@ -35,7 +35,7 @@ func NewDEXFleetStatusDeviceService(opts ...option.RequestOption) (r *DEXFleetSt
 }
 
 // List details for devices using WARP
-func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Device], err error) {
+func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DEXFleetStatusDeviceListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,11 +53,11 @@ func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetS
 }
 
 // List details for devices using WARP
-func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Device] {
+func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DEXFleetStatusDeviceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-type Device struct {
+type DEXFleetStatusDeviceListResponse struct {
 	// Cloudflare colo
 	Colo string `json:"colo,required"`
 	// Device identifier (UUID v4)
@@ -73,12 +73,13 @@ type Device struct {
 	// Device identifier (human readable)
 	DeviceName string `json:"deviceName"`
 	// User contact email address
-	PersonEmail string     `json:"personEmail"`
-	JSON        deviceJSON `json:"-"`
+	PersonEmail string                               `json:"personEmail"`
+	JSON        dexFleetStatusDeviceListResponseJSON `json:"-"`
 }
 
-// deviceJSON contains the JSON metadata for the struct [Device]
-type deviceJSON struct {
+// dexFleetStatusDeviceListResponseJSON contains the JSON metadata for the struct
+// [DEXFleetStatusDeviceListResponse]
+type dexFleetStatusDeviceListResponseJSON struct {
 	Colo        apijson.Field
 	DeviceID    apijson.Field
 	Mode        apijson.Field
@@ -92,11 +93,11 @@ type deviceJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Device) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r deviceJSON) RawJSON() string {
+func (r dexFleetStatusDeviceListResponseJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -47,44 +47,44 @@ func (r *ManagedHeaderService) Edit(ctx context.Context, params ManagedHeaderEdi
 	return
 }
 
-type RequestListItem struct {
+type RequestModel struct {
 	// Human-readable identifier of the Managed Transform.
 	ID string `json:"id"`
 	// When true, the Managed Transform is enabled.
-	Enabled bool                `json:"enabled"`
-	JSON    requestListItemJSON `json:"-"`
+	Enabled bool             `json:"enabled"`
+	JSON    requestModelJSON `json:"-"`
 }
 
-// requestListItemJSON contains the JSON metadata for the struct [RequestListItem]
-type requestListItemJSON struct {
+// requestModelJSON contains the JSON metadata for the struct [RequestModel]
+type requestModelJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RequestListItem) UnmarshalJSON(data []byte) (err error) {
+func (r *RequestModel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r requestListItemJSON) RawJSON() string {
+func (r requestModelJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestListItemParam struct {
+type RequestModelParam struct {
 	// Human-readable identifier of the Managed Transform.
 	ID param.Field[string] `json:"id"`
 	// When true, the Managed Transform is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r RequestListItemParam) MarshalJSON() (data []byte, err error) {
+func (r RequestModelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type ManagedHeaderListResponse struct {
-	ManagedRequestHeaders  []RequestListItem             `json:"managed_request_headers"`
-	ManagedResponseHeaders []RequestListItem             `json:"managed_response_headers"`
+	ManagedRequestHeaders  []RequestModel                `json:"managed_request_headers"`
+	ManagedResponseHeaders []RequestModel                `json:"managed_response_headers"`
 	JSON                   managedHeaderListResponseJSON `json:"-"`
 }
 
@@ -191,9 +191,9 @@ type ManagedHeaderListParams struct {
 
 type ManagedHeaderEditParams struct {
 	// Identifier
-	ZoneID                 param.Field[string]                 `path:"zone_id,required"`
-	ManagedRequestHeaders  param.Field[[]RequestListItemParam] `json:"managed_request_headers,required"`
-	ManagedResponseHeaders param.Field[[]RequestListItemParam] `json:"managed_response_headers,required"`
+	ZoneID                 param.Field[string]              `path:"zone_id,required"`
+	ManagedRequestHeaders  param.Field[[]RequestModelParam] `json:"managed_request_headers,required"`
+	ManagedResponseHeaders param.Field[[]RequestModelParam] `json:"managed_response_headers,required"`
 }
 
 func (r ManagedHeaderEditParams) MarshalJSON() (data []byte, err error) {

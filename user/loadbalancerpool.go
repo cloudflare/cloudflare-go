@@ -215,8 +215,8 @@ type Pool struct {
 	OriginSteering load_balancers.OriginSteering `json:"origin_steering"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins []load_balancers.OriginItem `json:"origins"`
-	JSON    poolJSON                    `json:"-"`
+	Origins []load_balancers.Origin `json:"origins"`
+	JSON    poolJSON                `json:"-"`
 }
 
 // poolJSON contains the JSON metadata for the struct [Pool]
@@ -348,7 +348,7 @@ type LoadBalancerPoolNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]load_balancers.OriginItemParam] `json:"origins,required"`
+	Origins param.Field[[]load_balancers.OriginParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]load_balancers.CheckRegion] `json:"check_regions"`
@@ -440,7 +440,7 @@ type LoadBalancerPoolUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]load_balancers.OriginItemParam] `json:"origins,required"`
+	Origins param.Field[[]load_balancers.OriginParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]load_balancers.CheckRegion] `json:"check_regions"`
@@ -634,7 +634,7 @@ type LoadBalancerPoolEditParams struct {
 	OriginSteering param.Field[load_balancers.OriginSteeringParam] `json:"origin_steering"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]load_balancers.OriginItemParam] `json:"origins"`
+	Origins param.Field[[]load_balancers.OriginParam] `json:"origins"`
 }
 
 func (r LoadBalancerPoolEditParams) MarshalJSON() (data []byte, err error) {

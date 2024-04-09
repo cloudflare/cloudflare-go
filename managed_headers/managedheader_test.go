@@ -56,7 +56,7 @@ func TestManagedHeaderEdit(t *testing.T) {
 	)
 	_, err := client.ManagedHeaders.Edit(context.TODO(), managed_headers.ManagedHeaderEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ManagedRequestHeaders: cloudflare.F([]managed_headers.RequestListItemParam{{
+		ManagedRequestHeaders: cloudflare.F([]managed_headers.RequestModelParam{{
 			Enabled: cloudflare.F(true),
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 		}, {
@@ -66,7 +66,7 @@ func TestManagedHeaderEdit(t *testing.T) {
 			Enabled: cloudflare.F(true),
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 		}}),
-		ManagedResponseHeaders: cloudflare.F([]managed_headers.RequestListItemParam{{
+		ManagedResponseHeaders: cloudflare.F([]managed_headers.RequestModelParam{{
 			Enabled: cloudflare.F(true),
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 		}, {

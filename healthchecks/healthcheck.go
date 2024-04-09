@@ -129,28 +129,28 @@ func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, quer
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
 // SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
 // and ENTERPRISE customers only).
-type CheckRegionItem string
+type CheckRegion string
 
 const (
-	CheckRegionItemWnam       CheckRegionItem = "WNAM"
-	CheckRegionItemEnam       CheckRegionItem = "ENAM"
-	CheckRegionItemWeu        CheckRegionItem = "WEU"
-	CheckRegionItemEeu        CheckRegionItem = "EEU"
-	CheckRegionItemNsam       CheckRegionItem = "NSAM"
-	CheckRegionItemSsam       CheckRegionItem = "SSAM"
-	CheckRegionItemOc         CheckRegionItem = "OC"
-	CheckRegionItemMe         CheckRegionItem = "ME"
-	CheckRegionItemNaf        CheckRegionItem = "NAF"
-	CheckRegionItemSaf        CheckRegionItem = "SAF"
-	CheckRegionItemIn         CheckRegionItem = "IN"
-	CheckRegionItemSeas       CheckRegionItem = "SEAS"
-	CheckRegionItemNeas       CheckRegionItem = "NEAS"
-	CheckRegionItemAllRegions CheckRegionItem = "ALL_REGIONS"
+	CheckRegionWnam       CheckRegion = "WNAM"
+	CheckRegionEnam       CheckRegion = "ENAM"
+	CheckRegionWeu        CheckRegion = "WEU"
+	CheckRegionEeu        CheckRegion = "EEU"
+	CheckRegionNsam       CheckRegion = "NSAM"
+	CheckRegionSsam       CheckRegion = "SSAM"
+	CheckRegionOc         CheckRegion = "OC"
+	CheckRegionMe         CheckRegion = "ME"
+	CheckRegionNaf        CheckRegion = "NAF"
+	CheckRegionSaf        CheckRegion = "SAF"
+	CheckRegionIn         CheckRegion = "IN"
+	CheckRegionSeas       CheckRegion = "SEAS"
+	CheckRegionNeas       CheckRegion = "NEAS"
+	CheckRegionAllRegions CheckRegion = "ALL_REGIONS"
 )
 
-func (r CheckRegionItem) IsKnown() bool {
+func (r CheckRegion) IsKnown() bool {
 	switch r {
-	case CheckRegionItemWnam, CheckRegionItemEnam, CheckRegionItemWeu, CheckRegionItemEeu, CheckRegionItemNsam, CheckRegionItemSsam, CheckRegionItemOc, CheckRegionItemMe, CheckRegionItemNaf, CheckRegionItemSaf, CheckRegionItemIn, CheckRegionItemSeas, CheckRegionItemNeas, CheckRegionItemAllRegions:
+	case CheckRegionWnam, CheckRegionEnam, CheckRegionWeu, CheckRegionEeu, CheckRegionNsam, CheckRegionSsam, CheckRegionOc, CheckRegionMe, CheckRegionNaf, CheckRegionSaf, CheckRegionIn, CheckRegionSeas, CheckRegionNeas, CheckRegionAllRegions:
 		return true
 	}
 	return false
@@ -163,7 +163,7 @@ type Healthcheck struct {
 	Address string `json:"address"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions []CheckRegionItem `json:"check_regions,nullable"`
+	CheckRegions []CheckRegion `json:"check_regions,nullable"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails int64 `json:"consecutive_fails"`
@@ -429,7 +429,7 @@ type HealthcheckNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]CheckRegionItem] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
@@ -515,7 +515,7 @@ type HealthcheckUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]CheckRegionItem] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
@@ -659,7 +659,7 @@ type HealthcheckEditParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]CheckRegionItem] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`

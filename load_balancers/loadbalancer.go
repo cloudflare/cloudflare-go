@@ -786,7 +786,7 @@ func (r NotificationFilterParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type OriginItem struct {
+type Origin struct {
 	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
 	// hostname. Hostnames entered here should resolve directly to the origin, and not
 	// be a hostname proxied by Cloudflare. To set an internal/reserved address,
@@ -815,12 +815,12 @@ type OriginItem struct {
 	//     origin's outstanding requests.
 	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
 	//     open connections.
-	Weight float64        `json:"weight"`
-	JSON   originItemJSON `json:"-"`
+	Weight float64    `json:"weight"`
+	JSON   originJSON `json:"-"`
 }
 
-// originItemJSON contains the JSON metadata for the struct [OriginItem]
-type originItemJSON struct {
+// originJSON contains the JSON metadata for the struct [Origin]
+type originJSON struct {
 	Address          apijson.Field
 	DisabledAt       apijson.Field
 	Enabled          apijson.Field
@@ -832,15 +832,15 @@ type originItemJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *OriginItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Origin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originItemJSON) RawJSON() string {
+func (r originJSON) RawJSON() string {
 	return r.raw
 }
 
-type OriginItemParam struct {
+type OriginParam struct {
 	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
 	// hostname. Hostnames entered here should resolve directly to the origin, and not
 	// be a hostname proxied by Cloudflare. To set an internal/reserved address,
@@ -869,7 +869,7 @@ type OriginItemParam struct {
 	Weight param.Field[float64] `json:"weight"`
 }
 
-func (r OriginItemParam) MarshalJSON() (data []byte, err error) {
+func (r OriginParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -28,9 +28,12 @@ import (
 // service directly, and instead use the [NewScriptService] method instead.
 type ScriptService struct {
 	Options     []option.RequestOption
+	Bindings    *ScriptBindingService
 	Schedules   *ScriptScheduleService
 	Tail        *ScriptTailService
+	UsageModel  *ScriptUsageModelService
 	Content     *ScriptContentService
+	ContentV2   *ScriptContentV2Service
 	Settings    *ScriptSettingService
 	Deployments *ScriptDeploymentService
 	Versions    *ScriptVersionService
@@ -42,9 +45,12 @@ type ScriptService struct {
 func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	r = &ScriptService{}
 	r.Options = opts
+	r.Bindings = NewScriptBindingService(opts...)
 	r.Schedules = NewScriptScheduleService(opts...)
 	r.Tail = NewScriptTailService(opts...)
+	r.UsageModel = NewScriptUsageModelService(opts...)
 	r.Content = NewScriptContentService(opts...)
+	r.ContentV2 = NewScriptContentV2Service(opts...)
 	r.Settings = NewScriptSettingService(opts...)
 	r.Deployments = NewScriptDeploymentService(opts...)
 	r.Versions = NewScriptVersionService(opts...)
@@ -151,80 +157,38 @@ func (r scriptJSON) RawJSON() string {
 	return r.raw
 }
 
-type Setting struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SettingsItem                                              `json:"result,required"`
-	// Whether the API call was successful
-	Success SettingSuccess `json:"success,required"`
-	JSON    settingJSON    `json:"-"`
-}
-
-// settingJSON contains the JSON metadata for the struct [Setting]
-type settingJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Setting) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SettingSuccess bool
-
-const (
-	SettingSuccessTrue SettingSuccess = true
-)
-
-func (r SettingSuccess) IsKnown() bool {
-	switch r {
-	case SettingSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type SettingsItem struct {
+type ScriptSetting struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScriptItem `json:"tail_consumers"`
-	JSON          settingsItemJSON     `json:"-"`
+	JSON          scriptSettingJSON    `json:"-"`
 }
 
-// settingsItemJSON contains the JSON metadata for the struct [SettingsItem]
-type settingsItemJSON struct {
+// scriptSettingJSON contains the JSON metadata for the struct [ScriptSetting]
+type scriptSettingJSON struct {
 	Logpush       apijson.Field
 	TailConsumers apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SettingsItem) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptSetting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingsItemJSON) RawJSON() string {
+func (r scriptSettingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingsItemParam struct {
+type ScriptSettingParam struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptItemParam] `json:"tail_consumers"`
 }
 
-func (r SettingsItemParam) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
