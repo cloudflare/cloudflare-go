@@ -46,11 +46,11 @@ func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, que
 }
 
 type MonitorReferenceGetResponse struct {
-	ReferenceType shared.UnnamedSchemaRefD8600eb4758b3ae35607a0327bcd691b `json:"reference_type"`
-	ResourceID    string                                                  `json:"resource_id"`
-	ResourceName  string                                                  `json:"resource_name"`
-	ResourceType  string                                                  `json:"resource_type"`
-	JSON          monitorReferenceGetResponseJSON                         `json:"-"`
+	ReferenceType MonitorReferenceGetResponseReferenceType `json:"reference_type"`
+	ResourceID    string                                   `json:"resource_id"`
+	ResourceName  string                                   `json:"resource_name"`
+	ResourceType  string                                   `json:"resource_type"`
+	JSON          monitorReferenceGetResponseJSON          `json:"-"`
 }
 
 // monitorReferenceGetResponseJSON contains the JSON metadata for the struct
@@ -70,6 +70,22 @@ func (r *MonitorReferenceGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r monitorReferenceGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type MonitorReferenceGetResponseReferenceType string
+
+const (
+	MonitorReferenceGetResponseReferenceTypeStar     MonitorReferenceGetResponseReferenceType = "*"
+	MonitorReferenceGetResponseReferenceTypeReferral MonitorReferenceGetResponseReferenceType = "referral"
+	MonitorReferenceGetResponseReferenceTypeReferrer MonitorReferenceGetResponseReferenceType = "referrer"
+)
+
+func (r MonitorReferenceGetResponseReferenceType) IsKnown() bool {
+	switch r {
+	case MonitorReferenceGetResponseReferenceTypeStar, MonitorReferenceGetResponseReferenceTypeReferral, MonitorReferenceGetResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
 }
 
 type MonitorReferenceGetParams struct {

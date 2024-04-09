@@ -55,8 +55,8 @@ type HealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 `json:"type"`
-	JSON healthCheckJSON                                  `json:"-"`
+	Type HealthCheckType `json:"type"`
+	JSON healthCheckJSON `json:"-"`
 }
 
 // healthCheckJSON contains the JSON metadata for the struct [HealthCheck]
@@ -118,7 +118,7 @@ type HealthCheckParam struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39] `json:"type"`
+	Type param.Field[HealthCheckType] `json:"type"`
 }
 
 func (r HealthCheckParam) MarshalJSON() (data []byte, err error) {
@@ -126,16 +126,16 @@ func (r HealthCheckParam) MarshalJSON() (data []byte, err error) {
 }
 
 // The type of healthcheck to run, reply or request. The default value is `reply`.
-type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 string
+type HealthCheckType string
 
 const (
-	UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Reply   UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 = "reply"
-	UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Request UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 = "request"
+	HealthCheckTypeReply   HealthCheckType = "reply"
+	HealthCheckTypeRequest HealthCheckType = "request"
 )
 
-func (r UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39) IsKnown() bool {
+func (r HealthCheckType) IsKnown() bool {
 	switch r {
-	case UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Reply, UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Request:
+	case HealthCheckTypeReply, HealthCheckTypeRequest:
 		return true
 	}
 	return false

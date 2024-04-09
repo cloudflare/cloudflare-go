@@ -305,11 +305,11 @@ func (r loadBalancerMonitorPreviewResponseJSON) RawJSON() string {
 }
 
 type LoadBalancerMonitorReferencesResponse struct {
-	ReferenceType shared.UnnamedSchemaRefD8600eb4758b3ae35607a0327bcd691b `json:"reference_type"`
-	ResourceID    string                                                  `json:"resource_id"`
-	ResourceName  string                                                  `json:"resource_name"`
-	ResourceType  string                                                  `json:"resource_type"`
-	JSON          loadBalancerMonitorReferencesResponseJSON               `json:"-"`
+	ReferenceType LoadBalancerMonitorReferencesResponseReferenceType `json:"reference_type"`
+	ResourceID    string                                             `json:"resource_id"`
+	ResourceName  string                                             `json:"resource_name"`
+	ResourceType  string                                             `json:"resource_type"`
+	JSON          loadBalancerMonitorReferencesResponseJSON          `json:"-"`
 }
 
 // loadBalancerMonitorReferencesResponseJSON contains the JSON metadata for the
@@ -329,6 +329,22 @@ func (r *LoadBalancerMonitorReferencesResponse) UnmarshalJSON(data []byte) (err 
 
 func (r loadBalancerMonitorReferencesResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type LoadBalancerMonitorReferencesResponseReferenceType string
+
+const (
+	LoadBalancerMonitorReferencesResponseReferenceTypeStar     LoadBalancerMonitorReferencesResponseReferenceType = "*"
+	LoadBalancerMonitorReferencesResponseReferenceTypeReferral LoadBalancerMonitorReferencesResponseReferenceType = "referral"
+	LoadBalancerMonitorReferencesResponseReferenceTypeReferrer LoadBalancerMonitorReferencesResponseReferenceType = "referrer"
+)
+
+func (r LoadBalancerMonitorReferencesResponseReferenceType) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorReferencesResponseReferenceTypeStar, LoadBalancerMonitorReferencesResponseReferenceTypeReferral, LoadBalancerMonitorReferencesResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
 }
 
 type LoadBalancerMonitorNewParams struct {

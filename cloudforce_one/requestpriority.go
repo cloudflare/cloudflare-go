@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // RequestPriorityService contains methods and other services that help with
@@ -60,7 +62,7 @@ func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier s
 }
 
 // Delete a Priority Intelligence Report
-func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union, err error) {
+func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *RequestPriorityDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", accountIdentifier, priorityIdentifer)
@@ -158,6 +160,32 @@ func (r PriorityTlp) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [cloudforce_one.RequestPriorityDeleteResponseUnknown],
+// [cloudforce_one.RequestPriorityDeleteResponseArray] or [shared.UnionString].
+type RequestPriorityDeleteResponseUnion interface {
+	ImplementsCloudforceOneRequestPriorityDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RequestPriorityDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RequestPriorityDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type RequestPriorityDeleteResponseArray []interface{}
+
+func (r RequestPriorityDeleteResponseArray) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion() {
 }
 
 type RequestPriorityNewParams struct {
@@ -315,9 +343,9 @@ func (r RequestPriorityUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   RequestPriorityDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityDeleteResponseEnvelopeJSON    `json:"-"`

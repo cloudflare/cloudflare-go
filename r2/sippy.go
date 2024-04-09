@@ -70,6 +70,20 @@ func (r *SippyService) Get(ctx context.Context, bucketName string, query SippyGe
 	return
 }
 
+type Provider string
+
+const (
+	ProviderR2 Provider = "r2"
+)
+
+func (r Provider) IsKnown() bool {
+	switch r {
+	case ProviderR2:
+		return true
+	}
+	return false
+}
+
 type Sippy struct {
 	// Details about the configured destination bucket
 	Destination SippyDestination `json:"destination"`
@@ -103,9 +117,9 @@ type SippyDestination struct {
 	AccessKeyID string `json:"accessKeyId"`
 	Account     string `json:"account"`
 	// Name of the bucket on the provider
-	Bucket   string                                           `json:"bucket"`
-	Provider UnnamedSchemaRef6430970563db310f19d39aafe3debd27 `json:"provider"`
-	JSON     sippyDestinationJSON                             `json:"-"`
+	Bucket   string               `json:"bucket"`
+	Provider Provider             `json:"provider"`
+	JSON     sippyDestinationJSON `json:"-"`
 }
 
 // sippyDestinationJSON contains the JSON metadata for the struct
@@ -164,20 +178,6 @@ const (
 func (r SippySourceProvider) IsKnown() bool {
 	switch r {
 	case SippySourceProviderAws, SippySourceProviderGcs:
-		return true
-	}
-	return false
-}
-
-type UnnamedSchemaRef6430970563db310f19d39aafe3debd27 string
-
-const (
-	UnnamedSchemaRef6430970563db310f19d39aafe3debd27R2 UnnamedSchemaRef6430970563db310f19d39aafe3debd27 = "r2"
-)
-
-func (r UnnamedSchemaRef6430970563db310f19d39aafe3debd27) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRef6430970563db310f19d39aafe3debd27R2:
 		return true
 	}
 	return false
@@ -255,8 +255,8 @@ type SippyUpdateParamsR2EnableSippyAwsDestination struct {
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]                                           `json:"accessKeyId"`
-	Provider    param.Field[UnnamedSchemaRef6430970563db310f19d39aafe3debd27] `json:"provider"`
+	AccessKeyID param.Field[string]   `json:"accessKeyId"`
+	Provider    param.Field[Provider] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
@@ -330,8 +330,8 @@ type SippyUpdateParamsR2EnableSippyGcsDestination struct {
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]                                           `json:"accessKeyId"`
-	Provider    param.Field[UnnamedSchemaRef6430970563db310f19d39aafe3debd27] `json:"provider"`
+	AccessKeyID param.Field[string]   `json:"accessKeyId"`
+	Provider    param.Field[Provider] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).

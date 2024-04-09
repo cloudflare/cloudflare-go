@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // ProjectDeploymentHistoryLogService contains methods and other services that help
@@ -33,7 +35,7 @@ func NewProjectDeploymentHistoryLogService(opts ...option.RequestOption) (r *Pro
 }
 
 // Fetch deployment logs for a project.
-func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
+func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *ProjectDeploymentHistoryLogGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentHistoryLogGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", query.AccountID, projectName, deploymentID)
@@ -45,15 +47,41 @@ func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectNam
 	return
 }
 
+// Union satisfied by [pages.ProjectDeploymentHistoryLogGetResponseUnknown],
+// [pages.ProjectDeploymentHistoryLogGetResponseArray] or [shared.UnionString].
+type ProjectDeploymentHistoryLogGetResponseUnion interface {
+	ImplementsPagesProjectDeploymentHistoryLogGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProjectDeploymentHistoryLogGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProjectDeploymentHistoryLogGetResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type ProjectDeploymentHistoryLogGetResponseArray []interface{}
+
+func (r ProjectDeploymentHistoryLogGetResponseArray) ImplementsPagesProjectDeploymentHistoryLogGetResponseUnion() {
+}
+
 type ProjectDeploymentHistoryLogGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ProjectDeploymentHistoryLogGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                       `json:"errors,required"`
+	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Result   ProjectDeploymentHistoryLogGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentHistoryLogGetResponseEnvelopeJSON    `json:"-"`

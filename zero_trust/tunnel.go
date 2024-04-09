@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/warp_connector"
 )
 
 // TunnelService contains methods and other services that help with interacting
@@ -59,7 +60,7 @@ func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ..
 }
 
 // Lists and filters all types of Tunnels in an account.
-func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8], err error) {
+func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[warp_connector.WARPConnector], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,7 +78,7 @@ func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts 
 }
 
 // Lists and filters all types of Tunnels in an account.
-func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8] {
+func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[warp_connector.WARPConnector] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -95,7 +96,7 @@ func (r *TunnelService) Delete(ctx context.Context, tunnelID string, params Tunn
 }
 
 // Updates an existing Cloudflare Tunnel.
-func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params TunnelEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8, err error) {
+func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params TunnelEditParams, opts ...option.RequestOption) (res *warp_connector.WARPConnector, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", params.AccountID, tunnelID)
@@ -274,7 +275,7 @@ func (r warpConnectorTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WARPConnectorTunnel) implementsSharedUnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8() {}
+func (r WARPConnectorTunnel) implementsWARPConnectorWARPConnector() {}
 
 type WARPConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
@@ -502,7 +503,7 @@ type TunnelEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8 `json:"result,required"`
+	Result warp_connector.WARPConnector `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelEditResponseEnvelopeJSON    `json:"-"`

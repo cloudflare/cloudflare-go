@@ -233,7 +233,7 @@ type IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheck struct {
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39        `json:"type"`
+	Type HealthCheckType                                         `json:"type"`
 	JSON ipsecTunnelNewResponseIPSECTunnelsTunnelHealthCheckJSON `json:"-"`
 }
 
@@ -369,7 +369,7 @@ type IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheck struct {
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39         `json:"type"`
+	Type HealthCheckType                                          `json:"type"`
 	JSON ipsecTunnelListResponseIPSECTunnelsTunnelHealthCheckJSON `json:"-"`
 }
 

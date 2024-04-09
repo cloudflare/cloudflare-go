@@ -64,15 +64,15 @@ func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTier
 }
 
 // ID of the zone setting.
-type UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 string
+type RegionalTieredCache string
 
 const (
-	UnnamedSchemaRef6535d2df7d4d089d21166bd140651307TcRegional UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 = "tc_regional"
+	RegionalTieredCacheTcRegional RegionalTieredCache = "tc_regional"
 )
 
-func (r UnnamedSchemaRef6535d2df7d4d089d21166bd140651307) IsKnown() bool {
+func (r RegionalTieredCache) IsKnown() bool {
 	switch r {
-	case UnnamedSchemaRef6535d2df7d4d089d21166bd140651307TcRegional:
+	case RegionalTieredCacheTcRegional:
 		return true
 	}
 	return false
@@ -83,7 +83,7 @@ func (r UnnamedSchemaRef6535d2df7d4d089d21166bd140651307) IsKnown() bool {
 // topologies.
 type RegionalTieredCacheEditResponse struct {
 	// ID of the zone setting.
-	ID UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 `json:"id,required"`
+	ID RegionalTieredCache `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
@@ -116,7 +116,7 @@ func (r regionalTieredCacheEditResponseJSON) RawJSON() string {
 // topologies.
 type RegionalTieredCacheEditResponseValue struct {
 	// ID of the zone setting.
-	ID UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 `json:"id,required"`
+	ID RegionalTieredCache `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                                `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       regionalTieredCacheEditResponseValueJSON `json:"-"`
@@ -144,7 +144,7 @@ func (r regionalTieredCacheEditResponseValueJSON) RawJSON() string {
 // topologies.
 type RegionalTieredCacheGetResponse struct {
 	// ID of the zone setting.
-	ID UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 `json:"id,required"`
+	ID RegionalTieredCache `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
@@ -177,7 +177,7 @@ func (r regionalTieredCacheGetResponseJSON) RawJSON() string {
 // topologies.
 type RegionalTieredCacheGetResponseValue struct {
 	// ID of the zone setting.
-	ID UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 `json:"id,required"`
+	ID RegionalTieredCache `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                               `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       regionalTieredCacheGetResponseValueJSON `json:"-"`

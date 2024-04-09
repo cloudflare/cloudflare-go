@@ -142,9 +142,9 @@ func init() {
 }
 
 type WAFPackageListResponseFirewallAPIResponseCollection struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                                          `json:"errors,required"`
+	Messages []shared.ResponseInfo                                          `json:"messages,required"`
+	Result   WAFPackageListResponseFirewallAPIResponseCollectionResultUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    WAFPackageListResponseFirewallAPIResponseCollectionSuccess    `json:"success,required"`
 	ResultInfo WAFPackageListResponseFirewallAPIResponseCollectionResultInfo `json:"result_info"`
@@ -172,6 +172,34 @@ func (r wafPackageListResponseFirewallAPIResponseCollectionJSON) RawJSON() strin
 }
 
 func (r WAFPackageListResponseFirewallAPIResponseCollection) implementsFirewallWAFPackageListResponse() {
+}
+
+// Union satisfied by
+// [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultUnknown],
+// [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultArray] or
+// [shared.UnionString].
+type WAFPackageListResponseFirewallAPIResponseCollectionResultUnion interface {
+	ImplementsFirewallWAFPackageListResponseFirewallAPIResponseCollectionResultUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WAFPackageListResponseFirewallAPIResponseCollectionResultUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WAFPackageListResponseFirewallAPIResponseCollectionResultArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type WAFPackageListResponseFirewallAPIResponseCollectionResultArray []interface{}
+
+func (r WAFPackageListResponseFirewallAPIResponseCollectionResultArray) ImplementsFirewallWAFPackageListResponseFirewallAPIResponseCollectionResultUnion() {
 }
 
 // Whether the API call was successful
@@ -685,9 +713,9 @@ func init() {
 }
 
 type WAFPackageGetResponseFirewallAPIResponseSingle struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo                                     `json:"errors,required"`
+	Messages []shared.ResponseInfo                                     `json:"messages,required"`
+	Result   WAFPackageGetResponseFirewallAPIResponseSingleResultUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success,required"`
 	JSON    wafPackageGetResponseFirewallAPIResponseSingleJSON    `json:"-"`
@@ -713,6 +741,24 @@ func (r wafPackageGetResponseFirewallAPIResponseSingleJSON) RawJSON() string {
 }
 
 func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsFirewallWAFPackageGetResponse() {}
+
+// Union satisfied by
+// [firewall.WAFPackageGetResponseFirewallAPIResponseSingleResultUnknown] or
+// [shared.UnionString].
+type WAFPackageGetResponseFirewallAPIResponseSingleResultUnion interface {
+	ImplementsFirewallWAFPackageGetResponseFirewallAPIResponseSingleResultUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WAFPackageGetResponseFirewallAPIResponseSingleResultUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 // Whether the API call was successful
 type WAFPackageGetResponseFirewallAPIResponseSingleSuccess bool

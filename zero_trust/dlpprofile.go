@@ -117,6 +117,44 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The type of the profile.
+type CustomProfile string
+
+const (
+	CustomProfileCustom CustomProfile = "custom"
+)
+
+func (r CustomProfile) IsKnown() bool {
+	switch r {
+	case CustomProfileCustom:
+		return true
+	}
+	return false
+}
+
+func (r CustomProfile) implementsZeroTrustProfile() {}
+
+func (r CustomProfile) implementsZeroTrustDLPProfileGetResponse() {}
+
+// The type of the profile.
+type PredefinedProfile string
+
+const (
+	PredefinedProfilePredefined PredefinedProfile = "predefined"
+)
+
+func (r PredefinedProfile) IsKnown() bool {
+	switch r {
+	case PredefinedProfilePredefined:
+		return true
+	}
+	return false
+}
+
+func (r PredefinedProfile) implementsZeroTrustProfile() {}
+
+func (r PredefinedProfile) implementsZeroTrustDLPProfileGetResponse() {}
+
 type Profile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
@@ -131,8 +169,8 @@ type Profile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 `json:"type"`
-	CreatedAt time.Time                                        `json:"created_at" format:"date-time"`
+	Type      PredefinedProfile `json:"type"`
+	CreatedAt time.Time         `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string      `json:"description"`
 	UpdatedAt   time.Time   `json:"updated_at" format:"date-time"`
@@ -321,36 +359,6 @@ func (r SkipConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The type of the profile.
-type UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1 string
-
-const (
-	UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1Custom UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1 = "custom"
-)
-
-func (r UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1Custom:
-		return true
-	}
-	return false
-}
-
-// The type of the profile.
-type UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 string
-
-const (
-	UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0Predefined UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 = "predefined"
-)
-
-func (r UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0Predefined:
-		return true
-	}
-	return false
-}
-
 type DLPProfileGetResponse struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
@@ -365,8 +373,8 @@ type DLPProfileGetResponse struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 `json:"type"`
-	CreatedAt time.Time                                        `json:"created_at" format:"date-time"`
+	Type      PredefinedProfile `json:"type"`
+	CreatedAt time.Time         `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string                    `json:"description"`
 	UpdatedAt   time.Time                 `json:"updated_at" format:"date-time"`

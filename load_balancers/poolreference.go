@@ -46,11 +46,11 @@ func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query Poo
 }
 
 type PoolReferenceGetResponse struct {
-	ReferenceType shared.UnnamedSchemaRefD8600eb4758b3ae35607a0327bcd691b `json:"reference_type"`
-	ResourceID    string                                                  `json:"resource_id"`
-	ResourceName  string                                                  `json:"resource_name"`
-	ResourceType  string                                                  `json:"resource_type"`
-	JSON          poolReferenceGetResponseJSON                            `json:"-"`
+	ReferenceType PoolReferenceGetResponseReferenceType `json:"reference_type"`
+	ResourceID    string                                `json:"resource_id"`
+	ResourceName  string                                `json:"resource_name"`
+	ResourceType  string                                `json:"resource_type"`
+	JSON          poolReferenceGetResponseJSON          `json:"-"`
 }
 
 // poolReferenceGetResponseJSON contains the JSON metadata for the struct
@@ -70,6 +70,22 @@ func (r *PoolReferenceGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r poolReferenceGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type PoolReferenceGetResponseReferenceType string
+
+const (
+	PoolReferenceGetResponseReferenceTypeStar     PoolReferenceGetResponseReferenceType = "*"
+	PoolReferenceGetResponseReferenceTypeReferral PoolReferenceGetResponseReferenceType = "referral"
+	PoolReferenceGetResponseReferenceTypeReferrer PoolReferenceGetResponseReferenceType = "referrer"
+)
+
+func (r PoolReferenceGetResponseReferenceType) IsKnown() bool {
+	switch r {
+	case PoolReferenceGetResponseReferenceTypeStar, PoolReferenceGetResponseReferenceTypeReferral, PoolReferenceGetResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
 }
 
 type PoolReferenceGetParams struct {

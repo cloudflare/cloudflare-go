@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -15,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // PoolService contains methods and other services that help with interacting with
@@ -40,7 +40,7 @@ func NewPoolService(opts ...option.RequestOption) (r *PoolService) {
 }
 
 // Create a new pool.
-func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *user.Pool, err error) {
+func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
@@ -53,7 +53,7 @@ func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...opt
 }
 
 // Modify a configured pool.
-func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *user.Pool, err error) {
+func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
@@ -66,7 +66,7 @@ func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpda
 }
 
 // List configured pools.
-func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.Pool], err error) {
+func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Pool], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -84,7 +84,7 @@ func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...o
 }
 
 // List configured pools.
-func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Pool] {
+func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Pool] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -102,7 +102,7 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, params PoolDele
 }
 
 // Apply changes to an existing pool, overwriting the supplied properties.
-func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *user.Pool, err error) {
+func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
@@ -115,7 +115,7 @@ func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditPa
 }
 
 // Fetch a single configured pool.
-func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *user.Pool, err error) {
+func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", query.AccountID, poolID)
@@ -125,6 +125,89 @@ func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParam
 	}
 	res = &env.Result
 	return
+}
+
+type Pool struct {
+	ID string `json:"id"`
+	// A list of regions from which to run health checks. Null means every Cloudflare
+	// data center.
+	CheckRegions []CheckRegion `json:"check_regions,nullable"`
+	CreatedOn    time.Time     `json:"created_on" format:"date-time"`
+	// A human-readable description of the pool.
+	Description string `json:"description"`
+	// This field shows up only if the pool is disabled. This field is set with the
+	// time the pool was disabled at.
+	DisabledAt time.Time `json:"disabled_at" format:"date-time"`
+	// Whether to enable (the default) or disable this pool. Disabled pools will not
+	// receive traffic and are excluded from health checks. Disabling a pool will cause
+	// any load balancers using it to failover to the next pool (if any).
+	Enabled bool `json:"enabled"`
+	// The latitude of the data center containing the origins used in this pool in
+	// decimal degrees. If this is set, longitude must also be set.
+	Latitude float64 `json:"latitude"`
+	// Configures load shedding policies and percentages for the pool.
+	LoadShedding LoadShedding `json:"load_shedding"`
+	// The longitude of the data center containing the origins used in this pool in
+	// decimal degrees. If this is set, latitude must also be set.
+	Longitude float64 `json:"longitude"`
+	// The minimum number of origins that must be healthy for this pool to serve
+	// traffic. If the number of healthy origins falls below this number, the pool will
+	// be marked unhealthy and will failover to the next available pool.
+	MinimumOrigins int64     `json:"minimum_origins"`
+	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
+	// The ID of the Monitor to use for checking the health of origins within this
+	// pool.
+	Monitor interface{} `json:"monitor"`
+	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
+	// underscores are allowed.
+	Name string `json:"name"`
+	// This field is now deprecated. It has been moved to Cloudflare's Centralized
+	// Notification service
+	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
+	// to send health status notifications to. This can be an individual mailbox or a
+	// mailing list. Multiple emails can be supplied as a comma delimited list.
+	NotificationEmail string `json:"notification_email"`
+	// Filter pool and origin health notifications by resource type or health status.
+	// Use null to reset.
+	NotificationFilter NotificationFilter `json:"notification_filter,nullable"`
+	// Configures origin steering for the pool. Controls how origins are selected for
+	// new sessions and traffic without session affinity.
+	OriginSteering OriginSteering `json:"origin_steering"`
+	// The list of origins within this pool. Traffic directed at this pool is balanced
+	// across all currently healthy origins, provided the pool itself is healthy.
+	Origins []Origin `json:"origins"`
+	JSON    poolJSON `json:"-"`
+}
+
+// poolJSON contains the JSON metadata for the struct [Pool]
+type poolJSON struct {
+	ID                 apijson.Field
+	CheckRegions       apijson.Field
+	CreatedOn          apijson.Field
+	Description        apijson.Field
+	DisabledAt         apijson.Field
+	Enabled            apijson.Field
+	Latitude           apijson.Field
+	LoadShedding       apijson.Field
+	Longitude          apijson.Field
+	MinimumOrigins     apijson.Field
+	ModifiedOn         apijson.Field
+	Monitor            apijson.Field
+	Name               apijson.Field
+	NotificationEmail  apijson.Field
+	NotificationFilter apijson.Field
+	OriginSteering     apijson.Field
+	Origins            apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *Pool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r poolJSON) RawJSON() string {
+	return r.raw
 }
 
 type PoolDeleteResponse struct {
@@ -199,7 +282,7 @@ func (r PoolNewParams) MarshalJSON() (data []byte, err error) {
 type PoolNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.Pool             `json:"result,required"`
+	Result   Pool                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolNewResponseEnvelopeJSON    `json:"-"`
@@ -293,7 +376,7 @@ func (r PoolUpdateParams) MarshalJSON() (data []byte, err error) {
 type PoolUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.Pool             `json:"result,required"`
+	Result   Pool                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolUpdateResponseEnvelopeJSON    `json:"-"`
@@ -456,7 +539,7 @@ func (r PoolEditParams) MarshalJSON() (data []byte, err error) {
 type PoolEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.Pool             `json:"result,required"`
+	Result   Pool                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolEditResponseEnvelopeJSON    `json:"-"`
@@ -504,7 +587,7 @@ type PoolGetParams struct {
 type PoolGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.Pool             `json:"result,required"`
+	Result   Pool                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolGetResponseEnvelopeJSON    `json:"-"`

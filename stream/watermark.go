@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // WatermarkService contains methods and other services that help with interacting
@@ -71,7 +73,7 @@ func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkLi
 }
 
 // Deletes a watermark profile.
-func (r *WatermarkService) Delete(ctx context.Context, identifier string, params WatermarkDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union, err error) {
+func (r *WatermarkService) Delete(ctx context.Context, identifier string, params WatermarkDeleteParams, opts ...option.RequestOption) (res *WatermarkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", params.AccountID, identifier)
@@ -155,6 +157,23 @@ func (r *Watermaks) UnmarshalJSON(data []byte) (err error) {
 
 func (r watermaksJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [stream.WatermarkDeleteResponseUnknown] or
+// [shared.UnionString].
+type WatermarkDeleteResponseUnion interface {
+	ImplementsStreamWatermarkDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WatermarkDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type WatermarkNewParams struct {
@@ -246,9 +265,9 @@ func (r WatermarkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   WatermarkDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkDeleteResponseEnvelopeJSON    `json:"-"`

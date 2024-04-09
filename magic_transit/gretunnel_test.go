@@ -70,7 +70,7 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 				Enabled:   cloudflare.F(true),
 				Rate:      cloudflare.F(magic_transit.UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Low),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Request),
+				Type:      cloudflare.F(magic_transit.HealthCheckTypeRequest),
 			}),
 			Mtu: cloudflare.F(int64(0)),
 			TTL: cloudflare.F(int64(0)),

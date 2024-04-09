@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // RequestService contains methods and other services that help with interacting
@@ -91,7 +93,7 @@ func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier s
 }
 
 // Delete a Request
-func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union, err error) {
+func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *RequestDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
@@ -467,6 +469,31 @@ func (r RequestConstantsTlp) IsKnown() bool {
 
 type RequestTypes []string
 
+// Union satisfied by [cloudforce_one.RequestDeleteResponseUnknown],
+// [cloudforce_one.RequestDeleteResponseArray] or [shared.UnionString].
+type RequestDeleteResponseUnion interface {
+	ImplementsCloudforceOneRequestDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RequestDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RequestDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type RequestDeleteResponseArray []interface{}
+
+func (r RequestDeleteResponseArray) ImplementsCloudforceOneRequestDeleteResponseUnion() {}
+
 type RequestNewParams struct {
 	// Request content
 	Content param.Field[string] `json:"content"`
@@ -689,9 +716,9 @@ func (r RequestListParamsStatus) IsKnown() bool {
 }
 
 type RequestDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   RequestDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestDeleteResponseEnvelopeJSON    `json:"-"`
