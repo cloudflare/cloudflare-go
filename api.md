@@ -1601,7 +1601,7 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#Lockdown">Lockdown</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#LockdownCIDRConfiguration">LockdownCIDRConfiguration</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#LockdownIPConfiguration">LockdownIPConfiguration</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#URLs">URLs</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#LockdownURL">LockdownURL</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#LockdownDeleteResponse">LockdownDeleteResponse</a>
 
 Methods:
@@ -1674,8 +1674,8 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#Override">Override</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#OverrideURL">OverrideURL</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#RewriteAction">RewriteAction</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#URLs">URLs</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#WAFRule">WAFRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#WAFOverrideDeleteResponse">WAFOverrideDeleteResponse</a>
 
