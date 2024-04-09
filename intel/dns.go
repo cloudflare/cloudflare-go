@@ -66,8 +66,8 @@ type DNS struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Reverse DNS look-ups observed during the time period.
-	ReverseRecords []UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050 `json:"reverse_records"`
-	JSON           dnsJSON                                            `json:"-"`
+	ReverseRecords []DNSReverseRecord `json:"reverse_records"`
+	JSON           dnsJSON            `json:"-"`
 }
 
 // dnsJSON contains the JSON metadata for the struct [DNS]
@@ -88,6 +88,34 @@ func (r dnsJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSReverseRecord struct {
+	// First seen date of the DNS record during the time period.
+	FirstSeen time.Time `json:"first_seen" format:"date"`
+	// Hostname that the IP was observed resolving to.
+	Hostname interface{} `json:"hostname"`
+	// Last seen date of the DNS record during the time period.
+	LastSeen time.Time            `json:"last_seen" format:"date"`
+	JSON     dnsReverseRecordJSON `json:"-"`
+}
+
+// dnsReverseRecordJSON contains the JSON metadata for the struct
+// [DNSReverseRecord]
+type dnsReverseRecordJSON struct {
+	FirstSeen   apijson.Field
+	Hostname    apijson.Field
+	LastSeen    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSReverseRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsReverseRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSParam struct {
 	// Total results returned based on your search parameters.
 	Count param.Field[float64] `json:"count"`
@@ -96,39 +124,24 @@ type DNSParam struct {
 	// Number of results per page of results.
 	PerPage param.Field[float64] `json:"per_page"`
 	// Reverse DNS look-ups observed during the time period.
-	ReverseRecords param.Field[[]UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050Param] `json:"reverse_records"`
+	ReverseRecords param.Field[[]DNSReverseRecordParam] `json:"reverse_records"`
 }
 
 func (r DNSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050 struct {
+type DNSReverseRecordParam struct {
 	// First seen date of the DNS record during the time period.
-	FirstSeen time.Time `json:"first_seen" format:"date"`
+	FirstSeen param.Field[time.Time] `json:"first_seen" format:"date"`
 	// Hostname that the IP was observed resolving to.
-	Hostname interface{} `json:"hostname"`
+	Hostname param.Field[interface{}] `json:"hostname"`
 	// Last seen date of the DNS record during the time period.
-	LastSeen time.Time                                            `json:"last_seen" format:"date"`
-	JSON     unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON `json:"-"`
+	LastSeen param.Field[time.Time] `json:"last_seen" format:"date"`
 }
 
-// unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050]
-type unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON struct {
-	FirstSeen   apijson.Field
-	Hostname    apijson.Field
-	LastSeen    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON) RawJSON() string {
-	return r.raw
+func (r DNSReverseRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DNSListResponse struct {

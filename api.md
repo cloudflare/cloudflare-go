@@ -3134,7 +3134,6 @@ Params Types:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#DNS">DNS</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050">UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#DNSListResponse">DNSListResponse</a>
 
 Methods:
