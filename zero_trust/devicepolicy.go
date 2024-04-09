@@ -327,9 +327,9 @@ func (r DevicePolicyNewParamsServiceModeV2) MarshalJSON() (data []byte, err erro
 }
 
 type DevicePolicyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SettingsPolicy                                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -416,9 +416,9 @@ func (r DevicePolicyDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DevicePolicyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []SettingsPolicy                                          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []SettingsPolicy      `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -544,9 +544,9 @@ func (r DevicePolicyEditParamsServiceModeV2) MarshalJSON() (data []byte, err err
 }
 
 type DevicePolicyEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SettingsPolicy                                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyEditResponseEnvelopeResultInfo `json:"result_info"`
@@ -624,9 +624,9 @@ type DevicePolicyGetParams struct {
 }
 
 type DevicePolicyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SettingsPolicy                                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyGetResponseEnvelopeResultInfo `json:"result_info"`

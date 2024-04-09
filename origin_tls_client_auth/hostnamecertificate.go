@@ -174,9 +174,9 @@ func (r HostnameCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameCertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Certificate                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -232,9 +232,9 @@ func (r HostnameCertificateDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type HostnameCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Certificate                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -280,9 +280,9 @@ type HostnameCertificateGetParams struct {
 }
 
 type HostnameCertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Certificate                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateGetResponseEnvelopeJSON    `json:"-"`

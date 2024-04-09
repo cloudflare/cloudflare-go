@@ -177,9 +177,9 @@ func (r AccessBookmarkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessBookmarkNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Bookmarks                                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Bookmarks             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkNewResponseEnvelopeJSON    `json:"-"`
@@ -228,9 +228,9 @@ func (r AccessBookmarkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessBookmarkUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Bookmarks                                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Bookmarks             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -279,9 +279,9 @@ func (r AccessBookmarkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessBookmarkDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AccessBookmarkDeleteResponse                              `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   AccessBookmarkDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -322,9 +322,9 @@ func (r AccessBookmarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Bookmarks                                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Bookmarks             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkGetResponseEnvelopeJSON    `json:"-"`

@@ -109,9 +109,9 @@ func (r EdgeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EdgeNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   InstantLogpushJob                                         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   InstantLogpushJob     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success EdgeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    edgeNewResponseEnvelopeJSON    `json:"-"`
@@ -157,9 +157,9 @@ type EdgeGetParams struct {
 }
 
 type EdgeGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []InstantLogpushJob                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []InstantLogpushJob   `json:"result,required"`
 	// Whether the API call was successful
 	Success EdgeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    edgeGetResponseEnvelopeJSON    `json:"-"`

@@ -463,9 +463,9 @@ func (r HealthcheckNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HealthcheckNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Healthcheck                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Healthcheck           `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckNewResponseEnvelopeJSON    `json:"-"`
@@ -549,9 +549,9 @@ func (r HealthcheckUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HealthcheckUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Healthcheck                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Healthcheck           `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckUpdateResponseEnvelopeJSON    `json:"-"`
@@ -607,9 +607,9 @@ func (r HealthcheckDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HealthcheckDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   HealthcheckDeleteResponse                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   HealthcheckDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckDeleteResponseEnvelopeJSON    `json:"-"`
@@ -693,9 +693,9 @@ func (r HealthcheckEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HealthcheckEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Healthcheck                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Healthcheck           `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckEditResponseEnvelopeJSON    `json:"-"`
@@ -741,9 +741,9 @@ type HealthcheckGetParams struct {
 }
 
 type HealthcheckGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Healthcheck                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Healthcheck           `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckGetResponseEnvelopeJSON    `json:"-"`

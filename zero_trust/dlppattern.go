@@ -59,9 +59,9 @@ func (r DLPPatternValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPatternValidateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                                   `json:"messages,required"`
+	Result   shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DLPPatternValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpPatternValidateResponseEnvelopeJSON    `json:"-"`

@@ -3984,9 +3984,9 @@ func (r RecordNewParamsURIRecordType) IsKnown() bool {
 }
 
 type RecordNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Record                                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Record                `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordNewResponseEnvelopeJSON    `json:"-"`
@@ -5262,9 +5262,9 @@ func (r RecordUpdateParamsURIRecordType) IsKnown() bool {
 }
 
 type RecordUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Record                                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Record                `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordUpdateResponseEnvelopeJSON    `json:"-"`
@@ -6783,9 +6783,9 @@ func (r RecordEditParamsURIRecordType) IsKnown() bool {
 }
 
 type RecordEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Record                                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Record                `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordEditResponseEnvelopeJSON    `json:"-"`
@@ -6836,9 +6836,9 @@ type RecordGetParams struct {
 }
 
 type RecordGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Record                                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Record                `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordGetResponseEnvelopeJSON    `json:"-"`
@@ -6898,9 +6898,9 @@ func (r RecordImportParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordImportResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   RecordImportResponse                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RecordImportResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordImportResponseEnvelopeSuccess              `json:"success,required"`
 	Timing  UnnamedSchemaRef2f895e023ae55b55d2f5925449b819cd `json:"timing"`
@@ -6953,9 +6953,9 @@ func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordScanResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   RecordScanResponse                                        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RecordScanResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordScanResponseEnvelopeSuccess                `json:"success,required"`
 	Timing  UnnamedSchemaRef2f895e023ae55b55d2f5925449b819cd `json:"timing"`

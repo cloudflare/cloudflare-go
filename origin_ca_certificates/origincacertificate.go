@@ -80,7 +80,7 @@ func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query O
 // Revoke an existing Origin CA certificate by its serial number. Use your Origin
 // CA Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, body OriginCACertificateDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837, err error) {
+func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, body OriginCACertificateDeleteParams, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("certificates/%s", certificateID)
@@ -188,6 +188,28 @@ func (r OriginCACertificateRequestedValidity) IsKnown() bool {
 	return false
 }
 
+type OriginCACertificateDeleteResponse struct {
+	// Identifier
+	ID   string                                `json:"id"`
+	JSON originCACertificateDeleteResponseJSON `json:"-"`
+}
+
+// originCACertificateDeleteResponseJSON contains the JSON metadata for the struct
+// [OriginCACertificateDeleteResponse]
+type originCACertificateDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginCACertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originCACertificateDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginCACertificateNewParams struct {
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
 	Csr param.Field[string] `json:"csr"`
@@ -245,8 +267,8 @@ func (r OriginCACertificateNewParamsRequestedValidity) IsKnown() bool {
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
@@ -310,9 +332,9 @@ func (r OriginCACertificateDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837   `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   OriginCACertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originCACertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -353,8 +375,8 @@ func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`

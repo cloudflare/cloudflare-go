@@ -110,9 +110,9 @@ func (r ControlRetentionFlagNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlRetentionFlagNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ControlRetentionFlagNewResponse                           `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   ControlRetentionFlagNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ControlRetentionFlagNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlRetentionFlagNewResponseEnvelopeJSON    `json:"-"`
@@ -153,9 +153,9 @@ func (r ControlRetentionFlagNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ControlRetentionFlagGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ControlRetentionFlagGetResponse                           `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   ControlRetentionFlagGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ControlRetentionFlagGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlRetentionFlagGetResponseEnvelopeJSON    `json:"-"`

@@ -195,9 +195,9 @@ func (r RequestPriorityNewParamsTlp) IsKnown() bool {
 }
 
 type RequestPriorityNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Priority                                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Priority              `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityNewResponseEnvelopeJSON    `json:"-"`
@@ -272,9 +272,9 @@ func (r RequestPriorityUpdateParamsTlp) IsKnown() bool {
 }
 
 type RequestPriorityUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Item                                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Item                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityUpdateResponseEnvelopeJSON    `json:"-"`
@@ -315,8 +315,8 @@ func (r RequestPriorityUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -358,9 +358,9 @@ func (r RequestPriorityDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Item                                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Item                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityGetResponseEnvelopeJSON    `json:"-"`
@@ -401,9 +401,9 @@ func (r RequestPriorityGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityQuotaResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Quota                                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Quota                 `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityQuotaResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityQuotaResponseEnvelopeJSON    `json:"-"`

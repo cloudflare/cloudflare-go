@@ -1140,9 +1140,9 @@ func (r PCAPNewParamsMagicVisibilityPCAPsRequestFullType) IsKnown() bool {
 }
 
 type PCAPNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PCAPNewResponse                                           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PCAPNewResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapNewResponseEnvelopeJSON    `json:"-"`
@@ -1193,9 +1193,9 @@ type PCAPGetParams struct {
 }
 
 type PCAPGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PCAPGetResponse                                           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PCAPGetResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapGetResponseEnvelopeJSON    `json:"-"`

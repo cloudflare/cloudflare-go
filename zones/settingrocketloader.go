@@ -208,8 +208,8 @@ func (r SettingRocketLoaderEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingRocketLoaderEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
@@ -251,8 +251,8 @@ type SettingRocketLoaderGetParams struct {
 }
 
 type SettingRocketLoaderGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that

@@ -138,9 +138,9 @@ func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Keys                                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Keys                  `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyNewResponseEnvelopeJSON    `json:"-"`
@@ -191,8 +191,8 @@ func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -239,9 +239,9 @@ type KeyGetParams struct {
 }
 
 type KeyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []KeyGetResponse                                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []KeyGetResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyGetResponseEnvelopeJSON    `json:"-"`

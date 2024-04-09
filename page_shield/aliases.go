@@ -13,13 +13,13 @@ type Error = apierror.Error
 type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
+type ResponseInfo = shared.ResponseInfo
+
+// This is an alias to an internal type.
+type ResponseInfoParam = shared.ResponseInfoParam
+
+// This is an alias to an internal type.
 type UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 = shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9
-
-// This is an alias to an internal type.
-type UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 = shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72
-
-// This is an alias to an internal type.
-type UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param = shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
@@ -98,9 +98,6 @@ type UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c = shared.UnnamedSchemaRef7
 //
 // This is an alias to an internal type.
 type UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam = shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam
-
-// This is an alias to an internal type.
-type UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837 = shared.UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion = shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion

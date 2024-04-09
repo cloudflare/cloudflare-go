@@ -679,9 +679,9 @@ func (r PolicyNewParamsAlertType) IsKnown() bool {
 }
 
 type PolicyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PolicyNewResponse                                         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PolicyNewResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success PolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    policyNewResponseEnvelopeJSON    `json:"-"`
@@ -819,9 +819,9 @@ func (r PolicyUpdateParamsAlertType) IsKnown() bool {
 }
 
 type PolicyUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PolicyUpdateResponse                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PolicyUpdateResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    policyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -872,8 +872,8 @@ type PolicyDeleteParams struct {
 }
 
 type PolicyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PolicyDeleteResponseEnvelopeSuccess    `json:"success,required"`
@@ -953,9 +953,9 @@ type PolicyGetParams struct {
 }
 
 type PolicyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Policy                                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Policy                `json:"result,required"`
 	// Whether the API call was successful
 	Success PolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    policyGetResponseEnvelopeJSON    `json:"-"`

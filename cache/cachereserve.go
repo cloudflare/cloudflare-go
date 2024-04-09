@@ -350,8 +350,8 @@ func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CacheReserveClearResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -424,8 +424,8 @@ func (r CacheReserveEditParamsValue) IsKnown() bool {
 }
 
 type CacheReserveEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Increase cache lifetimes by automatically storing all cacheable files into
 	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
 	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
@@ -478,8 +478,8 @@ type CacheReserveGetParams struct {
 }
 
 type CacheReserveGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Increase cache lifetimes by automatically storing all cacheable files into
 	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
 	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
@@ -532,8 +532,8 @@ type CacheReserveStatusParams struct {
 }
 
 type CacheReserveStatusResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind

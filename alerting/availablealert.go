@@ -78,9 +78,9 @@ type AvailableAlertListParams struct {
 }
 
 type AvailableAlertListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AvailableAlertListResponseUnion                           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   AvailableAlertListResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AvailableAlertListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AvailableAlertListResponseEnvelopeResultInfo `json:"result_info"`

@@ -4,12 +4,12 @@ package shared
 
 type UnionString string
 
+func (UnionString) ImplementsSharedUnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union() {}
 func (UnionString) ImplementsSharedUnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union() {}
 func (UnionString) ImplementsSharedUnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union() {}
 func (UnionString) ImplementsSharedUnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union() {}
 func (UnionString) ImplementsSharedUnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion() {}
 func (UnionString) ImplementsSharedUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion() {}
-func (UnionString) ImplementsSharedUnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union() {}
 func (UnionString) ImplementsUserLoadBalancerPoolHealthResponseUnion()                     {}
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                     {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()                         {}

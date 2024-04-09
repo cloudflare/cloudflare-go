@@ -274,9 +274,9 @@ func (r IndicatorFeedNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndicatorFeedNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndicatorFeedNewResponse                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   IndicatorFeedNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedNewResponseEnvelopeJSON    `json:"-"`
@@ -328,9 +328,9 @@ func (r IndicatorFeedUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndicatorFeedUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndicatorFeedUpdateResponse                               `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   IndicatorFeedUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedUpdateResponseEnvelopeJSON    `json:"-"`
@@ -386,9 +386,9 @@ type IndicatorFeedGetParams struct {
 }
 
 type IndicatorFeedGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndicatorFeedGetResponse                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   IndicatorFeedGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedGetResponseEnvelopeJSON    `json:"-"`
