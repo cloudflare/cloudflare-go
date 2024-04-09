@@ -59,7 +59,7 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}}),
-				StaticAddressing: cloudflare.F(magic_transit.StaticAddressingParam{
+				StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
 					Address: cloudflare.F("192.0.2.0/24"),
 					DHCPRelay: cloudflare.F(magic_transit.DHCPRelayParam{
 						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
@@ -134,7 +134,7 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}}),
-				StaticAddressing: cloudflare.F(magic_transit.StaticAddressingParam{
+				StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
 					Address: cloudflare.F("192.0.2.0/24"),
 					DHCPRelay: cloudflare.F(magic_transit.DHCPRelayParam{
 						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),

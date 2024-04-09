@@ -126,9 +126,9 @@ type Location struct {
 	// The name of the location.
 	Name string `json:"name"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks  []NetworkItem `json:"networks"`
-	UpdatedAt time.Time     `json:"updated_at" format:"date-time"`
-	JSON      locationJSON  `json:"-"`
+	Networks  []LocationNetwork `json:"networks"`
+	UpdatedAt time.Time         `json:"updated_at" format:"date-time"`
+	JSON      locationJSON      `json:"-"`
 }
 
 // locationJSON contains the JSON metadata for the struct [Location]
@@ -154,54 +154,33 @@ func (r locationJSON) RawJSON() string {
 	return r.raw
 }
 
-type Network struct {
+type LocationNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
-	Network string      `json:"network,required"`
-	JSON    networkJSON `json:"-"`
+	Network string              `json:"network,required"`
+	JSON    locationNetworkJSON `json:"-"`
 }
 
-// networkJSON contains the JSON metadata for the struct [Network]
-type networkJSON struct {
+// locationNetworkJSON contains the JSON metadata for the struct [LocationNetwork]
+type locationNetworkJSON struct {
 	Network     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Network) UnmarshalJSON(data []byte) (err error) {
+func (r *LocationNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r networkJSON) RawJSON() string {
+func (r locationNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
-type NetworkItem struct {
-	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
-	Network string          `json:"network,required"`
-	JSON    networkItemJSON `json:"-"`
-}
-
-// networkItemJSON contains the JSON metadata for the struct [NetworkItem]
-type networkItemJSON struct {
-	Network     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkItemJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkItemParam struct {
+type LocationNetworkParam struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network param.Field[string] `json:"network,required"`
 }
 
-func (r NetworkItemParam) MarshalJSON() (data []byte, err error) {
+func (r LocationNetworkParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -214,7 +193,7 @@ type GatewayLocationNewParams struct {
 	// True if the location needs to resolve EDNS queries.
 	EcsSupport param.Field[bool] `json:"ecs_support"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks param.Field[[]NetworkItemParam] `json:"networks"`
+	Networks param.Field[[]LocationNetworkParam] `json:"networks"`
 }
 
 func (r GatewayLocationNewParams) MarshalJSON() (data []byte, err error) {
@@ -273,7 +252,7 @@ type GatewayLocationUpdateParams struct {
 	// True if the location needs to resolve EDNS queries.
 	EcsSupport param.Field[bool] `json:"ecs_support"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks param.Field[[]NetworkItemParam] `json:"networks"`
+	Networks param.Field[[]LocationNetworkParam] `json:"networks"`
 }
 
 func (r GatewayLocationUpdateParams) MarshalJSON() (data []byte, err error) {

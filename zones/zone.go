@@ -29,6 +29,7 @@ type ZoneService struct {
 	Settings          *SettingService
 	CustomNameservers *CustomNameserverService
 	Holds             *HoldService
+	Workers           *WorkerService
 	Subscriptions     *SubscriptionService
 }
 
@@ -43,6 +44,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.Settings = NewSettingService(opts...)
 	r.CustomNameservers = NewCustomNameserverService(opts...)
 	r.Holds = NewHoldService(opts...)
+	r.Workers = NewWorkerService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
 	return
 }

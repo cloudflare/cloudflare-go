@@ -48,6 +48,376 @@ func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	return
 }
 
+// Enforces a device posture rule has run successfully
+type AccessDevicePostureRule struct {
+	DevicePosture AccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          accessDevicePostureRuleJSON          `json:"-"`
+}
+
+// accessDevicePostureRuleJSON contains the JSON metadata for the struct
+// [AccessDevicePostureRule]
+type accessDevicePostureRuleJSON struct {
+	DevicePosture apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessDevicePostureRule) implementsZeroTrustAccessRule() {}
+
+type AccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                   `json:"integration_uid,required"`
+	JSON           accessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// accessDevicePostureRuleDevicePostureJSON contains the JSON metadata for the
+// struct [AccessDevicePostureRuleDevicePosture]
+type accessDevicePostureRuleDevicePostureJSON struct {
+	IntegrationUid apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
+}
+
+// Enforces a device posture rule has run successfully
+type AccessDevicePostureRuleParam struct {
+	DevicePosture param.Field[AccessDevicePostureRuleDevicePostureParam] `json:"device_posture,required"`
+}
+
+func (r AccessDevicePostureRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessDevicePostureRuleDevicePostureParam struct {
+	// The ID of a device posture integration.
+	IntegrationUid param.Field[string] `json:"integration_uid,required"`
+}
+
+func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a specific email.
+type AccessRule struct {
+	Email                interface{}    `json:"email,required"`
+	EmailList            interface{}    `json:"email_list,required"`
+	EmailDomain          interface{}    `json:"email_domain,required"`
+	Everyone             interface{}    `json:"everyone,required"`
+	IP                   interface{}    `json:"ip,required"`
+	IPList               interface{}    `json:"ip_list,required"`
+	Certificate          interface{}    `json:"certificate,required"`
+	Group                interface{}    `json:"group,required"`
+	AzureAd              interface{}    `json:"azureAD,required"`
+	GitHubOrganization   interface{}    `json:"github-organization,required"`
+	Gsuite               interface{}    `json:"gsuite,required"`
+	Okta                 interface{}    `json:"okta,required"`
+	Saml                 interface{}    `json:"saml,required"`
+	ServiceToken         interface{}    `json:"service_token,required"`
+	AnyValidServiceToken interface{}    `json:"any_valid_service_token,required"`
+	ExternalEvaluation   interface{}    `json:"external_evaluation,required"`
+	Geo                  interface{}    `json:"geo,required"`
+	AuthMethod           interface{}    `json:"auth_method,required"`
+	DevicePosture        interface{}    `json:"device_posture,required"`
+	JSON                 accessRuleJSON `json:"-"`
+	union                AccessRuleUnion
+}
+
+// accessRuleJSON contains the JSON metadata for the struct [AccessRule]
+type accessRuleJSON struct {
+	Email                apijson.Field
+	EmailList            apijson.Field
+	EmailDomain          apijson.Field
+	Everyone             apijson.Field
+	IP                   apijson.Field
+	IPList               apijson.Field
+	Certificate          apijson.Field
+	Group                apijson.Field
+	AzureAd              apijson.Field
+	GitHubOrganization   apijson.Field
+	Gsuite               apijson.Field
+	Okta                 apijson.Field
+	Saml                 apijson.Field
+	ServiceToken         apijson.Field
+	AnyValidServiceToken apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	AuthMethod           apijson.Field
+	DevicePosture        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r accessRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r AccessRule) AsUnion() AccessRuleUnion {
+	return r.union
+}
+
+// Matches a specific email.
+//
+// Union satisfied by [zero_trust.EmailRule], [zero_trust.EmailListRule],
+// [zero_trust.DomainRule], [zero_trust.EveryoneRule], [zero_trust.IPRule],
+// [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
+// [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
+// [zero_trust.GsuiteGroupRule], [zero_trust.OktaGroupRule],
+// [zero_trust.SamlGroupRule], [zero_trust.ServiceTokenRule],
+// [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
+// [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
+// [zero_trust.AccessDevicePostureRule].
+type AccessRuleUnion interface {
+	implementsZeroTrustAccessRule()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessRuleUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(OktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessDevicePostureRule{}),
+		},
+	)
+}
+
+// Matches a specific email.
+type AccessRuleParam struct {
+	Email                param.Field[interface{}] `json:"email,required"`
+	EmailList            param.Field[interface{}] `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
+	Everyone             param.Field[interface{}] `json:"everyone,required"`
+	IP                   param.Field[interface{}] `json:"ip,required"`
+	IPList               param.Field[interface{}] `json:"ip_list,required"`
+	Certificate          param.Field[interface{}] `json:"certificate,required"`
+	Group                param.Field[interface{}] `json:"group,required"`
+	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
+	Okta                 param.Field[interface{}] `json:"okta,required"`
+	Saml                 param.Field[interface{}] `json:"saml,required"`
+	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}] `json:"geo,required"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
+}
+
+func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// Matches a specific email.
+//
+// Satisfied by [zero_trust.EmailRuleParam], [zero_trust.EmailListRuleParam],
+// [zero_trust.DomainRuleParam], [zero_trust.EveryoneRuleParam],
+// [zero_trust.IPRuleParam], [zero_trust.IPListRuleParam],
+// [zero_trust.CertificateRuleParam], [zero_trust.GroupRuleParam],
+// [zero_trust.AzureGroupRuleParam], [zero_trust.GitHubOrganizationRuleParam],
+// [zero_trust.GsuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
+// [zero_trust.SamlGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
+// [zero_trust.AnyValidServiceTokenRuleParam],
+// [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
+// [zero_trust.AuthenticationMethodRuleParam],
+// [zero_trust.AccessDevicePostureRuleParam], [AccessRuleParam].
+type AccessRuleUnionParam interface {
+	implementsZeroTrustAccessRuleUnionParam()
+}
+
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -71,13 +441,7 @@ func (r anyValidServiceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AnyValidServiceTokenRule) implementsZeroTrustIncludeItem() {}
-
-func (r AnyValidServiceTokenRule) implementsZeroTrustRule() {}
-
-func (r AnyValidServiceTokenRule) implementsZeroTrustExcludeItem() {}
-
-func (r AnyValidServiceTokenRule) implementsZeroTrustRequireItem() {}
+func (r AnyValidServiceTokenRule) implementsZeroTrustAccessRule() {}
 
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRuleParam struct {
@@ -89,111 +453,101 @@ func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 // Enforce different MFA options
 type AuthenticationMethodRule struct {
@@ -217,13 +571,7 @@ func (r authenticationMethodRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AuthenticationMethodRule) implementsZeroTrustIncludeItem() {}
-
-func (r AuthenticationMethodRule) implementsZeroTrustRule() {}
-
-func (r AuthenticationMethodRule) implementsZeroTrustExcludeItem() {}
-
-func (r AuthenticationMethodRule) implementsZeroTrustRequireItem() {}
+func (r AuthenticationMethodRule) implementsZeroTrustAccessRule() {}
 
 type AuthenticationMethodRuleAuthMethod struct {
 	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
@@ -256,111 +604,101 @@ func (r AuthenticationMethodRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type AuthenticationMethodRuleAuthMethodParam struct {
 	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
@@ -392,13 +730,7 @@ func (r azureGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AzureGroupRule) implementsZeroTrustIncludeItem() {}
-
-func (r AzureGroupRule) implementsZeroTrustRule() {}
-
-func (r AzureGroupRule) implementsZeroTrustExcludeItem() {}
-
-func (r AzureGroupRule) implementsZeroTrustRequireItem() {}
+func (r AzureGroupRule) implementsZeroTrustAccessRule() {}
 
 type AzureGroupRuleAzureAd struct {
 	// The ID of an Azure group.
@@ -434,111 +766,101 @@ func (r AzureGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type AzureGroupRuleAzureAdParam struct {
 	// The ID of an Azure group.
@@ -572,13 +894,7 @@ func (r certificateRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CertificateRule) implementsZeroTrustIncludeItem() {}
-
-func (r CertificateRule) implementsZeroTrustRule() {}
-
-func (r CertificateRule) implementsZeroTrustExcludeItem() {}
-
-func (r CertificateRule) implementsZeroTrustRequireItem() {}
+func (r CertificateRule) implementsZeroTrustAccessRule() {}
 
 // Matches any valid client certificate.
 type CertificateRuleParam struct {
@@ -589,111 +905,101 @@ func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 // Matches a specific country
 type CountryRule struct {
@@ -716,13 +1022,7 @@ func (r countryRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CountryRule) implementsZeroTrustIncludeItem() {}
-
-func (r CountryRule) implementsZeroTrustRule() {}
-
-func (r CountryRule) implementsZeroTrustExcludeItem() {}
-
-func (r CountryRule) implementsZeroTrustRequireItem() {}
+func (r CountryRule) implementsZeroTrustAccessRule() {}
 
 type CountryRuleGeo struct {
 	// The country code that should be matched.
@@ -754,111 +1054,101 @@ func (r CountryRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type CountryRuleGeoParam struct {
 	// The country code that should be matched.
@@ -866,182 +1156,6 @@ type CountryRuleGeoParam struct {
 }
 
 func (r CountryRuleGeoParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Enforces a device posture rule has run successfully
-type DevicePostureRule struct {
-	DevicePosture DevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          devicePostureRuleJSON          `json:"-"`
-}
-
-// devicePostureRuleJSON contains the JSON metadata for the struct
-// [DevicePostureRule]
-type devicePostureRuleJSON struct {
-	DevicePosture apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DevicePostureRule) implementsZeroTrustIncludeItem() {}
-
-func (r DevicePostureRule) implementsZeroTrustRule() {}
-
-func (r DevicePostureRule) implementsZeroTrustExcludeItem() {}
-
-func (r DevicePostureRule) implementsZeroTrustRequireItem() {}
-
-type DevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                             `json:"integration_uid,required"`
-	JSON           devicePostureRuleDevicePostureJSON `json:"-"`
-}
-
-// devicePostureRuleDevicePostureJSON contains the JSON metadata for the struct
-// [DevicePostureRuleDevicePosture]
-type devicePostureRuleDevicePostureJSON struct {
-	IntegrationUid apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *DevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureRuleDevicePostureJSON) RawJSON() string {
-	return r.raw
-}
-
-// Enforces a device posture rule has run successfully
-type DevicePostureRuleParam struct {
-	DevicePosture param.Field[DevicePostureRuleDevicePostureParam] `json:"device_posture,required"`
-}
-
-func (r DevicePostureRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-type DevicePostureRuleDevicePostureParam struct {
-	// The ID of a device posture integration.
-	IntegrationUid param.Field[string] `json:"integration_uid,required"`
-}
-
-func (r DevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1066,13 +1180,7 @@ func (r domainRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DomainRule) implementsZeroTrustIncludeItem() {}
-
-func (r DomainRule) implementsZeroTrustRule() {}
-
-func (r DomainRule) implementsZeroTrustExcludeItem() {}
-
-func (r DomainRule) implementsZeroTrustRequireItem() {}
+func (r DomainRule) implementsZeroTrustAccessRule() {}
 
 type DomainRuleEmailDomain struct {
 	// The email domain to match.
@@ -1105,111 +1213,101 @@ func (r DomainRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type DomainRuleEmailDomainParam struct {
 	// The email domain to match.
@@ -1241,13 +1339,7 @@ func (r emailListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EmailListRule) implementsZeroTrustIncludeItem() {}
-
-func (r EmailListRule) implementsZeroTrustRule() {}
-
-func (r EmailListRule) implementsZeroTrustExcludeItem() {}
-
-func (r EmailListRule) implementsZeroTrustRequireItem() {}
+func (r EmailListRule) implementsZeroTrustAccessRule() {}
 
 type EmailListRuleEmailList struct {
 	// The ID of a previously created email list.
@@ -1280,111 +1372,101 @@ func (r EmailListRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type EmailListRuleEmailListParam struct {
 	// The ID of a previously created email list.
@@ -1416,13 +1498,7 @@ func (r emailRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EmailRule) implementsZeroTrustIncludeItem() {}
-
-func (r EmailRule) implementsZeroTrustRule() {}
-
-func (r EmailRule) implementsZeroTrustExcludeItem() {}
-
-func (r EmailRule) implementsZeroTrustRequireItem() {}
+func (r EmailRule) implementsZeroTrustAccessRule() {}
 
 type EmailRuleEmail struct {
 	// The email of the user.
@@ -1454,111 +1530,101 @@ func (r EmailRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type EmailRuleEmailParam struct {
 	// The email of the user.
@@ -1591,13 +1657,7 @@ func (r everyoneRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EveryoneRule) implementsZeroTrustIncludeItem() {}
-
-func (r EveryoneRule) implementsZeroTrustRule() {}
-
-func (r EveryoneRule) implementsZeroTrustExcludeItem() {}
-
-func (r EveryoneRule) implementsZeroTrustRequireItem() {}
+func (r EveryoneRule) implementsZeroTrustAccessRule() {}
 
 // Matches everyone.
 type EveryoneRuleParam struct {
@@ -1609,111 +1669,101 @@ func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRule struct {
@@ -1737,13 +1787,7 @@ func (r externalEvaluationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ExternalEvaluationRule) implementsZeroTrustIncludeItem() {}
-
-func (r ExternalEvaluationRule) implementsZeroTrustRule() {}
-
-func (r ExternalEvaluationRule) implementsZeroTrustExcludeItem() {}
-
-func (r ExternalEvaluationRule) implementsZeroTrustRequireItem() {}
+func (r ExternalEvaluationRule) implementsZeroTrustAccessRule() {}
 
 type ExternalEvaluationRuleExternalEvaluation struct {
 	// The API endpoint containing your business logic.
@@ -1780,111 +1824,101 @@ func (r ExternalEvaluationRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type ExternalEvaluationRuleExternalEvaluationParam struct {
 	// The API endpoint containing your business logic.
@@ -1920,13 +1954,7 @@ func (r githubOrganizationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r GitHubOrganizationRule) implementsZeroTrustIncludeItem() {}
-
-func (r GitHubOrganizationRule) implementsZeroTrustRule() {}
-
-func (r GitHubOrganizationRule) implementsZeroTrustExcludeItem() {}
-
-func (r GitHubOrganizationRule) implementsZeroTrustRequireItem() {}
+func (r GitHubOrganizationRule) implementsZeroTrustAccessRule() {}
 
 type GitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
@@ -1962,111 +1990,101 @@ func (r GitHubOrganizationRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type GitHubOrganizationRuleGitHubOrganizationParam struct {
 	// The ID of your Github identity provider.
@@ -2100,13 +2118,7 @@ func (r groupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r GroupRule) implementsZeroTrustIncludeItem() {}
-
-func (r GroupRule) implementsZeroTrustRule() {}
-
-func (r GroupRule) implementsZeroTrustExcludeItem() {}
-
-func (r GroupRule) implementsZeroTrustRequireItem() {}
+func (r GroupRule) implementsZeroTrustAccessRule() {}
 
 type GroupRuleGroup struct {
 	// The ID of a previously created Access group.
@@ -2138,111 +2150,101 @@ func (r GroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type GroupRuleGroupParam struct {
 	// The ID of a previously created Access group.
@@ -2275,13 +2277,7 @@ func (r gsuiteGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r GsuiteGroupRule) implementsZeroTrustIncludeItem() {}
-
-func (r GsuiteGroupRule) implementsZeroTrustRule() {}
-
-func (r GsuiteGroupRule) implementsZeroTrustExcludeItem() {}
-
-func (r GsuiteGroupRule) implementsZeroTrustRequireItem() {}
+func (r GsuiteGroupRule) implementsZeroTrustAccessRule() {}
 
 type GsuiteGroupRuleGsuite struct {
 	// The ID of your Google Workspace identity provider.
@@ -2318,111 +2314,101 @@ func (r GsuiteGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type GsuiteGroupRuleGsuiteParam struct {
 	// The ID of your Google Workspace identity provider.
@@ -2433,216 +2419,6 @@ type GsuiteGroupRuleGsuiteParam struct {
 
 func (r GsuiteGroupRuleGsuiteParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Matches a specific email.
-type IncludeItem struct {
-	Email                interface{}     `json:"email,required"`
-	EmailList            interface{}     `json:"email_list,required"`
-	EmailDomain          interface{}     `json:"email_domain,required"`
-	Everyone             interface{}     `json:"everyone,required"`
-	IP                   interface{}     `json:"ip,required"`
-	IPList               interface{}     `json:"ip_list,required"`
-	Certificate          interface{}     `json:"certificate,required"`
-	Group                interface{}     `json:"group,required"`
-	AzureAd              interface{}     `json:"azureAD,required"`
-	GitHubOrganization   interface{}     `json:"github-organization,required"`
-	Gsuite               interface{}     `json:"gsuite,required"`
-	Okta                 interface{}     `json:"okta,required"`
-	Saml                 interface{}     `json:"saml,required"`
-	ServiceToken         interface{}     `json:"service_token,required"`
-	AnyValidServiceToken interface{}     `json:"any_valid_service_token,required"`
-	ExternalEvaluation   interface{}     `json:"external_evaluation,required"`
-	Geo                  interface{}     `json:"geo,required"`
-	AuthMethod           interface{}     `json:"auth_method,required"`
-	DevicePosture        interface{}     `json:"device_posture,required"`
-	JSON                 includeItemJSON `json:"-"`
-	union                IncludeItemUnion
-}
-
-// includeItemJSON contains the JSON metadata for the struct [IncludeItem]
-type includeItemJSON struct {
-	Email                apijson.Field
-	EmailList            apijson.Field
-	EmailDomain          apijson.Field
-	Everyone             apijson.Field
-	IP                   apijson.Field
-	IPList               apijson.Field
-	Certificate          apijson.Field
-	Group                apijson.Field
-	AzureAd              apijson.Field
-	GitHubOrganization   apijson.Field
-	Gsuite               apijson.Field
-	Okta                 apijson.Field
-	Saml                 apijson.Field
-	ServiceToken         apijson.Field
-	AnyValidServiceToken apijson.Field
-	ExternalEvaluation   apijson.Field
-	Geo                  apijson.Field
-	AuthMethod           apijson.Field
-	DevicePosture        apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r includeItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *IncludeItem) UnmarshalJSON(data []byte) (err error) {
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-func (r IncludeItem) AsUnion() IncludeItemUnion {
-	return r.union
-}
-
-// Matches a specific email.
-//
-// Union satisfied by [zero_trust.EmailRule], [zero_trust.EmailListRule],
-// [zero_trust.DomainRule], [zero_trust.EveryoneRule], [zero_trust.IPRule],
-// [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
-// [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
-// [zero_trust.GsuiteGroupRule], [zero_trust.OktaGroupRule],
-// [zero_trust.SamlGroupRule], [zero_trust.ServiceTokenRule],
-// [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
-// [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
-// [zero_trust.DevicePostureRule].
-type IncludeItemUnion interface {
-	implementsZeroTrustIncludeItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*IncludeItemUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EmailRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EmailListRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DomainRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EveryoneRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPListRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CertificateRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AzureGroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GitHubOrganizationRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GsuiteGroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OktaGroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SamlGroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ServiceTokenRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AnyValidServiceTokenRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ExternalEvaluationRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CountryRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AuthenticationMethodRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DevicePostureRule{}),
-		},
-	)
-}
-
-// Matches a specific email.
-type IncludeItemParam struct {
-	Email                param.Field[interface{}] `json:"email,required"`
-	EmailList            param.Field[interface{}] `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
-	Everyone             param.Field[interface{}] `json:"everyone,required"`
-	IP                   param.Field[interface{}] `json:"ip,required"`
-	IPList               param.Field[interface{}] `json:"ip_list,required"`
-	Certificate          param.Field[interface{}] `json:"certificate,required"`
-	Group                param.Field[interface{}] `json:"group,required"`
-	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
-	Okta                 param.Field[interface{}] `json:"okta,required"`
-	Saml                 param.Field[interface{}] `json:"saml,required"`
-	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}] `json:"geo,required"`
-	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
-}
-
-func (r IncludeItemParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IncludeItemParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-// Matches a specific email.
-//
-// Satisfied by [zero_trust.EmailRuleParam], [zero_trust.EmailListRuleParam],
-// [zero_trust.DomainRuleParam], [zero_trust.EveryoneRuleParam],
-// [zero_trust.IPRuleParam], [zero_trust.IPListRuleParam],
-// [zero_trust.CertificateRuleParam], [zero_trust.GroupRuleParam],
-// [zero_trust.AzureGroupRuleParam], [zero_trust.GitHubOrganizationRuleParam],
-// [zero_trust.GsuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
-// [zero_trust.SamlGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
-// [zero_trust.AnyValidServiceTokenRuleParam],
-// [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
-// [zero_trust.AuthenticationMethodRuleParam], [zero_trust.DevicePostureRuleParam],
-// [IncludeItemParam].
-type IncludeItemUnionParam interface {
-	implementsZeroTrustIncludeItemUnionParam()
 }
 
 // Matches an IP address from a list.
@@ -2666,13 +2442,7 @@ func (r ipListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPListRule) implementsZeroTrustIncludeItem() {}
-
-func (r IPListRule) implementsZeroTrustRule() {}
-
-func (r IPListRule) implementsZeroTrustExcludeItem() {}
-
-func (r IPListRule) implementsZeroTrustRequireItem() {}
+func (r IPListRule) implementsZeroTrustAccessRule() {}
 
 type IPListRuleIPList struct {
 	// The ID of a previously created IP list.
@@ -2705,111 +2475,101 @@ func (r IPListRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type IPListRuleIPListParam struct {
 	// The ID of a previously created IP list.
@@ -2841,13 +2601,7 @@ func (r ipRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPRule) implementsZeroTrustIncludeItem() {}
-
-func (r IPRule) implementsZeroTrustRule() {}
-
-func (r IPRule) implementsZeroTrustExcludeItem() {}
-
-func (r IPRule) implementsZeroTrustRequireItem() {}
+func (r IPRule) implementsZeroTrustAccessRule() {}
 
 type IPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -2879,111 +2633,101 @@ func (r IPRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type IPRuleIPParam struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -3015,13 +2759,7 @@ func (r oktaGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OktaGroupRule) implementsZeroTrustIncludeItem() {}
-
-func (r OktaGroupRule) implementsZeroTrustRule() {}
-
-func (r OktaGroupRule) implementsZeroTrustExcludeItem() {}
-
-func (r OktaGroupRule) implementsZeroTrustRequireItem() {}
+func (r OktaGroupRule) implementsZeroTrustAccessRule() {}
 
 type OktaGroupRuleOkta struct {
 	// The ID of your Okta identity provider.
@@ -3057,111 +2795,101 @@ func (r OktaGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type OktaGroupRuleOktaParam struct {
 	// The ID of your Okta identity provider.
@@ -3172,216 +2900,6 @@ type OktaGroupRuleOktaParam struct {
 
 func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Matches a specific email.
-type Rule struct {
-	Email                interface{} `json:"email,required"`
-	EmailList            interface{} `json:"email_list,required"`
-	EmailDomain          interface{} `json:"email_domain,required"`
-	Everyone             interface{} `json:"everyone,required"`
-	IP                   interface{} `json:"ip,required"`
-	IPList               interface{} `json:"ip_list,required"`
-	Certificate          interface{} `json:"certificate,required"`
-	Group                interface{} `json:"group,required"`
-	AzureAd              interface{} `json:"azureAD,required"`
-	GitHubOrganization   interface{} `json:"github-organization,required"`
-	Gsuite               interface{} `json:"gsuite,required"`
-	Okta                 interface{} `json:"okta,required"`
-	Saml                 interface{} `json:"saml,required"`
-	ServiceToken         interface{} `json:"service_token,required"`
-	AnyValidServiceToken interface{} `json:"any_valid_service_token,required"`
-	ExternalEvaluation   interface{} `json:"external_evaluation,required"`
-	Geo                  interface{} `json:"geo,required"`
-	AuthMethod           interface{} `json:"auth_method,required"`
-	DevicePosture        interface{} `json:"device_posture,required"`
-	JSON                 ruleJSON    `json:"-"`
-	union                RuleUnion
-}
-
-// ruleJSON contains the JSON metadata for the struct [Rule]
-type ruleJSON struct {
-	Email                apijson.Field
-	EmailList            apijson.Field
-	EmailDomain          apijson.Field
-	Everyone             apijson.Field
-	IP                   apijson.Field
-	IPList               apijson.Field
-	Certificate          apijson.Field
-	Group                apijson.Field
-	AzureAd              apijson.Field
-	GitHubOrganization   apijson.Field
-	Gsuite               apijson.Field
-	Okta                 apijson.Field
-	Saml                 apijson.Field
-	ServiceToken         apijson.Field
-	AnyValidServiceToken apijson.Field
-	ExternalEvaluation   apijson.Field
-	Geo                  apijson.Field
-	AuthMethod           apijson.Field
-	DevicePosture        apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r ruleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *Rule) UnmarshalJSON(data []byte) (err error) {
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-func (r Rule) AsUnion() RuleUnion {
-	return r.union
-}
-
-// Matches a specific email.
-//
-// Union satisfied by [zero_trust.EmailRule], [zero_trust.EmailListRule],
-// [zero_trust.DomainRule], [zero_trust.EveryoneRule], [zero_trust.IPRule],
-// [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
-// [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
-// [zero_trust.GsuiteGroupRule], [zero_trust.OktaGroupRule],
-// [zero_trust.SamlGroupRule], [zero_trust.ServiceTokenRule],
-// [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
-// [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
-// [zero_trust.DevicePostureRule].
-type RuleUnion interface {
-	implementsZeroTrustRule()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RuleUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EmailRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EmailListRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DomainRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EveryoneRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPListRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CertificateRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AzureGroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GitHubOrganizationRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GsuiteGroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OktaGroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SamlGroupRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ServiceTokenRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AnyValidServiceTokenRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ExternalEvaluationRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CountryRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AuthenticationMethodRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DevicePostureRule{}),
-		},
-	)
-}
-
-// Matches a specific email.
-type RuleParam struct {
-	Email                param.Field[interface{}] `json:"email,required"`
-	EmailList            param.Field[interface{}] `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
-	Everyone             param.Field[interface{}] `json:"everyone,required"`
-	IP                   param.Field[interface{}] `json:"ip,required"`
-	IPList               param.Field[interface{}] `json:"ip_list,required"`
-	Certificate          param.Field[interface{}] `json:"certificate,required"`
-	Group                param.Field[interface{}] `json:"group,required"`
-	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
-	Okta                 param.Field[interface{}] `json:"okta,required"`
-	Saml                 param.Field[interface{}] `json:"saml,required"`
-	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}] `json:"geo,required"`
-	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
-}
-
-func (r RuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RuleParam) implementsZeroTrustRuleUnionParam() {}
-
-// Matches a specific email.
-//
-// Satisfied by [zero_trust.EmailRuleParam], [zero_trust.EmailListRuleParam],
-// [zero_trust.DomainRuleParam], [zero_trust.EveryoneRuleParam],
-// [zero_trust.IPRuleParam], [zero_trust.IPListRuleParam],
-// [zero_trust.CertificateRuleParam], [zero_trust.GroupRuleParam],
-// [zero_trust.AzureGroupRuleParam], [zero_trust.GitHubOrganizationRuleParam],
-// [zero_trust.GsuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
-// [zero_trust.SamlGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
-// [zero_trust.AnyValidServiceTokenRuleParam],
-// [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
-// [zero_trust.AuthenticationMethodRuleParam], [zero_trust.DevicePostureRuleParam],
-// [RuleParam].
-type RuleUnionParam interface {
-	implementsZeroTrustRuleUnionParam()
 }
 
 // Matches a SAML group. Requires a SAML identity provider.
@@ -3405,13 +2923,7 @@ func (r samlGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SamlGroupRule) implementsZeroTrustIncludeItem() {}
-
-func (r SamlGroupRule) implementsZeroTrustRule() {}
-
-func (r SamlGroupRule) implementsZeroTrustExcludeItem() {}
-
-func (r SamlGroupRule) implementsZeroTrustRequireItem() {}
+func (r SamlGroupRule) implementsZeroTrustAccessRule() {}
 
 type SamlGroupRuleSaml struct {
 	// The name of the SAML attribute.
@@ -3447,111 +2959,101 @@ func (r SamlGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type SamlGroupRuleSamlParam struct {
 	// The name of the SAML attribute.
@@ -3586,13 +3088,7 @@ func (r serviceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ServiceTokenRule) implementsZeroTrustIncludeItem() {}
-
-func (r ServiceTokenRule) implementsZeroTrustRule() {}
-
-func (r ServiceTokenRule) implementsZeroTrustExcludeItem() {}
-
-func (r ServiceTokenRule) implementsZeroTrustRequireItem() {}
+func (r ServiceTokenRule) implementsZeroTrustAccessRule() {}
 
 type ServiceTokenRuleServiceToken struct {
 	// The ID of a Service Token.
@@ -3625,111 +3121,101 @@ func (r ServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type ServiceTokenRuleServiceTokenParam struct {
 	// The ID of a Service Token.

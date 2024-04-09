@@ -49,15 +49,6 @@ func (r *ScriptContentService) Update(ctx context.Context, scriptName string, pa
 	return
 }
 
-// Fetch script content only
-func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query ScriptContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content/v2", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
 type ScriptContentUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -129,9 +120,4 @@ func (r ScriptContentUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type ScriptContentGetParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
 }

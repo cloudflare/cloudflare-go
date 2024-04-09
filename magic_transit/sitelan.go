@@ -187,7 +187,7 @@ type LAN struct {
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing StaticAddressing `json:"static_addressing"`
+	StaticAddressing LANStaticAddressing `json:"static_addressing"`
 	// VLAN port number.
 	VlanTag int64   `json:"vlan_tag"`
 	JSON    lanJSON `json:"-"`
@@ -214,6 +214,59 @@ func (r *LAN) UnmarshalJSON(data []byte) (err error) {
 
 func (r lanJSON) RawJSON() string {
 	return r.raw
+}
+
+// If the site is not configured in high availability mode, this configuration is
+// optional (if omitted, use DHCP). However, if in high availability mode,
+// static_address is required along with secondary and virtual address.
+type LANStaticAddressing struct {
+	// A valid CIDR notation representing an IP range.
+	Address    string     `json:"address,required"`
+	DHCPRelay  DHCPRelay  `json:"dhcp_relay"`
+	DHCPServer DHCPServer `json:"dhcp_server"`
+	// A valid CIDR notation representing an IP range.
+	SecondaryAddress string `json:"secondary_address"`
+	// A valid CIDR notation representing an IP range.
+	VirtualAddress string                  `json:"virtual_address"`
+	JSON           lanStaticAddressingJSON `json:"-"`
+}
+
+// lanStaticAddressingJSON contains the JSON metadata for the struct
+// [LANStaticAddressing]
+type lanStaticAddressingJSON struct {
+	Address          apijson.Field
+	DHCPRelay        apijson.Field
+	DHCPServer       apijson.Field
+	SecondaryAddress apijson.Field
+	VirtualAddress   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *LANStaticAddressing) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r lanStaticAddressingJSON) RawJSON() string {
+	return r.raw
+}
+
+// If the site is not configured in high availability mode, this configuration is
+// optional (if omitted, use DHCP). However, if in high availability mode,
+// static_address is required along with secondary and virtual address.
+type LANStaticAddressingParam struct {
+	// A valid CIDR notation representing an IP range.
+	Address    param.Field[string]          `json:"address,required"`
+	DHCPRelay  param.Field[DHCPRelayParam]  `json:"dhcp_relay"`
+	DHCPServer param.Field[DHCPServerParam] `json:"dhcp_server"`
+	// A valid CIDR notation representing an IP range.
+	SecondaryAddress param.Field[string] `json:"secondary_address"`
+	// A valid CIDR notation representing an IP range.
+	VirtualAddress param.Field[string] `json:"virtual_address"`
+}
+
+func (r LANStaticAddressingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type Nat struct {
@@ -281,59 +334,6 @@ type RoutedSubnetParam struct {
 }
 
 func (r RoutedSubnetParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// If the site is not configured in high availability mode, this configuration is
-// optional (if omitted, use DHCP). However, if in high availability mode,
-// static_address is required along with secondary and virtual address.
-type StaticAddressing struct {
-	// A valid CIDR notation representing an IP range.
-	Address    string     `json:"address,required"`
-	DHCPRelay  DHCPRelay  `json:"dhcp_relay"`
-	DHCPServer DHCPServer `json:"dhcp_server"`
-	// A valid CIDR notation representing an IP range.
-	SecondaryAddress string `json:"secondary_address"`
-	// A valid CIDR notation representing an IP range.
-	VirtualAddress string               `json:"virtual_address"`
-	JSON           staticAddressingJSON `json:"-"`
-}
-
-// staticAddressingJSON contains the JSON metadata for the struct
-// [StaticAddressing]
-type staticAddressingJSON struct {
-	Address          apijson.Field
-	DHCPRelay        apijson.Field
-	DHCPServer       apijson.Field
-	SecondaryAddress apijson.Field
-	VirtualAddress   apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *StaticAddressing) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r staticAddressingJSON) RawJSON() string {
-	return r.raw
-}
-
-// If the site is not configured in high availability mode, this configuration is
-// optional (if omitted, use DHCP). However, if in high availability mode,
-// static_address is required along with secondary and virtual address.
-type StaticAddressingParam struct {
-	// A valid CIDR notation representing an IP range.
-	Address    param.Field[string]          `json:"address,required"`
-	DHCPRelay  param.Field[DHCPRelayParam]  `json:"dhcp_relay"`
-	DHCPServer param.Field[DHCPServerParam] `json:"dhcp_server"`
-	// A valid CIDR notation representing an IP range.
-	SecondaryAddress param.Field[string] `json:"secondary_address"`
-	// A valid CIDR notation representing an IP range.
-	VirtualAddress param.Field[string] `json:"virtual_address"`
-}
-
-func (r StaticAddressingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -467,7 +467,7 @@ type SiteLANNewParamsLAN struct {
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing param.Field[StaticAddressingParam] `json:"static_addressing"`
+	StaticAddressing param.Field[LANStaticAddressingParam] `json:"static_addressing"`
 }
 
 func (r SiteLANNewParamsLAN) MarshalJSON() (data []byte, err error) {
@@ -535,7 +535,7 @@ type SiteLANUpdateParamsLAN struct {
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing param.Field[StaticAddressingParam] `json:"static_addressing"`
+	StaticAddressing param.Field[LANStaticAddressingParam] `json:"static_addressing"`
 	// VLAN port number.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }

@@ -111,45 +111,45 @@ func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params Attac
 	return
 }
 
-type IssueClassItemParam = string
+type IssueClassParam = string
 
-type IssueTypeItem string
+type IssueType string
 
 const (
-	IssueTypeItemComplianceViolation   IssueTypeItem = "compliance_violation"
-	IssueTypeItemEmailSecurity         IssueTypeItem = "email_security"
-	IssueTypeItemExposedInfrastructure IssueTypeItem = "exposed_infrastructure"
-	IssueTypeItemInsecureConfiguration IssueTypeItem = "insecure_configuration"
-	IssueTypeItemWeakAuthentication    IssueTypeItem = "weak_authentication"
+	IssueTypeComplianceViolation   IssueType = "compliance_violation"
+	IssueTypeEmailSecurity         IssueType = "email_security"
+	IssueTypeExposedInfrastructure IssueType = "exposed_infrastructure"
+	IssueTypeInsecureConfiguration IssueType = "insecure_configuration"
+	IssueTypeWeakAuthentication    IssueType = "weak_authentication"
 )
 
-func (r IssueTypeItem) IsKnown() bool {
+func (r IssueType) IsKnown() bool {
 	switch r {
-	case IssueTypeItemComplianceViolation, IssueTypeItemEmailSecurity, IssueTypeItemExposedInfrastructure, IssueTypeItemInsecureConfiguration, IssueTypeItemWeakAuthentication:
+	case IssueTypeComplianceViolation, IssueTypeEmailSecurity, IssueTypeExposedInfrastructure, IssueTypeInsecureConfiguration, IssueTypeWeakAuthentication:
 		return true
 	}
 	return false
 }
 
-type ProductItemParam = string
+type ProductParam = string
 
-type SeverityQueryParamItem string
+type SeverityQueryParam string
 
 const (
-	SeverityQueryParamItemLow      SeverityQueryParamItem = "low"
-	SeverityQueryParamItemModerate SeverityQueryParamItem = "moderate"
-	SeverityQueryParamItemCritical SeverityQueryParamItem = "critical"
+	SeverityQueryParamLow      SeverityQueryParam = "low"
+	SeverityQueryParamModerate SeverityQueryParam = "moderate"
+	SeverityQueryParamCritical SeverityQueryParam = "critical"
 )
 
-func (r SeverityQueryParamItem) IsKnown() bool {
+func (r SeverityQueryParam) IsKnown() bool {
 	switch r {
-	case SeverityQueryParamItemLow, SeverityQueryParamItemModerate, SeverityQueryParamItemCritical:
+	case SeverityQueryParamLow, SeverityQueryParamModerate, SeverityQueryParamCritical:
 		return true
 	}
 	return false
 }
 
-type SubjectsItemParam = string
+type SubjectParam = string
 
 type AttackSurfaceReportIssueListResponse struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
@@ -370,22 +370,22 @@ func (r attackSurfaceReportIssueTypeResponseJSON) RawJSON() string {
 
 type AttackSurfaceReportIssueListParams struct {
 	// Identifier
-	AccountID     param.Field[string]                `path:"account_id,required"`
-	Dismissed     param.Field[bool]                  `query:"dismissed"`
-	IssueClass    param.Field[[]IssueClassItemParam] `query:"issue_class"`
-	IssueClassNeq param.Field[[]IssueClassItemParam] `query:"issue_class~neq"`
-	IssueType     param.Field[[]IssueTypeItem]       `query:"issue_type"`
-	IssueTypeNeq  param.Field[[]IssueTypeItem]       `query:"issue_type~neq"`
+	AccountID     param.Field[string]            `path:"account_id,required"`
+	Dismissed     param.Field[bool]              `query:"dismissed"`
+	IssueClass    param.Field[[]IssueClassParam] `query:"issue_class"`
+	IssueClassNeq param.Field[[]IssueClassParam] `query:"issue_class~neq"`
+	IssueType     param.Field[[]IssueType]       `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]IssueType]       `query:"issue_type~neq"`
 	// Current page within paginated list of results
 	Page param.Field[int64] `query:"page"`
 	// Number of results per page of results
-	PerPage     param.Field[int64]                    `query:"per_page"`
-	Product     param.Field[[]ProductItemParam]       `query:"product"`
-	ProductNeq  param.Field[[]ProductItemParam]       `query:"product~neq"`
-	Severity    param.Field[[]SeverityQueryParamItem] `query:"severity"`
-	SeverityNeq param.Field[[]SeverityQueryParamItem] `query:"severity~neq"`
-	Subject     param.Field[[]SubjectsItemParam]      `query:"subject"`
-	SubjectNeq  param.Field[[]SubjectsItemParam]      `query:"subject~neq"`
+	PerPage     param.Field[int64]                `query:"per_page"`
+	Product     param.Field[[]ProductParam]       `query:"product"`
+	ProductNeq  param.Field[[]ProductParam]       `query:"product~neq"`
+	Severity    param.Field[[]SeverityQueryParam] `query:"severity"`
+	SeverityNeq param.Field[[]SeverityQueryParam] `query:"severity~neq"`
+	Subject     param.Field[[]SubjectParam]       `query:"subject"`
+	SubjectNeq  param.Field[[]SubjectParam]       `query:"subject~neq"`
 }
 
 // URLQuery serializes [AttackSurfaceReportIssueListParams]'s query parameters as
@@ -399,18 +399,18 @@ func (r AttackSurfaceReportIssueListParams) URLQuery() (v url.Values) {
 
 type AttackSurfaceReportIssueClassParams struct {
 	// Identifier
-	AccountID     param.Field[string]                   `path:"account_id,required"`
-	Dismissed     param.Field[bool]                     `query:"dismissed"`
-	IssueClass    param.Field[[]IssueClassItemParam]    `query:"issue_class"`
-	IssueClassNeq param.Field[[]IssueClassItemParam]    `query:"issue_class~neq"`
-	IssueType     param.Field[[]IssueTypeItem]          `query:"issue_type"`
-	IssueTypeNeq  param.Field[[]IssueTypeItem]          `query:"issue_type~neq"`
-	Product       param.Field[[]ProductItemParam]       `query:"product"`
-	ProductNeq    param.Field[[]ProductItemParam]       `query:"product~neq"`
-	Severity      param.Field[[]SeverityQueryParamItem] `query:"severity"`
-	SeverityNeq   param.Field[[]SeverityQueryParamItem] `query:"severity~neq"`
-	Subject       param.Field[[]SubjectsItemParam]      `query:"subject"`
-	SubjectNeq    param.Field[[]SubjectsItemParam]      `query:"subject~neq"`
+	AccountID     param.Field[string]               `path:"account_id,required"`
+	Dismissed     param.Field[bool]                 `query:"dismissed"`
+	IssueClass    param.Field[[]IssueClassParam]    `query:"issue_class"`
+	IssueClassNeq param.Field[[]IssueClassParam]    `query:"issue_class~neq"`
+	IssueType     param.Field[[]IssueType]          `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]IssueType]          `query:"issue_type~neq"`
+	Product       param.Field[[]ProductParam]       `query:"product"`
+	ProductNeq    param.Field[[]ProductParam]       `query:"product~neq"`
+	Severity      param.Field[[]SeverityQueryParam] `query:"severity"`
+	SeverityNeq   param.Field[[]SeverityQueryParam] `query:"severity~neq"`
+	Subject       param.Field[[]SubjectParam]       `query:"subject"`
+	SubjectNeq    param.Field[[]SubjectParam]       `query:"subject~neq"`
 }
 
 // URLQuery serializes [AttackSurfaceReportIssueClassParams]'s query parameters as
@@ -520,18 +520,18 @@ func (r AttackSurfaceReportIssueDismissResponseEnvelopeSuccess) IsKnown() bool {
 
 type AttackSurfaceReportIssueSeverityParams struct {
 	// Identifier
-	AccountID     param.Field[string]                   `path:"account_id,required"`
-	Dismissed     param.Field[bool]                     `query:"dismissed"`
-	IssueClass    param.Field[[]IssueClassItemParam]    `query:"issue_class"`
-	IssueClassNeq param.Field[[]IssueClassItemParam]    `query:"issue_class~neq"`
-	IssueType     param.Field[[]IssueTypeItem]          `query:"issue_type"`
-	IssueTypeNeq  param.Field[[]IssueTypeItem]          `query:"issue_type~neq"`
-	Product       param.Field[[]ProductItemParam]       `query:"product"`
-	ProductNeq    param.Field[[]ProductItemParam]       `query:"product~neq"`
-	Severity      param.Field[[]SeverityQueryParamItem] `query:"severity"`
-	SeverityNeq   param.Field[[]SeverityQueryParamItem] `query:"severity~neq"`
-	Subject       param.Field[[]SubjectsItemParam]      `query:"subject"`
-	SubjectNeq    param.Field[[]SubjectsItemParam]      `query:"subject~neq"`
+	AccountID     param.Field[string]               `path:"account_id,required"`
+	Dismissed     param.Field[bool]                 `query:"dismissed"`
+	IssueClass    param.Field[[]IssueClassParam]    `query:"issue_class"`
+	IssueClassNeq param.Field[[]IssueClassParam]    `query:"issue_class~neq"`
+	IssueType     param.Field[[]IssueType]          `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]IssueType]          `query:"issue_type~neq"`
+	Product       param.Field[[]ProductParam]       `query:"product"`
+	ProductNeq    param.Field[[]ProductParam]       `query:"product~neq"`
+	Severity      param.Field[[]SeverityQueryParam] `query:"severity"`
+	SeverityNeq   param.Field[[]SeverityQueryParam] `query:"severity~neq"`
+	Subject       param.Field[[]SubjectParam]       `query:"subject"`
+	SubjectNeq    param.Field[[]SubjectParam]       `query:"subject~neq"`
 }
 
 // URLQuery serializes [AttackSurfaceReportIssueSeverityParams]'s query parameters
@@ -588,18 +588,18 @@ func (r AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess) IsKnown() bool 
 
 type AttackSurfaceReportIssueTypeParams struct {
 	// Identifier
-	AccountID     param.Field[string]                   `path:"account_id,required"`
-	Dismissed     param.Field[bool]                     `query:"dismissed"`
-	IssueClass    param.Field[[]IssueClassItemParam]    `query:"issue_class"`
-	IssueClassNeq param.Field[[]IssueClassItemParam]    `query:"issue_class~neq"`
-	IssueType     param.Field[[]IssueTypeItem]          `query:"issue_type"`
-	IssueTypeNeq  param.Field[[]IssueTypeItem]          `query:"issue_type~neq"`
-	Product       param.Field[[]ProductItemParam]       `query:"product"`
-	ProductNeq    param.Field[[]ProductItemParam]       `query:"product~neq"`
-	Severity      param.Field[[]SeverityQueryParamItem] `query:"severity"`
-	SeverityNeq   param.Field[[]SeverityQueryParamItem] `query:"severity~neq"`
-	Subject       param.Field[[]SubjectsItemParam]      `query:"subject"`
-	SubjectNeq    param.Field[[]SubjectsItemParam]      `query:"subject~neq"`
+	AccountID     param.Field[string]               `path:"account_id,required"`
+	Dismissed     param.Field[bool]                 `query:"dismissed"`
+	IssueClass    param.Field[[]IssueClassParam]    `query:"issue_class"`
+	IssueClassNeq param.Field[[]IssueClassParam]    `query:"issue_class~neq"`
+	IssueType     param.Field[[]IssueType]          `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]IssueType]          `query:"issue_type~neq"`
+	Product       param.Field[[]ProductParam]       `query:"product"`
+	ProductNeq    param.Field[[]ProductParam]       `query:"product~neq"`
+	Severity      param.Field[[]SeverityQueryParam] `query:"severity"`
+	SeverityNeq   param.Field[[]SeverityQueryParam] `query:"severity~neq"`
+	Subject       param.Field[[]SubjectParam]       `query:"subject"`
+	SubjectNeq    param.Field[[]SubjectParam]       `query:"subject~neq"`
 }
 
 // URLQuery serializes [AttackSurfaceReportIssueTypeParams]'s query parameters as

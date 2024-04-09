@@ -210,18 +210,18 @@ func (r DNSResolverSettingsV6Param) MarshalJSON() (data []byte, err error) {
 }
 
 // The protocol or layer to use.
-type FilterItem string
+type GatewayFilter string
 
 const (
-	FilterItemHTTP   FilterItem = "http"
-	FilterItemDNS    FilterItem = "dns"
-	FilterItemL4     FilterItem = "l4"
-	FilterItemEgress FilterItem = "egress"
+	GatewayFilterHTTP   GatewayFilter = "http"
+	GatewayFilterDNS    GatewayFilter = "dns"
+	GatewayFilterL4     GatewayFilter = "l4"
+	GatewayFilterEgress GatewayFilter = "egress"
 )
 
-func (r FilterItem) IsKnown() bool {
+func (r GatewayFilter) IsKnown() bool {
 	switch r {
-	case FilterItemHTTP, FilterItemDNS, FilterItemL4, FilterItemEgress:
+	case GatewayFilterHTTP, GatewayFilterDNS, GatewayFilterL4, GatewayFilterEgress:
 		return true
 	}
 	return false
@@ -244,7 +244,7 @@ type Rule struct {
 	Enabled bool `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters []FilterItem `json:"filters"`
+	Filters []GatewayFilter `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity string `json:"identity"`
 	// The name of the rule.
@@ -337,7 +337,7 @@ type RuleParam struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters param.Field[[]FilterItem] `json:"filters"`
+	Filters param.Field[[]GatewayFilter] `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity param.Field[string] `json:"identity"`
 	// The name of the rule.
@@ -1020,7 +1020,7 @@ type GatewayRuleNewParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters param.Field[[]FilterItem] `json:"filters"`
+	Filters param.Field[[]GatewayFilter] `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity param.Field[string] `json:"identity"`
 	// Precedence sets the order of your rules. Lower values indicate higher
@@ -1128,7 +1128,7 @@ type GatewayRuleUpdateParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters param.Field[[]FilterItem] `json:"filters"`
+	Filters param.Field[[]GatewayFilter] `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity param.Field[string] `json:"identity"`
 	// Precedence sets the order of your rules. Lower values indicate higher

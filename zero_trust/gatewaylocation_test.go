@@ -33,7 +33,7 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 		Name:          cloudflare.F("Austin Office Location"),
 		ClientDefault: cloudflare.F(false),
 		EcsSupport:    cloudflare.F(false),
-		Networks: cloudflare.F([]zero_trust.NetworkItemParam{{
+		Networks: cloudflare.F([]zero_trust.LocationNetworkParam{{
 			Network: cloudflare.F("192.0.2.1/32"),
 		}, {
 			Network: cloudflare.F("192.0.2.1/32"),
@@ -72,7 +72,7 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 			Name:          cloudflare.F("Austin Office Location"),
 			ClientDefault: cloudflare.F(false),
 			EcsSupport:    cloudflare.F(false),
-			Networks: cloudflare.F([]zero_trust.NetworkItemParam{{
+			Networks: cloudflare.F([]zero_trust.LocationNetworkParam{{
 				Network: cloudflare.F("192.0.2.1/32"),
 			}, {
 				Network: cloudflare.F("192.0.2.1/32"),

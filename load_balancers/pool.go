@@ -156,7 +156,7 @@ type PoolNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]OriginItemParam] `json:"origins,required"`
+	Origins param.Field[[]OriginParam] `json:"origins,required"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
@@ -247,7 +247,7 @@ type PoolUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]OriginItemParam] `json:"origins,required"`
+	Origins param.Field[[]OriginParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
@@ -446,7 +446,7 @@ type PoolEditParams struct {
 	OriginSteering param.Field[OriginSteeringParam] `json:"origin_steering"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]OriginItemParam] `json:"origins"`
+	Origins param.Field[[]OriginParam] `json:"origins"`
 }
 
 func (r PoolEditParams) MarshalJSON() (data []byte, err error) {

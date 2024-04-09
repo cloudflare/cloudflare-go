@@ -165,67 +165,15 @@ func (r ActionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Actions pattern.
-type ActionItem struct {
-	// Type of supported action.
-	Type  ActionItemType `json:"type,required"`
-	Value []string       `json:"value,required"`
-	JSON  actionItemJSON `json:"-"`
-}
-
-// actionItemJSON contains the JSON metadata for the struct [ActionItem]
-type actionItemJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ActionItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r actionItemJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of supported action.
-type ActionItemType string
-
-const (
-	ActionItemTypeDrop    ActionItemType = "drop"
-	ActionItemTypeForward ActionItemType = "forward"
-	ActionItemTypeWorker  ActionItemType = "worker"
-)
-
-func (r ActionItemType) IsKnown() bool {
-	switch r {
-	case ActionItemTypeDrop, ActionItemTypeForward, ActionItemTypeWorker:
-		return true
-	}
-	return false
-}
-
-// Actions pattern.
-type ActionItemParam struct {
-	// Type of supported action.
-	Type  param.Field[ActionItemType] `json:"type,required"`
-	Value param.Field[[]string]       `json:"value,required"`
-}
-
-func (r ActionItemParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type EmailRule struct {
 	// Routing rule identifier.
 	ID string `json:"id"`
 	// List actions patterns.
-	Actions []ActionItem `json:"actions"`
+	Actions []Action `json:"actions"`
 	// Routing rule status.
 	Enabled EmailRuleEnabled `json:"enabled"`
 	// Matching patterns to forward to your actions.
-	Matchers []MatcherItem `json:"matchers"`
+	Matchers []Matcher `json:"matchers"`
 	// Routing rule name.
 	Name string `json:"name"`
 	// Priority of the routing rule.
@@ -256,13 +204,7 @@ func (r emailRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EmailRule) implementsZeroTrustIncludeItem() {}
-
-func (r EmailRule) implementsZeroTrustRule() {}
-
-func (r EmailRule) implementsZeroTrustExcludeItem() {}
-
-func (r EmailRule) implementsZeroTrustRequireItem() {}
+func (r EmailRule) implementsZeroTrustAccessRule() {}
 
 // Routing rule status.
 type EmailRuleEnabled bool
@@ -282,11 +224,11 @@ func (r EmailRuleEnabled) IsKnown() bool {
 
 type EmailRuleParam struct {
 	// List actions patterns.
-	Actions param.Field[[]ActionItemParam] `json:"actions"`
+	Actions param.Field[[]ActionParam] `json:"actions"`
 	// Routing rule status.
 	Enabled param.Field[EmailRuleEnabled] `json:"enabled"`
 	// Matching patterns to forward to your actions.
-	Matchers param.Field[[]MatcherItemParam] `json:"matchers"`
+	Matchers param.Field[[]MatcherParam] `json:"matchers"`
 	// Routing rule name.
 	Name param.Field[string] `json:"name"`
 	// Priority of the routing rule.
@@ -297,111 +239,101 @@ func (r EmailRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 // Matching pattern to forward your actions.
 type Matcher struct {
@@ -475,83 +407,11 @@ func (r MatcherParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matching pattern to forward your actions.
-type MatcherItem struct {
-	// Field for type matcher.
-	Field MatcherItemField `json:"field,required"`
-	// Type of matcher.
-	Type MatcherItemType `json:"type,required"`
-	// Value for matcher.
-	Value string          `json:"value,required"`
-	JSON  matcherItemJSON `json:"-"`
-}
-
-// matcherItemJSON contains the JSON metadata for the struct [MatcherItem]
-type matcherItemJSON struct {
-	Field       apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MatcherItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r matcherItemJSON) RawJSON() string {
-	return r.raw
-}
-
-// Field for type matcher.
-type MatcherItemField string
-
-const (
-	MatcherItemFieldTo MatcherItemField = "to"
-)
-
-func (r MatcherItemField) IsKnown() bool {
-	switch r {
-	case MatcherItemFieldTo:
-		return true
-	}
-	return false
-}
-
-// Type of matcher.
-type MatcherItemType string
-
-const (
-	MatcherItemTypeLiteral MatcherItemType = "literal"
-)
-
-func (r MatcherItemType) IsKnown() bool {
-	switch r {
-	case MatcherItemTypeLiteral:
-		return true
-	}
-	return false
-}
-
-// Matching pattern to forward your actions.
-type MatcherItemParam struct {
-	// Field for type matcher.
-	Field param.Field[MatcherItemField] `json:"field,required"`
-	// Type of matcher.
-	Type param.Field[MatcherItemType] `json:"type,required"`
-	// Value for matcher.
-	Value param.Field[string] `json:"value,required"`
-}
-
-func (r MatcherItemParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type RuleNewParams struct {
 	// List actions patterns.
-	Actions param.Field[[]ActionItemParam] `json:"actions,required"`
+	Actions param.Field[[]ActionParam] `json:"actions,required"`
 	// Matching patterns to forward to your actions.
-	Matchers param.Field[[]MatcherItemParam] `json:"matchers,required"`
+	Matchers param.Field[[]MatcherParam] `json:"matchers,required"`
 	// Routing rule status.
 	Enabled param.Field[RuleNewParamsEnabled] `json:"enabled"`
 	// Routing rule name.
@@ -625,9 +485,9 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleUpdateParams struct {
 	// List actions patterns.
-	Actions param.Field[[]ActionItemParam] `json:"actions,required"`
+	Actions param.Field[[]ActionParam] `json:"actions,required"`
 	// Matching patterns to forward to your actions.
-	Matchers param.Field[[]MatcherItemParam] `json:"matchers,required"`
+	Matchers param.Field[[]MatcherParam] `json:"matchers,required"`
 	// Routing rule status.
 	Enabled param.Field[RuleUpdateParamsEnabled] `json:"enabled"`
 	// Routing rule name.

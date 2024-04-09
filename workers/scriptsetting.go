@@ -35,9 +35,9 @@ func NewScriptSettingService(opts ...option.RequestOption) (r *ScriptSettingServ
 // Patch script-level settings when using
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions).
 // Includes Logpush and Tail Consumers.
-func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, params ScriptSettingEditParams, opts ...option.RequestOption) (res *SettingsItem, err error) {
+func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, params ScriptSettingEditParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {
 	opts = append(r.Options[:], opts...)
-	var env Setting
+	var env ScriptSettingEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/script-settings", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -50,9 +50,9 @@ func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, para
 // Get script-level settings when using
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions).
 // Includes Logpush and Tail Consumers.
-func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query ScriptSettingGetParams, opts ...option.RequestOption) (res *SettingsItem, err error) {
+func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query ScriptSettingGetParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {
 	opts = append(r.Options[:], opts...)
-	var env Setting
+	var env ScriptSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/script-settings", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -75,17 +75,18 @@ func (r ScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type Setting struct {
+type ScriptSettingEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SettingsItem                                              `json:"result,required"`
+	Result   ScriptSetting                                             `json:"result,required"`
 	// Whether the API call was successful
-	Success SettingSuccess `json:"success,required"`
-	JSON    settingJSON    `json:"-"`
+	Success ScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    scriptSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// settingJSON contains the JSON metadata for the struct [Setting]
-type settingJSON struct {
+// scriptSettingEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScriptSettingEditResponseEnvelope]
+type scriptSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -94,24 +95,24 @@ type settingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Setting) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingJSON) RawJSON() string {
+func (r scriptSettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SettingSuccess bool
+type ScriptSettingEditResponseEnvelopeSuccess bool
 
 const (
-	SettingSuccessTrue SettingSuccess = true
+	ScriptSettingEditResponseEnvelopeSuccessTrue ScriptSettingEditResponseEnvelopeSuccess = true
 )
 
-func (r SettingSuccess) IsKnown() bool {
+func (r ScriptSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SettingSuccessTrue:
+	case ScriptSettingEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
@@ -120,4 +121,47 @@ func (r SettingSuccess) IsKnown() bool {
 type ScriptSettingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ScriptSettingGetResponseEnvelope struct {
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptSetting                                             `json:"result,required"`
+	// Whether the API call was successful
+	Success ScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    scriptSettingGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// scriptSettingGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScriptSettingGetResponseEnvelope]
+type scriptSettingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type ScriptSettingGetResponseEnvelopeSuccess bool
+
+const (
+	ScriptSettingGetResponseEnvelopeSuccessTrue ScriptSettingGetResponseEnvelopeSuccess = true
+)
+
+func (r ScriptSettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

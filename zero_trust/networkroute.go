@@ -54,7 +54,7 @@ func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewPar
 }
 
 // Lists and filters private network routes in an account.
-func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Network], err error) {
+func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Teamnet], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -72,7 +72,7 @@ func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListP
 }
 
 // Lists and filters private network routes in an account.
-func (r *NetworkRouteService) ListAutoPaging(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Network] {
+func (r *NetworkRouteService) ListAutoPaging(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Teamnet] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -101,76 +101,6 @@ func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params N
 	}
 	res = &env.Result
 	return
-}
-
-type Network struct {
-	// UUID of the route.
-	ID string `json:"id"`
-	// Optional remark describing the route.
-	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network"`
-	// The type of tunnel.
-	TunType NetworkTunType `json:"tun_type"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// The user-friendly name of the Cloudflare Tunnel serving the route.
-	TunnelName interface{} `json:"tunnel_name"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{} `json:"virtual_network_id"`
-	// A user-friendly name for the virtual network.
-	VirtualNetworkName string      `json:"virtual_network_name"`
-	JSON               networkJSON `json:"-"`
-}
-
-// networkJSON contains the JSON metadata for the struct [Network]
-type networkJSON struct {
-	ID                 apijson.Field
-	Comment            apijson.Field
-	CreatedAt          apijson.Field
-	DeletedAt          apijson.Field
-	Network            apijson.Field
-	TunType            apijson.Field
-	TunnelID           apijson.Field
-	TunnelName         apijson.Field
-	VirtualNetworkID   apijson.Field
-	VirtualNetworkName apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *Network) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of tunnel.
-type NetworkTunType string
-
-const (
-	NetworkTunTypeCfdTunnel     NetworkTunType = "cfd_tunnel"
-	NetworkTunTypeWARPConnector NetworkTunType = "warp_connector"
-	NetworkTunTypeIPSec         NetworkTunType = "ip_sec"
-	NetworkTunTypeGRE           NetworkTunType = "gre"
-	NetworkTunTypeCni           NetworkTunType = "cni"
-)
-
-func (r NetworkTunType) IsKnown() bool {
-	switch r {
-	case NetworkTunTypeCfdTunnel, NetworkTunTypeWARPConnector, NetworkTunTypeIPSec, NetworkTunTypeGRE, NetworkTunTypeCni:
-		return true
-	}
-	return false
 }
 
 type Route struct {
@@ -213,6 +143,95 @@ func (r *Route) UnmarshalJSON(data []byte) (err error) {
 
 func (r routeJSON) RawJSON() string {
 	return r.raw
+}
+
+type RouteParam struct {
+	// Optional remark describing the route.
+	Comment param.Field[string] `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt param.Field[interface{}] `json:"created_at"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network param.Field[string] `json:"network"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID param.Field[interface{}] `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
+}
+
+func (r RouteParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type Teamnet struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// The type of tunnel.
+	TunType TeamnetTunType `json:"tun_type"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// The user-friendly name of the Cloudflare Tunnel serving the route.
+	TunnelName interface{} `json:"tunnel_name"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{} `json:"virtual_network_id"`
+	// A user-friendly name for the virtual network.
+	VirtualNetworkName string      `json:"virtual_network_name"`
+	JSON               teamnetJSON `json:"-"`
+}
+
+// teamnetJSON contains the JSON metadata for the struct [Teamnet]
+type teamnetJSON struct {
+	ID                 apijson.Field
+	Comment            apijson.Field
+	CreatedAt          apijson.Field
+	DeletedAt          apijson.Field
+	Network            apijson.Field
+	TunType            apijson.Field
+	TunnelID           apijson.Field
+	TunnelName         apijson.Field
+	VirtualNetworkID   apijson.Field
+	VirtualNetworkName apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *Teamnet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r teamnetJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of tunnel.
+type TeamnetTunType string
+
+const (
+	TeamnetTunTypeCfdTunnel     TeamnetTunType = "cfd_tunnel"
+	TeamnetTunTypeWARPConnector TeamnetTunType = "warp_connector"
+	TeamnetTunTypeIPSec         TeamnetTunType = "ip_sec"
+	TeamnetTunTypeGRE           TeamnetTunType = "gre"
+	TeamnetTunTypeCni           TeamnetTunType = "cni"
+)
+
+func (r TeamnetTunType) IsKnown() bool {
+	switch r {
+	case TeamnetTunTypeCfdTunnel, TeamnetTunTypeWARPConnector, TeamnetTunTypeIPSec, TeamnetTunTypeGRE, TeamnetTunTypeCni:
+		return true
+	}
+	return false
 }
 
 type NetworkRouteNewParams struct {
