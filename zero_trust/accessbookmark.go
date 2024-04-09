@@ -35,7 +35,7 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 }
 
 // Create a new Bookmark application.
-func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid string, body AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmarks, err error) {
+func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid string, body AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -48,7 +48,7 @@ func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid
 }
 
 // Updates a configured Bookmark application.
-func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, uuid string, body AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmarks, err error) {
+func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, uuid string, body AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -61,7 +61,7 @@ func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, u
 }
 
 // Lists Bookmark applications.
-func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[Bookmarks], err error) {
+func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[Bookmark], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opt
 }
 
 // Lists Bookmark applications.
-func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Bookmarks] {
+func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Bookmark] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
@@ -97,7 +97,7 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, u
 }
 
 // Fetches a single Bookmark application.
-func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *Bookmarks, err error) {
+func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *Bookmark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -109,7 +109,7 @@ func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid
 	return
 }
 
-type Bookmarks struct {
+type Bookmark struct {
 	// The unique identifier for the Bookmark application.
 	ID string `json:"id"`
 	// Displays the application in the App Launcher.
@@ -120,13 +120,13 @@ type Bookmarks struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the Bookmark application.
-	Name      string        `json:"name"`
-	UpdatedAt time.Time     `json:"updated_at" format:"date-time"`
-	JSON      bookmarksJSON `json:"-"`
+	Name      string       `json:"name"`
+	UpdatedAt time.Time    `json:"updated_at" format:"date-time"`
+	JSON      bookmarkJSON `json:"-"`
 }
 
-// bookmarksJSON contains the JSON metadata for the struct [Bookmarks]
-type bookmarksJSON struct {
+// bookmarkJSON contains the JSON metadata for the struct [Bookmark]
+type bookmarkJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	CreatedAt          apijson.Field
@@ -138,11 +138,11 @@ type bookmarksJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *Bookmarks) UnmarshalJSON(data []byte) (err error) {
+func (r *Bookmark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bookmarksJSON) RawJSON() string {
+func (r bookmarkJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -179,7 +179,7 @@ func (r AccessBookmarkNewParams) MarshalJSON() (data []byte, err error) {
 type AccessBookmarkNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Bookmarks             `json:"result,required"`
+	Result   Bookmark              `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkNewResponseEnvelopeJSON    `json:"-"`
@@ -230,7 +230,7 @@ func (r AccessBookmarkUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessBookmarkUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Bookmarks             `json:"result,required"`
+	Result   Bookmark              `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -324,7 +324,7 @@ func (r AccessBookmarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AccessBookmarkGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Bookmarks             `json:"result,required"`
+	Result   Bookmark              `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkGetResponseEnvelopeJSON    `json:"-"`
