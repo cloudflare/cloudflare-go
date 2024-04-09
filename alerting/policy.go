@@ -250,6 +250,8 @@ func (r filterJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r Filter) implementsFirewallRuleFilter() {}
+
 type FilterAlertTriggerPreferencesValue string
 
 const (

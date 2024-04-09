@@ -120,24 +120,6 @@ func (r ruleJSON) RawJSON() string {
 	return r.raw
 }
 
-type RuleParam struct {
-	// The Web Analytics rule identifier.
-	ID param.Field[string] `json:"id"`
-	// The hostname the rule will be applied to.
-	Host param.Field[string] `json:"host"`
-	// Whether the rule includes or excludes traffic from being measured.
-	Inclusive param.Field[bool] `json:"inclusive"`
-	// Whether the rule is paused or not.
-	IsPaused param.Field[bool] `json:"is_paused"`
-	// The paths the rule will be applied to.
-	Paths    param.Field[[]string] `json:"paths"`
-	Priority param.Field[float64]  `json:"priority"`
-}
-
-func (r RuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type RuleListResponse struct {
 	// A list of rules.
 	Rules   []Rule                  `json:"rules"`
