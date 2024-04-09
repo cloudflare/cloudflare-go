@@ -110,288 +110,6 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
-// Optional filters that allow you to be alerted only on a subset of events for
-// that alert type based on some criteria. This is only available for select alert
-// types. See alert type documentation for more details.
-type Filter struct {
-	// Usage depends on specific alert type
-	Actions []string `json:"actions"`
-	// Used for configuring radar_notification
-	AffectedASNs []string `json:"affected_asns"`
-	// Used for configuring incident_alert. A list of identifiers for each component to
-	// monitor.
-	AffectedComponents []string `json:"affected_components"`
-	// Used for configuring radar_notification
-	AffectedLocations []string `json:"affected_locations"`
-	// Used for configuring maintenance_event_notification
-	AirportCode []string `json:"airport_code"`
-	// Usage depends on specific alert type
-	AlertTriggerPreferences []string `json:"alert_trigger_preferences"`
-	// Used for configuring magic_tunnel_health_check_event
-	AlertTriggerPreferencesValue []FilterAlertTriggerPreferencesValue `json:"alert_trigger_preferences_value"`
-	// Used for configuring load_balancing_pool_enablement_alert
-	Enabled []string `json:"enabled"`
-	// Used for configuring pages_event_alert
-	Environment []string `json:"environment"`
-	// Used for configuring pages_event_alert
-	Event []string `json:"event"`
-	// Used for configuring load_balancing_health_alert
-	EventSource []string `json:"event_source"`
-	// Usage depends on specific alert type
-	EventType []string `json:"event_type"`
-	// Usage depends on specific alert type
-	GroupBy []string `json:"group_by"`
-	// Used for configuring health_check_status_notification
-	HealthCheckID []string `json:"health_check_id"`
-	// Used for configuring incident_alert
-	IncidentImpact []FilterIncidentImpact `json:"incident_impact"`
-	// Used for configuring stream_live_notifications
-	InputID []string `json:"input_id"`
-	// Used for configuring billing_usage_alert
-	Limit []string `json:"limit"`
-	// Used for configuring logo_match_alert
-	LogoTag []string `json:"logo_tag"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	MegabitsPerSecond []string `json:"megabits_per_second"`
-	// Used for configuring load_balancing_health_alert
-	NewHealth []string `json:"new_health"`
-	// Used for configuring tunnel_health_event
-	NewStatus []string `json:"new_status"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	PacketsPerSecond []string `json:"packets_per_second"`
-	// Usage depends on specific alert type
-	PoolID []string `json:"pool_id"`
-	// Used for configuring billing_usage_alert
-	Product []string `json:"product"`
-	// Used for configuring pages_event_alert
-	ProjectID []string `json:"project_id"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	Protocol []string `json:"protocol"`
-	// Usage depends on specific alert type
-	QueryTag []string `json:"query_tag"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	RequestsPerSecond []string `json:"requests_per_second"`
-	// Usage depends on specific alert type
-	Selectors []string `json:"selectors"`
-	// Used for configuring clickhouse_alert_fw_ent_anomaly
-	Services []string `json:"services"`
-	// Usage depends on specific alert type
-	Slo []string `json:"slo"`
-	// Used for configuring health_check_status_notification
-	Status []string `json:"status"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	TargetHostname []string `json:"target_hostname"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	TargetIP []string `json:"target_ip"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	TargetZoneName []string `json:"target_zone_name"`
-	// Used for configuring traffic_anomalies_alert
-	TrafficExclusions []FilterTrafficExclusion `json:"traffic_exclusions"`
-	// Used for configuring tunnel_health_event
-	TunnelID []string `json:"tunnel_id"`
-	// Used for configuring magic_tunnel_health_check_event
-	TunnelName []string `json:"tunnel_name"`
-	// Usage depends on specific alert type
-	Where []string `json:"where"`
-	// Usage depends on specific alert type
-	Zones []string   `json:"zones"`
-	JSON  filterJSON `json:"-"`
-}
-
-// filterJSON contains the JSON metadata for the struct [Filter]
-type filterJSON struct {
-	Actions                      apijson.Field
-	AffectedASNs                 apijson.Field
-	AffectedComponents           apijson.Field
-	AffectedLocations            apijson.Field
-	AirportCode                  apijson.Field
-	AlertTriggerPreferences      apijson.Field
-	AlertTriggerPreferencesValue apijson.Field
-	Enabled                      apijson.Field
-	Environment                  apijson.Field
-	Event                        apijson.Field
-	EventSource                  apijson.Field
-	EventType                    apijson.Field
-	GroupBy                      apijson.Field
-	HealthCheckID                apijson.Field
-	IncidentImpact               apijson.Field
-	InputID                      apijson.Field
-	Limit                        apijson.Field
-	LogoTag                      apijson.Field
-	MegabitsPerSecond            apijson.Field
-	NewHealth                    apijson.Field
-	NewStatus                    apijson.Field
-	PacketsPerSecond             apijson.Field
-	PoolID                       apijson.Field
-	Product                      apijson.Field
-	ProjectID                    apijson.Field
-	Protocol                     apijson.Field
-	QueryTag                     apijson.Field
-	RequestsPerSecond            apijson.Field
-	Selectors                    apijson.Field
-	Services                     apijson.Field
-	Slo                          apijson.Field
-	Status                       apijson.Field
-	TargetHostname               apijson.Field
-	TargetIP                     apijson.Field
-	TargetZoneName               apijson.Field
-	TrafficExclusions            apijson.Field
-	TunnelID                     apijson.Field
-	TunnelName                   apijson.Field
-	Where                        apijson.Field
-	Zones                        apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
-}
-
-func (r *Filter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r Filter) implementsFirewallRuleFilter() {}
-
-type FilterAlertTriggerPreferencesValue string
-
-const (
-	FilterAlertTriggerPreferencesValue99_0 FilterAlertTriggerPreferencesValue = "99.0"
-	FilterAlertTriggerPreferencesValue98_0 FilterAlertTriggerPreferencesValue = "98.0"
-	FilterAlertTriggerPreferencesValue97_0 FilterAlertTriggerPreferencesValue = "97.0"
-)
-
-func (r FilterAlertTriggerPreferencesValue) IsKnown() bool {
-	switch r {
-	case FilterAlertTriggerPreferencesValue99_0, FilterAlertTriggerPreferencesValue98_0, FilterAlertTriggerPreferencesValue97_0:
-		return true
-	}
-	return false
-}
-
-type FilterIncidentImpact string
-
-const (
-	FilterIncidentImpactIncidentImpactNone     FilterIncidentImpact = "INCIDENT_IMPACT_NONE"
-	FilterIncidentImpactIncidentImpactMinor    FilterIncidentImpact = "INCIDENT_IMPACT_MINOR"
-	FilterIncidentImpactIncidentImpactMajor    FilterIncidentImpact = "INCIDENT_IMPACT_MAJOR"
-	FilterIncidentImpactIncidentImpactCritical FilterIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
-)
-
-func (r FilterIncidentImpact) IsKnown() bool {
-	switch r {
-	case FilterIncidentImpactIncidentImpactNone, FilterIncidentImpactIncidentImpactMinor, FilterIncidentImpactIncidentImpactMajor, FilterIncidentImpactIncidentImpactCritical:
-		return true
-	}
-	return false
-}
-
-type FilterTrafficExclusion string
-
-const (
-	FilterTrafficExclusionSecurityEvents FilterTrafficExclusion = "security_events"
-)
-
-func (r FilterTrafficExclusion) IsKnown() bool {
-	switch r {
-	case FilterTrafficExclusionSecurityEvents:
-		return true
-	}
-	return false
-}
-
-// Optional filters that allow you to be alerted only on a subset of events for
-// that alert type based on some criteria. This is only available for select alert
-// types. See alert type documentation for more details.
-type FilterParam struct {
-	// Usage depends on specific alert type
-	Actions param.Field[[]string] `json:"actions"`
-	// Used for configuring radar_notification
-	AffectedASNs param.Field[[]string] `json:"affected_asns"`
-	// Used for configuring incident_alert. A list of identifiers for each component to
-	// monitor.
-	AffectedComponents param.Field[[]string] `json:"affected_components"`
-	// Used for configuring radar_notification
-	AffectedLocations param.Field[[]string] `json:"affected_locations"`
-	// Used for configuring maintenance_event_notification
-	AirportCode param.Field[[]string] `json:"airport_code"`
-	// Usage depends on specific alert type
-	AlertTriggerPreferences param.Field[[]string] `json:"alert_trigger_preferences"`
-	// Used for configuring magic_tunnel_health_check_event
-	AlertTriggerPreferencesValue param.Field[[]FilterAlertTriggerPreferencesValue] `json:"alert_trigger_preferences_value"`
-	// Used for configuring load_balancing_pool_enablement_alert
-	Enabled param.Field[[]string] `json:"enabled"`
-	// Used for configuring pages_event_alert
-	Environment param.Field[[]string] `json:"environment"`
-	// Used for configuring pages_event_alert
-	Event param.Field[[]string] `json:"event"`
-	// Used for configuring load_balancing_health_alert
-	EventSource param.Field[[]string] `json:"event_source"`
-	// Usage depends on specific alert type
-	EventType param.Field[[]string] `json:"event_type"`
-	// Usage depends on specific alert type
-	GroupBy param.Field[[]string] `json:"group_by"`
-	// Used for configuring health_check_status_notification
-	HealthCheckID param.Field[[]string] `json:"health_check_id"`
-	// Used for configuring incident_alert
-	IncidentImpact param.Field[[]FilterIncidentImpact] `json:"incident_impact"`
-	// Used for configuring stream_live_notifications
-	InputID param.Field[[]string] `json:"input_id"`
-	// Used for configuring billing_usage_alert
-	Limit param.Field[[]string] `json:"limit"`
-	// Used for configuring logo_match_alert
-	LogoTag param.Field[[]string] `json:"logo_tag"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	MegabitsPerSecond param.Field[[]string] `json:"megabits_per_second"`
-	// Used for configuring load_balancing_health_alert
-	NewHealth param.Field[[]string] `json:"new_health"`
-	// Used for configuring tunnel_health_event
-	NewStatus param.Field[[]string] `json:"new_status"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	PacketsPerSecond param.Field[[]string] `json:"packets_per_second"`
-	// Usage depends on specific alert type
-	PoolID param.Field[[]string] `json:"pool_id"`
-	// Used for configuring billing_usage_alert
-	Product param.Field[[]string] `json:"product"`
-	// Used for configuring pages_event_alert
-	ProjectID param.Field[[]string] `json:"project_id"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	Protocol param.Field[[]string] `json:"protocol"`
-	// Usage depends on specific alert type
-	QueryTag param.Field[[]string] `json:"query_tag"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	RequestsPerSecond param.Field[[]string] `json:"requests_per_second"`
-	// Usage depends on specific alert type
-	Selectors param.Field[[]string] `json:"selectors"`
-	// Used for configuring clickhouse_alert_fw_ent_anomaly
-	Services param.Field[[]string] `json:"services"`
-	// Usage depends on specific alert type
-	Slo param.Field[[]string] `json:"slo"`
-	// Used for configuring health_check_status_notification
-	Status param.Field[[]string] `json:"status"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	TargetHostname param.Field[[]string] `json:"target_hostname"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	TargetIP param.Field[[]string] `json:"target_ip"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	TargetZoneName param.Field[[]string] `json:"target_zone_name"`
-	// Used for configuring traffic_anomalies_alert
-	TrafficExclusions param.Field[[]FilterTrafficExclusion] `json:"traffic_exclusions"`
-	// Used for configuring tunnel_health_event
-	TunnelID param.Field[[]string] `json:"tunnel_id"`
-	// Used for configuring magic_tunnel_health_check_event
-	TunnelName param.Field[[]string] `json:"tunnel_name"`
-	// Usage depends on specific alert type
-	Where param.Field[[]string] `json:"where"`
-	// Usage depends on specific alert type
-	Zones param.Field[[]string] `json:"zones"`
-}
-
-func (r FilterParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type Mechanism map[string][]Mechanism
 
 type MechanismParam map[string][]MechanismParam
@@ -411,7 +129,7 @@ type Policy struct {
 	// Optional filters that allow you to be alerted only on a subset of events for
 	// that alert type based on some criteria. This is only available for select alert
 	// types. See alert type documentation for more details.
-	Filters Filter `json:"filters"`
+	Filters PolicyFilter `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
 	Mechanisms Mechanism `json:"mechanisms"`
@@ -527,7 +245,7 @@ type PolicyParam struct {
 	// Optional filters that allow you to be alerted only on a subset of events for
 	// that alert type based on some criteria. This is only available for select alert
 	// types. See alert type documentation for more details.
-	Filters param.Field[FilterParam] `json:"filters"`
+	Filters param.Field[PolicyFilterParam] `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
 	Mechanisms param.Field[MechanismParam] `json:"mechanisms"`
@@ -536,6 +254,286 @@ type PolicyParam struct {
 }
 
 func (r PolicyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Optional filters that allow you to be alerted only on a subset of events for
+// that alert type based on some criteria. This is only available for select alert
+// types. See alert type documentation for more details.
+type PolicyFilter struct {
+	// Usage depends on specific alert type
+	Actions []string `json:"actions"`
+	// Used for configuring radar_notification
+	AffectedASNs []string `json:"affected_asns"`
+	// Used for configuring incident_alert. A list of identifiers for each component to
+	// monitor.
+	AffectedComponents []string `json:"affected_components"`
+	// Used for configuring radar_notification
+	AffectedLocations []string `json:"affected_locations"`
+	// Used for configuring maintenance_event_notification
+	AirportCode []string `json:"airport_code"`
+	// Usage depends on specific alert type
+	AlertTriggerPreferences []string `json:"alert_trigger_preferences"`
+	// Used for configuring magic_tunnel_health_check_event
+	AlertTriggerPreferencesValue []PolicyFilterAlertTriggerPreferencesValue `json:"alert_trigger_preferences_value"`
+	// Used for configuring load_balancing_pool_enablement_alert
+	Enabled []string `json:"enabled"`
+	// Used for configuring pages_event_alert
+	Environment []string `json:"environment"`
+	// Used for configuring pages_event_alert
+	Event []string `json:"event"`
+	// Used for configuring load_balancing_health_alert
+	EventSource []string `json:"event_source"`
+	// Usage depends on specific alert type
+	EventType []string `json:"event_type"`
+	// Usage depends on specific alert type
+	GroupBy []string `json:"group_by"`
+	// Used for configuring health_check_status_notification
+	HealthCheckID []string `json:"health_check_id"`
+	// Used for configuring incident_alert
+	IncidentImpact []PolicyFilterIncidentImpact `json:"incident_impact"`
+	// Used for configuring stream_live_notifications
+	InputID []string `json:"input_id"`
+	// Used for configuring billing_usage_alert
+	Limit []string `json:"limit"`
+	// Used for configuring logo_match_alert
+	LogoTag []string `json:"logo_tag"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	MegabitsPerSecond []string `json:"megabits_per_second"`
+	// Used for configuring load_balancing_health_alert
+	NewHealth []string `json:"new_health"`
+	// Used for configuring tunnel_health_event
+	NewStatus []string `json:"new_status"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	PacketsPerSecond []string `json:"packets_per_second"`
+	// Usage depends on specific alert type
+	PoolID []string `json:"pool_id"`
+	// Used for configuring billing_usage_alert
+	Product []string `json:"product"`
+	// Used for configuring pages_event_alert
+	ProjectID []string `json:"project_id"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	Protocol []string `json:"protocol"`
+	// Usage depends on specific alert type
+	QueryTag []string `json:"query_tag"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	RequestsPerSecond []string `json:"requests_per_second"`
+	// Usage depends on specific alert type
+	Selectors []string `json:"selectors"`
+	// Used for configuring clickhouse_alert_fw_ent_anomaly
+	Services []string `json:"services"`
+	// Usage depends on specific alert type
+	Slo []string `json:"slo"`
+	// Used for configuring health_check_status_notification
+	Status []string `json:"status"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	TargetHostname []string `json:"target_hostname"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	TargetIP []string `json:"target_ip"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	TargetZoneName []string `json:"target_zone_name"`
+	// Used for configuring traffic_anomalies_alert
+	TrafficExclusions []PolicyFilterTrafficExclusion `json:"traffic_exclusions"`
+	// Used for configuring tunnel_health_event
+	TunnelID []string `json:"tunnel_id"`
+	// Used for configuring magic_tunnel_health_check_event
+	TunnelName []string `json:"tunnel_name"`
+	// Usage depends on specific alert type
+	Where []string `json:"where"`
+	// Usage depends on specific alert type
+	Zones []string         `json:"zones"`
+	JSON  policyFilterJSON `json:"-"`
+}
+
+// policyFilterJSON contains the JSON metadata for the struct [PolicyFilter]
+type policyFilterJSON struct {
+	Actions                      apijson.Field
+	AffectedASNs                 apijson.Field
+	AffectedComponents           apijson.Field
+	AffectedLocations            apijson.Field
+	AirportCode                  apijson.Field
+	AlertTriggerPreferences      apijson.Field
+	AlertTriggerPreferencesValue apijson.Field
+	Enabled                      apijson.Field
+	Environment                  apijson.Field
+	Event                        apijson.Field
+	EventSource                  apijson.Field
+	EventType                    apijson.Field
+	GroupBy                      apijson.Field
+	HealthCheckID                apijson.Field
+	IncidentImpact               apijson.Field
+	InputID                      apijson.Field
+	Limit                        apijson.Field
+	LogoTag                      apijson.Field
+	MegabitsPerSecond            apijson.Field
+	NewHealth                    apijson.Field
+	NewStatus                    apijson.Field
+	PacketsPerSecond             apijson.Field
+	PoolID                       apijson.Field
+	Product                      apijson.Field
+	ProjectID                    apijson.Field
+	Protocol                     apijson.Field
+	QueryTag                     apijson.Field
+	RequestsPerSecond            apijson.Field
+	Selectors                    apijson.Field
+	Services                     apijson.Field
+	Slo                          apijson.Field
+	Status                       apijson.Field
+	TargetHostname               apijson.Field
+	TargetIP                     apijson.Field
+	TargetZoneName               apijson.Field
+	TrafficExclusions            apijson.Field
+	TunnelID                     apijson.Field
+	TunnelName                   apijson.Field
+	Where                        apijson.Field
+	Zones                        apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *PolicyFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyFilterJSON) RawJSON() string {
+	return r.raw
+}
+
+type PolicyFilterAlertTriggerPreferencesValue string
+
+const (
+	PolicyFilterAlertTriggerPreferencesValue99_0 PolicyFilterAlertTriggerPreferencesValue = "99.0"
+	PolicyFilterAlertTriggerPreferencesValue98_0 PolicyFilterAlertTriggerPreferencesValue = "98.0"
+	PolicyFilterAlertTriggerPreferencesValue97_0 PolicyFilterAlertTriggerPreferencesValue = "97.0"
+)
+
+func (r PolicyFilterAlertTriggerPreferencesValue) IsKnown() bool {
+	switch r {
+	case PolicyFilterAlertTriggerPreferencesValue99_0, PolicyFilterAlertTriggerPreferencesValue98_0, PolicyFilterAlertTriggerPreferencesValue97_0:
+		return true
+	}
+	return false
+}
+
+type PolicyFilterIncidentImpact string
+
+const (
+	PolicyFilterIncidentImpactIncidentImpactNone     PolicyFilterIncidentImpact = "INCIDENT_IMPACT_NONE"
+	PolicyFilterIncidentImpactIncidentImpactMinor    PolicyFilterIncidentImpact = "INCIDENT_IMPACT_MINOR"
+	PolicyFilterIncidentImpactIncidentImpactMajor    PolicyFilterIncidentImpact = "INCIDENT_IMPACT_MAJOR"
+	PolicyFilterIncidentImpactIncidentImpactCritical PolicyFilterIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
+)
+
+func (r PolicyFilterIncidentImpact) IsKnown() bool {
+	switch r {
+	case PolicyFilterIncidentImpactIncidentImpactNone, PolicyFilterIncidentImpactIncidentImpactMinor, PolicyFilterIncidentImpactIncidentImpactMajor, PolicyFilterIncidentImpactIncidentImpactCritical:
+		return true
+	}
+	return false
+}
+
+type PolicyFilterTrafficExclusion string
+
+const (
+	PolicyFilterTrafficExclusionSecurityEvents PolicyFilterTrafficExclusion = "security_events"
+)
+
+func (r PolicyFilterTrafficExclusion) IsKnown() bool {
+	switch r {
+	case PolicyFilterTrafficExclusionSecurityEvents:
+		return true
+	}
+	return false
+}
+
+// Optional filters that allow you to be alerted only on a subset of events for
+// that alert type based on some criteria. This is only available for select alert
+// types. See alert type documentation for more details.
+type PolicyFilterParam struct {
+	// Usage depends on specific alert type
+	Actions param.Field[[]string] `json:"actions"`
+	// Used for configuring radar_notification
+	AffectedASNs param.Field[[]string] `json:"affected_asns"`
+	// Used for configuring incident_alert. A list of identifiers for each component to
+	// monitor.
+	AffectedComponents param.Field[[]string] `json:"affected_components"`
+	// Used for configuring radar_notification
+	AffectedLocations param.Field[[]string] `json:"affected_locations"`
+	// Used for configuring maintenance_event_notification
+	AirportCode param.Field[[]string] `json:"airport_code"`
+	// Usage depends on specific alert type
+	AlertTriggerPreferences param.Field[[]string] `json:"alert_trigger_preferences"`
+	// Used for configuring magic_tunnel_health_check_event
+	AlertTriggerPreferencesValue param.Field[[]PolicyFilterAlertTriggerPreferencesValue] `json:"alert_trigger_preferences_value"`
+	// Used for configuring load_balancing_pool_enablement_alert
+	Enabled param.Field[[]string] `json:"enabled"`
+	// Used for configuring pages_event_alert
+	Environment param.Field[[]string] `json:"environment"`
+	// Used for configuring pages_event_alert
+	Event param.Field[[]string] `json:"event"`
+	// Used for configuring load_balancing_health_alert
+	EventSource param.Field[[]string] `json:"event_source"`
+	// Usage depends on specific alert type
+	EventType param.Field[[]string] `json:"event_type"`
+	// Usage depends on specific alert type
+	GroupBy param.Field[[]string] `json:"group_by"`
+	// Used for configuring health_check_status_notification
+	HealthCheckID param.Field[[]string] `json:"health_check_id"`
+	// Used for configuring incident_alert
+	IncidentImpact param.Field[[]PolicyFilterIncidentImpact] `json:"incident_impact"`
+	// Used for configuring stream_live_notifications
+	InputID param.Field[[]string] `json:"input_id"`
+	// Used for configuring billing_usage_alert
+	Limit param.Field[[]string] `json:"limit"`
+	// Used for configuring logo_match_alert
+	LogoTag param.Field[[]string] `json:"logo_tag"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	MegabitsPerSecond param.Field[[]string] `json:"megabits_per_second"`
+	// Used for configuring load_balancing_health_alert
+	NewHealth param.Field[[]string] `json:"new_health"`
+	// Used for configuring tunnel_health_event
+	NewStatus param.Field[[]string] `json:"new_status"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	PacketsPerSecond param.Field[[]string] `json:"packets_per_second"`
+	// Usage depends on specific alert type
+	PoolID param.Field[[]string] `json:"pool_id"`
+	// Used for configuring billing_usage_alert
+	Product param.Field[[]string] `json:"product"`
+	// Used for configuring pages_event_alert
+	ProjectID param.Field[[]string] `json:"project_id"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	Protocol param.Field[[]string] `json:"protocol"`
+	// Usage depends on specific alert type
+	QueryTag param.Field[[]string] `json:"query_tag"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	RequestsPerSecond param.Field[[]string] `json:"requests_per_second"`
+	// Usage depends on specific alert type
+	Selectors param.Field[[]string] `json:"selectors"`
+	// Used for configuring clickhouse_alert_fw_ent_anomaly
+	Services param.Field[[]string] `json:"services"`
+	// Usage depends on specific alert type
+	Slo param.Field[[]string] `json:"slo"`
+	// Used for configuring health_check_status_notification
+	Status param.Field[[]string] `json:"status"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	TargetHostname param.Field[[]string] `json:"target_hostname"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	TargetIP param.Field[[]string] `json:"target_ip"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	TargetZoneName param.Field[[]string] `json:"target_zone_name"`
+	// Used for configuring traffic_anomalies_alert
+	TrafficExclusions param.Field[[]PolicyFilterTrafficExclusion] `json:"traffic_exclusions"`
+	// Used for configuring tunnel_health_event
+	TunnelID param.Field[[]string] `json:"tunnel_id"`
+	// Used for configuring magic_tunnel_health_check_event
+	TunnelName param.Field[[]string] `json:"tunnel_name"`
+	// Usage depends on specific alert type
+	Where param.Field[[]string] `json:"where"`
+	// Usage depends on specific alert type
+	Zones param.Field[[]string] `json:"zones"`
+}
+
+func (r PolicyFilterParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -627,7 +625,7 @@ type PolicyNewParams struct {
 	// Optional filters that allow you to be alerted only on a subset of events for
 	// that alert type based on some criteria. This is only available for select alert
 	// types. See alert type documentation for more details.
-	Filters param.Field[FilterParam] `json:"filters"`
+	Filters param.Field[PolicyFilterParam] `json:"filters"`
 }
 
 func (r PolicyNewParams) MarshalJSON() (data []byte, err error) {
@@ -762,7 +760,7 @@ type PolicyUpdateParams struct {
 	// Optional filters that allow you to be alerted only on a subset of events for
 	// that alert type based on some criteria. This is only available for select alert
 	// types. See alert type documentation for more details.
-	Filters param.Field[FilterParam] `json:"filters"`
+	Filters param.Field[PolicyFilterParam] `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
 	Mechanisms param.Field[MechanismParam] `json:"mechanisms"`

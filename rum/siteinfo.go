@@ -115,7 +115,7 @@ type Site struct {
 	AutoInstall bool      `json:"auto_install"`
 	Created     time.Time `json:"created" format:"date-time"`
 	// A list of rules.
-	Rules   []Rule      `json:"rules"`
+	Rules   []RUMRule   `json:"rules"`
 	Ruleset SiteRuleset `json:"ruleset"`
 	// The Web Analytics site identifier.
 	SiteTag string `json:"site_tag"`
