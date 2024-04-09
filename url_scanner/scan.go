@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/radar"
 )
 
 // ScanService contains methods and other services that help with interacting with
@@ -503,23 +503,23 @@ func (r scanGetResponseScanMetaProcessorsTechEvidencePatternJSON) RawJSON() stri
 }
 
 type ScanGetResponseScanPage struct {
-	ASN                   string                                                    `json:"asn,required"`
-	ASNLocationAlpha2     string                                                    `json:"asnLocationAlpha2,required"`
-	Asnname               string                                                    `json:"asnname,required"`
-	Console               []ScanGetResponseScanPageConsole                          `json:"console,required"`
-	Cookies               []ScanGetResponseScanPageCooky                            `json:"cookies,required"`
-	Country               string                                                    `json:"country,required"`
-	CountryLocationAlpha2 string                                                    `json:"countryLocationAlpha2,required"`
-	Domain                string                                                    `json:"domain,required"`
-	Headers               []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"headers,required"`
-	IP                    string                                                    `json:"ip,required"`
-	Js                    ScanGetResponseScanPageJs                                 `json:"js,required"`
-	SecurityViolations    []ScanGetResponseScanPageSecurityViolation                `json:"securityViolations,required"`
-	Status                float64                                                   `json:"status,required"`
-	Subdivision1Name      string                                                    `json:"subdivision1Name,required"`
-	Subdivision2name      string                                                    `json:"subdivision2name,required"`
-	URL                   string                                                    `json:"url,required"`
-	JSON                  scanGetResponseScanPageJSON                               `json:"-"`
+	ASN                   string                                     `json:"asn,required"`
+	ASNLocationAlpha2     string                                     `json:"asnLocationAlpha2,required"`
+	Asnname               string                                     `json:"asnname,required"`
+	Console               []ScanGetResponseScanPageConsole           `json:"console,required"`
+	Cookies               []ScanGetResponseScanPageCooky             `json:"cookies,required"`
+	Country               string                                     `json:"country,required"`
+	CountryLocationAlpha2 string                                     `json:"countryLocationAlpha2,required"`
+	Domain                string                                     `json:"domain,required"`
+	Headers               []radar.Browser                            `json:"headers,required"`
+	IP                    string                                     `json:"ip,required"`
+	Js                    ScanGetResponseScanPageJs                  `json:"js,required"`
+	SecurityViolations    []ScanGetResponseScanPageSecurityViolation `json:"securityViolations,required"`
+	Status                float64                                    `json:"status,required"`
+	Subdivision1Name      string                                     `json:"subdivision1Name,required"`
+	Subdivision2name      string                                     `json:"subdivision2name,required"`
+	URL                   string                                     `json:"url,required"`
+	JSON                  scanGetResponseScanPageJSON                `json:"-"`
 }
 
 // scanGetResponseScanPageJSON contains the JSON metadata for the struct
@@ -1450,13 +1450,13 @@ func (r scanHarResponseHarLogEntryJSON) RawJSON() string {
 }
 
 type ScanHarResponseHarLogEntriesRequest struct {
-	BodySize    float64                                                   `json:"bodySize,required"`
-	Headers     []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"headers,required"`
-	HeadersSize float64                                                   `json:"headersSize,required"`
-	HTTPVersion string                                                    `json:"httpVersion,required"`
-	Method      string                                                    `json:"method,required"`
-	URL         string                                                    `json:"url,required"`
-	JSON        scanHarResponseHarLogEntriesRequestJSON                   `json:"-"`
+	BodySize    float64                                 `json:"bodySize,required"`
+	Headers     []radar.Browser                         `json:"headers,required"`
+	HeadersSize float64                                 `json:"headersSize,required"`
+	HTTPVersion string                                  `json:"httpVersion,required"`
+	Method      string                                  `json:"method,required"`
+	URL         string                                  `json:"url,required"`
+	JSON        scanHarResponseHarLogEntriesRequestJSON `json:"-"`
 }
 
 // scanHarResponseHarLogEntriesRequestJSON contains the JSON metadata for the
@@ -1481,16 +1481,16 @@ func (r scanHarResponseHarLogEntriesRequestJSON) RawJSON() string {
 }
 
 type ScanHarResponseHarLogEntriesResponse struct {
-	TransferSize float64                                                   `json:"_transferSize,required"`
-	BodySize     float64                                                   `json:"bodySize,required"`
-	Content      ScanHarResponseHarLogEntriesResponseContent               `json:"content,required"`
-	Headers      []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"headers,required"`
-	HeadersSize  float64                                                   `json:"headersSize,required"`
-	HTTPVersion  string                                                    `json:"httpVersion,required"`
-	RedirectURL  string                                                    `json:"redirectURL,required"`
-	Status       float64                                                   `json:"status,required"`
-	StatusText   string                                                    `json:"statusText,required"`
-	JSON         scanHarResponseHarLogEntriesResponseJSON                  `json:"-"`
+	TransferSize float64                                     `json:"_transferSize,required"`
+	BodySize     float64                                     `json:"bodySize,required"`
+	Content      ScanHarResponseHarLogEntriesResponseContent `json:"content,required"`
+	Headers      []radar.Browser                             `json:"headers,required"`
+	HeadersSize  float64                                     `json:"headersSize,required"`
+	HTTPVersion  string                                      `json:"httpVersion,required"`
+	RedirectURL  string                                      `json:"redirectURL,required"`
+	Status       float64                                     `json:"status,required"`
+	StatusText   string                                      `json:"statusText,required"`
+	JSON         scanHarResponseHarLogEntriesResponseJSON    `json:"-"`
 }
 
 // scanHarResponseHarLogEntriesResponseJSON contains the JSON metadata for the

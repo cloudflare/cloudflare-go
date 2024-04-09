@@ -54,7 +54,7 @@ func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, o
 }
 
 // Validates ownership challenge of the destination.
-func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854, err error) {
+func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *OwnershipValidation, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OwnershipValidateResponseEnvelope
 	var accountOrZone string
@@ -73,6 +73,27 @@ func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidat
 	}
 	res = &env.Result
 	return
+}
+
+type OwnershipValidation struct {
+	Valid bool                    `json:"valid"`
+	JSON  ownershipValidationJSON `json:"-"`
+}
+
+// ownershipValidationJSON contains the JSON metadata for the struct
+// [OwnershipValidation]
+type ownershipValidationJSON struct {
+	Valid       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OwnershipValidation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipValidationJSON) RawJSON() string {
+	return r.raw
 }
 
 type OwnershipNewResponse struct {
@@ -176,9 +197,9 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                                   `json:"messages,required"`
-	Result   shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   OwnershipValidation   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ownershipValidateResponseEnvelopeJSON    `json:"-"`

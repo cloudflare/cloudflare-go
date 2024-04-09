@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -55,9 +54,9 @@ func (r *EmailSecurityTopTldService) Get(ctx context.Context, query EmailSecurit
 }
 
 type EmailSecurityTopTldGetResponse struct {
-	Meta EmailSecurityTopTldGetResponseMeta                        `json:"meta,required"`
-	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
-	JSON emailSecurityTopTldGetResponseJSON                        `json:"-"`
+	Meta EmailSecurityTopTldGetResponseMeta `json:"meta,required"`
+	Top0 []Browser                          `json:"top_0,required"`
+	JSON emailSecurityTopTldGetResponseJSON `json:"-"`
 }
 
 // emailSecurityTopTldGetResponseJSON contains the JSON metadata for the struct
