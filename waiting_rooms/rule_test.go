@@ -67,18 +67,18 @@ func TestRuleUpdate(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.RuleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F([]waiting_rooms.RuleParam{{
-				Action:      cloudflare.F(waiting_rooms.RuleActionBypassWaitingRoom),
+			Body: cloudflare.F([]waiting_rooms.RuleUpdateParamsBody{{
+				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 			}, {
-				Action:      cloudflare.F(waiting_rooms.RuleActionBypassWaitingRoom),
+				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 			}, {
-				Action:      cloudflare.F(waiting_rooms.RuleActionBypassWaitingRoom),
+				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),

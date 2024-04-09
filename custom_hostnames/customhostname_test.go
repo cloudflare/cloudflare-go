@@ -47,7 +47,7 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 			Type:     cloudflare.F(custom_hostnames.UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1Dv),
 			Wildcard: cloudflare.F(false),
 		}),
-		CustomMetadata: cloudflare.F(custom_hostnames.CustomHostnameNewParamsCustomMetadata{
+		CustomMetadata: cloudflare.F(custom_hostnames.CustomMetadataParam{
 			Key: cloudflare.F("value"),
 		}),
 	})
@@ -143,7 +143,7 @@ func TestCustomHostnameEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		custom_hostnames.CustomHostnameEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CustomMetadata: cloudflare.F(custom_hostnames.CustomHostnameEditParamsCustomMetadata{
+			CustomMetadata: cloudflare.F(custom_hostnames.CustomMetadataParam{
 				Key: cloudflare.F("value"),
 			}),
 			CustomOriginServer: cloudflare.F("origin2.example.com"),
