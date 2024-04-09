@@ -218,7 +218,7 @@ type ARecord struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -303,7 +303,7 @@ type AAAARecord struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -387,7 +387,7 @@ type CAARecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -499,7 +499,7 @@ type CERTRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -615,7 +615,7 @@ type CNAMERecord struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -699,7 +699,7 @@ type DNSKEYRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -815,7 +815,7 @@ type DSRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -930,7 +930,7 @@ type HTTPSRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1042,7 +1042,7 @@ type LOCRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1214,7 +1214,7 @@ type MXRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1298,7 +1298,7 @@ type NAPTRRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1417,7 +1417,7 @@ type NSRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1498,7 +1498,7 @@ type PTRRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1787,9 +1787,9 @@ func (r RecordType) IsKnown() bool {
 	return false
 }
 
-type RecordTagsItem = string
+type RecordTags = string
 
-type RecordTagsItemParam = string
+type RecordTagsParam = string
 
 type SMIMEARecord struct {
 	// Components of a SMIMEA record.
@@ -1817,7 +1817,7 @@ type SMIMEARecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1936,7 +1936,7 @@ type SRVRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2067,7 +2067,7 @@ type SSHFPRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2179,7 +2179,7 @@ type SVCBRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2291,7 +2291,7 @@ type TLSARecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2451,7 +2451,7 @@ type TXTRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2592,7 +2592,7 @@ type URIRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTagsItem `json:"tags"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2781,7 +2781,7 @@ type RecordNewParamsARecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2831,7 +2831,7 @@ type RecordNewParamsAAAARecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2878,7 +2878,7 @@ type RecordNewParamsCAARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2939,7 +2939,7 @@ type RecordNewParamsCERTRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3005,7 +3005,7 @@ type RecordNewParamsCNAMERecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3052,7 +3052,7 @@ type RecordNewParamsDNSKEYRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3115,7 +3115,7 @@ type RecordNewParamsDSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3178,7 +3178,7 @@ type RecordNewParamsHTTPSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3239,7 +3239,7 @@ type RecordNewParamsLOCRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3353,7 +3353,7 @@ type RecordNewParamsMXRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3400,7 +3400,7 @@ type RecordNewParamsNAPTRRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3467,7 +3467,7 @@ type RecordNewParamsNSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3514,7 +3514,7 @@ type RecordNewParamsPTRRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3561,7 +3561,7 @@ type RecordNewParamsSMIMEARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3626,7 +3626,7 @@ type RecordNewParamsSRVRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3702,7 +3702,7 @@ type RecordNewParamsSSHFPRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3763,7 +3763,7 @@ type RecordNewParamsSVCBRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3824,7 +3824,7 @@ type RecordNewParamsTLSARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3887,7 +3887,7 @@ type RecordNewParamsTXTRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3937,7 +3937,7 @@ type RecordNewParamsURIRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4059,7 +4059,7 @@ type RecordUpdateParamsARecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4109,7 +4109,7 @@ type RecordUpdateParamsAAAARecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4156,7 +4156,7 @@ type RecordUpdateParamsCAARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4217,7 +4217,7 @@ type RecordUpdateParamsCERTRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4283,7 +4283,7 @@ type RecordUpdateParamsCNAMERecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4330,7 +4330,7 @@ type RecordUpdateParamsDNSKEYRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4393,7 +4393,7 @@ type RecordUpdateParamsDSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4456,7 +4456,7 @@ type RecordUpdateParamsHTTPSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4517,7 +4517,7 @@ type RecordUpdateParamsLOCRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4631,7 +4631,7 @@ type RecordUpdateParamsMXRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4678,7 +4678,7 @@ type RecordUpdateParamsNAPTRRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4745,7 +4745,7 @@ type RecordUpdateParamsNSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4792,7 +4792,7 @@ type RecordUpdateParamsPTRRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4839,7 +4839,7 @@ type RecordUpdateParamsSMIMEARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4904,7 +4904,7 @@ type RecordUpdateParamsSRVRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -4980,7 +4980,7 @@ type RecordUpdateParamsSSHFPRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5041,7 +5041,7 @@ type RecordUpdateParamsSVCBRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5102,7 +5102,7 @@ type RecordUpdateParamsTLSARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5165,7 +5165,7 @@ type RecordUpdateParamsTXTRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5215,7 +5215,7 @@ type RecordUpdateParamsURIRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5580,7 +5580,7 @@ type RecordEditParamsARecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5630,7 +5630,7 @@ type RecordEditParamsAAAARecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5677,7 +5677,7 @@ type RecordEditParamsCAARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5738,7 +5738,7 @@ type RecordEditParamsCERTRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5804,7 +5804,7 @@ type RecordEditParamsCNAMERecord struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5851,7 +5851,7 @@ type RecordEditParamsDNSKEYRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5914,7 +5914,7 @@ type RecordEditParamsDSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -5977,7 +5977,7 @@ type RecordEditParamsHTTPSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6038,7 +6038,7 @@ type RecordEditParamsLOCRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6152,7 +6152,7 @@ type RecordEditParamsMXRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6199,7 +6199,7 @@ type RecordEditParamsNAPTRRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6266,7 +6266,7 @@ type RecordEditParamsNSRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6313,7 +6313,7 @@ type RecordEditParamsPTRRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6360,7 +6360,7 @@ type RecordEditParamsSMIMEARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6425,7 +6425,7 @@ type RecordEditParamsSRVRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6501,7 +6501,7 @@ type RecordEditParamsSSHFPRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6562,7 +6562,7 @@ type RecordEditParamsSVCBRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6623,7 +6623,7 @@ type RecordEditParamsTLSARecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6686,7 +6686,7 @@ type RecordEditParamsTXTRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -6736,7 +6736,7 @@ type RecordEditParamsURIRecord struct {
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsItemParam] `json:"tags"`
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.

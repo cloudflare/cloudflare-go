@@ -180,6 +180,21 @@ func (r ListsType) IsKnown() bool {
 	return false
 }
 
+type ListsParam struct {
+	// API Resource UUID tag.
+	ID param.Field[string] `json:"id"`
+	// The description of the list.
+	Description param.Field[string] `json:"description"`
+	// The name of the list.
+	Name param.Field[string] `json:"name"`
+	// The type of list.
+	Type param.Field[ListsType] `json:"type"`
+}
+
+func (r ListsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type GatewayListNewResponse struct {
 	// API Resource UUID tag.
 	ID        string    `json:"id"`
@@ -187,7 +202,7 @@ type GatewayListNewResponse struct {
 	// The description of the list.
 	Description string `json:"description"`
 	// The items in the list.
-	Items []ListsItem `json:"items"`
+	Items []Lists `json:"items"`
 	// The name of the list.
 	Name string `json:"name"`
 	// The type of list.
@@ -246,7 +261,7 @@ type GatewayListNewParams struct {
 	// The description of the list.
 	Description param.Field[string] `json:"description"`
 	// The items in the list.
-	Items param.Field[[]ListsItemParam] `json:"items"`
+	Items param.Field[[]ListsParam] `json:"items"`
 }
 
 func (r GatewayListNewParams) MarshalJSON() (data []byte, err error) {
@@ -429,7 +444,7 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type GatewayListEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The items in the list.
-	Append param.Field[[]ListsItemParam] `json:"append"`
+	Append param.Field[[]ListsParam] `json:"append"`
 	// A list of the item values you want to remove.
 	Remove param.Field[[]string] `json:"remove"`
 }

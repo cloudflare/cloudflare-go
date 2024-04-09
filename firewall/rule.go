@@ -129,21 +129,21 @@ func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params Rul
 }
 
 // A list of products to bypass for a request when using the `bypass` action.
-type ProductsItem string
+type Products string
 
 const (
-	ProductsItemZoneLockdown  ProductsItem = "zoneLockdown"
-	ProductsItemUABlock       ProductsItem = "uaBlock"
-	ProductsItemBic           ProductsItem = "bic"
-	ProductsItemHot           ProductsItem = "hot"
-	ProductsItemSecurityLevel ProductsItem = "securityLevel"
-	ProductsItemRateLimit     ProductsItem = "rateLimit"
-	ProductsItemWAF           ProductsItem = "waf"
+	ProductsZoneLockdown  Products = "zoneLockdown"
+	ProductsUABlock       Products = "uaBlock"
+	ProductsBic           Products = "bic"
+	ProductsHot           Products = "hot"
+	ProductsSecurityLevel Products = "securityLevel"
+	ProductsRateLimit     Products = "rateLimit"
+	ProductsWAF           Products = "waf"
 )
 
-func (r ProductsItem) IsKnown() bool {
+func (r Products) IsKnown() bool {
 	switch r {
-	case ProductsItemZoneLockdown, ProductsItemUABlock, ProductsItemBic, ProductsItemHot, ProductsItemSecurityLevel, ProductsItemRateLimit, ProductsItemWAF:
+	case ProductsZoneLockdown, ProductsUABlock, ProductsBic, ProductsHot, ProductsSecurityLevel, ProductsRateLimit, ProductsWAF:
 		return true
 	}
 	return false
@@ -163,8 +163,8 @@ type Rule struct {
 	// The priority of the rule. Optional value used to define the processing order. A
 	// lower number indicates a higher priority. If not provided, rules with a defined
 	// priority will be processed before rules without a priority.
-	Priority float64        `json:"priority"`
-	Products []ProductsItem `json:"products"`
+	Priority float64    `json:"priority"`
+	Products []Products `json:"products"`
 	// A short reference tag. Allows you to select related firewall rules.
 	Ref  string   `json:"ref"`
 	JSON ruleJSON `json:"-"`

@@ -70,7 +70,7 @@ func (r *RequestService) Update(ctx context.Context, accountIdentifier string, r
 }
 
 // List Requests
-func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ListItem], err error) {
+func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[List], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -88,7 +88,7 @@ func (r *RequestService) List(ctx context.Context, accountIdentifier string, bod
 }
 
 // List Requests
-func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ListItem] {
+func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[List] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, body, opts...))
 }
 
@@ -249,18 +249,18 @@ func (r ItemStatus) IsKnown() bool {
 	return false
 }
 
-type ListItem struct {
+type List struct {
 	// UUID
 	ID string `json:"id,required"`
 	// Request creation time
-	Created  time.Time        `json:"created,required" format:"date-time"`
-	Priority ListItemPriority `json:"priority,required"`
+	Created  time.Time    `json:"created,required" format:"date-time"`
+	Priority ListPriority `json:"priority,required"`
 	// Requested information from request
 	Request string `json:"request,required"`
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp ListItemTlp `json:"tlp,required"`
+	Tlp ListTlp `json:"tlp,required"`
 	// Request last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
 	// Request completion time
@@ -270,14 +270,14 @@ type ListItem struct {
 	// Readable Request ID
 	ReadableID string `json:"readable_id"`
 	// Request Status
-	Status ListItemStatus `json:"status"`
+	Status ListStatus `json:"status"`
 	// Tokens for the request
-	Tokens int64        `json:"tokens"`
-	JSON   listItemJSON `json:"-"`
+	Tokens int64    `json:"tokens"`
+	JSON   listJSON `json:"-"`
 }
 
-// listItemJSON contains the JSON metadata for the struct [ListItem]
-type listItemJSON struct {
+// listJSON contains the JSON metadata for the struct [List]
+type listJSON struct {
 	ID            apijson.Field
 	Created       apijson.Field
 	Priority      apijson.Field
@@ -294,64 +294,64 @@ type listItemJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ListItem) UnmarshalJSON(data []byte) (err error) {
+func (r *List) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listItemJSON) RawJSON() string {
+func (r listJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItemPriority string
+type ListPriority string
 
 const (
-	ListItemPriorityRoutine ListItemPriority = "routine"
-	ListItemPriorityHigh    ListItemPriority = "high"
-	ListItemPriorityUrgent  ListItemPriority = "urgent"
+	ListPriorityRoutine ListPriority = "routine"
+	ListPriorityHigh    ListPriority = "high"
+	ListPriorityUrgent  ListPriority = "urgent"
 )
 
-func (r ListItemPriority) IsKnown() bool {
+func (r ListPriority) IsKnown() bool {
 	switch r {
-	case ListItemPriorityRoutine, ListItemPriorityHigh, ListItemPriorityUrgent:
+	case ListPriorityRoutine, ListPriorityHigh, ListPriorityUrgent:
 		return true
 	}
 	return false
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type ListItemTlp string
+type ListTlp string
 
 const (
-	ListItemTlpClear       ListItemTlp = "clear"
-	ListItemTlpAmber       ListItemTlp = "amber"
-	ListItemTlpAmberStrict ListItemTlp = "amber-strict"
-	ListItemTlpGreen       ListItemTlp = "green"
-	ListItemTlpRed         ListItemTlp = "red"
+	ListTlpClear       ListTlp = "clear"
+	ListTlpAmber       ListTlp = "amber"
+	ListTlpAmberStrict ListTlp = "amber-strict"
+	ListTlpGreen       ListTlp = "green"
+	ListTlpRed         ListTlp = "red"
 )
 
-func (r ListItemTlp) IsKnown() bool {
+func (r ListTlp) IsKnown() bool {
 	switch r {
-	case ListItemTlpClear, ListItemTlpAmber, ListItemTlpAmberStrict, ListItemTlpGreen, ListItemTlpRed:
+	case ListTlpClear, ListTlpAmber, ListTlpAmberStrict, ListTlpGreen, ListTlpRed:
 		return true
 	}
 	return false
 }
 
 // Request Status
-type ListItemStatus string
+type ListStatus string
 
 const (
-	ListItemStatusOpen      ListItemStatus = "open"
-	ListItemStatusAccepted  ListItemStatus = "accepted"
-	ListItemStatusReported  ListItemStatus = "reported"
-	ListItemStatusApproved  ListItemStatus = "approved"
-	ListItemStatusCompleted ListItemStatus = "completed"
-	ListItemStatusDeclined  ListItemStatus = "declined"
+	ListStatusOpen      ListStatus = "open"
+	ListStatusAccepted  ListStatus = "accepted"
+	ListStatusReported  ListStatus = "reported"
+	ListStatusApproved  ListStatus = "approved"
+	ListStatusCompleted ListStatus = "completed"
+	ListStatusDeclined  ListStatus = "declined"
 )
 
-func (r ListItemStatus) IsKnown() bool {
+func (r ListStatus) IsKnown() bool {
 	switch r {
-	case ListItemStatusOpen, ListItemStatusAccepted, ListItemStatusReported, ListItemStatusApproved, ListItemStatusCompleted, ListItemStatusDeclined:
+	case ListStatusOpen, ListStatusAccepted, ListStatusReported, ListStatusApproved, ListStatusCompleted, ListStatusDeclined:
 		return true
 	}
 	return false

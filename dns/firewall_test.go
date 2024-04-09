@@ -133,7 +133,7 @@ func TestFirewallEditWithOptionalParams(t *testing.T) {
 		dns.FirewallEditParams{
 			AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			DeprecateAnyRequests: cloudflare.F(true),
-			DNSFirewallIPs:       cloudflare.F([]dns.FirewallIPsItemUnionParam{shared.UnionString("203.0.113.1"), shared.UnionString("203.0.113.254"), shared.UnionString("2001:DB8:AB::CF"), shared.UnionString("2001:DB8:CD::CF")}),
+			DNSFirewallIPs:       cloudflare.F([]dns.FirewallIPsUnionParam{shared.UnionString("203.0.113.1"), shared.UnionString("203.0.113.254"), shared.UnionString("2001:DB8:AB::CF"), shared.UnionString("2001:DB8:CD::CF")}),
 			EcsFallback:          cloudflare.F(false),
 			MaximumCacheTTL:      cloudflare.F(900.000000),
 			MinimumCacheTTL:      cloudflare.F(60.000000),

@@ -58,7 +58,7 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 			}}),
 			Result: cloudflare.F(workers.ScriptSettingParam{
 				Logpush: cloudflare.F(false),
-				TailConsumers: cloudflare.F([]workers.ConsumerScriptItemParam{{
+				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),

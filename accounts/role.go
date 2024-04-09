@@ -108,8 +108,8 @@ type Role struct {
 	// Role Name.
 	Name string `json:"name,required"`
 	// Access permissions for this User.
-	Permissions []user.PermissionItem `json:"permissions,required"`
-	JSON        roleJSON              `json:"-"`
+	Permissions []user.Permission `json:"permissions,required"`
+	JSON        roleJSON          `json:"-"`
 }
 
 // roleJSON contains the JSON metadata for the struct [Role]

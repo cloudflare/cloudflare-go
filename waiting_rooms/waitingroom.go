@@ -131,7 +131,7 @@ func (r *WaitingRoomService) Get(ctx context.Context, waitingRoomID string, quer
 	return
 }
 
-type AdditionalRoutesItem struct {
+type AdditionalRoutes struct {
 	// The hostname to which this waiting room will be applied (no wildcards). The
 	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
 	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
@@ -140,28 +140,28 @@ type AdditionalRoutesItem struct {
 	// will be enabled for all subpaths as well. If there are two waiting rooms on the
 	// same subpath, the waiting room for the most specific path will be chosen.
 	// Wildcards and query parameters are not supported.
-	Path string                   `json:"path"`
-	JSON additionalRoutesItemJSON `json:"-"`
+	Path string               `json:"path"`
+	JSON additionalRoutesJSON `json:"-"`
 }
 
-// additionalRoutesItemJSON contains the JSON metadata for the struct
-// [AdditionalRoutesItem]
-type additionalRoutesItemJSON struct {
+// additionalRoutesJSON contains the JSON metadata for the struct
+// [AdditionalRoutes]
+type additionalRoutesJSON struct {
 	Host        apijson.Field
 	Path        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AdditionalRoutesItem) UnmarshalJSON(data []byte) (err error) {
+func (r *AdditionalRoutes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r additionalRoutesItemJSON) RawJSON() string {
+func (r additionalRoutesJSON) RawJSON() string {
 	return r.raw
 }
 
-type AdditionalRoutesItemParam struct {
+type AdditionalRoutesParam struct {
 	// The hostname to which this waiting room will be applied (no wildcards). The
 	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
 	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
@@ -173,7 +173,7 @@ type AdditionalRoutesItemParam struct {
 	Path param.Field[string] `json:"path"`
 }
 
-func (r AdditionalRoutesItemParam) MarshalJSON() (data []byte, err error) {
+func (r AdditionalRoutesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -276,7 +276,7 @@ type WaitingRoom struct {
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes []AdditionalRoutesItem `json:"additional_routes"`
+	AdditionalRoutes []AdditionalRoutes `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
 	CookieAttributes CookieAttributes `json:"cookie_attributes"`
@@ -714,7 +714,7 @@ type WaitingRoomNewParams struct {
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes param.Field[[]AdditionalRoutesItemParam] `json:"additional_routes"`
+	AdditionalRoutes param.Field[[]AdditionalRoutesParam] `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
 	CookieAttributes param.Field[CookieAttributesParam] `json:"cookie_attributes"`
@@ -1099,7 +1099,7 @@ type WaitingRoomUpdateParams struct {
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes param.Field[[]AdditionalRoutesItemParam] `json:"additional_routes"`
+	AdditionalRoutes param.Field[[]AdditionalRoutesParam] `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
 	CookieAttributes param.Field[CookieAttributesParam] `json:"cookie_attributes"`
@@ -1526,7 +1526,7 @@ type WaitingRoomEditParams struct {
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes param.Field[[]AdditionalRoutesItemParam] `json:"additional_routes"`
+	AdditionalRoutes param.Field[[]AdditionalRoutesParam] `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
 	CookieAttributes param.Field[CookieAttributesParam] `json:"cookie_attributes"`

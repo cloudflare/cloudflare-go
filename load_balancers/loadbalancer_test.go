@@ -30,7 +30,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.New(context.TODO(), load_balancers.LoadBalancerNewParams{
 		ZoneID:       cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+		DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 		FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 		Name:         cloudflare.F("www.example.com"),
 		AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
@@ -80,17 +80,17 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 			},
 		}),
-		Rules: cloudflare.F([]load_balancers.RulesItemParam{{
+		Rules: cloudflare.F([]load_balancers.RulesParam{{
 			Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 			Disabled:  cloudflare.F(true),
-			FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+			FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 				ContentType: cloudflare.F("application/json"),
 				Location:    cloudflare.F("www.example.com"),
 				MessageBody: cloudflare.F("Testing Hello"),
 				StatusCode:  cloudflare.F(int64(0)),
 			}),
 			Name: cloudflare.F("route the path /testing to testing datacenter."),
-			Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+			Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 				AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 					FailoverAcrossPools: cloudflare.F(true),
 				}),
@@ -103,7 +103,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "00920f38ce07c2e2f4df50b1f61d4194",
 					},
 				}),
-				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -138,7 +138,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 					},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
@@ -148,7 +148,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
@@ -156,14 +156,14 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 		}, {
 			Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 			Disabled:  cloudflare.F(true),
-			FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+			FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 				ContentType: cloudflare.F("application/json"),
 				Location:    cloudflare.F("www.example.com"),
 				MessageBody: cloudflare.F("Testing Hello"),
 				StatusCode:  cloudflare.F(int64(0)),
 			}),
 			Name: cloudflare.F("route the path /testing to testing datacenter."),
-			Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+			Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 				AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 					FailoverAcrossPools: cloudflare.F(true),
 				}),
@@ -176,7 +176,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "00920f38ce07c2e2f4df50b1f61d4194",
 					},
 				}),
-				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -211,7 +211,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 					},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
@@ -221,7 +221,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
@@ -229,14 +229,14 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 		}, {
 			Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 			Disabled:  cloudflare.F(true),
-			FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+			FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 				ContentType: cloudflare.F("application/json"),
 				Location:    cloudflare.F("www.example.com"),
 				MessageBody: cloudflare.F("Testing Hello"),
 				StatusCode:  cloudflare.F(int64(0)),
 			}),
 			Name: cloudflare.F("route the path /testing to testing datacenter."),
-			Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+			Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 				AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 					FailoverAcrossPools: cloudflare.F(true),
 				}),
@@ -249,7 +249,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "00920f38ce07c2e2f4df50b1f61d4194",
 					},
 				}),
-				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -284,7 +284,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 					},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
@@ -294,7 +294,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
@@ -341,7 +341,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		load_balancers.LoadBalancerUpdateParams{
 			ZoneID:       cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+			DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 			FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 			Name:         cloudflare.F("www.example.com"),
 			AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
@@ -392,17 +392,17 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 				},
 			}),
-			Rules: cloudflare.F([]load_balancers.RulesItemParam{{
+			Rules: cloudflare.F([]load_balancers.RulesParam{{
 				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 				Disabled:  cloudflare.F(true),
-				FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+				FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 					ContentType: cloudflare.F("application/json"),
 					Location:    cloudflare.F("www.example.com"),
 					MessageBody: cloudflare.F("Testing Hello"),
 					StatusCode:  cloudflare.F(int64(0)),
 				}),
 				Name: cloudflare.F("route the path /testing to testing datacenter."),
-				Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+				Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
@@ -415,7 +415,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "00920f38ce07c2e2f4df50b1f61d4194",
 						},
 					}),
-					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -450,7 +450,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -460,7 +460,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -468,14 +468,14 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 			}, {
 				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 				Disabled:  cloudflare.F(true),
-				FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+				FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 					ContentType: cloudflare.F("application/json"),
 					Location:    cloudflare.F("www.example.com"),
 					MessageBody: cloudflare.F("Testing Hello"),
 					StatusCode:  cloudflare.F(int64(0)),
 				}),
 				Name: cloudflare.F("route the path /testing to testing datacenter."),
-				Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+				Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
@@ -488,7 +488,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "00920f38ce07c2e2f4df50b1f61d4194",
 						},
 					}),
-					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -523,7 +523,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -533,7 +533,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -541,14 +541,14 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 			}, {
 				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 				Disabled:  cloudflare.F(true),
-				FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+				FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 					ContentType: cloudflare.F("application/json"),
 					Location:    cloudflare.F("www.example.com"),
 					MessageBody: cloudflare.F("Testing Hello"),
 					StatusCode:  cloudflare.F(int64(0)),
 				}),
 				Name: cloudflare.F("route the path /testing to testing datacenter."),
-				Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+				Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
@@ -561,7 +561,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "00920f38ce07c2e2f4df50b1f61d4194",
 						},
 					}),
-					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -596,7 +596,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -606,7 +606,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -723,7 +723,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					"1": "00920f38ce07c2e2f4df50b1f61d4194",
 				},
 			}),
-			DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+			DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 			Description:  cloudflare.F("Load Balancer for www.example.com"),
 			Enabled:      cloudflare.F(true),
 			FallbackPool: cloudflare.F[any](map[string]interface{}{}),
@@ -762,17 +762,17 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 				},
 			}),
-			Rules: cloudflare.F([]load_balancers.RulesItemParam{{
+			Rules: cloudflare.F([]load_balancers.RulesParam{{
 				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 				Disabled:  cloudflare.F(true),
-				FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+				FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 					ContentType: cloudflare.F("application/json"),
 					Location:    cloudflare.F("www.example.com"),
 					MessageBody: cloudflare.F("Testing Hello"),
 					StatusCode:  cloudflare.F(int64(0)),
 				}),
 				Name: cloudflare.F("route the path /testing to testing datacenter."),
-				Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+				Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
@@ -785,7 +785,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "00920f38ce07c2e2f4df50b1f61d4194",
 						},
 					}),
-					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -820,7 +820,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -830,7 +830,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -838,14 +838,14 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 			}, {
 				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 				Disabled:  cloudflare.F(true),
-				FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+				FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 					ContentType: cloudflare.F("application/json"),
 					Location:    cloudflare.F("www.example.com"),
 					MessageBody: cloudflare.F("Testing Hello"),
 					StatusCode:  cloudflare.F(int64(0)),
 				}),
 				Name: cloudflare.F("route the path /testing to testing datacenter."),
-				Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+				Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
@@ -858,7 +858,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "00920f38ce07c2e2f4df50b1f61d4194",
 						},
 					}),
-					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -893,7 +893,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -903,7 +903,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -911,14 +911,14 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 			}, {
 				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
 				Disabled:  cloudflare.F(true),
-				FixedResponse: cloudflare.F(load_balancers.RulesItemFixedResponseParam{
+				FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 					ContentType: cloudflare.F("application/json"),
 					Location:    cloudflare.F("www.example.com"),
 					MessageBody: cloudflare.F("Testing Hello"),
 					StatusCode:  cloudflare.F(int64(0)),
 				}),
 				Name: cloudflare.F("route the path /testing to testing datacenter."),
-				Overrides: cloudflare.F(load_balancers.RulesItemOverridesParam{
+				Overrides: cloudflare.F(load_balancers.RulesOverridesParam{
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
@@ -931,7 +931,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "00920f38ce07c2e2f4df50b1f61d4194",
 						},
 					}),
-					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsItemParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
+					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
@@ -966,7 +966,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesItemOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -976,7 +976,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesItemOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),

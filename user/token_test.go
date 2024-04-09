@@ -55,8 +55,8 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 		}}),
 		Condition: cloudflare.F(user.TokenNewParamsCondition{
 			RequestIP: cloudflare.F(user.TokenNewParamsConditionRequestIP{
-				In:    cloudflare.F([]user.CIDRListItemParam{"123.123.123.0/24", "2606:4700::/32"}),
-				NotIn: cloudflare.F([]user.CIDRListItemParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
+				In:    cloudflare.F([]user.CIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
+				NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
 			}),
 		}),
 		ExpiresOn: cloudflare.F(time.Now()),
@@ -115,8 +115,8 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 			Status: cloudflare.F(user.TokenUpdateParamsStatusActive),
 			Condition: cloudflare.F(user.TokenUpdateParamsCondition{
 				RequestIP: cloudflare.F(user.TokenUpdateParamsConditionRequestIP{
-					In:    cloudflare.F([]user.CIDRListItemParam{"123.123.123.0/24", "2606:4700::/32"}),
-					NotIn: cloudflare.F([]user.CIDRListItemParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
+					In:    cloudflare.F([]user.CIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
+					NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
 				}),
 			}),
 			ExpiresOn: cloudflare.F(time.Now()),
