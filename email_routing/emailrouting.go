@@ -173,17 +173,6 @@ func (r SettingsStatus) IsKnown() bool {
 	return false
 }
 
-type SettingsParam struct {
-	// State of the zone settings for Email Routing.
-	Enabled param.Field[SettingsEnabled] `json:"enabled"`
-	// Flag to check if the user skipped the configuration wizard.
-	SkipWizard param.Field[SettingsSkipWizard] `json:"skip_wizard"`
-}
-
-func (r SettingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type EmailRoutingDisableParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
