@@ -220,7 +220,7 @@ type AccessRule struct {
 	Group                interface{}    `json:"group,required"`
 	AzureAD              interface{}    `json:"azureAD,required"`
 	GitHubOrganization   interface{}    `json:"github-organization,required"`
-	Gsuite               interface{}    `json:"gsuite,required"`
+	GSuite               interface{}    `json:"gsuite,required"`
 	Okta                 interface{}    `json:"okta,required"`
 	SAML                 interface{}    `json:"saml,required"`
 	ServiceToken         interface{}    `json:"service_token,required"`
@@ -245,7 +245,7 @@ type accessRuleJSON struct {
 	Group                apijson.Field
 	AzureAD              apijson.Field
 	GitHubOrganization   apijson.Field
-	Gsuite               apijson.Field
+	GSuite               apijson.Field
 	Okta                 apijson.Field
 	SAML                 apijson.Field
 	ServiceToken         apijson.Field
@@ -280,7 +280,7 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.DomainRule], [zero_trust.EveryoneRule], [zero_trust.IPRule],
 // [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
 // [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
-// [zero_trust.GsuiteGroupRule], [zero_trust.OktaGroupRule],
+// [zero_trust.GSuiteGroupRule], [zero_trust.OktaGroupRule],
 // [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule],
 // [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
 // [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
@@ -335,7 +335,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GsuiteGroupRule{}),
+			Type:       reflect.TypeOf(GSuiteGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -384,7 +384,7 @@ type AccessRuleParam struct {
 	Group                param.Field[interface{}] `json:"group,required"`
 	AzureAD              param.Field[interface{}] `json:"azureAD,required"`
 	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
+	GSuite               param.Field[interface{}] `json:"gsuite,required"`
 	Okta                 param.Field[interface{}] `json:"okta,required"`
 	SAML                 param.Field[interface{}] `json:"saml,required"`
 	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
@@ -408,7 +408,7 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 // [zero_trust.IPRuleParam], [zero_trust.IPListRuleParam],
 // [zero_trust.CertificateRuleParam], [zero_trust.GroupRuleParam],
 // [zero_trust.AzureGroupRuleParam], [zero_trust.GitHubOrganizationRuleParam],
-// [zero_trust.GsuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
+// [zero_trust.GSuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
 // [zero_trust.SAMLGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
 // [zero_trust.AnyValidServiceTokenRuleParam],
 // [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
@@ -2257,167 +2257,167 @@ func (r GroupRuleGroupParam) MarshalJSON() (data []byte, err error) {
 
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
-type GsuiteGroupRule struct {
-	Gsuite GsuiteGroupRuleGsuite `json:"gsuite,required"`
-	JSON   gsuiteGroupRuleJSON   `json:"-"`
+type GSuiteGroupRule struct {
+	GSuite GSuiteGroupRuleGSuite `json:"gsuite,required"`
+	JSON   GSuiteGroupRuleJSON   `json:"-"`
 }
 
-// gsuiteGroupRuleJSON contains the JSON metadata for the struct [GsuiteGroupRule]
-type gsuiteGroupRuleJSON struct {
-	Gsuite      apijson.Field
+// GSuiteGroupRuleJSON contains the JSON metadata for the struct [GSuiteGroupRule]
+type GSuiteGroupRuleJSON struct {
+	GSuite      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *GSuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r gsuiteGroupRuleJSON) RawJSON() string {
+func (r GSuiteGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r GsuiteGroupRule) implementsZeroTrustAccessRule() {}
+func (r GSuiteGroupRule) implementsZeroTrustAccessRule() {}
 
-type GsuiteGroupRuleGsuite struct {
+type GSuiteGroupRuleGSuite struct {
 	// The ID of your Google Workspace identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The email of the Google Workspace group.
 	Email string                    `json:"email,required"`
-	JSON  gsuiteGroupRuleGsuiteJSON `json:"-"`
+	JSON  GSuiteGroupRuleGSuiteJSON `json:"-"`
 }
 
-// gsuiteGroupRuleGsuiteJSON contains the JSON metadata for the struct
-// [GsuiteGroupRuleGsuite]
-type gsuiteGroupRuleGsuiteJSON struct {
+// GSuiteGroupRuleGSuiteJSON contains the JSON metadata for the struct
+// [GSuiteGroupRuleGSuite]
+type GSuiteGroupRuleGSuiteJSON struct {
 	ConnectionID apijson.Field
 	Email        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *GsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
+func (r *GSuiteGroupRuleGSuite) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r gsuiteGroupRuleGsuiteJSON) RawJSON() string {
+func (r GSuiteGroupRuleGSuiteJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
-type GsuiteGroupRuleParam struct {
-	Gsuite param.Field[GsuiteGroupRuleGsuiteParam] `json:"gsuite,required"`
+type GSuiteGroupRuleParam struct {
+	GSuite param.Field[GSuiteGroupRuleGSuiteParam] `json:"gsuite,required"`
 }
 
-func (r GsuiteGroupRuleParam) MarshalJSON() (data []byte, err error) {
+func (r GSuiteGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-type GsuiteGroupRuleGsuiteParam struct {
+type GSuiteGroupRuleGSuiteParam struct {
 	// The ID of your Google Workspace identity provider.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 	// The email of the Google Workspace group.
 	Email param.Field[string] `json:"email,required"`
 }
 
-func (r GsuiteGroupRuleGsuiteParam) MarshalJSON() (data []byte, err error) {
+func (r GSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
