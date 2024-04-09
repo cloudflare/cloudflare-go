@@ -117,44 +117,6 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The type of the profile.
-type CustomProfile string
-
-const (
-	CustomProfileCustom CustomProfile = "custom"
-)
-
-func (r CustomProfile) IsKnown() bool {
-	switch r {
-	case CustomProfileCustom:
-		return true
-	}
-	return false
-}
-
-func (r CustomProfile) implementsZeroTrustProfile() {}
-
-func (r CustomProfile) implementsZeroTrustDLPProfileGetResponse() {}
-
-// The type of the profile.
-type PredefinedProfile string
-
-const (
-	PredefinedProfilePredefined PredefinedProfile = "predefined"
-)
-
-func (r PredefinedProfile) IsKnown() bool {
-	switch r {
-	case PredefinedProfilePredefined:
-		return true
-	}
-	return false
-}
-
-func (r PredefinedProfile) implementsZeroTrustProfile() {}
-
-func (r PredefinedProfile) implementsZeroTrustDLPProfileGetResponse() {}
-
 type Profile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
@@ -169,8 +131,8 @@ type Profile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      PredefinedProfile `json:"type"`
-	CreatedAt time.Time         `json:"created_at" format:"date-time"`
+	Type      ProfileType `json:"type"`
+	CreatedAt time.Time   `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string      `json:"description"`
 	UpdatedAt   time.Time   `json:"updated_at" format:"date-time"`
@@ -326,6 +288,23 @@ func (r ProfileDLPIntegrationProfileType) IsKnown() bool {
 	return false
 }
 
+// The type of the profile.
+type ProfileType string
+
+const (
+	ProfileTypePredefined  ProfileType = "predefined"
+	ProfileTypeCustom      ProfileType = "custom"
+	ProfileTypeIntegration ProfileType = "integration"
+)
+
+func (r ProfileType) IsKnown() bool {
+	switch r {
+	case ProfileTypePredefined, ProfileTypeCustom, ProfileTypeIntegration:
+		return true
+	}
+	return false
+}
+
 // Content types to exclude from context analysis and return all matches.
 type SkipConfiguration struct {
 	// If the content type is a file, skip context analysis and return all matches.
@@ -373,8 +352,8 @@ type DLPProfileGetResponse struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      PredefinedProfile `json:"type"`
-	CreatedAt time.Time         `json:"created_at" format:"date-time"`
+	Type      DLPProfileGetResponseType `json:"type"`
+	CreatedAt time.Time                 `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string                    `json:"description"`
 	UpdatedAt   time.Time                 `json:"updated_at" format:"date-time"`
@@ -526,6 +505,23 @@ const (
 func (r DLPProfileGetResponseDLPIntegrationProfileType) IsKnown() bool {
 	switch r {
 	case DLPProfileGetResponseDLPIntegrationProfileTypeIntegration:
+		return true
+	}
+	return false
+}
+
+// The type of the profile.
+type DLPProfileGetResponseType string
+
+const (
+	DLPProfileGetResponseTypePredefined  DLPProfileGetResponseType = "predefined"
+	DLPProfileGetResponseTypeCustom      DLPProfileGetResponseType = "custom"
+	DLPProfileGetResponseTypeIntegration DLPProfileGetResponseType = "integration"
+)
+
+func (r DLPProfileGetResponseType) IsKnown() bool {
+	switch r {
+	case DLPProfileGetResponseTypePredefined, DLPProfileGetResponseTypeCustom, DLPProfileGetResponseTypeIntegration:
 		return true
 	}
 	return false

@@ -206,9 +206,9 @@ func (r FirewallRuleConfiguration) AsUnion() (FirewallRuleConfigurationUnion) {
 
 // The rule configuration.
 //
-// Union satisfied by [firewall.IPConfiguration], [firewall.IPV6Configuration],
-// [firewall.CIDRConfiguration], [firewall.ASNConfiguration] or
-// [firewall.CountryConfiguration].
+// Union satisfied by [firewall.AccessRuleIPConfiguration],
+// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
+// [firewall.ASNConfiguration] or [firewall.CountryConfiguration].
 type FirewallRuleConfigurationUnion interface {
   implementsUserFirewallRuleConfiguration()
 }
@@ -219,7 +219,7 @@ func init() {
     "",
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
-      Type: reflect.TypeOf(firewall.IPConfiguration{}),
+      Type: reflect.TypeOf(firewall.AccessRuleIPConfiguration{}),
     },
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
@@ -227,7 +227,7 @@ func init() {
     },
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
-      Type: reflect.TypeOf(firewall.CIDRConfiguration{}),
+      Type: reflect.TypeOf(firewall.AccessRuleCIDRConfiguration{}),
     },
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
@@ -332,9 +332,9 @@ func (r FirewallAccessRuleNewParamsConfiguration) implementsUserFirewallAccessRu
 
 // The rule configuration.
 //
-// Satisfied by [firewall.IPConfigurationParam], [firewall.IPV6ConfigurationParam],
-// [firewall.CIDRConfigurationParam], [firewall.ASNConfigurationParam],
-// [firewall.CountryConfigurationParam],
+// Satisfied by [firewall.AccessRuleIPConfigurationParam],
+// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
+// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
 // [FirewallAccessRuleNewParamsConfiguration].
 type FirewallAccessRuleNewParamsConfigurationUnion interface {
   implementsUserFirewallAccessRuleNewParamsConfigurationUnion()

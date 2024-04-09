@@ -201,6 +201,8 @@ func (r memberUserJSON) RawJSON() string {
 	return r.raw
 }
 
+type MemberRoles []string
+
 type MemberWithInviteCode struct {
 	// Membership identifier tag.
 	ID string `json:"id,required"`
@@ -297,8 +299,6 @@ func (r *MemberWithInviteCodeUser) UnmarshalJSON(data []byte) (err error) {
 func (r memberWithInviteCodeUserJSON) RawJSON() string {
 	return r.raw
 }
-
-type Roles []string
 
 type MemberListResponse struct {
 	// Identifier

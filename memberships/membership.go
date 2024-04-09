@@ -110,7 +110,7 @@ type Membership struct {
 	// All access permissions for the user at the account.
 	Permissions user.Permission `json:"permissions"`
 	// List of role names for the user at the account.
-	Roles accounts.Roles `json:"roles"`
+	Roles accounts.MemberRoles `json:"roles"`
 	// Status of this membership.
 	Status MembershipStatus `json:"status"`
 	JSON   membershipJSON   `json:"-"`
