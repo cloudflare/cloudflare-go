@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -182,9 +181,9 @@ func (r attackLayer7TopAttacksResponseTop0JSON) RawJSON() string {
 }
 
 type AttackLayer7TopIndustryResponse struct {
-	Meta AttackLayer7TopIndustryResponseMeta                       `json:"meta,required"`
-	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
-	JSON attackLayer7TopIndustryResponseJSON                       `json:"-"`
+	Meta AttackLayer7TopIndustryResponseMeta `json:"meta,required"`
+	Top0 []Browser                           `json:"top_0,required"`
+	JSON attackLayer7TopIndustryResponseJSON `json:"-"`
 }
 
 // attackLayer7TopIndustryResponseJSON contains the JSON metadata for the struct
@@ -253,9 +252,9 @@ func (r attackLayer7TopIndustryResponseMetaConfidenceInfoJSON) RawJSON() string 
 }
 
 type AttackLayer7TopVerticalResponse struct {
-	Meta AttackLayer7TopVerticalResponseMeta                       `json:"meta,required"`
-	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
-	JSON attackLayer7TopVerticalResponseJSON                       `json:"-"`
+	Meta AttackLayer7TopVerticalResponseMeta `json:"meta,required"`
+	Top0 []Browser                           `json:"top_0,required"`
+	JSON attackLayer7TopVerticalResponseJSON `json:"-"`
 }
 
 // attackLayer7TopVerticalResponseJSON contains the JSON metadata for the struct

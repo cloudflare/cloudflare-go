@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -13,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // MonitorService contains methods and other services that help with interacting
@@ -38,7 +38,7 @@ func NewMonitorService(opts ...option.RequestOption) (r *MonitorService) {
 }
 
 // Create a configured monitor.
-func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts ...option.RequestOption) (res *user.Monitor, err error) {
+func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts ...option.RequestOption) (res *MonitorNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", params.AccountID)
@@ -51,7 +51,7 @@ func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts 
 }
 
 // Modify a configured monitor.
-func (r *MonitorService) Update(ctx context.Context, monitorID string, params MonitorUpdateParams, opts ...option.RequestOption) (res *user.Monitor, err error) {
+func (r *MonitorService) Update(ctx context.Context, monitorID string, params MonitorUpdateParams, opts ...option.RequestOption) (res *MonitorUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
@@ -64,7 +64,7 @@ func (r *MonitorService) Update(ctx context.Context, monitorID string, params Mo
 }
 
 // List configured monitors for an account.
-func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.Monitor], err error) {
+func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MonitorListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -82,7 +82,7 @@ func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts
 }
 
 // List configured monitors for an account.
-func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Monitor] {
+func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MonitorListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -100,7 +100,7 @@ func (r *MonitorService) Delete(ctx context.Context, monitorID string, params Mo
 }
 
 // Apply changes to an existing monitor, overwriting the supplied properties.
-func (r *MonitorService) Edit(ctx context.Context, monitorID string, params MonitorEditParams, opts ...option.RequestOption) (res *user.Monitor, err error) {
+func (r *MonitorService) Edit(ctx context.Context, monitorID string, params MonitorEditParams, opts ...option.RequestOption) (res *MonitorEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
@@ -113,7 +113,7 @@ func (r *MonitorService) Edit(ctx context.Context, monitorID string, params Moni
 }
 
 // List a single configured monitor for an account.
-func (r *MonitorService) Get(ctx context.Context, monitorID string, query MonitorGetParams, opts ...option.RequestOption) (res *user.Monitor, err error) {
+func (r *MonitorService) Get(ctx context.Context, monitorID string, query MonitorGetParams, opts ...option.RequestOption) (res *MonitorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", query.AccountID, monitorID)
@@ -123,6 +123,339 @@ func (r *MonitorService) Get(ctx context.Context, monitorID string, query Monito
 	}
 	res = &env.Result
 	return
+}
+
+type MonitorNewResponse struct {
+	ID string `json:"id"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure bool `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown int64 `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp int64     `json:"consecutive_up"`
+	CreatedOn     time.Time `json:"created_on" format:"date-time"`
+	// Object description.
+	Description string `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody string `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes string `json:"expected_codes"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects bool `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header interface{} `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval int64 `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method     string    `json:"method"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path string `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port int64 `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone string `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries int64 `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout int64 `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type MonitorNewResponseType `json:"type"`
+	JSON monitorNewResponseJSON `json:"-"`
+}
+
+// monitorNewResponseJSON contains the JSON metadata for the struct
+// [MonitorNewResponse]
+type monitorNewResponseJSON struct {
+	ID              apijson.Field
+	AllowInsecure   apijson.Field
+	ConsecutiveDown apijson.Field
+	ConsecutiveUp   apijson.Field
+	CreatedOn       apijson.Field
+	Description     apijson.Field
+	ExpectedBody    apijson.Field
+	ExpectedCodes   apijson.Field
+	FollowRedirects apijson.Field
+	Header          apijson.Field
+	Interval        apijson.Field
+	Method          apijson.Field
+	ModifiedOn      apijson.Field
+	Path            apijson.Field
+	Port            apijson.Field
+	ProbeZone       apijson.Field
+	Retries         apijson.Field
+	Timeout         apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MonitorNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type MonitorNewResponseType string
+
+const (
+	MonitorNewResponseTypeHTTP     MonitorNewResponseType = "http"
+	MonitorNewResponseTypeHTTPS    MonitorNewResponseType = "https"
+	MonitorNewResponseTypeTCP      MonitorNewResponseType = "tcp"
+	MonitorNewResponseTypeUdpIcmp  MonitorNewResponseType = "udp_icmp"
+	MonitorNewResponseTypeIcmpPing MonitorNewResponseType = "icmp_ping"
+	MonitorNewResponseTypeSmtp     MonitorNewResponseType = "smtp"
+)
+
+func (r MonitorNewResponseType) IsKnown() bool {
+	switch r {
+	case MonitorNewResponseTypeHTTP, MonitorNewResponseTypeHTTPS, MonitorNewResponseTypeTCP, MonitorNewResponseTypeUdpIcmp, MonitorNewResponseTypeIcmpPing, MonitorNewResponseTypeSmtp:
+		return true
+	}
+	return false
+}
+
+type MonitorUpdateResponse struct {
+	ID string `json:"id"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure bool `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown int64 `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp int64     `json:"consecutive_up"`
+	CreatedOn     time.Time `json:"created_on" format:"date-time"`
+	// Object description.
+	Description string `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody string `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes string `json:"expected_codes"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects bool `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header interface{} `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval int64 `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method     string    `json:"method"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path string `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port int64 `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone string `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries int64 `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout int64 `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type MonitorUpdateResponseType `json:"type"`
+	JSON monitorUpdateResponseJSON `json:"-"`
+}
+
+// monitorUpdateResponseJSON contains the JSON metadata for the struct
+// [MonitorUpdateResponse]
+type monitorUpdateResponseJSON struct {
+	ID              apijson.Field
+	AllowInsecure   apijson.Field
+	ConsecutiveDown apijson.Field
+	ConsecutiveUp   apijson.Field
+	CreatedOn       apijson.Field
+	Description     apijson.Field
+	ExpectedBody    apijson.Field
+	ExpectedCodes   apijson.Field
+	FollowRedirects apijson.Field
+	Header          apijson.Field
+	Interval        apijson.Field
+	Method          apijson.Field
+	ModifiedOn      apijson.Field
+	Path            apijson.Field
+	Port            apijson.Field
+	ProbeZone       apijson.Field
+	Retries         apijson.Field
+	Timeout         apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MonitorUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type MonitorUpdateResponseType string
+
+const (
+	MonitorUpdateResponseTypeHTTP     MonitorUpdateResponseType = "http"
+	MonitorUpdateResponseTypeHTTPS    MonitorUpdateResponseType = "https"
+	MonitorUpdateResponseTypeTCP      MonitorUpdateResponseType = "tcp"
+	MonitorUpdateResponseTypeUdpIcmp  MonitorUpdateResponseType = "udp_icmp"
+	MonitorUpdateResponseTypeIcmpPing MonitorUpdateResponseType = "icmp_ping"
+	MonitorUpdateResponseTypeSmtp     MonitorUpdateResponseType = "smtp"
+)
+
+func (r MonitorUpdateResponseType) IsKnown() bool {
+	switch r {
+	case MonitorUpdateResponseTypeHTTP, MonitorUpdateResponseTypeHTTPS, MonitorUpdateResponseTypeTCP, MonitorUpdateResponseTypeUdpIcmp, MonitorUpdateResponseTypeIcmpPing, MonitorUpdateResponseTypeSmtp:
+		return true
+	}
+	return false
+}
+
+type MonitorListResponse struct {
+	ID string `json:"id"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure bool `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown int64 `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp int64     `json:"consecutive_up"`
+	CreatedOn     time.Time `json:"created_on" format:"date-time"`
+	// Object description.
+	Description string `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody string `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes string `json:"expected_codes"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects bool `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header interface{} `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval int64 `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method     string    `json:"method"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path string `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port int64 `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone string `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries int64 `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout int64 `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type MonitorListResponseType `json:"type"`
+	JSON monitorListResponseJSON `json:"-"`
+}
+
+// monitorListResponseJSON contains the JSON metadata for the struct
+// [MonitorListResponse]
+type monitorListResponseJSON struct {
+	ID              apijson.Field
+	AllowInsecure   apijson.Field
+	ConsecutiveDown apijson.Field
+	ConsecutiveUp   apijson.Field
+	CreatedOn       apijson.Field
+	Description     apijson.Field
+	ExpectedBody    apijson.Field
+	ExpectedCodes   apijson.Field
+	FollowRedirects apijson.Field
+	Header          apijson.Field
+	Interval        apijson.Field
+	Method          apijson.Field
+	ModifiedOn      apijson.Field
+	Path            apijson.Field
+	Port            apijson.Field
+	ProbeZone       apijson.Field
+	Retries         apijson.Field
+	Timeout         apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MonitorListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type MonitorListResponseType string
+
+const (
+	MonitorListResponseTypeHTTP     MonitorListResponseType = "http"
+	MonitorListResponseTypeHTTPS    MonitorListResponseType = "https"
+	MonitorListResponseTypeTCP      MonitorListResponseType = "tcp"
+	MonitorListResponseTypeUdpIcmp  MonitorListResponseType = "udp_icmp"
+	MonitorListResponseTypeIcmpPing MonitorListResponseType = "icmp_ping"
+	MonitorListResponseTypeSmtp     MonitorListResponseType = "smtp"
+)
+
+func (r MonitorListResponseType) IsKnown() bool {
+	switch r {
+	case MonitorListResponseTypeHTTP, MonitorListResponseTypeHTTPS, MonitorListResponseTypeTCP, MonitorListResponseTypeUdpIcmp, MonitorListResponseTypeIcmpPing, MonitorListResponseTypeSmtp:
+		return true
+	}
+	return false
 }
 
 type MonitorDeleteResponse struct {
@@ -144,6 +477,228 @@ func (r *MonitorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r monitorDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type MonitorEditResponse struct {
+	ID string `json:"id"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure bool `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown int64 `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp int64     `json:"consecutive_up"`
+	CreatedOn     time.Time `json:"created_on" format:"date-time"`
+	// Object description.
+	Description string `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody string `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes string `json:"expected_codes"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects bool `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header interface{} `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval int64 `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method     string    `json:"method"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path string `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port int64 `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone string `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries int64 `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout int64 `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type MonitorEditResponseType `json:"type"`
+	JSON monitorEditResponseJSON `json:"-"`
+}
+
+// monitorEditResponseJSON contains the JSON metadata for the struct
+// [MonitorEditResponse]
+type monitorEditResponseJSON struct {
+	ID              apijson.Field
+	AllowInsecure   apijson.Field
+	ConsecutiveDown apijson.Field
+	ConsecutiveUp   apijson.Field
+	CreatedOn       apijson.Field
+	Description     apijson.Field
+	ExpectedBody    apijson.Field
+	ExpectedCodes   apijson.Field
+	FollowRedirects apijson.Field
+	Header          apijson.Field
+	Interval        apijson.Field
+	Method          apijson.Field
+	ModifiedOn      apijson.Field
+	Path            apijson.Field
+	Port            apijson.Field
+	ProbeZone       apijson.Field
+	Retries         apijson.Field
+	Timeout         apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MonitorEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type MonitorEditResponseType string
+
+const (
+	MonitorEditResponseTypeHTTP     MonitorEditResponseType = "http"
+	MonitorEditResponseTypeHTTPS    MonitorEditResponseType = "https"
+	MonitorEditResponseTypeTCP      MonitorEditResponseType = "tcp"
+	MonitorEditResponseTypeUdpIcmp  MonitorEditResponseType = "udp_icmp"
+	MonitorEditResponseTypeIcmpPing MonitorEditResponseType = "icmp_ping"
+	MonitorEditResponseTypeSmtp     MonitorEditResponseType = "smtp"
+)
+
+func (r MonitorEditResponseType) IsKnown() bool {
+	switch r {
+	case MonitorEditResponseTypeHTTP, MonitorEditResponseTypeHTTPS, MonitorEditResponseTypeTCP, MonitorEditResponseTypeUdpIcmp, MonitorEditResponseTypeIcmpPing, MonitorEditResponseTypeSmtp:
+		return true
+	}
+	return false
+}
+
+type MonitorGetResponse struct {
+	ID string `json:"id"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure bool `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown int64 `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp int64     `json:"consecutive_up"`
+	CreatedOn     time.Time `json:"created_on" format:"date-time"`
+	// Object description.
+	Description string `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody string `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes string `json:"expected_codes"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects bool `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header interface{} `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval int64 `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method     string    `json:"method"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path string `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port int64 `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone string `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries int64 `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout int64 `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type MonitorGetResponseType `json:"type"`
+	JSON monitorGetResponseJSON `json:"-"`
+}
+
+// monitorGetResponseJSON contains the JSON metadata for the struct
+// [MonitorGetResponse]
+type monitorGetResponseJSON struct {
+	ID              apijson.Field
+	AllowInsecure   apijson.Field
+	ConsecutiveDown apijson.Field
+	ConsecutiveUp   apijson.Field
+	CreatedOn       apijson.Field
+	Description     apijson.Field
+	ExpectedBody    apijson.Field
+	ExpectedCodes   apijson.Field
+	FollowRedirects apijson.Field
+	Header          apijson.Field
+	Interval        apijson.Field
+	Method          apijson.Field
+	ModifiedOn      apijson.Field
+	Path            apijson.Field
+	Port            apijson.Field
+	ProbeZone       apijson.Field
+	Retries         apijson.Field
+	Timeout         apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MonitorGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type MonitorGetResponseType string
+
+const (
+	MonitorGetResponseTypeHTTP     MonitorGetResponseType = "http"
+	MonitorGetResponseTypeHTTPS    MonitorGetResponseType = "https"
+	MonitorGetResponseTypeTCP      MonitorGetResponseType = "tcp"
+	MonitorGetResponseTypeUdpIcmp  MonitorGetResponseType = "udp_icmp"
+	MonitorGetResponseTypeIcmpPing MonitorGetResponseType = "icmp_ping"
+	MonitorGetResponseTypeSmtp     MonitorGetResponseType = "smtp"
+)
+
+func (r MonitorGetResponseType) IsKnown() bool {
+	switch r {
+	case MonitorGetResponseTypeHTTP, MonitorGetResponseTypeHTTPS, MonitorGetResponseTypeTCP, MonitorGetResponseTypeUdpIcmp, MonitorGetResponseTypeIcmpPing, MonitorGetResponseTypeSmtp:
+		return true
+	}
+	return false
 }
 
 type MonitorNewParams struct {
@@ -228,7 +783,7 @@ func (r MonitorNewParamsType) IsKnown() bool {
 type MonitorNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.Monitor          `json:"result,required"`
+	Result   MonitorNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorNewResponseEnvelopeJSON    `json:"-"`
@@ -350,7 +905,7 @@ func (r MonitorUpdateParamsType) IsKnown() bool {
 type MonitorUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.Monitor          `json:"result,required"`
+	Result   MonitorUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorUpdateResponseEnvelopeJSON    `json:"-"`
@@ -530,7 +1085,7 @@ func (r MonitorEditParamsType) IsKnown() bool {
 type MonitorEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.Monitor          `json:"result,required"`
+	Result   MonitorEditResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorEditResponseEnvelopeJSON    `json:"-"`
@@ -578,7 +1133,7 @@ type MonitorGetParams struct {
 type MonitorGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.Monitor          `json:"result,required"`
+	Result   MonitorGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorGetResponseEnvelopeJSON    `json:"-"`
