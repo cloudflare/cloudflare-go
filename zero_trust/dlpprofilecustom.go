@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // DLPProfileCustomService contains methods and other services that help with
@@ -55,7 +57,7 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 }
 
 // Deletes a DLP custom profile.
-func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
+func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
@@ -98,9 +100,9 @@ type CustomProfile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1 `json:"type"`
-	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
-	JSON      customProfileJSON                                `json:"-"`
+	Type      CustomProfile     `json:"type"`
+	UpdatedAt time.Time         `json:"updated_at" format:"date-time"`
+	JSON      customProfileJSON `json:"-"`
 }
 
 // customProfileJSON contains the JSON metadata for the struct [CustomProfile]
@@ -223,6 +225,23 @@ type PatternParam struct {
 
 func (r PatternParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Union satisfied by [zero_trust.DLPProfileCustomDeleteResponseUnknown] or
+// [shared.UnionString].
+type DLPProfileCustomDeleteResponseUnion interface {
+	ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPProfileCustomDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type DLPProfileCustomNewParams struct {
@@ -448,9 +467,9 @@ func (r DLPProfileCustomDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   DLPProfileCustomDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileCustomDeleteResponseEnvelopeJSON    `json:"-"`

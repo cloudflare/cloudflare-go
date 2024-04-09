@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // DNSSECService contains methods and other services that help with interacting
@@ -33,7 +35,7 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 }
 
 // Delete DNSSEC.
-func (r *DNSSECService) Delete(ctx context.Context, params DNSSECDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union, err error) {
+func (r *DNSSECService) Delete(ctx context.Context, params DNSSECDeleteParams, opts ...option.RequestOption) (res *DNSSECDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", params.ZoneID)
@@ -160,6 +162,22 @@ func (r DNSSECStatus) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [dnssec.DNSSECDeleteResponseUnknown] or [shared.UnionString].
+type DNSSECDeleteResponseUnion interface {
+	ImplementsDNSSECDNSSECDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSSECDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type DNSSECDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string]      `path:"zone_id,required"`
@@ -171,9 +189,9 @@ func (r DNSSECDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSSECDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   DNSSECDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnssecDeleteResponseEnvelopeJSON    `json:"-"`

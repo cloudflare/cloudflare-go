@@ -35,7 +35,7 @@ func TestSippyUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Destination: cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsDestination{
 				AccessKeyID:     cloudflare.F("string"),
-				Provider:        cloudflare.F(r2.UnnamedSchemaRef6430970563db310f19d39aafe3debd27R2),
+				Provider:        cloudflare.F(r2.ProviderR2),
 				SecretAccessKey: cloudflare.F("string"),
 			}),
 			Source: cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsSource{

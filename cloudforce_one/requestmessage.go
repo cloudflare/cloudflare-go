@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // RequestMessageService contains methods and other services that help with
@@ -62,7 +64,7 @@ func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier st
 }
 
 // Delete a Request Message
-func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union, err error) {
+func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *RequestMessageDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", accountIdentifier, requestIdentifier, messageIdentifer)
@@ -121,6 +123,32 @@ func (r *Message) UnmarshalJSON(data []byte) (err error) {
 
 func (r messageJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [cloudforce_one.RequestMessageDeleteResponseUnknown],
+// [cloudforce_one.RequestMessageDeleteResponseArray] or [shared.UnionString].
+type RequestMessageDeleteResponseUnion interface {
+	ImplementsCloudforceOneRequestMessageDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RequestMessageDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RequestMessageDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type RequestMessageDeleteResponseArray []interface{}
+
+func (r RequestMessageDeleteResponseArray) ImplementsCloudforceOneRequestMessageDeleteResponseUnion() {
 }
 
 type RequestMessageNewParams struct {
@@ -255,9 +283,9 @@ func (r RequestMessageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestMessageDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   RequestMessageDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageDeleteResponseEnvelopeJSON    `json:"-"`

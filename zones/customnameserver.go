@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // CustomNameserverService contains methods and other services that help with
@@ -37,7 +39,7 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 // If you would like new zones in the account to use account custom nameservers by
 // default, use PUT /accounts/:identifier to set the account setting
 // use_account_custom_ns_by_default to true.
-func (r *CustomNameserverService) Update(ctx context.Context, params CustomNameserverUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
+func (r *CustomNameserverService) Update(ctx context.Context, params CustomNameserverUpdateParams, opts ...option.RequestOption) (res *CustomNameserverUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_ns", params.ZoneID)
@@ -50,7 +52,7 @@ func (r *CustomNameserverService) Update(ctx context.Context, params CustomNames
 }
 
 // Get metadata for account-level custom nameservers on a zone.
-func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
+func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *CustomNameserverGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_ns", query.ZoneID)
@@ -61,6 +63,56 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 	res = &env.Result
 	return
 }
+
+// Union satisfied by [zones.CustomNameserverUpdateResponseUnknown],
+// [zones.CustomNameserverUpdateResponseArray] or [shared.UnionString].
+type CustomNameserverUpdateResponseUnion interface {
+	ImplementsZonesCustomNameserverUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CustomNameserverUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CustomNameserverUpdateResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type CustomNameserverUpdateResponseArray []interface{}
+
+func (r CustomNameserverUpdateResponseArray) ImplementsZonesCustomNameserverUpdateResponseUnion() {}
+
+// Union satisfied by [zones.CustomNameserverGetResponseUnknown],
+// [zones.CustomNameserverGetResponseArray] or [shared.UnionString].
+type CustomNameserverGetResponseUnion interface {
+	ImplementsZonesCustomNameserverGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CustomNameserverGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CustomNameserverGetResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type CustomNameserverGetResponseArray []interface{}
+
+func (r CustomNameserverGetResponseArray) ImplementsZonesCustomNameserverGetResponseUnion() {}
 
 type CustomNameserverUpdateParams struct {
 	// Identifier
@@ -76,9 +128,9 @@ func (r CustomNameserverUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   CustomNameserverUpdateResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -157,9 +209,9 @@ type CustomNameserverGetParams struct {
 }
 
 type CustomNameserverGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   CustomNameserverGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CustomNameserverGetResponseEnvelopeSuccess `json:"success,required"`
 	// Whether zone uses account-level custom nameservers.

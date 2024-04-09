@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // NamespaceService contains methods and other services that help with interacting
@@ -58,7 +60,7 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 }
 
 // Modifies a namespace's title.
-func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
+func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", params.AccountID, namespaceID)
@@ -94,7 +96,7 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceL
 }
 
 // Deletes the namespace corresponding to the given ID.
-func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, params NamespaceDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
+func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, params NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", params.AccountID, namespaceID)
@@ -132,6 +134,38 @@ func (r *Namespace) UnmarshalJSON(data []byte) (err error) {
 
 func (r namespaceJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [kv.NamespaceUpdateResponseUnknown] or [shared.UnionString].
+type NamespaceUpdateResponseUnion interface {
+	ImplementsKVNamespaceUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NamespaceUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [kv.NamespaceDeleteResponseUnknown] or [shared.UnionString].
+type NamespaceDeleteResponseUnion interface {
+	ImplementsKVNamespaceDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NamespaceDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type NamespaceNewParams struct {
@@ -200,9 +234,9 @@ func (r NamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   NamespaceUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceUpdateResponseEnvelopeJSON    `json:"-"`
@@ -306,9 +340,9 @@ func (r NamespaceDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   NamespaceDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceDeleteResponseEnvelopeJSON    `json:"-"`

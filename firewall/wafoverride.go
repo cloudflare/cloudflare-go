@@ -157,7 +157,7 @@ type Override struct {
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
-	URLs []URLsItems  `json:"urls"`
+	URLs []URLs       `json:"urls"`
 	JSON overrideJSON `json:"-"`
 }
 
@@ -274,7 +274,7 @@ func (r Rule) IsKnown() bool {
 	return false
 }
 
-type URLsItems = string
+type URLs = string
 
 type WAFOverrideDeleteResponse struct {
 	// The unique identifier of the WAF override.

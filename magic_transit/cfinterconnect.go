@@ -203,7 +203,7 @@ type CfInterconnectListResponseInterconnectsHealthCheck struct {
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39       `json:"type"`
+	Type HealthCheckType                                        `json:"type"`
 	JSON cfInterconnectListResponseInterconnectsHealthCheckJSON `json:"-"`
 }
 
@@ -289,7 +289,7 @@ type CfInterconnectUpdateParamsHealthCheck struct {
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39] `json:"type"`
+	Type param.Field[HealthCheckType] `json:"type"`
 }
 
 func (r CfInterconnectUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
