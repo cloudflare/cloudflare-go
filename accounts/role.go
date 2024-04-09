@@ -34,7 +34,7 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Role], err error) {
+func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RoleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,7 +52,7 @@ func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...op
 }
 
 // Get all available roles for an account.
-func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Role] {
+func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RoleListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -100,7 +100,7 @@ func (r PermissionGrantParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type Role struct {
+type RoleListResponse struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
 	// Description of role's permissions.
@@ -108,12 +108,13 @@ type Role struct {
 	// Role Name.
 	Name string `json:"name,required"`
 	// Access permissions for this User.
-	Permissions []user.Permission `json:"permissions,required"`
-	JSON        roleJSON          `json:"-"`
+	Permissions []user.Permission    `json:"permissions,required"`
+	JSON        roleListResponseJSON `json:"-"`
 }
 
-// roleJSON contains the JSON metadata for the struct [Role]
-type roleJSON struct {
+// roleListResponseJSON contains the JSON metadata for the struct
+// [RoleListResponse]
+type roleListResponseJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Name        apijson.Field
@@ -122,11 +123,11 @@ type roleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Role) UnmarshalJSON(data []byte) (err error) {
+func (r *RoleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r roleJSON) RawJSON() string {
+func (r roleListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
