@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // SnippetService contains methods and other services that help with interacting
@@ -73,7 +75,7 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, zoneIdentifier stri
 }
 
 // Delete Snippet
-func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union, err error) {
+func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *SnippetDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
@@ -125,6 +127,31 @@ func (r *Snippet) UnmarshalJSON(data []byte) (err error) {
 func (r snippetJSON) RawJSON() string {
 	return r.raw
 }
+
+// Union satisfied by [snippets.SnippetDeleteResponseUnknown],
+// [snippets.SnippetDeleteResponseArray] or [shared.UnionString].
+type SnippetDeleteResponseUnion interface {
+	ImplementsSnippetsSnippetDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SnippetDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SnippetDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type SnippetDeleteResponseArray []interface{}
+
+func (r SnippetDeleteResponseArray) ImplementsSnippetsSnippetDeleteResponseUnion() {}
 
 type SnippetUpdateParams struct {
 	// Content files of uploaded snippet
@@ -190,9 +217,9 @@ func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   SnippetDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetDeleteResponseEnvelopeJSON    `json:"-"`

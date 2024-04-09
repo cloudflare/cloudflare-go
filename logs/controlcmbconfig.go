@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // ControlCmbConfigService contains methods and other services that help with
@@ -46,7 +48,7 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 }
 
 // Deletes CMB config.
-func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
+func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
@@ -91,6 +93,31 @@ func (r *CmbConfig) UnmarshalJSON(data []byte) (err error) {
 func (r cmbConfigJSON) RawJSON() string {
 	return r.raw
 }
+
+// Union satisfied by [logs.ControlCmbConfigDeleteResponseUnknown],
+// [logs.ControlCmbConfigDeleteResponseArray] or [shared.UnionString].
+type ControlCmbConfigDeleteResponseUnion interface {
+	ImplementsLogsControlCmbConfigDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ControlCmbConfigDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ControlCmbConfigDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type ControlCmbConfigDeleteResponseArray []interface{}
+
+func (r ControlCmbConfigDeleteResponseArray) ImplementsLogsControlCmbConfigDeleteResponseUnion() {}
 
 type ControlCmbConfigNewParams struct {
 	// Identifier
@@ -157,9 +184,9 @@ func (r ControlCmbConfigDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlCmbConfigDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   ControlCmbConfigDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigDeleteResponseEnvelopeJSON    `json:"-"`

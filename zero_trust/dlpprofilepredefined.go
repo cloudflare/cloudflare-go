@@ -68,8 +68,8 @@ type PredefinedProfile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 `json:"type"`
-	JSON predefinedProfileJSON                            `json:"-"`
+	Type PredefinedProfile     `json:"type"`
+	JSON predefinedProfileJSON `json:"-"`
 }
 
 // predefinedProfileJSON contains the JSON metadata for the struct

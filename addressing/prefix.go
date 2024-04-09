@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // PrefixService contains methods and other services that help with interacting
@@ -74,7 +76,7 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 }
 
 // Delete an unapproved prefix owned by the account.
-func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
+func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
@@ -171,6 +173,31 @@ func (r prefixJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [addressing.PrefixDeleteResponseUnknown],
+// [addressing.PrefixDeleteResponseArray] or [shared.UnionString].
+type PrefixDeleteResponseUnion interface {
+	ImplementsAddressingPrefixDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PrefixDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PrefixDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type PrefixDeleteResponseArray []interface{}
+
+func (r PrefixDeleteResponseArray) ImplementsAddressingPrefixDeleteResponseUnion() {}
+
 type PrefixNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -245,9 +272,9 @@ func (r PrefixDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   PrefixDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PrefixDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PrefixDeleteResponseEnvelopeResultInfo `json:"result_info"`

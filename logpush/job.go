@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // JobService contains methods and other services that help with interacting with
@@ -109,7 +111,7 @@ func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, op
 }
 
 // Deletes a Logpush job.
-func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
+func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeleteParams, opts ...option.RequestOption) (res *JobDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobDeleteResponseEnvelope
 	var accountOrZone string
@@ -151,6 +153,31 @@ func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, o
 	res = &env.Result
 	return
 }
+
+// Union satisfied by [logpush.JobDeleteResponseUnknown],
+// [logpush.JobDeleteResponseArray] or [shared.UnionString].
+type JobDeleteResponseUnion interface {
+	ImplementsLogpushJobDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*JobDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(JobDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type JobDeleteResponseArray []interface{}
+
+func (r JobDeleteResponseArray) ImplementsLogpushJobDeleteResponseUnion() {}
 
 type JobNewParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
@@ -364,9 +391,9 @@ func (r JobDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type JobDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   JobDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobDeleteResponseEnvelopeJSON    `json:"-"`

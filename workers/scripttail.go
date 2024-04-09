@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // ScriptTailService contains methods and other services that help with interacting
@@ -45,7 +47,7 @@ func (r *ScriptTailService) New(ctx context.Context, scriptName string, params S
 }
 
 // Deletes a tail from a Worker.
-func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, params ScriptTailDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union, err error) {
+func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, params ScriptTailDeleteParams, opts ...option.RequestOption) (res *ScriptTailDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptTailDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", params.AccountID, scriptName, id)
@@ -138,6 +140,31 @@ func (r scriptTailNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [workers.ScriptTailDeleteResponseUnknown],
+// [workers.ScriptTailDeleteResponseArray] or [shared.UnionString].
+type ScriptTailDeleteResponseUnion interface {
+	ImplementsWorkersScriptTailDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ScriptTailDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptTailDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type ScriptTailDeleteResponseArray []interface{}
+
+func (r ScriptTailDeleteResponseArray) ImplementsWorkersScriptTailDeleteResponseUnion() {}
+
 type ScriptTailGetResponse struct {
 	ID        interface{}               `json:"id"`
 	ExpiresAt interface{}               `json:"expires_at"`
@@ -227,9 +254,9 @@ func (r ScriptTailDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   ScriptTailDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptTailDeleteResponseEnvelopeJSON    `json:"-"`

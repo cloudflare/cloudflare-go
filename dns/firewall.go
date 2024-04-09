@@ -169,8 +169,8 @@ type Firewall struct {
 	// Last modification of DNS Firewall cluster.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS Firewall Cluster Name.
-	Name        string                  `json:"name,required"`
-	UpstreamIPs []UpstreamIPsItemsUnion `json:"upstream_ips,required" format:"ipv4"`
+	Name        string             `json:"name,required"`
+	UpstreamIPs []UpstreamIPsUnion `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation AttackMitigation `json:"attack_mitigation,nullable"`
 	// Negative DNS Cache TTL.
@@ -243,13 +243,13 @@ type FirewallIPsItemUnionParam interface {
 // Upstream DNS Server IPv4 Address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type UpstreamIPsItemsUnion interface {
-	ImplementsDNSUpstreamIPsItemsUnion()
+type UpstreamIPsUnion interface {
+	ImplementsDNSUpstreamIPsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UpstreamIPsItemsUnion)(nil)).Elem(),
+		reflect.TypeOf((*UpstreamIPsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -265,8 +265,8 @@ func init() {
 // Upstream DNS Server IPv4 Address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type UpstreamIPsItemsUnionParam interface {
-	ImplementsDNSUpstreamIPsItemsUnionParam()
+type UpstreamIPsUnionParam interface {
+	ImplementsDNSUpstreamIPsUnionParam()
 }
 
 type FirewallDeleteResponse struct {
@@ -295,8 +295,8 @@ type FirewallNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// DNS Firewall Cluster Name.
-	Name        param.Field[string]                       `json:"name,required"`
-	UpstreamIPs param.Field[[]UpstreamIPsItemsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
+	Name        param.Field[string]                  `json:"name,required"`
+	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
 	// Deprecate the response to ANY requests.
@@ -447,8 +447,8 @@ type FirewallEditParams struct {
 	// Minimum DNS Cache TTL.
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
 	// DNS Firewall Cluster Name.
-	Name        param.Field[string]                       `json:"name,required"`
-	UpstreamIPs param.Field[[]UpstreamIPsItemsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
+	Name        param.Field[string]                  `json:"name,required"`
+	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
 	// Negative DNS Cache TTL.

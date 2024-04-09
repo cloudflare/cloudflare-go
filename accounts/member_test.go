@@ -62,7 +62,7 @@ func TestMemberUpdate(t *testing.T) {
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberUpdateParams{
 			AccountID: cloudflare.F[any](map[string]interface{}{}),
-			Roles: cloudflare.F([]accounts.MemberRoleParam{{
+			Roles: cloudflare.F([]accounts.MemberUpdateParamsRole{{
 				ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 			}, {
 				ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),

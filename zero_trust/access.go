@@ -218,11 +218,11 @@ type AccessRule struct {
 	IPList               interface{}    `json:"ip_list,required"`
 	Certificate          interface{}    `json:"certificate,required"`
 	Group                interface{}    `json:"group,required"`
-	AzureAd              interface{}    `json:"azureAD,required"`
+	AzureAD              interface{}    `json:"azureAD,required"`
 	GitHubOrganization   interface{}    `json:"github-organization,required"`
 	Gsuite               interface{}    `json:"gsuite,required"`
 	Okta                 interface{}    `json:"okta,required"`
-	Saml                 interface{}    `json:"saml,required"`
+	SAML                 interface{}    `json:"saml,required"`
 	ServiceToken         interface{}    `json:"service_token,required"`
 	AnyValidServiceToken interface{}    `json:"any_valid_service_token,required"`
 	ExternalEvaluation   interface{}    `json:"external_evaluation,required"`
@@ -243,11 +243,11 @@ type accessRuleJSON struct {
 	IPList               apijson.Field
 	Certificate          apijson.Field
 	Group                apijson.Field
-	AzureAd              apijson.Field
+	AzureAD              apijson.Field
 	GitHubOrganization   apijson.Field
 	Gsuite               apijson.Field
 	Okta                 apijson.Field
-	Saml                 apijson.Field
+	SAML                 apijson.Field
 	ServiceToken         apijson.Field
 	AnyValidServiceToken apijson.Field
 	ExternalEvaluation   apijson.Field
@@ -281,7 +281,7 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
 // [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
 // [zero_trust.GsuiteGroupRule], [zero_trust.OktaGroupRule],
-// [zero_trust.SamlGroupRule], [zero_trust.ServiceTokenRule],
+// [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule],
 // [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
 // [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
 // [zero_trust.AccessDevicePostureRule].
@@ -343,7 +343,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SamlGroupRule{}),
+			Type:       reflect.TypeOf(SAMLGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -382,11 +382,11 @@ type AccessRuleParam struct {
 	IPList               param.Field[interface{}] `json:"ip_list,required"`
 	Certificate          param.Field[interface{}] `json:"certificate,required"`
 	Group                param.Field[interface{}] `json:"group,required"`
-	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
+	AzureAD              param.Field[interface{}] `json:"azureAD,required"`
 	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
 	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
 	Okta                 param.Field[interface{}] `json:"okta,required"`
-	Saml                 param.Field[interface{}] `json:"saml,required"`
+	SAML                 param.Field[interface{}] `json:"saml,required"`
 	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
 	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
 	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
@@ -409,7 +409,7 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 // [zero_trust.CertificateRuleParam], [zero_trust.GroupRuleParam],
 // [zero_trust.AzureGroupRuleParam], [zero_trust.GitHubOrganizationRuleParam],
 // [zero_trust.GsuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
-// [zero_trust.SamlGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
+// [zero_trust.SAMLGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
 // [zero_trust.AnyValidServiceTokenRuleParam],
 // [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
 // [zero_trust.AuthenticationMethodRuleParam],
@@ -711,13 +711,13 @@ func (r AuthenticationMethodRuleAuthMethodParam) MarshalJSON() (data []byte, err
 
 // Matches an Azure group. Requires an Azure identity provider.
 type AzureGroupRule struct {
-	AzureAd AzureGroupRuleAzureAd `json:"azureAD,required"`
+	AzureAD AzureGroupRuleAzureAD `json:"azureAD,required"`
 	JSON    azureGroupRuleJSON    `json:"-"`
 }
 
 // azureGroupRuleJSON contains the JSON metadata for the struct [AzureGroupRule]
 type azureGroupRuleJSON struct {
-	AzureAd     apijson.Field
+	AzureAD     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -732,34 +732,34 @@ func (r azureGroupRuleJSON) RawJSON() string {
 
 func (r AzureGroupRule) implementsZeroTrustAccessRule() {}
 
-type AzureGroupRuleAzureAd struct {
+type AzureGroupRuleAzureAD struct {
 	// The ID of an Azure group.
 	ID string `json:"id,required"`
 	// The ID of your Azure identity provider.
 	ConnectionID string                    `json:"connection_id,required"`
-	JSON         azureGroupRuleAzureAdJSON `json:"-"`
+	JSON         azureGroupRuleAzureADJSON `json:"-"`
 }
 
-// azureGroupRuleAzureAdJSON contains the JSON metadata for the struct
-// [AzureGroupRuleAzureAd]
-type azureGroupRuleAzureAdJSON struct {
+// azureGroupRuleAzureADJSON contains the JSON metadata for the struct
+// [AzureGroupRuleAzureAD]
+type azureGroupRuleAzureADJSON struct {
 	ID           apijson.Field
 	ConnectionID apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
+func (r *AzureGroupRuleAzureAD) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r azureGroupRuleAzureAdJSON) RawJSON() string {
+func (r azureGroupRuleAzureADJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
 type AzureGroupRuleParam struct {
-	AzureAd param.Field[AzureGroupRuleAzureAdParam] `json:"azureAD,required"`
+	AzureAD param.Field[AzureGroupRuleAzureADParam] `json:"azureAD,required"`
 }
 
 func (r AzureGroupRuleParam) MarshalJSON() (data []byte, err error) {
@@ -862,14 +862,14 @@ func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-type AzureGroupRuleAzureAdParam struct {
+type AzureGroupRuleAzureADParam struct {
 	// The ID of an Azure group.
 	ID param.Field[string] `json:"id,required"`
 	// The ID of your Azure identity provider.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 }
 
-func (r AzureGroupRuleAzureAdParam) MarshalJSON() (data []byte, err error) {
+func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2903,19 +2903,19 @@ func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Matches a SAML group. Requires a SAML identity provider.
-type SamlGroupRule struct {
-	Saml SamlGroupRuleSaml `json:"saml,required"`
+type SAMLGroupRule struct {
+	SAML SAMLGroupRuleSAML `json:"saml,required"`
 	JSON samlGroupRuleJSON `json:"-"`
 }
 
-// samlGroupRuleJSON contains the JSON metadata for the struct [SamlGroupRule]
+// samlGroupRuleJSON contains the JSON metadata for the struct [SAMLGroupRule]
 type samlGroupRuleJSON struct {
-	Saml        apijson.Field
+	SAML        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SamlGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *SAMLGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2923,146 +2923,146 @@ func (r samlGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SamlGroupRule) implementsZeroTrustAccessRule() {}
+func (r SAMLGroupRule) implementsZeroTrustAccessRule() {}
 
-type SamlGroupRuleSaml struct {
+type SAMLGroupRuleSAML struct {
 	// The name of the SAML attribute.
 	AttributeName string `json:"attribute_name,required"`
 	// The SAML attribute value to look for.
 	AttributeValue string                `json:"attribute_value,required"`
-	JSON           samlGroupRuleSamlJSON `json:"-"`
+	JSON           samlGroupRuleSAMLJSON `json:"-"`
 }
 
-// samlGroupRuleSamlJSON contains the JSON metadata for the struct
-// [SamlGroupRuleSaml]
-type samlGroupRuleSamlJSON struct {
+// samlGroupRuleSAMLJSON contains the JSON metadata for the struct
+// [SAMLGroupRuleSAML]
+type samlGroupRuleSAMLJSON struct {
 	AttributeName  apijson.Field
 	AttributeValue apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *SamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
+func (r *SAMLGroupRuleSAML) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r samlGroupRuleSamlJSON) RawJSON() string {
+func (r samlGroupRuleSAMLJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a SAML group. Requires a SAML identity provider.
-type SamlGroupRuleParam struct {
-	Saml param.Field[SamlGroupRuleSamlParam] `json:"saml,required"`
+type SAMLGroupRuleParam struct {
+	SAML param.Field[SAMLGroupRuleSAMLParam] `json:"saml,required"`
 }
 
-func (r SamlGroupRuleParam) MarshalJSON() (data []byte, err error) {
+func (r SAMLGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-type SamlGroupRuleSamlParam struct {
+type SAMLGroupRuleSAMLParam struct {
 	// The name of the SAML attribute.
 	AttributeName param.Field[string] `json:"attribute_name,required"`
 	// The SAML attribute value to look for.
 	AttributeValue param.Field[string] `json:"attribute_value,required"`
 }
 
-func (r SamlGroupRuleSamlParam) MarshalJSON() (data []byte, err error) {
+func (r SAMLGroupRuleSAMLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
