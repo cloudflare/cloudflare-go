@@ -34,7 +34,7 @@ func NewDeviceNetworkService(opts ...option.RequestOption) (r *DeviceNetworkServ
 }
 
 // Creates a new device managed network.
-func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewParams, opts ...option.RequestOption) (res *Network, err error) {
+func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks", params.AccountID)
@@ -47,7 +47,7 @@ func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewP
 }
 
 // Updates a configured device managed network.
-func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, params DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *Network, err error) {
+func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, params DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", params.AccountID, networkID)
@@ -60,7 +60,7 @@ func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, par
 }
 
 // Fetches a list of managed networks for an account.
-func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Network], err error) {
+func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceNetwork], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,13 +78,13 @@ func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkList
 }
 
 // Fetches a list of managed networks for an account.
-func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Network] {
+func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DeviceNetwork] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a device managed network and fetches a list of the remaining device
 // managed networks for an account.
-func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, params DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]Network, err error) {
+func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, params DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", params.AccountID, networkID)
@@ -97,7 +97,7 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, par
 }
 
 // Fetches details for a single managed network.
-func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query DeviceNetworkGetParams, opts ...option.RequestOption) (res *Network, err error) {
+func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query DeviceNetworkGetParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", query.AccountID, networkID)
@@ -109,21 +109,21 @@ func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query 
 	return
 }
 
-type Network struct {
+type DeviceNetwork struct {
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
-	Config NetworkConfig `json:"config"`
+	Config DeviceNetworkConfig `json:"config"`
 	// The name of the device managed network. This name must be unique.
 	Name string `json:"name"`
 	// API UUID.
 	NetworkID string `json:"network_id"`
 	// The type of device managed network.
-	Type NetworkType `json:"type"`
-	JSON networkJSON `json:"-"`
+	Type DeviceNetworkType `json:"type"`
+	JSON deviceNetworkJSON `json:"-"`
 }
 
-// networkJSON contains the JSON metadata for the struct [Network]
-type networkJSON struct {
+// deviceNetworkJSON contains the JSON metadata for the struct [DeviceNetwork]
+type deviceNetworkJSON struct {
 	Config      apijson.Field
 	Name        apijson.Field
 	NetworkID   apijson.Field
@@ -132,53 +132,54 @@ type networkJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Network) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r networkJSON) RawJSON() string {
+func (r deviceNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
 // The configuration object containing information for the WARP client to detect
 // the managed network.
-type NetworkConfig struct {
+type DeviceNetworkConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
 	TLSSockaddr string `json:"tls_sockaddr,required"`
 	// The SHA-256 hash of the TLS certificate presented by the host found at
 	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
 	// timestamp, etc) will be used to validate the certificate.
-	Sha256 string            `json:"sha256"`
-	JSON   networkConfigJSON `json:"-"`
+	Sha256 string                  `json:"sha256"`
+	JSON   deviceNetworkConfigJSON `json:"-"`
 }
 
-// networkConfigJSON contains the JSON metadata for the struct [NetworkConfig]
-type networkConfigJSON struct {
+// deviceNetworkConfigJSON contains the JSON metadata for the struct
+// [DeviceNetworkConfig]
+type deviceNetworkConfigJSON struct {
 	TLSSockaddr apijson.Field
 	Sha256      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NetworkConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceNetworkConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r networkConfigJSON) RawJSON() string {
+func (r deviceNetworkConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of device managed network.
-type NetworkType string
+type DeviceNetworkType string
 
 const (
-	NetworkTypeTLS NetworkType = "tls"
+	DeviceNetworkTypeTLS DeviceNetworkType = "tls"
 )
 
-func (r NetworkType) IsKnown() bool {
+func (r DeviceNetworkType) IsKnown() bool {
 	switch r {
-	case NetworkTypeTLS:
+	case DeviceNetworkTypeTLS:
 		return true
 	}
 	return false
@@ -233,7 +234,7 @@ func (r DeviceNetworkNewParamsType) IsKnown() bool {
 type DeviceNetworkNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Network               `json:"result,required,nullable"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -322,7 +323,7 @@ func (r DeviceNetworkUpdateParamsType) IsKnown() bool {
 type DeviceNetworkUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Network               `json:"result,required,nullable"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -378,7 +379,7 @@ func (r DeviceNetworkDeleteParams) MarshalJSON() (data []byte, err error) {
 type DeviceNetworkDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Network             `json:"result,required,nullable"`
+	Result   []DeviceNetwork       `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DeviceNetworkDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DeviceNetworkDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -458,7 +459,7 @@ type DeviceNetworkGetParams struct {
 type DeviceNetworkGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Network               `json:"result,required,nullable"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkGetResponseEnvelopeJSON    `json:"-"`

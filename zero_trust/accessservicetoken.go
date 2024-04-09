@@ -59,7 +59,7 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 }
 
 // Updates a configured service token.
-func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ErviceToken, err error) {
+func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenUpdateResponseEnvelope
 	var accountOrZone string
@@ -81,7 +81,7 @@ func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, par
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ErviceToken], err error) {
+func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ServiceToken], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -108,12 +108,12 @@ func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServic
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ErviceToken] {
+func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ServiceToken] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a service token.
-func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ErviceToken, err error) {
+func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenDeleteResponseEnvelope
 	var accountOrZone string
@@ -135,7 +135,7 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, bod
 }
 
 // Refreshes the expiration of a service token.
-func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ErviceToken, err error) {
+func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenRefreshResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", identifier, uuid)
@@ -160,7 +160,7 @@ func (r *AccessServiceTokenService) Rotate(ctx context.Context, identifier strin
 	return
 }
 
-type ErviceToken struct {
+type ServiceToken struct {
 	// The ID of the service token.
 	ID interface{} `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
@@ -172,13 +172,13 @@ type ErviceToken struct {
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name      string          `json:"name"`
-	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
-	JSON      erviceTokenJSON `json:"-"`
+	Name      string           `json:"name"`
+	UpdatedAt time.Time        `json:"updated_at" format:"date-time"`
+	JSON      serviceTokenJSON `json:"-"`
 }
 
-// erviceTokenJSON contains the JSON metadata for the struct [ErviceToken]
-type erviceTokenJSON struct {
+// serviceTokenJSON contains the JSON metadata for the struct [ServiceToken]
+type serviceTokenJSON struct {
 	ID          apijson.Field
 	ClientID    apijson.Field
 	CreatedAt   apijson.Field
@@ -189,11 +189,11 @@ type erviceTokenJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ErviceToken) UnmarshalJSON(data []byte) (err error) {
+func (r *ServiceToken) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r erviceTokenJSON) RawJSON() string {
+func (r serviceTokenJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -361,7 +361,7 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessServiceTokenUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ErviceToken           `json:"result,required"`
+	Result   ServiceToken          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -418,7 +418,7 @@ type AccessServiceTokenDeleteParams struct {
 type AccessServiceTokenDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ErviceToken           `json:"result,required"`
+	Result   ServiceToken          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
@@ -461,7 +461,7 @@ func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AccessServiceTokenRefreshResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ErviceToken           `json:"result,required"`
+	Result   ServiceToken          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenRefreshResponseEnvelopeJSON    `json:"-"`
