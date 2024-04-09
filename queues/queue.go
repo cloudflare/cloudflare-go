@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -64,16 +65,26 @@ func (r *QueueService) Update(ctx context.Context, queueID string, params QueueU
 }
 
 // Returns the queues owned by an account.
-func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...option.RequestOption) (res *[]QueueListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env QueueListResponseEnvelope
+func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...option.RequestOption) (res *pagination.SinglePage[QueueListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/queues", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns the queues owned by an account.
+func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[QueueListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a queue.
@@ -442,100 +453,6 @@ func (r queueUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 type QueueListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type QueueListResponseEnvelope struct {
-	Consumers           interface{}           `json:"consumers,required"`
-	ConsumersTotalCount interface{}           `json:"consumers_total_count,required"`
-	CreatedOn           interface{}           `json:"created_on,required"`
-	Errors              []shared.ResponseInfo `json:"errors,required"`
-	Messages            []shared.ResponseInfo `json:"messages,required"`
-	ModifiedOn          interface{}           `json:"modified_on,required"`
-	Producers           interface{}           `json:"producers,required"`
-	ProducersTotalCount interface{}           `json:"producers_total_count,required"`
-	QueueID             interface{}           `json:"queue_id,required"`
-	QueueName           interface{}           `json:"queue_name,required"`
-	Result              []QueueListResponse   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    QueueListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo QueueListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       queueListResponseEnvelopeJSON       `json:"-"`
-}
-
-// queueListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [QueueListResponseEnvelope]
-type queueListResponseEnvelopeJSON struct {
-	Consumers           apijson.Field
-	ConsumersTotalCount apijson.Field
-	CreatedOn           apijson.Field
-	Errors              apijson.Field
-	Messages            apijson.Field
-	ModifiedOn          apijson.Field
-	Producers           apijson.Field
-	ProducersTotalCount apijson.Field
-	QueueID             apijson.Field
-	QueueName           apijson.Field
-	Result              apijson.Field
-	Success             apijson.Field
-	ResultInfo          apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *QueueListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type QueueListResponseEnvelopeSuccess bool
-
-const (
-	QueueListResponseEnvelopeSuccessTrue QueueListResponseEnvelopeSuccess = true
-)
-
-func (r QueueListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case QueueListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type QueueListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
-	TotalPages float64                                 `json:"total_pages"`
-	JSON       queueListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// queueListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [QueueListResponseEnvelopeResultInfo]
-type queueListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type QueueDeleteParams struct {
