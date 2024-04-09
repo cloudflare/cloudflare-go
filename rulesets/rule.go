@@ -258,10 +258,8 @@ func (r RuleNewResponseRule) AsUnion() RuleNewResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.RuleNewResponseRulesRulesetsBlockRule],
-// [rulesets.RuleNewResponseRulesRulesetsExecuteRule],
-// [rulesets.RuleNewResponseRulesRulesetsLogRule] or
-// [rulesets.RuleNewResponseRulesRulesetsSkipRule].
+// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
+// [rulesets.LogRule] or [rulesets.SkipRule].
 type RuleNewResponseRulesUnion interface {
 	implementsRulesetsRuleNewResponseRule()
 }
@@ -272,685 +270,25 @@ func init() {
 		"action",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleNewResponseRulesRulesetsBlockRule{}),
+			Type:               reflect.TypeOf(BlockRule{}),
 			DiscriminatorValue: "block",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleNewResponseRulesRulesetsExecuteRule{}),
+			Type:               reflect.TypeOf(ExecuteRule{}),
 			DiscriminatorValue: "execute",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleNewResponseRulesRulesetsLogRule{}),
+			Type:               reflect.TypeOf(LogRule{}),
 			DiscriminatorValue: "log",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleNewResponseRulesRulesetsSkipRule{}),
+			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
 		},
 	)
-}
-
-type RuleNewResponseRulesRulesetsBlockRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleNewResponseRulesRulesetsBlockRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleNewResponseRulesRulesetsBlockRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                    `json:"ref"`
-	JSON ruleNewResponseRulesRulesetsBlockRuleJSON `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsBlockRuleJSON contains the JSON metadata for the
-// struct [RuleNewResponseRulesRulesetsBlockRule]
-type ruleNewResponseRulesRulesetsBlockRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsBlockRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleNewResponseRulesRulesetsBlockRule) implementsRulesetsRuleNewResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleNewResponseRulesRulesetsBlockRuleAction string
-
-const (
-	RuleNewResponseRulesRulesetsBlockRuleActionBlock RuleNewResponseRulesRulesetsBlockRuleAction = "block"
-)
-
-func (r RuleNewResponseRulesRulesetsBlockRuleAction) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsBlockRuleActionBlock:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleNewResponseRulesRulesetsBlockRuleActionParameters struct {
-	// The response to show when the block is applied.
-	Response RuleNewResponseRulesRulesetsBlockRuleActionParametersResponse `json:"response"`
-	JSON     ruleNewResponseRulesRulesetsBlockRuleActionParametersJSON     `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsBlockRuleActionParametersJSON contains the JSON
-// metadata for the struct [RuleNewResponseRulesRulesetsBlockRuleActionParameters]
-type ruleNewResponseRulesRulesetsBlockRuleActionParametersJSON struct {
-	Response    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsBlockRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsBlockRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// The response to show when the block is applied.
-type RuleNewResponseRulesRulesetsBlockRuleActionParametersResponse struct {
-	// The content to return.
-	Content string `json:"content,required"`
-	// The type of the content to return.
-	ContentType string `json:"content_type,required"`
-	// The status code to return.
-	StatusCode int64                                                             `json:"status_code,required"`
-	JSON       ruleNewResponseRulesRulesetsBlockRuleActionParametersResponseJSON `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsBlockRuleActionParametersResponseJSON contains the
-// JSON metadata for the struct
-// [RuleNewResponseRulesRulesetsBlockRuleActionParametersResponse]
-type ruleNewResponseRulesRulesetsBlockRuleActionParametersResponseJSON struct {
-	Content     apijson.Field
-	ContentType apijson.Field
-	StatusCode  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsBlockRuleActionParametersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsBlockRuleActionParametersResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleNewResponseRulesRulesetsExecuteRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleNewResponseRulesRulesetsExecuteRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleNewResponseRulesRulesetsExecuteRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                      `json:"ref"`
-	JSON ruleNewResponseRulesRulesetsExecuteRuleJSON `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsExecuteRuleJSON contains the JSON metadata for the
-// struct [RuleNewResponseRulesRulesetsExecuteRule]
-type ruleNewResponseRulesRulesetsExecuteRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsExecuteRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleNewResponseRulesRulesetsExecuteRule) implementsRulesetsRuleNewResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleNewResponseRulesRulesetsExecuteRuleAction string
-
-const (
-	RuleNewResponseRulesRulesetsExecuteRuleActionExecute RuleNewResponseRulesRulesetsExecuteRuleAction = "execute"
-)
-
-func (r RuleNewResponseRulesRulesetsExecuteRuleAction) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsExecuteRuleActionExecute:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleNewResponseRulesRulesetsExecuteRuleActionParameters struct {
-	// The ID of the ruleset to execute.
-	ID string `json:"id,required"`
-	// The configuration to use for matched data logging.
-	MatchedData RuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData `json:"matched_data"`
-	// A set of overrides to apply to the target ruleset.
-	Overrides RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides `json:"overrides"`
-	JSON      ruleNewResponseRulesRulesetsExecuteRuleActionParametersJSON      `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsExecuteRuleActionParametersJSON contains the JSON
-// metadata for the struct
-// [RuleNewResponseRulesRulesetsExecuteRuleActionParameters]
-type ruleNewResponseRulesRulesetsExecuteRuleActionParametersJSON struct {
-	ID          apijson.Field
-	MatchedData apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsExecuteRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsExecuteRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// The configuration to use for matched data logging.
-type RuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
-	// The public key to encrypt matched data logs with.
-	PublicKey string                                                                 `json:"public_key,required"`
-	JSON      ruleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON contains
-// the JSON metadata for the struct
-// [RuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData]
-type ruleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON struct {
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// A set of overrides to apply to the target ruleset.
-type RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides struct {
-	// An action to override all rules with. This option has lower precedence than rule
-	// and category overrides.
-	Action string `json:"action"`
-	// A list of category-level overrides. This option has the second-highest
-	// precedence after rule-level overrides.
-	Categories []RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory `json:"categories"`
-	// Whether to enable execution of all rules. This option has lower precedence than
-	// rule and category overrides.
-	Enabled bool `json:"enabled"`
-	// A list of rule-level overrides. This option has the highest precedence.
-	Rules []RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRule `json:"rules"`
-	// A sensitivity level to set for all rules. This option has lower precedence than
-	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON             `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON contains
-// the JSON metadata for the struct
-// [RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides]
-type ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON struct {
-	Action           apijson.Field
-	Categories       apijson.Field
-	Enabled          apijson.Field
-	Rules            apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON) RawJSON() string {
-	return r.raw
-}
-
-// A category-level override
-type RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
-	// The name of the category to override.
-	Category string `json:"category,required"`
-	// The action to override rules in the category with.
-	Action string `json:"action"`
-	// Whether to enable execution of rules in the category.
-	Enabled bool `json:"enabled"`
-	// The sensitivity level to use for rules in the category.
-	SensitivityLevel RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON               `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON
-// contains the JSON metadata for the struct
-// [RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory]
-type ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON struct {
-	Category         apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON) RawJSON() string {
-	return r.raw
-}
-
-// The sensitivity level to use for rules in the category.
-type RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
-
-const (
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
-)
-
-func (r RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-// A rule-level override
-type RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
-	// The ID of the rule to override.
-	ID string `json:"id,required"`
-	// The action to override the rule with.
-	Action string `json:"action"`
-	// Whether to enable execution of the rule.
-	Enabled bool `json:"enabled"`
-	// The score threshold to use for the rule.
-	ScoreThreshold int64 `json:"score_threshold"`
-	// The sensitivity level to use for the rule.
-	SensitivityLevel RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON              `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON
-// contains the JSON metadata for the struct
-// [RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRule]
-type ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON struct {
-	ID               apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	ScoreThreshold   apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-// The sensitivity level to use for the rule.
-type RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
-
-const (
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
-)
-
-func (r RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-// A sensitivity level to set for all rules. This option has lower precedence than
-// rule and category overrides and is only applicable for DDoS phases.
-type RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
-
-const (
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
-)
-
-func (r RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, RuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-type RuleNewResponseRulesRulesetsLogRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleNewResponseRulesRulesetsLogRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                  `json:"ref"`
-	JSON ruleNewResponseRulesRulesetsLogRuleJSON `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsLogRuleJSON contains the JSON metadata for the
-// struct [RuleNewResponseRulesRulesetsLogRule]
-type ruleNewResponseRulesRulesetsLogRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsLogRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleNewResponseRulesRulesetsLogRule) implementsRulesetsRuleNewResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleNewResponseRulesRulesetsLogRuleAction string
-
-const (
-	RuleNewResponseRulesRulesetsLogRuleActionLog RuleNewResponseRulesRulesetsLogRuleAction = "log"
-)
-
-func (r RuleNewResponseRulesRulesetsLogRuleAction) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsLogRuleActionLog:
-		return true
-	}
-	return false
-}
-
-type RuleNewResponseRulesRulesetsSkipRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleNewResponseRulesRulesetsSkipRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleNewResponseRulesRulesetsSkipRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                   `json:"ref"`
-	JSON ruleNewResponseRulesRulesetsSkipRuleJSON `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsSkipRuleJSON contains the JSON metadata for the
-// struct [RuleNewResponseRulesRulesetsSkipRule]
-type ruleNewResponseRulesRulesetsSkipRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsSkipRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleNewResponseRulesRulesetsSkipRule) implementsRulesetsRuleNewResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleNewResponseRulesRulesetsSkipRuleAction string
-
-const (
-	RuleNewResponseRulesRulesetsSkipRuleActionSkip RuleNewResponseRulesRulesetsSkipRuleAction = "skip"
-)
-
-func (r RuleNewResponseRulesRulesetsSkipRuleAction) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsSkipRuleActionSkip:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleNewResponseRulesRulesetsSkipRuleActionParameters struct {
-	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
-	Phases []RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase `json:"phases"`
-	// A list of legacy security products to skip the execution of.
-	Products []RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct `json:"products"`
-	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
-	// execution of. This option is incompatible with the ruleset option.
-	Rules map[string][]string `json:"rules"`
-	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
-	Ruleset RuleNewResponseRulesRulesetsSkipRuleActionParametersRuleset `json:"ruleset"`
-	// A list of ruleset IDs to skip the execution of. This option is incompatible with
-	// the ruleset and phases options.
-	Rulesets []string                                                 `json:"rulesets"`
-	JSON     ruleNewResponseRulesRulesetsSkipRuleActionParametersJSON `json:"-"`
-}
-
-// ruleNewResponseRulesRulesetsSkipRuleActionParametersJSON contains the JSON
-// metadata for the struct [RuleNewResponseRulesRulesetsSkipRuleActionParameters]
-type ruleNewResponseRulesRulesetsSkipRuleActionParametersJSON struct {
-	Phases      apijson.Field
-	Products    apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	Rulesets    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseRulesRulesetsSkipRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// A phase to skip the execution of.
-type RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase string
-
-const (
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL4                         RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL7                         RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
-)
-
-func (r RuleNewResponseRulesRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL4, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL7, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
-		return true
-	}
-	return false
-}
-
-// The name of a legacy security product to skip the execution of.
-type RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct string
-
-const (
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersProductBic           RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "bic"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersProductHot           RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersProductUABlock       RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersProductWAF           RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
-)
-
-func (r RuleNewResponseRulesRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsSkipRuleActionParametersProductBic, RuleNewResponseRulesRulesetsSkipRuleActionParametersProductHot, RuleNewResponseRulesRulesetsSkipRuleActionParametersProductRateLimit, RuleNewResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel, RuleNewResponseRulesRulesetsSkipRuleActionParametersProductUABlock, RuleNewResponseRulesRulesetsSkipRuleActionParametersProductWAF, RuleNewResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown:
-		return true
-	}
-	return false
-}
-
-// A ruleset to skip the execution of. This option is incompatible with the
-// rulesets, rules and phases options.
-type RuleNewResponseRulesRulesetsSkipRuleActionParametersRuleset string
-
-const (
-	RuleNewResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent RuleNewResponseRulesRulesetsSkipRuleActionParametersRuleset = "current"
-)
-
-func (r RuleNewResponseRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
-	switch r {
-	case RuleNewResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -1129,10 +467,8 @@ func (r RuleDeleteResponseRule) AsUnion() RuleDeleteResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.RuleDeleteResponseRulesRulesetsBlockRule],
-// [rulesets.RuleDeleteResponseRulesRulesetsExecuteRule],
-// [rulesets.RuleDeleteResponseRulesRulesetsLogRule] or
-// [rulesets.RuleDeleteResponseRulesRulesetsSkipRule].
+// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
+// [rulesets.LogRule] or [rulesets.SkipRule].
 type RuleDeleteResponseRulesUnion interface {
 	implementsRulesetsRuleDeleteResponseRule()
 }
@@ -1143,687 +479,25 @@ func init() {
 		"action",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleDeleteResponseRulesRulesetsBlockRule{}),
+			Type:               reflect.TypeOf(BlockRule{}),
 			DiscriminatorValue: "block",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleDeleteResponseRulesRulesetsExecuteRule{}),
+			Type:               reflect.TypeOf(ExecuteRule{}),
 			DiscriminatorValue: "execute",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleDeleteResponseRulesRulesetsLogRule{}),
+			Type:               reflect.TypeOf(LogRule{}),
 			DiscriminatorValue: "log",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleDeleteResponseRulesRulesetsSkipRule{}),
+			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
 		},
 	)
-}
-
-type RuleDeleteResponseRulesRulesetsBlockRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleDeleteResponseRulesRulesetsBlockRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleDeleteResponseRulesRulesetsBlockRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                       `json:"ref"`
-	JSON ruleDeleteResponseRulesRulesetsBlockRuleJSON `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsBlockRuleJSON contains the JSON metadata for the
-// struct [RuleDeleteResponseRulesRulesetsBlockRule]
-type ruleDeleteResponseRulesRulesetsBlockRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsBlockRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleDeleteResponseRulesRulesetsBlockRule) implementsRulesetsRuleDeleteResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleDeleteResponseRulesRulesetsBlockRuleAction string
-
-const (
-	RuleDeleteResponseRulesRulesetsBlockRuleActionBlock RuleDeleteResponseRulesRulesetsBlockRuleAction = "block"
-)
-
-func (r RuleDeleteResponseRulesRulesetsBlockRuleAction) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsBlockRuleActionBlock:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleDeleteResponseRulesRulesetsBlockRuleActionParameters struct {
-	// The response to show when the block is applied.
-	Response RuleDeleteResponseRulesRulesetsBlockRuleActionParametersResponse `json:"response"`
-	JSON     ruleDeleteResponseRulesRulesetsBlockRuleActionParametersJSON     `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsBlockRuleActionParametersJSON contains the JSON
-// metadata for the struct
-// [RuleDeleteResponseRulesRulesetsBlockRuleActionParameters]
-type ruleDeleteResponseRulesRulesetsBlockRuleActionParametersJSON struct {
-	Response    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsBlockRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsBlockRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// The response to show when the block is applied.
-type RuleDeleteResponseRulesRulesetsBlockRuleActionParametersResponse struct {
-	// The content to return.
-	Content string `json:"content,required"`
-	// The type of the content to return.
-	ContentType string `json:"content_type,required"`
-	// The status code to return.
-	StatusCode int64                                                                `json:"status_code,required"`
-	JSON       ruleDeleteResponseRulesRulesetsBlockRuleActionParametersResponseJSON `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsBlockRuleActionParametersResponseJSON contains
-// the JSON metadata for the struct
-// [RuleDeleteResponseRulesRulesetsBlockRuleActionParametersResponse]
-type ruleDeleteResponseRulesRulesetsBlockRuleActionParametersResponseJSON struct {
-	Content     apijson.Field
-	ContentType apijson.Field
-	StatusCode  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsBlockRuleActionParametersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsBlockRuleActionParametersResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleDeleteResponseRulesRulesetsExecuteRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleDeleteResponseRulesRulesetsExecuteRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleDeleteResponseRulesRulesetsExecuteRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                         `json:"ref"`
-	JSON ruleDeleteResponseRulesRulesetsExecuteRuleJSON `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsExecuteRuleJSON contains the JSON metadata for
-// the struct [RuleDeleteResponseRulesRulesetsExecuteRule]
-type ruleDeleteResponseRulesRulesetsExecuteRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsExecuteRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleDeleteResponseRulesRulesetsExecuteRule) implementsRulesetsRuleDeleteResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleDeleteResponseRulesRulesetsExecuteRuleAction string
-
-const (
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionExecute RuleDeleteResponseRulesRulesetsExecuteRuleAction = "execute"
-)
-
-func (r RuleDeleteResponseRulesRulesetsExecuteRuleAction) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsExecuteRuleActionExecute:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleDeleteResponseRulesRulesetsExecuteRuleActionParameters struct {
-	// The ID of the ruleset to execute.
-	ID string `json:"id,required"`
-	// The configuration to use for matched data logging.
-	MatchedData RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedData `json:"matched_data"`
-	// A set of overrides to apply to the target ruleset.
-	Overrides RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverrides `json:"overrides"`
-	JSON      ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersJSON      `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersJSON contains the JSON
-// metadata for the struct
-// [RuleDeleteResponseRulesRulesetsExecuteRuleActionParameters]
-type ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersJSON struct {
-	ID          apijson.Field
-	MatchedData apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsExecuteRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// The configuration to use for matched data logging.
-type RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
-	// The public key to encrypt matched data logs with.
-	PublicKey string                                                                    `json:"public_key,required"`
-	JSON      ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON
-// contains the JSON metadata for the struct
-// [RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedData]
-type ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON struct {
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// A set of overrides to apply to the target ruleset.
-type RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverrides struct {
-	// An action to override all rules with. This option has lower precedence than rule
-	// and category overrides.
-	Action string `json:"action"`
-	// A list of category-level overrides. This option has the second-highest
-	// precedence after rule-level overrides.
-	Categories []RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory `json:"categories"`
-	// Whether to enable execution of all rules. This option has lower precedence than
-	// rule and category overrides.
-	Enabled bool `json:"enabled"`
-	// A list of rule-level overrides. This option has the highest precedence.
-	Rules []RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRule `json:"rules"`
-	// A sensitivity level to set for all rules. This option has lower precedence than
-	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON             `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON contains
-// the JSON metadata for the struct
-// [RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverrides]
-type ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON struct {
-	Action           apijson.Field
-	Categories       apijson.Field
-	Enabled          apijson.Field
-	Rules            apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverrides) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON) RawJSON() string {
-	return r.raw
-}
-
-// A category-level override
-type RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
-	// The name of the category to override.
-	Category string `json:"category,required"`
-	// The action to override rules in the category with.
-	Action string `json:"action"`
-	// Whether to enable execution of rules in the category.
-	Enabled bool `json:"enabled"`
-	// The sensitivity level to use for rules in the category.
-	SensitivityLevel RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON               `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON
-// contains the JSON metadata for the struct
-// [RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory]
-type ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON struct {
-	Category         apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON) RawJSON() string {
-	return r.raw
-}
-
-// The sensitivity level to use for rules in the category.
-type RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
-
-const (
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
-)
-
-func (r RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-// A rule-level override
-type RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
-	// The ID of the rule to override.
-	ID string `json:"id,required"`
-	// The action to override the rule with.
-	Action string `json:"action"`
-	// Whether to enable execution of the rule.
-	Enabled bool `json:"enabled"`
-	// The score threshold to use for the rule.
-	ScoreThreshold int64 `json:"score_threshold"`
-	// The sensitivity level to use for the rule.
-	SensitivityLevel RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON              `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON
-// contains the JSON metadata for the struct
-// [RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRule]
-type ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON struct {
-	ID               apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	ScoreThreshold   apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-// The sensitivity level to use for the rule.
-type RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
-
-const (
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
-)
-
-func (r RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-// A sensitivity level to set for all rules. This option has lower precedence than
-// rule and category overrides and is only applicable for DDoS phases.
-type RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
-
-const (
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
-)
-
-func (r RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, RuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-type RuleDeleteResponseRulesRulesetsLogRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleDeleteResponseRulesRulesetsLogRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                     `json:"ref"`
-	JSON ruleDeleteResponseRulesRulesetsLogRuleJSON `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsLogRuleJSON contains the JSON metadata for the
-// struct [RuleDeleteResponseRulesRulesetsLogRule]
-type ruleDeleteResponseRulesRulesetsLogRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsLogRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleDeleteResponseRulesRulesetsLogRule) implementsRulesetsRuleDeleteResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleDeleteResponseRulesRulesetsLogRuleAction string
-
-const (
-	RuleDeleteResponseRulesRulesetsLogRuleActionLog RuleDeleteResponseRulesRulesetsLogRuleAction = "log"
-)
-
-func (r RuleDeleteResponseRulesRulesetsLogRuleAction) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsLogRuleActionLog:
-		return true
-	}
-	return false
-}
-
-type RuleDeleteResponseRulesRulesetsSkipRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleDeleteResponseRulesRulesetsSkipRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleDeleteResponseRulesRulesetsSkipRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                      `json:"ref"`
-	JSON ruleDeleteResponseRulesRulesetsSkipRuleJSON `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsSkipRuleJSON contains the JSON metadata for the
-// struct [RuleDeleteResponseRulesRulesetsSkipRule]
-type ruleDeleteResponseRulesRulesetsSkipRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsSkipRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleDeleteResponseRulesRulesetsSkipRule) implementsRulesetsRuleDeleteResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleDeleteResponseRulesRulesetsSkipRuleAction string
-
-const (
-	RuleDeleteResponseRulesRulesetsSkipRuleActionSkip RuleDeleteResponseRulesRulesetsSkipRuleAction = "skip"
-)
-
-func (r RuleDeleteResponseRulesRulesetsSkipRuleAction) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsSkipRuleActionSkip:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleDeleteResponseRulesRulesetsSkipRuleActionParameters struct {
-	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
-	Phases []RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase `json:"phases"`
-	// A list of legacy security products to skip the execution of.
-	Products []RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct `json:"products"`
-	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
-	// execution of. This option is incompatible with the ruleset option.
-	Rules map[string][]string `json:"rules"`
-	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
-	Ruleset RuleDeleteResponseRulesRulesetsSkipRuleActionParametersRuleset `json:"ruleset"`
-	// A list of ruleset IDs to skip the execution of. This option is incompatible with
-	// the ruleset and phases options.
-	Rulesets []string                                                    `json:"rulesets"`
-	JSON     ruleDeleteResponseRulesRulesetsSkipRuleActionParametersJSON `json:"-"`
-}
-
-// ruleDeleteResponseRulesRulesetsSkipRuleActionParametersJSON contains the JSON
-// metadata for the struct
-// [RuleDeleteResponseRulesRulesetsSkipRuleActionParameters]
-type ruleDeleteResponseRulesRulesetsSkipRuleActionParametersJSON struct {
-	Phases      apijson.Field
-	Products    apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	Rulesets    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseRulesRulesetsSkipRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// A phase to skip the execution of.
-type RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase string
-
-const (
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL4                         RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL7                         RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
-)
-
-func (r RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL4, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL7, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
-		return true
-	}
-	return false
-}
-
-// The name of a legacy security product to skip the execution of.
-type RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct string
-
-const (
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductBic           RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct = "bic"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductHot           RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductUABlock       RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductWAF           RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
-)
-
-func (r RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductBic, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductHot, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductRateLimit, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductUABlock, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductWAF, RuleDeleteResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown:
-		return true
-	}
-	return false
-}
-
-// A ruleset to skip the execution of. This option is incompatible with the
-// rulesets, rules and phases options.
-type RuleDeleteResponseRulesRulesetsSkipRuleActionParametersRuleset string
-
-const (
-	RuleDeleteResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent RuleDeleteResponseRulesRulesetsSkipRuleActionParametersRuleset = "current"
-)
-
-func (r RuleDeleteResponseRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -2002,10 +676,8 @@ func (r RuleEditResponseRule) AsUnion() RuleEditResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.RuleEditResponseRulesRulesetsBlockRule],
-// [rulesets.RuleEditResponseRulesRulesetsExecuteRule],
-// [rulesets.RuleEditResponseRulesRulesetsLogRule] or
-// [rulesets.RuleEditResponseRulesRulesetsSkipRule].
+// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
+// [rulesets.LogRule] or [rulesets.SkipRule].
 type RuleEditResponseRulesUnion interface {
 	implementsRulesetsRuleEditResponseRule()
 }
@@ -2016,685 +688,25 @@ func init() {
 		"action",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleEditResponseRulesRulesetsBlockRule{}),
+			Type:               reflect.TypeOf(BlockRule{}),
 			DiscriminatorValue: "block",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleEditResponseRulesRulesetsExecuteRule{}),
+			Type:               reflect.TypeOf(ExecuteRule{}),
 			DiscriminatorValue: "execute",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleEditResponseRulesRulesetsLogRule{}),
+			Type:               reflect.TypeOf(LogRule{}),
 			DiscriminatorValue: "log",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RuleEditResponseRulesRulesetsSkipRule{}),
+			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
 		},
 	)
-}
-
-type RuleEditResponseRulesRulesetsBlockRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleEditResponseRulesRulesetsBlockRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleEditResponseRulesRulesetsBlockRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                     `json:"ref"`
-	JSON ruleEditResponseRulesRulesetsBlockRuleJSON `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsBlockRuleJSON contains the JSON metadata for the
-// struct [RuleEditResponseRulesRulesetsBlockRule]
-type ruleEditResponseRulesRulesetsBlockRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsBlockRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleEditResponseRulesRulesetsBlockRule) implementsRulesetsRuleEditResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleEditResponseRulesRulesetsBlockRuleAction string
-
-const (
-	RuleEditResponseRulesRulesetsBlockRuleActionBlock RuleEditResponseRulesRulesetsBlockRuleAction = "block"
-)
-
-func (r RuleEditResponseRulesRulesetsBlockRuleAction) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsBlockRuleActionBlock:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleEditResponseRulesRulesetsBlockRuleActionParameters struct {
-	// The response to show when the block is applied.
-	Response RuleEditResponseRulesRulesetsBlockRuleActionParametersResponse `json:"response"`
-	JSON     ruleEditResponseRulesRulesetsBlockRuleActionParametersJSON     `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsBlockRuleActionParametersJSON contains the JSON
-// metadata for the struct [RuleEditResponseRulesRulesetsBlockRuleActionParameters]
-type ruleEditResponseRulesRulesetsBlockRuleActionParametersJSON struct {
-	Response    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsBlockRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsBlockRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// The response to show when the block is applied.
-type RuleEditResponseRulesRulesetsBlockRuleActionParametersResponse struct {
-	// The content to return.
-	Content string `json:"content,required"`
-	// The type of the content to return.
-	ContentType string `json:"content_type,required"`
-	// The status code to return.
-	StatusCode int64                                                              `json:"status_code,required"`
-	JSON       ruleEditResponseRulesRulesetsBlockRuleActionParametersResponseJSON `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsBlockRuleActionParametersResponseJSON contains the
-// JSON metadata for the struct
-// [RuleEditResponseRulesRulesetsBlockRuleActionParametersResponse]
-type ruleEditResponseRulesRulesetsBlockRuleActionParametersResponseJSON struct {
-	Content     apijson.Field
-	ContentType apijson.Field
-	StatusCode  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsBlockRuleActionParametersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsBlockRuleActionParametersResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleEditResponseRulesRulesetsExecuteRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleEditResponseRulesRulesetsExecuteRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleEditResponseRulesRulesetsExecuteRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                       `json:"ref"`
-	JSON ruleEditResponseRulesRulesetsExecuteRuleJSON `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsExecuteRuleJSON contains the JSON metadata for the
-// struct [RuleEditResponseRulesRulesetsExecuteRule]
-type ruleEditResponseRulesRulesetsExecuteRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsExecuteRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleEditResponseRulesRulesetsExecuteRule) implementsRulesetsRuleEditResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleEditResponseRulesRulesetsExecuteRuleAction string
-
-const (
-	RuleEditResponseRulesRulesetsExecuteRuleActionExecute RuleEditResponseRulesRulesetsExecuteRuleAction = "execute"
-)
-
-func (r RuleEditResponseRulesRulesetsExecuteRuleAction) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsExecuteRuleActionExecute:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleEditResponseRulesRulesetsExecuteRuleActionParameters struct {
-	// The ID of the ruleset to execute.
-	ID string `json:"id,required"`
-	// The configuration to use for matched data logging.
-	MatchedData RuleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedData `json:"matched_data"`
-	// A set of overrides to apply to the target ruleset.
-	Overrides RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverrides `json:"overrides"`
-	JSON      ruleEditResponseRulesRulesetsExecuteRuleActionParametersJSON      `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsExecuteRuleActionParametersJSON contains the JSON
-// metadata for the struct
-// [RuleEditResponseRulesRulesetsExecuteRuleActionParameters]
-type ruleEditResponseRulesRulesetsExecuteRuleActionParametersJSON struct {
-	ID          apijson.Field
-	MatchedData apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsExecuteRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsExecuteRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// The configuration to use for matched data logging.
-type RuleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
-	// The public key to encrypt matched data logs with.
-	PublicKey string                                                                  `json:"public_key,required"`
-	JSON      ruleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON contains
-// the JSON metadata for the struct
-// [RuleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedData]
-type ruleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON struct {
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// A set of overrides to apply to the target ruleset.
-type RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverrides struct {
-	// An action to override all rules with. This option has lower precedence than rule
-	// and category overrides.
-	Action string `json:"action"`
-	// A list of category-level overrides. This option has the second-highest
-	// precedence after rule-level overrides.
-	Categories []RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory `json:"categories"`
-	// Whether to enable execution of all rules. This option has lower precedence than
-	// rule and category overrides.
-	Enabled bool `json:"enabled"`
-	// A list of rule-level overrides. This option has the highest precedence.
-	Rules []RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRule `json:"rules"`
-	// A sensitivity level to set for all rules. This option has lower precedence than
-	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON             `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON contains
-// the JSON metadata for the struct
-// [RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverrides]
-type ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON struct {
-	Action           apijson.Field
-	Categories       apijson.Field
-	Enabled          apijson.Field
-	Rules            apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverrides) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON) RawJSON() string {
-	return r.raw
-}
-
-// A category-level override
-type RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
-	// The name of the category to override.
-	Category string `json:"category,required"`
-	// The action to override rules in the category with.
-	Action string `json:"action"`
-	// Whether to enable execution of rules in the category.
-	Enabled bool `json:"enabled"`
-	// The sensitivity level to use for rules in the category.
-	SensitivityLevel RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON               `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON
-// contains the JSON metadata for the struct
-// [RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory]
-type ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON struct {
-	Category         apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON) RawJSON() string {
-	return r.raw
-}
-
-// The sensitivity level to use for rules in the category.
-type RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
-
-const (
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
-)
-
-func (r RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-// A rule-level override
-type RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
-	// The ID of the rule to override.
-	ID string `json:"id,required"`
-	// The action to override the rule with.
-	Action string `json:"action"`
-	// Whether to enable execution of the rule.
-	Enabled bool `json:"enabled"`
-	// The score threshold to use for the rule.
-	ScoreThreshold int64 `json:"score_threshold"`
-	// The sensitivity level to use for the rule.
-	SensitivityLevel RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel `json:"sensitivity_level"`
-	JSON             ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON              `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON
-// contains the JSON metadata for the struct
-// [RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRule]
-type ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON struct {
-	ID               apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	ScoreThreshold   apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-// The sensitivity level to use for the rule.
-type RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
-
-const (
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
-)
-
-func (r RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-// A sensitivity level to set for all rules. This option has lower precedence than
-// rule and category overrides and is only applicable for DDoS phases.
-type RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
-
-const (
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
-)
-
-func (r RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, RuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
-		return true
-	}
-	return false
-}
-
-type RuleEditResponseRulesRulesetsLogRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleEditResponseRulesRulesetsLogRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                   `json:"ref"`
-	JSON ruleEditResponseRulesRulesetsLogRuleJSON `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsLogRuleJSON contains the JSON metadata for the
-// struct [RuleEditResponseRulesRulesetsLogRule]
-type ruleEditResponseRulesRulesetsLogRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsLogRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleEditResponseRulesRulesetsLogRule) implementsRulesetsRuleEditResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleEditResponseRulesRulesetsLogRuleAction string
-
-const (
-	RuleEditResponseRulesRulesetsLogRuleActionLog RuleEditResponseRulesRulesetsLogRuleAction = "log"
-)
-
-func (r RuleEditResponseRulesRulesetsLogRuleAction) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsLogRuleActionLog:
-		return true
-	}
-	return false
-}
-
-type RuleEditResponseRulesRulesetsSkipRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RuleEditResponseRulesRulesetsSkipRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RuleEditResponseRulesRulesetsSkipRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                    `json:"ref"`
-	JSON ruleEditResponseRulesRulesetsSkipRuleJSON `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsSkipRuleJSON contains the JSON metadata for the
-// struct [RuleEditResponseRulesRulesetsSkipRule]
-type ruleEditResponseRulesRulesetsSkipRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsSkipRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RuleEditResponseRulesRulesetsSkipRule) implementsRulesetsRuleEditResponseRule() {}
-
-// The action to perform when the rule matches.
-type RuleEditResponseRulesRulesetsSkipRuleAction string
-
-const (
-	RuleEditResponseRulesRulesetsSkipRuleActionSkip RuleEditResponseRulesRulesetsSkipRuleAction = "skip"
-)
-
-func (r RuleEditResponseRulesRulesetsSkipRuleAction) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsSkipRuleActionSkip:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RuleEditResponseRulesRulesetsSkipRuleActionParameters struct {
-	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
-	Phases []RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase `json:"phases"`
-	// A list of legacy security products to skip the execution of.
-	Products []RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct `json:"products"`
-	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
-	// execution of. This option is incompatible with the ruleset option.
-	Rules map[string][]string `json:"rules"`
-	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
-	Ruleset RuleEditResponseRulesRulesetsSkipRuleActionParametersRuleset `json:"ruleset"`
-	// A list of ruleset IDs to skip the execution of. This option is incompatible with
-	// the ruleset and phases options.
-	Rulesets []string                                                  `json:"rulesets"`
-	JSON     ruleEditResponseRulesRulesetsSkipRuleActionParametersJSON `json:"-"`
-}
-
-// ruleEditResponseRulesRulesetsSkipRuleActionParametersJSON contains the JSON
-// metadata for the struct [RuleEditResponseRulesRulesetsSkipRuleActionParameters]
-type ruleEditResponseRulesRulesetsSkipRuleActionParametersJSON struct {
-	Phases      apijson.Field
-	Products    apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	Rulesets    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseRulesRulesetsSkipRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// A phase to skip the execution of.
-type RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase string
-
-const (
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL4                         RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL7                         RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
-)
-
-func (r RuleEditResponseRulesRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL4, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseDDoSL7, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleEditResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
-		return true
-	}
-	return false
-}
-
-// The name of a legacy security product to skip the execution of.
-type RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct string
-
-const (
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersProductBic           RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct = "bic"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersProductHot           RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersProductUABlock       RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersProductWAF           RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
-)
-
-func (r RuleEditResponseRulesRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsSkipRuleActionParametersProductBic, RuleEditResponseRulesRulesetsSkipRuleActionParametersProductHot, RuleEditResponseRulesRulesetsSkipRuleActionParametersProductRateLimit, RuleEditResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel, RuleEditResponseRulesRulesetsSkipRuleActionParametersProductUABlock, RuleEditResponseRulesRulesetsSkipRuleActionParametersProductWAF, RuleEditResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown:
-		return true
-	}
-	return false
-}
-
-// A ruleset to skip the execution of. This option is incompatible with the
-// rulesets, rules and phases options.
-type RuleEditResponseRulesRulesetsSkipRuleActionParametersRuleset string
-
-const (
-	RuleEditResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent RuleEditResponseRulesRulesetsSkipRuleActionParametersRuleset = "current"
-)
-
-func (r RuleEditResponseRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
-	switch r {
-	case RuleEditResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -2716,8 +728,8 @@ func (r RuleEditResponseRulesAction) IsKnown() bool {
 }
 
 // This interface is a union satisfied by one of the following:
-// [RuleNewParamsRulesetsBlockRule], [RuleNewParamsRulesetsExecuteRule],
-// [RuleNewParamsRulesetsLogRule], [RuleNewParamsRulesetsSkipRule].
+// [RuleNewParamsBlockRule], [RuleNewParamsExecuteRule], [RuleNewParamsLogRule],
+// [RuleNewParamsSkipRule].
 type RuleNewParams interface {
 	ImplementsRuleNewParams()
 
@@ -2726,7 +738,7 @@ type RuleNewParams interface {
 	getZoneID() param.Field[string]
 }
 
-type RuleNewParamsRulesetsBlockRule struct {
+type RuleNewParamsBlockRule struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -2734,9 +746,9 @@ type RuleNewParamsRulesetsBlockRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleNewParamsRulesetsBlockRuleAction] `json:"action"`
+	Action param.Field[RuleNewParamsBlockRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RuleNewParamsRulesetsBlockRuleActionParameters] `json:"action_parameters"`
+	ActionParameters param.Field[RuleNewParamsBlockRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
@@ -2749,49 +761,49 @@ type RuleNewParamsRulesetsBlockRule struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleNewParamsRulesetsBlockRule) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBlockRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsRulesetsBlockRule) getAccountID() param.Field[string] {
+func (r RuleNewParamsBlockRule) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r RuleNewParamsRulesetsBlockRule) getZoneID() param.Field[string] {
+func (r RuleNewParamsBlockRule) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (RuleNewParamsRulesetsBlockRule) ImplementsRuleNewParams() {
+func (RuleNewParamsBlockRule) ImplementsRuleNewParams() {
 
 }
 
 // The action to perform when the rule matches.
-type RuleNewParamsRulesetsBlockRuleAction string
+type RuleNewParamsBlockRuleAction string
 
 const (
-	RuleNewParamsRulesetsBlockRuleActionBlock RuleNewParamsRulesetsBlockRuleAction = "block"
+	RuleNewParamsBlockRuleActionBlock RuleNewParamsBlockRuleAction = "block"
 )
 
-func (r RuleNewParamsRulesetsBlockRuleAction) IsKnown() bool {
+func (r RuleNewParamsBlockRuleAction) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsBlockRuleActionBlock:
+	case RuleNewParamsBlockRuleActionBlock:
 		return true
 	}
 	return false
 }
 
 // The parameters configuring the rule's action.
-type RuleNewParamsRulesetsBlockRuleActionParameters struct {
+type RuleNewParamsBlockRuleActionParameters struct {
 	// The response to show when the block is applied.
-	Response param.Field[RuleNewParamsRulesetsBlockRuleActionParametersResponse] `json:"response"`
+	Response param.Field[RuleNewParamsBlockRuleActionParametersResponse] `json:"response"`
 }
 
-func (r RuleNewParamsRulesetsBlockRuleActionParameters) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBlockRuleActionParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The response to show when the block is applied.
-type RuleNewParamsRulesetsBlockRuleActionParametersResponse struct {
+type RuleNewParamsBlockRuleActionParametersResponse struct {
 	// The content to return.
 	Content param.Field[string] `json:"content,required"`
 	// The type of the content to return.
@@ -2800,11 +812,11 @@ type RuleNewParamsRulesetsBlockRuleActionParametersResponse struct {
 	StatusCode param.Field[int64] `json:"status_code,required"`
 }
 
-func (r RuleNewParamsRulesetsBlockRuleActionParametersResponse) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBlockRuleActionParametersResponse) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RuleNewParamsRulesetsExecuteRule struct {
+type RuleNewParamsExecuteRule struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -2812,9 +824,9 @@ type RuleNewParamsRulesetsExecuteRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleNewParamsRulesetsExecuteRuleAction] `json:"action"`
+	Action param.Field[RuleNewParamsExecuteRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RuleNewParamsRulesetsExecuteRuleActionParameters] `json:"action_parameters"`
+	ActionParameters param.Field[RuleNewParamsExecuteRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
@@ -2827,85 +839,85 @@ type RuleNewParamsRulesetsExecuteRule struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleNewParamsRulesetsExecuteRule) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsExecuteRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsRulesetsExecuteRule) getAccountID() param.Field[string] {
+func (r RuleNewParamsExecuteRule) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r RuleNewParamsRulesetsExecuteRule) getZoneID() param.Field[string] {
+func (r RuleNewParamsExecuteRule) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (RuleNewParamsRulesetsExecuteRule) ImplementsRuleNewParams() {
+func (RuleNewParamsExecuteRule) ImplementsRuleNewParams() {
 
 }
 
 // The action to perform when the rule matches.
-type RuleNewParamsRulesetsExecuteRuleAction string
+type RuleNewParamsExecuteRuleAction string
 
 const (
-	RuleNewParamsRulesetsExecuteRuleActionExecute RuleNewParamsRulesetsExecuteRuleAction = "execute"
+	RuleNewParamsExecuteRuleActionExecute RuleNewParamsExecuteRuleAction = "execute"
 )
 
-func (r RuleNewParamsRulesetsExecuteRuleAction) IsKnown() bool {
+func (r RuleNewParamsExecuteRuleAction) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsExecuteRuleActionExecute:
+	case RuleNewParamsExecuteRuleActionExecute:
 		return true
 	}
 	return false
 }
 
 // The parameters configuring the rule's action.
-type RuleNewParamsRulesetsExecuteRuleActionParameters struct {
+type RuleNewParamsExecuteRuleActionParameters struct {
 	// The ID of the ruleset to execute.
 	ID param.Field[string] `json:"id,required"`
 	// The configuration to use for matched data logging.
-	MatchedData param.Field[RuleNewParamsRulesetsExecuteRuleActionParametersMatchedData] `json:"matched_data"`
+	MatchedData param.Field[RuleNewParamsExecuteRuleActionParametersMatchedData] `json:"matched_data"`
 	// A set of overrides to apply to the target ruleset.
-	Overrides param.Field[RuleNewParamsRulesetsExecuteRuleActionParametersOverrides] `json:"overrides"`
+	Overrides param.Field[RuleNewParamsExecuteRuleActionParametersOverrides] `json:"overrides"`
 }
 
-func (r RuleNewParamsRulesetsExecuteRuleActionParameters) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsExecuteRuleActionParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The configuration to use for matched data logging.
-type RuleNewParamsRulesetsExecuteRuleActionParametersMatchedData struct {
+type RuleNewParamsExecuteRuleActionParametersMatchedData struct {
 	// The public key to encrypt matched data logs with.
 	PublicKey param.Field[string] `json:"public_key,required"`
 }
 
-func (r RuleNewParamsRulesetsExecuteRuleActionParametersMatchedData) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsExecuteRuleActionParametersMatchedData) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A set of overrides to apply to the target ruleset.
-type RuleNewParamsRulesetsExecuteRuleActionParametersOverrides struct {
+type RuleNewParamsExecuteRuleActionParametersOverrides struct {
 	// An action to override all rules with. This option has lower precedence than rule
 	// and category overrides.
 	Action param.Field[string] `json:"action"`
 	// A list of category-level overrides. This option has the second-highest
 	// precedence after rule-level overrides.
-	Categories param.Field[[]RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategory] `json:"categories"`
+	Categories param.Field[[]RuleNewParamsExecuteRuleActionParametersOverridesCategory] `json:"categories"`
 	// Whether to enable execution of all rules. This option has lower precedence than
 	// rule and category overrides.
 	Enabled param.Field[bool] `json:"enabled"`
 	// A list of rule-level overrides. This option has the highest precedence.
-	Rules param.Field[[]RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRule] `json:"rules"`
+	Rules param.Field[[]RuleNewParamsExecuteRuleActionParametersOverridesRule] `json:"rules"`
 	// A sensitivity level to set for all rules. This option has lower precedence than
 	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel param.Field[RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel] `json:"sensitivity_level"`
+	SensitivityLevel param.Field[RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-func (r RuleNewParamsRulesetsExecuteRuleActionParametersOverrides) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsExecuteRuleActionParametersOverrides) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A category-level override
-type RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategory struct {
+type RuleNewParamsExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
 	Category param.Field[string] `json:"category,required"`
 	// The action to override rules in the category with.
@@ -2913,33 +925,33 @@ type RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategory struct {
 	// Whether to enable execution of rules in the category.
 	Enabled param.Field[bool] `json:"enabled"`
 	// The sensitivity level to use for rules in the category.
-	SensitivityLevel param.Field[RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel] `json:"sensitivity_level"`
+	SensitivityLevel param.Field[RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-func (r RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategory) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsExecuteRuleActionParametersOverridesCategory) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The sensitivity level to use for rules in the category.
-type RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
+type RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
 
 const (
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
+	RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
+	RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
+	RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
+	RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
 )
 
-func (r RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
+func (r RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
+	case RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RuleNewParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
 		return true
 	}
 	return false
 }
 
 // A rule-level override
-type RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRule struct {
+type RuleNewParamsExecuteRuleActionParametersOverridesRule struct {
 	// The ID of the rule to override.
 	ID param.Field[string] `json:"id,required"`
 	// The action to override the rule with.
@@ -2949,26 +961,26 @@ type RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRule struct {
 	// The score threshold to use for the rule.
 	ScoreThreshold param.Field[int64] `json:"score_threshold"`
 	// The sensitivity level to use for the rule.
-	SensitivityLevel param.Field[RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel] `json:"sensitivity_level"`
+	SensitivityLevel param.Field[RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-func (r RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRule) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsExecuteRuleActionParametersOverridesRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The sensitivity level to use for the rule.
-type RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
+type RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
 
 const (
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
+	RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
+	RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
+	RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
+	RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
 )
 
-func (r RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
+func (r RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
+	case RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RuleNewParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
 		return true
 	}
 	return false
@@ -2976,24 +988,24 @@ func (r RuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivit
 
 // A sensitivity level to set for all rules. This option has lower precedence than
 // rule and category overrides and is only applicable for DDoS phases.
-type RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
+type RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevel string
 
 const (
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
+	RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevelDefault RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
+	RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
+	RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevelLow     RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
+	RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
 )
 
-func (r RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
+func (r RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, RuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
+	case RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevelLow, RuleNewParamsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
 		return true
 	}
 	return false
 }
 
-type RuleNewParamsRulesetsLogRule struct {
+type RuleNewParamsLogRule struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -3001,7 +1013,7 @@ type RuleNewParamsRulesetsLogRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleNewParamsRulesetsLogRuleAction] `json:"action"`
+	Action param.Field[RuleNewParamsLogRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[interface{}] `json:"action_parameters"`
 	// An informative description of the rule.
@@ -3016,38 +1028,38 @@ type RuleNewParamsRulesetsLogRule struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleNewParamsRulesetsLogRule) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsLogRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsRulesetsLogRule) getAccountID() param.Field[string] {
+func (r RuleNewParamsLogRule) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r RuleNewParamsRulesetsLogRule) getZoneID() param.Field[string] {
+func (r RuleNewParamsLogRule) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (RuleNewParamsRulesetsLogRule) ImplementsRuleNewParams() {
+func (RuleNewParamsLogRule) ImplementsRuleNewParams() {
 
 }
 
 // The action to perform when the rule matches.
-type RuleNewParamsRulesetsLogRuleAction string
+type RuleNewParamsLogRuleAction string
 
 const (
-	RuleNewParamsRulesetsLogRuleActionLog RuleNewParamsRulesetsLogRuleAction = "log"
+	RuleNewParamsLogRuleActionLog RuleNewParamsLogRuleAction = "log"
 )
 
-func (r RuleNewParamsRulesetsLogRuleAction) IsKnown() bool {
+func (r RuleNewParamsLogRuleAction) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsLogRuleActionLog:
+	case RuleNewParamsLogRuleActionLog:
 		return true
 	}
 	return false
 }
 
-type RuleNewParamsRulesetsSkipRule struct {
+type RuleNewParamsSkipRule struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -3055,9 +1067,9 @@ type RuleNewParamsRulesetsSkipRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleNewParamsRulesetsSkipRuleAction] `json:"action"`
+	Action param.Field[RuleNewParamsSkipRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RuleNewParamsRulesetsSkipRuleActionParameters] `json:"action_parameters"`
+	ActionParameters param.Field[RuleNewParamsSkipRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
@@ -3070,112 +1082,112 @@ type RuleNewParamsRulesetsSkipRule struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleNewParamsRulesetsSkipRule) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsSkipRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsRulesetsSkipRule) getAccountID() param.Field[string] {
+func (r RuleNewParamsSkipRule) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r RuleNewParamsRulesetsSkipRule) getZoneID() param.Field[string] {
+func (r RuleNewParamsSkipRule) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (RuleNewParamsRulesetsSkipRule) ImplementsRuleNewParams() {
+func (RuleNewParamsSkipRule) ImplementsRuleNewParams() {
 
 }
 
 // The action to perform when the rule matches.
-type RuleNewParamsRulesetsSkipRuleAction string
+type RuleNewParamsSkipRuleAction string
 
 const (
-	RuleNewParamsRulesetsSkipRuleActionSkip RuleNewParamsRulesetsSkipRuleAction = "skip"
+	RuleNewParamsSkipRuleActionSkip RuleNewParamsSkipRuleAction = "skip"
 )
 
-func (r RuleNewParamsRulesetsSkipRuleAction) IsKnown() bool {
+func (r RuleNewParamsSkipRuleAction) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsSkipRuleActionSkip:
+	case RuleNewParamsSkipRuleActionSkip:
 		return true
 	}
 	return false
 }
 
 // The parameters configuring the rule's action.
-type RuleNewParamsRulesetsSkipRuleActionParameters struct {
+type RuleNewParamsSkipRuleActionParameters struct {
 	// A list of phases to skip the execution of. This option is incompatible with the
 	// ruleset and rulesets options.
-	Phases param.Field[[]RuleNewParamsRulesetsSkipRuleActionParametersPhase] `json:"phases"`
+	Phases param.Field[[]RuleNewParamsSkipRuleActionParametersPhase] `json:"phases"`
 	// A list of legacy security products to skip the execution of.
-	Products param.Field[[]RuleNewParamsRulesetsSkipRuleActionParametersProduct] `json:"products"`
+	Products param.Field[[]RuleNewParamsSkipRuleActionParametersProduct] `json:"products"`
 	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
 	// execution of. This option is incompatible with the ruleset option.
 	Rules param.Field[map[string][]string] `json:"rules"`
 	// A ruleset to skip the execution of. This option is incompatible with the
 	// rulesets, rules and phases options.
-	Ruleset param.Field[RuleNewParamsRulesetsSkipRuleActionParametersRuleset] `json:"ruleset"`
+	Ruleset param.Field[RuleNewParamsSkipRuleActionParametersRuleset] `json:"ruleset"`
 	// A list of ruleset IDs to skip the execution of. This option is incompatible with
 	// the ruleset and phases options.
 	Rulesets param.Field[[]string] `json:"rulesets"`
 }
 
-func (r RuleNewParamsRulesetsSkipRuleActionParameters) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsSkipRuleActionParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A phase to skip the execution of.
-type RuleNewParamsRulesetsSkipRuleActionParametersPhase string
+type RuleNewParamsSkipRuleActionParametersPhase string
 
 const (
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDoSL4                         RuleNewParamsRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDoSL7                         RuleNewParamsRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransit                   RuleNewParamsRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RuleNewParamsRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RuleNewParamsRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
+	RuleNewParamsSkipRuleActionParametersPhaseDDoSL4                         RuleNewParamsSkipRuleActionParametersPhase = "ddos_l4"
+	RuleNewParamsSkipRuleActionParametersPhaseDDoSL7                         RuleNewParamsSkipRuleActionParametersPhase = "ddos_l7"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleNewParamsSkipRuleActionParametersPhase = "http_config_settings"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleNewParamsSkipRuleActionParametersPhase = "http_custom_errors"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleNewParamsSkipRuleActionParametersPhase = "http_log_custom_fields"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRatelimit                  RuleNewParamsSkipRuleActionParametersPhase = "http_ratelimit"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RuleNewParamsSkipRuleActionParametersPhase = "http_request_cache_settings"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RuleNewParamsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RuleNewParamsSkipRuleActionParametersPhase = "http_request_firewall_custom"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RuleNewParamsSkipRuleActionParametersPhase = "http_request_firewall_managed"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RuleNewParamsSkipRuleActionParametersPhase = "http_request_late_transform"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestOrigin              RuleNewParamsSkipRuleActionParametersPhase = "http_request_origin"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestRedirect            RuleNewParamsSkipRuleActionParametersPhase = "http_request_redirect"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestSanitize            RuleNewParamsSkipRuleActionParametersPhase = "http_request_sanitize"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestSbfm                RuleNewParamsSkipRuleActionParametersPhase = "http_request_sbfm"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RuleNewParamsSkipRuleActionParametersPhase = "http_request_select_configuration"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestTransform           RuleNewParamsSkipRuleActionParametersPhase = "http_request_transform"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPResponseCompression        RuleNewParamsSkipRuleActionParametersPhase = "http_response_compression"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RuleNewParamsSkipRuleActionParametersPhase = "http_response_firewall_managed"
+	RuleNewParamsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RuleNewParamsSkipRuleActionParametersPhase = "http_response_headers_transform"
+	RuleNewParamsSkipRuleActionParametersPhaseMagicTransit                   RuleNewParamsSkipRuleActionParametersPhase = "magic_transit"
+	RuleNewParamsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RuleNewParamsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
+	RuleNewParamsSkipRuleActionParametersPhaseMagicTransitManaged            RuleNewParamsSkipRuleActionParametersPhase = "magic_transit_managed"
 )
 
-func (r RuleNewParamsRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
+func (r RuleNewParamsSkipRuleActionParametersPhase) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDoSL4, RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDoSL7, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
+	case RuleNewParamsSkipRuleActionParametersPhaseDDoSL4, RuleNewParamsSkipRuleActionParametersPhaseDDoSL7, RuleNewParamsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleNewParamsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleNewParamsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleNewParamsSkipRuleActionParametersPhaseHTTPRatelimit, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleNewParamsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleNewParamsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleNewParamsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleNewParamsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleNewParamsSkipRuleActionParametersPhaseMagicTransit, RuleNewParamsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleNewParamsSkipRuleActionParametersPhaseMagicTransitManaged:
 		return true
 	}
 	return false
 }
 
 // The name of a legacy security product to skip the execution of.
-type RuleNewParamsRulesetsSkipRuleActionParametersProduct string
+type RuleNewParamsSkipRuleActionParametersProduct string
 
 const (
-	RuleNewParamsRulesetsSkipRuleActionParametersProductBic           RuleNewParamsRulesetsSkipRuleActionParametersProduct = "bic"
-	RuleNewParamsRulesetsSkipRuleActionParametersProductHot           RuleNewParamsRulesetsSkipRuleActionParametersProduct = "hot"
-	RuleNewParamsRulesetsSkipRuleActionParametersProductRateLimit     RuleNewParamsRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RuleNewParamsRulesetsSkipRuleActionParametersProductSecurityLevel RuleNewParamsRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RuleNewParamsRulesetsSkipRuleActionParametersProductUABlock       RuleNewParamsRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RuleNewParamsRulesetsSkipRuleActionParametersProductWAF           RuleNewParamsRulesetsSkipRuleActionParametersProduct = "waf"
-	RuleNewParamsRulesetsSkipRuleActionParametersProductZoneLockdown  RuleNewParamsRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
+	RuleNewParamsSkipRuleActionParametersProductBic           RuleNewParamsSkipRuleActionParametersProduct = "bic"
+	RuleNewParamsSkipRuleActionParametersProductHot           RuleNewParamsSkipRuleActionParametersProduct = "hot"
+	RuleNewParamsSkipRuleActionParametersProductRateLimit     RuleNewParamsSkipRuleActionParametersProduct = "rateLimit"
+	RuleNewParamsSkipRuleActionParametersProductSecurityLevel RuleNewParamsSkipRuleActionParametersProduct = "securityLevel"
+	RuleNewParamsSkipRuleActionParametersProductUABlock       RuleNewParamsSkipRuleActionParametersProduct = "uaBlock"
+	RuleNewParamsSkipRuleActionParametersProductWAF           RuleNewParamsSkipRuleActionParametersProduct = "waf"
+	RuleNewParamsSkipRuleActionParametersProductZoneLockdown  RuleNewParamsSkipRuleActionParametersProduct = "zoneLockdown"
 )
 
-func (r RuleNewParamsRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
+func (r RuleNewParamsSkipRuleActionParametersProduct) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsSkipRuleActionParametersProductBic, RuleNewParamsRulesetsSkipRuleActionParametersProductHot, RuleNewParamsRulesetsSkipRuleActionParametersProductRateLimit, RuleNewParamsRulesetsSkipRuleActionParametersProductSecurityLevel, RuleNewParamsRulesetsSkipRuleActionParametersProductUABlock, RuleNewParamsRulesetsSkipRuleActionParametersProductWAF, RuleNewParamsRulesetsSkipRuleActionParametersProductZoneLockdown:
+	case RuleNewParamsSkipRuleActionParametersProductBic, RuleNewParamsSkipRuleActionParametersProductHot, RuleNewParamsSkipRuleActionParametersProductRateLimit, RuleNewParamsSkipRuleActionParametersProductSecurityLevel, RuleNewParamsSkipRuleActionParametersProductUABlock, RuleNewParamsSkipRuleActionParametersProductWAF, RuleNewParamsSkipRuleActionParametersProductZoneLockdown:
 		return true
 	}
 	return false
@@ -3183,15 +1195,15 @@ func (r RuleNewParamsRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
 
 // A ruleset to skip the execution of. This option is incompatible with the
 // rulesets, rules and phases options.
-type RuleNewParamsRulesetsSkipRuleActionParametersRuleset string
+type RuleNewParamsSkipRuleActionParametersRuleset string
 
 const (
-	RuleNewParamsRulesetsSkipRuleActionParametersRulesetCurrent RuleNewParamsRulesetsSkipRuleActionParametersRuleset = "current"
+	RuleNewParamsSkipRuleActionParametersRulesetCurrent RuleNewParamsSkipRuleActionParametersRuleset = "current"
 )
 
-func (r RuleNewParamsRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
+func (r RuleNewParamsSkipRuleActionParametersRuleset) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsSkipRuleActionParametersRulesetCurrent:
+	case RuleNewParamsSkipRuleActionParametersRulesetCurrent:
 		return true
 	}
 	return false
@@ -3507,8 +1519,8 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 // This interface is a union satisfied by one of the following:
-// [RuleEditParamsRulesetsBlockRule], [RuleEditParamsRulesetsExecuteRule],
-// [RuleEditParamsRulesetsLogRule], [RuleEditParamsRulesetsSkipRule].
+// [RuleEditParamsBlockRule], [RuleEditParamsExecuteRule], [RuleEditParamsLogRule],
+// [RuleEditParamsSkipRule].
 type RuleEditParams interface {
 	ImplementsRuleEditParams()
 
@@ -3517,7 +1529,7 @@ type RuleEditParams interface {
 	getZoneID() param.Field[string]
 }
 
-type RuleEditParamsRulesetsBlockRule struct {
+type RuleEditParamsBlockRule struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -3525,9 +1537,9 @@ type RuleEditParamsRulesetsBlockRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleEditParamsRulesetsBlockRuleAction] `json:"action"`
+	Action param.Field[RuleEditParamsBlockRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RuleEditParamsRulesetsBlockRuleActionParameters] `json:"action_parameters"`
+	ActionParameters param.Field[RuleEditParamsBlockRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
@@ -3540,49 +1552,49 @@ type RuleEditParamsRulesetsBlockRule struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleEditParamsRulesetsBlockRule) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBlockRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsRulesetsBlockRule) getAccountID() param.Field[string] {
+func (r RuleEditParamsBlockRule) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r RuleEditParamsRulesetsBlockRule) getZoneID() param.Field[string] {
+func (r RuleEditParamsBlockRule) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (RuleEditParamsRulesetsBlockRule) ImplementsRuleEditParams() {
+func (RuleEditParamsBlockRule) ImplementsRuleEditParams() {
 
 }
 
 // The action to perform when the rule matches.
-type RuleEditParamsRulesetsBlockRuleAction string
+type RuleEditParamsBlockRuleAction string
 
 const (
-	RuleEditParamsRulesetsBlockRuleActionBlock RuleEditParamsRulesetsBlockRuleAction = "block"
+	RuleEditParamsBlockRuleActionBlock RuleEditParamsBlockRuleAction = "block"
 )
 
-func (r RuleEditParamsRulesetsBlockRuleAction) IsKnown() bool {
+func (r RuleEditParamsBlockRuleAction) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsBlockRuleActionBlock:
+	case RuleEditParamsBlockRuleActionBlock:
 		return true
 	}
 	return false
 }
 
 // The parameters configuring the rule's action.
-type RuleEditParamsRulesetsBlockRuleActionParameters struct {
+type RuleEditParamsBlockRuleActionParameters struct {
 	// The response to show when the block is applied.
-	Response param.Field[RuleEditParamsRulesetsBlockRuleActionParametersResponse] `json:"response"`
+	Response param.Field[RuleEditParamsBlockRuleActionParametersResponse] `json:"response"`
 }
 
-func (r RuleEditParamsRulesetsBlockRuleActionParameters) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBlockRuleActionParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The response to show when the block is applied.
-type RuleEditParamsRulesetsBlockRuleActionParametersResponse struct {
+type RuleEditParamsBlockRuleActionParametersResponse struct {
 	// The content to return.
 	Content param.Field[string] `json:"content,required"`
 	// The type of the content to return.
@@ -3591,11 +1603,11 @@ type RuleEditParamsRulesetsBlockRuleActionParametersResponse struct {
 	StatusCode param.Field[int64] `json:"status_code,required"`
 }
 
-func (r RuleEditParamsRulesetsBlockRuleActionParametersResponse) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBlockRuleActionParametersResponse) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RuleEditParamsRulesetsExecuteRule struct {
+type RuleEditParamsExecuteRule struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -3603,9 +1615,9 @@ type RuleEditParamsRulesetsExecuteRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleEditParamsRulesetsExecuteRuleAction] `json:"action"`
+	Action param.Field[RuleEditParamsExecuteRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RuleEditParamsRulesetsExecuteRuleActionParameters] `json:"action_parameters"`
+	ActionParameters param.Field[RuleEditParamsExecuteRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
@@ -3618,85 +1630,85 @@ type RuleEditParamsRulesetsExecuteRule struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleEditParamsRulesetsExecuteRule) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsExecuteRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsRulesetsExecuteRule) getAccountID() param.Field[string] {
+func (r RuleEditParamsExecuteRule) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r RuleEditParamsRulesetsExecuteRule) getZoneID() param.Field[string] {
+func (r RuleEditParamsExecuteRule) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (RuleEditParamsRulesetsExecuteRule) ImplementsRuleEditParams() {
+func (RuleEditParamsExecuteRule) ImplementsRuleEditParams() {
 
 }
 
 // The action to perform when the rule matches.
-type RuleEditParamsRulesetsExecuteRuleAction string
+type RuleEditParamsExecuteRuleAction string
 
 const (
-	RuleEditParamsRulesetsExecuteRuleActionExecute RuleEditParamsRulesetsExecuteRuleAction = "execute"
+	RuleEditParamsExecuteRuleActionExecute RuleEditParamsExecuteRuleAction = "execute"
 )
 
-func (r RuleEditParamsRulesetsExecuteRuleAction) IsKnown() bool {
+func (r RuleEditParamsExecuteRuleAction) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsExecuteRuleActionExecute:
+	case RuleEditParamsExecuteRuleActionExecute:
 		return true
 	}
 	return false
 }
 
 // The parameters configuring the rule's action.
-type RuleEditParamsRulesetsExecuteRuleActionParameters struct {
+type RuleEditParamsExecuteRuleActionParameters struct {
 	// The ID of the ruleset to execute.
 	ID param.Field[string] `json:"id,required"`
 	// The configuration to use for matched data logging.
-	MatchedData param.Field[RuleEditParamsRulesetsExecuteRuleActionParametersMatchedData] `json:"matched_data"`
+	MatchedData param.Field[RuleEditParamsExecuteRuleActionParametersMatchedData] `json:"matched_data"`
 	// A set of overrides to apply to the target ruleset.
-	Overrides param.Field[RuleEditParamsRulesetsExecuteRuleActionParametersOverrides] `json:"overrides"`
+	Overrides param.Field[RuleEditParamsExecuteRuleActionParametersOverrides] `json:"overrides"`
 }
 
-func (r RuleEditParamsRulesetsExecuteRuleActionParameters) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsExecuteRuleActionParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The configuration to use for matched data logging.
-type RuleEditParamsRulesetsExecuteRuleActionParametersMatchedData struct {
+type RuleEditParamsExecuteRuleActionParametersMatchedData struct {
 	// The public key to encrypt matched data logs with.
 	PublicKey param.Field[string] `json:"public_key,required"`
 }
 
-func (r RuleEditParamsRulesetsExecuteRuleActionParametersMatchedData) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsExecuteRuleActionParametersMatchedData) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A set of overrides to apply to the target ruleset.
-type RuleEditParamsRulesetsExecuteRuleActionParametersOverrides struct {
+type RuleEditParamsExecuteRuleActionParametersOverrides struct {
 	// An action to override all rules with. This option has lower precedence than rule
 	// and category overrides.
 	Action param.Field[string] `json:"action"`
 	// A list of category-level overrides. This option has the second-highest
 	// precedence after rule-level overrides.
-	Categories param.Field[[]RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategory] `json:"categories"`
+	Categories param.Field[[]RuleEditParamsExecuteRuleActionParametersOverridesCategory] `json:"categories"`
 	// Whether to enable execution of all rules. This option has lower precedence than
 	// rule and category overrides.
 	Enabled param.Field[bool] `json:"enabled"`
 	// A list of rule-level overrides. This option has the highest precedence.
-	Rules param.Field[[]RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRule] `json:"rules"`
+	Rules param.Field[[]RuleEditParamsExecuteRuleActionParametersOverridesRule] `json:"rules"`
 	// A sensitivity level to set for all rules. This option has lower precedence than
 	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel param.Field[RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel] `json:"sensitivity_level"`
+	SensitivityLevel param.Field[RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-func (r RuleEditParamsRulesetsExecuteRuleActionParametersOverrides) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsExecuteRuleActionParametersOverrides) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A category-level override
-type RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategory struct {
+type RuleEditParamsExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
 	Category param.Field[string] `json:"category,required"`
 	// The action to override rules in the category with.
@@ -3704,33 +1716,33 @@ type RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategory struct {
 	// Whether to enable execution of rules in the category.
 	Enabled param.Field[bool] `json:"enabled"`
 	// The sensitivity level to use for rules in the category.
-	SensitivityLevel param.Field[RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel] `json:"sensitivity_level"`
+	SensitivityLevel param.Field[RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-func (r RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategory) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsExecuteRuleActionParametersOverridesCategory) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The sensitivity level to use for rules in the category.
-type RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
+type RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
 
 const (
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
+	RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
+	RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
+	RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
+	RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
 )
 
-func (r RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
+func (r RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
+	case RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RuleEditParamsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
 		return true
 	}
 	return false
 }
 
 // A rule-level override
-type RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRule struct {
+type RuleEditParamsExecuteRuleActionParametersOverridesRule struct {
 	// The ID of the rule to override.
 	ID param.Field[string] `json:"id,required"`
 	// The action to override the rule with.
@@ -3740,26 +1752,26 @@ type RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRule struct {
 	// The score threshold to use for the rule.
 	ScoreThreshold param.Field[int64] `json:"score_threshold"`
 	// The sensitivity level to use for the rule.
-	SensitivityLevel param.Field[RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel] `json:"sensitivity_level"`
+	SensitivityLevel param.Field[RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-func (r RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRule) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsExecuteRuleActionParametersOverridesRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The sensitivity level to use for the rule.
-type RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
+type RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
 
 const (
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
+	RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
+	RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
+	RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
+	RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
 )
 
-func (r RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
+func (r RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
+	case RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RuleEditParamsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
 		return true
 	}
 	return false
@@ -3767,24 +1779,24 @@ func (r RuleEditParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivi
 
 // A sensitivity level to set for all rules. This option has lower precedence than
 // rule and category overrides and is only applicable for DDoS phases.
-type RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
+type RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevel string
 
 const (
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
+	RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevelDefault RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
+	RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
+	RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevelLow     RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
+	RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
 )
 
-func (r RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
+func (r RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, RuleEditParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
+	case RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevelLow, RuleEditParamsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
 		return true
 	}
 	return false
 }
 
-type RuleEditParamsRulesetsLogRule struct {
+type RuleEditParamsLogRule struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -3792,7 +1804,7 @@ type RuleEditParamsRulesetsLogRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleEditParamsRulesetsLogRuleAction] `json:"action"`
+	Action param.Field[RuleEditParamsLogRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[interface{}] `json:"action_parameters"`
 	// An informative description of the rule.
@@ -3807,38 +1819,38 @@ type RuleEditParamsRulesetsLogRule struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleEditParamsRulesetsLogRule) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsLogRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsRulesetsLogRule) getAccountID() param.Field[string] {
+func (r RuleEditParamsLogRule) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r RuleEditParamsRulesetsLogRule) getZoneID() param.Field[string] {
+func (r RuleEditParamsLogRule) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (RuleEditParamsRulesetsLogRule) ImplementsRuleEditParams() {
+func (RuleEditParamsLogRule) ImplementsRuleEditParams() {
 
 }
 
 // The action to perform when the rule matches.
-type RuleEditParamsRulesetsLogRuleAction string
+type RuleEditParamsLogRuleAction string
 
 const (
-	RuleEditParamsRulesetsLogRuleActionLog RuleEditParamsRulesetsLogRuleAction = "log"
+	RuleEditParamsLogRuleActionLog RuleEditParamsLogRuleAction = "log"
 )
 
-func (r RuleEditParamsRulesetsLogRuleAction) IsKnown() bool {
+func (r RuleEditParamsLogRuleAction) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsLogRuleActionLog:
+	case RuleEditParamsLogRuleActionLog:
 		return true
 	}
 	return false
 }
 
-type RuleEditParamsRulesetsSkipRule struct {
+type RuleEditParamsSkipRule struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -3846,9 +1858,9 @@ type RuleEditParamsRulesetsSkipRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleEditParamsRulesetsSkipRuleAction] `json:"action"`
+	Action param.Field[RuleEditParamsSkipRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RuleEditParamsRulesetsSkipRuleActionParameters] `json:"action_parameters"`
+	ActionParameters param.Field[RuleEditParamsSkipRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
@@ -3861,112 +1873,112 @@ type RuleEditParamsRulesetsSkipRule struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleEditParamsRulesetsSkipRule) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsSkipRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsRulesetsSkipRule) getAccountID() param.Field[string] {
+func (r RuleEditParamsSkipRule) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r RuleEditParamsRulesetsSkipRule) getZoneID() param.Field[string] {
+func (r RuleEditParamsSkipRule) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (RuleEditParamsRulesetsSkipRule) ImplementsRuleEditParams() {
+func (RuleEditParamsSkipRule) ImplementsRuleEditParams() {
 
 }
 
 // The action to perform when the rule matches.
-type RuleEditParamsRulesetsSkipRuleAction string
+type RuleEditParamsSkipRuleAction string
 
 const (
-	RuleEditParamsRulesetsSkipRuleActionSkip RuleEditParamsRulesetsSkipRuleAction = "skip"
+	RuleEditParamsSkipRuleActionSkip RuleEditParamsSkipRuleAction = "skip"
 )
 
-func (r RuleEditParamsRulesetsSkipRuleAction) IsKnown() bool {
+func (r RuleEditParamsSkipRuleAction) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsSkipRuleActionSkip:
+	case RuleEditParamsSkipRuleActionSkip:
 		return true
 	}
 	return false
 }
 
 // The parameters configuring the rule's action.
-type RuleEditParamsRulesetsSkipRuleActionParameters struct {
+type RuleEditParamsSkipRuleActionParameters struct {
 	// A list of phases to skip the execution of. This option is incompatible with the
 	// ruleset and rulesets options.
-	Phases param.Field[[]RuleEditParamsRulesetsSkipRuleActionParametersPhase] `json:"phases"`
+	Phases param.Field[[]RuleEditParamsSkipRuleActionParametersPhase] `json:"phases"`
 	// A list of legacy security products to skip the execution of.
-	Products param.Field[[]RuleEditParamsRulesetsSkipRuleActionParametersProduct] `json:"products"`
+	Products param.Field[[]RuleEditParamsSkipRuleActionParametersProduct] `json:"products"`
 	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
 	// execution of. This option is incompatible with the ruleset option.
 	Rules param.Field[map[string][]string] `json:"rules"`
 	// A ruleset to skip the execution of. This option is incompatible with the
 	// rulesets, rules and phases options.
-	Ruleset param.Field[RuleEditParamsRulesetsSkipRuleActionParametersRuleset] `json:"ruleset"`
+	Ruleset param.Field[RuleEditParamsSkipRuleActionParametersRuleset] `json:"ruleset"`
 	// A list of ruleset IDs to skip the execution of. This option is incompatible with
 	// the ruleset and phases options.
 	Rulesets param.Field[[]string] `json:"rulesets"`
 }
 
-func (r RuleEditParamsRulesetsSkipRuleActionParameters) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsSkipRuleActionParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A phase to skip the execution of.
-type RuleEditParamsRulesetsSkipRuleActionParametersPhase string
+type RuleEditParamsSkipRuleActionParametersPhase string
 
 const (
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDoSL4                         RuleEditParamsRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDoSL7                         RuleEditParamsRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransit                   RuleEditParamsRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RuleEditParamsRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RuleEditParamsRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
+	RuleEditParamsSkipRuleActionParametersPhaseDDoSL4                         RuleEditParamsSkipRuleActionParametersPhase = "ddos_l4"
+	RuleEditParamsSkipRuleActionParametersPhaseDDoSL7                         RuleEditParamsSkipRuleActionParametersPhase = "ddos_l7"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleEditParamsSkipRuleActionParametersPhase = "http_config_settings"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleEditParamsSkipRuleActionParametersPhase = "http_custom_errors"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleEditParamsSkipRuleActionParametersPhase = "http_log_custom_fields"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRatelimit                  RuleEditParamsSkipRuleActionParametersPhase = "http_ratelimit"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RuleEditParamsSkipRuleActionParametersPhase = "http_request_cache_settings"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RuleEditParamsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RuleEditParamsSkipRuleActionParametersPhase = "http_request_firewall_custom"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RuleEditParamsSkipRuleActionParametersPhase = "http_request_firewall_managed"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RuleEditParamsSkipRuleActionParametersPhase = "http_request_late_transform"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestOrigin              RuleEditParamsSkipRuleActionParametersPhase = "http_request_origin"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestRedirect            RuleEditParamsSkipRuleActionParametersPhase = "http_request_redirect"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestSanitize            RuleEditParamsSkipRuleActionParametersPhase = "http_request_sanitize"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestSbfm                RuleEditParamsSkipRuleActionParametersPhase = "http_request_sbfm"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RuleEditParamsSkipRuleActionParametersPhase = "http_request_select_configuration"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestTransform           RuleEditParamsSkipRuleActionParametersPhase = "http_request_transform"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPResponseCompression        RuleEditParamsSkipRuleActionParametersPhase = "http_response_compression"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RuleEditParamsSkipRuleActionParametersPhase = "http_response_firewall_managed"
+	RuleEditParamsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RuleEditParamsSkipRuleActionParametersPhase = "http_response_headers_transform"
+	RuleEditParamsSkipRuleActionParametersPhaseMagicTransit                   RuleEditParamsSkipRuleActionParametersPhase = "magic_transit"
+	RuleEditParamsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RuleEditParamsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
+	RuleEditParamsSkipRuleActionParametersPhaseMagicTransitManaged            RuleEditParamsSkipRuleActionParametersPhase = "magic_transit_managed"
 )
 
-func (r RuleEditParamsRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
+func (r RuleEditParamsSkipRuleActionParametersPhase) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDoSL4, RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDoSL7, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
+	case RuleEditParamsSkipRuleActionParametersPhaseDDoSL4, RuleEditParamsSkipRuleActionParametersPhaseDDoSL7, RuleEditParamsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleEditParamsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleEditParamsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleEditParamsSkipRuleActionParametersPhaseHTTPRatelimit, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleEditParamsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleEditParamsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleEditParamsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleEditParamsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleEditParamsSkipRuleActionParametersPhaseMagicTransit, RuleEditParamsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleEditParamsSkipRuleActionParametersPhaseMagicTransitManaged:
 		return true
 	}
 	return false
 }
 
 // The name of a legacy security product to skip the execution of.
-type RuleEditParamsRulesetsSkipRuleActionParametersProduct string
+type RuleEditParamsSkipRuleActionParametersProduct string
 
 const (
-	RuleEditParamsRulesetsSkipRuleActionParametersProductBic           RuleEditParamsRulesetsSkipRuleActionParametersProduct = "bic"
-	RuleEditParamsRulesetsSkipRuleActionParametersProductHot           RuleEditParamsRulesetsSkipRuleActionParametersProduct = "hot"
-	RuleEditParamsRulesetsSkipRuleActionParametersProductRateLimit     RuleEditParamsRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RuleEditParamsRulesetsSkipRuleActionParametersProductSecurityLevel RuleEditParamsRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RuleEditParamsRulesetsSkipRuleActionParametersProductUABlock       RuleEditParamsRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RuleEditParamsRulesetsSkipRuleActionParametersProductWAF           RuleEditParamsRulesetsSkipRuleActionParametersProduct = "waf"
-	RuleEditParamsRulesetsSkipRuleActionParametersProductZoneLockdown  RuleEditParamsRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
+	RuleEditParamsSkipRuleActionParametersProductBic           RuleEditParamsSkipRuleActionParametersProduct = "bic"
+	RuleEditParamsSkipRuleActionParametersProductHot           RuleEditParamsSkipRuleActionParametersProduct = "hot"
+	RuleEditParamsSkipRuleActionParametersProductRateLimit     RuleEditParamsSkipRuleActionParametersProduct = "rateLimit"
+	RuleEditParamsSkipRuleActionParametersProductSecurityLevel RuleEditParamsSkipRuleActionParametersProduct = "securityLevel"
+	RuleEditParamsSkipRuleActionParametersProductUABlock       RuleEditParamsSkipRuleActionParametersProduct = "uaBlock"
+	RuleEditParamsSkipRuleActionParametersProductWAF           RuleEditParamsSkipRuleActionParametersProduct = "waf"
+	RuleEditParamsSkipRuleActionParametersProductZoneLockdown  RuleEditParamsSkipRuleActionParametersProduct = "zoneLockdown"
 )
 
-func (r RuleEditParamsRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
+func (r RuleEditParamsSkipRuleActionParametersProduct) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsSkipRuleActionParametersProductBic, RuleEditParamsRulesetsSkipRuleActionParametersProductHot, RuleEditParamsRulesetsSkipRuleActionParametersProductRateLimit, RuleEditParamsRulesetsSkipRuleActionParametersProductSecurityLevel, RuleEditParamsRulesetsSkipRuleActionParametersProductUABlock, RuleEditParamsRulesetsSkipRuleActionParametersProductWAF, RuleEditParamsRulesetsSkipRuleActionParametersProductZoneLockdown:
+	case RuleEditParamsSkipRuleActionParametersProductBic, RuleEditParamsSkipRuleActionParametersProductHot, RuleEditParamsSkipRuleActionParametersProductRateLimit, RuleEditParamsSkipRuleActionParametersProductSecurityLevel, RuleEditParamsSkipRuleActionParametersProductUABlock, RuleEditParamsSkipRuleActionParametersProductWAF, RuleEditParamsSkipRuleActionParametersProductZoneLockdown:
 		return true
 	}
 	return false
@@ -3974,15 +1986,15 @@ func (r RuleEditParamsRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
 
 // A ruleset to skip the execution of. This option is incompatible with the
 // rulesets, rules and phases options.
-type RuleEditParamsRulesetsSkipRuleActionParametersRuleset string
+type RuleEditParamsSkipRuleActionParametersRuleset string
 
 const (
-	RuleEditParamsRulesetsSkipRuleActionParametersRulesetCurrent RuleEditParamsRulesetsSkipRuleActionParametersRuleset = "current"
+	RuleEditParamsSkipRuleActionParametersRulesetCurrent RuleEditParamsSkipRuleActionParametersRuleset = "current"
 )
 
-func (r RuleEditParamsRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
+func (r RuleEditParamsSkipRuleActionParametersRuleset) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsSkipRuleActionParametersRulesetCurrent:
+	case RuleEditParamsSkipRuleActionParametersRulesetCurrent:
 		return true
 	}
 	return false
