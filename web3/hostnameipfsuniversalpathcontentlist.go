@@ -97,20 +97,11 @@ func (r ContentListAction) IsKnown() bool {
 	return false
 }
 
-type ContentListParam struct {
-	// Behavior of the content list.
-	Action param.Field[ContentListAction] `json:"action"`
-}
-
-func (r ContentListParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type HostnameIPFSUniversalPathContentListUpdateParams struct {
 	// Behavior of the content list.
 	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action,required"`
 	// Content list entries.
-	Entries param.Field[[]ContentListParam] `json:"entries,required"`
+	Entries param.Field[[]HostnameIPFSUniversalPathContentListUpdateParamsEntry] `json:"entries,required"`
 }
 
 func (r HostnameIPFSUniversalPathContentListUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -127,6 +118,36 @@ const (
 func (r HostnameIPFSUniversalPathContentListUpdateParamsAction) IsKnown() bool {
 	switch r {
 	case HostnameIPFSUniversalPathContentListUpdateParamsActionBlock:
+		return true
+	}
+	return false
+}
+
+// Content list entry to be blocked.
+type HostnameIPFSUniversalPathContentListUpdateParamsEntry struct {
+	// CID or content path of content to block.
+	Content param.Field[string] `json:"content"`
+	// An optional description of the content list entry.
+	Description param.Field[string] `json:"description"`
+	// Type of content list entry to block.
+	Type param.Field[HostnameIPFSUniversalPathContentListUpdateParamsEntriesType] `json:"type"`
+}
+
+func (r HostnameIPFSUniversalPathContentListUpdateParamsEntry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Type of content list entry to block.
+type HostnameIPFSUniversalPathContentListUpdateParamsEntriesType string
+
+const (
+	HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid         HostnameIPFSUniversalPathContentListUpdateParamsEntriesType = "cid"
+	HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeContentPath HostnameIPFSUniversalPathContentListUpdateParamsEntriesType = "content_path"
+)
+
+func (r HostnameIPFSUniversalPathContentListUpdateParamsEntriesType) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid, HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeContentPath:
 		return true
 	}
 	return false
