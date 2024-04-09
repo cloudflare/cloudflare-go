@@ -3,6 +3,9 @@
 package user
 
 import (
+	"time"
+
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -24,4 +27,30 @@ func NewLoadBalancerAnalyticsService(opts ...option.RequestOption) (r *LoadBalan
 	r.Options = opts
 	r.Events = NewLoadBalancerAnalyticsEventService(opts...)
 	return
+}
+
+type Analytics struct {
+	ID        int64         `json:"id"`
+	Origins   []interface{} `json:"origins"`
+	Pool      interface{}   `json:"pool"`
+	Timestamp time.Time     `json:"timestamp" format:"date-time"`
+	JSON      analyticsJSON `json:"-"`
+}
+
+// analyticsJSON contains the JSON metadata for the struct [Analytics]
+type analyticsJSON struct {
+	ID          apijson.Field
+	Origins     apijson.Field
+	Pool        apijson.Field
+	Timestamp   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Analytics) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsJSON) RawJSON() string {
+	return r.raw
 }

@@ -45,6 +45,99 @@ func (r *ScheduleService) New(ctx context.Context, url string, params ScheduleNe
 	return
 }
 
+// The test schedule.
+type Schedule struct {
+	// The frequency of the test.
+	Frequency ScheduleFrequency `json:"frequency"`
+	// A test region.
+	Region ScheduleRegion `json:"region"`
+	// A URL.
+	URL  string       `json:"url"`
+	JSON scheduleJSON `json:"-"`
+}
+
+// scheduleJSON contains the JSON metadata for the struct [Schedule]
+type scheduleJSON struct {
+	Frequency   apijson.Field
+	Region      apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Schedule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleJSON) RawJSON() string {
+	return r.raw
+}
+
+// The frequency of the test.
+type ScheduleFrequency string
+
+const (
+	ScheduleFrequencyDaily  ScheduleFrequency = "DAILY"
+	ScheduleFrequencyWeekly ScheduleFrequency = "WEEKLY"
+)
+
+func (r ScheduleFrequency) IsKnown() bool {
+	switch r {
+	case ScheduleFrequencyDaily, ScheduleFrequencyWeekly:
+		return true
+	}
+	return false
+}
+
+// A test region.
+type ScheduleRegion string
+
+const (
+	ScheduleRegionAsiaEast1           ScheduleRegion = "asia-east1"
+	ScheduleRegionAsiaNortheast1      ScheduleRegion = "asia-northeast1"
+	ScheduleRegionAsiaNortheast2      ScheduleRegion = "asia-northeast2"
+	ScheduleRegionAsiaSouth1          ScheduleRegion = "asia-south1"
+	ScheduleRegionAsiaSoutheast1      ScheduleRegion = "asia-southeast1"
+	ScheduleRegionAustraliaSoutheast1 ScheduleRegion = "australia-southeast1"
+	ScheduleRegionEuropeNorth1        ScheduleRegion = "europe-north1"
+	ScheduleRegionEuropeSouthwest1    ScheduleRegion = "europe-southwest1"
+	ScheduleRegionEuropeWest1         ScheduleRegion = "europe-west1"
+	ScheduleRegionEuropeWest2         ScheduleRegion = "europe-west2"
+	ScheduleRegionEuropeWest3         ScheduleRegion = "europe-west3"
+	ScheduleRegionEuropeWest4         ScheduleRegion = "europe-west4"
+	ScheduleRegionEuropeWest8         ScheduleRegion = "europe-west8"
+	ScheduleRegionEuropeWest9         ScheduleRegion = "europe-west9"
+	ScheduleRegionMeWest1             ScheduleRegion = "me-west1"
+	ScheduleRegionSouthamericaEast1   ScheduleRegion = "southamerica-east1"
+	ScheduleRegionUsCentral1          ScheduleRegion = "us-central1"
+	ScheduleRegionUsEast1             ScheduleRegion = "us-east1"
+	ScheduleRegionUsEast4             ScheduleRegion = "us-east4"
+	ScheduleRegionUsSouth1            ScheduleRegion = "us-south1"
+	ScheduleRegionUsWest1             ScheduleRegion = "us-west1"
+)
+
+func (r ScheduleRegion) IsKnown() bool {
+	switch r {
+	case ScheduleRegionAsiaEast1, ScheduleRegionAsiaNortheast1, ScheduleRegionAsiaNortheast2, ScheduleRegionAsiaSouth1, ScheduleRegionAsiaSoutheast1, ScheduleRegionAustraliaSoutheast1, ScheduleRegionEuropeNorth1, ScheduleRegionEuropeSouthwest1, ScheduleRegionEuropeWest1, ScheduleRegionEuropeWest2, ScheduleRegionEuropeWest3, ScheduleRegionEuropeWest4, ScheduleRegionEuropeWest8, ScheduleRegionEuropeWest9, ScheduleRegionMeWest1, ScheduleRegionSouthamericaEast1, ScheduleRegionUsCentral1, ScheduleRegionUsEast1, ScheduleRegionUsEast4, ScheduleRegionUsSouth1, ScheduleRegionUsWest1:
+		return true
+	}
+	return false
+}
+
+// The test schedule.
+type ScheduleParam struct {
+	// The frequency of the test.
+	Frequency param.Field[ScheduleFrequency] `json:"frequency"`
+	// A test region.
+	Region param.Field[ScheduleRegion] `json:"region"`
+	// A URL.
+	URL param.Field[string] `json:"url"`
+}
+
+func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScheduleNewResponse struct {
 	// The test schedule.
 	Schedule Schedule                `json:"schedule"`

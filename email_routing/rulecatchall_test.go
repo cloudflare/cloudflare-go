@@ -32,22 +32,22 @@ func TestRuleCatchAllUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		email_routing.RuleCatchAllUpdateParams{
-			Actions: cloudflare.F([]email_routing.ActionParam{{
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+			Actions: cloudflare.F([]email_routing.CatchAllActionParam{{
+				Type:  cloudflare.F(email_routing.CatchAllActionTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.CatchAllActionTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.CatchAllActionTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}}),
-			Matchers: cloudflare.F([]email_routing.MatcherParam{{
-				Type: cloudflare.F(email_routing.MatcherTypeAll),
+			Matchers: cloudflare.F([]email_routing.CatchAllMatcherParam{{
+				Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
 			}, {
-				Type: cloudflare.F(email_routing.MatcherTypeAll),
+				Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
 			}, {
-				Type: cloudflare.F(email_routing.MatcherTypeAll),
+				Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
 			}}),
 			Enabled: cloudflare.F(email_routing.RuleCatchAllUpdateParamsEnabledTrue),
 			Name:    cloudflare.F("Send to user@example.net rule."),

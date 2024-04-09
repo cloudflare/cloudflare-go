@@ -130,15 +130,6 @@ func (r roleJSON) RawJSON() string {
 	return r.raw
 }
 
-type RoleParam struct {
-	// Role identifier tag.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r RoleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type RoleListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }

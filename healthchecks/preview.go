@@ -102,7 +102,7 @@ type PreviewNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]CheckRegionItem] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`

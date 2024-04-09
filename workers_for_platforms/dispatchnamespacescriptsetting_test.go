@@ -56,7 +56,7 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Result: cloudflare.F(workers.SettingsItemParam{
+			Result: cloudflare.F(workers.ScriptSettingParam{
 				Logpush: cloudflare.F(false),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptItemParam{{
 					Environment: cloudflare.F("production"),

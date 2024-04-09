@@ -33,7 +33,7 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 
 // Returns a list of settings (and their details) that Page Rules can apply to
 // matching requests.
-func (r *SettingService) List(ctx context.Context, query SettingListParams, opts ...option.RequestOption) (res *Settings, err error) {
+func (r *SettingService) List(ctx context.Context, query SettingListParams, opts ...option.RequestOption) (res *[]SettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/pagerules/settings", query.ZoneID)
@@ -44,10 +44,6 @@ func (r *SettingService) List(ctx context.Context, query SettingListParams, opts
 	res = &env.Result
 	return
 }
-
-type Settings []interface{}
-
-type SettingsParam []interface{}
 
 type SettingListResponse = interface{}
 
@@ -60,7 +56,7 @@ type SettingListResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Settings available for the zone.
-	Result Settings `json:"result,required"`
+	Result []SettingListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingListResponseEnvelopeJSON    `json:"-"`

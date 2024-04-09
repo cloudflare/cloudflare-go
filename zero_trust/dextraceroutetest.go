@@ -63,7 +63,7 @@ func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID strin
 
 // Get percentiles for a traceroute test for a given time period between 1 hour and
 // 7 days.
-func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID string, params DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *Percentiles, err error) {
+func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID string, params DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *DEXTracerouteTestPercentilesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestPercentilesResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/percentiles", params.AccountID, testID)
@@ -224,30 +224,6 @@ func (r NetworkPathNetworkPathSamplingUnit) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type Percentiles struct {
-	HopsCount       Percentiles     `json:"hopsCount"`
-	PacketLossPct   Percentiles     `json:"packetLossPct"`
-	RoundTripTimeMs Percentiles     `json:"roundTripTimeMs"`
-	JSON            percentilesJSON `json:"-"`
-}
-
-// percentilesJSON contains the JSON metadata for the struct [Percentiles]
-type percentilesJSON struct {
-	HopsCount       apijson.Field
-	PacketLossPct   apijson.Field
-	RoundTripTimeMs apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *Percentiles) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r percentilesJSON) RawJSON() string {
-	return r.raw
 }
 
 type Traceroute struct {
@@ -575,6 +551,31 @@ func (r tracerouteTracerouteStatsByColoPacketLossPctSlotJSON) RawJSON() string {
 	return r.raw
 }
 
+type DEXTracerouteTestPercentilesResponse struct {
+	HopsCount       Percentiles                              `json:"hopsCount"`
+	PacketLossPct   Percentiles                              `json:"packetLossPct"`
+	RoundTripTimeMs Percentiles                              `json:"roundTripTimeMs"`
+	JSON            dexTracerouteTestPercentilesResponseJSON `json:"-"`
+}
+
+// dexTracerouteTestPercentilesResponseJSON contains the JSON metadata for the
+// struct [DEXTracerouteTestPercentilesResponse]
+type dexTracerouteTestPercentilesResponseJSON struct {
+	HopsCount       apijson.Field
+	PacketLossPct   apijson.Field
+	RoundTripTimeMs apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DEXTracerouteTestPercentilesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexTracerouteTestPercentilesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DEXTracerouteTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Time interval for aggregate time slots.
@@ -765,7 +766,7 @@ func (r DEXTracerouteTestPercentilesParams) URLQuery() (v url.Values) {
 type DEXTracerouteTestPercentilesResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Percentiles                                               `json:"result,required"`
+	Result   DEXTracerouteTestPercentilesResponse                      `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestPercentilesResponseEnvelopeJSON    `json:"-"`
