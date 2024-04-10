@@ -170,12 +170,12 @@ type TestsTest struct {
 	HTTPResults       TestsTestsHTTPResults         `json:"httpResults,nullable"`
 	HTTPResultsByColo []TestsTestsHTTPResultsByColo `json:"httpResultsByColo"`
 	// for HTTP, the method to use when running the test
-	Method                  string                                             `json:"method"`
-	TargetPolicies          []UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11 `json:"target_policies"`
-	Targeted                bool                                               `json:"targeted"`
-	TracerouteResults       TestsTestsTracerouteResults                        `json:"tracerouteResults,nullable"`
-	TracerouteResultsByColo []TestsTestsTracerouteResultsByColo                `json:"tracerouteResultsByColo"`
-	JSON                    testsTestJSON                                      `json:"-"`
+	Method                  string                              `json:"method"`
+	TargetPolicies          []DeviceExperienceMonitor           `json:"target_policies"`
+	Targeted                bool                                `json:"targeted"`
+	TracerouteResults       TestsTestsTracerouteResults         `json:"tracerouteResults,nullable"`
+	TracerouteResultsByColo []TestsTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`
+	JSON                    testsTestJSON                       `json:"-"`
 }
 
 // testsTestJSON contains the JSON metadata for the struct [TestsTest]

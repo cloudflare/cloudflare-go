@@ -54,6 +54,27 @@ func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appI
 	return
 }
 
+type UserPolicyCheckGeo struct {
+	Country string                 `json:"country"`
+	JSON    userPolicyCheckGeoJSON `json:"-"`
+}
+
+// userPolicyCheckGeoJSON contains the JSON metadata for the struct
+// [UserPolicyCheckGeo]
+type userPolicyCheckGeoJSON struct {
+	Country     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserPolicyCheckGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userPolicyCheckGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessApplicationUserPolicyCheckListResponse struct {
 	AppState     AccessApplicationUserPolicyCheckListResponseAppState     `json:"app_state"`
 	UserIdentity AccessApplicationUserPolicyCheckListResponseUserIdentity `json:"user_identity"`
@@ -110,15 +131,15 @@ func (r accessApplicationUserPolicyCheckListResponseAppStateJSON) RawJSON() stri
 }
 
 type AccessApplicationUserPolicyCheckListResponseUserIdentity struct {
-	ID             string                                                      `json:"id"`
-	AccountID      string                                                      `json:"account_id"`
-	DeviceSessions interface{}                                                 `json:"device_sessions"`
-	Email          string                                                      `json:"email"`
-	Geo            AccessApplicationUserPolicyCheckListResponseUserIdentityGeo `json:"geo"`
-	Iat            int64                                                       `json:"iat"`
-	IsGateway      bool                                                        `json:"is_gateway"`
-	IsWARP         bool                                                        `json:"is_warp"`
-	Name           string                                                      `json:"name"`
+	ID             string             `json:"id"`
+	AccountID      string             `json:"account_id"`
+	DeviceSessions interface{}        `json:"device_sessions"`
+	Email          string             `json:"email"`
+	Geo            UserPolicyCheckGeo `json:"geo"`
+	Iat            int64              `json:"iat"`
+	IsGateway      bool               `json:"is_gateway"`
+	IsWARP         bool               `json:"is_warp"`
+	Name           string             `json:"name"`
 	// UUID
 	UserUUID string                                                       `json:"user_uuid"`
 	Version  int64                                                        `json:"version"`
@@ -149,28 +170,6 @@ func (r *AccessApplicationUserPolicyCheckListResponseUserIdentity) UnmarshalJSON
 }
 
 func (r accessApplicationUserPolicyCheckListResponseUserIdentityJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUserPolicyCheckListResponseUserIdentityGeo struct {
-	Country string                                                          `json:"country"`
-	JSON    accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON `json:"-"`
-}
-
-// accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUserPolicyCheckListResponseUserIdentityGeo]
-type accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON struct {
-	Country     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUserPolicyCheckListResponseUserIdentityGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -36,6 +36,32 @@ func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 	return
 }
 
+type DeviceExperienceMonitor struct {
+	ID string `json:"id,required"`
+	// Whether the policy is the default for the account
+	Default bool                        `json:"default,required"`
+	Name    string                      `json:"name,required"`
+	JSON    deviceExperienceMonitorJSON `json:"-"`
+}
+
+// deviceExperienceMonitorJSON contains the JSON metadata for the struct
+// [DeviceExperienceMonitor]
+type deviceExperienceMonitorJSON struct {
+	ID          apijson.Field
+	Default     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceExperienceMonitor) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceExperienceMonitorJSON) RawJSON() string {
+	return r.raw
+}
+
 type NetworkPath struct {
 	// API Resource UUID tag.
 	ID         string `json:"id,required"`
@@ -214,31 +240,5 @@ func (r *Percentiles) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r percentilesJSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11 struct {
-	ID string `json:"id,required"`
-	// Whether the policy is the default for the account
-	Default bool                                                 `json:"default,required"`
-	Name    string                                               `json:"name,required"`
-	JSON    unnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11JSON `json:"-"`
-}
-
-// unnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11]
-type unnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11JSON struct {
-	ID          apijson.Field
-	Default     apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11JSON) RawJSON() string {
 	return r.raw
 }

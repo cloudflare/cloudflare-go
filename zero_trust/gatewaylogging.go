@@ -63,8 +63,8 @@ type LoggingSetting struct {
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii bool `json:"redact_pii"`
 	// Logging settings by rule type.
-	SettingsByRuleType UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b `json:"settings_by_rule_type"`
-	JSON               loggingSettingJSON                               `json:"-"`
+	SettingsByRuleType LoggingSettingSettingsByRuleType `json:"settings_by_rule_type"`
+	JSON               loggingSettingJSON               `json:"-"`
 }
 
 // loggingSettingJSON contains the JSON metadata for the struct [LoggingSetting]
@@ -83,32 +83,20 @@ func (r loggingSettingJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoggingSettingParam struct {
-	// Redact personally identifiable information from activity logging (PII fields
-	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
-	RedactPii param.Field[bool] `json:"redact_pii"`
-	// Logging settings by rule type.
-	SettingsByRuleType param.Field[UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam] `json:"settings_by_rule_type"`
-}
-
-func (r LoggingSettingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // Logging settings by rule type.
-type UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b struct {
+type LoggingSettingSettingsByRuleType struct {
 	// Logging settings for DNS firewall.
 	DNS interface{} `json:"dns"`
 	// Logging settings for HTTP/HTTPS firewall.
 	HTTP interface{} `json:"http"`
 	// Logging settings for Network firewall.
-	L4   interface{}                                          `json:"l4"`
-	JSON unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON `json:"-"`
+	L4   interface{}                          `json:"l4"`
+	JSON loggingSettingSettingsByRuleTypeJSON `json:"-"`
 }
 
-// unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON contains the JSON metadata
-// for the struct [UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b]
-type unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON struct {
+// loggingSettingSettingsByRuleTypeJSON contains the JSON metadata for the struct
+// [LoggingSettingSettingsByRuleType]
+type loggingSettingSettingsByRuleTypeJSON struct {
 	DNS         apijson.Field
 	HTTP        apijson.Field
 	L4          apijson.Field
@@ -116,16 +104,28 @@ type unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b) UnmarshalJSON(data []byte) (err error) {
+func (r *LoggingSettingSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON) RawJSON() string {
+func (r loggingSettingSettingsByRuleTypeJSON) RawJSON() string {
 	return r.raw
 }
 
+type LoggingSettingParam struct {
+	// Redact personally identifiable information from activity logging (PII fields
+	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
+	RedactPii param.Field[bool] `json:"redact_pii"`
+	// Logging settings by rule type.
+	SettingsByRuleType param.Field[LoggingSettingSettingsByRuleTypeParam] `json:"settings_by_rule_type"`
+}
+
+func (r LoggingSettingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Logging settings by rule type.
-type UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam struct {
+type LoggingSettingSettingsByRuleTypeParam struct {
 	// Logging settings for DNS firewall.
 	DNS param.Field[interface{}] `json:"dns"`
 	// Logging settings for HTTP/HTTPS firewall.
@@ -134,7 +134,7 @@ type UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam struct {
 	L4 param.Field[interface{}] `json:"l4"`
 }
 
-func (r UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam) MarshalJSON() (data []byte, err error) {
+func (r LoggingSettingSettingsByRuleTypeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
