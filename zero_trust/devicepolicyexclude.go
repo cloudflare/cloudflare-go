@@ -129,8 +129,8 @@ func (r SplitTunnelExcludeParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DevicePolicyExcludeUpdateParams struct {
-	AccountID param.Field[string]                    `path:"account_id,required"`
-	Body      param.Field[[]SplitTunnelExcludeParam] `json:"body,required"`
+	AccountID param.Field[string]       `path:"account_id,required"`
+	Body      []SplitTunnelExcludeParam `json:"body,required"`
 }
 
 func (r DevicePolicyExcludeUpdateParams) MarshalJSON() (data []byte, err error) {

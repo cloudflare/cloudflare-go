@@ -87,7 +87,7 @@ func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opt
 
 // Delete an image on Cloudflare Images. On success, all copies of the image are
 // deleted and purged from cache.
-func (r *V1Service) Delete(ctx context.Context, imageID string, params V1DeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *V1Service) Delete(ctx context.Context, imageID string, params V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1DeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", params.AccountID, imageID)
@@ -254,6 +254,22 @@ func (r V1ListResponseSuccess) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [images.V1DeleteResponseUnknown] or [shared.UnionString].
+type V1DeleteResponseUnion interface {
+	ImplementsImagesV1DeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*V1DeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type V1NewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -335,8 +351,8 @@ func (r V1ListParams) URLQuery() (v url.Values) {
 
 type V1DeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r V1DeleteParams) MarshalJSON() (data []byte, err error) {
@@ -344,9 +360,9 @@ func (r V1DeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1DeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1DeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success V1DeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1DeleteResponseEnvelopeJSON    `json:"-"`

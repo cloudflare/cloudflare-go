@@ -30,7 +30,7 @@ func TestForceAXFRNew(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.ForceAXFR.New(context.TODO(), secondary_dns.ForceAXFRNewParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   cloudflare.F[any](map[string]interface{}{}),
+		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

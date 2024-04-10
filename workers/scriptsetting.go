@@ -64,15 +64,12 @@ func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query
 
 type ScriptSettingEditParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	// Whether Logpush is turned on for the Worker.
-	Logpush param.Field[bool] `json:"logpush"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
+	AccountID     param.Field[string] `path:"account_id,required"`
+	ScriptSetting ScriptSettingParam  `json:"script_setting,required"`
 }
 
 func (r ScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.ScriptSetting)
 }
 
 type ScriptSettingEditResponseEnvelope struct {

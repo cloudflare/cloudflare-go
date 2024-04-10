@@ -30,7 +30,7 @@ func TestDeviceUnrevokeNew(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.Unrevoke.New(context.TODO(), zero_trust.DeviceUnrevokeNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Body:      cloudflare.F([]string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"}),
+		Body:      []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

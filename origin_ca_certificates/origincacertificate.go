@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // OriginCACertificateService contains methods and other services that help with
@@ -38,7 +40,7 @@ func NewOriginCACertificateService(opts ...option.RequestOption) (r *OriginCACer
 
 // Create an Origin CA certificate. Use your Origin CA Key as your User Service Key
 // when calling this endpoint ([see above](#requests)).
-func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificateNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateNewResponseEnvelope
 	path := "certificates"
@@ -95,7 +97,7 @@ func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID s
 // Get an existing Origin CA certificate by its serial number. Use your Origin CA
 // Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateGetResponseEnvelope
 	path := fmt.Sprintf("certificates/%s", certificateID)
@@ -188,6 +190,24 @@ func (r OriginCACertificateRequestedValidity) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by
+// [origin_ca_certificates.OriginCACertificateNewResponseUnknown] or
+// [shared.UnionString].
+type OriginCACertificateNewResponseUnion interface {
+	ImplementsOriginCACertificatesOriginCACertificateNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OriginCACertificateNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type OriginCACertificateDeleteResponse struct {
 	// Identifier
 	ID   string                                `json:"id"`
@@ -208,6 +228,24 @@ func (r *OriginCACertificateDeleteResponse) UnmarshalJSON(data []byte) (err erro
 
 func (r originCACertificateDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by
+// [origin_ca_certificates.OriginCACertificateGetResponseUnknown] or
+// [shared.UnionString].
+type OriginCACertificateGetResponseUnion interface {
+	ImplementsOriginCACertificatesOriginCACertificateGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OriginCACertificateGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type OriginCACertificateNewParams struct {
@@ -267,9 +305,9 @@ func (r OriginCACertificateNewParamsRequestedValidity) IsKnown() bool {
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   OriginCACertificateNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originCACertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -324,7 +362,7 @@ func (r OriginCACertificateListParams) URLQuery() (v url.Values) {
 }
 
 type OriginCACertificateDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r OriginCACertificateDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -375,9 +413,9 @@ func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   OriginCACertificateGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originCACertificateGetResponseEnvelopeJSON    `json:"-"`

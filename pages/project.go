@@ -1763,6 +1763,659 @@ func (r projectDeploymentConfigsProductionVectorizeBindingsVectorizeJSON) RawJSO
 	return r.raw
 }
 
+type ProjectParam struct {
+	// Configs for the project build process.
+	BuildConfig         param.Field[ProjectBuildConfigParam] `json:"build_config"`
+	CanonicalDeployment param.Field[DeploymentParam]         `json:"canonical_deployment"`
+	// Configs for deployments in a project.
+	DeploymentConfigs param.Field[ProjectDeploymentConfigsParam] `json:"deployment_configs"`
+	LatestDeployment  param.Field[DeploymentParam]               `json:"latest_deployment"`
+	// Name of the project.
+	Name param.Field[string] `json:"name"`
+	// Production branch of the project. Used to identify production deployments.
+	ProductionBranch param.Field[string] `json:"production_branch"`
+}
+
+func (r ProjectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configs for the project build process.
+type ProjectBuildConfigParam struct {
+	// Enable build caching for the project.
+	BuildCaching param.Field[bool] `json:"build_caching"`
+	// Command used to build project.
+	BuildCommand param.Field[string] `json:"build_command"`
+	// Output directory of the build.
+	DestinationDir param.Field[string] `json:"destination_dir"`
+	// Directory to run the command.
+	RootDir param.Field[string] `json:"root_dir"`
+	// The classifying tag for analytics.
+	WebAnalyticsTag param.Field[string] `json:"web_analytics_tag"`
+	// The auth token for analytics.
+	WebAnalyticsToken param.Field[string] `json:"web_analytics_token"`
+}
+
+func (r ProjectBuildConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configs for deployments in a project.
+type ProjectDeploymentConfigsParam struct {
+	// Configs for preview deploys.
+	Preview param.Field[ProjectDeploymentConfigsPreviewParam] `json:"preview"`
+	// Configs for production deploys.
+	Production param.Field[ProjectDeploymentConfigsProductionParam] `json:"production"`
+}
+
+func (r ProjectDeploymentConfigsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configs for preview deploys.
+type ProjectDeploymentConfigsPreviewParam struct {
+	// Constellation bindings used for Pages Functions.
+	AIBindings param.Field[ProjectDeploymentConfigsPreviewAIBindingsParam] `json:"ai_bindings"`
+	// Analytics Engine bindings used for Pages Functions.
+	AnalyticsEngineDatasets param.Field[ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsParam] `json:"analytics_engine_datasets"`
+	// Browser bindings used for Pages Functions.
+	Browsers param.Field[ProjectDeploymentConfigsPreviewBrowsersParam] `json:"browsers"`
+	// Compatibility date used for Pages Functions.
+	CompatibilityDate param.Field[string] `json:"compatibility_date"`
+	// Compatibility flags used for Pages Functions.
+	CompatibilityFlags param.Field[[]interface{}] `json:"compatibility_flags"`
+	// D1 databases used for Pages Functions.
+	D1Databases param.Field[ProjectDeploymentConfigsPreviewD1DatabasesParam] `json:"d1_databases"`
+	// Durabble Object namespaces used for Pages Functions.
+	DurableObjectNamespaces param.Field[ProjectDeploymentConfigsPreviewDurableObjectNamespacesParam] `json:"durable_object_namespaces"`
+	// Environment variables for build configs.
+	EnvVars param.Field[ProjectDeploymentConfigsPreviewEnvVarsParam] `json:"env_vars"`
+	// Hyperdrive bindings used for Pages Functions.
+	HyperdriveBindings param.Field[ProjectDeploymentConfigsPreviewHyperdriveBindingsParam] `json:"hyperdrive_bindings"`
+	// KV namespaces used for Pages Functions.
+	KVNamespaces param.Field[ProjectDeploymentConfigsPreviewKVNamespacesParam] `json:"kv_namespaces"`
+	// mTLS bindings used for Pages Functions.
+	MTLSCertificates param.Field[ProjectDeploymentConfigsPreviewMTLSCertificatesParam] `json:"mtls_certificates"`
+	// Placement setting used for Pages Functions.
+	Placement param.Field[ProjectDeploymentConfigsPreviewPlacementParam] `json:"placement"`
+	// Queue Producer bindings used for Pages Functions.
+	QueueProducers param.Field[ProjectDeploymentConfigsPreviewQueueProducersParam] `json:"queue_producers"`
+	// R2 buckets used for Pages Functions.
+	R2Buckets param.Field[ProjectDeploymentConfigsPreviewR2BucketsParam] `json:"r2_buckets"`
+	// Services used for Pages Functions.
+	Services param.Field[ProjectDeploymentConfigsPreviewServicesParam] `json:"services"`
+	// Vectorize bindings used for Pages Functions.
+	VectorizeBindings param.Field[ProjectDeploymentConfigsPreviewVectorizeBindingsParam] `json:"vectorize_bindings"`
+}
+
+func (r ProjectDeploymentConfigsPreviewParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Constellation bindings used for Pages Functions.
+type ProjectDeploymentConfigsPreviewAIBindingsParam struct {
+	// AI binding.
+	AIBinding param.Field[ProjectDeploymentConfigsPreviewAIBindingsAIBindingParam] `json:"AI_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsPreviewAIBindingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// AI binding.
+type ProjectDeploymentConfigsPreviewAIBindingsAIBindingParam struct {
+	ProjectID param.Field[interface{}] `json:"project_id"`
+}
+
+func (r ProjectDeploymentConfigsPreviewAIBindingsAIBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Analytics Engine bindings used for Pages Functions.
+type ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsParam struct {
+	// Analytics Engine binding.
+	AnalyticsEngineBinding param.Field[ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingParam] `json:"ANALYTICS_ENGINE_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Analytics Engine binding.
+type ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingParam struct {
+	// Name of the dataset.
+	Dataset param.Field[string] `json:"dataset"`
+}
+
+func (r ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Browser bindings used for Pages Functions.
+type ProjectDeploymentConfigsPreviewBrowsersParam struct {
+	// Browser binding.
+	Browser param.Field[interface{}] `json:"BROWSER"`
+}
+
+func (r ProjectDeploymentConfigsPreviewBrowsersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// D1 databases used for Pages Functions.
+type ProjectDeploymentConfigsPreviewD1DatabasesParam struct {
+	// D1 binding.
+	D1Binding param.Field[ProjectDeploymentConfigsPreviewD1DatabasesD1BindingParam] `json:"D1_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsPreviewD1DatabasesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// D1 binding.
+type ProjectDeploymentConfigsPreviewD1DatabasesD1BindingParam struct {
+	// UUID of the D1 database.
+	ID param.Field[string] `json:"id"`
+}
+
+func (r ProjectDeploymentConfigsPreviewD1DatabasesD1BindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Durabble Object namespaces used for Pages Functions.
+type ProjectDeploymentConfigsPreviewDurableObjectNamespacesParam struct {
+	// Durabble Object binding.
+	DoBinding param.Field[ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingParam] `json:"DO_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsPreviewDurableObjectNamespacesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Durabble Object binding.
+type ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingParam struct {
+	// ID of the Durabble Object namespace.
+	NamespaceID param.Field[string] `json:"namespace_id"`
+}
+
+func (r ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Environment variables for build configs.
+type ProjectDeploymentConfigsPreviewEnvVarsParam struct {
+	// Environment variable.
+	EnvironmentVariable param.Field[ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableParam] `json:"ENVIRONMENT_VARIABLE"`
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Environment variable.
+type ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableParam struct {
+	// The type of environment variable (plain text or secret)
+	Type param.Field[ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableType] `json:"type"`
+	// Environment variable value.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hyperdrive bindings used for Pages Functions.
+type ProjectDeploymentConfigsPreviewHyperdriveBindingsParam struct {
+	// Hyperdrive binding.
+	Hyperdrive param.Field[ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveParam] `json:"HYPERDRIVE"`
+}
+
+func (r ProjectDeploymentConfigsPreviewHyperdriveBindingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hyperdrive binding.
+type ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveParam struct {
+	ID param.Field[string] `json:"id"`
+}
+
+func (r ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// KV namespaces used for Pages Functions.
+type ProjectDeploymentConfigsPreviewKVNamespacesParam struct {
+	// KV binding.
+	KVBinding param.Field[ProjectDeploymentConfigsPreviewKVNamespacesKVBindingParam] `json:"KV_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsPreviewKVNamespacesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// KV binding.
+type ProjectDeploymentConfigsPreviewKVNamespacesKVBindingParam struct {
+	// ID of the KV namespace.
+	NamespaceID param.Field[string] `json:"namespace_id"`
+}
+
+func (r ProjectDeploymentConfigsPreviewKVNamespacesKVBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// mTLS bindings used for Pages Functions.
+type ProjectDeploymentConfigsPreviewMTLSCertificatesParam struct {
+	// mTLS binding.
+	MTLS param.Field[ProjectDeploymentConfigsPreviewMTLSCertificatesMTLSParam] `json:"MTLS"`
+}
+
+func (r ProjectDeploymentConfigsPreviewMTLSCertificatesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// mTLS binding.
+type ProjectDeploymentConfigsPreviewMTLSCertificatesMTLSParam struct {
+	CertificateID param.Field[string] `json:"certificate_id"`
+}
+
+func (r ProjectDeploymentConfigsPreviewMTLSCertificatesMTLSParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Placement setting used for Pages Functions.
+type ProjectDeploymentConfigsPreviewPlacementParam struct {
+	// Placement mode.
+	Mode param.Field[string] `json:"mode"`
+}
+
+func (r ProjectDeploymentConfigsPreviewPlacementParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Queue Producer bindings used for Pages Functions.
+type ProjectDeploymentConfigsPreviewQueueProducersParam struct {
+	// Queue Producer binding.
+	QueueProducerBinding param.Field[ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBindingParam] `json:"QUEUE_PRODUCER_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsPreviewQueueProducersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Queue Producer binding.
+type ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBindingParam struct {
+	// Name of the Queue.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// R2 buckets used for Pages Functions.
+type ProjectDeploymentConfigsPreviewR2BucketsParam struct {
+	// R2 binding.
+	R2Binding param.Field[ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam] `json:"R2_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsPreviewR2BucketsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// R2 binding.
+type ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam struct {
+	// Name of the R2 bucket.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Services used for Pages Functions.
+type ProjectDeploymentConfigsPreviewServicesParam struct {
+	// Service binding.
+	ServiceBinding param.Field[ProjectDeploymentConfigsPreviewServicesServiceBindingParam] `json:"SERVICE_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsPreviewServicesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Service binding.
+type ProjectDeploymentConfigsPreviewServicesServiceBindingParam struct {
+	// The entrypoint to bind to.
+	Entrypoint param.Field[string] `json:"entrypoint"`
+	// The Service environment.
+	Environment param.Field[string] `json:"environment"`
+	// The Service name.
+	Service param.Field[string] `json:"service"`
+}
+
+func (r ProjectDeploymentConfigsPreviewServicesServiceBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Vectorize bindings used for Pages Functions.
+type ProjectDeploymentConfigsPreviewVectorizeBindingsParam struct {
+	// Vectorize binding.
+	Vectorize param.Field[ProjectDeploymentConfigsPreviewVectorizeBindingsVectorizeParam] `json:"VECTORIZE"`
+}
+
+func (r ProjectDeploymentConfigsPreviewVectorizeBindingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Vectorize binding.
+type ProjectDeploymentConfigsPreviewVectorizeBindingsVectorizeParam struct {
+	IndexName param.Field[string] `json:"index_name"`
+}
+
+func (r ProjectDeploymentConfigsPreviewVectorizeBindingsVectorizeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configs for production deploys.
+type ProjectDeploymentConfigsProductionParam struct {
+	// Constellation bindings used for Pages Functions.
+	AIBindings param.Field[ProjectDeploymentConfigsProductionAIBindingsParam] `json:"ai_bindings"`
+	// Analytics Engine bindings used for Pages Functions.
+	AnalyticsEngineDatasets param.Field[ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsParam] `json:"analytics_engine_datasets"`
+	// Browser bindings used for Pages Functions.
+	Browsers param.Field[ProjectDeploymentConfigsProductionBrowsersParam] `json:"browsers"`
+	// Compatibility date used for Pages Functions.
+	CompatibilityDate param.Field[string] `json:"compatibility_date"`
+	// Compatibility flags used for Pages Functions.
+	CompatibilityFlags param.Field[[]interface{}] `json:"compatibility_flags"`
+	// D1 databases used for Pages Functions.
+	D1Databases param.Field[ProjectDeploymentConfigsProductionD1DatabasesParam] `json:"d1_databases"`
+	// Durabble Object namespaces used for Pages Functions.
+	DurableObjectNamespaces param.Field[ProjectDeploymentConfigsProductionDurableObjectNamespacesParam] `json:"durable_object_namespaces"`
+	// Environment variables for build configs.
+	EnvVars param.Field[ProjectDeploymentConfigsProductionEnvVarsParam] `json:"env_vars"`
+	// Hyperdrive bindings used for Pages Functions.
+	HyperdriveBindings param.Field[ProjectDeploymentConfigsProductionHyperdriveBindingsParam] `json:"hyperdrive_bindings"`
+	// KV namespaces used for Pages Functions.
+	KVNamespaces param.Field[ProjectDeploymentConfigsProductionKVNamespacesParam] `json:"kv_namespaces"`
+	// mTLS bindings used for Pages Functions.
+	MTLSCertificates param.Field[ProjectDeploymentConfigsProductionMTLSCertificatesParam] `json:"mtls_certificates"`
+	// Placement setting used for Pages Functions.
+	Placement param.Field[ProjectDeploymentConfigsProductionPlacementParam] `json:"placement"`
+	// Queue Producer bindings used for Pages Functions.
+	QueueProducers param.Field[ProjectDeploymentConfigsProductionQueueProducersParam] `json:"queue_producers"`
+	// R2 buckets used for Pages Functions.
+	R2Buckets param.Field[ProjectDeploymentConfigsProductionR2BucketsParam] `json:"r2_buckets"`
+	// Services used for Pages Functions.
+	Services param.Field[ProjectDeploymentConfigsProductionServicesParam] `json:"services"`
+	// Vectorize bindings used for Pages Functions.
+	VectorizeBindings param.Field[ProjectDeploymentConfigsProductionVectorizeBindingsParam] `json:"vectorize_bindings"`
+}
+
+func (r ProjectDeploymentConfigsProductionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Constellation bindings used for Pages Functions.
+type ProjectDeploymentConfigsProductionAIBindingsParam struct {
+	// AI binding.
+	AIBinding param.Field[ProjectDeploymentConfigsProductionAIBindingsAIBindingParam] `json:"AI_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsProductionAIBindingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// AI binding.
+type ProjectDeploymentConfigsProductionAIBindingsAIBindingParam struct {
+	ProjectID param.Field[interface{}] `json:"project_id"`
+}
+
+func (r ProjectDeploymentConfigsProductionAIBindingsAIBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Analytics Engine bindings used for Pages Functions.
+type ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsParam struct {
+	// Analytics Engine binding.
+	AnalyticsEngineBinding param.Field[ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingParam] `json:"ANALYTICS_ENGINE_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Analytics Engine binding.
+type ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingParam struct {
+	// Name of the dataset.
+	Dataset param.Field[string] `json:"dataset"`
+}
+
+func (r ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Browser bindings used for Pages Functions.
+type ProjectDeploymentConfigsProductionBrowsersParam struct {
+	// Browser binding.
+	Browser param.Field[interface{}] `json:"BROWSER"`
+}
+
+func (r ProjectDeploymentConfigsProductionBrowsersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// D1 databases used for Pages Functions.
+type ProjectDeploymentConfigsProductionD1DatabasesParam struct {
+	// D1 binding.
+	D1Binding param.Field[ProjectDeploymentConfigsProductionD1DatabasesD1BindingParam] `json:"D1_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsProductionD1DatabasesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// D1 binding.
+type ProjectDeploymentConfigsProductionD1DatabasesD1BindingParam struct {
+	// UUID of the D1 database.
+	ID param.Field[string] `json:"id"`
+}
+
+func (r ProjectDeploymentConfigsProductionD1DatabasesD1BindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Durabble Object namespaces used for Pages Functions.
+type ProjectDeploymentConfigsProductionDurableObjectNamespacesParam struct {
+	// Durabble Object binding.
+	DoBinding param.Field[ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBindingParam] `json:"DO_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsProductionDurableObjectNamespacesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Durabble Object binding.
+type ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBindingParam struct {
+	// ID of the Durabble Object namespace.
+	NamespaceID param.Field[string] `json:"namespace_id"`
+}
+
+func (r ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Environment variables for build configs.
+type ProjectDeploymentConfigsProductionEnvVarsParam struct {
+	// Environment variable.
+	EnvironmentVariable param.Field[ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableParam] `json:"ENVIRONMENT_VARIABLE"`
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Environment variable.
+type ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableParam struct {
+	// The type of environment variable (plain text or secret)
+	Type param.Field[ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableType] `json:"type"`
+	// Environment variable value.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hyperdrive bindings used for Pages Functions.
+type ProjectDeploymentConfigsProductionHyperdriveBindingsParam struct {
+	// Hyperdrive binding.
+	Hyperdrive param.Field[ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdriveParam] `json:"HYPERDRIVE"`
+}
+
+func (r ProjectDeploymentConfigsProductionHyperdriveBindingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hyperdrive binding.
+type ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdriveParam struct {
+	ID param.Field[string] `json:"id"`
+}
+
+func (r ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdriveParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// KV namespaces used for Pages Functions.
+type ProjectDeploymentConfigsProductionKVNamespacesParam struct {
+	// KV binding.
+	KVBinding param.Field[ProjectDeploymentConfigsProductionKVNamespacesKVBindingParam] `json:"KV_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsProductionKVNamespacesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// KV binding.
+type ProjectDeploymentConfigsProductionKVNamespacesKVBindingParam struct {
+	// ID of the KV namespace.
+	NamespaceID param.Field[string] `json:"namespace_id"`
+}
+
+func (r ProjectDeploymentConfigsProductionKVNamespacesKVBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// mTLS bindings used for Pages Functions.
+type ProjectDeploymentConfigsProductionMTLSCertificatesParam struct {
+	// mTLS binding.
+	MTLS param.Field[ProjectDeploymentConfigsProductionMTLSCertificatesMTLSParam] `json:"MTLS"`
+}
+
+func (r ProjectDeploymentConfigsProductionMTLSCertificatesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// mTLS binding.
+type ProjectDeploymentConfigsProductionMTLSCertificatesMTLSParam struct {
+	CertificateID param.Field[string] `json:"certificate_id"`
+}
+
+func (r ProjectDeploymentConfigsProductionMTLSCertificatesMTLSParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Placement setting used for Pages Functions.
+type ProjectDeploymentConfigsProductionPlacementParam struct {
+	// Placement mode.
+	Mode param.Field[string] `json:"mode"`
+}
+
+func (r ProjectDeploymentConfigsProductionPlacementParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Queue Producer bindings used for Pages Functions.
+type ProjectDeploymentConfigsProductionQueueProducersParam struct {
+	// Queue Producer binding.
+	QueueProducerBinding param.Field[ProjectDeploymentConfigsProductionQueueProducersQueueProducerBindingParam] `json:"QUEUE_PRODUCER_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsProductionQueueProducersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Queue Producer binding.
+type ProjectDeploymentConfigsProductionQueueProducersQueueProducerBindingParam struct {
+	// Name of the Queue.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r ProjectDeploymentConfigsProductionQueueProducersQueueProducerBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// R2 buckets used for Pages Functions.
+type ProjectDeploymentConfigsProductionR2BucketsParam struct {
+	// R2 binding.
+	R2Binding param.Field[ProjectDeploymentConfigsProductionR2BucketsR2BindingParam] `json:"R2_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsProductionR2BucketsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// R2 binding.
+type ProjectDeploymentConfigsProductionR2BucketsR2BindingParam struct {
+	// Name of the R2 bucket.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r ProjectDeploymentConfigsProductionR2BucketsR2BindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Services used for Pages Functions.
+type ProjectDeploymentConfigsProductionServicesParam struct {
+	// Service binding.
+	ServiceBinding param.Field[ProjectDeploymentConfigsProductionServicesServiceBindingParam] `json:"SERVICE_BINDING"`
+}
+
+func (r ProjectDeploymentConfigsProductionServicesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Service binding.
+type ProjectDeploymentConfigsProductionServicesServiceBindingParam struct {
+	// The entrypoint to bind to.
+	Entrypoint param.Field[string] `json:"entrypoint"`
+	// The Service environment.
+	Environment param.Field[string] `json:"environment"`
+	// The Service name.
+	Service param.Field[string] `json:"service"`
+}
+
+func (r ProjectDeploymentConfigsProductionServicesServiceBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Vectorize bindings used for Pages Functions.
+type ProjectDeploymentConfigsProductionVectorizeBindingsParam struct {
+	// Vectorize binding.
+	Vectorize param.Field[ProjectDeploymentConfigsProductionVectorizeBindingsVectorizeParam] `json:"VECTORIZE"`
+}
+
+func (r ProjectDeploymentConfigsProductionVectorizeBindingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Vectorize binding.
+type ProjectDeploymentConfigsProductionVectorizeBindingsVectorizeParam struct {
+	IndexName param.Field[string] `json:"index_name"`
+}
+
+func (r ProjectDeploymentConfigsProductionVectorizeBindingsVectorizeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // The status of the deployment.
 type Stage struct {
 	// When the stage ended.
@@ -1861,688 +2514,11 @@ type ProjectPurgeBuildCacheResponse = interface{}
 type ProjectNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Configs for the project build process.
-	BuildConfig         param.Field[ProjectNewParamsBuildConfig] `json:"build_config"`
-	CanonicalDeployment param.Field[DeploymentParam]             `json:"canonical_deployment"`
-	// Configs for deployments in a project.
-	DeploymentConfigs param.Field[ProjectNewParamsDeploymentConfigs] `json:"deployment_configs"`
-	LatestDeployment  param.Field[DeploymentParam]                   `json:"latest_deployment"`
-	// Name of the project.
-	Name param.Field[string] `json:"name"`
-	// Production branch of the project. Used to identify production deployments.
-	ProductionBranch param.Field[string] `json:"production_branch"`
+	Project   ProjectParam        `json:"project,required"`
 }
 
 func (r ProjectNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configs for the project build process.
-type ProjectNewParamsBuildConfig struct {
-	// Enable build caching for the project.
-	BuildCaching param.Field[bool] `json:"build_caching"`
-	// Command used to build project.
-	BuildCommand param.Field[string] `json:"build_command"`
-	// Output directory of the build.
-	DestinationDir param.Field[string] `json:"destination_dir"`
-	// Directory to run the command.
-	RootDir param.Field[string] `json:"root_dir"`
-	// The classifying tag for analytics.
-	WebAnalyticsTag param.Field[string] `json:"web_analytics_tag"`
-	// The auth token for analytics.
-	WebAnalyticsToken param.Field[string] `json:"web_analytics_token"`
-}
-
-func (r ProjectNewParamsBuildConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configs for deployments in a project.
-type ProjectNewParamsDeploymentConfigs struct {
-	// Configs for preview deploys.
-	Preview param.Field[ProjectNewParamsDeploymentConfigsPreview] `json:"preview"`
-	// Configs for production deploys.
-	Production param.Field[ProjectNewParamsDeploymentConfigsProduction] `json:"production"`
-}
-
-func (r ProjectNewParamsDeploymentConfigs) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configs for preview deploys.
-type ProjectNewParamsDeploymentConfigsPreview struct {
-	// Constellation bindings used for Pages Functions.
-	AIBindings param.Field[ProjectNewParamsDeploymentConfigsPreviewAIBindings] `json:"ai_bindings"`
-	// Analytics Engine bindings used for Pages Functions.
-	AnalyticsEngineDatasets param.Field[ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasets] `json:"analytics_engine_datasets"`
-	// Browser bindings used for Pages Functions.
-	Browsers param.Field[ProjectNewParamsDeploymentConfigsPreviewBrowsers] `json:"browsers"`
-	// Compatibility date used for Pages Functions.
-	CompatibilityDate param.Field[string] `json:"compatibility_date"`
-	// Compatibility flags used for Pages Functions.
-	CompatibilityFlags param.Field[[]interface{}] `json:"compatibility_flags"`
-	// D1 databases used for Pages Functions.
-	D1Databases param.Field[ProjectNewParamsDeploymentConfigsPreviewD1Databases] `json:"d1_databases"`
-	// Durabble Object namespaces used for Pages Functions.
-	DurableObjectNamespaces param.Field[ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespaces] `json:"durable_object_namespaces"`
-	// Environment variables for build configs.
-	EnvVars param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVars] `json:"env_vars"`
-	// Hyperdrive bindings used for Pages Functions.
-	HyperdriveBindings param.Field[ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings] `json:"hyperdrive_bindings"`
-	// KV namespaces used for Pages Functions.
-	KVNamespaces param.Field[ProjectNewParamsDeploymentConfigsPreviewKVNamespaces] `json:"kv_namespaces"`
-	// mTLS bindings used for Pages Functions.
-	MTLSCertificates param.Field[ProjectNewParamsDeploymentConfigsPreviewMTLSCertificates] `json:"mtls_certificates"`
-	// Placement setting used for Pages Functions.
-	Placement param.Field[ProjectNewParamsDeploymentConfigsPreviewPlacement] `json:"placement"`
-	// Queue Producer bindings used for Pages Functions.
-	QueueProducers param.Field[ProjectNewParamsDeploymentConfigsPreviewQueueProducers] `json:"queue_producers"`
-	// R2 buckets used for Pages Functions.
-	R2Buckets param.Field[ProjectNewParamsDeploymentConfigsPreviewR2Buckets] `json:"r2_buckets"`
-	// Services used for Pages Functions.
-	Services param.Field[ProjectNewParamsDeploymentConfigsPreviewServices] `json:"services"`
-	// Vectorize bindings used for Pages Functions.
-	VectorizeBindings param.Field[ProjectNewParamsDeploymentConfigsPreviewVectorizeBindings] `json:"vectorize_bindings"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreview) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Constellation bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewAIBindings struct {
-	// AI binding.
-	AIBinding param.Field[ProjectNewParamsDeploymentConfigsPreviewAIBindingsAIBinding] `json:"AI_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewAIBindings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// AI binding.
-type ProjectNewParamsDeploymentConfigsPreviewAIBindingsAIBinding struct {
-	ProjectID param.Field[interface{}] `json:"project_id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewAIBindingsAIBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Analytics Engine bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasets struct {
-	// Analytics Engine binding.
-	AnalyticsEngineBinding param.Field[ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding] `json:"ANALYTICS_ENGINE_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasets) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Analytics Engine binding.
-type ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
-	// Name of the dataset.
-	Dataset param.Field[string] `json:"dataset"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Browser bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewBrowsers struct {
-	// Browser binding.
-	Browser param.Field[interface{}] `json:"BROWSER"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewBrowsers) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// D1 databases used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewD1Databases struct {
-	// D1 binding.
-	D1Binding param.Field[ProjectNewParamsDeploymentConfigsPreviewD1DatabasesD1Binding] `json:"D1_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewD1Databases) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// D1 binding.
-type ProjectNewParamsDeploymentConfigsPreviewD1DatabasesD1Binding struct {
-	// UUID of the D1 database.
-	ID param.Field[string] `json:"id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewD1DatabasesD1Binding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Durabble Object namespaces used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespaces struct {
-	// Durabble Object binding.
-	DoBinding param.Field[ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespacesDoBinding] `json:"DO_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespaces) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Durabble Object binding.
-type ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespacesDoBinding struct {
-	// ID of the Durabble Object namespace.
-	NamespaceID param.Field[string] `json:"namespace_id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespacesDoBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Environment variables for build configs.
-type ProjectNewParamsDeploymentConfigsPreviewEnvVars struct {
-	// Environment variable.
-	EnvironmentVariable param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariable] `json:"ENVIRONMENT_VARIABLE"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewEnvVars) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Environment variable.
-type ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariable struct {
-	// The type of environment variable (plain text or secret)
-	Type param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType] `json:"type"`
-	// Environment variable value.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariable) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of environment variable (plain text or secret)
-type ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType string
-
-const (
-	ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText  ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "plain_text"
-	ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "secret_text"
-)
-
-func (r ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType) IsKnown() bool {
-	switch r {
-	case ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText, ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText:
-		return true
-	}
-	return false
-}
-
-// Hyperdrive bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings struct {
-	// Hyperdrive binding.
-	Hyperdrive param.Field[ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindingsHyperdrive] `json:"HYPERDRIVE"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Hyperdrive binding.
-type ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindingsHyperdrive struct {
-	ID param.Field[string] `json:"id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindingsHyperdrive) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// KV namespaces used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewKVNamespaces struct {
-	// KV binding.
-	KVBinding param.Field[ProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding] `json:"KV_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewKVNamespaces) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// KV binding.
-type ProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding struct {
-	// ID of the KV namespace.
-	NamespaceID param.Field[string] `json:"namespace_id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// mTLS bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewMTLSCertificates struct {
-	// mTLS binding.
-	MTLS param.Field[ProjectNewParamsDeploymentConfigsPreviewMTLSCertificatesMTLS] `json:"MTLS"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewMTLSCertificates) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// mTLS binding.
-type ProjectNewParamsDeploymentConfigsPreviewMTLSCertificatesMTLS struct {
-	CertificateID param.Field[string] `json:"certificate_id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewMTLSCertificatesMTLS) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Placement setting used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewPlacement struct {
-	// Placement mode.
-	Mode param.Field[string] `json:"mode"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewPlacement) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Queue Producer bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewQueueProducers struct {
-	// Queue Producer binding.
-	QueueProducerBinding param.Field[ProjectNewParamsDeploymentConfigsPreviewQueueProducersQueueProducerBinding] `json:"QUEUE_PRODUCER_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewQueueProducers) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Queue Producer binding.
-type ProjectNewParamsDeploymentConfigsPreviewQueueProducersQueueProducerBinding struct {
-	// Name of the Queue.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewQueueProducersQueueProducerBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// R2 buckets used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewR2Buckets struct {
-	// R2 binding.
-	R2Binding param.Field[ProjectNewParamsDeploymentConfigsPreviewR2BucketsR2Binding] `json:"R2_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewR2Buckets) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// R2 binding.
-type ProjectNewParamsDeploymentConfigsPreviewR2BucketsR2Binding struct {
-	// Name of the R2 bucket.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewR2BucketsR2Binding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Services used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewServices struct {
-	// Service binding.
-	ServiceBinding param.Field[ProjectNewParamsDeploymentConfigsPreviewServicesServiceBinding] `json:"SERVICE_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewServices) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Service binding.
-type ProjectNewParamsDeploymentConfigsPreviewServicesServiceBinding struct {
-	// The entrypoint to bind to.
-	Entrypoint param.Field[string] `json:"entrypoint"`
-	// The Service environment.
-	Environment param.Field[string] `json:"environment"`
-	// The Service name.
-	Service param.Field[string] `json:"service"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewServicesServiceBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Vectorize bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsPreviewVectorizeBindings struct {
-	// Vectorize binding.
-	Vectorize param.Field[ProjectNewParamsDeploymentConfigsPreviewVectorizeBindingsVectorize] `json:"VECTORIZE"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewVectorizeBindings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Vectorize binding.
-type ProjectNewParamsDeploymentConfigsPreviewVectorizeBindingsVectorize struct {
-	IndexName param.Field[string] `json:"index_name"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsPreviewVectorizeBindingsVectorize) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configs for production deploys.
-type ProjectNewParamsDeploymentConfigsProduction struct {
-	// Constellation bindings used for Pages Functions.
-	AIBindings param.Field[ProjectNewParamsDeploymentConfigsProductionAIBindings] `json:"ai_bindings"`
-	// Analytics Engine bindings used for Pages Functions.
-	AnalyticsEngineDatasets param.Field[ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasets] `json:"analytics_engine_datasets"`
-	// Browser bindings used for Pages Functions.
-	Browsers param.Field[ProjectNewParamsDeploymentConfigsProductionBrowsers] `json:"browsers"`
-	// Compatibility date used for Pages Functions.
-	CompatibilityDate param.Field[string] `json:"compatibility_date"`
-	// Compatibility flags used for Pages Functions.
-	CompatibilityFlags param.Field[[]interface{}] `json:"compatibility_flags"`
-	// D1 databases used for Pages Functions.
-	D1Databases param.Field[ProjectNewParamsDeploymentConfigsProductionD1Databases] `json:"d1_databases"`
-	// Durabble Object namespaces used for Pages Functions.
-	DurableObjectNamespaces param.Field[ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespaces] `json:"durable_object_namespaces"`
-	// Environment variables for build configs.
-	EnvVars param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVars] `json:"env_vars"`
-	// Hyperdrive bindings used for Pages Functions.
-	HyperdriveBindings param.Field[ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings] `json:"hyperdrive_bindings"`
-	// KV namespaces used for Pages Functions.
-	KVNamespaces param.Field[ProjectNewParamsDeploymentConfigsProductionKVNamespaces] `json:"kv_namespaces"`
-	// mTLS bindings used for Pages Functions.
-	MTLSCertificates param.Field[ProjectNewParamsDeploymentConfigsProductionMTLSCertificates] `json:"mtls_certificates"`
-	// Placement setting used for Pages Functions.
-	Placement param.Field[ProjectNewParamsDeploymentConfigsProductionPlacement] `json:"placement"`
-	// Queue Producer bindings used for Pages Functions.
-	QueueProducers param.Field[ProjectNewParamsDeploymentConfigsProductionQueueProducers] `json:"queue_producers"`
-	// R2 buckets used for Pages Functions.
-	R2Buckets param.Field[ProjectNewParamsDeploymentConfigsProductionR2Buckets] `json:"r2_buckets"`
-	// Services used for Pages Functions.
-	Services param.Field[ProjectNewParamsDeploymentConfigsProductionServices] `json:"services"`
-	// Vectorize bindings used for Pages Functions.
-	VectorizeBindings param.Field[ProjectNewParamsDeploymentConfigsProductionVectorizeBindings] `json:"vectorize_bindings"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProduction) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Constellation bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionAIBindings struct {
-	// AI binding.
-	AIBinding param.Field[ProjectNewParamsDeploymentConfigsProductionAIBindingsAIBinding] `json:"AI_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionAIBindings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// AI binding.
-type ProjectNewParamsDeploymentConfigsProductionAIBindingsAIBinding struct {
-	ProjectID param.Field[interface{}] `json:"project_id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionAIBindingsAIBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Analytics Engine bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasets struct {
-	// Analytics Engine binding.
-	AnalyticsEngineBinding param.Field[ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding] `json:"ANALYTICS_ENGINE_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasets) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Analytics Engine binding.
-type ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
-	// Name of the dataset.
-	Dataset param.Field[string] `json:"dataset"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Browser bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionBrowsers struct {
-	// Browser binding.
-	Browser param.Field[interface{}] `json:"BROWSER"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionBrowsers) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// D1 databases used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionD1Databases struct {
-	// D1 binding.
-	D1Binding param.Field[ProjectNewParamsDeploymentConfigsProductionD1DatabasesD1Binding] `json:"D1_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionD1Databases) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// D1 binding.
-type ProjectNewParamsDeploymentConfigsProductionD1DatabasesD1Binding struct {
-	// UUID of the D1 database.
-	ID param.Field[string] `json:"id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionD1DatabasesD1Binding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Durabble Object namespaces used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespaces struct {
-	// Durabble Object binding.
-	DoBinding param.Field[ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespacesDoBinding] `json:"DO_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespaces) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Durabble Object binding.
-type ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespacesDoBinding struct {
-	// ID of the Durabble Object namespace.
-	NamespaceID param.Field[string] `json:"namespace_id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespacesDoBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Environment variables for build configs.
-type ProjectNewParamsDeploymentConfigsProductionEnvVars struct {
-	// Environment variable.
-	EnvironmentVariable param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariable] `json:"ENVIRONMENT_VARIABLE"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionEnvVars) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Environment variable.
-type ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariable struct {
-	// The type of environment variable (plain text or secret)
-	Type param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableType] `json:"type"`
-	// Environment variable value.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariable) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of environment variable (plain text or secret)
-type ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableType string
-
-const (
-	ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText  ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "plain_text"
-	ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "secret_text"
-)
-
-func (r ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableType) IsKnown() bool {
-	switch r {
-	case ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText, ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText:
-		return true
-	}
-	return false
-}
-
-// Hyperdrive bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings struct {
-	// Hyperdrive binding.
-	Hyperdrive param.Field[ProjectNewParamsDeploymentConfigsProductionHyperdriveBindingsHyperdrive] `json:"HYPERDRIVE"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Hyperdrive binding.
-type ProjectNewParamsDeploymentConfigsProductionHyperdriveBindingsHyperdrive struct {
-	ID param.Field[string] `json:"id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionHyperdriveBindingsHyperdrive) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// KV namespaces used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionKVNamespaces struct {
-	// KV binding.
-	KVBinding param.Field[ProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding] `json:"KV_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionKVNamespaces) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// KV binding.
-type ProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding struct {
-	// ID of the KV namespace.
-	NamespaceID param.Field[string] `json:"namespace_id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// mTLS bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionMTLSCertificates struct {
-	// mTLS binding.
-	MTLS param.Field[ProjectNewParamsDeploymentConfigsProductionMTLSCertificatesMTLS] `json:"MTLS"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionMTLSCertificates) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// mTLS binding.
-type ProjectNewParamsDeploymentConfigsProductionMTLSCertificatesMTLS struct {
-	CertificateID param.Field[string] `json:"certificate_id"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionMTLSCertificatesMTLS) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Placement setting used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionPlacement struct {
-	// Placement mode.
-	Mode param.Field[string] `json:"mode"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionPlacement) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Queue Producer bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionQueueProducers struct {
-	// Queue Producer binding.
-	QueueProducerBinding param.Field[ProjectNewParamsDeploymentConfigsProductionQueueProducersQueueProducerBinding] `json:"QUEUE_PRODUCER_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionQueueProducers) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Queue Producer binding.
-type ProjectNewParamsDeploymentConfigsProductionQueueProducersQueueProducerBinding struct {
-	// Name of the Queue.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionQueueProducersQueueProducerBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// R2 buckets used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionR2Buckets struct {
-	// R2 binding.
-	R2Binding param.Field[ProjectNewParamsDeploymentConfigsProductionR2BucketsR2Binding] `json:"R2_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionR2Buckets) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// R2 binding.
-type ProjectNewParamsDeploymentConfigsProductionR2BucketsR2Binding struct {
-	// Name of the R2 bucket.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionR2BucketsR2Binding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Services used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionServices struct {
-	// Service binding.
-	ServiceBinding param.Field[ProjectNewParamsDeploymentConfigsProductionServicesServiceBinding] `json:"SERVICE_BINDING"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionServices) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Service binding.
-type ProjectNewParamsDeploymentConfigsProductionServicesServiceBinding struct {
-	// The entrypoint to bind to.
-	Entrypoint param.Field[string] `json:"entrypoint"`
-	// The Service environment.
-	Environment param.Field[string] `json:"environment"`
-	// The Service name.
-	Service param.Field[string] `json:"service"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionServicesServiceBinding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Vectorize bindings used for Pages Functions.
-type ProjectNewParamsDeploymentConfigsProductionVectorizeBindings struct {
-	// Vectorize binding.
-	Vectorize param.Field[ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize] `json:"VECTORIZE"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionVectorizeBindings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Vectorize binding.
-type ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize struct {
-	IndexName param.Field[string] `json:"index_name"`
-}
-
-func (r ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Project)
 }
 
 type ProjectNewResponseEnvelope struct {
@@ -2595,8 +2571,8 @@ type ProjectListParams struct {
 
 type ProjectDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -2605,8 +2581,8 @@ func (r ProjectDeleteParams) MarshalJSON() (data []byte, err error) {
 
 type ProjectEditParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectEditParams) MarshalJSON() (data []byte, err error) {

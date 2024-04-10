@@ -78,6 +78,15 @@ func (r dnsSettingJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSettingParam struct {
+	// Settings determining the nameservers through which the zone should be available.
+	Nameservers param.Field[NameserverParam] `json:"nameservers"`
+}
+
+func (r DNSSettingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Settings determining the nameservers through which the zone should be available.
 type Nameserver struct {
 	// Nameserver type
@@ -128,13 +137,12 @@ func (r NameserverParam) MarshalJSON() (data []byte, err error) {
 
 type DNSSettingEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Settings determining the nameservers through which the zone should be available.
-	Nameservers param.Field[NameserverParam] `json:"nameservers"`
+	ZoneID     param.Field[string] `path:"zone_id,required"`
+	DNSSetting DNSSettingParam     `json:"dns_setting,required"`
 }
 
 func (r DNSSettingEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.DNSSetting)
 }
 
 type DNSSettingEditResponseEnvelope struct {

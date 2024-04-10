@@ -30,7 +30,7 @@ func TestACLNew(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.ACLs.New(context.TODO(), secondary_dns.ACLNewParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		Body:      cloudflare.F[any](map[string]interface{}{}),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -60,8 +60,10 @@ func TestACLUpdate(t *testing.T) {
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.ACLUpdateParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			IPRange:   cloudflare.F("192.0.2.53/28"),
-			Name:      cloudflare.F("my-acl-1"),
+			ACL: secondary_dns.ACLParam{
+				IPRange: cloudflare.F("192.0.2.53/28"),
+				Name:    cloudflare.F("my-acl-1"),
+			},
 		},
 	)
 	if err != nil {
@@ -118,7 +120,7 @@ func TestACLDelete(t *testing.T) {
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.ACLDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

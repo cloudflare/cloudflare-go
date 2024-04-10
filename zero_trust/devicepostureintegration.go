@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // DevicePostureIntegrationService contains methods and other services that help
@@ -70,7 +72,7 @@ func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, qu
 }
 
 // Delete a configured device posture integration.
-func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, params DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, params DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", params.AccountID, integrationID)
@@ -190,6 +192,23 @@ func (r IntegrationType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [zero_trust.DevicePostureIntegrationDeleteResponseUnknown] or
+// [shared.UnionString].
+type DevicePostureIntegrationDeleteResponseUnion interface {
+	ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DevicePostureIntegrationDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type DevicePostureIntegrationNewParams struct {
@@ -440,8 +459,8 @@ type DevicePostureIntegrationListParams struct {
 }
 
 type DevicePostureIntegrationDeleteParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r DevicePostureIntegrationDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -449,9 +468,9 @@ func (r DevicePostureIntegrationDeleteParams) MarshalJSON() (data []byte, err er
 }
 
 type DevicePostureIntegrationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo                       `json:"errors,required"`
+	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Result   DevicePostureIntegrationDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationDeleteResponseEnvelopeJSON    `json:"-"`

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // IndexService contains methods and other services that help with interacting with
@@ -82,7 +84,7 @@ func (r *IndexService) ListAutoPaging(ctx context.Context, accountIdentifier str
 }
 
 // Deletes the specified Vectorize Index.
-func (r *IndexService) Delete(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *IndexService) Delete(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *IndexDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s", accountIdentifier, indexName)
@@ -386,6 +388,23 @@ func (r indexUpsertJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [vectorize.IndexDeleteResponseUnknown] or
+// [shared.UnionString].
+type IndexDeleteResponseUnion interface {
+	ImplementsVectorizeIndexDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*IndexDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type IndexGetByIDsResponse = interface{}
 
 type IndexNewParams struct {
@@ -587,9 +606,9 @@ func (r IndexUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IndexDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   IndexDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`
@@ -778,7 +797,7 @@ func (r IndexGetByIDsResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IndexInsertParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r IndexInsertParams) MarshalJSON() (data []byte, err error) {
@@ -887,7 +906,7 @@ func (r IndexQueryResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IndexUpsertParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r IndexUpsertParams) MarshalJSON() (data []byte, err error) {

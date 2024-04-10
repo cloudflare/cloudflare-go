@@ -33,9 +33,9 @@ func TestProjectDomainNew(t *testing.T) {
 		"this-is-my-project-01",
 		pages.ProjectDomainNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F[any](map[string]interface{}{
+			Body: map[string]interface{}{
 				"name": "example.com",
-			}),
+			},
 		},
 	)
 	if err != nil {
@@ -97,7 +97,7 @@ func TestProjectDomainDelete(t *testing.T) {
 		"this-is-my-domain-01.com",
 		pages.ProjectDomainDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -129,7 +129,7 @@ func TestProjectDomainEdit(t *testing.T) {
 		"this-is-my-domain-01.com",
 		pages.ProjectDomainEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

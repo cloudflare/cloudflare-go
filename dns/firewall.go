@@ -211,6 +211,35 @@ func (r firewallJSON) RawJSON() string {
 	return r.raw
 }
 
+type FirewallParam struct {
+	// Deprecate the response to ANY requests.
+	DeprecateAnyRequests param.Field[bool]                    `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
+	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
+	EcsFallback param.Field[bool] `json:"ecs_fallback,required"`
+	// Maximum DNS Cache TTL.
+	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl,required"`
+	// Minimum DNS Cache TTL.
+	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
+	// DNS Firewall Cluster Name.
+	Name        param.Field[string]                  `json:"name,required"`
+	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
+	// Attack mitigation settings.
+	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
+	// Negative DNS Cache TTL.
+	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
+	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
+	// the upstream nameservers configured on the cluster).
+	Ratelimit param.Field[float64] `json:"ratelimit"`
+	// Number of retries for fetching DNS responses from upstream nameservers (not
+	// counting the initial attempt).
+	Retries param.Field[float64] `json:"retries"`
+}
+
+func (r FirewallParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Cloudflare-assigned DNS IPv4 Address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
@@ -383,8 +412,8 @@ func (r FirewallListParams) URLQuery() (v url.Values) {
 
 type FirewallDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r FirewallDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -437,32 +466,11 @@ func (r FirewallDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type FirewallEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests param.Field[bool]                    `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
-	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback param.Field[bool] `json:"ecs_fallback,required"`
-	// Maximum DNS Cache TTL.
-	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl,required"`
-	// Minimum DNS Cache TTL.
-	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
-	// DNS Firewall Cluster Name.
-	Name        param.Field[string]                  `json:"name,required"`
-	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
-	// Attack mitigation settings.
-	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
-	// Negative DNS Cache TTL.
-	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster).
-	Ratelimit param.Field[float64] `json:"ratelimit"`
-	// Number of retries for fetching DNS responses from upstream nameservers (not
-	// counting the initial attempt).
-	Retries param.Field[float64] `json:"retries"`
+	Firewall  FirewallParam       `json:"firewall,required"`
 }
 
 func (r FirewallEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Firewall)
 }
 
 type FirewallEditResponseEnvelope struct {

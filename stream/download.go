@@ -34,7 +34,7 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 }
 
 // Creates a download for a video when a video is ready to view.
-func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", params.AccountID, identifier)
@@ -60,7 +60,7 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 }
 
 // Lists the downloads created for a video.
-func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", query.AccountID, identifier)
@@ -70,6 +70,22 @@ func (r *DownloadService) Get(ctx context.Context, identifier string, query Down
 	}
 	res = &env.Result
 	return
+}
+
+// Union satisfied by [stream.DownloadNewResponseUnknown] or [shared.UnionString].
+type DownloadNewResponseUnion interface {
+	ImplementsStreamDownloadNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DownloadNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 // Union satisfied by [stream.DownloadDeleteResponseUnknown] or
@@ -89,10 +105,26 @@ func init() {
 	)
 }
 
+// Union satisfied by [stream.DownloadGetResponseUnknown] or [shared.UnionString].
+type DownloadGetResponseUnion interface {
+	ImplementsStreamDownloadGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DownloadGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type DownloadNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
@@ -100,9 +132,9 @@ func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DownloadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   DownloadNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DownloadNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    downloadNewResponseEnvelopeJSON    `json:"-"`
@@ -196,9 +228,9 @@ type DownloadGetParams struct {
 }
 
 type DownloadGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   DownloadGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DownloadGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    downloadGetResponseEnvelopeJSON    `json:"-"`

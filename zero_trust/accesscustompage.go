@@ -162,6 +162,21 @@ func (r CustomPageType) IsKnown() bool {
 	return false
 }
 
+type CustomPageParam struct {
+	// Custom page HTML.
+	CustomHTML param.Field[string] `json:"custom_html,required"`
+	// Custom page name.
+	Name param.Field[string] `json:"name,required"`
+	// Custom page type.
+	Type param.Field[CustomPageType] `json:"type,required"`
+	// Number of apps the custom page is assigned to.
+	AppCount param.Field[int64] `json:"app_count"`
+}
+
+func (r CustomPageParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type CustomPageWithoutHTML struct {
 	// Custom page name.
 	Name string `json:"name,required"`
@@ -236,34 +251,11 @@ func (r accessCustomPageDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessCustomPageNewParams struct {
-	// Custom page HTML.
-	CustomHTML param.Field[string] `json:"custom_html,required"`
-	// Custom page name.
-	Name param.Field[string] `json:"name,required"`
-	// Custom page type.
-	Type param.Field[AccessCustomPageNewParamsType] `json:"type,required"`
-	// Number of apps the custom page is assigned to.
-	AppCount param.Field[int64] `json:"app_count"`
+	CustomPage CustomPageParam `json:"custom_page,required"`
 }
 
 func (r AccessCustomPageNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Custom page type.
-type AccessCustomPageNewParamsType string
-
-const (
-	AccessCustomPageNewParamsTypeIdentityDenied AccessCustomPageNewParamsType = "identity_denied"
-	AccessCustomPageNewParamsTypeForbidden      AccessCustomPageNewParamsType = "forbidden"
-)
-
-func (r AccessCustomPageNewParamsType) IsKnown() bool {
-	switch r {
-	case AccessCustomPageNewParamsTypeIdentityDenied, AccessCustomPageNewParamsTypeForbidden:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.CustomPage)
 }
 
 type AccessCustomPageNewResponseEnvelope struct {
@@ -310,34 +302,11 @@ func (r AccessCustomPageNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageUpdateParams struct {
-	// Custom page HTML.
-	CustomHTML param.Field[string] `json:"custom_html,required"`
-	// Custom page name.
-	Name param.Field[string] `json:"name,required"`
-	// Custom page type.
-	Type param.Field[AccessCustomPageUpdateParamsType] `json:"type,required"`
-	// Number of apps the custom page is assigned to.
-	AppCount param.Field[int64] `json:"app_count"`
+	CustomPage CustomPageParam `json:"custom_page,required"`
 }
 
 func (r AccessCustomPageUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Custom page type.
-type AccessCustomPageUpdateParamsType string
-
-const (
-	AccessCustomPageUpdateParamsTypeIdentityDenied AccessCustomPageUpdateParamsType = "identity_denied"
-	AccessCustomPageUpdateParamsTypeForbidden      AccessCustomPageUpdateParamsType = "forbidden"
-)
-
-func (r AccessCustomPageUpdateParamsType) IsKnown() bool {
-	switch r {
-	case AccessCustomPageUpdateParamsTypeIdentityDenied, AccessCustomPageUpdateParamsTypeForbidden:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.CustomPage)
 }
 
 type AccessCustomPageUpdateResponseEnvelope struct {

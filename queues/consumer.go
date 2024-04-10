@@ -254,8 +254,8 @@ func (r consumerGetResponseJSON) RawJSON() string {
 
 type ConsumerNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {
@@ -350,8 +350,8 @@ func (r consumerNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type ConsumerUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -446,8 +446,8 @@ func (r consumerUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type ConsumerDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConsumerDeleteParams) MarshalJSON() (data []byte, err error) {

@@ -64,6 +64,18 @@ type HostnameAssociation = string
 
 type HostnameAssociationParam = string
 
+type TLSHostnameAssociationParam struct {
+	Hostnames param.Field[[]HostnameAssociationParam] `json:"hostnames"`
+	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
+	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
+	// to your active Cloudflare Managed CA.
+	MTLSCertificateID param.Field[string] `json:"mtls_certificate_id"`
+}
+
+func (r TLSHostnameAssociationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type HostnameAssociationUpdateResponse struct {
 	Hostnames []HostnameAssociation                 `json:"hostnames"`
 	JSON      hostnameAssociationUpdateResponseJSON `json:"-"`
@@ -108,16 +120,12 @@ func (r hostnameAssociationGetResponseJSON) RawJSON() string {
 
 type HostnameAssociationUpdateParams struct {
 	// Identifier
-	ZoneID    param.Field[string]                     `path:"zone_id,required"`
-	Hostnames param.Field[[]HostnameAssociationParam] `json:"hostnames"`
-	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
-	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
-	// to your active Cloudflare Managed CA.
-	MTLSCertificateID param.Field[string] `json:"mtls_certificate_id"`
+	ZoneID                 param.Field[string]         `path:"zone_id,required"`
+	TLSHostnameAssociation TLSHostnameAssociationParam `json:"tls_hostname_association,required"`
 }
 
 func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.TLSHostnameAssociation)
 }
 
 type HostnameAssociationUpdateResponseEnvelope struct {

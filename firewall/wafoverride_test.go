@@ -32,7 +32,7 @@ func TestWAFOverrideNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.WAFOverrideNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -63,7 +63,7 @@ func TestWAFOverrideUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"de677e5818985db1285d0e80225f06e5",
 		firewall.WAFOverrideUpdateParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -125,7 +125,7 @@ func TestWAFOverrideDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"de677e5818985db1285d0e80225f06e5",
 		firewall.WAFOverrideDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {

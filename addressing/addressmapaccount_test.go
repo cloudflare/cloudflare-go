@@ -33,7 +33,7 @@ func TestAddressMapAccountUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapAccountUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -64,7 +64,7 @@ func TestAddressMapAccountDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapAccountDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

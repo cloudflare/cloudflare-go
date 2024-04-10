@@ -29,9 +29,11 @@ func TestHostnameAssociationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CertificateAuthorities.HostnameAssociations.Update(context.TODO(), certificate_authorities.HostnameAssociationUpdateParams{
-		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Hostnames:         cloudflare.F([]certificate_authorities.HostnameAssociationParam{"api.example.com", "api.example.com", "api.example.com"}),
-		MTLSCertificateID: cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		TLSHostnameAssociation: certificate_authorities.TLSHostnameAssociationParam{
+			Hostnames:         cloudflare.F([]certificate_authorities.HostnameAssociationParam{"api.example.com", "api.example.com", "api.example.com"}),
+			MTLSCertificateID: cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

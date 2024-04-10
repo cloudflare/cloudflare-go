@@ -32,7 +32,7 @@ func TestUARuleNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.UARuleNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -63,7 +63,7 @@ func TestUARuleUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.UARuleUpdateParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -128,7 +128,7 @@ func TestUARuleDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.UARuleDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {

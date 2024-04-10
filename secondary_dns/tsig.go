@@ -136,6 +136,19 @@ func (r tsigJSON) RawJSON() string {
 	return r.raw
 }
 
+type TSIGParam struct {
+	// TSIG algorithm.
+	Algo param.Field[string] `json:"algo,required"`
+	// TSIG key name.
+	Name param.Field[string] `json:"name,required"`
+	// TSIG secret.
+	Secret param.Field[string] `json:"secret,required"`
+}
+
+func (r TSIGParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type TSIGDeleteResponse struct {
 	ID   string                 `json:"id"`
 	JSON tsigDeleteResponseJSON `json:"-"`
@@ -159,16 +172,11 @@ func (r tsigDeleteResponseJSON) RawJSON() string {
 
 type TSIGNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// TSIG algorithm.
-	Algo param.Field[string] `json:"algo,required"`
-	// TSIG key name.
-	Name param.Field[string] `json:"name,required"`
-	// TSIG secret.
-	Secret param.Field[string] `json:"secret,required"`
+	TSIG      TSIGParam           `json:"tsig,required"`
 }
 
 func (r TSIGNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.TSIG)
 }
 
 type TSIGNewResponseEnvelope struct {
@@ -216,16 +224,11 @@ func (r TSIGNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TSIGUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// TSIG algorithm.
-	Algo param.Field[string] `json:"algo,required"`
-	// TSIG key name.
-	Name param.Field[string] `json:"name,required"`
-	// TSIG secret.
-	Secret param.Field[string] `json:"secret,required"`
+	TSIG      TSIGParam           `json:"tsig,required"`
 }
 
 func (r TSIGUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.TSIG)
 }
 
 type TSIGUpdateResponseEnvelope struct {
@@ -276,8 +279,8 @@ type TSIGListParams struct {
 }
 
 type TSIGDeleteParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r TSIGDeleteParams) MarshalJSON() (data []byte, err error) {

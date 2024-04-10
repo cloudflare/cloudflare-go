@@ -33,7 +33,7 @@ func TestLockdownNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.LockdownNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -64,7 +64,7 @@ func TestLockdownUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.LockdownUpdateParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -135,7 +135,7 @@ func TestLockdownDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.LockdownDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {

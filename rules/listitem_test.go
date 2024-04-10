@@ -33,7 +33,7 @@ func TestListItemNew(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		rules.ListItemNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F([]rules.ListItemNewParamsBody{{
+			Body: []rules.ListItemNewParamsBody{{
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(rules.HostnameParam{
@@ -81,7 +81,7 @@ func TestListItemNew(t *testing.T) {
 					SubpathMatching:     cloudflare.F(true),
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
-			}}),
+			}},
 		},
 	)
 	if err != nil {
@@ -112,7 +112,7 @@ func TestListItemUpdate(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		rules.ListItemUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F([]rules.ListItemUpdateParamsBody{{
+			Body: []rules.ListItemUpdateParamsBody{{
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(rules.HostnameParam{
@@ -160,7 +160,7 @@ func TestListItemUpdate(t *testing.T) {
 					SubpathMatching:     cloudflare.F(true),
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
-			}}),
+			}},
 		},
 	)
 	if err != nil {

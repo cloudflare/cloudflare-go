@@ -94,7 +94,7 @@ func TestDomainDelete(t *testing.T) {
 		"dbe10b4bc17c295377eabd600e1787fd",
 		workers.DomainDeleteParams{
 			AccountID: cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

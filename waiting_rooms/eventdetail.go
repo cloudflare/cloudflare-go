@@ -46,6 +46,58 @@ func (r *EventDetailService) Get(ctx context.Context, waitingRoomID string, even
 	return
 }
 
+type EventQueryParam struct {
+	// An ISO 8601 timestamp that marks the end of the event.
+	EventEndTime param.Field[string] `json:"event_end_time,required"`
+	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
+	// users will be processed with the event's configuration. The start time must be
+	// at least one minute before `event_end_time`.
+	EventStartTime param.Field[string] `json:"event_start_time,required"`
+	// A unique name to identify the event. Only alphanumeric characters, hyphens and
+	// underscores are allowed.
+	Name param.Field[string] `json:"name,required"`
+	// If set, the event will override the waiting room's `custom_page_html` property
+	// while it is active. If null, the event will inherit it.
+	CustomPageHTML param.Field[string] `json:"custom_page_html"`
+	// A note that you can use to add more details about the event.
+	Description param.Field[string] `json:"description"`
+	// If set, the event will override the waiting room's `disable_session_renewal`
+	// property while it is active. If null, the event will inherit it.
+	DisableSessionRenewal param.Field[bool] `json:"disable_session_renewal"`
+	// If set, the event will override the waiting room's `new_users_per_minute`
+	// property while it is active. If null, the event will inherit it. This can only
+	// be set if the event's `total_active_users` property is also set.
+	NewUsersPerMinute param.Field[int64] `json:"new_users_per_minute"`
+	// An ISO 8601 timestamp that marks when to begin queueing all users before the
+	// event starts. The prequeue must start at least five minutes before
+	// `event_start_time`.
+	PrequeueStartTime param.Field[string] `json:"prequeue_start_time"`
+	// If set, the event will override the waiting room's `queueing_method` property
+	// while it is active. If null, the event will inherit it.
+	QueueingMethod param.Field[string] `json:"queueing_method"`
+	// If set, the event will override the waiting room's `session_duration` property
+	// while it is active. If null, the event will inherit it.
+	SessionDuration param.Field[int64] `json:"session_duration"`
+	// If enabled, users in the prequeue will be shuffled randomly at the
+	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
+	// useful for situations when many users will join the event prequeue at the same
+	// time and you want to shuffle them to ensure fairness. Naturally, it makes the
+	// most sense to enable this feature when the `queueing_method` during the event
+	// respects ordering such as **fifo**, or else the shuffling may be unnecessary.
+	ShuffleAtEventStart param.Field[bool] `json:"shuffle_at_event_start"`
+	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
+	// will be handled based on the waiting room configuration.
+	Suspended param.Field[bool] `json:"suspended"`
+	// If set, the event will override the waiting room's `total_active_users` property
+	// while it is active. If null, the event will inherit it. This can only be set if
+	// the event's `new_users_per_minute` property is also set.
+	TotalActiveUsers param.Field[int64] `json:"total_active_users"`
+}
+
+func (r EventQueryParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type EventDetailGetResponse struct {
 	ID             string    `json:"id"`
 	CreatedOn      time.Time `json:"created_on" format:"date-time"`

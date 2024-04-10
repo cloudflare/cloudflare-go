@@ -32,36 +32,38 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		user.SubscriptionUpdateParams{
-			App: cloudflare.F(user.SubscriptionUpdateParamsApp{
-				InstallID: cloudflare.F("string"),
-			}),
-			ComponentValues: cloudflare.F([]user.SubscriptionUpdateParamsComponentValue{{
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}}),
-			Frequency: cloudflare.F(user.SubscriptionUpdateParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(user.SubscriptionUpdateParamsRatePlan{
-				Currency:          cloudflare.F("USD"),
-				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F("free"),
-				IsContract:        cloudflare.F(false),
-				PublicName:        cloudflare.F("Business Plan"),
-				Scope:             cloudflare.F("zone"),
-				Sets:              cloudflare.F([]string{"string", "string", "string"}),
-			}),
-			Zone: cloudflare.F(user.SubscriptionUpdateParamsZone{}),
+			Subscription: user.SubscriptionParam{
+				App: cloudflare.F(user.SubscriptionAppParam{
+					InstallID: cloudflare.F("string"),
+				}),
+				ComponentValues: cloudflare.F([]user.SubscriptionComponentValueParam{{
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}, {
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}, {
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}}),
+				Frequency: cloudflare.F(user.SubscriptionFrequencyMonthly),
+				RatePlan: cloudflare.F(user.SubscriptionRatePlanParam{
+					Currency:          cloudflare.F("USD"),
+					ExternallyManaged: cloudflare.F(false),
+					ID:                cloudflare.F("free"),
+					IsContract:        cloudflare.F(false),
+					PublicName:        cloudflare.F("Business Plan"),
+					Scope:             cloudflare.F("zone"),
+					Sets:              cloudflare.F([]string{"string", "string", "string"}),
+				}),
+				Zone: cloudflare.F(user.SubscriptionZoneParam{}),
+			},
 		},
 	)
 	if err != nil {
@@ -91,7 +93,7 @@ func TestSubscriptionDelete(t *testing.T) {
 		context.TODO(),
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		user.SubscriptionDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -121,36 +123,38 @@ func TestSubscriptionEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		user.SubscriptionEditParams{
-			App: cloudflare.F(user.SubscriptionEditParamsApp{
-				InstallID: cloudflare.F("string"),
-			}),
-			ComponentValues: cloudflare.F([]user.SubscriptionEditParamsComponentValue{{
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}}),
-			Frequency: cloudflare.F(user.SubscriptionEditParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(user.SubscriptionEditParamsRatePlan{
-				Currency:          cloudflare.F("USD"),
-				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F("free"),
-				IsContract:        cloudflare.F(false),
-				PublicName:        cloudflare.F("Business Plan"),
-				Scope:             cloudflare.F("zone"),
-				Sets:              cloudflare.F([]string{"string", "string", "string"}),
-			}),
-			Zone: cloudflare.F(user.SubscriptionEditParamsZone{}),
+			Subscription: user.SubscriptionParam{
+				App: cloudflare.F(user.SubscriptionAppParam{
+					InstallID: cloudflare.F("string"),
+				}),
+				ComponentValues: cloudflare.F([]user.SubscriptionComponentValueParam{{
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}, {
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}, {
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}}),
+				Frequency: cloudflare.F(user.SubscriptionFrequencyMonthly),
+				RatePlan: cloudflare.F(user.SubscriptionRatePlanParam{
+					Currency:          cloudflare.F("USD"),
+					ExternallyManaged: cloudflare.F(false),
+					ID:                cloudflare.F("free"),
+					IsContract:        cloudflare.F(false),
+					PublicName:        cloudflare.F("Business Plan"),
+					Scope:             cloudflare.F("zone"),
+					Sets:              cloudflare.F([]string{"string", "string", "string"}),
+				}),
+				Zone: cloudflare.F(user.SubscriptionZoneParam{}),
+			},
 		},
 	)
 	if err != nil {

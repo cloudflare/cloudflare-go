@@ -29,15 +29,17 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Records.New(context.TODO(), dns.RecordNewParamsARecord{
-		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Content: cloudflare.F("198.51.100.4"),
-		Name:    cloudflare.F("example.com"),
-		Type:    cloudflare.F(dns.RecordNewParamsARecordTypeA),
-		Comment: cloudflare.F("Domain verification record"),
-		Proxied: cloudflare.F(false),
-		Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-		TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
+	_, err := client.DNS.Records.New(context.TODO(), dns.RecordNewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Record: dns.ARecordParam{
+			Content: cloudflare.F("198.51.100.4"),
+			Name:    cloudflare.F("example.com"),
+			Proxied: cloudflare.F(false),
+			Type:    cloudflare.F(dns.ARecordTypeA),
+			Comment: cloudflare.F("Domain verification record"),
+			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -65,15 +67,17 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Records.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		dns.RecordUpdateParamsARecord{
-			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Content: cloudflare.F("198.51.100.4"),
-			Name:    cloudflare.F("example.com"),
-			Type:    cloudflare.F(dns.RecordUpdateParamsARecordTypeA),
-			Comment: cloudflare.F("Domain verification record"),
-			Proxied: cloudflare.F(false),
-			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-			TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
+		dns.RecordUpdateParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Record: dns.ARecordParam{
+				Content: cloudflare.F("198.51.100.4"),
+				Name:    cloudflare.F("example.com"),
+				Proxied: cloudflare.F(false),
+				Type:    cloudflare.F(dns.ARecordTypeA),
+				Comment: cloudflare.F("Domain verification record"),
+				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+				TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
+			},
 		},
 	)
 	if err != nil {
@@ -157,7 +161,7 @@ func TestRecordDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.RecordDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:   cloudflare.F[any](map[string]interface{}{}),
+			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -186,15 +190,17 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Records.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		dns.RecordEditParamsARecord{
-			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Content: cloudflare.F("198.51.100.4"),
-			Name:    cloudflare.F("example.com"),
-			Type:    cloudflare.F(dns.RecordEditParamsARecordTypeA),
-			Comment: cloudflare.F("Domain verification record"),
-			Proxied: cloudflare.F(false),
-			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-			TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
+		dns.RecordEditParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Record: dns.ARecordParam{
+				Content: cloudflare.F("198.51.100.4"),
+				Name:    cloudflare.F("example.com"),
+				Proxied: cloudflare.F(false),
+				Type:    cloudflare.F(dns.ARecordTypeA),
+				Comment: cloudflare.F("Domain verification record"),
+				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+				TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
+			},
 		},
 	)
 	if err != nil {
@@ -306,7 +312,7 @@ func TestRecordScan(t *testing.T) {
 	)
 	_, err := client.DNS.Records.Scan(context.TODO(), dns.RecordScanParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:   cloudflare.F[any](map[string]interface{}{}),
+		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

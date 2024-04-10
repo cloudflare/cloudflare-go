@@ -172,8 +172,8 @@ func (r magicNetworkMonitoringRuleJSON) RawJSON() string {
 }
 
 type RuleNewParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
@@ -224,8 +224,8 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleUpdateParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -280,8 +280,8 @@ type RuleListParams struct {
 }
 
 type RuleDeleteParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -332,8 +332,8 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleEditParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r RuleEditParams) MarshalJSON() (data []byte, err error) {

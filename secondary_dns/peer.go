@@ -148,6 +148,29 @@ func (r peerJSON) RawJSON() string {
 	return r.raw
 }
 
+type PeerParam struct {
+	// The name of the peer.
+	Name param.Field[string] `json:"name,required"`
+	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
+	// this peer is linked to. For primary zones this IP defines the IP of the
+	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
+	// zones this IP defines the IP of the primary nameserver Cloudflare will send
+	// AXFR/IXFR requests to.
+	IP param.Field[string] `json:"ip"`
+	// Enable IXFR transfer protocol, default is AXFR. Only applicable to secondary
+	// zones.
+	IxfrEnable param.Field[bool] `json:"ixfr_enable"`
+	// DNS port of primary or secondary nameserver, depending on what zone this peer is
+	// linked to.
+	Port param.Field[float64] `json:"port"`
+	// TSIG authentication will be used for zone transfer if configured.
+	TSIGID param.Field[string] `json:"tsig_id"`
+}
+
+func (r PeerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type PeerDeleteResponse struct {
 	ID   string                 `json:"id"`
 	JSON peerDeleteResponseJSON `json:"-"`
@@ -170,8 +193,8 @@ func (r peerDeleteResponseJSON) RawJSON() string {
 }
 
 type PeerNewParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
@@ -223,26 +246,11 @@ func (r PeerNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PeerUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The name of the peer.
-	Name param.Field[string] `json:"name,required"`
-	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
-	// this peer is linked to. For primary zones this IP defines the IP of the
-	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
-	// zones this IP defines the IP of the primary nameserver Cloudflare will send
-	// AXFR/IXFR requests to.
-	IP param.Field[string] `json:"ip"`
-	// Enable IXFR transfer protocol, default is AXFR. Only applicable to secondary
-	// zones.
-	IxfrEnable param.Field[bool] `json:"ixfr_enable"`
-	// DNS port of primary or secondary nameserver, depending on what zone this peer is
-	// linked to.
-	Port param.Field[float64] `json:"port"`
-	// TSIG authentication will be used for zone transfer if configured.
-	TSIGID param.Field[string] `json:"tsig_id"`
+	Peer      PeerParam           `json:"peer,required"`
 }
 
 func (r PeerUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Peer)
 }
 
 type PeerUpdateResponseEnvelope struct {
@@ -293,8 +301,8 @@ type PeerListParams struct {
 }
 
 type PeerDeleteParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r PeerDeleteParams) MarshalJSON() (data []byte, err error) {

@@ -178,7 +178,7 @@ func TestTokenDelete(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		user.TokenDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {

@@ -42,7 +42,7 @@ func NewPCAPService(opts ...option.RequestOption) (r *PCAPService) {
 func (r *PCAPService) New(ctx context.Context, params PCAPNewParams, opts ...option.RequestOption) (res *PCAPNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pcaps", params.getAccountID())
+	path := fmt.Sprintf("accounts/%s/pcaps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -999,53 +999,81 @@ func (r PCAPGetResponseType) IsKnown() bool {
 	return false
 }
 
-// This interface is a union satisfied by one of the following:
-// [PCAPNewParamsMagicVisibilityPCAPsRequestSimple],
-// [PCAPNewParamsMagicVisibilityPCAPsRequestFull].
-type PCAPNewParams interface {
-	ImplementsPCAPNewParams()
-
-	getAccountID() param.Field[string]
+type PCAPNewParams struct {
+	// Identifier
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Body      PCAPNewParamsBodyUnion `json:"body,required"`
 }
 
-type PCAPNewParamsMagicVisibilityPCAPsRequestSimple struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+func (r PCAPNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type PCAPNewParamsBody struct {
+	// The packet capture filter. When this field is empty, all packets are captured.
+	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
 	// The limit of packets contained in a packet capture.
-	PacketLimit param.Field[float64] `json:"packet_limit,required"`
+	PacketLimit param.Field[float64] `json:"packet_limit"`
 	// The system used to collect packet captures.
-	System param.Field[PCAPNewParamsMagicVisibilityPCAPsRequestSimpleSystem] `json:"system,required"`
+	System param.Field[PCAPNewParamsBodySystem] `json:"system,required"`
 	// The packet capture duration in seconds.
 	TimeLimit param.Field[float64] `json:"time_limit,required"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type param.Field[PCAPNewParamsMagicVisibilityPCAPsRequestSimpleType] `json:"type,required"`
+	Type param.Field[PCAPNewParamsBodyType] `json:"type,required"`
+	// The maximum number of bytes to capture. This field only applies to `full` packet
+	// captures.
+	ByteLimit param.Field[float64] `json:"byte_limit"`
+	// The name of the data center used for the packet capture. This can be a specific
+	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
+	// packet captures.
+	ColoName param.Field[string] `json:"colo_name"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf param.Field[string] `json:"destination_conf"`
+}
+
+func (r PCAPNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r PCAPNewParamsBody) implementsPCAPsPCAPNewParamsBodyUnion() {}
+
+// Satisfied by [pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimple],
+// [pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestFull], [PCAPNewParamsBody].
+type PCAPNewParamsBodyUnion interface {
+	implementsPCAPsPCAPNewParamsBodyUnion()
+}
+
+type PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimple struct {
+	// The limit of packets contained in a packet capture.
+	PacketLimit param.Field[float64] `json:"packet_limit,required"`
+	// The system used to collect packet captures.
+	System param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystem] `json:"system,required"`
+	// The packet capture duration in seconds.
+	TimeLimit param.Field[float64] `json:"time_limit,required"`
+	// The type of packet capture. `Simple` captures sampled packets, and `full`
+	// captures entire payloads and non-sampled packets.
+	Type param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleType] `json:"type,required"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
 }
 
-func (r PCAPNewParamsMagicVisibilityPCAPsRequestSimple) MarshalJSON() (data []byte, err error) {
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimple) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PCAPNewParamsMagicVisibilityPCAPsRequestSimple) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (PCAPNewParamsMagicVisibilityPCAPsRequestSimple) ImplementsPCAPNewParams() {
-
-}
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimple) implementsPCAPsPCAPNewParamsBodyUnion() {}
 
 // The system used to collect packet captures.
-type PCAPNewParamsMagicVisibilityPCAPsRequestSimpleSystem string
+type PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystem string
 
 const (
-	PCAPNewParamsMagicVisibilityPCAPsRequestSimpleSystemMagicTransit PCAPNewParamsMagicVisibilityPCAPsRequestSimpleSystem = "magic-transit"
+	PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystemMagicTransit PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystem = "magic-transit"
 )
 
-func (r PCAPNewParamsMagicVisibilityPCAPsRequestSimpleSystem) IsKnown() bool {
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystem) IsKnown() bool {
 	switch r {
-	case PCAPNewParamsMagicVisibilityPCAPsRequestSimpleSystemMagicTransit:
+	case PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystemMagicTransit:
 		return true
 	}
 	return false
@@ -1053,24 +1081,22 @@ func (r PCAPNewParamsMagicVisibilityPCAPsRequestSimpleSystem) IsKnown() bool {
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PCAPNewParamsMagicVisibilityPCAPsRequestSimpleType string
+type PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleType string
 
 const (
-	PCAPNewParamsMagicVisibilityPCAPsRequestSimpleTypeSimple PCAPNewParamsMagicVisibilityPCAPsRequestSimpleType = "simple"
-	PCAPNewParamsMagicVisibilityPCAPsRequestSimpleTypeFull   PCAPNewParamsMagicVisibilityPCAPsRequestSimpleType = "full"
+	PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeSimple PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleType = "simple"
+	PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeFull   PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleType = "full"
 )
 
-func (r PCAPNewParamsMagicVisibilityPCAPsRequestSimpleType) IsKnown() bool {
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleType) IsKnown() bool {
 	switch r {
-	case PCAPNewParamsMagicVisibilityPCAPsRequestSimpleTypeSimple, PCAPNewParamsMagicVisibilityPCAPsRequestSimpleTypeFull:
+	case PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeSimple, PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeFull:
 		return true
 	}
 	return false
 }
 
-type PCAPNewParamsMagicVisibilityPCAPsRequestFull struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+type PCAPNewParamsBodyMagicVisibilityPCAPsRequestFull struct {
 	// The name of the data center used for the packet capture. This can be a specific
 	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
 	// packet captures.
@@ -1078,12 +1104,12 @@ type PCAPNewParamsMagicVisibilityPCAPsRequestFull struct {
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf,required"`
 	// The system used to collect packet captures.
-	System param.Field[PCAPNewParamsMagicVisibilityPCAPsRequestFullSystem] `json:"system,required"`
+	System param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullSystem] `json:"system,required"`
 	// The packet capture duration in seconds.
 	TimeLimit param.Field[float64] `json:"time_limit,required"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type param.Field[PCAPNewParamsMagicVisibilityPCAPsRequestFullType] `json:"type,required"`
+	Type param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullType] `json:"type,required"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
 	// captures.
 	ByteLimit param.Field[float64] `json:"byte_limit"`
@@ -1093,28 +1119,22 @@ type PCAPNewParamsMagicVisibilityPCAPsRequestFull struct {
 	PacketLimit param.Field[float64] `json:"packet_limit"`
 }
 
-func (r PCAPNewParamsMagicVisibilityPCAPsRequestFull) MarshalJSON() (data []byte, err error) {
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsRequestFull) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PCAPNewParamsMagicVisibilityPCAPsRequestFull) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (PCAPNewParamsMagicVisibilityPCAPsRequestFull) ImplementsPCAPNewParams() {
-
-}
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsRequestFull) implementsPCAPsPCAPNewParamsBodyUnion() {}
 
 // The system used to collect packet captures.
-type PCAPNewParamsMagicVisibilityPCAPsRequestFullSystem string
+type PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullSystem string
 
 const (
-	PCAPNewParamsMagicVisibilityPCAPsRequestFullSystemMagicTransit PCAPNewParamsMagicVisibilityPCAPsRequestFullSystem = "magic-transit"
+	PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullSystemMagicTransit PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullSystem = "magic-transit"
 )
 
-func (r PCAPNewParamsMagicVisibilityPCAPsRequestFullSystem) IsKnown() bool {
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullSystem) IsKnown() bool {
 	switch r {
-	case PCAPNewParamsMagicVisibilityPCAPsRequestFullSystemMagicTransit:
+	case PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullSystemMagicTransit:
 		return true
 	}
 	return false
@@ -1122,16 +1142,48 @@ func (r PCAPNewParamsMagicVisibilityPCAPsRequestFullSystem) IsKnown() bool {
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PCAPNewParamsMagicVisibilityPCAPsRequestFullType string
+type PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullType string
 
 const (
-	PCAPNewParamsMagicVisibilityPCAPsRequestFullTypeSimple PCAPNewParamsMagicVisibilityPCAPsRequestFullType = "simple"
-	PCAPNewParamsMagicVisibilityPCAPsRequestFullTypeFull   PCAPNewParamsMagicVisibilityPCAPsRequestFullType = "full"
+	PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullTypeSimple PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullType = "simple"
+	PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullTypeFull   PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullType = "full"
 )
 
-func (r PCAPNewParamsMagicVisibilityPCAPsRequestFullType) IsKnown() bool {
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullType) IsKnown() bool {
 	switch r {
-	case PCAPNewParamsMagicVisibilityPCAPsRequestFullTypeSimple, PCAPNewParamsMagicVisibilityPCAPsRequestFullTypeFull:
+	case PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullTypeSimple, PCAPNewParamsBodyMagicVisibilityPCAPsRequestFullTypeFull:
+		return true
+	}
+	return false
+}
+
+// The system used to collect packet captures.
+type PCAPNewParamsBodySystem string
+
+const (
+	PCAPNewParamsBodySystemMagicTransit PCAPNewParamsBodySystem = "magic-transit"
+)
+
+func (r PCAPNewParamsBodySystem) IsKnown() bool {
+	switch r {
+	case PCAPNewParamsBodySystemMagicTransit:
+		return true
+	}
+	return false
+}
+
+// The type of packet capture. `Simple` captures sampled packets, and `full`
+// captures entire payloads and non-sampled packets.
+type PCAPNewParamsBodyType string
+
+const (
+	PCAPNewParamsBodyTypeSimple PCAPNewParamsBodyType = "simple"
+	PCAPNewParamsBodyTypeFull   PCAPNewParamsBodyType = "full"
+)
+
+func (r PCAPNewParamsBodyType) IsKnown() bool {
+	switch r {
+	case PCAPNewParamsBodyTypeSimple, PCAPNewParamsBodyTypeFull:
 		return true
 	}
 	return false

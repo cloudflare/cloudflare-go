@@ -286,7 +286,7 @@ func (r deletedFilterJSON) RawJSON() string {
 func (r DeletedFilter) implementsFirewallFirewallRuleFilter() {}
 
 type RuleNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
@@ -370,7 +370,7 @@ func (r ruleNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type RuleUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -497,7 +497,7 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleEditParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r RuleEditParams) MarshalJSON() (data []byte, err error) {

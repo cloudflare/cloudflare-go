@@ -30,7 +30,7 @@ func TestAccountSettingUpdate(t *testing.T) {
 	)
 	_, err := client.Workers.AccountSettings.Update(context.TODO(), workers.AccountSettingUpdateParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      cloudflare.F("{'default_usage_model': 'unbound'}"),
+		Body:      "{'default_usage_model': 'unbound'}",
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

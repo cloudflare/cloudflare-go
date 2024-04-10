@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // DatabaseService contains methods and other services that help with interacting
@@ -71,7 +73,7 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 }
 
 // Deletes the specified D1 database.
-func (r *DatabaseService) Delete(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *DatabaseService) Delete(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *DatabaseDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", accountIdentifier, databaseIdentifier)
@@ -221,6 +223,22 @@ func (r databaseListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [d1.DatabaseDeleteResponseUnknown] or [shared.UnionString].
+type DatabaseDeleteResponseUnion interface {
+	ImplementsD1DatabaseDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DatabaseDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type DatabaseNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -294,9 +312,9 @@ func (r DatabaseListParams) URLQuery() (v url.Values) {
 }
 
 type DatabaseDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   DatabaseDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseDeleteResponseEnvelopeJSON    `json:"-"`

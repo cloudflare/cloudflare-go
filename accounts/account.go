@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // AccountService contains methods and other services that help with interacting
@@ -40,7 +42,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 }
 
 // Update an existing account.
-func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", params.AccountID)
@@ -76,7 +78,7 @@ func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListPa
 }
 
 // Get information about a specific account that you are a member of.
-func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", query.AccountID)
@@ -185,22 +187,19 @@ func (r AccountSettingsDefaultNameservers) IsKnown() bool {
 	return false
 }
 
-type AccountListResponse = interface{}
-
-type AccountUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+type AccountParam struct {
 	// Account name
 	Name param.Field[string] `json:"name,required"`
 	// Account settings
-	Settings param.Field[AccountUpdateParamsSettings] `json:"settings"`
+	Settings param.Field[AccountSettingsParam] `json:"settings"`
 }
 
-func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r AccountParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Account settings
-type AccountUpdateParamsSettings struct {
+type AccountSettingsParam struct {
 	// Specifies the default nameservers to be used for new zones added to this
 	// account.
 	//
@@ -211,7 +210,7 @@ type AccountUpdateParamsSettings struct {
 	// See
 	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
 	// for more information.
-	DefaultNameservers param.Field[AccountUpdateParamsSettingsDefaultNameservers] `json:"default_nameservers"`
+	DefaultNameservers param.Field[AccountSettingsDefaultNameservers] `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
 	EnforceTwofactor param.Field[bool] `json:"enforce_twofactor"`
@@ -222,40 +221,58 @@ type AccountUpdateParamsSettings struct {
 	UseAccountCustomNSByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
 }
 
-func (r AccountUpdateParamsSettings) MarshalJSON() (data []byte, err error) {
+func (r AccountSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Specifies the default nameservers to be used for new zones added to this
-// account.
-//
-// - `cloudflare.standard` for Cloudflare-branded nameservers
-// - `custom.account` for account custom nameservers
-// - `custom.tenant` for tenant custom nameservers
-//
-// See
-// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
-// for more information.
-type AccountUpdateParamsSettingsDefaultNameservers string
+// Union satisfied by [accounts.AccountUpdateResponseUnknown] or
+// [shared.UnionString].
+type AccountUpdateResponseUnion interface {
+	ImplementsAccountsAccountUpdateResponseUnion()
+}
 
-const (
-	AccountUpdateParamsSettingsDefaultNameserversCloudflareStandard AccountUpdateParamsSettingsDefaultNameservers = "cloudflare.standard"
-	AccountUpdateParamsSettingsDefaultNameserversCustomAccount      AccountUpdateParamsSettingsDefaultNameservers = "custom.account"
-	AccountUpdateParamsSettingsDefaultNameserversCustomTenant       AccountUpdateParamsSettingsDefaultNameservers = "custom.tenant"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccountUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
-func (r AccountUpdateParamsSettingsDefaultNameservers) IsKnown() bool {
-	switch r {
-	case AccountUpdateParamsSettingsDefaultNameserversCloudflareStandard, AccountUpdateParamsSettingsDefaultNameserversCustomAccount, AccountUpdateParamsSettingsDefaultNameserversCustomTenant:
-		return true
-	}
-	return false
+type AccountListResponse = interface{}
+
+// Union satisfied by [accounts.AccountGetResponseUnknown] or [shared.UnionString].
+type AccountGetResponseUnion interface {
+	ImplementsAccountsAccountGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccountGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type AccountUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+	Account   AccountParam             `json:"account,required"`
+}
+
+func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Account)
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   AccountUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
@@ -335,9 +352,9 @@ type AccountGetParams struct {
 }
 
 type AccountGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   AccountGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountGetResponseEnvelopeJSON    `json:"-"`

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // GatewayListService contains methods and other services that help with
@@ -86,7 +88,7 @@ func (r *GatewayListService) ListAutoPaging(ctx context.Context, query GatewayLi
 }
 
 // Deletes a Zero Trust list.
-func (r *GatewayListService) Delete(ctx context.Context, listID string, params GatewayListDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *GatewayListService) Delete(ctx context.Context, listID string, params GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
@@ -325,6 +327,23 @@ func (r GatewayListListResponseType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [zero_trust.GatewayListDeleteResponseUnknown] or
+// [shared.UnionString].
+type GatewayListDeleteResponseUnion interface {
+	ImplementsZeroTrustGatewayListDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*GatewayListDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type GatewayListEditResponse struct {
@@ -579,8 +598,8 @@ type GatewayListListParams struct {
 }
 
 type GatewayListDeleteParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r GatewayListDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -588,9 +607,9 @@ func (r GatewayListDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayListDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   GatewayListDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayListDeleteResponseEnvelopeJSON    `json:"-"`

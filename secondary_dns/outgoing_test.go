@@ -86,7 +86,7 @@ func TestOutgoingDelete(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.Outgoing.Delete(context.TODO(), secondary_dns.OutgoingDeleteParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   cloudflare.F[any](map[string]interface{}{}),
+		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -113,7 +113,7 @@ func TestOutgoingDisable(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.Outgoing.Disable(context.TODO(), secondary_dns.OutgoingDisableParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   cloudflare.F[any](map[string]interface{}{}),
+		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -140,7 +140,7 @@ func TestOutgoingEnable(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.Outgoing.Enable(context.TODO(), secondary_dns.OutgoingEnableParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   cloudflare.F[any](map[string]interface{}{}),
+		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -167,7 +167,7 @@ func TestOutgoingForceNotify(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.Outgoing.ForceNotify(context.TODO(), secondary_dns.OutgoingForceNotifyParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   cloudflare.F[any](map[string]interface{}{}),
+		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

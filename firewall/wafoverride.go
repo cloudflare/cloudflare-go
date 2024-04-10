@@ -299,7 +299,7 @@ func (r wafOverrideDeleteResponseJSON) RawJSON() string {
 }
 
 type WAFOverrideNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
@@ -350,7 +350,7 @@ func (r WAFOverrideNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WAFOverrideUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -416,7 +416,7 @@ func (r WAFOverrideListParams) URLQuery() (v url.Values) {
 }
 
 type WAFOverrideDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r WAFOverrideDeleteParams) MarshalJSON() (data []byte, err error) {

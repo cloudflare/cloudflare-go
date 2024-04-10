@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // RateLimitService contains methods and other services that help with interacting
@@ -36,7 +38,7 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 
 // Creates a new rate limit for a zone. Refer to the object definition for a list
 // of required attributes.
-func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body RateLimitNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body RateLimitNewParams, opts ...option.RequestOption) (res *RateLimitNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
@@ -85,7 +87,7 @@ func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id
 }
 
 // Updates an existing rate limit.
-func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id string, body RateLimitEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id string, body RateLimitEditParams, opts ...option.RequestOption) (res *RateLimitEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
@@ -98,7 +100,7 @@ func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id s
 }
 
 // Fetches the details of a rate limit.
-func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
@@ -457,6 +459,23 @@ func (r rateLimitMatchResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [rate_limits.RateLimitNewResponseUnknown] or
+// [shared.UnionString].
+type RateLimitNewResponseUnion interface {
+	ImplementsRateLimitsRateLimitNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RateLimitNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type RateLimitDeleteResponse struct {
 	// The unique identifier of the rate limit.
 	ID   string                      `json:"id"`
@@ -479,8 +498,42 @@ func (r rateLimitDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [rate_limits.RateLimitEditResponseUnknown] or
+// [shared.UnionString].
+type RateLimitEditResponseUnion interface {
+	ImplementsRateLimitsRateLimitEditResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RateLimitEditResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [rate_limits.RateLimitGetResponseUnknown] or
+// [shared.UnionString].
+type RateLimitGetResponseUnion interface {
+	ImplementsRateLimitsRateLimitGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RateLimitGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type RateLimitNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r RateLimitNewParams) MarshalJSON() (data []byte, err error) {
@@ -488,9 +541,9 @@ func (r RateLimitNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RateLimitNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   RateLimitNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitNewResponseEnvelopeJSON    `json:"-"`
@@ -547,7 +600,7 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 }
 
 type RateLimitDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r RateLimitDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -598,7 +651,7 @@ func (r RateLimitDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitEditParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r RateLimitEditParams) MarshalJSON() (data []byte, err error) {
@@ -606,9 +659,9 @@ func (r RateLimitEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RateLimitEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   RateLimitEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitEditResponseEnvelopeJSON    `json:"-"`
@@ -649,9 +702,9 @@ func (r RateLimitEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   RateLimitGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitGetResponseEnvelopeJSON    `json:"-"`

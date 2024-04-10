@@ -41,12 +41,12 @@ func (r *IdentityProviderService) New(ctx context.Context, params IdentityProvid
 	var env IdentityProviderNewResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.getAccountID().Present {
+	if params.AccountID.Present {
 		accountOrZone = "accounts"
-		accountOrZoneID = params.getAccountID()
+		accountOrZoneID = params.AccountID
 	} else {
 		accountOrZone = "zones"
-		accountOrZoneID = params.getZoneID()
+		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/identity_providers", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
@@ -63,12 +63,12 @@ func (r *IdentityProviderService) Update(ctx context.Context, uuid string, param
 	var env IdentityProviderUpdateResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.getAccountID().Present {
+	if params.AccountID.Present {
 		accountOrZone = "accounts"
-		accountOrZoneID = params.getAccountID()
+		accountOrZoneID = params.AccountID
 	} else {
 		accountOrZone = "zones"
-		accountOrZoneID = params.getZoneID()
+		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/identity_providers/%s", accountOrZone, accountOrZoneID, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
@@ -271,6 +271,61 @@ func (r AzureADConfigPrompt) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AzureADParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AzureADConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r AzureADParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AzureADParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AzureADConfigParam struct {
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Should Cloudflare try to load authentication contexts from your account
+	ConditionalAccessEnabled param.Field[bool] `json:"conditional_access_enabled"`
+	// Your Azure directory uuid
+	DirectoryID param.Field[string] `json:"directory_id"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Indicates the type of user interaction that is required. prompt=login forces the
+	// user to enter their credentials on that request, negating single-sign on.
+	// prompt=none is the opposite. It ensures that the user isn't presented with any
+	// interactive prompt. If the request can't be completed silently by using
+	// single-sign on, the Microsoft identity platform returns an interaction_required
+	// error. prompt=select_account interrupts single sign-on providing account
+	// selection experience listing all the accounts either in session or any
+	// remembered account or an option to choose to use a different account altogether.
+	Prompt param.Field[AzureADConfigPrompt] `json:"prompt"`
+	// Should Cloudflare try to load groups from your account
+	SupportGroups param.Field[bool] `json:"support_groups"`
+}
+
+func (r AzureADConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type GenericOAuthConfig struct {
@@ -1309,6 +1364,515 @@ func (r identityProviderAccessOnetimepinJSON) RawJSON() string {
 }
 
 func (r IdentityProviderAccessOnetimepin) implementsZeroTrustIdentityProvider() {}
+
+type IdentityProviderParam struct {
+	Config param.Field[interface{}] `json:"config"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+}
+
+func (r IdentityProviderParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// Satisfied by [zero_trust.AzureADParam],
+// [zero_trust.IdentityProviderAccessCentrifyParam],
+// [zero_trust.IdentityProviderAccessFacebookParam],
+// [zero_trust.IdentityProviderAccessGitHubParam],
+// [zero_trust.IdentityProviderAccessGoogleParam],
+// [zero_trust.IdentityProviderAccessGoogleAppsParam],
+// [zero_trust.IdentityProviderAccessLinkedinParam],
+// [zero_trust.IdentityProviderAccessOIDCParam],
+// [zero_trust.IdentityProviderAccessOktaParam],
+// [zero_trust.IdentityProviderAccessOneloginParam],
+// [zero_trust.IdentityProviderAccessPingoneParam],
+// [zero_trust.IdentityProviderAccessSAMLParam],
+// [zero_trust.IdentityProviderAccessYandexParam],
+// [zero_trust.IdentityProviderAccessOnetimepinParam], [IdentityProviderParam].
+type IdentityProviderUnionParam interface {
+	implementsZeroTrustIdentityProviderUnionParam()
+}
+
+type IdentityProviderAccessCentrifyParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessCentrifyConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessCentrifyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessCentrifyParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessCentrifyConfigParam struct {
+	// Your centrify account url
+	CentrifyAccount param.Field[string] `json:"centrify_account"`
+	// Your centrify app id
+	CentrifyAppID param.Field[string] `json:"centrify_app_id"`
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+}
+
+func (r IdentityProviderAccessCentrifyConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessFacebookParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessFacebookParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessFacebookParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+type IdentityProviderAccessGitHubParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessGitHubParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessGitHubParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+type IdentityProviderAccessGoogleParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessGoogleConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessGoogleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessGoogleParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessGoogleConfigParam struct {
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+}
+
+func (r IdentityProviderAccessGoogleConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessGoogleAppsParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessGoogleAppsConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessGoogleAppsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessGoogleAppsParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessGoogleAppsConfigParam struct {
+	// Your companies TLD
+	AppsDomain param.Field[string] `json:"apps_domain"`
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+}
+
+func (r IdentityProviderAccessGoogleAppsConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessLinkedinParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessLinkedinParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessLinkedinParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+type IdentityProviderAccessOIDCParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessOIDCConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessOIDCParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessOIDCParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessOIDCConfigParam struct {
+	// The authorization_endpoint URL of your IdP
+	AuthURL param.Field[string] `json:"auth_url"`
+	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
+	CERTsURL param.Field[string] `json:"certs_url"`
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// OAuth scopes
+	Scopes param.Field[[]string] `json:"scopes"`
+	// The token_endpoint URL of your IdP
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r IdentityProviderAccessOIDCConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessOktaParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessOktaConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessOktaParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessOktaParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessOktaConfigParam struct {
+	// Your okta authorization server id
+	AuthorizationServerID param.Field[string] `json:"authorization_server_id"`
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Your okta account url
+	OktaAccount param.Field[string] `json:"okta_account"`
+}
+
+func (r IdentityProviderAccessOktaConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessOneloginParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessOneloginConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessOneloginParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessOneloginParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessOneloginConfigParam struct {
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Your OneLogin account url
+	OneloginAccount param.Field[string] `json:"onelogin_account"`
+}
+
+func (r IdentityProviderAccessOneloginConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessPingoneParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessPingoneConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessPingoneParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessPingoneParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessPingoneConfigParam struct {
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Your PingOne environment identifier
+	PingEnvID param.Field[string] `json:"ping_env_id"`
+}
+
+func (r IdentityProviderAccessPingoneConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessSAMLParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessSAMLConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessSAMLParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessSAMLParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessSAMLConfigParam struct {
+	// A list of SAML attribute names that will be added to your signed JWT token and
+	// can be used in SAML policy rules.
+	Attributes param.Field[[]string] `json:"attributes"`
+	// The attribute name for email in the SAML response.
+	EmailAttributeName param.Field[string] `json:"email_attribute_name"`
+	// Add a list of attribute names that will be returned in the response header from
+	// the Access callback.
+	HeaderAttributes param.Field[[]IdentityProviderAccessSAMLConfigHeaderAttributeParam] `json:"header_attributes"`
+	// X509 certificate to verify the signature in the SAML authentication response
+	IDPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
+	// IdP Entity ID or Issuer URL
+	IssuerURL param.Field[string] `json:"issuer_url"`
+	// Sign the SAML authentication request with Access credentials. To verify the
+	// signature, use the public key from the Access certs endpoints.
+	SignRequest param.Field[bool] `json:"sign_request"`
+	// URL to send the SAML authentication requests to
+	SSOTargetURL param.Field[string] `json:"sso_target_url"`
+}
+
+func (r IdentityProviderAccessSAMLConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessSAMLConfigHeaderAttributeParam struct {
+	// attribute name from the IDP
+	AttributeName param.Field[string] `json:"attribute_name"`
+	// header that will be added on the request to the origin
+	HeaderName param.Field[string] `json:"header_name"`
+}
+
+func (r IdentityProviderAccessSAMLConfigHeaderAttributeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IdentityProviderAccessYandexParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessYandexParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessYandexParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+type IdentityProviderAccessOnetimepinParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[interface{}] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessOnetimepinParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessOnetimepinParam) implementsZeroTrustIdentityProviderUnionParam() {}
 
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
@@ -2392,771 +2956,16 @@ func (r identityProviderDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// This interface is a union satisfied by one of the following:
-// [IdentityProviderNewParamsAzureAD], [IdentityProviderNewParamsAccessCentrify],
-// [IdentityProviderNewParamsAccessFacebook],
-// [IdentityProviderNewParamsAccessGitHub],
-// [IdentityProviderNewParamsAccessGoogle],
-// [IdentityProviderNewParamsAccessGoogleApps],
-// [IdentityProviderNewParamsAccessLinkedin],
-// [IdentityProviderNewParamsAccessOIDC], [IdentityProviderNewParamsAccessOkta],
-// [IdentityProviderNewParamsAccessOnelogin],
-// [IdentityProviderNewParamsAccessPingone], [IdentityProviderNewParamsAccessSAML],
-// [IdentityProviderNewParamsAccessYandex],
-// [IdentityProviderNewParamsAccessOnetimepin].
-type IdentityProviderNewParams interface {
-	ImplementsIdentityProviderNewParams()
-
-	getAccountID() param.Field[string]
-
-	getZoneID() param.Field[string]
-}
-
-type IdentityProviderNewParamsAzureAD struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAzureADConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
+type IdentityProviderNewParams struct {
+	IdentityProvider IdentityProviderUnionParam `json:"identity_provider,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
 }
 
-func (r IdentityProviderNewParamsAzureAD) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAzureAD) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAzureAD) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAzureAD) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAzureADConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Should Cloudflare try to load authentication contexts from your account
-	ConditionalAccessEnabled param.Field[bool] `json:"conditional_access_enabled"`
-	// Your Azure directory uuid
-	DirectoryID param.Field[string] `json:"directory_id"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Indicates the type of user interaction that is required. prompt=login forces the
-	// user to enter their credentials on that request, negating single-sign on.
-	// prompt=none is the opposite. It ensures that the user isn't presented with any
-	// interactive prompt. If the request can't be completed silently by using
-	// single-sign on, the Microsoft identity platform returns an interaction_required
-	// error. prompt=select_account interrupts single sign-on providing account
-	// selection experience listing all the accounts either in session or any
-	// remembered account or an option to choose to use a different account altogether.
-	Prompt param.Field[IdentityProviderNewParamsAzureADConfigPrompt] `json:"prompt"`
-	// Should Cloudflare try to load groups from your account
-	SupportGroups param.Field[bool] `json:"support_groups"`
-}
-
-func (r IdentityProviderNewParamsAzureADConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Indicates the type of user interaction that is required. prompt=login forces the
-// user to enter their credentials on that request, negating single-sign on.
-// prompt=none is the opposite. It ensures that the user isn't presented with any
-// interactive prompt. If the request can't be completed silently by using
-// single-sign on, the Microsoft identity platform returns an interaction_required
-// error. prompt=select_account interrupts single sign-on providing account
-// selection experience listing all the accounts either in session or any
-// remembered account or an option to choose to use a different account altogether.
-type IdentityProviderNewParamsAzureADConfigPrompt string
-
-const (
-	IdentityProviderNewParamsAzureADConfigPromptLogin         IdentityProviderNewParamsAzureADConfigPrompt = "login"
-	IdentityProviderNewParamsAzureADConfigPromptSelectAccount IdentityProviderNewParamsAzureADConfigPrompt = "select_account"
-	IdentityProviderNewParamsAzureADConfigPromptNone          IdentityProviderNewParamsAzureADConfigPrompt = "none"
-)
-
-func (r IdentityProviderNewParamsAzureADConfigPrompt) IsKnown() bool {
-	switch r {
-	case IdentityProviderNewParamsAzureADConfigPromptLogin, IdentityProviderNewParamsAzureADConfigPromptSelectAccount, IdentityProviderNewParamsAzureADConfigPromptNone:
-		return true
-	}
-	return false
-}
-
-type IdentityProviderNewParamsAccessCentrify struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessCentrifyConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessCentrify) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessCentrify) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessCentrify) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessCentrify) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessCentrifyConfig struct {
-	// Your centrify account url
-	CentrifyAccount param.Field[string] `json:"centrify_account"`
-	// Your centrify app id
-	CentrifyAppID param.Field[string] `json:"centrify_app_id"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r IdentityProviderNewParamsAccessCentrifyConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessFacebook struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessFacebook) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessFacebook) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessFacebook) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessFacebook) ImplementsIdentityProviderNewParams() {
-
-}
-
-type IdentityProviderNewParamsAccessGitHub struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessGitHub) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessGitHub) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessGitHub) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessGitHub) ImplementsIdentityProviderNewParams() {
-
-}
-
-type IdentityProviderNewParamsAccessGoogle struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessGoogleConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessGoogle) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessGoogle) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessGoogle) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessGoogle) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessGoogleConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r IdentityProviderNewParamsAccessGoogleConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessGoogleApps struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessGoogleAppsConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessGoogleApps) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessGoogleApps) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessGoogleApps) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessGoogleApps) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessGoogleAppsConfig struct {
-	// Your companies TLD
-	AppsDomain param.Field[string] `json:"apps_domain"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r IdentityProviderNewParamsAccessGoogleAppsConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessLinkedin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessLinkedin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessLinkedin) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessLinkedin) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessLinkedin) ImplementsIdentityProviderNewParams() {
-
-}
-
-type IdentityProviderNewParamsAccessOIDC struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessOIDCConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessOIDC) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessOIDC) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessOIDC) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessOIDC) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessOIDCConfig struct {
-	// The authorization_endpoint URL of your IdP
-	AuthURL param.Field[string] `json:"auth_url"`
-	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
-	CERTsURL param.Field[string] `json:"certs_url"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// OAuth scopes
-	Scopes param.Field[[]string] `json:"scopes"`
-	// The token_endpoint URL of your IdP
-	TokenURL param.Field[string] `json:"token_url"`
-}
-
-func (r IdentityProviderNewParamsAccessOIDCConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessOkta struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessOktaConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessOkta) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessOkta) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessOkta) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessOkta) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessOktaConfig struct {
-	// Your okta authorization server id
-	AuthorizationServerID param.Field[string] `json:"authorization_server_id"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your okta account url
-	OktaAccount param.Field[string] `json:"okta_account"`
-}
-
-func (r IdentityProviderNewParamsAccessOktaConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessOnelogin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessOneloginConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessOnelogin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessOnelogin) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessOnelogin) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessOnelogin) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessOneloginConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your OneLogin account url
-	OneloginAccount param.Field[string] `json:"onelogin_account"`
-}
-
-func (r IdentityProviderNewParamsAccessOneloginConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessPingone struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessPingoneConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessPingone) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessPingone) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessPingone) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessPingone) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessPingoneConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your PingOne environment identifier
-	PingEnvID param.Field[string] `json:"ping_env_id"`
-}
-
-func (r IdentityProviderNewParamsAccessPingoneConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessSAML struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessSAMLConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessSAML) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessSAML) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessSAML) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessSAML) ImplementsIdentityProviderNewParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessSAMLConfig struct {
-	// A list of SAML attribute names that will be added to your signed JWT token and
-	// can be used in SAML policy rules.
-	Attributes param.Field[[]string] `json:"attributes"`
-	// The attribute name for email in the SAML response.
-	EmailAttributeName param.Field[string] `json:"email_attribute_name"`
-	// Add a list of attribute names that will be returned in the response header from
-	// the Access callback.
-	HeaderAttributes param.Field[[]IdentityProviderNewParamsAccessSAMLConfigHeaderAttribute] `json:"header_attributes"`
-	// X509 certificate to verify the signature in the SAML authentication response
-	IDPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
-	// IdP Entity ID or Issuer URL
-	IssuerURL param.Field[string] `json:"issuer_url"`
-	// Sign the SAML authentication request with Access credentials. To verify the
-	// signature, use the public key from the Access certs endpoints.
-	SignRequest param.Field[bool] `json:"sign_request"`
-	// URL to send the SAML authentication requests to
-	SSOTargetURL param.Field[string] `json:"sso_target_url"`
-}
-
-func (r IdentityProviderNewParamsAccessSAMLConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessSAMLConfigHeaderAttribute struct {
-	// attribute name from the IDP
-	AttributeName param.Field[string] `json:"attribute_name"`
-	// header that will be added on the request to the origin
-	HeaderName param.Field[string] `json:"header_name"`
-}
-
-func (r IdentityProviderNewParamsAccessSAMLConfigHeaderAttribute) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderNewParamsAccessYandex struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessYandex) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessYandex) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessYandex) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessYandex) ImplementsIdentityProviderNewParams() {
-
-}
-
-type IdentityProviderNewParamsAccessOnetimepin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[interface{}] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderNewParamsAccessOnetimepin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderNewParamsAccessOnetimepin) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderNewParamsAccessOnetimepin) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderNewParamsAccessOnetimepin) ImplementsIdentityProviderNewParams() {
-
+func (r IdentityProviderNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.IdentityProvider)
 }
 
 type IdentityProviderNewResponseEnvelope struct {
@@ -3202,774 +3011,16 @@ func (r IdentityProviderNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-// This interface is a union satisfied by one of the following:
-// [IdentityProviderUpdateParamsAzureAD],
-// [IdentityProviderUpdateParamsAccessCentrify],
-// [IdentityProviderUpdateParamsAccessFacebook],
-// [IdentityProviderUpdateParamsAccessGitHub],
-// [IdentityProviderUpdateParamsAccessGoogle],
-// [IdentityProviderUpdateParamsAccessGoogleApps],
-// [IdentityProviderUpdateParamsAccessLinkedin],
-// [IdentityProviderUpdateParamsAccessOIDC],
-// [IdentityProviderUpdateParamsAccessOkta],
-// [IdentityProviderUpdateParamsAccessOnelogin],
-// [IdentityProviderUpdateParamsAccessPingone],
-// [IdentityProviderUpdateParamsAccessSAML],
-// [IdentityProviderUpdateParamsAccessYandex],
-// [IdentityProviderUpdateParamsAccessOnetimepin].
-type IdentityProviderUpdateParams interface {
-	ImplementsIdentityProviderUpdateParams()
-
-	getAccountID() param.Field[string]
-
-	getZoneID() param.Field[string]
-}
-
-type IdentityProviderUpdateParamsAzureAD struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAzureADConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
+type IdentityProviderUpdateParams struct {
+	IdentityProvider IdentityProviderUnionParam `json:"identity_provider,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
 }
 
-func (r IdentityProviderUpdateParamsAzureAD) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAzureAD) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAzureAD) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAzureAD) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAzureADConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Should Cloudflare try to load authentication contexts from your account
-	ConditionalAccessEnabled param.Field[bool] `json:"conditional_access_enabled"`
-	// Your Azure directory uuid
-	DirectoryID param.Field[string] `json:"directory_id"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Indicates the type of user interaction that is required. prompt=login forces the
-	// user to enter their credentials on that request, negating single-sign on.
-	// prompt=none is the opposite. It ensures that the user isn't presented with any
-	// interactive prompt. If the request can't be completed silently by using
-	// single-sign on, the Microsoft identity platform returns an interaction_required
-	// error. prompt=select_account interrupts single sign-on providing account
-	// selection experience listing all the accounts either in session or any
-	// remembered account or an option to choose to use a different account altogether.
-	Prompt param.Field[IdentityProviderUpdateParamsAzureADConfigPrompt] `json:"prompt"`
-	// Should Cloudflare try to load groups from your account
-	SupportGroups param.Field[bool] `json:"support_groups"`
-}
-
-func (r IdentityProviderUpdateParamsAzureADConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Indicates the type of user interaction that is required. prompt=login forces the
-// user to enter their credentials on that request, negating single-sign on.
-// prompt=none is the opposite. It ensures that the user isn't presented with any
-// interactive prompt. If the request can't be completed silently by using
-// single-sign on, the Microsoft identity platform returns an interaction_required
-// error. prompt=select_account interrupts single sign-on providing account
-// selection experience listing all the accounts either in session or any
-// remembered account or an option to choose to use a different account altogether.
-type IdentityProviderUpdateParamsAzureADConfigPrompt string
-
-const (
-	IdentityProviderUpdateParamsAzureADConfigPromptLogin         IdentityProviderUpdateParamsAzureADConfigPrompt = "login"
-	IdentityProviderUpdateParamsAzureADConfigPromptSelectAccount IdentityProviderUpdateParamsAzureADConfigPrompt = "select_account"
-	IdentityProviderUpdateParamsAzureADConfigPromptNone          IdentityProviderUpdateParamsAzureADConfigPrompt = "none"
-)
-
-func (r IdentityProviderUpdateParamsAzureADConfigPrompt) IsKnown() bool {
-	switch r {
-	case IdentityProviderUpdateParamsAzureADConfigPromptLogin, IdentityProviderUpdateParamsAzureADConfigPromptSelectAccount, IdentityProviderUpdateParamsAzureADConfigPromptNone:
-		return true
-	}
-	return false
-}
-
-type IdentityProviderUpdateParamsAccessCentrify struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessCentrifyConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessCentrify) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessCentrify) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessCentrify) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessCentrify) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessCentrifyConfig struct {
-	// Your centrify account url
-	CentrifyAccount param.Field[string] `json:"centrify_account"`
-	// Your centrify app id
-	CentrifyAppID param.Field[string] `json:"centrify_app_id"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r IdentityProviderUpdateParamsAccessCentrifyConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessFacebook struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessFacebook) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessFacebook) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessFacebook) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessFacebook) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-type IdentityProviderUpdateParamsAccessGitHub struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessGitHub) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessGitHub) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessGitHub) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessGitHub) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-type IdentityProviderUpdateParamsAccessGoogle struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessGoogleConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessGoogle) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessGoogle) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessGoogle) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessGoogle) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessGoogleConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r IdentityProviderUpdateParamsAccessGoogleConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessGoogleApps struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessGoogleAppsConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessGoogleApps) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessGoogleApps) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessGoogleApps) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessGoogleApps) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessGoogleAppsConfig struct {
-	// Your companies TLD
-	AppsDomain param.Field[string] `json:"apps_domain"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r IdentityProviderUpdateParamsAccessGoogleAppsConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessLinkedin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessLinkedin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessLinkedin) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessLinkedin) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessLinkedin) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-type IdentityProviderUpdateParamsAccessOIDC struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessOIDCConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessOIDC) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessOIDC) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessOIDC) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessOIDC) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessOIDCConfig struct {
-	// The authorization_endpoint URL of your IdP
-	AuthURL param.Field[string] `json:"auth_url"`
-	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
-	CERTsURL param.Field[string] `json:"certs_url"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// OAuth scopes
-	Scopes param.Field[[]string] `json:"scopes"`
-	// The token_endpoint URL of your IdP
-	TokenURL param.Field[string] `json:"token_url"`
-}
-
-func (r IdentityProviderUpdateParamsAccessOIDCConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessOkta struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessOktaConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessOkta) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessOkta) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessOkta) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessOkta) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessOktaConfig struct {
-	// Your okta authorization server id
-	AuthorizationServerID param.Field[string] `json:"authorization_server_id"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your okta account url
-	OktaAccount param.Field[string] `json:"okta_account"`
-}
-
-func (r IdentityProviderUpdateParamsAccessOktaConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessOnelogin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessOneloginConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessOnelogin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessOnelogin) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessOnelogin) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessOnelogin) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessOneloginConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your OneLogin account url
-	OneloginAccount param.Field[string] `json:"onelogin_account"`
-}
-
-func (r IdentityProviderUpdateParamsAccessOneloginConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessPingone struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessPingoneConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessPingone) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessPingone) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessPingone) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessPingone) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessPingoneConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your PingOne environment identifier
-	PingEnvID param.Field[string] `json:"ping_env_id"`
-}
-
-func (r IdentityProviderUpdateParamsAccessPingoneConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessSAML struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessSAMLConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessSAML) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessSAML) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessSAML) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessSAML) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessSAMLConfig struct {
-	// A list of SAML attribute names that will be added to your signed JWT token and
-	// can be used in SAML policy rules.
-	Attributes param.Field[[]string] `json:"attributes"`
-	// The attribute name for email in the SAML response.
-	EmailAttributeName param.Field[string] `json:"email_attribute_name"`
-	// Add a list of attribute names that will be returned in the response header from
-	// the Access callback.
-	HeaderAttributes param.Field[[]IdentityProviderUpdateParamsAccessSAMLConfigHeaderAttribute] `json:"header_attributes"`
-	// X509 certificate to verify the signature in the SAML authentication response
-	IDPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
-	// IdP Entity ID or Issuer URL
-	IssuerURL param.Field[string] `json:"issuer_url"`
-	// Sign the SAML authentication request with Access credentials. To verify the
-	// signature, use the public key from the Access certs endpoints.
-	SignRequest param.Field[bool] `json:"sign_request"`
-	// URL to send the SAML authentication requests to
-	SSOTargetURL param.Field[string] `json:"sso_target_url"`
-}
-
-func (r IdentityProviderUpdateParamsAccessSAMLConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessSAMLConfigHeaderAttribute struct {
-	// attribute name from the IDP
-	AttributeName param.Field[string] `json:"attribute_name"`
-	// header that will be added on the request to the origin
-	HeaderName param.Field[string] `json:"header_name"`
-}
-
-func (r IdentityProviderUpdateParamsAccessSAMLConfigHeaderAttribute) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type IdentityProviderUpdateParamsAccessYandex struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessYandex) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessYandex) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessYandex) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessYandex) ImplementsIdentityProviderUpdateParams() {
-
-}
-
-type IdentityProviderUpdateParamsAccessOnetimepin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[interface{}] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
-}
-
-func (r IdentityProviderUpdateParamsAccessOnetimepin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IdentityProviderUpdateParamsAccessOnetimepin) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (r IdentityProviderUpdateParamsAccessOnetimepin) getZoneID() param.Field[string] {
-	return r.ZoneID
-}
-
-func (IdentityProviderUpdateParamsAccessOnetimepin) ImplementsIdentityProviderUpdateParams() {
-
+func (r IdentityProviderUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.IdentityProvider)
 }
 
 type IdentityProviderUpdateResponseEnvelope struct {

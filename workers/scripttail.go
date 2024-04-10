@@ -191,8 +191,8 @@ func (r scriptTailGetResponseJSON) RawJSON() string {
 
 type ScriptTailNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
@@ -244,8 +244,8 @@ func (r ScriptTailNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptTailDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ScriptTailDeleteParams) MarshalJSON() (data []byte, err error) {
