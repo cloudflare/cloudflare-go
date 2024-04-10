@@ -124,7 +124,7 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule],
 // [zero_trust.AccessRuleAccessAnyValidServiceTokenRule],
 // [zero_trust.ExternalEvaluationRule], [zero_trust.CountryRule],
-// [zero_trust.AuthenticationMethodRule] or
+// [zero_trust.AccessRuleAccessAuthenticationMethodRule] or
 // [zero_trust.AccessRuleAccessDevicePostureRule].
 type AccessRuleUnion interface {
 	implementsZeroTrustAccessRule()
@@ -204,7 +204,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AuthenticationMethodRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessAuthenticationMethodRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -237,6 +237,52 @@ func (r accessRuleAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
 }
 
 func (r AccessRuleAccessAnyValidServiceTokenRule) implementsZeroTrustAccessRule() {}
+
+// Enforce different MFA options
+type AccessRuleAccessAuthenticationMethodRule struct {
+	AuthMethod AccessRuleAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	JSON       accessRuleAccessAuthenticationMethodRuleJSON       `json:"-"`
+}
+
+// accessRuleAccessAuthenticationMethodRuleJSON contains the JSON metadata for the
+// struct [AccessRuleAccessAuthenticationMethodRule]
+type accessRuleAccessAuthenticationMethodRuleJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessAuthenticationMethodRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessAuthenticationMethodRuleAuthMethod struct {
+	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
+	AuthMethod string                                                 `json:"auth_method,required"`
+	JSON       accessRuleAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
+}
+
+// accessRuleAccessAuthenticationMethodRuleAuthMethodJSON contains the JSON
+// metadata for the struct [AccessRuleAccessAuthenticationMethodRuleAuthMethod]
+type accessRuleAccessAuthenticationMethodRuleAuthMethodJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
 
 // Enforces a device posture rule has run successfully
 type AccessRuleAccessDevicePostureRule struct {
@@ -324,7 +370,7 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 // [zero_trust.SAMLGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
 // [zero_trust.AccessRuleAccessAnyValidServiceTokenRuleParam],
 // [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
-// [zero_trust.AuthenticationMethodRuleParam],
+// [zero_trust.AccessRuleAccessAuthenticationMethodRuleParam],
 // [zero_trust.AccessRuleAccessDevicePostureRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsZeroTrustAccessRuleUnionParam()
@@ -341,6 +387,26 @@ func (r AccessRuleAccessAnyValidServiceTokenRuleParam) MarshalJSON() (data []byt
 }
 
 func (r AccessRuleAccessAnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// Enforce different MFA options
+type AccessRuleAccessAuthenticationMethodRuleParam struct {
+	AuthMethod param.Field[AccessRuleAccessAuthenticationMethodRuleAuthMethodParam] `json:"auth_method,required"`
+}
+
+func (r AccessRuleAccessAuthenticationMethodRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessAuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessAuthenticationMethodRuleAuthMethodParam struct {
+	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
+	AuthMethod param.Field[string] `json:"auth_method,required"`
+}
+
+func (r AccessRuleAccessAuthenticationMethodRuleAuthMethodParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Enforces a device posture rule has run successfully
 type AccessRuleAccessDevicePostureRuleParam struct {
@@ -359,166 +425,6 @@ type AccessRuleAccessDevicePostureRuleDevicePostureParam struct {
 }
 
 func (r AccessRuleAccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Enforce different MFA options
-type AuthenticationMethodRule struct {
-	AuthMethod AuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
-	JSON       authenticationMethodRuleJSON       `json:"-"`
-}
-
-// authenticationMethodRuleJSON contains the JSON metadata for the struct
-// [AuthenticationMethodRule]
-type authenticationMethodRuleJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r authenticationMethodRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AuthenticationMethodRule) implementsZeroTrustAccessRule() {}
-
-type AuthenticationMethodRuleAuthMethod struct {
-	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod string                                 `json:"auth_method,required"`
-	JSON       authenticationMethodRuleAuthMethodJSON `json:"-"`
-}
-
-// authenticationMethodRuleAuthMethodJSON contains the JSON metadata for the struct
-// [AuthenticationMethodRuleAuthMethod]
-type authenticationMethodRuleAuthMethodJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r authenticationMethodRuleAuthMethodJSON) RawJSON() string {
-	return r.raw
-}
-
-// Enforce different MFA options
-type AuthenticationMethodRuleParam struct {
-	AuthMethod param.Field[AuthenticationMethodRuleAuthMethodParam] `json:"auth_method,required"`
-}
-
-func (r AuthenticationMethodRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type AuthenticationMethodRuleAuthMethodParam struct {
-	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod param.Field[string] `json:"auth_method,required"`
-}
-
-func (r AuthenticationMethodRuleAuthMethodParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
