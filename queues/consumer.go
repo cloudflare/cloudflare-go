@@ -85,40 +85,14 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, query Consume
 	return
 }
 
-type UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5 struct {
-	// The maximum number of messages to include in a batch
-	BatchSize     float64                                              `json:"batch_size"`
-	MaxRetries    float64                                              `json:"max_retries"`
-	MaxWaitTimeMs float64                                              `json:"max_wait_time_ms"`
-	JSON          unnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5JSON `json:"-"`
-}
-
-// unnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5]
-type unnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5JSON struct {
-	BatchSize     apijson.Field
-	MaxRetries    apijson.Field
-	MaxWaitTimeMs apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5JSON) RawJSON() string {
-	return r.raw
-}
-
 type ConsumerNewResponse struct {
-	CreatedOn       interface{}                                      `json:"created_on"`
-	DeadLetterQueue string                                           `json:"dead_letter_queue"`
-	Environment     interface{}                                      `json:"environment"`
-	QueueName       interface{}                                      `json:"queue_name"`
-	ScriptName      interface{}                                      `json:"script_name"`
-	Settings        UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5 `json:"settings"`
-	JSON            consumerNewResponseJSON                          `json:"-"`
+	CreatedOn       interface{}                 `json:"created_on"`
+	DeadLetterQueue string                      `json:"dead_letter_queue"`
+	Environment     interface{}                 `json:"environment"`
+	QueueName       interface{}                 `json:"queue_name"`
+	ScriptName      interface{}                 `json:"script_name"`
+	Settings        ConsumerNewResponseSettings `json:"settings"`
+	JSON            consumerNewResponseJSON     `json:"-"`
 }
 
 // consumerNewResponseJSON contains the JSON metadata for the struct
@@ -139,6 +113,32 @@ func (r *ConsumerNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r consumerNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerNewResponseSettings struct {
+	// The maximum number of messages to include in a batch
+	BatchSize     float64                         `json:"batch_size"`
+	MaxRetries    float64                         `json:"max_retries"`
+	MaxWaitTimeMs float64                         `json:"max_wait_time_ms"`
+	JSON          consumerNewResponseSettingsJSON `json:"-"`
+}
+
+// consumerNewResponseSettingsJSON contains the JSON metadata for the struct
+// [ConsumerNewResponseSettings]
+type consumerNewResponseSettingsJSON struct {
+	BatchSize     apijson.Field
+	MaxRetries    apijson.Field
+	MaxWaitTimeMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ConsumerNewResponseSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerNewResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -224,12 +224,12 @@ type ConsumerDeleteResponseArray []interface{}
 func (r ConsumerDeleteResponseArray) ImplementsQueuesConsumerDeleteResponseUnion() {}
 
 type ConsumerGetResponse struct {
-	CreatedOn   interface{}                                      `json:"created_on"`
-	Environment interface{}                                      `json:"environment"`
-	QueueName   interface{}                                      `json:"queue_name"`
-	Service     interface{}                                      `json:"service"`
-	Settings    UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5 `json:"settings"`
-	JSON        consumerGetResponseJSON                          `json:"-"`
+	CreatedOn   interface{}                 `json:"created_on"`
+	Environment interface{}                 `json:"environment"`
+	QueueName   interface{}                 `json:"queue_name"`
+	Service     interface{}                 `json:"service"`
+	Settings    ConsumerGetResponseSettings `json:"settings"`
+	JSON        consumerGetResponseJSON     `json:"-"`
 }
 
 // consumerGetResponseJSON contains the JSON metadata for the struct
@@ -249,6 +249,32 @@ func (r *ConsumerGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r consumerGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerGetResponseSettings struct {
+	// The maximum number of messages to include in a batch
+	BatchSize     float64                         `json:"batch_size"`
+	MaxRetries    float64                         `json:"max_retries"`
+	MaxWaitTimeMs float64                         `json:"max_wait_time_ms"`
+	JSON          consumerGetResponseSettingsJSON `json:"-"`
+}
+
+// consumerGetResponseSettingsJSON contains the JSON metadata for the struct
+// [ConsumerGetResponseSettings]
+type consumerGetResponseSettingsJSON struct {
+	BatchSize     apijson.Field
+	MaxRetries    apijson.Field
+	MaxWaitTimeMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ConsumerGetResponseSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerGetResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -36,7 +36,7 @@ func NewHostnameCertificateService(opts ...option.RequestOption) (r *HostnameCer
 
 // Upload a certificate to be used for client authentication on a hostname. 10
 // hostname certificates per zone are allowed.
-func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCertificateNewParams, opts ...option.RequestOption) (res *Certificate, err error) {
+func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCertificateNewParams, opts ...option.RequestOption) (res *HostnameCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", params.ZoneID)
@@ -72,7 +72,7 @@ func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query H
 }
 
 // Delete Hostname Client Certificate
-func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, params HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *Certificate, err error) {
+func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, params HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *HostnameCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", params.ZoneID, certificateID)
@@ -85,7 +85,7 @@ func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID s
 }
 
 // Get the certificate by ID to be used for client authentication on a hostname.
-func (r *HostnameCertificateService) Get(ctx context.Context, certificateID string, query HostnameCertificateGetParams, opts ...option.RequestOption) (res *Certificate, err error) {
+func (r *HostnameCertificateService) Get(ctx context.Context, certificateID string, query HostnameCertificateGetParams, opts ...option.RequestOption) (res *HostnameCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", query.ZoneID, certificateID)
@@ -160,6 +160,198 @@ func (r CertificateStatus) IsKnown() bool {
 	return false
 }
 
+type HostnameCertificateNewResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The hostname certificate.
+	Certificate string `json:"certificate"`
+	// The date when the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// The serial number on the uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// Status of the certificate or the association.
+	Status HostnameCertificateNewResponseStatus `json:"status"`
+	// The time when the certificate was uploaded.
+	UploadedOn time.Time                          `json:"uploaded_on" format:"date-time"`
+	JSON       hostnameCertificateNewResponseJSON `json:"-"`
+}
+
+// hostnameCertificateNewResponseJSON contains the JSON metadata for the struct
+// [HostnameCertificateNewResponse]
+type hostnameCertificateNewResponseJSON struct {
+	ID           apijson.Field
+	Certificate  apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	Status       apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *HostnameCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameCertificateNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the certificate or the association.
+type HostnameCertificateNewResponseStatus string
+
+const (
+	HostnameCertificateNewResponseStatusInitializing       HostnameCertificateNewResponseStatus = "initializing"
+	HostnameCertificateNewResponseStatusPendingDeployment  HostnameCertificateNewResponseStatus = "pending_deployment"
+	HostnameCertificateNewResponseStatusPendingDeletion    HostnameCertificateNewResponseStatus = "pending_deletion"
+	HostnameCertificateNewResponseStatusActive             HostnameCertificateNewResponseStatus = "active"
+	HostnameCertificateNewResponseStatusDeleted            HostnameCertificateNewResponseStatus = "deleted"
+	HostnameCertificateNewResponseStatusDeploymentTimedOut HostnameCertificateNewResponseStatus = "deployment_timed_out"
+	HostnameCertificateNewResponseStatusDeletionTimedOut   HostnameCertificateNewResponseStatus = "deletion_timed_out"
+)
+
+func (r HostnameCertificateNewResponseStatus) IsKnown() bool {
+	switch r {
+	case HostnameCertificateNewResponseStatusInitializing, HostnameCertificateNewResponseStatusPendingDeployment, HostnameCertificateNewResponseStatusPendingDeletion, HostnameCertificateNewResponseStatusActive, HostnameCertificateNewResponseStatusDeleted, HostnameCertificateNewResponseStatusDeploymentTimedOut, HostnameCertificateNewResponseStatusDeletionTimedOut:
+		return true
+	}
+	return false
+}
+
+type HostnameCertificateDeleteResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The hostname certificate.
+	Certificate string `json:"certificate"`
+	// The date when the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// The serial number on the uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// Status of the certificate or the association.
+	Status HostnameCertificateDeleteResponseStatus `json:"status"`
+	// The time when the certificate was uploaded.
+	UploadedOn time.Time                             `json:"uploaded_on" format:"date-time"`
+	JSON       hostnameCertificateDeleteResponseJSON `json:"-"`
+}
+
+// hostnameCertificateDeleteResponseJSON contains the JSON metadata for the struct
+// [HostnameCertificateDeleteResponse]
+type hostnameCertificateDeleteResponseJSON struct {
+	ID           apijson.Field
+	Certificate  apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	Status       apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *HostnameCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameCertificateDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the certificate or the association.
+type HostnameCertificateDeleteResponseStatus string
+
+const (
+	HostnameCertificateDeleteResponseStatusInitializing       HostnameCertificateDeleteResponseStatus = "initializing"
+	HostnameCertificateDeleteResponseStatusPendingDeployment  HostnameCertificateDeleteResponseStatus = "pending_deployment"
+	HostnameCertificateDeleteResponseStatusPendingDeletion    HostnameCertificateDeleteResponseStatus = "pending_deletion"
+	HostnameCertificateDeleteResponseStatusActive             HostnameCertificateDeleteResponseStatus = "active"
+	HostnameCertificateDeleteResponseStatusDeleted            HostnameCertificateDeleteResponseStatus = "deleted"
+	HostnameCertificateDeleteResponseStatusDeploymentTimedOut HostnameCertificateDeleteResponseStatus = "deployment_timed_out"
+	HostnameCertificateDeleteResponseStatusDeletionTimedOut   HostnameCertificateDeleteResponseStatus = "deletion_timed_out"
+)
+
+func (r HostnameCertificateDeleteResponseStatus) IsKnown() bool {
+	switch r {
+	case HostnameCertificateDeleteResponseStatusInitializing, HostnameCertificateDeleteResponseStatusPendingDeployment, HostnameCertificateDeleteResponseStatusPendingDeletion, HostnameCertificateDeleteResponseStatusActive, HostnameCertificateDeleteResponseStatusDeleted, HostnameCertificateDeleteResponseStatusDeploymentTimedOut, HostnameCertificateDeleteResponseStatusDeletionTimedOut:
+		return true
+	}
+	return false
+}
+
+type HostnameCertificateGetResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The hostname certificate.
+	Certificate string `json:"certificate"`
+	// The date when the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// The serial number on the uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// Status of the certificate or the association.
+	Status HostnameCertificateGetResponseStatus `json:"status"`
+	// The time when the certificate was uploaded.
+	UploadedOn time.Time                          `json:"uploaded_on" format:"date-time"`
+	JSON       hostnameCertificateGetResponseJSON `json:"-"`
+}
+
+// hostnameCertificateGetResponseJSON contains the JSON metadata for the struct
+// [HostnameCertificateGetResponse]
+type hostnameCertificateGetResponseJSON struct {
+	ID           apijson.Field
+	Certificate  apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	Status       apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *HostnameCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameCertificateGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the certificate or the association.
+type HostnameCertificateGetResponseStatus string
+
+const (
+	HostnameCertificateGetResponseStatusInitializing       HostnameCertificateGetResponseStatus = "initializing"
+	HostnameCertificateGetResponseStatusPendingDeployment  HostnameCertificateGetResponseStatus = "pending_deployment"
+	HostnameCertificateGetResponseStatusPendingDeletion    HostnameCertificateGetResponseStatus = "pending_deletion"
+	HostnameCertificateGetResponseStatusActive             HostnameCertificateGetResponseStatus = "active"
+	HostnameCertificateGetResponseStatusDeleted            HostnameCertificateGetResponseStatus = "deleted"
+	HostnameCertificateGetResponseStatusDeploymentTimedOut HostnameCertificateGetResponseStatus = "deployment_timed_out"
+	HostnameCertificateGetResponseStatusDeletionTimedOut   HostnameCertificateGetResponseStatus = "deletion_timed_out"
+)
+
+func (r HostnameCertificateGetResponseStatus) IsKnown() bool {
+	switch r {
+	case HostnameCertificateGetResponseStatusInitializing, HostnameCertificateGetResponseStatusPendingDeployment, HostnameCertificateGetResponseStatusPendingDeletion, HostnameCertificateGetResponseStatusActive, HostnameCertificateGetResponseStatusDeleted, HostnameCertificateGetResponseStatusDeploymentTimedOut, HostnameCertificateGetResponseStatusDeletionTimedOut:
+		return true
+	}
+	return false
+}
+
 type HostnameCertificateNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -174,9 +366,9 @@ func (r HostnameCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Certificate           `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   HostnameCertificateNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -232,9 +424,9 @@ func (r HostnameCertificateDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type HostnameCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Certificate           `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   HostnameCertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -280,9 +472,9 @@ type HostnameCertificateGetParams struct {
 }
 
 type HostnameCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Certificate           `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   HostnameCertificateGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateGetResponseEnvelopeJSON    `json:"-"`

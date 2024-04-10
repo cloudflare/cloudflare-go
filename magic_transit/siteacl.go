@@ -112,9 +112,9 @@ type ACL struct {
 	LAN1           ACLConfiguration `json:"lan_1"`
 	LAN2           ACLConfiguration `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                                             `json:"name"`
-	Protocols []UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 `json:"protocols"`
-	JSON      aclJSON                                            `json:"-"`
+	Name      string            `json:"name"`
+	Protocols []AllowedProtocol `json:"protocols"`
+	JSON      aclJSON           `json:"-"`
 }
 
 // aclJSON contains the JSON metadata for the struct [ACL]
@@ -150,8 +150,8 @@ type ACLParam struct {
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]                                             `json:"name"`
-	Protocols param.Field[[]UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916] `json:"protocols"`
+	Name      param.Field[string]            `json:"name"`
+	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
 }
 
 func (r ACLParam) MarshalJSON() (data []byte, err error) {
@@ -208,6 +208,24 @@ func (r ACLConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Array of allowed communication protocols between configured LANs. If no
+// protocols are provided, all protocols are allowed.
+type AllowedProtocol string
+
+const (
+	AllowedProtocolTCP  AllowedProtocol = "tcp"
+	AllowedProtocolUdp  AllowedProtocol = "udp"
+	AllowedProtocolIcmp AllowedProtocol = "icmp"
+)
+
+func (r AllowedProtocol) IsKnown() bool {
+	switch r {
+	case AllowedProtocolTCP, AllowedProtocolUdp, AllowedProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
@@ -235,24 +253,6 @@ func init() {
 // Satisfied by [shared.UnionString], [shared.UnionString].
 type SubnetUnionParam interface {
 	ImplementsMagicTransitSubnetUnionParam()
-}
-
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 string
-
-const (
-	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916TCP  UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "tcp"
-	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp  UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "udp"
-	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "icmp"
-)
-
-func (r UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916TCP, UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp, UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp:
-		return true
-	}
-	return false
 }
 
 type SiteACLNewResponse struct {
@@ -386,8 +386,8 @@ type SiteACLNewParamsACL struct {
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
 	// traffic locally on the Magic WAN Connector. If not included in request, will
 	// default to false.
-	ForwardLocally param.Field[bool]                                               `json:"forward_locally"`
-	Protocols      param.Field[[]UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916] `json:"protocols"`
+	ForwardLocally param.Field[bool]              `json:"forward_locally"`
+	Protocols      param.Field[[]AllowedProtocol] `json:"protocols"`
 }
 
 func (r SiteACLNewParamsACL) MarshalJSON() (data []byte, err error) {
@@ -458,8 +458,8 @@ type SiteACLUpdateParamsACL struct {
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]                                             `json:"name"`
-	Protocols param.Field[[]UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916] `json:"protocols"`
+	Name      param.Field[string]            `json:"name"`
+	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
 }
 
 func (r SiteACLUpdateParamsACL) MarshalJSON() (data []byte, err error) {
