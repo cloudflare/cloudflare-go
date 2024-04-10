@@ -207,6 +207,7 @@ Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#CIDRListParam">CIDRListParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#PolicyParam">PolicyParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#TokenParam">TokenParam</a>
 
 Response Types:
 
