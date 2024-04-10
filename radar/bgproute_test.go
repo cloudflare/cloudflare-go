@@ -117,12 +117,13 @@ func TestBGPRouteTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Timeseries(context.TODO(), radar.BGPRouteTimeseriesParams{
-		ASN:       cloudflare.F(int64(0)),
-		DateEnd:   cloudflare.F(time.Now()),
-		DateRange: cloudflare.F(radar.BGPRouteTimeseriesParamsDateRange7d),
-		DateStart: cloudflare.F(time.Now()),
-		Format:    cloudflare.F(radar.BGPRouteTimeseriesParamsFormatJson),
-		Location:  cloudflare.F("US"),
+		ASN:          cloudflare.F(int64(0)),
+		DateEnd:      cloudflare.F(time.Now()),
+		DateRange:    cloudflare.F(radar.BGPRouteTimeseriesParamsDateRange7d),
+		DateStart:    cloudflare.F(time.Now()),
+		Format:       cloudflare.F(radar.BGPRouteTimeseriesParamsFormatJson),
+		IncludeDelay: cloudflare.F(true),
+		Location:     cloudflare.F("US"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
