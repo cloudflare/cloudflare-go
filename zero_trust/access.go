@@ -125,7 +125,8 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.AccessRuleAccessAccessGroupRule],
 // [zero_trust.AccessRuleAccessAzureGroupRule],
 // [zero_trust.AccessRuleAccessGitHubOrganizationRule],
-// [zero_trust.AccessRuleAccessGSuiteGroupRule], [zero_trust.OktaGroupRule],
+// [zero_trust.AccessRuleAccessGSuiteGroupRule],
+// [zero_trust.AccessRuleAccessOktaGroupRule],
 // [zero_trust.AccessRuleAccessSAMLGroupRule],
 // [zero_trust.AccessRuleAccessServiceTokenRule],
 // [zero_trust.AccessRuleAccessAnyValidServiceTokenRule],
@@ -187,7 +188,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OktaGroupRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessOktaGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -694,6 +695,55 @@ func (r accessRuleAccessGSuiteGroupRuleGSuiteJSON) RawJSON() string {
 	return r.raw
 }
 
+// Matches an Okta group. Requires an Okta identity provider.
+type AccessRuleAccessOktaGroupRule struct {
+	Okta AccessRuleAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON accessRuleAccessOktaGroupRuleJSON `json:"-"`
+}
+
+// accessRuleAccessOktaGroupRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessOktaGroupRule]
+type accessRuleAccessOktaGroupRuleJSON struct {
+	Okta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessOktaGroupRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessOktaGroupRuleOkta struct {
+	// The ID of your Okta identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Okta group.
+	Email string                                `json:"email,required"`
+	JSON  accessRuleAccessOktaGroupRuleOktaJSON `json:"-"`
+}
+
+// accessRuleAccessOktaGroupRuleOktaJSON contains the JSON metadata for the struct
+// [AccessRuleAccessOktaGroupRuleOkta]
+type accessRuleAccessOktaGroupRuleOktaJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type AccessRuleAccessSAMLGroupRule struct {
 	SAML AccessRuleAccessSAMLGroupRuleSAML `json:"saml,required"`
@@ -1045,7 +1095,7 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 // [zero_trust.AccessRuleAccessAzureGroupRuleParam],
 // [zero_trust.AccessRuleAccessGitHubOrganizationRuleParam],
 // [zero_trust.AccessRuleAccessGSuiteGroupRuleParam],
-// [zero_trust.OktaGroupRuleParam],
+// [zero_trust.AccessRuleAccessOktaGroupRuleParam],
 // [zero_trust.AccessRuleAccessSAMLGroupRuleParam],
 // [zero_trust.AccessRuleAccessServiceTokenRuleParam],
 // [zero_trust.AccessRuleAccessAnyValidServiceTokenRuleParam],
@@ -1267,6 +1317,28 @@ func (r AccessRuleAccessGSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
+// Matches an Okta group. Requires an Okta identity provider.
+type AccessRuleAccessOktaGroupRuleParam struct {
+	Okta param.Field[AccessRuleAccessOktaGroupRuleOktaParam] `json:"okta,required"`
+}
+
+func (r AccessRuleAccessOktaGroupRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessOktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessOktaGroupRuleOktaParam struct {
+	// The ID of your Okta identity provider.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// The email of the Okta group.
+	Email param.Field[string] `json:"email,required"`
+}
+
+func (r AccessRuleAccessOktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type AccessRuleAccessSAMLGroupRuleParam struct {
 	SAML param.Field[AccessRuleAccessSAMLGroupRuleSAMLParam] `json:"saml,required"`
@@ -1401,169 +1473,5 @@ type AccessRuleAccessDevicePostureRuleDevicePostureParam struct {
 }
 
 func (r AccessRuleAccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches an Okta group. Requires an Okta identity provider.
-type OktaGroupRule struct {
-	Okta OktaGroupRuleOkta `json:"okta,required"`
-	JSON oktaGroupRuleJSON `json:"-"`
-}
-
-// oktaGroupRuleJSON contains the JSON metadata for the struct [OktaGroupRule]
-type oktaGroupRuleJSON struct {
-	Okta        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OktaGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r oktaGroupRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r OktaGroupRule) implementsZeroTrustAccessRule() {}
-
-type OktaGroupRuleOkta struct {
-	// The ID of your Okta identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email string                `json:"email,required"`
-	JSON  oktaGroupRuleOktaJSON `json:"-"`
-}
-
-// oktaGroupRuleOktaJSON contains the JSON metadata for the struct
-// [OktaGroupRuleOkta]
-type oktaGroupRuleOktaJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *OktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r oktaGroupRuleOktaJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches an Okta group. Requires an Okta identity provider.
-type OktaGroupRuleParam struct {
-	Okta param.Field[OktaGroupRuleOktaParam] `json:"okta,required"`
-}
-
-func (r OktaGroupRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type OktaGroupRuleOktaParam struct {
-	// The ID of your Okta identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email param.Field[string] `json:"email,required"`
-}
-
-func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
