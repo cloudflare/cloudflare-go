@@ -216,6 +216,9 @@ type ListWorkersParams struct{}
 
 type DeleteWorkerParams struct {
 	ScriptName string
+
+	// DispatchNamespaceName is the dispatch namespace the Worker is uploaded to.
+	DispatchNamespace *string
 }
 
 type PlacementMode string
@@ -242,6 +245,10 @@ func (api *API) DeleteWorker(ctx context.Context, rc *ResourceContainer, params 
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, params.ScriptName)
+	if params.DispatchNamespace != nil && *params.DispatchNamespace != "" {
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", rc.Identifier, *params.DispatchNamespace, params.ScriptName)
+	}
+
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 
 	var r WorkerScriptResponse

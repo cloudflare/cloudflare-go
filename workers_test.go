@@ -459,6 +459,23 @@ func TestDeleteWorker(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestDeleteNamespacedWorker(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/dispatch/namespaces/foo/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprint(w, deleteWorkerResponseData)
+	})
+
+	err := client.DeleteWorker(context.Background(), AccountIdentifier(testAccountID), DeleteWorkerParams{
+		ScriptName:        "bar",
+		DispatchNamespace: &[]string{"foo"}[0],
+	})
+	assert.NoError(t, err)
+}
+
 func TestGetWorker(t *testing.T) {
 	setup()
 	defer teardown()
