@@ -72,8 +72,8 @@ func (r bgpTopPrefixesResponseJSON) RawJSON() string {
 }
 
 type BGPTopPrefixesResponseMeta struct {
-	DateRange []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	JSON      bgpTopPrefixesResponseMetaJSON                     `json:"-"`
+	DateRange []BGPTopPrefixesResponseMetaDateRange `json:"dateRange,required"`
+	JSON      bgpTopPrefixesResponseMetaJSON        `json:"-"`
 }
 
 // bgpTopPrefixesResponseMetaJSON contains the JSON metadata for the struct
@@ -89,6 +89,31 @@ func (r *BGPTopPrefixesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpTopPrefixesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPTopPrefixesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                               `json:"startTime,required" format:"date-time"`
+	JSON      bgpTopPrefixesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// bgpTopPrefixesResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [BGPTopPrefixesResponseMetaDateRange]
+type bgpTopPrefixesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPTopPrefixesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpTopPrefixesResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 

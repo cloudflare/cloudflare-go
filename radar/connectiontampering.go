@@ -83,7 +83,7 @@ func (r connectionTamperingSummaryResponseJSON) RawJSON() string {
 }
 
 type ConnectionTamperingSummaryResponseMeta struct {
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5   `json:"dateRange,required"`
+	DateRange      []ConnectionTamperingSummaryResponseMetaDateRange    `json:"dateRange,required"`
 	ConfidenceInfo ConnectionTamperingSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           connectionTamperingSummaryResponseMetaJSON           `json:"-"`
 }
@@ -105,10 +105,35 @@ func (r connectionTamperingSummaryResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type ConnectionTamperingSummaryResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
+	JSON      connectionTamperingSummaryResponseMetaDateRangeJSON `json:"-"`
+}
+
+// connectionTamperingSummaryResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [ConnectionTamperingSummaryResponseMetaDateRange]
+type connectionTamperingSummaryResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectionTamperingSummaryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectionTamperingSummaryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ConnectionTamperingSummaryResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1       `json:"annotations"`
-	Level       int64                                                    `json:"level"`
-	JSON        connectionTamperingSummaryResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []ConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                            `json:"level"`
+	JSON        connectionTamperingSummaryResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // connectionTamperingSummaryResponseMetaConfidenceInfoJSON contains the JSON
@@ -125,6 +150,40 @@ func (r *ConnectionTamperingSummaryResponseMetaConfidenceInfo) UnmarshalJSON(dat
 }
 
 func (r connectionTamperingSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                             `json:"dataSource,required"`
+	Description     string                                                             `json:"description,required"`
+	EventType       string                                                             `json:"eventType,required"`
+	IsInstantaneous interface{}                                                        `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                          `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                             `json:"linkedUrl"`
+	StartTime       time.Time                                                          `json:"startTime" format:"date-time"`
+	JSON            connectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// connectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [ConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation]
+type connectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -192,7 +251,7 @@ func (r connectionTamperingTimeseriesGroupsResponseJSON) RawJSON() string {
 
 type ConnectionTamperingTimeseriesGroupsResponseMeta struct {
 	AggInterval    string                                                        `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5            `json:"dateRange,required"`
+	DateRange      []ConnectionTamperingTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    time.Time                                                     `json:"lastUpdated,required" format:"date-time"`
 	ConfidenceInfo ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           connectionTamperingTimeseriesGroupsResponseMetaJSON           `json:"-"`
@@ -217,10 +276,36 @@ func (r connectionTamperingTimeseriesGroupsResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type ConnectionTamperingTimeseriesGroupsResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                    `json:"startTime,required" format:"date-time"`
+	JSON      connectionTamperingTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
+}
+
+// connectionTamperingTimeseriesGroupsResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [ConnectionTamperingTimeseriesGroupsResponseMetaDateRange]
+type connectionTamperingTimeseriesGroupsResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectionTamperingTimeseriesGroupsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectionTamperingTimeseriesGroupsResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1                `json:"annotations"`
-	Level       int64                                                             `json:"level"`
-	JSON        connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                     `json:"level"`
+	JSON        connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoJSON contains the
@@ -238,6 +323,40 @@ func (r *ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfo) Unmarsha
 }
 
 func (r connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                      `json:"dataSource,required"`
+	Description     string                                                                      `json:"description,required"`
+	EventType       string                                                                      `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                 `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                                   `json:"startTime" format:"date-time"`
+	JSON            connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation]
+type connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

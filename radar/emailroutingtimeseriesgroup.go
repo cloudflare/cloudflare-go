@@ -112,9 +112,9 @@ func (r *EmailRoutingTimeseriesGroupService) SPF(ctx context.Context, query Emai
 }
 
 type EmailRoutingTimeseriesGroupARCResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c `json:"serie_0,required"`
-	JSON   emailRoutingTimeseriesGroupARCResponseJSON       `json:"-"`
+	Meta   interface{}                                `json:"meta,required"`
+	Serie0 RadarEmailSeries                           `json:"serie_0,required"`
+	JSON   emailRoutingTimeseriesGroupARCResponseJSON `json:"-"`
 }
 
 // emailRoutingTimeseriesGroupARCResponseJSON contains the JSON metadata for the
@@ -135,9 +135,9 @@ func (r emailRoutingTimeseriesGroupARCResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingTimeseriesGroupDKIMResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c `json:"serie_0,required"`
-	JSON   emailRoutingTimeseriesGroupDKIMResponseJSON      `json:"-"`
+	Meta   interface{}                                 `json:"meta,required"`
+	Serie0 RadarEmailSeries                            `json:"serie_0,required"`
+	JSON   emailRoutingTimeseriesGroupDKIMResponseJSON `json:"-"`
 }
 
 // emailRoutingTimeseriesGroupDKIMResponseJSON contains the JSON metadata for the
@@ -158,9 +158,9 @@ func (r emailRoutingTimeseriesGroupDKIMResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingTimeseriesGroupDMARCResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c `json:"serie_0,required"`
-	JSON   emailRoutingTimeseriesGroupDMARCResponseJSON     `json:"-"`
+	Meta   interface{}                                  `json:"meta,required"`
+	Serie0 RadarEmailSeries                             `json:"serie_0,required"`
+	JSON   emailRoutingTimeseriesGroupDMARCResponseJSON `json:"-"`
 }
 
 // emailRoutingTimeseriesGroupDMARCResponseJSON contains the JSON metadata for the
@@ -273,9 +273,9 @@ func (r emailRoutingTimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string
 }
 
 type EmailRoutingTimeseriesGroupSPFResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c `json:"serie_0,required"`
-	JSON   emailRoutingTimeseriesGroupSPFResponseJSON       `json:"-"`
+	Meta   interface{}                                `json:"meta,required"`
+	Serie0 RadarEmailSeries                           `json:"serie_0,required"`
+	JSON   emailRoutingTimeseriesGroupSPFResponseJSON `json:"-"`
 }
 
 // emailRoutingTimeseriesGroupSPFResponseJSON contains the JSON metadata for the

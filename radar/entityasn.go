@@ -432,9 +432,9 @@ func (r entityAsnipResponseASNRelatedJSON) RawJSON() string {
 }
 
 type EntityASNRelResponse struct {
-	Meta UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7 `json:"meta,required"`
-	Rels []EntityASNRelResponseRel                        `json:"rels,required"`
-	JSON entityASNRelResponseJSON                         `json:"-"`
+	Meta EntityASNRelResponseMeta  `json:"meta,required"`
+	Rels []EntityASNRelResponseRel `json:"rels,required"`
+	JSON entityASNRelResponseJSON  `json:"-"`
 }
 
 // entityASNRelResponseJSON contains the JSON metadata for the struct
@@ -451,6 +451,31 @@ func (r *EntityASNRelResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r entityASNRelResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNRelResponseMeta struct {
+	DataTime   string                       `json:"data_time,required"`
+	QueryTime  string                       `json:"query_time,required"`
+	TotalPeers int64                        `json:"total_peers,required"`
+	JSON       entityASNRelResponseMetaJSON `json:"-"`
+}
+
+// entityASNRelResponseMetaJSON contains the JSON metadata for the struct
+// [EntityASNRelResponseMeta]
+type entityASNRelResponseMetaJSON struct {
+	DataTime    apijson.Field
+	QueryTime   apijson.Field
+	TotalPeers  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityASNRelResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNRelResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 

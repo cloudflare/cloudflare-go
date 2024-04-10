@@ -5560,19 +5560,6 @@ Methods:
 
 # Radar
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42">UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef4124a22436f90127c7fa2c4543219752">UnnamedSchemaRef4124a22436f90127c7fa2c4543219752</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb">UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55">UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09">UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297">UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef9002274ed7cb7f3dc567421e31529a3a">UnnamedSchemaRef9002274ed7cb7f3dc567421e31529a3a</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1">UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5">UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7">UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7</a>
-
 ## Annotations
 
 ### Outages
@@ -5814,8 +5801,8 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c">UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#UnnamedSchemaRef853c157ad369010995e35be614e0343f">UnnamedSchemaRef853c157ad369010995e35be614e0343f</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RadarEmailSeries">RadarEmailSeries</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RadarEmailSummary">RadarEmailSummary</a>
 
 ### Routing
 

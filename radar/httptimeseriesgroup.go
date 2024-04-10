@@ -208,9 +208,9 @@ func (r httpTimeseriesGroupBotClassResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupBrowserResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55 `json:"serie_0,required"`
-	JSON   httpTimeseriesGroupBrowserResponseJSON           `json:"-"`
+	Meta   interface{}                              `json:"meta,required"`
+	Serie0 HTTPTimeseriesGroupBrowserResponseSerie0 `json:"serie_0,required"`
+	JSON   httpTimeseriesGroupBrowserResponseJSON   `json:"-"`
 }
 
 // httpTimeseriesGroupBrowserResponseJSON contains the JSON metadata for the struct
@@ -230,10 +230,32 @@ func (r httpTimeseriesGroupBrowserResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type HTTPTimeseriesGroupBrowserResponseSerie0 struct {
+	Timestamps  []string                                     `json:"timestamps,required"`
+	ExtraFields map[string][]string                          `json:"-,extras"`
+	JSON        httpTimeseriesGroupBrowserResponseSerie0JSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserResponseSerie0JSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupBrowserResponseSerie0]
+type httpTimeseriesGroupBrowserResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupBrowserFamilyResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55 `json:"serie_0,required"`
-	JSON   httpTimeseriesGroupBrowserFamilyResponseJSON     `json:"-"`
+	Meta   interface{}                                    `json:"meta,required"`
+	Serie0 HTTPTimeseriesGroupBrowserFamilyResponseSerie0 `json:"serie_0,required"`
+	JSON   httpTimeseriesGroupBrowserFamilyResponseJSON   `json:"-"`
 }
 
 // httpTimeseriesGroupBrowserFamilyResponseJSON contains the JSON metadata for the
@@ -250,6 +272,28 @@ func (r *HTTPTimeseriesGroupBrowserFamilyResponse) UnmarshalJSON(data []byte) (e
 }
 
 func (r httpTimeseriesGroupBrowserFamilyResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupBrowserFamilyResponseSerie0 struct {
+	Timestamps  []string                                           `json:"timestamps,required"`
+	ExtraFields map[string][]string                                `json:"-,extras"`
+	JSON        httpTimeseriesGroupBrowserFamilyResponseSerie0JSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserFamilyResponseSerie0JSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupBrowserFamilyResponseSerie0]
+type httpTimeseriesGroupBrowserFamilyResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserFamilyResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserFamilyResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -402,9 +446,9 @@ func (r httpTimeseriesGroupHTTPVersionResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupIPVersionResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef9002274ed7cb7f3dc567421e31529a3a `json:"serie_0,required"`
-	JSON   httpTimeseriesGroupIPVersionResponseJSON         `json:"-"`
+	Meta   interface{}                                `json:"meta,required"`
+	Serie0 HTTPTimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
+	JSON   httpTimeseriesGroupIPVersionResponseJSON   `json:"-"`
 }
 
 // httpTimeseriesGroupIPVersionResponseJSON contains the JSON metadata for the
@@ -424,10 +468,35 @@ func (r httpTimeseriesGroupIPVersionResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type HTTPTimeseriesGroupIPVersionResponseSerie0 struct {
+	IPv4       []string                                       `json:"IPv4,required"`
+	IPv6       []string                                       `json:"IPv6,required"`
+	Timestamps []string                                       `json:"timestamps,required"`
+	JSON       httpTimeseriesGroupIPVersionResponseSerie0JSON `json:"-"`
+}
+
+// httpTimeseriesGroupIPVersionResponseSerie0JSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupIPVersionResponseSerie0]
+type httpTimeseriesGroupIPVersionResponseSerie0JSON struct {
+	IPv4        apijson.Field
+	IPv6        apijson.Field
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupIPVersionResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupOSResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55 `json:"serie_0,required"`
-	JSON   httpTimeseriesGroupOSResponseJSON                `json:"-"`
+	Meta   interface{}                         `json:"meta,required"`
+	Serie0 HTTPTimeseriesGroupOSResponseSerie0 `json:"serie_0,required"`
+	JSON   httpTimeseriesGroupOSResponseJSON   `json:"-"`
 }
 
 // httpTimeseriesGroupOSResponseJSON contains the JSON metadata for the struct
@@ -444,6 +513,28 @@ func (r *HTTPTimeseriesGroupOSResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r httpTimeseriesGroupOSResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupOSResponseSerie0 struct {
+	Timestamps  []string                                `json:"timestamps,required"`
+	ExtraFields map[string][]string                     `json:"-,extras"`
+	JSON        httpTimeseriesGroupOSResponseSerie0JSON `json:"-"`
+}
+
+// httpTimeseriesGroupOSResponseSerie0JSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupOSResponseSerie0]
+type httpTimeseriesGroupOSResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupOSResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupOSResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 
