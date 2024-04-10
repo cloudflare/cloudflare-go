@@ -37,7 +37,7 @@ func NewListService(opts ...option.RequestOption) (r *ListService) {
 }
 
 // Creates a new list of the specified type.
-func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...option.RequestOption) (res *RuleList, err error) {
+func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...option.RequestOption) (res *ListsList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rules/lists", params.AccountID)
@@ -50,7 +50,7 @@ func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...opt
 }
 
 // Updates the description of a list.
-func (r *ListService) Update(ctx context.Context, listID string, params ListUpdateParams, opts ...option.RequestOption) (res *RuleList, err error) {
+func (r *ListService) Update(ctx context.Context, listID string, params ListUpdateParams, opts ...option.RequestOption) (res *ListsList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", params.AccountID, listID)
@@ -63,7 +63,7 @@ func (r *ListService) Update(ctx context.Context, listID string, params ListUpda
 }
 
 // Fetches all lists in the account.
-func (r *ListService) List(ctx context.Context, query ListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RuleList], err error) {
+func (r *ListService) List(ctx context.Context, query ListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ListsList], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -81,7 +81,7 @@ func (r *ListService) List(ctx context.Context, query ListListParams, opts ...op
 }
 
 // Fetches all lists in the account.
-func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleList] {
+func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ListsList] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -99,7 +99,7 @@ func (r *ListService) Delete(ctx context.Context, listID string, params ListDele
 }
 
 // Fetches the details of a list.
-func (r *ListService) Get(ctx context.Context, listID string, query ListGetParams, opts ...option.RequestOption) (res *RuleList, err error) {
+func (r *ListService) Get(ctx context.Context, listID string, query ListGetParams, opts ...option.RequestOption) (res *ListsList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", query.AccountID, listID)
@@ -143,6 +143,68 @@ type HostnameParam struct {
 
 func (r HostnameParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type ListsList struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on"`
+	// An informative summary of the list.
+	Description string `json:"description"`
+	// The type of the list. Each type supports specific list items (IP addresses,
+	// ASNs, hostnames or redirects).
+	Kind ListsListKind `json:"kind"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// An informative name for the list. Use this name in filter and rule expressions.
+	Name string `json:"name"`
+	// The number of items in the list.
+	NumItems float64 `json:"num_items"`
+	// The number of [filters](/operations/filters-list-filters) referencing the list.
+	NumReferencingFilters float64       `json:"num_referencing_filters"`
+	JSON                  listsListJSON `json:"-"`
+}
+
+// listsListJSON contains the JSON metadata for the struct [ListsList]
+type listsListJSON struct {
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	Kind                  apijson.Field
+	ModifiedOn            apijson.Field
+	Name                  apijson.Field
+	NumItems              apijson.Field
+	NumReferencingFilters apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *ListsList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listsListJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of the list. Each type supports specific list items (IP addresses,
+// ASNs, hostnames or redirects).
+type ListsListKind string
+
+const (
+	ListsListKindIP       ListsListKind = "ip"
+	ListsListKindRedirect ListsListKind = "redirect"
+	ListsListKindHostname ListsListKind = "hostname"
+	ListsListKindASN      ListsListKind = "asn"
+)
+
+func (r ListsListKind) IsKnown() bool {
+	switch r {
+	case ListsListKindIP, ListsListKindRedirect, ListsListKindHostname, ListsListKindASN:
+		return true
+	}
+	return false
 }
 
 // The definition of the redirect.
@@ -212,68 +274,6 @@ func (r RedirectParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RuleList struct {
-	// The unique ID of the list.
-	ID string `json:"id"`
-	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on"`
-	// An informative summary of the list.
-	Description string `json:"description"`
-	// The type of the list. Each type supports specific list items (IP addresses,
-	// ASNs, hostnames or redirects).
-	Kind RuleListKind `json:"kind"`
-	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on"`
-	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name"`
-	// The number of items in the list.
-	NumItems float64 `json:"num_items"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64      `json:"num_referencing_filters"`
-	JSON                  ruleListJSON `json:"-"`
-}
-
-// ruleListJSON contains the JSON metadata for the struct [RuleList]
-type ruleListJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	Description           apijson.Field
-	Kind                  apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NumItems              apijson.Field
-	NumReferencingFilters apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *RuleList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleListJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of the list. Each type supports specific list items (IP addresses,
-// ASNs, hostnames or redirects).
-type RuleListKind string
-
-const (
-	RuleListKindIP       RuleListKind = "ip"
-	RuleListKindRedirect RuleListKind = "redirect"
-	RuleListKindHostname RuleListKind = "hostname"
-	RuleListKindASN      RuleListKind = "asn"
-)
-
-func (r RuleListKind) IsKnown() bool {
-	switch r {
-	case RuleListKindIP, RuleListKindRedirect, RuleListKindHostname, RuleListKindASN:
-		return true
-	}
-	return false
-}
-
 type ListNewResponse = interface{}
 
 type ListUpdateResponse = interface{}
@@ -340,7 +340,7 @@ func (r ListNewParamsKind) IsKnown() bool {
 type ListNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RuleList              `json:"result,required,nullable"`
+	Result   ListsList             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listNewResponseEnvelopeJSON    `json:"-"`
@@ -394,7 +394,7 @@ func (r ListUpdateParams) MarshalJSON() (data []byte, err error) {
 type ListUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RuleList              `json:"result,required,nullable"`
+	Result   ListsList             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listUpdateResponseEnvelopeJSON    `json:"-"`
@@ -500,7 +500,7 @@ type ListGetParams struct {
 type ListGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RuleList              `json:"result,required,nullable"`
+	Result   ListsList             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listGetResponseEnvelopeJSON    `json:"-"`
