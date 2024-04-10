@@ -162,6 +162,40 @@ func (r PriorityTlp) IsKnown() bool {
 	return false
 }
 
+type PriorityEditParam struct {
+	// List of labels
+	Labels param.Field[[]LabelParam] `json:"labels,required"`
+	// Priority
+	Priority param.Field[int64] `json:"priority,required"`
+	// Requirement
+	Requirement param.Field[string] `json:"requirement,required"`
+	// The CISA defined Traffic Light Protocol (TLP)
+	Tlp param.Field[PriorityEditTlp] `json:"tlp,required"`
+}
+
+func (r PriorityEditParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The CISA defined Traffic Light Protocol (TLP)
+type PriorityEditTlp string
+
+const (
+	PriorityEditTlpClear       PriorityEditTlp = "clear"
+	PriorityEditTlpAmber       PriorityEditTlp = "amber"
+	PriorityEditTlpAmberStrict PriorityEditTlp = "amber-strict"
+	PriorityEditTlpGreen       PriorityEditTlp = "green"
+	PriorityEditTlpRed         PriorityEditTlp = "red"
+)
+
+func (r PriorityEditTlp) IsKnown() bool {
+	switch r {
+	case PriorityEditTlpClear, PriorityEditTlpAmber, PriorityEditTlpAmberStrict, PriorityEditTlpGreen, PriorityEditTlpRed:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [cloudforce_one.RequestPriorityDeleteResponseUnknown],
 // [cloudforce_one.RequestPriorityDeleteResponseArray] or [shared.UnionString].
 type RequestPriorityDeleteResponseUnion interface {
@@ -189,37 +223,11 @@ func (r RequestPriorityDeleteResponseArray) ImplementsCloudforceOneRequestPriori
 }
 
 type RequestPriorityNewParams struct {
-	// List of labels
-	Labels param.Field[[]LabelParam] `json:"labels,required"`
-	// Priority
-	Priority param.Field[int64] `json:"priority,required"`
-	// Requirement
-	Requirement param.Field[string] `json:"requirement,required"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp param.Field[RequestPriorityNewParamsTlp] `json:"tlp,required"`
+	PriorityEdit PriorityEditParam `json:"priority_edit,required"`
 }
 
 func (r RequestPriorityNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityNewParamsTlp string
-
-const (
-	RequestPriorityNewParamsTlpClear       RequestPriorityNewParamsTlp = "clear"
-	RequestPriorityNewParamsTlpAmber       RequestPriorityNewParamsTlp = "amber"
-	RequestPriorityNewParamsTlpAmberStrict RequestPriorityNewParamsTlp = "amber-strict"
-	RequestPriorityNewParamsTlpGreen       RequestPriorityNewParamsTlp = "green"
-	RequestPriorityNewParamsTlpRed         RequestPriorityNewParamsTlp = "red"
-)
-
-func (r RequestPriorityNewParamsTlp) IsKnown() bool {
-	switch r {
-	case RequestPriorityNewParamsTlpClear, RequestPriorityNewParamsTlpAmber, RequestPriorityNewParamsTlpAmberStrict, RequestPriorityNewParamsTlpGreen, RequestPriorityNewParamsTlpRed:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.PriorityEdit)
 }
 
 type RequestPriorityNewResponseEnvelope struct {
@@ -266,37 +274,11 @@ func (r RequestPriorityNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityUpdateParams struct {
-	// List of labels
-	Labels param.Field[[]LabelParam] `json:"labels,required"`
-	// Priority
-	Priority param.Field[int64] `json:"priority,required"`
-	// Requirement
-	Requirement param.Field[string] `json:"requirement,required"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp param.Field[RequestPriorityUpdateParamsTlp] `json:"tlp,required"`
+	PriorityEdit PriorityEditParam `json:"priority_edit,required"`
 }
 
 func (r RequestPriorityUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityUpdateParamsTlp string
-
-const (
-	RequestPriorityUpdateParamsTlpClear       RequestPriorityUpdateParamsTlp = "clear"
-	RequestPriorityUpdateParamsTlpAmber       RequestPriorityUpdateParamsTlp = "amber"
-	RequestPriorityUpdateParamsTlpAmberStrict RequestPriorityUpdateParamsTlp = "amber-strict"
-	RequestPriorityUpdateParamsTlpGreen       RequestPriorityUpdateParamsTlp = "green"
-	RequestPriorityUpdateParamsTlpRed         RequestPriorityUpdateParamsTlp = "red"
-)
-
-func (r RequestPriorityUpdateParamsTlp) IsKnown() bool {
-	switch r {
-	case RequestPriorityUpdateParamsTlpClear, RequestPriorityUpdateParamsTlpAmber, RequestPriorityUpdateParamsTlpAmberStrict, RequestPriorityUpdateParamsTlpGreen, RequestPriorityUpdateParamsTlpRed:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.PriorityEdit)
 }
 
 type RequestPriorityUpdateResponseEnvelope struct {

@@ -157,7 +157,7 @@ func TestJobDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		int64(1),
 		logpush.JobDeleteParams{
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
 		},

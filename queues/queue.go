@@ -264,8 +264,8 @@ func (r queueGetResponseJSON) RawJSON() string {
 
 type QueueNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
@@ -358,8 +358,8 @@ func (r queueNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type QueueUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -457,8 +457,8 @@ type QueueListParams struct {
 
 type QueueDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r QueueDeleteParams) MarshalJSON() (data []byte, err error) {

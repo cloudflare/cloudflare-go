@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // MembershipService contains methods and other services that help with interacting
@@ -36,7 +38,7 @@ func NewMembershipService(opts ...option.RequestOption) (r *MembershipService) {
 }
 
 // Accept or reject this account invitation.
-func (r *MembershipService) Update(ctx context.Context, membershipID string, body MembershipUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *MembershipService) Update(ctx context.Context, membershipID string, body MembershipUpdateParams, opts ...option.RequestOption) (res *MembershipUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MembershipUpdateResponseEnvelope
 	path := fmt.Sprintf("memberships/%s", membershipID)
@@ -85,7 +87,7 @@ func (r *MembershipService) Delete(ctx context.Context, membershipID string, bod
 }
 
 // Get a specific membership.
-func (r *MembershipService) Get(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *MembershipService) Get(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *MembershipGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MembershipGetResponseEnvelope
 	path := fmt.Sprintf("memberships/%s", membershipID)
@@ -197,6 +199,23 @@ func (r MembershipStatus) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [memberships.MembershipUpdateResponseUnknown] or
+// [shared.UnionString].
+type MembershipUpdateResponseUnion interface {
+	ImplementsMembershipsMembershipUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MembershipUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type MembershipDeleteResponse struct {
 	// Membership identifier tag.
 	ID   string                       `json:"id"`
@@ -217,6 +236,23 @@ func (r *MembershipDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r membershipDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [memberships.MembershipGetResponseUnknown] or
+// [shared.UnionString].
+type MembershipGetResponseUnion interface {
+	ImplementsMembershipsMembershipGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MembershipGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type MembershipUpdateParams struct {
@@ -245,9 +281,9 @@ func (r MembershipUpdateParamsStatus) IsKnown() bool {
 }
 
 type MembershipUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   MembershipUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MembershipUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    membershipUpdateResponseEnvelopeJSON    `json:"-"`
@@ -376,7 +412,7 @@ func (r MembershipListParamsStatus) IsKnown() bool {
 }
 
 type MembershipDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r MembershipDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -427,9 +463,9 @@ func (r MembershipDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MembershipGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   MembershipGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MembershipGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    membershipGetResponseEnvelopeJSON    `json:"-"`

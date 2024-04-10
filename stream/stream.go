@@ -340,8 +340,8 @@ func (r VideoStatusState) IsKnown() bool {
 
 type StreamNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 	// Specifies the TUS protocol version. This value must be included in every upload
 	// request. Notes: The only supported version of TUS protocol is 1.0.0.
 	TusResumable param.Field[StreamNewParamsTusResumable] `header:"Tus-Resumable,required"`
@@ -429,8 +429,8 @@ func (r StreamListParamsStatus) IsKnown() bool {
 
 type StreamDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r StreamDeleteParams) MarshalJSON() (data []byte, err error) {

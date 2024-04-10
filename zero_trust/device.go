@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // DeviceService contains methods and other services that help with interacting
@@ -73,7 +75,7 @@ func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListPara
 }
 
 // Fetches details for a single device.
-func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/%s", query.AccountID, deviceID)
@@ -206,6 +208,23 @@ func (r deviceUserJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [zero_trust.DeviceGetResponseUnknown] or
+// [shared.UnionString].
+type DeviceGetResponseUnion interface {
+	ImplementsZeroTrustDeviceGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DeviceGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type DeviceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
@@ -215,9 +234,9 @@ type DeviceGetParams struct {
 }
 
 type DeviceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   DeviceGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceGetResponseEnvelopeJSON    `json:"-"`

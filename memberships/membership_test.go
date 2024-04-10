@@ -96,7 +96,7 @@ func TestMembershipDelete(t *testing.T) {
 		context.TODO(),
 		"4536bcfad5faccb111b47003c79917fa",
 		memberships.MembershipDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {

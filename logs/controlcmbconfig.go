@@ -94,6 +94,15 @@ func (r cmbConfigJSON) RawJSON() string {
 	return r.raw
 }
 
+type CmbConfigParam struct {
+	// Comma-separated list of regions.
+	Regions param.Field[string] `json:"regions"`
+}
+
+func (r CmbConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Union satisfied by [logs.ControlCmbConfigDeleteResponseUnknown],
 // [logs.ControlCmbConfigDeleteResponseArray] or [shared.UnionString].
 type ControlCmbConfigDeleteResponseUnion interface {
@@ -122,12 +131,11 @@ func (r ControlCmbConfigDeleteResponseArray) ImplementsLogsControlCmbConfigDelet
 type ControlCmbConfigNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Comma-separated list of regions.
-	Regions param.Field[string] `json:"regions"`
+	CmbConfig CmbConfigParam      `json:"cmb_config,required"`
 }
 
 func (r ControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.CmbConfig)
 }
 
 type ControlCmbConfigNewResponseEnvelope struct {
@@ -175,8 +183,8 @@ func (r ControlCmbConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ControlCmbConfigDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ControlCmbConfigDeleteParams) MarshalJSON() (data []byte, err error) {

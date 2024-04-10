@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // GatewayLocationService contains methods and other services that help with
@@ -84,7 +86,7 @@ func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query Gatew
 }
 
 // Deletes a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, params GatewayLocationDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, params GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", params.AccountID, locationID)
@@ -182,6 +184,23 @@ type LocationNetworkParam struct {
 
 func (r LocationNetworkParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Union satisfied by [zero_trust.GatewayLocationDeleteResponseUnknown] or
+// [shared.UnionString].
+type GatewayLocationDeleteResponseUnion interface {
+	ImplementsZeroTrustGatewayLocationDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*GatewayLocationDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type GatewayLocationNewParams struct {
@@ -307,8 +326,8 @@ type GatewayLocationListParams struct {
 }
 
 type GatewayLocationDeleteParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r GatewayLocationDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -316,9 +335,9 @@ func (r GatewayLocationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLocationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   GatewayLocationDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationDeleteResponseEnvelopeJSON    `json:"-"`

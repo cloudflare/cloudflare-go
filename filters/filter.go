@@ -148,7 +148,7 @@ func (r firewallFilterJSON) RawJSON() string {
 func (r FirewallFilter) implementsFirewallFirewallRuleFilter() {}
 
 type FilterNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
@@ -232,7 +232,7 @@ func (r filterNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type FilterUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -308,7 +308,7 @@ func (r FilterListParams) URLQuery() (v url.Values) {
 }
 
 type FilterDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r FilterDeleteParams) MarshalJSON() (data []byte, err error) {

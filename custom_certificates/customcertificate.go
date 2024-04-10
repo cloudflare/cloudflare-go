@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/custom_hostnames"
@@ -18,6 +19,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/keyless_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // CustomCertificateService contains methods and other services that help with
@@ -41,7 +43,7 @@ func NewCustomCertificateService(opts ...option.RequestOption) (r *CustomCertifi
 }
 
 // Upload a new SSL certificate for a zone.
-func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
@@ -96,7 +98,7 @@ func (r *CustomCertificateService) Delete(ctx context.Context, customCertificate
 // Upload a new private key and/or PEM/CRT for the SSL certificate. Note: PATCHing
 // a configuration for sni_custom certificates will result in a new resource id
 // being returned, and the previous one being deleted.
-func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
@@ -109,7 +111,7 @@ func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID
 }
 
 // SSL Configuration Details
-func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", query.ZoneID, customCertificateID)
@@ -128,7 +130,7 @@ type CustomCertificate struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod custom_hostnames.UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method,required"`
+	BundleMethod custom_hostnames.BundleMethod `json:"bundle_method,required"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
 	Hosts     []string  `json:"hosts,required"`
@@ -277,6 +279,23 @@ func (r GeoRestrictionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Union satisfied by [custom_certificates.CustomCertificateNewResponseUnknown] or
+// [shared.UnionString].
+type CustomCertificateNewResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CustomCertificateNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type CustomCertificateDeleteResponse struct {
 	// Identifier
 	ID   string                              `json:"id"`
@@ -299,6 +318,40 @@ func (r customCertificateDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [custom_certificates.CustomCertificateEditResponseUnknown] or
+// [shared.UnionString].
+type CustomCertificateEditResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateEditResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CustomCertificateEditResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [custom_certificates.CustomCertificateGetResponseUnknown] or
+// [shared.UnionString].
+type CustomCertificateGetResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CustomCertificateGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type CustomCertificateNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -310,7 +363,7 @@ type CustomCertificateNewParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1] `json:"bundle_method"`
+	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -356,9 +409,9 @@ func (r CustomCertificateNewParamsType) IsKnown() bool {
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   CustomCertificateNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -457,8 +510,8 @@ func (r CustomCertificateListParamsStatus) IsKnown() bool {
 
 type CustomCertificateDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r CustomCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -515,7 +568,7 @@ type CustomCertificateEditParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1] `json:"bundle_method"`
+	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
 	// Specify the region where your private key can be held locally for optimal TLS
@@ -545,9 +598,9 @@ func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   CustomCertificateEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -593,9 +646,9 @@ type CustomCertificateGetParams struct {
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   CustomCertificateGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateGetResponseEnvelopeJSON    `json:"-"`

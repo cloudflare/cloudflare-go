@@ -107,7 +107,7 @@ func (r accountSettingGetResponseJSON) RawJSON() string {
 type AccountSettingUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      param.Field[string] `json:"body,required"`
+	Body      string              `json:"body,required"`
 }
 
 func (r AccountSettingUpdateParams) MarshalJSON() (data []byte, err error) {

@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -47,7 +46,7 @@ func (r *TokenValueService) Update(ctx context.Context, tokenID interface{}, bod
 type Value = string
 
 type TokenValueUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r TokenValueUpdateParams) MarshalJSON() (data []byte, err error) {

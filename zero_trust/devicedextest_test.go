@@ -30,29 +30,31 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.DEXTests.New(context.TODO(), zero_trust.DeviceDEXTestNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Data: cloudflare.F(zero_trust.SchemaDataParam{
-			Host:   cloudflare.F("https://dash.cloudflare.com"),
-			Kind:   cloudflare.F("http"),
-			Method: cloudflare.F("GET"),
-		}),
-		Enabled:     cloudflare.F(true),
-		Interval:    cloudflare.F("30m"),
-		Name:        cloudflare.F("HTTP dash health check"),
-		Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
-		TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestNewParamsTargetPolicy{{
-			Default: cloudflare.F(true),
-			ID:      cloudflare.F("string"),
-			Name:    cloudflare.F("string"),
-		}, {
-			Default: cloudflare.F(true),
-			ID:      cloudflare.F("string"),
-			Name:    cloudflare.F("string"),
-		}, {
-			Default: cloudflare.F(true),
-			ID:      cloudflare.F("string"),
-			Name:    cloudflare.F("string"),
-		}}),
-		Targeted: cloudflare.F(true),
+		SchemaHTTP: zero_trust.SchemaHTTPParam{
+			Data: cloudflare.F(zero_trust.SchemaDataParam{
+				Host:   cloudflare.F("https://dash.cloudflare.com"),
+				Kind:   cloudflare.F("http"),
+				Method: cloudflare.F("GET"),
+			}),
+			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+			Enabled:     cloudflare.F(true),
+			Interval:    cloudflare.F("30m"),
+			Name:        cloudflare.F("HTTP dash health check"),
+			TargetPolicies: cloudflare.F([]zero_trust.SchemaHTTPTargetPolicyParam{{
+				Default: cloudflare.F(true),
+				ID:      cloudflare.F("string"),
+				Name:    cloudflare.F("string"),
+			}, {
+				Default: cloudflare.F(true),
+				ID:      cloudflare.F("string"),
+				Name:    cloudflare.F("string"),
+			}, {
+				Default: cloudflare.F(true),
+				ID:      cloudflare.F("string"),
+				Name:    cloudflare.F("string"),
+			}}),
+			Targeted: cloudflare.F(true),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -82,29 +84,31 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DeviceDEXTestUpdateParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Data: cloudflare.F(zero_trust.SchemaDataParam{
-				Host:   cloudflare.F("https://dash.cloudflare.com"),
-				Kind:   cloudflare.F("http"),
-				Method: cloudflare.F("GET"),
-			}),
-			Enabled:     cloudflare.F(true),
-			Interval:    cloudflare.F("30m"),
-			Name:        cloudflare.F("HTTP dash health check"),
-			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
-			TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestUpdateParamsTargetPolicy{{
-				Default: cloudflare.F(true),
-				ID:      cloudflare.F("string"),
-				Name:    cloudflare.F("string"),
-			}, {
-				Default: cloudflare.F(true),
-				ID:      cloudflare.F("string"),
-				Name:    cloudflare.F("string"),
-			}, {
-				Default: cloudflare.F(true),
-				ID:      cloudflare.F("string"),
-				Name:    cloudflare.F("string"),
-			}}),
-			Targeted: cloudflare.F(true),
+			SchemaHTTP: zero_trust.SchemaHTTPParam{
+				Data: cloudflare.F(zero_trust.SchemaDataParam{
+					Host:   cloudflare.F("https://dash.cloudflare.com"),
+					Kind:   cloudflare.F("http"),
+					Method: cloudflare.F("GET"),
+				}),
+				Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+				Enabled:     cloudflare.F(true),
+				Interval:    cloudflare.F("30m"),
+				Name:        cloudflare.F("HTTP dash health check"),
+				TargetPolicies: cloudflare.F([]zero_trust.SchemaHTTPTargetPolicyParam{{
+					Default: cloudflare.F(true),
+					ID:      cloudflare.F("string"),
+					Name:    cloudflare.F("string"),
+				}, {
+					Default: cloudflare.F(true),
+					ID:      cloudflare.F("string"),
+					Name:    cloudflare.F("string"),
+				}, {
+					Default: cloudflare.F(true),
+					ID:      cloudflare.F("string"),
+					Name:    cloudflare.F("string"),
+				}}),
+				Targeted: cloudflare.F(true),
+			},
 		},
 	)
 	if err != nil {

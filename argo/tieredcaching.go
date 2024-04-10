@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // TieredCachingService contains methods and other services that help with
@@ -33,7 +35,7 @@ func NewTieredCachingService(opts ...option.RequestOption) (r *TieredCachingServ
 }
 
 // Updates enablement of Tiered Caching
-func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", params.ZoneID)
@@ -46,7 +48,7 @@ func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEdi
 }
 
 // Get Tiered Caching setting
-func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", query.ZoneID)
@@ -56,6 +58,40 @@ func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetPa
 	}
 	res = &env.Result
 	return
+}
+
+// Union satisfied by [argo.TieredCachingEditResponseUnknown] or
+// [shared.UnionString].
+type TieredCachingEditResponseUnion interface {
+	ImplementsArgoTieredCachingEditResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TieredCachingEditResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [argo.TieredCachingGetResponseUnknown] or
+// [shared.UnionString].
+type TieredCachingGetResponseUnion interface {
+	ImplementsArgoTieredCachingGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TieredCachingGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type TieredCachingEditParams struct {
@@ -86,9 +122,9 @@ func (r TieredCachingEditParamsValue) IsKnown() bool {
 }
 
 type TieredCachingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   TieredCachingEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingEditResponseEnvelopeJSON    `json:"-"`
@@ -134,9 +170,9 @@ type TieredCachingGetParams struct {
 }
 
 type TieredCachingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   TieredCachingGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingGetResponseEnvelopeJSON    `json:"-"`

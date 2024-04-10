@@ -47,8 +47,8 @@ func (r *ForceAXFRService) New(ctx context.Context, params ForceAXFRNewParams, o
 type ForceAXFR = string
 
 type ForceAXFRNewParams struct {
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r ForceAXFRNewParams) MarshalJSON() (data []byte, err error) {

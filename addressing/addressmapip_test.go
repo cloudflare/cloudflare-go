@@ -34,7 +34,7 @@ func TestAddressMapIPUpdate(t *testing.T) {
 		"192.0.2.1",
 		addressing.AddressMapIPUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -66,7 +66,7 @@ func TestAddressMapIPDelete(t *testing.T) {
 		"192.0.2.1",
 		addressing.AddressMapIPDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

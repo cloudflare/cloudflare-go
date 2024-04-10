@@ -129,7 +129,7 @@ func TestHostnameIPFSUniversalPathContentListEntryDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		web3.HostnameIPFSUniversalPathContentListEntryDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {

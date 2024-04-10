@@ -147,8 +147,8 @@ func (r keyGetResponseJSON) RawJSON() string {
 
 type KeyNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
@@ -200,8 +200,8 @@ func (r KeyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type KeyDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {

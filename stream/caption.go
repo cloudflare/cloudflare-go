@@ -35,7 +35,7 @@ func NewCaptionService(opts ...option.RequestOption) (r *CaptionService) {
 
 // Uploads the caption or subtitle file to the endpoint for a specific BCP47
 // language. One caption or subtitle file per language is allowed.
-func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *CaptionUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
@@ -97,6 +97,23 @@ func (r captionJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [stream.CaptionUpdateResponseUnknown] or
+// [shared.UnionString].
+type CaptionUpdateResponseUnion interface {
+	ImplementsStreamCaptionUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CaptionUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 // Union satisfied by [stream.CaptionDeleteResponseUnknown],
 // [stream.CaptionDeleteResponseArray] or [shared.UnionString].
 type CaptionDeleteResponseUnion interface {
@@ -134,9 +151,9 @@ func (r CaptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   CaptionUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -178,8 +195,8 @@ func (r CaptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type CaptionDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r CaptionDeleteParams) MarshalJSON() (data []byte, err error) {

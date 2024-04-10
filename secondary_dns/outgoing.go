@@ -378,8 +378,8 @@ func (r OutgoingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingDeleteParams struct {
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r OutgoingDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -430,8 +430,8 @@ func (r OutgoingDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingDisableParams struct {
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r OutgoingDisableParams) MarshalJSON() (data []byte, err error) {
@@ -483,8 +483,8 @@ func (r OutgoingDisableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingEnableParams struct {
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r OutgoingEnableParams) MarshalJSON() (data []byte, err error) {
@@ -536,8 +536,8 @@ func (r OutgoingEnableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingForceNotifyParams struct {
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r OutgoingForceNotifyParams) MarshalJSON() (data []byte, err error) {

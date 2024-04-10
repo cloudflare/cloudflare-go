@@ -117,15 +117,15 @@ func (r CacheReserve) IsKnown() bool {
 }
 
 // ID of the zone setting.
-type UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d string
+type CacheReserveClear string
 
 const (
-	UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968dCacheReserveClear UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d = "cache_reserve_clear"
+	CacheReserveClearCacheReserveClear CacheReserveClear = "cache_reserve_clear"
 )
 
-func (r UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d) IsKnown() bool {
+func (r CacheReserveClear) IsKnown() bool {
 	switch r {
-	case UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968dCacheReserveClear:
+	case CacheReserveClearCacheReserveClear:
 		return true
 	}
 	return false
@@ -137,7 +137,7 @@ func (r UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d) IsKnown() bool {
 // that you cannot undo or cancel this operation.
 type CacheReserveClearResponse struct {
 	// ID of the zone setting.
-	ID UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d `json:"id,required"`
+	ID CacheReserveClear `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// The time that the latest Cache Reserve Clear operation started.
@@ -291,7 +291,7 @@ func (r CacheReserveGetResponseValue) IsKnown() bool {
 // that you cannot undo or cancel this operation.
 type CacheReserveStatusResponse struct {
 	// ID of the zone setting.
-	ID UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d `json:"id,required"`
+	ID CacheReserveClear `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// The time that the latest Cache Reserve Clear operation started.
@@ -341,8 +341,8 @@ func (r CacheReserveStatusResponseState) IsKnown() bool {
 
 type CacheReserveClearParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {

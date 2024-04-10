@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // CertificatePackService contains methods and other services that help with
@@ -91,7 +93,7 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 }
 
 // For a given zone, get a certificate pack.
-func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", query.ZoneID, certificatePackID)
@@ -281,6 +283,23 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [ssl.CertificatePackGetResponseUnknown] or
+// [shared.UnionString].
+type CertificatePackGetResponseUnion interface {
+	ImplementsSSLCertificatePackGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CertificatePackGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type CertificatePackListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -314,8 +333,8 @@ func (r CertificatePackListParamsStatus) IsKnown() bool {
 
 type CertificatePackDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r CertificatePackDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -367,8 +386,8 @@ func (r CertificatePackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CertificatePackEditParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
@@ -424,9 +443,9 @@ type CertificatePackGetParams struct {
 }
 
 type CertificatePackGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   CertificatePackGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackGetResponseEnvelopeJSON    `json:"-"`

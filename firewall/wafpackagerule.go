@@ -86,7 +86,7 @@ func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, rule
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *WAFPackageRuleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageRuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", query.ZoneID, packageID, ruleID)
@@ -879,6 +879,23 @@ func (r WAFPackageRuleEditResponseMode) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [firewall.WAFPackageRuleGetResponseUnknown] or
+// [shared.UnionString].
+type WAFPackageRuleGetResponseUnion interface {
+	ImplementsFirewallWAFPackageRuleGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WAFPackageRuleGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type WAFPackageRuleListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -1067,9 +1084,9 @@ type WAFPackageRuleGetParams struct {
 }
 
 type WAFPackageRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   WAFPackageRuleGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageRuleGetResponseEnvelopeJSON    `json:"-"`

@@ -434,8 +434,8 @@ func (r PoolListParams) URLQuery() (v url.Values) {
 
 type PoolDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r PoolDeleteParams) MarshalJSON() (data []byte, err error) {

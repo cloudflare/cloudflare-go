@@ -135,7 +135,7 @@ func TestGatewayLocationDelete(t *testing.T) {
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayLocationDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

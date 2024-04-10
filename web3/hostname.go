@@ -296,7 +296,7 @@ func (r HostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HostnameDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r HostnameDeleteParams) MarshalJSON() (data []byte, err error) {

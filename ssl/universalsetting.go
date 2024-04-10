@@ -104,9 +104,7 @@ func (r universalSSLSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-type UniversalSettingEditParams struct {
-	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+type UniversalSSLSettingsParam struct {
 	// Disabling Universal SSL removes any currently active Universal SSL certificates
 	// for your zone from the edge and prevents any future Universal SSL certificates
 	// from being ordered. If there are no advanced certificates or custom certificates
@@ -135,8 +133,18 @@ type UniversalSettingEditParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r UniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
+func (r UniversalSSLSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type UniversalSettingEditParams struct {
+	// Identifier
+	ZoneID               param.Field[string]       `path:"zone_id,required"`
+	UniversalSSLSettings UniversalSSLSettingsParam `json:"universal_ssl_settings,required"`
+}
+
+func (r UniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.UniversalSSLSettings)
 }
 
 type UniversalSettingEditResponseEnvelope struct {

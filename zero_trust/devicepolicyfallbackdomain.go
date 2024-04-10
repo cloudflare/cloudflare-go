@@ -129,8 +129,8 @@ func (r FallbackDomainParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DevicePolicyFallbackDomainUpdateParams struct {
-	AccountID param.Field[string]                `path:"account_id,required"`
-	Body      param.Field[[]FallbackDomainParam] `json:"body,required"`
+	AccountID param.Field[string]   `path:"account_id,required"`
+	Body      []FallbackDomainParam `json:"body,required"`
 }
 
 func (r DevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err error) {

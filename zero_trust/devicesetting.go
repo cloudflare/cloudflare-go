@@ -88,8 +88,7 @@ func (r deviceSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DeviceSettingUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+type DeviceSettingsParam struct {
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -100,8 +99,17 @@ type DeviceSettingUpdateParams struct {
 	UseZtVirtualIP param.Field[bool] `json:"use_zt_virtual_ip"`
 }
 
-func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r DeviceSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type DeviceSettingUpdateParams struct {
+	AccountID      param.Field[string] `path:"account_id,required"`
+	DeviceSettings DeviceSettingsParam `json:"device_settings,required"`
+}
+
+func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.DeviceSettings)
 }
 
 type DeviceSettingUpdateResponseEnvelope struct {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // InviteService contains methods and other services that help with interacting
@@ -57,7 +59,7 @@ func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.Reque
 }
 
 // Responds to an invitation.
-func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteEditResponseEnvelope
 	path := fmt.Sprintf("user/invites/%s", inviteID)
@@ -70,7 +72,7 @@ func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEd
 }
 
 // Gets the details of an invitation.
-func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteGetResponseEnvelope
 	path := fmt.Sprintf("user/invites/%s", inviteID)
@@ -178,6 +180,38 @@ func (r InviteStatus) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [user.InviteEditResponseUnknown] or [shared.UnionString].
+type InviteEditResponseUnion interface {
+	ImplementsUserInviteEditResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*InviteEditResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [user.InviteGetResponseUnknown] or [shared.UnionString].
+type InviteGetResponseUnion interface {
+	ImplementsUserInviteGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*InviteGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type InviteEditParams struct {
 	// Status of your response to the invitation (rejected or accepted).
 	Status param.Field[InviteEditParamsStatus] `json:"status,required"`
@@ -204,9 +238,9 @@ func (r InviteEditParamsStatus) IsKnown() bool {
 }
 
 type InviteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   InviteEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success InviteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    inviteEditResponseEnvelopeJSON    `json:"-"`
@@ -247,9 +281,9 @@ func (r InviteEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InviteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   InviteGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success InviteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    inviteGetResponseEnvelopeJSON    `json:"-"`

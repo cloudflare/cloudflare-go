@@ -102,7 +102,7 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 type SubdomainUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      param.Field[string] `json:"body,required"`
+	Body      string              `json:"body,required"`
 }
 
 func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {

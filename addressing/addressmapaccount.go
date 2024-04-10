@@ -114,8 +114,8 @@ func (r AddressMapAccountDeleteResponseArray) ImplementsAddressingAddressMapAcco
 
 type AddressMapAccountUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r AddressMapAccountUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -200,8 +200,8 @@ func (r addressMapAccountUpdateResponseEnvelopeResultInfoJSON) RawJSON() string 
 
 type AddressMapAccountDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r AddressMapAccountDeleteParams) MarshalJSON() (data []byte, err error) {

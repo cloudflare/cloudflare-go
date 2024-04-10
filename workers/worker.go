@@ -694,10 +694,10 @@ func (r SingleStepMigrationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SingleStepMigrationParam) implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion() {
+func (r SingleStepMigrationParam) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SingleStepMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion() {
+func (r SingleStepMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
 type SingleStepMigrationRenamedClassParam struct {
@@ -733,7 +733,23 @@ func (r SteppedMigrationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SteppedMigrationParam) implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion() {}
+func (r SteppedMigrationParam) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+}
 
-func (r SteppedMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion() {
+func (r SteppedMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+}
+
+// JSON encoded metadata about the uploaded parts and Worker configuration.
+type WorkerMetadataParam struct {
+	// Name of the part in the multipart request that contains the script (e.g. the
+	// file adding a listener to the `fetch` event). Indicates a
+	// `service worker syntax` Worker.
+	BodyPart param.Field[string] `json:"body_part"`
+	// Name of the part in the multipart request that contains the main module (e.g.
+	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
+	MainModule param.Field[string] `json:"main_module"`
+}
+
+func (r WorkerMetadataParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }

@@ -140,8 +140,8 @@ func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigNewParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
@@ -192,8 +192,8 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigUpdateParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -244,8 +244,8 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigDeleteParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConfigDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -296,8 +296,8 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigEditParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {

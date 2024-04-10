@@ -186,8 +186,8 @@ func (r ProjectDomainGetResponseArray) ImplementsPagesProjectDomainGetResponseUn
 
 type ProjectDomainNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
@@ -244,8 +244,8 @@ type ProjectDomainListParams struct {
 
 type ProjectDomainDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectDomainDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -254,8 +254,8 @@ func (r ProjectDomainDeleteParams) MarshalJSON() (data []byte, err error) {
 
 type ProjectDomainEditParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectDomainEditParams) MarshalJSON() (data []byte, err error) {

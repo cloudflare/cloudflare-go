@@ -220,8 +220,7 @@ func (r schemaHTTPTargetPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-type DeviceDEXTestNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+type SchemaHTTPParam struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
 	Data param.Field[SchemaDataParam] `json:"data,required"`
@@ -234,15 +233,15 @@ type DeviceDEXTestNewParams struct {
 	// Additional details about the test.
 	Description param.Field[string] `json:"description"`
 	// Device settings profiles targeted by this test
-	TargetPolicies param.Field[[]DeviceDEXTestNewParamsTargetPolicy] `json:"target_policies"`
-	Targeted       param.Field[bool]                                 `json:"targeted"`
+	TargetPolicies param.Field[[]SchemaHTTPTargetPolicyParam] `json:"target_policies"`
+	Targeted       param.Field[bool]                          `json:"targeted"`
 }
 
-func (r DeviceDEXTestNewParams) MarshalJSON() (data []byte, err error) {
+func (r SchemaHTTPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type DeviceDEXTestNewParamsTargetPolicy struct {
+type SchemaHTTPTargetPolicyParam struct {
 	// The id of the device settings profile
 	ID param.Field[string] `json:"id"`
 	// Whether the profile is the account default
@@ -251,8 +250,17 @@ type DeviceDEXTestNewParamsTargetPolicy struct {
 	Name param.Field[string] `json:"name"`
 }
 
-func (r DeviceDEXTestNewParamsTargetPolicy) MarshalJSON() (data []byte, err error) {
+func (r SchemaHTTPTargetPolicyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type DeviceDEXTestNewParams struct {
+	AccountID  param.Field[string] `path:"account_id,required"`
+	SchemaHTTP SchemaHTTPParam     `json:"schema_http,required"`
+}
+
+func (r DeviceDEXTestNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.SchemaHTTP)
 }
 
 type DeviceDEXTestNewResponseEnvelope struct {
@@ -299,38 +307,12 @@ func (r DeviceDEXTestNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceDEXTestUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The configuration object which contains the details for the WARP client to
-	// conduct the test.
-	Data param.Field[SchemaDataParam] `json:"data,required"`
-	// Determines whether or not the test is active.
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// How often the test will run.
-	Interval param.Field[string] `json:"interval,required"`
-	// The name of the DEX test. Must be unique.
-	Name param.Field[string] `json:"name,required"`
-	// Additional details about the test.
-	Description param.Field[string] `json:"description"`
-	// Device settings profiles targeted by this test
-	TargetPolicies param.Field[[]DeviceDEXTestUpdateParamsTargetPolicy] `json:"target_policies"`
-	Targeted       param.Field[bool]                                    `json:"targeted"`
+	AccountID  param.Field[string] `path:"account_id,required"`
+	SchemaHTTP SchemaHTTPParam     `json:"schema_http,required"`
 }
 
 func (r DeviceDEXTestUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DeviceDEXTestUpdateParamsTargetPolicy struct {
-	// The id of the device settings profile
-	ID param.Field[string] `json:"id"`
-	// Whether the profile is the account default
-	Default param.Field[bool] `json:"default"`
-	// The name of the device settings profile
-	Name param.Field[string] `json:"name"`
-}
-
-func (r DeviceDEXTestUpdateParamsTargetPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.SchemaHTTP)
 }
 
 type DeviceDEXTestUpdateResponseEnvelope struct {

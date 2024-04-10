@@ -5,11 +5,13 @@ package user
 import (
 	"context"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // BillingProfileService contains methods and other services that help with
@@ -31,7 +33,7 @@ func NewBillingProfileService(opts ...option.RequestOption) (r *BillingProfileSe
 }
 
 // Accesses your billing profile object.
-func (r *BillingProfileService) Get(ctx context.Context, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *BillingProfileService) Get(ctx context.Context, opts ...option.RequestOption) (res *BillingProfileGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BillingProfileGetResponseEnvelope
 	path := "user/billing/profile"
@@ -43,10 +45,27 @@ func (r *BillingProfileService) Get(ctx context.Context, opts ...option.RequestO
 	return
 }
 
+// Union satisfied by [user.BillingProfileGetResponseUnknown] or
+// [shared.UnionString].
+type BillingProfileGetResponseUnion interface {
+	ImplementsUserBillingProfileGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*BillingProfileGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type BillingProfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   BillingProfileGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success BillingProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    billingProfileGetResponseEnvelopeJSON    `json:"-"`

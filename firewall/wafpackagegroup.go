@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // WAFPackageGroupService contains methods and other services that help with
@@ -69,7 +71,7 @@ func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID s
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params WAFPackageGroupEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params WAFPackageGroupEditParams, opts ...option.RequestOption) (res *WAFPackageGroupEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", params.ZoneID, packageID, groupID)
@@ -85,7 +87,7 @@ func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, gro
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query WAFPackageGroupGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query WAFPackageGroupGetParams, opts ...option.RequestOption) (res *WAFPackageGroupGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", query.ZoneID, packageID, groupID)
@@ -173,6 +175,40 @@ func (r GroupAllowedMode) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [firewall.WAFPackageGroupEditResponseUnknown] or
+// [shared.UnionString].
+type WAFPackageGroupEditResponseUnion interface {
+	ImplementsFirewallWAFPackageGroupEditResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WAFPackageGroupEditResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [firewall.WAFPackageGroupGetResponseUnknown] or
+// [shared.UnionString].
+type WAFPackageGroupGetResponseUnion interface {
+	ImplementsFirewallWAFPackageGroupGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WAFPackageGroupGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type WAFPackageGroupListParams struct {
@@ -303,9 +339,9 @@ func (r WAFPackageGroupEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageGroupEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   WAFPackageGroupEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupEditResponseEnvelopeJSON    `json:"-"`
@@ -351,9 +387,9 @@ type WAFPackageGroupGetParams struct {
 }
 
 type WAFPackageGroupGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   WAFPackageGroupGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupGetResponseEnvelopeJSON    `json:"-"`

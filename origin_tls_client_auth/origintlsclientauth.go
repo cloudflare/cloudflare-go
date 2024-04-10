@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // OriginTLSClientAuthService contains methods and other services that help with
@@ -42,7 +44,7 @@ func NewOriginTLSClientAuthService(opts ...option.RequestOption) (r *OriginTLSCl
 // important to keep only one certificate active. Also, make sure to enable
 // zone-level authenticated origin pulls by making a PUT call to settings endpoint
 // to see the uploaded certificate in use.
-func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSClientAuthNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSClientAuthNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", params.ZoneID)
@@ -78,7 +80,7 @@ func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query O
 }
 
 // Delete Certificate
-func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, params OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, params OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", params.ZoneID, certificateID)
@@ -91,7 +93,7 @@ func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID s
 }
 
 // Get Certificate Details
-func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID string, query OriginTLSClientAuthGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID string, query OriginTLSClientAuthGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", query.ZoneID, certificateID)
@@ -134,6 +136,60 @@ func (r zoneAuthenticatedOriginPullJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by
+// [origin_tls_client_auth.OriginTLSClientAuthNewResponseUnknown] or
+// [shared.UnionString].
+type OriginTLSClientAuthNewResponseUnion interface {
+	ImplementsOriginTLSClientAuthOriginTLSClientAuthNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OriginTLSClientAuthNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by
+// [origin_tls_client_auth.OriginTLSClientAuthDeleteResponseUnknown] or
+// [shared.UnionString].
+type OriginTLSClientAuthDeleteResponseUnion interface {
+	ImplementsOriginTLSClientAuthOriginTLSClientAuthDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OriginTLSClientAuthDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by
+// [origin_tls_client_auth.OriginTLSClientAuthGetResponseUnknown] or
+// [shared.UnionString].
+type OriginTLSClientAuthGetResponseUnion interface {
+	ImplementsOriginTLSClientAuthOriginTLSClientAuthGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OriginTLSClientAuthGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type OriginTLSClientAuthNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -148,9 +204,9 @@ func (r OriginTLSClientAuthNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OriginTLSClientAuthNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   OriginTLSClientAuthNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthNewResponseEnvelopeJSON    `json:"-"`
@@ -197,8 +253,8 @@ type OriginTLSClientAuthListParams struct {
 
 type OriginTLSClientAuthDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r OriginTLSClientAuthDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -206,9 +262,9 @@ func (r OriginTLSClientAuthDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
+	Result   OriginTLSClientAuthDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthDeleteResponseEnvelopeJSON    `json:"-"`
@@ -254,9 +310,9 @@ type OriginTLSClientAuthGetParams struct {
 }
 
 type OriginTLSClientAuthGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   OriginTLSClientAuthGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthGetResponseEnvelopeJSON    `json:"-"`

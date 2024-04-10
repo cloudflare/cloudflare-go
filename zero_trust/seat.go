@@ -78,7 +78,7 @@ func (r seatJSON) RawJSON() string {
 }
 
 type SeatEditParams struct {
-	Body param.Field[[]SeatEditParamsBody] `json:"body,required"`
+	Body []SeatEditParamsBody `json:"body,required"`
 }
 
 func (r SeatEditParams) MarshalJSON() (data []byte, err error) {
