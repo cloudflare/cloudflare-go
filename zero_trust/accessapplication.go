@@ -577,7 +577,7 @@ type ApplicationSaaSApplicationSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat ApplicationSaaSApplicationSaasAppNameIDFormat `json:"name_id_format"`
+	NameIDFormat SaasAppNameIDFormat `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -791,22 +791,6 @@ const (
 func (r ApplicationSaaSApplicationSaasAppAuthType) IsKnown() bool {
 	switch r {
 	case ApplicationSaaSApplicationSaasAppAuthTypeSAML, ApplicationSaaSApplicationSaasAppAuthTypeOIDC:
-		return true
-	}
-	return false
-}
-
-// The format of the name identifier sent to the SaaS application.
-type ApplicationSaaSApplicationSaasAppNameIDFormat string
-
-const (
-	ApplicationSaaSApplicationSaasAppNameIDFormatID    ApplicationSaaSApplicationSaasAppNameIDFormat = "id"
-	ApplicationSaaSApplicationSaasAppNameIDFormatEmail ApplicationSaaSApplicationSaasAppNameIDFormat = "email"
-)
-
-func (r ApplicationSaaSApplicationSaasAppNameIDFormat) IsKnown() bool {
-	switch r {
-	case ApplicationSaaSApplicationSaasAppNameIDFormatID, ApplicationSaaSApplicationSaasAppNameIDFormatEmail:
 		return true
 	}
 	return false
@@ -1503,7 +1487,7 @@ type ApplicationSaaSApplicationSaasAppParam struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[ApplicationSaaSApplicationSaasAppNameIDFormat] `json:"name_id_format"`
+	NameIDFormat param.Field[SaasAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1872,6 +1856,69 @@ type CustomPagesh = string
 
 type CustomPageshParam = string
 
+// A globally unique name for an identity or service provider.
+type SaasAppNameFormat string
+
+const (
+	SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified SaasAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic       SaasAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI         SaasAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+)
+
+func (r SaasAppNameFormat) IsKnown() bool {
+	switch r {
+	case SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified, SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic, SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI:
+		return true
+	}
+	return false
+}
+
+// The format of the name identifier sent to the SaaS application.
+type SaasAppNameIDFormat string
+
+const (
+	SaasAppNameIDFormatID    SaasAppNameIDFormat = "id"
+	SaasAppNameIDFormatEmail SaasAppNameIDFormat = "email"
+)
+
+func (r SaasAppNameIDFormat) IsKnown() bool {
+	switch r {
+	case SaasAppNameIDFormatID, SaasAppNameIDFormatEmail:
+		return true
+	}
+	return false
+}
+
+type SaasAppSource struct {
+	// The name of the IdP attribute.
+	Name string            `json:"name"`
+	JSON saasAppSourceJSON `json:"-"`
+}
+
+// saasAppSourceJSON contains the JSON metadata for the struct [SaasAppSource]
+type saasAppSourceJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SaasAppSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r saasAppSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SaasAppSourceParam struct {
+	// The name of the IdP attribute.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r SaasAppSourceParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SAMLSaasApp struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
@@ -1887,7 +1934,7 @@ type SAMLSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat SAMLSaasAppNameIDFormat `json:"name_id_format"`
+	NameIDFormat SaasAppNameIDFormat `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1959,9 +2006,9 @@ type SAMLSaasAppCustomAttributes struct {
 	// The name of the attribute.
 	Name string `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat SAMLSaasAppCustomAttributesNameFormat `json:"name_format"`
-	Source     SAMLSaasAppCustomAttributesSource     `json:"source"`
-	JSON       samlSaasAppCustomAttributesJSON       `json:"-"`
+	NameFormat SaasAppNameFormat               `json:"name_format"`
+	Source     SaasAppSource                   `json:"source"`
+	JSON       samlSaasAppCustomAttributesJSON `json:"-"`
 }
 
 // samlSaasAppCustomAttributesJSON contains the JSON metadata for the struct
@@ -1982,61 +2029,6 @@ func (r samlSaasAppCustomAttributesJSON) RawJSON() string {
 	return r.raw
 }
 
-// A globally unique name for an identity or service provider.
-type SAMLSaasAppCustomAttributesNameFormat string
-
-const (
-	SAMLSaasAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified SAMLSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	SAMLSaasAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic       SAMLSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	SAMLSaasAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI         SAMLSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-)
-
-func (r SAMLSaasAppCustomAttributesNameFormat) IsKnown() bool {
-	switch r {
-	case SAMLSaasAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified, SAMLSaasAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic, SAMLSaasAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI:
-		return true
-	}
-	return false
-}
-
-type SAMLSaasAppCustomAttributesSource struct {
-	// The name of the IdP attribute.
-	Name string                                `json:"name"`
-	JSON samlSaasAppCustomAttributesSourceJSON `json:"-"`
-}
-
-// samlSaasAppCustomAttributesSourceJSON contains the JSON metadata for the struct
-// [SAMLSaasAppCustomAttributesSource]
-type samlSaasAppCustomAttributesSourceJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SAMLSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r samlSaasAppCustomAttributesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// The format of the name identifier sent to the SaaS application.
-type SAMLSaasAppNameIDFormat string
-
-const (
-	SAMLSaasAppNameIDFormatID    SAMLSaasAppNameIDFormat = "id"
-	SAMLSaasAppNameIDFormatEmail SAMLSaasAppNameIDFormat = "email"
-)
-
-func (r SAMLSaasAppNameIDFormat) IsKnown() bool {
-	switch r {
-	case SAMLSaasAppNameIDFormatID, SAMLSaasAppNameIDFormatEmail:
-		return true
-	}
-	return false
-}
-
 type SAMLSaasAppParam struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
@@ -2051,7 +2043,7 @@ type SAMLSaasAppParam struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[SAMLSaasAppNameIDFormat] `json:"name_id_format"`
+	NameIDFormat param.Field[SaasAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -2081,20 +2073,11 @@ type SAMLSaasAppCustomAttributesParam struct {
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[SAMLSaasAppCustomAttributesNameFormat]  `json:"name_format"`
-	Source     param.Field[SAMLSaasAppCustomAttributesSourceParam] `json:"source"`
+	NameFormat param.Field[SaasAppNameFormat]  `json:"name_format"`
+	Source     param.Field[SaasAppSourceParam] `json:"source"`
 }
 
 func (r SAMLSaasAppCustomAttributesParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SAMLSaasAppCustomAttributesSourceParam struct {
-	// The name of the IdP attribute.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r SAMLSaasAppCustomAttributesSourceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

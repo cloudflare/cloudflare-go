@@ -62,7 +62,7 @@ func (r *AnalyticsService) Stored(ctx context.Context, params AnalyticsStoredPar
 
 // Metrics on Workers KV requests.
 type Components struct {
-	Data []UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7 `json:"data,required,nullable"`
+	Data []ComponentsData `json:"data,required,nullable"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -97,6 +97,27 @@ func (r *Components) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r componentsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ComponentsData struct {
+	// List of metrics returned by the query.
+	Metrics []interface{}      `json:"metrics,required"`
+	JSON    componentsDataJSON `json:"-"`
+}
+
+// componentsDataJSON contains the JSON metadata for the struct [ComponentsData]
+type componentsDataJSON struct {
+	Metrics     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ComponentsData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r componentsDataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -157,7 +178,7 @@ func (r componentsQueryJSON) RawJSON() string {
 
 // Metrics on Workers KV requests.
 type Schema struct {
-	Data []UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7 `json:"data,required,nullable"`
+	Data []SchemaData `json:"data,required,nullable"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -192,6 +213,27 @@ func (r *Schema) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r schemaJSON) RawJSON() string {
+	return r.raw
+}
+
+type SchemaData struct {
+	// List of metrics returned by the query.
+	Metrics []interface{}  `json:"metrics,required"`
+	JSON    schemaDataJSON `json:"-"`
+}
+
+// schemaDataJSON contains the JSON metadata for the struct [SchemaData]
+type schemaDataJSON struct {
+	Metrics     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SchemaData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r schemaDataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -247,28 +289,6 @@ func (r *SchemaQuery) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r schemaQueryJSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7 struct {
-	// List of metrics returned by the query.
-	Metrics []interface{}                                        `json:"metrics,required"`
-	JSON    unnamedSchemaRef608bee5065f7314d6fa572b89a1910f7JSON `json:"-"`
-}
-
-// unnamedSchemaRef608bee5065f7314d6fa572b89a1910f7JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7]
-type unnamedSchemaRef608bee5065f7314d6fa572b89a1910f7JSON struct {
-	Metrics     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef608bee5065f7314d6fa572b89a1910f7JSON) RawJSON() string {
 	return r.raw
 }
 

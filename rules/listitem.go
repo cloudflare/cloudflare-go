@@ -124,26 +124,25 @@ func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, lis
 	return
 }
 
-type UnnamedSchemaRef34bb6e31800bc0207c083affa12d2775 struct {
-	After  string                                               `json:"after"`
-	Before string                                               `json:"before"`
-	JSON   unnamedSchemaRef34bb6e31800bc0207c083affa12d2775JSON `json:"-"`
+type ListCursor struct {
+	After  string         `json:"after"`
+	Before string         `json:"before"`
+	JSON   listCursorJSON `json:"-"`
 }
 
-// unnamedSchemaRef34bb6e31800bc0207c083affa12d2775JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef34bb6e31800bc0207c083affa12d2775]
-type unnamedSchemaRef34bb6e31800bc0207c083affa12d2775JSON struct {
+// listCursorJSON contains the JSON metadata for the struct [ListCursor]
+type listCursorJSON struct {
 	After       apijson.Field
 	Before      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef34bb6e31800bc0207c083affa12d2775) UnmarshalJSON(data []byte) (err error) {
+func (r *ListCursor) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef34bb6e31800bc0207c083affa12d2775JSON) RawJSON() string {
+func (r listCursorJSON) RawJSON() string {
 	return r.raw
 }
 
