@@ -139,8 +139,7 @@ type MagicNetworkMonitoringRule struct {
 	// the rule name. Max 256 characters.
 	Name     string   `json:"name,required"`
 	Prefixes []string `json:"prefixes,required"`
-	// The id of the rule. Must be unique.
-	ID string `json:"id"`
+	ID       string   `json:"id"`
 	// The number of bits per second for the rule. When this value is exceeded for the
 	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
 	BandwidthThreshold float64 `json:"bandwidth_threshold"`
