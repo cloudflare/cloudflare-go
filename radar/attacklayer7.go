@@ -54,9 +54,9 @@ func (r *AttackLayer7Service) Timeseries(ctx context.Context, query AttackLayer7
 }
 
 type AttackLayer7TimeseriesResponse struct {
-	Meta   AttackLayer7TimeseriesResponseMeta               `json:"meta,required"`
-	Serie0 UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb `json:"serie_0,required"`
-	JSON   attackLayer7TimeseriesResponseJSON               `json:"-"`
+	Meta   AttackLayer7TimeseriesResponseMeta   `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesResponseJSON   `json:"-"`
 }
 
 // attackLayer7TimeseriesResponseJSON contains the JSON metadata for the struct
@@ -77,11 +77,11 @@ func (r attackLayer7TimeseriesResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7TimeseriesResponseMeta struct {
-	AggInterval    string                                             `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	LastUpdated    time.Time                                          `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo AttackLayer7TimeseriesResponseMetaConfidenceInfo   `json:"confidenceInfo"`
-	JSON           attackLayer7TimeseriesResponseMetaJSON             `json:"-"`
+	AggInterval    string                                           `json:"aggInterval,required"`
+	DateRange      []AttackLayer7TimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    time.Time                                        `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo AttackLayer7TimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           attackLayer7TimeseriesResponseMetaJSON           `json:"-"`
 }
 
 // attackLayer7TimeseriesResponseMetaJSON contains the JSON metadata for the struct
@@ -103,10 +103,35 @@ func (r attackLayer7TimeseriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type AttackLayer7TimeseriesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	JSON      attackLayer7TimeseriesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesResponseMetaDateRange]
+type attackLayer7TimeseriesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AttackLayer7TimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        attackLayer7TimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []AttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                        `json:"level"`
+	JSON        attackLayer7TimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // attackLayer7TimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -123,6 +148,63 @@ func (r *AttackLayer7TimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []
 }
 
 func (r attackLayer7TimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                         `json:"dataSource,required"`
+	Description     string                                                         `json:"description,required"`
+	EventType       string                                                         `json:"eventType,required"`
+	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
+	JSON            attackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [AttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation]
+type attackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesResponseSerie0 struct {
+	Timestamps []time.Time                              `json:"timestamps,required" format:"date-time"`
+	Values     []string                                 `json:"values,required"`
+	JSON       attackLayer7TimeseriesResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesResponseSerie0JSON contains the JSON metadata for the
+// struct [AttackLayer7TimeseriesResponseSerie0]
+type attackLayer7TimeseriesResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

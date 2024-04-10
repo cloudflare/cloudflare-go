@@ -71,7 +71,7 @@ func (r emailSecurityTopTldSpoofGetResponseJSON) RawJSON() string {
 }
 
 type EmailSecurityTopTldSpoofGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5    `json:"dateRange,required"`
+	DateRange      []EmailSecurityTopTldSpoofGetResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
 	ConfidenceInfo EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           emailSecurityTopTldSpoofGetResponseMetaJSON           `json:"-"`
@@ -95,10 +95,35 @@ func (r emailSecurityTopTldSpoofGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type EmailSecurityTopTldSpoofGetResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTopTldSpoofGetResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTopTldSpoofGetResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [EmailSecurityTopTldSpoofGetResponseMetaDateRange]
+type emailSecurityTopTldSpoofGetResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTopTldSpoofGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTopTldSpoofGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1        `json:"annotations"`
-	Level       int64                                                     `json:"level"`
-	JSON        emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                             `json:"level"`
+	JSON        emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON contains the JSON
@@ -115,6 +140,40 @@ func (r *EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo) UnmarshalJSON(da
 }
 
 func (r emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                              `json:"dataSource,required"`
+	Description     string                                                              `json:"description,required"`
+	EventType       string                                                              `json:"eventType,required"`
+	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                              `json:"linkedUrl"`
+	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
+	JSON            emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -72,15 +72,15 @@ func (r trafficAnomalyGetResponseJSON) RawJSON() string {
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaly struct {
-	StartDate            string                                              `json:"startDate,required"`
-	Status               string                                              `json:"status,required"`
-	Type                 string                                              `json:"type,required"`
-	UUID                 string                                              `json:"uuid,required"`
-	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails `json:"asnDetails"`
-	EndDate              string                                              `json:"endDate"`
-	LocationDetails      UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42    `json:"locationDetails"`
-	VisibleInDataSources []string                                            `json:"visibleInDataSources"`
-	JSON                 trafficAnomalyGetResponseTrafficAnomalyJSON         `json:"-"`
+	StartDate            string                                                   `json:"startDate,required"`
+	Status               string                                                   `json:"status,required"`
+	Type                 string                                                   `json:"type,required"`
+	UUID                 string                                                   `json:"uuid,required"`
+	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails"`
+	EndDate              string                                                   `json:"endDate"`
+	LocationDetails      TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails"`
+	VisibleInDataSources []string                                                 `json:"visibleInDataSources"`
+	JSON                 trafficAnomalyGetResponseTrafficAnomalyJSON              `json:"-"`
 }
 
 // trafficAnomalyGetResponseTrafficAnomalyJSON contains the JSON metadata for the
@@ -107,10 +107,10 @@ func (r trafficAnomalyGetResponseTrafficAnomalyJSON) RawJSON() string {
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaliesASNDetails struct {
-	ASN       string                                                  `json:"asn,required"`
-	Name      string                                                  `json:"name,required"`
-	Locations UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42        `json:"locations"`
-	JSON      trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON `json:"-"`
+	ASN       string                                                       `json:"asn,required"`
+	Name      string                                                       `json:"name,required"`
+	Locations TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations `json:"locations"`
+	JSON      trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON      `json:"-"`
 }
 
 // trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON contains the JSON
@@ -128,6 +128,54 @@ func (r *TrafficAnomalyGetResponseTrafficAnomaliesASNDetails) UnmarshalJSON(data
 }
 
 func (r trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations struct {
+	Code string                                                           `json:"code,required"`
+	Name string                                                           `json:"name,required"`
+	JSON trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON `json:"-"`
+}
+
+// trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON contains the
+// JSON metadata for the struct
+// [TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations]
+type trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON struct {
+	Code        apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails struct {
+	Code string                                                       `json:"code,required"`
+	Name string                                                       `json:"name,required"`
+	JSON trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON `json:"-"`
+}
+
+// trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON contains the JSON
+// metadata for the struct
+// [TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails]
+type trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON struct {
+	Code        apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON) RawJSON() string {
 	return r.raw
 }
 

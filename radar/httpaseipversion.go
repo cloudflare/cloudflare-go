@@ -49,9 +49,9 @@ func (r *HTTPAseIPVersionService) Get(ctx context.Context, ipVersion HTTPAseIPVe
 }
 
 type HTTPAseIPVersionGetResponse struct {
-	Meta HTTPAseIPVersionGetResponseMeta                    `json:"meta,required"`
-	Top0 []UnnamedSchemaRef4124a22436f90127c7fa2c4543219752 `json:"top_0,required"`
-	JSON httpAseIPVersionGetResponseJSON                    `json:"-"`
+	Meta HTTPAseIPVersionGetResponseMeta   `json:"meta,required"`
+	Top0 []HTTPAseIPVersionGetResponseTop0 `json:"top_0,required"`
+	JSON httpAseIPVersionGetResponseJSON   `json:"-"`
 }
 
 // httpAseIPVersionGetResponseJSON contains the JSON metadata for the struct
@@ -72,10 +72,10 @@ func (r httpAseIPVersionGetResponseJSON) RawJSON() string {
 }
 
 type HTTPAseIPVersionGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	LastUpdated    string                                             `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPAseIPVersionGetResponseMetaConfidenceInfo      `json:"confidenceInfo"`
-	JSON           httpAseIPVersionGetResponseMetaJSON                `json:"-"`
+	DateRange      []HTTPAseIPVersionGetResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                        `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPAseIPVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           httpAseIPVersionGetResponseMetaJSON           `json:"-"`
 }
 
 // httpAseIPVersionGetResponseMetaJSON contains the JSON metadata for the struct
@@ -96,10 +96,35 @@ func (r httpAseIPVersionGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type HTTPAseIPVersionGetResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	JSON      httpAseIPVersionGetResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpAseIPVersionGetResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [HTTPAseIPVersionGetResponseMetaDateRange]
+type httpAseIPVersionGetResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseIPVersionGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseIPVersionGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPAseIPVersionGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
-	Level       int64                                              `json:"level"`
-	JSON        httpAseIPVersionGetResponseMetaConfidenceInfoJSON  `json:"-"`
+	Annotations []HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                     `json:"level"`
+	JSON        httpAseIPVersionGetResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // httpAseIPVersionGetResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -116,6 +141,65 @@ func (r *HTTPAseIPVersionGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byt
 }
 
 func (r httpAseIPVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                      `json:"dataSource,required"`
+	Description     string                                                      `json:"description,required"`
+	EventType       string                                                      `json:"eventType,required"`
+	IsInstantaneous interface{}                                                 `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
+	JSON            httpAseIPVersionGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpAseIPVersionGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation]
+type httpAseIPVersionGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseIPVersionGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseIPVersionGetResponseTop0 struct {
+	ClientASN    int64                               `json:"clientASN,required"`
+	ClientAsName string                              `json:"clientASName,required"`
+	Value        string                              `json:"value,required"`
+	JSON         httpAseIPVersionGetResponseTop0JSON `json:"-"`
+}
+
+// httpAseIPVersionGetResponseTop0JSON contains the JSON metadata for the struct
+// [HTTPAseIPVersionGetResponseTop0]
+type httpAseIPVersionGetResponseTop0JSON struct {
+	ClientASN    apijson.Field
+	ClientAsName apijson.Field
+	Value        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *HTTPAseIPVersionGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseIPVersionGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

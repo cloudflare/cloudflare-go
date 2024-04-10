@@ -52,9 +52,9 @@ func (r *AS112Service) Timeseries(ctx context.Context, query AS112TimeseriesPara
 }
 
 type AS112TimeseriesResponse struct {
-	Meta   AS112TimeseriesResponseMeta                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb `json:"serie_0,required"`
-	JSON   as112TimeseriesResponseJSON                      `json:"-"`
+	Meta   AS112TimeseriesResponseMeta   `json:"meta,required"`
+	Serie0 AS112TimeseriesResponseSerie0 `json:"serie_0,required"`
+	JSON   as112TimeseriesResponseJSON   `json:"-"`
 }
 
 // as112TimeseriesResponseJSON contains the JSON metadata for the struct
@@ -75,11 +75,11 @@ func (r as112TimeseriesResponseJSON) RawJSON() string {
 }
 
 type AS112TimeseriesResponseMeta struct {
-	AggInterval    string                                             `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	LastUpdated    time.Time                                          `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo AS112TimeseriesResponseMetaConfidenceInfo          `json:"confidenceInfo"`
-	JSON           as112TimeseriesResponseMetaJSON                    `json:"-"`
+	AggInterval    string                                    `json:"aggInterval,required"`
+	DateRange      []AS112TimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    time.Time                                 `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo AS112TimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           as112TimeseriesResponseMetaJSON           `json:"-"`
 }
 
 // as112TimeseriesResponseMetaJSON contains the JSON metadata for the struct
@@ -101,10 +101,35 @@ func (r as112TimeseriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type AS112TimeseriesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                `json:"startTime,required" format:"date-time"`
+	JSON      as112TimeseriesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// as112TimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [AS112TimeseriesResponseMetaDateRange]
+type as112TimeseriesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AS112TimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112TimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AS112TimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
-	Level       int64                                              `json:"level"`
-	JSON        as112TimeseriesResponseMetaConfidenceInfoJSON      `json:"-"`
+	Annotations []AS112TimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                 `json:"level"`
+	JSON        as112TimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // as112TimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -121,6 +146,62 @@ func (r *AS112TimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (
 }
 
 func (r as112TimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AS112TimeseriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                  `json:"dataSource,required"`
+	Description     string                                                  `json:"description,required"`
+	EventType       string                                                  `json:"eventType,required"`
+	IsInstantaneous interface{}                                             `json:"isInstantaneous,required"`
+	EndTime         time.Time                                               `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                  `json:"linkedUrl"`
+	StartTime       time.Time                                               `json:"startTime" format:"date-time"`
+	JSON            as112TimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// as112TimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [AS112TimeseriesResponseMetaConfidenceInfoAnnotation]
+type as112TimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AS112TimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112TimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AS112TimeseriesResponseSerie0 struct {
+	Timestamps []time.Time                       `json:"timestamps,required" format:"date-time"`
+	Values     []string                          `json:"values,required"`
+	JSON       as112TimeseriesResponseSerie0JSON `json:"-"`
+}
+
+// as112TimeseriesResponseSerie0JSON contains the JSON metadata for the struct
+// [AS112TimeseriesResponseSerie0]
+type as112TimeseriesResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AS112TimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112TimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 
