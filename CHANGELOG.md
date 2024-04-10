@@ -1,4 +1,6 @@
-## 0.93.0 (Unreleased)
+## 0.94.0 (Unreleased)
+
+## 0.93.0 (April 10th, 2024)
 
 BREAKING CHANGES:
 
