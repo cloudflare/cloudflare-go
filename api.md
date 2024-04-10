@@ -4674,6 +4674,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#UserPolicyCheckGeo">UserPolicyCheckGeo</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AccessApplicationUserPolicyCheckListResponse">AccessApplicationUserPolicyCheckListResponse</a>
 
 Methods:
@@ -4890,9 +4891,9 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DeviceExperienceMonitor">DeviceExperienceMonitor</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#NetworkPath">NetworkPath</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#Percentiles">Percentiles</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11">UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11</a>
 
 ### Colos
 
@@ -5225,10 +5226,10 @@ Params Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#CustomCertificateSettingsParam">CustomCertificateSettingsParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#ExtendedEmailMatchingParam">ExtendedEmailMatchingParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#FipsSettingsParam">FipsSettingsParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#GatewayConfigurationSettingsParam">GatewayConfigurationSettingsParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#NotificationSettingsParam">NotificationSettingsParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#ProtocolDetectionParam">ProtocolDetectionParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#TLSSettingsParam">TLSSettingsParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam">UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam</a>
 
 Response Types:
 
@@ -5240,10 +5241,10 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#CustomCertificateSettings">CustomCertificateSettings</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#ExtendedEmailMatching">ExtendedEmailMatching</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#FipsSettings">FipsSettings</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#GatewayConfigurationSettings">GatewayConfigurationSettings</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#NotificationSettings">NotificationSettings</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#ProtocolDetection">ProtocolDetection</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#TLSSettings">TLSSettings</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e">UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#GatewayConfigurationUpdateResponse">GatewayConfigurationUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#GatewayConfigurationEditResponse">GatewayConfigurationEditResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#GatewayConfigurationGetResponse">GatewayConfigurationGetResponse</a>
@@ -5310,12 +5311,10 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#LoggingSettingParam">LoggingSettingParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam">UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#LoggingSetting">LoggingSetting</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b">UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b</a>
 
 Methods:
 
@@ -5547,7 +5546,7 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner">url_scanner</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner#UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6">UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner">url_scanner</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner#URLScannerDomain">URLScannerDomain</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner">url_scanner</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner#ScanNewResponse">ScanNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner">url_scanner</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner#ScanGetResponse">ScanGetResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner">url_scanner</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/url_scanner#ScanHarResponse">ScanHarResponse</a>

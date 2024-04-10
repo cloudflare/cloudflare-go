@@ -30,7 +30,7 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Update(context.TODO(), zero_trust.GatewayConfigurationUpdateParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Settings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam{
+		Settings: cloudflare.F(zero_trust.GatewayConfigurationSettingsParam{
 			ActivityLog: cloudflare.F(zero_trust.ActivityLogSettingsParam{
 				Enabled: cloudflare.F(true),
 			}),
@@ -105,7 +105,7 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Edit(context.TODO(), zero_trust.GatewayConfigurationEditParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Settings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam{
+		Settings: cloudflare.F(zero_trust.GatewayConfigurationSettingsParam{
 			ActivityLog: cloudflare.F(zero_trust.ActivityLogSettingsParam{
 				Enabled: cloudflare.F(true),
 			}),

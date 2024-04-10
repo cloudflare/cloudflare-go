@@ -85,16 +85,16 @@ func (r *ScanService) Screenshot(ctx context.Context, accountID string, scanID s
 	return
 }
 
-type UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6 struct {
-	ID              int64                                                `json:"id,required"`
-	Name            string                                               `json:"name,required"`
-	SuperCategoryID int64                                                `json:"super_category_id"`
-	JSON            unnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6JSON `json:"-"`
+type URLScannerDomain struct {
+	ID              int64                `json:"id,required"`
+	Name            string               `json:"name,required"`
+	SuperCategoryID int64                `json:"super_category_id"`
+	JSON            urlScannerDomainJSON `json:"-"`
 }
 
-// unnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6]
-type unnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6JSON struct {
+// urlScannerDomainJSON contains the JSON metadata for the struct
+// [URLScannerDomain]
+type urlScannerDomainJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -102,11 +102,11 @@ type unnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6JSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerDomain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6JSON) RawJSON() string {
+func (r urlScannerDomainJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -303,9 +303,9 @@ func (r scanGetResponseScanMetaProcessorsJSON) RawJSON() string {
 }
 
 type ScanGetResponseScanMetaProcessorsCategories struct {
-	Content []UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6 `json:"content,required"`
-	Risks   []ScanGetResponseScanMetaProcessorsCategoriesRisk  `json:"risks,required"`
-	JSON    scanGetResponseScanMetaProcessorsCategoriesJSON    `json:"-"`
+	Content []URLScannerDomain                                `json:"content,required"`
+	Risks   []ScanGetResponseScanMetaProcessorsCategoriesRisk `json:"risks,required"`
+	JSON    scanGetResponseScanMetaProcessorsCategoriesJSON   `json:"-"`
 }
 
 // scanGetResponseScanMetaProcessorsCategoriesJSON contains the JSON metadata for
@@ -1091,8 +1091,8 @@ func (r scanGetResponseScanDomainsExampleComJSON) RawJSON() string {
 
 type ScanGetResponseScanDomainsExampleComCategories struct {
 	Inherited ScanGetResponseScanDomainsExampleComCategoriesInherited `json:"inherited,required"`
-	Content   []UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6      `json:"content"`
-	Risks     []UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6      `json:"risks"`
+	Content   []URLScannerDomain                                      `json:"content"`
+	Risks     []URLScannerDomain                                      `json:"risks"`
 	JSON      scanGetResponseScanDomainsExampleComCategoriesJSON      `json:"-"`
 }
 
@@ -1115,9 +1115,9 @@ func (r scanGetResponseScanDomainsExampleComCategoriesJSON) RawJSON() string {
 }
 
 type ScanGetResponseScanDomainsExampleComCategoriesInherited struct {
-	Content []UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6          `json:"content"`
+	Content []URLScannerDomain                                          `json:"content"`
 	From    string                                                      `json:"from"`
-	Risks   []UnnamedSchemaRef6d7a78acccfc753a8e931b1c4e72b6a6          `json:"risks"`
+	Risks   []URLScannerDomain                                          `json:"risks"`
 	JSON    scanGetResponseScanDomainsExampleComCategoriesInheritedJSON `json:"-"`
 }
 

@@ -82,12 +82,12 @@ type Traceroute struct {
 	Interval string         `json:"interval,required"`
 	Kind     TracerouteKind `json:"kind,required"`
 	// The name of the Traceroute synthetic application test
-	Name                  string                                             `json:"name,required"`
-	TargetPolicies        []UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11 `json:"target_policies"`
-	Targeted              bool                                               `json:"targeted"`
-	TracerouteStats       TracerouteTracerouteStats                          `json:"tracerouteStats,nullable"`
-	TracerouteStatsByColo []TracerouteTracerouteStatsByColo                  `json:"tracerouteStatsByColo"`
-	JSON                  tracerouteJSON                                     `json:"-"`
+	Name                  string                            `json:"name,required"`
+	TargetPolicies        []DeviceExperienceMonitor         `json:"target_policies"`
+	Targeted              bool                              `json:"targeted"`
+	TracerouteStats       TracerouteTracerouteStats         `json:"tracerouteStats,nullable"`
+	TracerouteStatsByColo []TracerouteTracerouteStatsByColo `json:"tracerouteStatsByColo"`
+	JSON                  tracerouteJSON                    `json:"-"`
 }
 
 // tracerouteJSON contains the JSON metadata for the struct [Traceroute]

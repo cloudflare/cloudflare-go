@@ -61,10 +61,10 @@ type HTTPDetails struct {
 	// The HTTP method to use when running the test
 	Method string `json:"method"`
 	// The name of the HTTP synthetic application test
-	Name           string                                             `json:"name"`
-	TargetPolicies []UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11 `json:"target_policies"`
-	Targeted       bool                                               `json:"targeted"`
-	JSON           httpDetailsJSON                                    `json:"-"`
+	Name           string                    `json:"name"`
+	TargetPolicies []DeviceExperienceMonitor `json:"target_policies"`
+	Targeted       bool                      `json:"targeted"`
+	JSON           httpDetailsJSON           `json:"-"`
 }
 
 // httpDetailsJSON contains the JSON metadata for the struct [HTTPDetails]
