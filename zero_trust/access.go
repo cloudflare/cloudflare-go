@@ -116,14 +116,21 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 
 // Matches a specific email.
 //
-// Union satisfied by [zero_trust.EmailRule], [zero_trust.EmailListRule],
-// [zero_trust.DomainRule], [zero_trust.EveryoneRule], [zero_trust.IPRule],
-// [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
-// [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
-// [zero_trust.GSuiteGroupRule], [zero_trust.OktaGroupRule],
-// [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule],
+// Union satisfied by [zero_trust.AccessRuleAccessEmailRule],
+// [zero_trust.AccessRuleAccessEmailListRule],
+// [zero_trust.AccessRuleAccessDomainRule],
+// [zero_trust.AccessRuleAccessEveryoneRule], [zero_trust.AccessRuleAccessIPRule],
+// [zero_trust.AccessRuleAccessIPListRule],
+// [zero_trust.AccessRuleAccessCertificateRule], [zero_trust.GroupRule],
+// [zero_trust.AccessRuleAccessAzureGroupRule],
+// [zero_trust.AccessRuleAccessGitHubOrganizationRule],
+// [zero_trust.AccessRuleAccessGSuiteGroupRule],
+// [zero_trust.AccessRuleAccessOktaGroupRule],
+// [zero_trust.AccessRuleAccessSAMLGroupRule],
+// [zero_trust.AccessRuleAccessServiceTokenRule],
 // [zero_trust.AccessRuleAccessAnyValidServiceTokenRule],
-// [zero_trust.ExternalEvaluationRule], [zero_trust.CountryRule],
+// [zero_trust.AccessRuleAccessExternalEvaluationRule],
+// [zero_trust.AccessRuleAccessCountryRule],
 // [zero_trust.AccessRuleAccessAuthenticationMethodRule] or
 // [zero_trust.AccessRuleAccessDevicePostureRule].
 type AccessRuleUnion interface {
@@ -136,31 +143,31 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EmailRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessEmailRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EmailListRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessEmailListRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DomainRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessDomainRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EveryoneRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessEveryoneRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessIPRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPListRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessIPListRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CertificateRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessCertificateRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -168,27 +175,27 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AzureGroupRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessAzureGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GitHubOrganizationRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessGitHubOrganizationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GSuiteGroupRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessGSuiteGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OktaGroupRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessOktaGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SAMLGroupRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessSAMLGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ServiceTokenRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -196,11 +203,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ExternalEvaluationRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessExternalEvaluationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CountryRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessCountryRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -211,6 +218,578 @@ func init() {
 			Type:       reflect.TypeOf(AccessRuleAccessDevicePostureRule{}),
 		},
 	)
+}
+
+// Matches a specific email.
+type AccessRuleAccessEmailRule struct {
+	Email AccessRuleAccessEmailRuleEmail `json:"email,required"`
+	JSON  accessRuleAccessEmailRuleJSON  `json:"-"`
+}
+
+// accessRuleAccessEmailRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessEmailRule]
+type accessRuleAccessEmailRuleJSON struct {
+	Email       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessEmailRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessEmailRuleEmail struct {
+	// The email of the user.
+	Email string                             `json:"email,required" format:"email"`
+	JSON  accessRuleAccessEmailRuleEmailJSON `json:"-"`
+}
+
+// accessRuleAccessEmailRuleEmailJSON contains the JSON metadata for the struct
+// [AccessRuleAccessEmailRuleEmail]
+type accessRuleAccessEmailRuleEmailJSON struct {
+	Email       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches an email address from a list.
+type AccessRuleAccessEmailListRule struct {
+	EmailList AccessRuleAccessEmailListRuleEmailList `json:"email_list,required"`
+	JSON      accessRuleAccessEmailListRuleJSON      `json:"-"`
+}
+
+// accessRuleAccessEmailListRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessEmailListRule]
+type accessRuleAccessEmailListRuleJSON struct {
+	EmailList   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessEmailListRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessEmailListRuleEmailList struct {
+	// The ID of a previously created email list.
+	ID   string                                     `json:"id,required"`
+	JSON accessRuleAccessEmailListRuleEmailListJSON `json:"-"`
+}
+
+// accessRuleAccessEmailListRuleEmailListJSON contains the JSON metadata for the
+// struct [AccessRuleAccessEmailListRuleEmailList]
+type accessRuleAccessEmailListRuleEmailListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
+// Match an entire email domain.
+type AccessRuleAccessDomainRule struct {
+	EmailDomain AccessRuleAccessDomainRuleEmailDomain `json:"email_domain,required"`
+	JSON        accessRuleAccessDomainRuleJSON        `json:"-"`
+}
+
+// accessRuleAccessDomainRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessDomainRule]
+type accessRuleAccessDomainRuleJSON struct {
+	EmailDomain apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessDomainRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessDomainRuleEmailDomain struct {
+	// The email domain to match.
+	Domain string                                    `json:"domain,required"`
+	JSON   accessRuleAccessDomainRuleEmailDomainJSON `json:"-"`
+}
+
+// accessRuleAccessDomainRuleEmailDomainJSON contains the JSON metadata for the
+// struct [AccessRuleAccessDomainRuleEmailDomain]
+type accessRuleAccessDomainRuleEmailDomainJSON struct {
+	Domain      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches everyone.
+type AccessRuleAccessEveryoneRule struct {
+	// An empty object which matches on all users.
+	Everyone interface{}                      `json:"everyone,required"`
+	JSON     accessRuleAccessEveryoneRuleJSON `json:"-"`
+}
+
+// accessRuleAccessEveryoneRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessEveryoneRule]
+type accessRuleAccessEveryoneRuleJSON struct {
+	Everyone    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessEveryoneRule) implementsZeroTrustAccessRule() {}
+
+// Matches an IP address block.
+type AccessRuleAccessIPRule struct {
+	IP   AccessRuleAccessIPRuleIP   `json:"ip,required"`
+	JSON accessRuleAccessIPRuleJSON `json:"-"`
+}
+
+// accessRuleAccessIPRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessIPRule]
+type accessRuleAccessIPRuleJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessIPRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessIPRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessIPRuleIP struct {
+	// An IPv4 or IPv6 CIDR block.
+	IP   string                       `json:"ip,required"`
+	JSON accessRuleAccessIPRuleIPJSON `json:"-"`
+}
+
+// accessRuleAccessIPRuleIPJSON contains the JSON metadata for the struct
+// [AccessRuleAccessIPRuleIP]
+type accessRuleAccessIPRuleIPJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches an IP address from a list.
+type AccessRuleAccessIPListRule struct {
+	IPList AccessRuleAccessIPListRuleIPList `json:"ip_list,required"`
+	JSON   accessRuleAccessIPListRuleJSON   `json:"-"`
+}
+
+// accessRuleAccessIPListRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessIPListRule]
+type accessRuleAccessIPListRuleJSON struct {
+	IPList      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessIPListRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessIPListRuleIPList struct {
+	// The ID of a previously created IP list.
+	ID   string                               `json:"id,required"`
+	JSON accessRuleAccessIPListRuleIPListJSON `json:"-"`
+}
+
+// accessRuleAccessIPListRuleIPListJSON contains the JSON metadata for the struct
+// [AccessRuleAccessIPListRuleIPList]
+type accessRuleAccessIPListRuleIPListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches any valid client certificate.
+type AccessRuleAccessCertificateRule struct {
+	Certificate interface{}                         `json:"certificate,required"`
+	JSON        accessRuleAccessCertificateRuleJSON `json:"-"`
+}
+
+// accessRuleAccessCertificateRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessCertificateRule]
+type accessRuleAccessCertificateRuleJSON struct {
+	Certificate apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessCertificateRule) implementsZeroTrustAccessRule() {}
+
+// Matches an Azure group. Requires an Azure identity provider.
+type AccessRuleAccessAzureGroupRule struct {
+	AzureAD AccessRuleAccessAzureGroupRuleAzureAD `json:"azureAD,required"`
+	JSON    accessRuleAccessAzureGroupRuleJSON    `json:"-"`
+}
+
+// accessRuleAccessAzureGroupRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessAzureGroupRule]
+type accessRuleAccessAzureGroupRuleJSON struct {
+	AzureAD     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessAzureGroupRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessAzureGroupRuleAzureAD struct {
+	// The ID of an Azure group.
+	ID string `json:"id,required"`
+	// The ID of your Azure identity provider.
+	ConnectionID string                                    `json:"connection_id,required"`
+	JSON         accessRuleAccessAzureGroupRuleAzureADJSON `json:"-"`
+}
+
+// accessRuleAccessAzureGroupRuleAzureADJSON contains the JSON metadata for the
+// struct [AccessRuleAccessAzureGroupRuleAzureAD]
+type accessRuleAccessAzureGroupRuleAzureADJSON struct {
+	ID           apijson.Field
+	ConnectionID apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAzureGroupRuleAzureAD) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAzureGroupRuleAzureADJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches a Github organization. Requires a Github identity provider.
+type AccessRuleAccessGitHubOrganizationRule struct {
+	GitHubOrganization AccessRuleAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	JSON               accessRuleAccessGitHubOrganizationRuleJSON               `json:"-"`
+}
+
+// accessRuleAccessGitHubOrganizationRuleJSON contains the JSON metadata for the
+// struct [AccessRuleAccessGitHubOrganizationRule]
+type accessRuleAccessGitHubOrganizationRuleJSON struct {
+	GitHubOrganization apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessGitHubOrganizationRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessGitHubOrganizationRuleGitHubOrganization struct {
+	// The ID of your Github identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The name of the organization.
+	Name string                                                       `json:"name,required"`
+	JSON accessRuleAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
+}
+
+// accessRuleAccessGitHubOrganizationRuleGitHubOrganizationJSON contains the JSON
+// metadata for the struct
+// [AccessRuleAccessGitHubOrganizationRuleGitHubOrganization]
+type accessRuleAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
+	ConnectionID apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches a group in Google Workspace. Requires a Google Workspace identity
+// provider.
+type AccessRuleAccessGSuiteGroupRule struct {
+	GSuite AccessRuleAccessGSuiteGroupRuleGSuite `json:"gsuite,required"`
+	JSON   accessRuleAccessGSuiteGroupRuleJSON   `json:"-"`
+}
+
+// accessRuleAccessGSuiteGroupRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessGSuiteGroupRule]
+type accessRuleAccessGSuiteGroupRuleJSON struct {
+	GSuite      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessGSuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessGSuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessGSuiteGroupRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessGSuiteGroupRuleGSuite struct {
+	// The ID of your Google Workspace identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Google Workspace group.
+	Email string                                    `json:"email,required"`
+	JSON  accessRuleAccessGSuiteGroupRuleGSuiteJSON `json:"-"`
+}
+
+// accessRuleAccessGSuiteGroupRuleGSuiteJSON contains the JSON metadata for the
+// struct [AccessRuleAccessGSuiteGroupRuleGSuite]
+type accessRuleAccessGSuiteGroupRuleGSuiteJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessGSuiteGroupRuleGSuite) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessGSuiteGroupRuleGSuiteJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches an Okta group. Requires an Okta identity provider.
+type AccessRuleAccessOktaGroupRule struct {
+	Okta AccessRuleAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON accessRuleAccessOktaGroupRuleJSON `json:"-"`
+}
+
+// accessRuleAccessOktaGroupRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessOktaGroupRule]
+type accessRuleAccessOktaGroupRuleJSON struct {
+	Okta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessOktaGroupRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessOktaGroupRuleOkta struct {
+	// The ID of your Okta identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Okta group.
+	Email string                                `json:"email,required"`
+	JSON  accessRuleAccessOktaGroupRuleOktaJSON `json:"-"`
+}
+
+// accessRuleAccessOktaGroupRuleOktaJSON contains the JSON metadata for the struct
+// [AccessRuleAccessOktaGroupRuleOkta]
+type accessRuleAccessOktaGroupRuleOktaJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches a SAML group. Requires a SAML identity provider.
+type AccessRuleAccessSAMLGroupRule struct {
+	SAML AccessRuleAccessSAMLGroupRuleSAML `json:"saml,required"`
+	JSON accessRuleAccessSAMLGroupRuleJSON `json:"-"`
+}
+
+// accessRuleAccessSAMLGroupRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessSAMLGroupRule]
+type accessRuleAccessSAMLGroupRuleJSON struct {
+	SAML        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessSAMLGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessSAMLGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessSAMLGroupRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessSAMLGroupRuleSAML struct {
+	// The name of the SAML attribute.
+	AttributeName string `json:"attribute_name,required"`
+	// The SAML attribute value to look for.
+	AttributeValue string                                `json:"attribute_value,required"`
+	JSON           accessRuleAccessSAMLGroupRuleSAMLJSON `json:"-"`
+}
+
+// accessRuleAccessSAMLGroupRuleSAMLJSON contains the JSON metadata for the struct
+// [AccessRuleAccessSAMLGroupRuleSAML]
+type accessRuleAccessSAMLGroupRuleSAMLJSON struct {
+	AttributeName  apijson.Field
+	AttributeValue apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessSAMLGroupRuleSAML) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessSAMLGroupRuleSAMLJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches a specific Access Service Token
+type AccessRuleAccessServiceTokenRule struct {
+	ServiceToken AccessRuleAccessServiceTokenRuleServiceToken `json:"service_token,required"`
+	JSON         accessRuleAccessServiceTokenRuleJSON         `json:"-"`
+}
+
+// accessRuleAccessServiceTokenRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessServiceTokenRule]
+type accessRuleAccessServiceTokenRuleJSON struct {
+	ServiceToken apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessServiceTokenRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessServiceTokenRuleServiceToken struct {
+	// The ID of a Service Token.
+	TokenID string                                           `json:"token_id,required"`
+	JSON    accessRuleAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+}
+
+// accessRuleAccessServiceTokenRuleServiceTokenJSON contains the JSON metadata for
+// the struct [AccessRuleAccessServiceTokenRuleServiceToken]
+type accessRuleAccessServiceTokenRuleServiceTokenJSON struct {
+	TokenID     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches any valid Access Service Token
@@ -237,6 +816,103 @@ func (r accessRuleAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
 }
 
 func (r AccessRuleAccessAnyValidServiceTokenRule) implementsZeroTrustAccessRule() {}
+
+// Create Allow or Block policies which evaluate the user based on custom criteria.
+type AccessRuleAccessExternalEvaluationRule struct {
+	ExternalEvaluation AccessRuleAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	JSON               accessRuleAccessExternalEvaluationRuleJSON               `json:"-"`
+}
+
+// accessRuleAccessExternalEvaluationRuleJSON contains the JSON metadata for the
+// struct [AccessRuleAccessExternalEvaluationRule]
+type accessRuleAccessExternalEvaluationRuleJSON struct {
+	ExternalEvaluation apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessExternalEvaluationRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessExternalEvaluationRuleExternalEvaluation struct {
+	// The API endpoint containing your business logic.
+	EvaluateURL string `json:"evaluate_url,required"`
+	// The API endpoint containing the key that Access uses to verify that the response
+	// came from your API.
+	KeysURL string                                                       `json:"keys_url,required"`
+	JSON    accessRuleAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
+}
+
+// accessRuleAccessExternalEvaluationRuleExternalEvaluationJSON contains the JSON
+// metadata for the struct
+// [AccessRuleAccessExternalEvaluationRuleExternalEvaluation]
+type accessRuleAccessExternalEvaluationRuleExternalEvaluationJSON struct {
+	EvaluateURL apijson.Field
+	KeysURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches a specific country
+type AccessRuleAccessCountryRule struct {
+	Geo  AccessRuleAccessCountryRuleGeo  `json:"geo,required"`
+	JSON accessRuleAccessCountryRuleJSON `json:"-"`
+}
+
+// accessRuleAccessCountryRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessCountryRule]
+type accessRuleAccessCountryRuleJSON struct {
+	Geo         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessCountryRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessCountryRuleGeo struct {
+	// The country code that should be matched.
+	CountryCode string                             `json:"country_code,required"`
+	JSON        accessRuleAccessCountryRuleGeoJSON `json:"-"`
+}
+
+// accessRuleAccessCountryRuleGeoJSON contains the JSON metadata for the struct
+// [AccessRuleAccessCountryRuleGeo]
+type accessRuleAccessCountryRuleGeoJSON struct {
+	CountryCode apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
 
 // Enforce different MFA options
 type AccessRuleAccessAuthenticationMethodRule struct {
@@ -361,19 +1037,280 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 // Matches a specific email.
 //
-// Satisfied by [zero_trust.EmailRuleParam], [zero_trust.EmailListRuleParam],
-// [zero_trust.DomainRuleParam], [zero_trust.EveryoneRuleParam],
-// [zero_trust.IPRuleParam], [zero_trust.IPListRuleParam],
-// [zero_trust.CertificateRuleParam], [zero_trust.GroupRuleParam],
-// [zero_trust.AzureGroupRuleParam], [zero_trust.GitHubOrganizationRuleParam],
-// [zero_trust.GSuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
-// [zero_trust.SAMLGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
+// Satisfied by [zero_trust.AccessRuleAccessEmailRuleParam],
+// [zero_trust.AccessRuleAccessEmailListRuleParam],
+// [zero_trust.AccessRuleAccessDomainRuleParam],
+// [zero_trust.AccessRuleAccessEveryoneRuleParam],
+// [zero_trust.AccessRuleAccessIPRuleParam],
+// [zero_trust.AccessRuleAccessIPListRuleParam],
+// [zero_trust.AccessRuleAccessCertificateRuleParam], [zero_trust.GroupRuleParam],
+// [zero_trust.AccessRuleAccessAzureGroupRuleParam],
+// [zero_trust.AccessRuleAccessGitHubOrganizationRuleParam],
+// [zero_trust.AccessRuleAccessGSuiteGroupRuleParam],
+// [zero_trust.AccessRuleAccessOktaGroupRuleParam],
+// [zero_trust.AccessRuleAccessSAMLGroupRuleParam],
+// [zero_trust.AccessRuleAccessServiceTokenRuleParam],
 // [zero_trust.AccessRuleAccessAnyValidServiceTokenRuleParam],
-// [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
+// [zero_trust.AccessRuleAccessExternalEvaluationRuleParam],
+// [zero_trust.AccessRuleAccessCountryRuleParam],
 // [zero_trust.AccessRuleAccessAuthenticationMethodRuleParam],
 // [zero_trust.AccessRuleAccessDevicePostureRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsZeroTrustAccessRuleUnionParam()
+}
+
+// Matches a specific email.
+type AccessRuleAccessEmailRuleParam struct {
+	Email param.Field[AccessRuleAccessEmailRuleEmailParam] `json:"email,required"`
+}
+
+func (r AccessRuleAccessEmailRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessEmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessEmailRuleEmailParam struct {
+	// The email of the user.
+	Email param.Field[string] `json:"email,required" format:"email"`
+}
+
+func (r AccessRuleAccessEmailRuleEmailParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches an email address from a list.
+type AccessRuleAccessEmailListRuleParam struct {
+	EmailList param.Field[AccessRuleAccessEmailListRuleEmailListParam] `json:"email_list,required"`
+}
+
+func (r AccessRuleAccessEmailListRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessEmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessEmailListRuleEmailListParam struct {
+	// The ID of a previously created email list.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessRuleAccessEmailListRuleEmailListParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Match an entire email domain.
+type AccessRuleAccessDomainRuleParam struct {
+	EmailDomain param.Field[AccessRuleAccessDomainRuleEmailDomainParam] `json:"email_domain,required"`
+}
+
+func (r AccessRuleAccessDomainRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessDomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessDomainRuleEmailDomainParam struct {
+	// The email domain to match.
+	Domain param.Field[string] `json:"domain,required"`
+}
+
+func (r AccessRuleAccessDomainRuleEmailDomainParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches everyone.
+type AccessRuleAccessEveryoneRuleParam struct {
+	// An empty object which matches on all users.
+	Everyone param.Field[interface{}] `json:"everyone,required"`
+}
+
+func (r AccessRuleAccessEveryoneRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessEveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// Matches an IP address block.
+type AccessRuleAccessIPRuleParam struct {
+	IP param.Field[AccessRuleAccessIPRuleIPParam] `json:"ip,required"`
+}
+
+func (r AccessRuleAccessIPRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessIPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessIPRuleIPParam struct {
+	// An IPv4 or IPv6 CIDR block.
+	IP param.Field[string] `json:"ip,required"`
+}
+
+func (r AccessRuleAccessIPRuleIPParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches an IP address from a list.
+type AccessRuleAccessIPListRuleParam struct {
+	IPList param.Field[AccessRuleAccessIPListRuleIPListParam] `json:"ip_list,required"`
+}
+
+func (r AccessRuleAccessIPListRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessIPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessIPListRuleIPListParam struct {
+	// The ID of a previously created IP list.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessRuleAccessIPListRuleIPListParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches any valid client certificate.
+type AccessRuleAccessCertificateRuleParam struct {
+	Certificate param.Field[interface{}] `json:"certificate,required"`
+}
+
+func (r AccessRuleAccessCertificateRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessCertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// Matches an Azure group. Requires an Azure identity provider.
+type AccessRuleAccessAzureGroupRuleParam struct {
+	AzureAD param.Field[AccessRuleAccessAzureGroupRuleAzureADParam] `json:"azureAD,required"`
+}
+
+func (r AccessRuleAccessAzureGroupRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessAzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessAzureGroupRuleAzureADParam struct {
+	// The ID of an Azure group.
+	ID param.Field[string] `json:"id,required"`
+	// The ID of your Azure identity provider.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+}
+
+func (r AccessRuleAccessAzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a Github organization. Requires a Github identity provider.
+type AccessRuleAccessGitHubOrganizationRuleParam struct {
+	GitHubOrganization param.Field[AccessRuleAccessGitHubOrganizationRuleGitHubOrganizationParam] `json:"github-organization,required"`
+}
+
+func (r AccessRuleAccessGitHubOrganizationRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessGitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessGitHubOrganizationRuleGitHubOrganizationParam struct {
+	// The ID of your Github identity provider.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// The name of the organization.
+	Name param.Field[string] `json:"name,required"`
+}
+
+func (r AccessRuleAccessGitHubOrganizationRuleGitHubOrganizationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a group in Google Workspace. Requires a Google Workspace identity
+// provider.
+type AccessRuleAccessGSuiteGroupRuleParam struct {
+	GSuite param.Field[AccessRuleAccessGSuiteGroupRuleGSuiteParam] `json:"gsuite,required"`
+}
+
+func (r AccessRuleAccessGSuiteGroupRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessGSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessGSuiteGroupRuleGSuiteParam struct {
+	// The ID of your Google Workspace identity provider.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// The email of the Google Workspace group.
+	Email param.Field[string] `json:"email,required"`
+}
+
+func (r AccessRuleAccessGSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches an Okta group. Requires an Okta identity provider.
+type AccessRuleAccessOktaGroupRuleParam struct {
+	Okta param.Field[AccessRuleAccessOktaGroupRuleOktaParam] `json:"okta,required"`
+}
+
+func (r AccessRuleAccessOktaGroupRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessOktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessOktaGroupRuleOktaParam struct {
+	// The ID of your Okta identity provider.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// The email of the Okta group.
+	Email param.Field[string] `json:"email,required"`
+}
+
+func (r AccessRuleAccessOktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a SAML group. Requires a SAML identity provider.
+type AccessRuleAccessSAMLGroupRuleParam struct {
+	SAML param.Field[AccessRuleAccessSAMLGroupRuleSAMLParam] `json:"saml,required"`
+}
+
+func (r AccessRuleAccessSAMLGroupRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessSAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessSAMLGroupRuleSAMLParam struct {
+	// The name of the SAML attribute.
+	AttributeName param.Field[string] `json:"attribute_name,required"`
+	// The SAML attribute value to look for.
+	AttributeValue param.Field[string] `json:"attribute_value,required"`
+}
+
+func (r AccessRuleAccessSAMLGroupRuleSAMLParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a specific Access Service Token
+type AccessRuleAccessServiceTokenRuleParam struct {
+	ServiceToken param.Field[AccessRuleAccessServiceTokenRuleServiceTokenParam] `json:"service_token,required"`
+}
+
+func (r AccessRuleAccessServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessServiceTokenRuleServiceTokenParam struct {
+	// The ID of a Service Token.
+	TokenID param.Field[string] `json:"token_id,required"`
+}
+
+func (r AccessRuleAccessServiceTokenRuleServiceTokenParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches any valid Access Service Token
@@ -387,6 +1324,49 @@ func (r AccessRuleAccessAnyValidServiceTokenRuleParam) MarshalJSON() (data []byt
 }
 
 func (r AccessRuleAccessAnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// Create Allow or Block policies which evaluate the user based on custom criteria.
+type AccessRuleAccessExternalEvaluationRuleParam struct {
+	ExternalEvaluation param.Field[AccessRuleAccessExternalEvaluationRuleExternalEvaluationParam] `json:"external_evaluation,required"`
+}
+
+func (r AccessRuleAccessExternalEvaluationRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessExternalEvaluationRuleExternalEvaluationParam struct {
+	// The API endpoint containing your business logic.
+	EvaluateURL param.Field[string] `json:"evaluate_url,required"`
+	// The API endpoint containing the key that Access uses to verify that the response
+	// came from your API.
+	KeysURL param.Field[string] `json:"keys_url,required"`
+}
+
+func (r AccessRuleAccessExternalEvaluationRuleExternalEvaluationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a specific country
+type AccessRuleAccessCountryRuleParam struct {
+	Geo param.Field[AccessRuleAccessCountryRuleGeoParam] `json:"geo,required"`
+}
+
+func (r AccessRuleAccessCountryRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessCountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessCountryRuleGeoParam struct {
+	// The country code that should be matched.
+	CountryCode param.Field[string] `json:"country_code,required"`
+}
+
+func (r AccessRuleAccessCountryRuleGeoParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Enforce different MFA options
 type AccessRuleAccessAuthenticationMethodRuleParam struct {
@@ -425,1394 +1405,6 @@ type AccessRuleAccessDevicePostureRuleDevicePostureParam struct {
 }
 
 func (r AccessRuleAccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches an Azure group. Requires an Azure identity provider.
-type AzureGroupRule struct {
-	AzureAD AzureGroupRuleAzureAD `json:"azureAD,required"`
-	JSON    azureGroupRuleJSON    `json:"-"`
-}
-
-// azureGroupRuleJSON contains the JSON metadata for the struct [AzureGroupRule]
-type azureGroupRuleJSON struct {
-	AzureAD     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AzureGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r azureGroupRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AzureGroupRule) implementsZeroTrustAccessRule() {}
-
-type AzureGroupRuleAzureAD struct {
-	// The ID of an Azure group.
-	ID string `json:"id,required"`
-	// The ID of your Azure identity provider.
-	ConnectionID string                    `json:"connection_id,required"`
-	JSON         azureGroupRuleAzureADJSON `json:"-"`
-}
-
-// azureGroupRuleAzureADJSON contains the JSON metadata for the struct
-// [AzureGroupRuleAzureAD]
-type azureGroupRuleAzureADJSON struct {
-	ID           apijson.Field
-	ConnectionID apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AzureGroupRuleAzureAD) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r azureGroupRuleAzureADJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches an Azure group. Requires an Azure identity provider.
-type AzureGroupRuleParam struct {
-	AzureAD param.Field[AzureGroupRuleAzureADParam] `json:"azureAD,required"`
-}
-
-func (r AzureGroupRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type AzureGroupRuleAzureADParam struct {
-	// The ID of an Azure group.
-	ID param.Field[string] `json:"id,required"`
-	// The ID of your Azure identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-}
-
-func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches any valid client certificate.
-type CertificateRule struct {
-	Certificate interface{}         `json:"certificate,required"`
-	JSON        certificateRuleJSON `json:"-"`
-}
-
-// certificateRuleJSON contains the JSON metadata for the struct [CertificateRule]
-type certificateRuleJSON struct {
-	Certificate apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificateRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r CertificateRule) implementsZeroTrustAccessRule() {}
-
-// Matches any valid client certificate.
-type CertificateRuleParam struct {
-	Certificate param.Field[interface{}] `json:"certificate,required"`
-}
-
-func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-// Matches a specific country
-type CountryRule struct {
-	Geo  CountryRuleGeo  `json:"geo,required"`
-	JSON countryRuleJSON `json:"-"`
-}
-
-// countryRuleJSON contains the JSON metadata for the struct [CountryRule]
-type countryRuleJSON struct {
-	Geo         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CountryRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r countryRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r CountryRule) implementsZeroTrustAccessRule() {}
-
-type CountryRuleGeo struct {
-	// The country code that should be matched.
-	CountryCode string             `json:"country_code,required"`
-	JSON        countryRuleGeoJSON `json:"-"`
-}
-
-// countryRuleGeoJSON contains the JSON metadata for the struct [CountryRuleGeo]
-type countryRuleGeoJSON struct {
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r countryRuleGeoJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches a specific country
-type CountryRuleParam struct {
-	Geo param.Field[CountryRuleGeoParam] `json:"geo,required"`
-}
-
-func (r CountryRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type CountryRuleGeoParam struct {
-	// The country code that should be matched.
-	CountryCode param.Field[string] `json:"country_code,required"`
-}
-
-func (r CountryRuleGeoParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Match an entire email domain.
-type DomainRule struct {
-	EmailDomain DomainRuleEmailDomain `json:"email_domain,required"`
-	JSON        domainRuleJSON        `json:"-"`
-}
-
-// domainRuleJSON contains the JSON metadata for the struct [DomainRule]
-type domainRuleJSON struct {
-	EmailDomain apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DomainRule) implementsZeroTrustAccessRule() {}
-
-type DomainRuleEmailDomain struct {
-	// The email domain to match.
-	Domain string                    `json:"domain,required"`
-	JSON   domainRuleEmailDomainJSON `json:"-"`
-}
-
-// domainRuleEmailDomainJSON contains the JSON metadata for the struct
-// [DomainRuleEmailDomain]
-type domainRuleEmailDomainJSON struct {
-	Domain      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainRuleEmailDomainJSON) RawJSON() string {
-	return r.raw
-}
-
-// Match an entire email domain.
-type DomainRuleParam struct {
-	EmailDomain param.Field[DomainRuleEmailDomainParam] `json:"email_domain,required"`
-}
-
-func (r DomainRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type DomainRuleEmailDomainParam struct {
-	// The email domain to match.
-	Domain param.Field[string] `json:"domain,required"`
-}
-
-func (r DomainRuleEmailDomainParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches an email address from a list.
-type EmailListRule struct {
-	EmailList EmailListRuleEmailList `json:"email_list,required"`
-	JSON      emailListRuleJSON      `json:"-"`
-}
-
-// emailListRuleJSON contains the JSON metadata for the struct [EmailListRule]
-type emailListRuleJSON struct {
-	EmailList   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailListRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r EmailListRule) implementsZeroTrustAccessRule() {}
-
-type EmailListRuleEmailList struct {
-	// The ID of a previously created email list.
-	ID   string                     `json:"id,required"`
-	JSON emailListRuleEmailListJSON `json:"-"`
-}
-
-// emailListRuleEmailListJSON contains the JSON metadata for the struct
-// [EmailListRuleEmailList]
-type emailListRuleEmailListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailListRuleEmailListJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches an email address from a list.
-type EmailListRuleParam struct {
-	EmailList param.Field[EmailListRuleEmailListParam] `json:"email_list,required"`
-}
-
-func (r EmailListRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type EmailListRuleEmailListParam struct {
-	// The ID of a previously created email list.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r EmailListRuleEmailListParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches a specific email.
-type EmailRule struct {
-	Email EmailRuleEmail `json:"email,required"`
-	JSON  emailRuleJSON  `json:"-"`
-}
-
-// emailRuleJSON contains the JSON metadata for the struct [EmailRule]
-type emailRuleJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r EmailRule) implementsZeroTrustAccessRule() {}
-
-type EmailRuleEmail struct {
-	// The email of the user.
-	Email string             `json:"email,required" format:"email"`
-	JSON  emailRuleEmailJSON `json:"-"`
-}
-
-// emailRuleEmailJSON contains the JSON metadata for the struct [EmailRuleEmail]
-type emailRuleEmailJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRuleEmailJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches a specific email.
-type EmailRuleParam struct {
-	Email param.Field[EmailRuleEmailParam] `json:"email,required"`
-}
-
-func (r EmailRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type EmailRuleEmailParam struct {
-	// The email of the user.
-	Email param.Field[string] `json:"email,required" format:"email"`
-}
-
-func (r EmailRuleEmailParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches everyone.
-type EveryoneRule struct {
-	// An empty object which matches on all users.
-	Everyone interface{}      `json:"everyone,required"`
-	JSON     everyoneRuleJSON `json:"-"`
-}
-
-// everyoneRuleJSON contains the JSON metadata for the struct [EveryoneRule]
-type everyoneRuleJSON struct {
-	Everyone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EveryoneRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r everyoneRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r EveryoneRule) implementsZeroTrustAccessRule() {}
-
-// Matches everyone.
-type EveryoneRuleParam struct {
-	// An empty object which matches on all users.
-	Everyone param.Field[interface{}] `json:"everyone,required"`
-}
-
-func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-// Create Allow or Block policies which evaluate the user based on custom criteria.
-type ExternalEvaluationRule struct {
-	ExternalEvaluation ExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
-	JSON               externalEvaluationRuleJSON               `json:"-"`
-}
-
-// externalEvaluationRuleJSON contains the JSON metadata for the struct
-// [ExternalEvaluationRule]
-type externalEvaluationRuleJSON struct {
-	ExternalEvaluation apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *ExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r externalEvaluationRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r ExternalEvaluationRule) implementsZeroTrustAccessRule() {}
-
-type ExternalEvaluationRuleExternalEvaluation struct {
-	// The API endpoint containing your business logic.
-	EvaluateURL string `json:"evaluate_url,required"`
-	// The API endpoint containing the key that Access uses to verify that the response
-	// came from your API.
-	KeysURL string                                       `json:"keys_url,required"`
-	JSON    externalEvaluationRuleExternalEvaluationJSON `json:"-"`
-}
-
-// externalEvaluationRuleExternalEvaluationJSON contains the JSON metadata for the
-// struct [ExternalEvaluationRuleExternalEvaluation]
-type externalEvaluationRuleExternalEvaluationJSON struct {
-	EvaluateURL apijson.Field
-	KeysURL     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r externalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Create Allow or Block policies which evaluate the user based on custom criteria.
-type ExternalEvaluationRuleParam struct {
-	ExternalEvaluation param.Field[ExternalEvaluationRuleExternalEvaluationParam] `json:"external_evaluation,required"`
-}
-
-func (r ExternalEvaluationRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type ExternalEvaluationRuleExternalEvaluationParam struct {
-	// The API endpoint containing your business logic.
-	EvaluateURL param.Field[string] `json:"evaluate_url,required"`
-	// The API endpoint containing the key that Access uses to verify that the response
-	// came from your API.
-	KeysURL param.Field[string] `json:"keys_url,required"`
-}
-
-func (r ExternalEvaluationRuleExternalEvaluationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches a Github organization. Requires a Github identity provider.
-type GitHubOrganizationRule struct {
-	GitHubOrganization GitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
-	JSON               githubOrganizationRuleJSON               `json:"-"`
-}
-
-// githubOrganizationRuleJSON contains the JSON metadata for the struct
-// [GitHubOrganizationRule]
-type githubOrganizationRuleJSON struct {
-	GitHubOrganization apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *GitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r githubOrganizationRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r GitHubOrganizationRule) implementsZeroTrustAccessRule() {}
-
-type GitHubOrganizationRuleGitHubOrganization struct {
-	// The ID of your Github identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The name of the organization.
-	Name string                                       `json:"name,required"`
-	JSON githubOrganizationRuleGitHubOrganizationJSON `json:"-"`
-}
-
-// githubOrganizationRuleGitHubOrganizationJSON contains the JSON metadata for the
-// struct [GitHubOrganizationRuleGitHubOrganization]
-type githubOrganizationRuleGitHubOrganizationJSON struct {
-	ConnectionID apijson.Field
-	Name         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *GitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r githubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches a Github organization. Requires a Github identity provider.
-type GitHubOrganizationRuleParam struct {
-	GitHubOrganization param.Field[GitHubOrganizationRuleGitHubOrganizationParam] `json:"github-organization,required"`
-}
-
-func (r GitHubOrganizationRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type GitHubOrganizationRuleGitHubOrganizationParam struct {
-	// The ID of your Github identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// The name of the organization.
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r GitHubOrganizationRuleGitHubOrganizationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1971,976 +1563,5 @@ type GroupRuleGroupParam struct {
 }
 
 func (r GroupRuleGroupParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches a group in Google Workspace. Requires a Google Workspace identity
-// provider.
-type GSuiteGroupRule struct {
-	GSuite GSuiteGroupRuleGSuite `json:"gsuite,required"`
-	JSON   GSuiteGroupRuleJSON   `json:"-"`
-}
-
-// GSuiteGroupRuleJSON contains the JSON metadata for the struct [GSuiteGroupRule]
-type GSuiteGroupRuleJSON struct {
-	GSuite      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GSuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r GSuiteGroupRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r GSuiteGroupRule) implementsZeroTrustAccessRule() {}
-
-type GSuiteGroupRuleGSuite struct {
-	// The ID of your Google Workspace identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Google Workspace group.
-	Email string                    `json:"email,required"`
-	JSON  GSuiteGroupRuleGSuiteJSON `json:"-"`
-}
-
-// GSuiteGroupRuleGSuiteJSON contains the JSON metadata for the struct
-// [GSuiteGroupRuleGSuite]
-type GSuiteGroupRuleGSuiteJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *GSuiteGroupRuleGSuite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r GSuiteGroupRuleGSuiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches a group in Google Workspace. Requires a Google Workspace identity
-// provider.
-type GSuiteGroupRuleParam struct {
-	GSuite param.Field[GSuiteGroupRuleGSuiteParam] `json:"gsuite,required"`
-}
-
-func (r GSuiteGroupRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type GSuiteGroupRuleGSuiteParam struct {
-	// The ID of your Google Workspace identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// The email of the Google Workspace group.
-	Email param.Field[string] `json:"email,required"`
-}
-
-func (r GSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches an IP address from a list.
-type IPListRule struct {
-	IPList IPListRuleIPList `json:"ip_list,required"`
-	JSON   ipListRuleJSON   `json:"-"`
-}
-
-// ipListRuleJSON contains the JSON metadata for the struct [IPListRule]
-type ipListRuleJSON struct {
-	IPList      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipListRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r IPListRule) implementsZeroTrustAccessRule() {}
-
-type IPListRuleIPList struct {
-	// The ID of a previously created IP list.
-	ID   string               `json:"id,required"`
-	JSON ipListRuleIPListJSON `json:"-"`
-}
-
-// ipListRuleIPListJSON contains the JSON metadata for the struct
-// [IPListRuleIPList]
-type ipListRuleIPListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipListRuleIPListJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches an IP address from a list.
-type IPListRuleParam struct {
-	IPList param.Field[IPListRuleIPListParam] `json:"ip_list,required"`
-}
-
-func (r IPListRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type IPListRuleIPListParam struct {
-	// The ID of a previously created IP list.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r IPListRuleIPListParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches an IP address block.
-type IPRule struct {
-	IP   IPRuleIP   `json:"ip,required"`
-	JSON ipRuleJSON `json:"-"`
-}
-
-// ipRuleJSON contains the JSON metadata for the struct [IPRule]
-type ipRuleJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r IPRule) implementsZeroTrustAccessRule() {}
-
-type IPRuleIP struct {
-	// An IPv4 or IPv6 CIDR block.
-	IP   string       `json:"ip,required"`
-	JSON ipRuleIPJSON `json:"-"`
-}
-
-// ipRuleIPJSON contains the JSON metadata for the struct [IPRuleIP]
-type ipRuleIPJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPRuleIP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipRuleIPJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches an IP address block.
-type IPRuleParam struct {
-	IP param.Field[IPRuleIPParam] `json:"ip,required"`
-}
-
-func (r IPRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type IPRuleIPParam struct {
-	// An IPv4 or IPv6 CIDR block.
-	IP param.Field[string] `json:"ip,required"`
-}
-
-func (r IPRuleIPParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches an Okta group. Requires an Okta identity provider.
-type OktaGroupRule struct {
-	Okta OktaGroupRuleOkta `json:"okta,required"`
-	JSON oktaGroupRuleJSON `json:"-"`
-}
-
-// oktaGroupRuleJSON contains the JSON metadata for the struct [OktaGroupRule]
-type oktaGroupRuleJSON struct {
-	Okta        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OktaGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r oktaGroupRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r OktaGroupRule) implementsZeroTrustAccessRule() {}
-
-type OktaGroupRuleOkta struct {
-	// The ID of your Okta identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email string                `json:"email,required"`
-	JSON  oktaGroupRuleOktaJSON `json:"-"`
-}
-
-// oktaGroupRuleOktaJSON contains the JSON metadata for the struct
-// [OktaGroupRuleOkta]
-type oktaGroupRuleOktaJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *OktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r oktaGroupRuleOktaJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches an Okta group. Requires an Okta identity provider.
-type OktaGroupRuleParam struct {
-	Okta param.Field[OktaGroupRuleOktaParam] `json:"okta,required"`
-}
-
-func (r OktaGroupRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type OktaGroupRuleOktaParam struct {
-	// The ID of your Okta identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email param.Field[string] `json:"email,required"`
-}
-
-func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches a SAML group. Requires a SAML identity provider.
-type SAMLGroupRule struct {
-	SAML SAMLGroupRuleSAML `json:"saml,required"`
-	JSON samlGroupRuleJSON `json:"-"`
-}
-
-// samlGroupRuleJSON contains the JSON metadata for the struct [SAMLGroupRule]
-type samlGroupRuleJSON struct {
-	SAML        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SAMLGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r samlGroupRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SAMLGroupRule) implementsZeroTrustAccessRule() {}
-
-type SAMLGroupRuleSAML struct {
-	// The name of the SAML attribute.
-	AttributeName string `json:"attribute_name,required"`
-	// The SAML attribute value to look for.
-	AttributeValue string                `json:"attribute_value,required"`
-	JSON           samlGroupRuleSAMLJSON `json:"-"`
-}
-
-// samlGroupRuleSAMLJSON contains the JSON metadata for the struct
-// [SAMLGroupRuleSAML]
-type samlGroupRuleSAMLJSON struct {
-	AttributeName  apijson.Field
-	AttributeValue apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *SAMLGroupRuleSAML) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r samlGroupRuleSAMLJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches a SAML group. Requires a SAML identity provider.
-type SAMLGroupRuleParam struct {
-	SAML param.Field[SAMLGroupRuleSAMLParam] `json:"saml,required"`
-}
-
-func (r SAMLGroupRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type SAMLGroupRuleSAMLParam struct {
-	// The name of the SAML attribute.
-	AttributeName param.Field[string] `json:"attribute_name,required"`
-	// The SAML attribute value to look for.
-	AttributeValue param.Field[string] `json:"attribute_value,required"`
-}
-
-func (r SAMLGroupRuleSAMLParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches a specific Access Service Token
-type ServiceTokenRule struct {
-	ServiceToken ServiceTokenRuleServiceToken `json:"service_token,required"`
-	JSON         serviceTokenRuleJSON         `json:"-"`
-}
-
-// serviceTokenRuleJSON contains the JSON metadata for the struct
-// [ServiceTokenRule]
-type serviceTokenRuleJSON struct {
-	ServiceToken apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *ServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceTokenRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r ServiceTokenRule) implementsZeroTrustAccessRule() {}
-
-type ServiceTokenRuleServiceToken struct {
-	// The ID of a Service Token.
-	TokenID string                           `json:"token_id,required"`
-	JSON    serviceTokenRuleServiceTokenJSON `json:"-"`
-}
-
-// serviceTokenRuleServiceTokenJSON contains the JSON metadata for the struct
-// [ServiceTokenRuleServiceToken]
-type serviceTokenRuleServiceTokenJSON struct {
-	TokenID     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceTokenRuleServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches a specific Access Service Token
-type ServiceTokenRuleParam struct {
-	ServiceToken param.Field[ServiceTokenRuleServiceTokenParam] `json:"service_token,required"`
-}
-
-func (r ServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type ServiceTokenRuleServiceTokenParam struct {
-	// The ID of a Service Token.
-	TokenID param.Field[string] `json:"token_id,required"`
-}
-
-func (r ServiceTokenRuleServiceTokenParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
