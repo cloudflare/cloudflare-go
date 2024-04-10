@@ -413,6 +413,84 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// account settings.
+type GatewayConfigurationSettings struct {
+	// Activity log settings.
+	ActivityLog ActivityLogSettings `json:"activity_log"`
+	// Anti-virus settings.
+	Antivirus AntiVirusSettings `json:"antivirus"`
+	// Block page layout settings.
+	BlockPage BlockPageSettings `json:"block_page"`
+	// DLP body scanning settings.
+	BodyScanning BodyScanningSettings `json:"body_scanning"`
+	// Browser isolation settings.
+	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation"`
+	// Custom certificate settings for BYO-PKI.
+	CustomCertificate CustomCertificateSettings `json:"custom_certificate"`
+	// Extended e-mail matching settings.
+	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
+	// FIPS settings.
+	Fips FipsSettings `json:"fips"`
+	// Protocol Detection settings.
+	ProtocolDetection ProtocolDetection `json:"protocol_detection"`
+	// TLS interception settings.
+	TLSDecrypt TLSSettings                      `json:"tls_decrypt"`
+	JSON       gatewayConfigurationSettingsJSON `json:"-"`
+}
+
+// gatewayConfigurationSettingsJSON contains the JSON metadata for the struct
+// [GatewayConfigurationSettings]
+type gatewayConfigurationSettingsJSON struct {
+	ActivityLog           apijson.Field
+	Antivirus             apijson.Field
+	BlockPage             apijson.Field
+	BodyScanning          apijson.Field
+	BrowserIsolation      apijson.Field
+	CustomCertificate     apijson.Field
+	ExtendedEmailMatching apijson.Field
+	Fips                  apijson.Field
+	ProtocolDetection     apijson.Field
+	TLSDecrypt            apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayConfigurationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// account settings.
+type GatewayConfigurationSettingsParam struct {
+	// Activity log settings.
+	ActivityLog param.Field[ActivityLogSettingsParam] `json:"activity_log"`
+	// Anti-virus settings.
+	Antivirus param.Field[AntiVirusSettingsParam] `json:"antivirus"`
+	// Block page layout settings.
+	BlockPage param.Field[BlockPageSettingsParam] `json:"block_page"`
+	// DLP body scanning settings.
+	BodyScanning param.Field[BodyScanningSettingsParam] `json:"body_scanning"`
+	// Browser isolation settings.
+	BrowserIsolation param.Field[BrowserIsolationSettingsParam] `json:"browser_isolation"`
+	// Custom certificate settings for BYO-PKI.
+	CustomCertificate param.Field[CustomCertificateSettingsParam] `json:"custom_certificate"`
+	// Extended e-mail matching settings.
+	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`
+	// FIPS settings.
+	Fips param.Field[FipsSettingsParam] `json:"fips"`
+	// Protocol Detection settings.
+	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
+	// TLS interception settings.
+	TLSDecrypt param.Field[TLSSettingsParam] `json:"tls_decrypt"`
+}
+
+func (r GatewayConfigurationSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
 type NotificationSettings struct {
@@ -526,90 +604,12 @@ func (r TLSSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 // account settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e struct {
-	// Activity log settings.
-	ActivityLog ActivityLogSettings `json:"activity_log"`
-	// Anti-virus settings.
-	Antivirus AntiVirusSettings `json:"antivirus"`
-	// Block page layout settings.
-	BlockPage BlockPageSettings `json:"block_page"`
-	// DLP body scanning settings.
-	BodyScanning BodyScanningSettings `json:"body_scanning"`
-	// Browser isolation settings.
-	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation"`
-	// Custom certificate settings for BYO-PKI.
-	CustomCertificate CustomCertificateSettings `json:"custom_certificate"`
-	// Extended e-mail matching settings.
-	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
-	// FIPS settings.
-	Fips FipsSettings `json:"fips"`
-	// Protocol Detection settings.
-	ProtocolDetection ProtocolDetection `json:"protocol_detection"`
-	// TLS interception settings.
-	TLSDecrypt TLSSettings                                          `json:"tls_decrypt"`
-	JSON       unnamedSchemaRef055aaf3918bf29f81c09d394a864182eJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eJSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eJSON struct {
-	ActivityLog           apijson.Field
-	Antivirus             apijson.Field
-	BlockPage             apijson.Field
-	BodyScanning          apijson.Field
-	BrowserIsolation      apijson.Field
-	CustomCertificate     apijson.Field
-	ExtendedEmailMatching apijson.Field
-	Fips                  apijson.Field
-	ProtocolDetection     apijson.Field
-	TLSDecrypt            apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eJSON) RawJSON() string {
-	return r.raw
-}
-
-// account settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam struct {
-	// Activity log settings.
-	ActivityLog param.Field[ActivityLogSettingsParam] `json:"activity_log"`
-	// Anti-virus settings.
-	Antivirus param.Field[AntiVirusSettingsParam] `json:"antivirus"`
-	// Block page layout settings.
-	BlockPage param.Field[BlockPageSettingsParam] `json:"block_page"`
-	// DLP body scanning settings.
-	BodyScanning param.Field[BodyScanningSettingsParam] `json:"body_scanning"`
-	// Browser isolation settings.
-	BrowserIsolation param.Field[BrowserIsolationSettingsParam] `json:"browser_isolation"`
-	// Custom certificate settings for BYO-PKI.
-	CustomCertificate param.Field[CustomCertificateSettingsParam] `json:"custom_certificate"`
-	// Extended e-mail matching settings.
-	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`
-	// FIPS settings.
-	Fips param.Field[FipsSettingsParam] `json:"fips"`
-	// Protocol Detection settings.
-	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
-	// TLS interception settings.
-	TLSDecrypt param.Field[TLSSettingsParam] `json:"tls_decrypt"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// account settings.
 type GatewayConfigurationUpdateResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// account settings.
-	Settings  UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e `json:"settings"`
-	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
-	JSON      gatewayConfigurationUpdateResponseJSON           `json:"-"`
+	Settings  GatewayConfigurationSettings           `json:"settings"`
+	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
+	JSON      gatewayConfigurationUpdateResponseJSON `json:"-"`
 }
 
 // gatewayConfigurationUpdateResponseJSON contains the JSON metadata for the struct
@@ -634,9 +634,9 @@ func (r gatewayConfigurationUpdateResponseJSON) RawJSON() string {
 type GatewayConfigurationEditResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// account settings.
-	Settings  UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e `json:"settings"`
-	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
-	JSON      gatewayConfigurationEditResponseJSON             `json:"-"`
+	Settings  GatewayConfigurationSettings         `json:"settings"`
+	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
+	JSON      gatewayConfigurationEditResponseJSON `json:"-"`
 }
 
 // gatewayConfigurationEditResponseJSON contains the JSON metadata for the struct
@@ -661,9 +661,9 @@ func (r gatewayConfigurationEditResponseJSON) RawJSON() string {
 type GatewayConfigurationGetResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// account settings.
-	Settings  UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e `json:"settings"`
-	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
-	JSON      gatewayConfigurationGetResponseJSON              `json:"-"`
+	Settings  GatewayConfigurationSettings        `json:"settings"`
+	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
+	JSON      gatewayConfigurationGetResponseJSON `json:"-"`
 }
 
 // gatewayConfigurationGetResponseJSON contains the JSON metadata for the struct
@@ -687,7 +687,7 @@ func (r gatewayConfigurationGetResponseJSON) RawJSON() string {
 type GatewayConfigurationUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// account settings.
-	Settings param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam] `json:"settings"`
+	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
 func (r GatewayConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -741,7 +741,7 @@ func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type GatewayConfigurationEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// account settings.
-	Settings param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam] `json:"settings"`
+	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
 func (r GatewayConfigurationEditParams) MarshalJSON() (data []byte, err error) {

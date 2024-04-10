@@ -32,7 +32,7 @@ func TestGatewayLoggingUpdateWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		LoggingSetting: zero_trust.LoggingSettingParam{
 			RedactPii: cloudflare.F(true),
-			SettingsByRuleType: cloudflare.F(zero_trust.UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam{
+			SettingsByRuleType: cloudflare.F(zero_trust.LoggingSettingSettingsByRuleTypeParam{
 				DNS:  cloudflare.F[any](map[string]interface{}{}),
 				HTTP: cloudflare.F[any](map[string]interface{}{}),
 				L4:   cloudflare.F[any](map[string]interface{}{}),
