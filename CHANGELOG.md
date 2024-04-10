@@ -1,5 +1,17 @@
 ## 0.93.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* dns: Remove "locked" flag which is always false ([#1618](https://github.com/cloudflare/cloudflare-go/issues/1618))
+
+ENHANCEMENTS:
+
+* magic_transit_ipsec_tunnel: Adds support for replay_protection boolean flag ([#1710](https://github.com/cloudflare/cloudflare-go/issues/1710))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.22.0 to 0.24.0 ([#1688](https://github.com/cloudflare/cloudflare-go/issues/1688))
+
 ## 0.92.0 (March 27th, 2024)
 
 ENHANCEMENTS:
