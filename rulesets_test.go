@@ -903,6 +903,7 @@ func TestUpdateRulesetRule(t *testing.T) {
     }`)
 	}
 
+	mux.HandleFunc("/accounts/"+testAccountID+"/rulesets/2c0fc9fa937b11eaa1b71c4d701ab86e/rules/62449e2e0de149619edb35e59c10d802", handler)
 	mux.HandleFunc("/zones/"+testZoneID+"/rulesets/2c0fc9fa937b11eaa1b71c4d701ab86e/rules/62449e2e0de149619edb35e59c10d802", handler)
 
 	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-02T20:24:07.776073Z")
@@ -939,5 +940,91 @@ func TestUpdateRulesetRule(t *testing.T) {
 	zoneActual, err := client.UpdateRulesetRule(context.Background(), ZoneIdentifier(testZoneID), "2c0fc9fa937b11eaa1b71c4d701ab86e", updated)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, zoneActual)
+	}
+
+	accountActual, err := client.UpdateRulesetRule(context.Background(), AccountIdentifier(testAccountID), "2c0fc9fa937b11eaa1b71c4d701ab86e", updated)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, accountActual)
+	}
+}
+
+func TestCreateRulesetRule(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "result": {
+        "id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
+        "name": "my example ruleset",
+        "description": "Test magic transit ruleset",
+        "kind": "root",
+        "version": "1",
+        "last_updated": "2020-12-02T20:24:07.776073Z",
+        "phase": "magic_transit",
+        "rules": [
+          {
+            "id": "62449e2e0de149619edb35e59c10d801",
+            "version": "1",
+            "action": "skip",
+            "action_parameters":{
+              "ruleset":"current"
+          },
+            "expression": "tcp.dstport in { 32768..65535 }",
+            "description": "Allow TCP Ephemeral Ports",
+            "last_updated": "2020-12-02T20:24:07.776073Z",
+            "ref": "72449e2e0de149619edb35e59c10d801",
+            "enabled": true
+          }
+        ]
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/rulesets/2c0fc9fa937b11eaa1b71c4d701ab86e/rules", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/rulesets/2c0fc9fa937b11eaa1b71c4d701ab86e/rules", handler)
+
+	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-02T20:24:07.776073Z")
+
+	rule := RulesetRule{
+		ID:      "62449e2e0de149619edb35e59c10d801",
+		Version: StringPtr("1"),
+		Action:  string(RulesetRuleActionSkip),
+		ActionParameters: &RulesetRuleActionParameters{
+			Ruleset: "current",
+		},
+		Expression:  "tcp.dstport in { 32768..65535 }",
+		Description: "Allow TCP Ephemeral Ports",
+		LastUpdated: &lastUpdated,
+		Ref:         "72449e2e0de149619edb35e59c10d801",
+		Enabled:     BoolPtr(true),
+	}
+
+	newRule := CreateRulesetRuleParams{rule}
+
+	want := Ruleset{
+		ID:          "2c0fc9fa937b11eaa1b71c4d701ab86e",
+		Name:        "my example ruleset",
+		Description: "Test magic transit ruleset",
+		Kind:        "root",
+		Version:     StringPtr("1"),
+		LastUpdated: &lastUpdated,
+		Phase:       string(RulesetPhaseMagicTransit),
+		Rules:       []RulesetRule{rule},
+	}
+
+	zoneActual, err := client.CreateRulesetRule(context.Background(), ZoneIdentifier(testZoneID), "2c0fc9fa937b11eaa1b71c4d701ab86e", newRule)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, zoneActual)
+	}
+
+	accountActual, err := client.CreateRulesetRule(context.Background(), AccountIdentifier(testAccountID), "2c0fc9fa937b11eaa1b71c4d701ab86e", newRule)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, accountActual)
 	}
 }

@@ -733,6 +733,10 @@ type UpdateRulesetParams struct {
 	Rules       []RulesetRule `json:"rules"`
 }
 
+type CreateRulesetRuleParams struct {
+	RulesetRule
+}
+
 type UpdateRulesetRuleParams struct {
 	RulesetRule
 }
@@ -846,6 +850,29 @@ func (api *API) UpdateRuleset(ctx context.Context, rc *ResourceContainer, params
 	return result.Result, nil
 }
 
+// CreateRulesetRule creates a new ruleset rule.
+//
+// API reference: https://developers.cloudflare.com/api/operations/createAccountRulesetRule
+// API reference: https://developers.cloudflare.com/api/operations/createZoneRulesetRule
+func (api *API) CreateRulesetRule(ctx context.Context, rc *ResourceContainer, rulesetID string, params CreateRulesetRuleParams) (Ruleset, error) {
+	uri := fmt.Sprintf("/%s/%s/rulesets/%s/rules", rc.Level, rc.Identifier, rulesetID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	if err != nil {
+		return Ruleset{}, err
+	}
+
+	result := CreateRulesetResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return result.Result, nil
+}
+
+// UpdateRulesetRule updates a ruleset rule based on the ruleset and rule ID.
+//
+// API reference: https://developers.cloudflare.com/api/operations/updateAccountRulesetRule
+// API reference: https://developers.cloudflare.com/api/operations/updateZoneRulesetRule
 func (api *API) UpdateRulesetRule(ctx context.Context, rc *ResourceContainer, rulesetID string, params UpdateRulesetRuleParams) (Ruleset, error) {
 	if params.ID == "" {
 		return Ruleset{}, ErrMissingResourceIdentifier
