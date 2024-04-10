@@ -733,6 +733,10 @@ type UpdateRulesetParams struct {
 	Rules       []RulesetRule `json:"rules"`
 }
 
+type UpdateRulesetRuleParams struct {
+	RulesetRule
+}
+
 type UpdateEntrypointRulesetParams struct {
 	Phase       string        `json:"-"`
 	Description string        `json:"description,omitempty"`
@@ -830,6 +834,25 @@ func (api *API) UpdateRuleset(ctx context.Context, rc *ResourceContainer, params
 
 	uri := fmt.Sprintf("/%s/%s/rulesets/%s", rc.Level, rc.Identifier, params.ID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
+	if err != nil {
+		return Ruleset{}, err
+	}
+
+	result := UpdateRulesetResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return result.Result, nil
+}
+
+func (api *API) UpdateRulesetRule(ctx context.Context, rc *ResourceContainer, rulesetID string, params UpdateRulesetRuleParams) (Ruleset, error) {
+	if params.ID == "" {
+		return Ruleset{}, ErrMissingResourceIdentifier
+	}
+
+	uri := fmt.Sprintf("/%s/%s/rulesets/%s/rules/%s", rc.Level, rc.Identifier, rulesetID, params.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return Ruleset{}, err
 	}

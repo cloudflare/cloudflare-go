@@ -864,3 +864,80 @@ func TestUpdateRuleset(t *testing.T) {
 		assert.Equal(t, want, accountActual)
 	}
 }
+
+func TestUpdateRulesetRule(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "result": {
+        "id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
+        "name": "ruleset1",
+        "description": "Test Firewall Ruleset Update",
+        "kind": "root",
+        "version": "1",
+        "last_updated": "2020-12-02T20:24:07.776073Z",
+        "phase": "magic_transit",
+        "rules": [
+          {
+            "id": "62449e2e0de149619edb35e59c10d802",
+            "version": "1",
+            "action": "skip",
+            "action_parameters":{
+              "ruleset":"current"
+            },
+            "expression": "udp.dstport in { 32768..65535 }",
+            "description": "Allow UDP Ephemeral Ports",
+            "last_updated": "2020-12-02T20:24:07.776073Z",
+            "ref": "72449e2e0de149619edb35e59c10d801",
+            "enabled": true
+          }
+        ]
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/rulesets/2c0fc9fa937b11eaa1b71c4d701ab86e/rules/62449e2e0de149619edb35e59c10d802", handler)
+
+	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-02T20:24:07.776073Z")
+
+	rule := RulesetRule{
+		ID:      "62449e2e0de149619edb35e59c10d802",
+		Version: StringPtr("1"),
+		Action:  string(RulesetRuleActionSkip),
+		ActionParameters: &RulesetRuleActionParameters{
+			Ruleset: "current",
+		},
+		Expression:  "udp.dstport in { 32768..65535 }",
+		Description: "Allow UDP Ephemeral Ports",
+		LastUpdated: &lastUpdated,
+		Ref:         "72449e2e0de149619edb35e59c10d801",
+		Enabled:     BoolPtr(true),
+	}
+
+	updated := UpdateRulesetRuleParams{
+		rule,
+	}
+
+	want := Ruleset{
+		ID:          "2c0fc9fa937b11eaa1b71c4d701ab86e",
+		Name:        "ruleset1",
+		Description: "Test Firewall Ruleset Update",
+		Kind:        "root",
+		Version:     StringPtr("1"),
+		LastUpdated: &lastUpdated,
+		Phase:       string(RulesetPhaseMagicTransit),
+		Rules:       []RulesetRule{rule},
+	}
+
+	zoneActual, err := client.UpdateRulesetRule(context.Background(), ZoneIdentifier(testZoneID), "2c0fc9fa937b11eaa1b71c4d701ab86e", updated)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, zoneActual)
+	}
+}
