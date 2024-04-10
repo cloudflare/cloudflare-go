@@ -117,7 +117,7 @@ type DeviceInput struct {
 	// Whether or not file exists
 	Exists bool `json:"exists"`
 	// Operating system
-	OperatingSystem UnnamedSchemaRef41885dd46b9e0294254c49305a273681 `json:"operating_system"`
+	OperatingSystem DeviceInputOperatingSystem `json:"operating_system"`
 	// File path.
 	Path string `json:"path"`
 	// SHA-256.
@@ -129,7 +129,7 @@ type DeviceInput struct {
 	// Domain
 	Domain string `json:"domain"`
 	// operator
-	Operator UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 `json:"operator"`
+	Operator DeviceInputOperator `json:"operator"`
 	// Operating System Distribution Name (linux only)
 	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
@@ -340,7 +340,7 @@ func init() {
 
 type DeviceInputTeamsDevicesFileInputRequest struct {
 	// Operating system
-	OperatingSystem UnnamedSchemaRef41885dd46b9e0294254c49305a273681 `json:"operating_system,required"`
+	OperatingSystem DeviceInputTeamsDevicesFileInputRequestOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// Whether or not file exists
@@ -373,6 +373,23 @@ func (r deviceInputTeamsDevicesFileInputRequestJSON) RawJSON() string {
 }
 
 func (r DeviceInputTeamsDevicesFileInputRequest) implementsZeroTrustDeviceInput() {}
+
+// Operating system
+type DeviceInputTeamsDevicesFileInputRequestOperatingSystem string
+
+const (
+	DeviceInputTeamsDevicesFileInputRequestOperatingSystemWindows DeviceInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
+	DeviceInputTeamsDevicesFileInputRequestOperatingSystemLinux   DeviceInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
+	DeviceInputTeamsDevicesFileInputRequestOperatingSystemMac     DeviceInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
+)
+
+func (r DeviceInputTeamsDevicesFileInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesFileInputRequestOperatingSystemWindows, DeviceInputTeamsDevicesFileInputRequestOperatingSystemLinux, DeviceInputTeamsDevicesFileInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
 
 type DeviceInputTeamsDevicesUniqueClientIDInputRequest struct {
 	// List ID.
@@ -464,7 +481,7 @@ type DeviceInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
 	OperatingSystem DeviceInputTeamsDevicesOSVersionInputRequestOperatingSystem `json:"operating_system,required"`
 	// operator
-	Operator UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 `json:"operator,required"`
+	Operator DeviceInputTeamsDevicesOSVersionInputRequestOperator `json:"operator,required"`
 	// Version of OS
 	Version string `json:"version,required"`
 	// Operating System Distribution Name (linux only)
@@ -515,6 +532,25 @@ func (r DeviceInputTeamsDevicesOSVersionInputRequestOperatingSystem) IsKnown() b
 	return false
 }
 
+// operator
+type DeviceInputTeamsDevicesOSVersionInputRequestOperator string
+
+const (
+	DeviceInputTeamsDevicesOSVersionInputRequestOperatorLess            DeviceInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DeviceInputTeamsDevicesOSVersionInputRequestOperatorLessOrEquals    DeviceInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DeviceInputTeamsDevicesOSVersionInputRequestOperatorGreater         DeviceInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DeviceInputTeamsDevicesOSVersionInputRequestOperatorGreaterOrEquals DeviceInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DeviceInputTeamsDevicesOSVersionInputRequestOperatorEquals          DeviceInputTeamsDevicesOSVersionInputRequestOperator = "=="
+)
+
+func (r DeviceInputTeamsDevicesOSVersionInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesOSVersionInputRequestOperatorLess, DeviceInputTeamsDevicesOSVersionInputRequestOperatorLessOrEquals, DeviceInputTeamsDevicesOSVersionInputRequestOperatorGreater, DeviceInputTeamsDevicesOSVersionInputRequestOperatorGreaterOrEquals, DeviceInputTeamsDevicesOSVersionInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
+
 type DeviceInputTeamsDevicesFirewallInputRequest struct {
 	// Enabled
 	Enabled bool `json:"enabled,required"`
@@ -560,7 +596,7 @@ func (r DeviceInputTeamsDevicesFirewallInputRequestOperatingSystem) IsKnown() bo
 
 type DeviceInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
-	OperatingSystem UnnamedSchemaRef41885dd46b9e0294254c49305a273681 `json:"operating_system,required"`
+	OperatingSystem DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// SHA-256.
@@ -591,9 +627,26 @@ func (r deviceInputTeamsDevicesSentineloneInputRequestJSON) RawJSON() string {
 
 func (r DeviceInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDeviceInput() {}
 
+// Operating system
+type DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystem string
+
+const (
+	DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
+	DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
+	DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
+)
+
+func (r DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows, DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux, DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type DeviceInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
-	OperatingSystem UnnamedSchemaRef41885dd46b9e0294254c49305a273681 `json:"operating_system,required"`
+	OperatingSystem DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// SHA-256.
@@ -624,6 +677,23 @@ func (r deviceInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON() string {
 
 func (r DeviceInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDeviceInput() {}
 
+// Operating system
+type DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
+
+const (
+	DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
+	DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
+	DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
+)
+
+func (r DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows, DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux, DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type DeviceInputTeamsDevicesDiskEncryptionInputRequest struct {
 	// List of volume names to be checked for encryption.
 	CheckDisks []string `json:"checkDisks"`
@@ -653,7 +723,7 @@ func (r DeviceInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDe
 
 type DeviceInputTeamsDevicesApplicationInputRequest struct {
 	// Operating system
-	OperatingSystem UnnamedSchemaRef41885dd46b9e0294254c49305a273681 `json:"operating_system,required"`
+	OperatingSystem DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
 	// Path for the application.
 	Path string `json:"path,required"`
 	// SHA-256.
@@ -683,6 +753,23 @@ func (r deviceInputTeamsDevicesApplicationInputRequestJSON) RawJSON() string {
 }
 
 func (r DeviceInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDeviceInput() {}
+
+// Operating system
+type DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem string
+
+const (
+	DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
+	DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
+	DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
+)
+
+func (r DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemWindows, DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemLinux, DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
 
 type DeviceInputTeamsDevicesClientCertificateInputRequest struct {
 	// UUID of Cloudflare managed certificate.
@@ -761,7 +848,7 @@ type DeviceInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen string `json:"last_seen"`
 	// operator
-	Operator UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 `json:"operator"`
+	Operator DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
 	// Os Version
 	OS string `json:"os"`
 	// overall
@@ -802,6 +889,25 @@ func (r deviceInputTeamsDevicesCrowdstrikeInputRequestJSON) RawJSON() string {
 }
 
 func (r DeviceInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDeviceInput() {}
+
+// operator
+type DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator string
+
+const (
+	DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorLess            DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals    DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater         DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals          DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+)
+
+func (r DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorLess, DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals, DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater, DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals, DeviceInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 // For more details on state, please refer to the Crowdstrike documentation.
 type DeviceInputTeamsDevicesCrowdstrikeInputRequestState string
@@ -1042,8 +1148,8 @@ type DeviceInputTeamsDevicesSentineloneS2sInputRequest struct {
 	// Network status of device.
 	NetworkStatus DeviceInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus `json:"network_status"`
 	// operator
-	Operator UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930      `json:"operator"`
-	JSON     deviceInputTeamsDevicesSentineloneS2sInputRequestJSON `json:"-"`
+	Operator DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator `json:"operator"`
+	JSON     deviceInputTeamsDevicesSentineloneS2sInputRequestJSON     `json:"-"`
 }
 
 // deviceInputTeamsDevicesSentineloneS2sInputRequestJSON contains the JSON metadata
@@ -1082,6 +1188,64 @@ const (
 func (r DeviceInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus) IsKnown() bool {
 	switch r {
 	case DeviceInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected, DeviceInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected, DeviceInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting, DeviceInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting:
+		return true
+	}
+	return false
+}
+
+// operator
+type DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator string
+
+const (
+	DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorLess            DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals    DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater         DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals          DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+)
+
+func (r DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorLess, DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals, DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater, DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals, DeviceInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Operating system
+type DeviceInputOperatingSystem string
+
+const (
+	DeviceInputOperatingSystemWindows  DeviceInputOperatingSystem = "windows"
+	DeviceInputOperatingSystemLinux    DeviceInputOperatingSystem = "linux"
+	DeviceInputOperatingSystemMac      DeviceInputOperatingSystem = "mac"
+	DeviceInputOperatingSystemAndroid  DeviceInputOperatingSystem = "android"
+	DeviceInputOperatingSystemIos      DeviceInputOperatingSystem = "ios"
+	DeviceInputOperatingSystemChromeos DeviceInputOperatingSystem = "chromeos"
+)
+
+func (r DeviceInputOperatingSystem) IsKnown() bool {
+	switch r {
+	case DeviceInputOperatingSystemWindows, DeviceInputOperatingSystemLinux, DeviceInputOperatingSystemMac, DeviceInputOperatingSystemAndroid, DeviceInputOperatingSystemIos, DeviceInputOperatingSystemChromeos:
+		return true
+	}
+	return false
+}
+
+// operator
+type DeviceInputOperator string
+
+const (
+	DeviceInputOperatorLess            DeviceInputOperator = "<"
+	DeviceInputOperatorLessOrEquals    DeviceInputOperator = "<="
+	DeviceInputOperatorGreater         DeviceInputOperator = ">"
+	DeviceInputOperatorGreaterOrEquals DeviceInputOperator = ">="
+	DeviceInputOperatorEquals          DeviceInputOperator = "=="
+)
+
+func (r DeviceInputOperator) IsKnown() bool {
+	switch r {
+	case DeviceInputOperatorLess, DeviceInputOperatorLessOrEquals, DeviceInputOperatorGreater, DeviceInputOperatorGreaterOrEquals, DeviceInputOperatorEquals:
 		return true
 	}
 	return false
@@ -1222,7 +1386,7 @@ type DeviceInputParam struct {
 	// Whether or not file exists
 	Exists param.Field[bool] `json:"exists"`
 	// Operating system
-	OperatingSystem param.Field[UnnamedSchemaRef41885dd46b9e0294254c49305a273681] `json:"operating_system"`
+	OperatingSystem param.Field[DeviceInputOperatingSystem] `json:"operating_system"`
 	// File path.
 	Path param.Field[string] `json:"path"`
 	// SHA-256.
@@ -1234,7 +1398,7 @@ type DeviceInputParam struct {
 	// Domain
 	Domain param.Field[string] `json:"domain"`
 	// operator
-	Operator param.Field[UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930] `json:"operator"`
+	Operator param.Field[DeviceInputOperator] `json:"operator"`
 	// Operating System Distribution Name (linux only)
 	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
@@ -1322,7 +1486,7 @@ type DeviceInputUnionParam interface {
 
 type DeviceInputTeamsDevicesFileInputRequestParam struct {
 	// Operating system
-	OperatingSystem param.Field[UnnamedSchemaRef41885dd46b9e0294254c49305a273681] `json:"operating_system,required"`
+	OperatingSystem param.Field[DeviceInputTeamsDevicesFileInputRequestOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// Whether or not file exists
@@ -1371,7 +1535,7 @@ type DeviceInputTeamsDevicesOSVersionInputRequestParam struct {
 	// Operating System
 	OperatingSystem param.Field[DeviceInputTeamsDevicesOSVersionInputRequestOperatingSystem] `json:"operating_system,required"`
 	// operator
-	Operator param.Field[UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930] `json:"operator,required"`
+	Operator param.Field[DeviceInputTeamsDevicesOSVersionInputRequestOperator] `json:"operator,required"`
 	// Version of OS
 	Version param.Field[string] `json:"version,required"`
 	// Operating System Distribution Name (linux only)
@@ -1406,7 +1570,7 @@ func (r DeviceInputTeamsDevicesFirewallInputRequestParam) implementsZeroTrustDev
 
 type DeviceInputTeamsDevicesSentineloneInputRequestParam struct {
 	// Operating system
-	OperatingSystem param.Field[UnnamedSchemaRef41885dd46b9e0294254c49305a273681] `json:"operating_system,required"`
+	OperatingSystem param.Field[DeviceInputTeamsDevicesSentineloneInputRequestOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -1424,7 +1588,7 @@ func (r DeviceInputTeamsDevicesSentineloneInputRequestParam) implementsZeroTrust
 
 type DeviceInputTeamsDevicesCarbonblackInputRequestParam struct {
 	// Operating system
-	OperatingSystem param.Field[UnnamedSchemaRef41885dd46b9e0294254c49305a273681] `json:"operating_system,required"`
+	OperatingSystem param.Field[DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -1456,7 +1620,7 @@ func (r DeviceInputTeamsDevicesDiskEncryptionInputRequestParam) implementsZeroTr
 
 type DeviceInputTeamsDevicesApplicationInputRequestParam struct {
 	// Operating system
-	OperatingSystem param.Field[UnnamedSchemaRef41885dd46b9e0294254c49305a273681] `json:"operating_system,required"`
+	OperatingSystem param.Field[DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
 	// Path for the application.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -1506,7 +1670,7 @@ type DeviceInputTeamsDevicesCrowdstrikeInputRequestParam struct {
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen param.Field[string] `json:"last_seen"`
 	// operator
-	Operator param.Field[UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930] `json:"operator"`
+	Operator param.Field[DeviceInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
 	// Os Version
 	OS param.Field[string] `json:"os"`
 	// overall
@@ -1589,7 +1753,7 @@ type DeviceInputTeamsDevicesSentineloneS2sInputRequestParam struct {
 	// Network status of device.
 	NetworkStatus param.Field[DeviceInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus] `json:"network_status"`
 	// operator
-	Operator param.Field[UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930] `json:"operator"`
+	Operator param.Field[DeviceInputTeamsDevicesSentineloneS2sInputRequestOperator] `json:"operator"`
 }
 
 func (r DeviceInputTeamsDevicesSentineloneS2sInputRequestParam) MarshalJSON() (data []byte, err error) {
@@ -1718,42 +1882,6 @@ const (
 func (r DevicePostureRuleType) IsKnown() bool {
 	switch r {
 	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s:
-		return true
-	}
-	return false
-}
-
-// operator
-type UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 string
-
-const (
-	UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930Less            UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 = "<"
-	UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930LessOrEquals    UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 = "<="
-	UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930Greater         UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 = ">"
-	UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930GreaterOrEquals UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 = ">="
-	UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930Equals          UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 = "=="
-)
-
-func (r UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930Less, UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930LessOrEquals, UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930Greater, UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930GreaterOrEquals, UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930Equals:
-		return true
-	}
-	return false
-}
-
-// Operating system
-type UnnamedSchemaRef41885dd46b9e0294254c49305a273681 string
-
-const (
-	UnnamedSchemaRef41885dd46b9e0294254c49305a273681Windows UnnamedSchemaRef41885dd46b9e0294254c49305a273681 = "windows"
-	UnnamedSchemaRef41885dd46b9e0294254c49305a273681Linux   UnnamedSchemaRef41885dd46b9e0294254c49305a273681 = "linux"
-	UnnamedSchemaRef41885dd46b9e0294254c49305a273681Mac     UnnamedSchemaRef41885dd46b9e0294254c49305a273681 = "mac"
-)
-
-func (r UnnamedSchemaRef41885dd46b9e0294254c49305a273681) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRef41885dd46b9e0294254c49305a273681Windows, UnnamedSchemaRef41885dd46b9e0294254c49305a273681Linux, UnnamedSchemaRef41885dd46b9e0294254c49305a273681Mac:
 		return true
 	}
 	return false
