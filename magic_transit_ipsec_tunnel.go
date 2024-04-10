@@ -42,7 +42,7 @@ type MagicTransitIPsecTunnel struct {
 	PskMetadata        *MagicTransitIPsecTunnelPskMetadata `json:"psk_metadata,omitempty"`
 	RemoteIdentities   *RemoteIdentities                   `json:"remote_identities,omitempty"`
 	AllowNullCipher    bool                                `json:"allow_null_cipher"`
-	ReplayProtection   bool                                `json:"replay_protection"`
+	ReplayProtection   *bool                               `json:"replay_protection,omitempty"`
 }
 
 // ListMagicTransitIPsecTunnelsResponse contains a response including IPsec tunnels.

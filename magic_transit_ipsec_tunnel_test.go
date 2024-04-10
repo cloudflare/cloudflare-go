@@ -54,7 +54,7 @@ func TestListMagicTransitIPsecTunnels(t *testing.T) {
 			CloudflareEndpoint: "203.0.113.2",
 			InterfaceAddress:   "192.0.2.0/31",
 			Description:        "Tunnel for ISP X",
-			ReplayProtection:   true,
+			ReplayProtection:   BoolPtr(true),
 		},
 	}
 
@@ -107,7 +107,7 @@ func TestGetMagicTransitIPsecTunnel(t *testing.T) {
 		InterfaceAddress:   "192.0.2.0/31",
 		Description:        "Tunnel for ISP X",
 		AllowNullCipher:    true,
-		ReplayProtection:   true,
+		ReplayProtection:   BoolPtr(true),
 	}
 
 	actual, err := client.GetMagicTransitIPsecTunnel(context.Background(), testAccountID, "c4a7362d577a6c3019a474fd6f485821")
@@ -271,7 +271,7 @@ func TestCreateMagicTransitIPsecTunnelsWithReplayProtection(t *testing.T) {
 		CloudflareEndpoint: "203.0.113.2",
 		InterfaceAddress:   "192.0.2.0/31",
 		Description:        "Tunnel for ISP X",
-		ReplayProtection:   true,
+		ReplayProtection:   BoolPtr(true),
 	}}
 
 	actual, err := client.CreateMagicTransitIPsecTunnels(context.Background(), testAccountID, want)
