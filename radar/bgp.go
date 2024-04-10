@@ -56,9 +56,9 @@ func (r *BGPService) Timeseries(ctx context.Context, query BGPTimeseriesParams, 
 }
 
 type BGPTimeseriesResponse struct {
-	Meta   BGPTimeseriesResponseMeta                        `json:"meta,required"`
-	Serie0 UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb `json:"serie_0,required"`
-	JSON   bgpTimeseriesResponseJSON                        `json:"-"`
+	Meta   BGPTimeseriesResponseMeta   `json:"meta,required"`
+	Serie0 BGPTimeseriesResponseSerie0 `json:"serie_0,required"`
+	JSON   bgpTimeseriesResponseJSON   `json:"-"`
 }
 
 // bgpTimeseriesResponseJSON contains the JSON metadata for the struct
@@ -79,11 +79,11 @@ func (r bgpTimeseriesResponseJSON) RawJSON() string {
 }
 
 type BGPTimeseriesResponseMeta struct {
-	AggInterval    string                                             `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	LastUpdated    time.Time                                          `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo BGPTimeseriesResponseMetaConfidenceInfo            `json:"confidenceInfo"`
-	JSON           bgpTimeseriesResponseMetaJSON                      `json:"-"`
+	AggInterval    string                                  `json:"aggInterval,required"`
+	DateRange      []BGPTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    time.Time                               `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo BGPTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           bgpTimeseriesResponseMetaJSON           `json:"-"`
 }
 
 // bgpTimeseriesResponseMetaJSON contains the JSON metadata for the struct
@@ -105,10 +105,35 @@ func (r bgpTimeseriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type BGPTimeseriesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                              `json:"startTime,required" format:"date-time"`
+	JSON      bgpTimeseriesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// bgpTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the struct
+// [BGPTimeseriesResponseMetaDateRange]
+type bgpTimeseriesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type BGPTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
-	Level       int64                                              `json:"level"`
-	JSON        bgpTimeseriesResponseMetaConfidenceInfoJSON        `json:"-"`
+	Annotations []BGPTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                               `json:"level"`
+	JSON        bgpTimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // bgpTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -125,6 +150,62 @@ func (r *BGPTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (er
 }
 
 func (r bgpTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                `json:"dataSource,required"`
+	Description     string                                                `json:"description,required"`
+	EventType       string                                                `json:"eventType,required"`
+	IsInstantaneous interface{}                                           `json:"isInstantaneous,required"`
+	EndTime         time.Time                                             `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                `json:"linkedUrl"`
+	StartTime       time.Time                                             `json:"startTime" format:"date-time"`
+	JSON            bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
+// for the struct [BGPTimeseriesResponseMetaConfidenceInfoAnnotation]
+type bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *BGPTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPTimeseriesResponseSerie0 struct {
+	Timestamps []time.Time                     `json:"timestamps,required" format:"date-time"`
+	Values     []string                        `json:"values,required"`
+	JSON       bgpTimeseriesResponseSerie0JSON `json:"-"`
+}
+
+// bgpTimeseriesResponseSerie0JSON contains the JSON metadata for the struct
+// [BGPTimeseriesResponseSerie0]
+type bgpTimeseriesResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPTimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpTimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

@@ -28,16 +28,16 @@ func NewEmailService(opts ...option.RequestOption) (r *EmailService) {
 	return
 }
 
-type UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c struct {
-	Fail []string                                             `json:"FAIL,required"`
-	None []string                                             `json:"NONE,required"`
-	Pass []string                                             `json:"PASS,required"`
-	JSON unnamedSchemaRef67c73d4742566cab0909f71b1822e88cJSON `json:"-"`
+type RadarEmailSeries struct {
+	Fail []string             `json:"FAIL,required"`
+	None []string             `json:"NONE,required"`
+	Pass []string             `json:"PASS,required"`
+	JSON radarEmailSeriesJSON `json:"-"`
 }
 
-// unnamedSchemaRef67c73d4742566cab0909f71b1822e88cJSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c]
-type unnamedSchemaRef67c73d4742566cab0909f71b1822e88cJSON struct {
+// radarEmailSeriesJSON contains the JSON metadata for the struct
+// [RadarEmailSeries]
+type radarEmailSeriesJSON struct {
 	Fail        apijson.Field
 	None        apijson.Field
 	Pass        apijson.Field
@@ -45,24 +45,24 @@ type unnamedSchemaRef67c73d4742566cab0909f71b1822e88cJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSeries) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef67c73d4742566cab0909f71b1822e88cJSON) RawJSON() string {
+func (r radarEmailSeriesJSON) RawJSON() string {
 	return r.raw
 }
 
-type UnnamedSchemaRef853c157ad369010995e35be614e0343f struct {
-	Fail string                                               `json:"FAIL,required"`
-	None string                                               `json:"NONE,required"`
-	Pass string                                               `json:"PASS,required"`
-	JSON unnamedSchemaRef853c157ad369010995e35be614e0343fJSON `json:"-"`
+type RadarEmailSummary struct {
+	Fail string                `json:"FAIL,required"`
+	None string                `json:"NONE,required"`
+	Pass string                `json:"PASS,required"`
+	JSON radarEmailSummaryJSON `json:"-"`
 }
 
-// unnamedSchemaRef853c157ad369010995e35be614e0343fJSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef853c157ad369010995e35be614e0343f]
-type unnamedSchemaRef853c157ad369010995e35be614e0343fJSON struct {
+// radarEmailSummaryJSON contains the JSON metadata for the struct
+// [RadarEmailSummary]
+type radarEmailSummaryJSON struct {
 	Fail        apijson.Field
 	None        apijson.Field
 	Pass        apijson.Field
@@ -70,10 +70,10 @@ type unnamedSchemaRef853c157ad369010995e35be614e0343fJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef853c157ad369010995e35be614e0343f) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSummary) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef853c157ad369010995e35be614e0343fJSON) RawJSON() string {
+func (r radarEmailSummaryJSON) RawJSON() string {
 	return r.raw
 }

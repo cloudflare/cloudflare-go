@@ -106,10 +106,10 @@ func (r httpTopBrowserFamiliesResponseJSON) RawJSON() string {
 }
 
 type HTTPTopBrowserFamiliesResponseMeta struct {
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	LastUpdated    string                                             `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPTopBrowserFamiliesResponseMetaConfidenceInfo   `json:"confidenceInfo"`
-	JSON           httpTopBrowserFamiliesResponseMetaJSON             `json:"-"`
+	DateRange      []HTTPTopBrowserFamiliesResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                           `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPTopBrowserFamiliesResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           httpTopBrowserFamiliesResponseMetaJSON           `json:"-"`
 }
 
 // httpTopBrowserFamiliesResponseMetaJSON contains the JSON metadata for the struct
@@ -130,10 +130,35 @@ func (r httpTopBrowserFamiliesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type HTTPTopBrowserFamiliesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	JSON      httpTopBrowserFamiliesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTopBrowserFamiliesResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [HTTPTopBrowserFamiliesResponseMetaDateRange]
+type httpTopBrowserFamiliesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTopBrowserFamiliesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTopBrowserFamiliesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTopBrowserFamiliesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        httpTopBrowserFamiliesResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []HTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                        `json:"level"`
+	JSON        httpTopBrowserFamiliesResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // httpTopBrowserFamiliesResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -150,6 +175,40 @@ func (r *HTTPTopBrowserFamiliesResponseMetaConfidenceInfo) UnmarshalJSON(data []
 }
 
 func (r httpTopBrowserFamiliesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                         `json:"dataSource,required"`
+	Description     string                                                         `json:"description,required"`
+	EventType       string                                                         `json:"eventType,required"`
+	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
+	JSON            httpTopBrowserFamiliesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTopBrowserFamiliesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [HTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotation]
+type httpTopBrowserFamiliesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTopBrowserFamiliesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -177,10 +236,10 @@ func (r httpTopBrowsersResponseJSON) RawJSON() string {
 }
 
 type HTTPTopBrowsersResponseMeta struct {
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	LastUpdated    string                                             `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPTopBrowsersResponseMetaConfidenceInfo          `json:"confidenceInfo"`
-	JSON           httpTopBrowsersResponseMetaJSON                    `json:"-"`
+	DateRange      []HTTPTopBrowsersResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                    `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPTopBrowsersResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           httpTopBrowsersResponseMetaJSON           `json:"-"`
 }
 
 // httpTopBrowsersResponseMetaJSON contains the JSON metadata for the struct
@@ -201,10 +260,35 @@ func (r httpTopBrowsersResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type HTTPTopBrowsersResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                `json:"startTime,required" format:"date-time"`
+	JSON      httpTopBrowsersResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTopBrowsersResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [HTTPTopBrowsersResponseMetaDateRange]
+type httpTopBrowsersResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTopBrowsersResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTopBrowsersResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTopBrowsersResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
-	Level       int64                                              `json:"level"`
-	JSON        httpTopBrowsersResponseMetaConfidenceInfoJSON      `json:"-"`
+	Annotations []HTTPTopBrowsersResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                 `json:"level"`
+	JSON        httpTopBrowsersResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // httpTopBrowsersResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -221,6 +305,39 @@ func (r *HTTPTopBrowsersResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (
 }
 
 func (r httpTopBrowsersResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTopBrowsersResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                  `json:"dataSource,required"`
+	Description     string                                                  `json:"description,required"`
+	EventType       string                                                  `json:"eventType,required"`
+	IsInstantaneous interface{}                                             `json:"isInstantaneous,required"`
+	EndTime         time.Time                                               `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                  `json:"linkedUrl"`
+	StartTime       time.Time                                               `json:"startTime" format:"date-time"`
+	JSON            httpTopBrowsersResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTopBrowsersResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [HTTPTopBrowsersResponseMetaConfidenceInfoAnnotation]
+type httpTopBrowsersResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTopBrowsersResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTopBrowsersResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -49,9 +49,9 @@ func (r *HTTPAseHTTPProtocolService) Get(ctx context.Context, httpProtocol HTTPA
 }
 
 type HTTPAseHTTPProtocolGetResponse struct {
-	Meta HTTPAseHTTPProtocolGetResponseMeta                 `json:"meta,required"`
-	Top0 []UnnamedSchemaRef4124a22436f90127c7fa2c4543219752 `json:"top_0,required"`
-	JSON httpAseHTTPProtocolGetResponseJSON                 `json:"-"`
+	Meta HTTPAseHTTPProtocolGetResponseMeta   `json:"meta,required"`
+	Top0 []HTTPAseHTTPProtocolGetResponseTop0 `json:"top_0,required"`
+	JSON httpAseHTTPProtocolGetResponseJSON   `json:"-"`
 }
 
 // httpAseHTTPProtocolGetResponseJSON contains the JSON metadata for the struct
@@ -72,10 +72,10 @@ func (r httpAseHTTPProtocolGetResponseJSON) RawJSON() string {
 }
 
 type HTTPAseHTTPProtocolGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	LastUpdated    string                                             `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPAseHTTPProtocolGetResponseMetaConfidenceInfo   `json:"confidenceInfo"`
-	JSON           httpAseHTTPProtocolGetResponseMetaJSON             `json:"-"`
+	DateRange      []HTTPAseHTTPProtocolGetResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                           `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPAseHTTPProtocolGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           httpAseHTTPProtocolGetResponseMetaJSON           `json:"-"`
 }
 
 // httpAseHTTPProtocolGetResponseMetaJSON contains the JSON metadata for the struct
@@ -96,10 +96,35 @@ func (r httpAseHTTPProtocolGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type HTTPAseHTTPProtocolGetResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	JSON      httpAseHTTPProtocolGetResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpAseHTTPProtocolGetResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [HTTPAseHTTPProtocolGetResponseMetaDateRange]
+type httpAseHTTPProtocolGetResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseHTTPProtocolGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseHTTPProtocolGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPAseHTTPProtocolGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        httpAseHTTPProtocolGetResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []HTTPAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                        `json:"level"`
+	JSON        httpAseHTTPProtocolGetResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // httpAseHTTPProtocolGetResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -116,6 +141,65 @@ func (r *HTTPAseHTTPProtocolGetResponseMetaConfidenceInfo) UnmarshalJSON(data []
 }
 
 func (r httpAseHTTPProtocolGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                         `json:"dataSource,required"`
+	Description     string                                                         `json:"description,required"`
+	EventType       string                                                         `json:"eventType,required"`
+	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
+	JSON            httpAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [HTTPAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotation]
+type httpAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseHTTPProtocolGetResponseTop0 struct {
+	ClientASN    int64                                  `json:"clientASN,required"`
+	ClientAsName string                                 `json:"clientASName,required"`
+	Value        string                                 `json:"value,required"`
+	JSON         httpAseHTTPProtocolGetResponseTop0JSON `json:"-"`
+}
+
+// httpAseHTTPProtocolGetResponseTop0JSON contains the JSON metadata for the struct
+// [HTTPAseHTTPProtocolGetResponseTop0]
+type httpAseHTTPProtocolGetResponseTop0JSON struct {
+	ClientASN    apijson.Field
+	ClientAsName apijson.Field
+	Value        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *HTTPAseHTTPProtocolGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseHTTPProtocolGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

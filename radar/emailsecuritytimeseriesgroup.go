@@ -151,9 +151,9 @@ func (r *EmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, qu
 }
 
 type EmailSecurityTimeseriesGroupARCResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c `json:"serie_0,required"`
-	JSON   emailSecurityTimeseriesGroupARCResponseJSON      `json:"-"`
+	Meta   interface{}                                 `json:"meta,required"`
+	Serie0 RadarEmailSeries                            `json:"serie_0,required"`
+	JSON   emailSecurityTimeseriesGroupARCResponseJSON `json:"-"`
 }
 
 // emailSecurityTimeseriesGroupARCResponseJSON contains the JSON metadata for the
@@ -174,9 +174,9 @@ func (r emailSecurityTimeseriesGroupARCResponseJSON) RawJSON() string {
 }
 
 type EmailSecurityTimeseriesGroupDKIMResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c `json:"serie_0,required"`
-	JSON   emailSecurityTimeseriesGroupDKIMResponseJSON     `json:"-"`
+	Meta   interface{}                                  `json:"meta,required"`
+	Serie0 RadarEmailSeries                             `json:"serie_0,required"`
+	JSON   emailSecurityTimeseriesGroupDKIMResponseJSON `json:"-"`
 }
 
 // emailSecurityTimeseriesGroupDKIMResponseJSON contains the JSON metadata for the
@@ -197,9 +197,9 @@ func (r emailSecurityTimeseriesGroupDKIMResponseJSON) RawJSON() string {
 }
 
 type EmailSecurityTimeseriesGroupDMARCResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c `json:"serie_0,required"`
-	JSON   emailSecurityTimeseriesGroupDMARCResponseJSON    `json:"-"`
+	Meta   interface{}                                   `json:"meta,required"`
+	Serie0 RadarEmailSeries                              `json:"serie_0,required"`
+	JSON   emailSecurityTimeseriesGroupDMARCResponseJSON `json:"-"`
 }
 
 // emailSecurityTimeseriesGroupDMARCResponseJSON contains the JSON metadata for the
@@ -312,9 +312,9 @@ func (r emailSecurityTimeseriesGroupSpamResponseSerie0JSON) RawJSON() string {
 }
 
 type EmailSecurityTimeseriesGroupSPFResponse struct {
-	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 UnnamedSchemaRef67c73d4742566cab0909f71b1822e88c `json:"serie_0,required"`
-	JSON   emailSecurityTimeseriesGroupSPFResponseJSON      `json:"-"`
+	Meta   interface{}                                 `json:"meta,required"`
+	Serie0 RadarEmailSeries                            `json:"serie_0,required"`
+	JSON   emailSecurityTimeseriesGroupSPFResponseJSON `json:"-"`
 }
 
 // emailSecurityTimeseriesGroupSPFResponseJSON contains the JSON metadata for the

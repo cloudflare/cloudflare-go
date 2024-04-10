@@ -135,11 +135,11 @@ func (r qualitySpeedSummaryResponseJSON) RawJSON() string {
 }
 
 type QualitySpeedSummaryResponseMeta struct {
-	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
-	LastUpdated    string                                             `json:"lastUpdated,required"`
-	Normalization  string                                             `json:"normalization,required"`
-	ConfidenceInfo QualitySpeedSummaryResponseMetaConfidenceInfo      `json:"confidenceInfo"`
-	JSON           qualitySpeedSummaryResponseMetaJSON                `json:"-"`
+	DateRange      []QualitySpeedSummaryResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                        `json:"lastUpdated,required"`
+	Normalization  string                                        `json:"normalization,required"`
+	ConfidenceInfo QualitySpeedSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           qualitySpeedSummaryResponseMetaJSON           `json:"-"`
 }
 
 // qualitySpeedSummaryResponseMetaJSON contains the JSON metadata for the struct
@@ -161,10 +161,35 @@ func (r qualitySpeedSummaryResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type QualitySpeedSummaryResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	JSON      qualitySpeedSummaryResponseMetaDateRangeJSON `json:"-"`
+}
+
+// qualitySpeedSummaryResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [QualitySpeedSummaryResponseMetaDateRange]
+type qualitySpeedSummaryResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualitySpeedSummaryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedSummaryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type QualitySpeedSummaryResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
-	Level       int64                                              `json:"level"`
-	JSON        qualitySpeedSummaryResponseMetaConfidenceInfoJSON  `json:"-"`
+	Annotations []QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                     `json:"level"`
+	JSON        qualitySpeedSummaryResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // qualitySpeedSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -181,6 +206,40 @@ func (r *QualitySpeedSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byt
 }
 
 func (r qualitySpeedSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                      `json:"dataSource,required"`
+	Description     string                                                      `json:"description,required"`
+	EventType       string                                                      `json:"eventType,required"`
+	IsInstantaneous interface{}                                                 `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
+	JSON            qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation]
+type qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
