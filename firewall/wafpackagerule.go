@@ -116,28 +116,27 @@ func (r AllowedModesAnomaly) IsKnown() bool {
 }
 
 // The rule group to which the current WAF rule belongs.
-type UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 struct {
+type WAFRuleGroup struct {
 	// The unique identifier of the rule group.
 	ID string `json:"id"`
 	// The name of the rule group.
-	Name string                                               `json:"name"`
-	JSON unnamedSchemaRef532d8b97684c9032dd36bae8acddebf5JSON `json:"-"`
+	Name string           `json:"name"`
+	JSON wafRuleGroupJSON `json:"-"`
 }
 
-// unnamedSchemaRef532d8b97684c9032dd36bae8acddebf5JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5]
-type unnamedSchemaRef532d8b97684c9032dd36bae8acddebf5JSON struct {
+// wafRuleGroupJSON contains the JSON metadata for the struct [WAFRuleGroup]
+type wafRuleGroupJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5) UnmarshalJSON(data []byte) (err error) {
+func (r *WAFRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef532d8b97684c9032dd36bae8acddebf5JSON) RawJSON() string {
+func (r wafRuleGroupJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -149,7 +148,7 @@ type WAFPackageRuleListResponse struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
+	Group WAFRuleGroup `json:"group,required"`
 	// The unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// The unique identifier of a WAF package.
@@ -241,7 +240,7 @@ type WAFPackageRuleListResponseWAFManagedRulesAnomalyRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
 	Mode WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode `json:"mode,required"`
@@ -308,7 +307,7 @@ type WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
+	Group WAFRuleGroup `json:"group,required"`
 	// The action that the current WAF rule will perform when triggered. Applies to
 	// traditional (deny) WAF rules.
 	Mode WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
@@ -416,7 +415,7 @@ type WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
 	Mode WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
@@ -518,7 +517,7 @@ type WAFPackageRuleEditResponse struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
+	Group WAFRuleGroup `json:"group,required"`
 	// The unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// The unique identifier of a WAF package.
@@ -610,7 +609,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode `json:"mode,required"`
@@ -677,7 +676,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
+	Group WAFRuleGroup `json:"group,required"`
 	// The action that the current WAF rule will perform when triggered. Applies to
 	// traditional (deny) WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
@@ -785,7 +784,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
