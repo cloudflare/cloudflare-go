@@ -50,7 +50,7 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 					Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
 				}),
 				Name:      cloudflare.F("PIN Pad - Cash Register"),
-				Protocols: cloudflare.F([]magic_transit.UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916{magic_transit.UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916TCP, magic_transit.UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp, magic_transit.UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp}),
+				Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
 			}),
 		},
 	)
@@ -99,7 +99,7 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 					Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
 				}),
 				Name:      cloudflare.F("PIN Pad - Cash Register"),
-				Protocols: cloudflare.F([]magic_transit.UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916{magic_transit.UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916TCP, magic_transit.UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp, magic_transit.UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp}),
+				Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
 			}),
 		},
 	)

@@ -58,16 +58,15 @@ func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, quer
 	return
 }
 
-type UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26 struct {
-	CreatedOn  interface{}                                          `json:"created_on"`
-	Cron       interface{}                                          `json:"cron"`
-	ModifiedOn interface{}                                          `json:"modified_on"`
-	JSON       unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON `json:"-"`
+type Schedule struct {
+	CreatedOn  interface{}  `json:"created_on"`
+	Cron       interface{}  `json:"cron"`
+	ModifiedOn interface{}  `json:"modified_on"`
+	JSON       scheduleJSON `json:"-"`
 }
 
-// unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26]
-type unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON struct {
+// scheduleJSON contains the JSON metadata for the struct [Schedule]
+type scheduleJSON struct {
 	CreatedOn   apijson.Field
 	Cron        apijson.Field
 	ModifiedOn  apijson.Field
@@ -75,17 +74,24 @@ type unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26) UnmarshalJSON(data []byte) (err error) {
+func (r *Schedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON) RawJSON() string {
+func (r scheduleJSON) RawJSON() string {
 	return r.raw
 }
 
+type ScheduleParam struct {
+}
+
+func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScriptScheduleUpdateResponse struct {
-	Schedules []UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26 `json:"schedules"`
-	JSON      scriptScheduleUpdateResponseJSON                   `json:"-"`
+	Schedules []Schedule                       `json:"schedules"`
+	JSON      scriptScheduleUpdateResponseJSON `json:"-"`
 }
 
 // scriptScheduleUpdateResponseJSON contains the JSON metadata for the struct
@@ -105,8 +111,8 @@ func (r scriptScheduleUpdateResponseJSON) RawJSON() string {
 }
 
 type ScriptScheduleGetResponse struct {
-	Schedules []UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26 `json:"schedules"`
-	JSON      scriptScheduleGetResponseJSON                      `json:"-"`
+	Schedules []Schedule                    `json:"schedules"`
+	JSON      scriptScheduleGetResponseJSON `json:"-"`
 }
 
 // scriptScheduleGetResponseJSON contains the JSON metadata for the struct
