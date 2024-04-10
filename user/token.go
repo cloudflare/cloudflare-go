@@ -226,6 +226,63 @@ func (r PolicyPermissionGroupParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type TokenParam struct {
+	// Token name.
+	Name param.Field[string] `json:"name,required"`
+	// List of access policies assigned to the token.
+	Policies param.Field[[]PolicyParam] `json:"policies,required"`
+	// Status of the token.
+	Status    param.Field[TokenStatus]         `json:"status,required"`
+	Condition param.Field[TokenConditionParam] `json:"condition"`
+	// The expiration time on or after which the JWT MUST NOT be accepted for
+	// processing.
+	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
+	// The time before which the token MUST NOT be accepted for processing.
+	NotBefore param.Field[time.Time] `json:"not_before" format:"date-time"`
+}
+
+func (r TokenParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Status of the token.
+type TokenStatus string
+
+const (
+	TokenStatusActive   TokenStatus = "active"
+	TokenStatusDisabled TokenStatus = "disabled"
+	TokenStatusExpired  TokenStatus = "expired"
+)
+
+func (r TokenStatus) IsKnown() bool {
+	switch r {
+	case TokenStatusActive, TokenStatusDisabled, TokenStatusExpired:
+		return true
+	}
+	return false
+}
+
+type TokenConditionParam struct {
+	// Client IP restrictions.
+	RequestIP param.Field[TokenConditionRequestIPParam] `json:"request_ip"`
+}
+
+func (r TokenConditionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Client IP restrictions.
+type TokenConditionRequestIPParam struct {
+	// List of IPv4/IPv6 CIDR addresses.
+	In param.Field[[]CIDRListParam] `json:"in"`
+	// List of IPv4/IPv6 CIDR addresses.
+	NotIn param.Field[[]CIDRListParam] `json:"not_in"`
+}
+
+func (r TokenConditionRequestIPParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type TokenNewResponse struct {
 	// The token value.
 	Value Value                `json:"value"`
@@ -435,60 +492,11 @@ func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TokenUpdateParams struct {
-	// Token name.
-	Name param.Field[string] `json:"name,required"`
-	// List of access policies assigned to the token.
-	Policies param.Field[[]PolicyParam] `json:"policies,required"`
-	// Status of the token.
-	Status    param.Field[TokenUpdateParamsStatus]    `json:"status,required"`
-	Condition param.Field[TokenUpdateParamsCondition] `json:"condition"`
-	// The expiration time on or after which the JWT MUST NOT be accepted for
-	// processing.
-	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
-	// The time before which the token MUST NOT be accepted for processing.
-	NotBefore param.Field[time.Time] `json:"not_before" format:"date-time"`
+	Token TokenParam `json:"token,required"`
 }
 
 func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Status of the token.
-type TokenUpdateParamsStatus string
-
-const (
-	TokenUpdateParamsStatusActive   TokenUpdateParamsStatus = "active"
-	TokenUpdateParamsStatusDisabled TokenUpdateParamsStatus = "disabled"
-	TokenUpdateParamsStatusExpired  TokenUpdateParamsStatus = "expired"
-)
-
-func (r TokenUpdateParamsStatus) IsKnown() bool {
-	switch r {
-	case TokenUpdateParamsStatusActive, TokenUpdateParamsStatusDisabled, TokenUpdateParamsStatusExpired:
-		return true
-	}
-	return false
-}
-
-type TokenUpdateParamsCondition struct {
-	// Client IP restrictions.
-	RequestIP param.Field[TokenUpdateParamsConditionRequestIP] `json:"request_ip"`
-}
-
-func (r TokenUpdateParamsCondition) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Client IP restrictions.
-type TokenUpdateParamsConditionRequestIP struct {
-	// List of IPv4/IPv6 CIDR addresses.
-	In param.Field[[]CIDRListParam] `json:"in"`
-	// List of IPv4/IPv6 CIDR addresses.
-	NotIn param.Field[[]CIDRListParam] `json:"not_in"`
-}
-
-func (r TokenUpdateParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Token)
 }
 
 type TokenUpdateResponseEnvelope struct {
