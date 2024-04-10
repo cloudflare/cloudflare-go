@@ -121,7 +121,8 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.AccessRuleAccessDomainRule],
 // [zero_trust.AccessRuleAccessEveryoneRule], [zero_trust.AccessRuleAccessIPRule],
 // [zero_trust.AccessRuleAccessIPListRule],
-// [zero_trust.AccessRuleAccessCertificateRule], [zero_trust.GroupRule],
+// [zero_trust.AccessRuleAccessCertificateRule],
+// [zero_trust.AccessRuleAccessAccessGroupRule],
 // [zero_trust.AccessRuleAccessAzureGroupRule],
 // [zero_trust.AccessRuleAccessGitHubOrganizationRule],
 // [zero_trust.AccessRuleAccessGSuiteGroupRule],
@@ -171,7 +172,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GroupRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessAccessGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -498,6 +499,52 @@ func (r accessRuleAccessCertificateRuleJSON) RawJSON() string {
 }
 
 func (r AccessRuleAccessCertificateRule) implementsZeroTrustAccessRule() {}
+
+// Matches an Access group.
+type AccessRuleAccessAccessGroupRule struct {
+	Group AccessRuleAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  accessRuleAccessAccessGroupRuleJSON  `json:"-"`
+}
+
+// accessRuleAccessAccessGroupRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessAccessGroupRule]
+type accessRuleAccessAccessGroupRuleJSON struct {
+	Group       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessAccessGroupRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                   `json:"id,required"`
+	JSON accessRuleAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// accessRuleAccessAccessGroupRuleGroupJSON contains the JSON metadata for the
+// struct [AccessRuleAccessAccessGroupRuleGroup]
+type accessRuleAccessAccessGroupRuleGroupJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
 
 // Matches an Azure group. Requires an Azure identity provider.
 type AccessRuleAccessAzureGroupRule struct {
@@ -1043,7 +1090,8 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 // [zero_trust.AccessRuleAccessEveryoneRuleParam],
 // [zero_trust.AccessRuleAccessIPRuleParam],
 // [zero_trust.AccessRuleAccessIPListRuleParam],
-// [zero_trust.AccessRuleAccessCertificateRuleParam], [zero_trust.GroupRuleParam],
+// [zero_trust.AccessRuleAccessCertificateRuleParam],
+// [zero_trust.AccessRuleAccessAccessGroupRuleParam],
 // [zero_trust.AccessRuleAccessAzureGroupRuleParam],
 // [zero_trust.AccessRuleAccessGitHubOrganizationRuleParam],
 // [zero_trust.AccessRuleAccessGSuiteGroupRuleParam],
@@ -1181,6 +1229,26 @@ func (r AccessRuleAccessCertificateRuleParam) MarshalJSON() (data []byte, err er
 }
 
 func (r AccessRuleAccessCertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// Matches an Access group.
+type AccessRuleAccessAccessGroupRuleParam struct {
+	Group param.Field[AccessRuleAccessAccessGroupRuleGroupParam] `json:"group,required"`
+}
+
+func (r AccessRuleAccessAccessGroupRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessAccessGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessAccessGroupRuleGroupParam struct {
+	// The ID of a previously created Access group.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessRuleAccessAccessGroupRuleGroupParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Matches an Azure group. Requires an Azure identity provider.
 type AccessRuleAccessAzureGroupRuleParam struct {
@@ -1405,163 +1473,5 @@ type AccessRuleAccessDevicePostureRuleDevicePostureParam struct {
 }
 
 func (r AccessRuleAccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Matches an Access group.
-type GroupRule struct {
-	Group GroupRuleGroup `json:"group,required"`
-	JSON  groupRuleJSON  `json:"-"`
-}
-
-// groupRuleJSON contains the JSON metadata for the struct [GroupRule]
-type groupRuleJSON struct {
-	Group       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r groupRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r GroupRule) implementsZeroTrustAccessRule() {}
-
-type GroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string             `json:"id,required"`
-	JSON groupRuleGroupJSON `json:"-"`
-}
-
-// groupRuleGroupJSON contains the JSON metadata for the struct [GroupRuleGroup]
-type groupRuleGroupJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r groupRuleGroupJSON) RawJSON() string {
-	return r.raw
-}
-
-// Matches an Access group.
-type GroupRuleParam struct {
-	Group param.Field[GroupRuleGroupParam] `json:"group,required"`
-}
-
-func (r GroupRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type GroupRuleGroupParam struct {
-	// The ID of a previously created Access group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r GroupRuleGroupParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
