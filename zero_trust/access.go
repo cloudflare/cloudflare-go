@@ -122,8 +122,9 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
 // [zero_trust.GSuiteGroupRule], [zero_trust.OktaGroupRule],
 // [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule],
-// [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
-// [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
+// [zero_trust.AccessRuleAccessAnyValidServiceTokenRule],
+// [zero_trust.ExternalEvaluationRule], [zero_trust.CountryRule],
+// [zero_trust.AuthenticationMethodRule] or
 // [zero_trust.AccessRuleAccessDevicePostureRule].
 type AccessRuleUnion interface {
 	implementsZeroTrustAccessRule()
@@ -191,7 +192,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AnyValidServiceTokenRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessAnyValidServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -211,6 +212,31 @@ func init() {
 		},
 	)
 }
+
+// Matches any valid Access Service Token
+type AccessRuleAccessAnyValidServiceTokenRule struct {
+	// An empty object which matches on all service tokens.
+	AnyValidServiceToken interface{}                                  `json:"any_valid_service_token,required"`
+	JSON                 accessRuleAccessAnyValidServiceTokenRuleJSON `json:"-"`
+}
+
+// accessRuleAccessAnyValidServiceTokenRuleJSON contains the JSON metadata for the
+// struct [AccessRuleAccessAnyValidServiceTokenRule]
+type accessRuleAccessAnyValidServiceTokenRuleJSON struct {
+	AnyValidServiceToken apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessAnyValidServiceTokenRule) implementsZeroTrustAccessRule() {}
 
 // Enforces a device posture rule has run successfully
 type AccessRuleAccessDevicePostureRule struct {
@@ -296,13 +322,25 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 // [zero_trust.AzureGroupRuleParam], [zero_trust.GitHubOrganizationRuleParam],
 // [zero_trust.GSuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
 // [zero_trust.SAMLGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
-// [zero_trust.AnyValidServiceTokenRuleParam],
+// [zero_trust.AccessRuleAccessAnyValidServiceTokenRuleParam],
 // [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
 // [zero_trust.AuthenticationMethodRuleParam],
 // [zero_trust.AccessRuleAccessDevicePostureRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsZeroTrustAccessRuleUnionParam()
 }
+
+// Matches any valid Access Service Token
+type AccessRuleAccessAnyValidServiceTokenRuleParam struct {
+	// An empty object which matches on all service tokens.
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+}
+
+func (r AccessRuleAccessAnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessAnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 // Enforces a device posture rule has run successfully
 type AccessRuleAccessDevicePostureRuleParam struct {
@@ -323,137 +361,6 @@ type AccessRuleAccessDevicePostureRuleDevicePostureParam struct {
 func (r AccessRuleAccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// Matches any valid Access Service Token
-type AnyValidServiceTokenRule struct {
-	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                  `json:"any_valid_service_token,required"`
-	JSON                 anyValidServiceTokenRuleJSON `json:"-"`
-}
-
-// anyValidServiceTokenRuleJSON contains the JSON metadata for the struct
-// [AnyValidServiceTokenRule]
-type anyValidServiceTokenRuleJSON struct {
-	AnyValidServiceToken apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r anyValidServiceTokenRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AnyValidServiceTokenRule) implementsZeroTrustAccessRule() {}
-
-// Matches any valid Access Service Token
-type AnyValidServiceTokenRuleParam struct {
-	// An empty object which matches on all service tokens.
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
-}
-
-func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 // Enforce different MFA options
 type AuthenticationMethodRule struct {
