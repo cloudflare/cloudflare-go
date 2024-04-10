@@ -4422,12 +4422,10 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AccessRuleUnionParam">AccessRuleUnionParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#GroupRuleParam">GroupRuleParam</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AccessRule">AccessRule</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#GroupRule">GroupRule</a>
 
 ### Applications
 
