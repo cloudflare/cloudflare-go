@@ -126,35 +126,35 @@ func (r *GatewayListService) Get(ctx context.Context, listID string, query Gatew
 	return
 }
 
-type Lists struct {
+type GatewayList struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The value of the item in a list.
-	Value string    `json:"value"`
-	JSON  listsJSON `json:"-"`
+	Value string          `json:"value"`
+	JSON  gatewayListJSON `json:"-"`
 }
 
-// listsJSON contains the JSON metadata for the struct [Lists]
-type listsJSON struct {
+// gatewayListJSON contains the JSON metadata for the struct [GatewayList]
+type gatewayListJSON struct {
 	CreatedAt   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Lists) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listsJSON) RawJSON() string {
+func (r gatewayListJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListsParam struct {
+type GatewayListParam struct {
 	// The value of the item in a list.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r ListsParam) MarshalJSON() (data []byte, err error) {
+func (r GatewayListParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -165,7 +165,7 @@ type GatewayListNewResponse struct {
 	// The description of the list.
 	Description string `json:"description"`
 	// The items in the list.
-	Items []Lists `json:"items"`
+	Items []GatewayList `json:"items"`
 	// The name of the list.
 	Name string `json:"name"`
 	// The type of list.
@@ -469,7 +469,7 @@ type GatewayListNewParams struct {
 	// The description of the list.
 	Description param.Field[string] `json:"description"`
 	// The items in the list.
-	Items param.Field[[]ListsParam] `json:"items"`
+	Items param.Field[[]GatewayListParam] `json:"items"`
 }
 
 func (r GatewayListNewParams) MarshalJSON() (data []byte, err error) {
@@ -652,7 +652,7 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type GatewayListEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The items in the list.
-	Append param.Field[[]ListsParam] `json:"append"`
+	Append param.Field[[]GatewayListParam] `json:"append"`
 	// A list of the item values you want to remove.
 	Remove param.Field[[]string] `json:"remove"`
 }
