@@ -39,7 +39,7 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 			}),
 			HealthCheck: cloudflare.F(magic_transit.CfInterconnectUpdateParamsHealthCheck{
 				Enabled: cloudflare.F(true),
-				Rate:    cloudflare.F(magic_transit.UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Low),
+				Rate:    cloudflare.F(magic_transit.HealthCheckRateLow),
 				Target:  cloudflare.F("203.0.113.1"),
 				Type:    cloudflare.F(magic_transit.HealthCheckTypeRequest),
 			}),

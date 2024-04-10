@@ -47,7 +47,7 @@ type HealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 `json:"rate"`
+	Rate HealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -110,7 +110,7 @@ type HealthCheckParam struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5] `json:"rate"`
+	Rate param.Field[HealthCheckRate] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -125,6 +125,23 @@ func (r HealthCheckParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// How frequent the health check is run. The default value is `mid`.
+type HealthCheckRate string
+
+const (
+	HealthCheckRateLow  HealthCheckRate = "low"
+	HealthCheckRateMid  HealthCheckRate = "mid"
+	HealthCheckRateHigh HealthCheckRate = "high"
+)
+
+func (r HealthCheckRate) IsKnown() bool {
+	switch r {
+	case HealthCheckRateLow, HealthCheckRateMid, HealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type HealthCheckType string
 
@@ -136,23 +153,6 @@ const (
 func (r HealthCheckType) IsKnown() bool {
 	switch r {
 	case HealthCheckTypeReply, HealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 string
-
-const (
-	UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Low  UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 = "low"
-	UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Mid  UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 = "mid"
-	UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5High UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 = "high"
-)
-
-func (r UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Low, UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Mid, UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5High:
 		return true
 	}
 	return false
