@@ -32,7 +32,7 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]Lists], err error) {
+func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]GatewayList], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -50,7 +50,7 @@ func (r *GatewayListItemService) List(ctx context.Context, listID string, query 
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[[]Lists] {
+func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[[]GatewayList] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, listID, query, opts...))
 }
 
