@@ -223,8 +223,8 @@ type HostnameCertificateListParams struct {
 
 type HostnameCertificateDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r HostnameCertificateDeleteParams) MarshalJSON() (data []byte, err error) {

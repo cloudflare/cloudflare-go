@@ -30,7 +30,7 @@ func TestGRETunnelNew(t *testing.T) {
 	)
 	_, err := client.MagicTransit.GRETunnels.New(context.TODO(), magic_transit.GRETunnelNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      cloudflare.F[any](map[string]interface{}{}),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -130,7 +130,7 @@ func TestGRETunnelDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.GRETunnelDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

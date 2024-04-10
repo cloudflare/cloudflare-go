@@ -333,7 +333,7 @@ type KeylessCertificateNewParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1] `json:"bundle_method"`
+	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// The keyless SSL name.
 	Name param.Field[string] `json:"name"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
@@ -394,8 +394,8 @@ type KeylessCertificateListParams struct {
 
 type KeylessCertificateDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r KeylessCertificateDeleteParams) MarshalJSON() (data []byte, err error) {

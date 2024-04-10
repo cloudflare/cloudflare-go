@@ -96,7 +96,7 @@ func TestProjectDeploymentDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pages.ProjectDeploymentDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -159,7 +159,7 @@ func TestProjectDeploymentRetry(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pages.ProjectDeploymentRetryParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -191,7 +191,7 @@ func TestProjectDeploymentRollback(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pages.ProjectDeploymentRollbackParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

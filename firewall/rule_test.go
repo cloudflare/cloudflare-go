@@ -32,7 +32,7 @@ func TestRuleNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.RuleNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -63,7 +63,7 @@ func TestRuleUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b60",
 		firewall.RuleUpdateParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -160,7 +160,7 @@ func TestRuleEdit(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b60",
 		firewall.RuleEditParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {

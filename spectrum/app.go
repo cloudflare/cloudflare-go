@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // AppService contains methods and other services that help with interacting with
@@ -100,7 +102,7 @@ func (r *AppService) Delete(ctx context.Context, zone string, appID string, body
 }
 
 // Gets the application configuration of a specific application inside a zone.
-func (r *AppService) Get(ctx context.Context, zone string, appID string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *AppService) Get(ctx context.Context, zone string, appID string, opts ...option.RequestOption) (res *AppGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AppGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/apps/%s", zone, appID)
@@ -397,6 +399,22 @@ func (r *AppDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r appDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [spectrum.AppGetResponseUnknown] or [shared.UnionString].
+type AppGetResponseUnion interface {
+	ImplementsSpectrumAppGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AppGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type AppNewParams struct {
@@ -744,7 +762,7 @@ func (r AppListParamsOrder) IsKnown() bool {
 }
 
 type AppDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r AppDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -795,9 +813,9 @@ func (r AppDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AppGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AppGetResponseUnion   `json:"result,required"`
 	// Whether the API call was successful
 	Success AppGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    appGetResponseEnvelopeJSON    `json:"-"`

@@ -344,6 +344,47 @@ func (r HTTPConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type QueryHealthcheckParam struct {
+	// The hostname or IP address of the origin server to run health checks on.
+	Address param.Field[string] `json:"address,required"`
+	// A short name to identify the health check. Only alphanumeric characters, hyphens
+	// and underscores are allowed.
+	Name param.Field[string] `json:"name,required"`
+	// A list of regions from which to run health checks. Null means Cloudflare will
+	// pick a default region.
+	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
+	// The number of consecutive fails required from a health check before changing the
+	// health to unhealthy.
+	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
+	// The number of consecutive successes required from a health check before changing
+	// the health to healthy.
+	ConsecutiveSuccesses param.Field[int64] `json:"consecutive_successes"`
+	// A human-readable description of the health check.
+	Description param.Field[string] `json:"description"`
+	// Parameters specific to an HTTP or HTTPS health check.
+	HTTPConfig param.Field[HTTPConfigurationParam] `json:"http_config"`
+	// The interval between each health check. Shorter intervals may give quicker
+	// notifications if the origin status changes, but will increase load on the origin
+	// as we check from multiple locations.
+	Interval param.Field[int64] `json:"interval"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries param.Field[int64] `json:"retries"`
+	// If suspended, no health checks are sent to the origin.
+	Suspended param.Field[bool] `json:"suspended"`
+	// Parameters specific to TCP health check.
+	TCPConfig param.Field[TCPConfigurationParam] `json:"tcp_config"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout param.Field[int64] `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP', 'HTTPS' and 'TCP'.
+	Type param.Field[string] `json:"type"`
+}
+
+func (r QueryHealthcheckParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Parameters specific to TCP health check.
 type TCPConfiguration struct {
 	// The TCP connection method to use for the health check.
@@ -421,45 +462,12 @@ func (r healthcheckDeleteResponseJSON) RawJSON() string {
 
 type HealthcheckNewParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The hostname or IP address of the origin server to run health checks on.
-	Address param.Field[string] `json:"address,required"`
-	// A short name to identify the health check. Only alphanumeric characters, hyphens
-	// and underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
-	// A list of regions from which to run health checks. Null means Cloudflare will
-	// pick a default region.
-	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
-	// The number of consecutive fails required from a health check before changing the
-	// health to unhealthy.
-	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
-	// The number of consecutive successes required from a health check before changing
-	// the health to healthy.
-	ConsecutiveSuccesses param.Field[int64] `json:"consecutive_successes"`
-	// A human-readable description of the health check.
-	Description param.Field[string] `json:"description"`
-	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig param.Field[HTTPConfigurationParam] `json:"http_config"`
-	// The interval between each health check. Shorter intervals may give quicker
-	// notifications if the origin status changes, but will increase load on the origin
-	// as we check from multiple locations.
-	Interval param.Field[int64] `json:"interval"`
-	// The number of retries to attempt in case of a timeout before marking the origin
-	// as unhealthy. Retries are attempted immediately.
-	Retries param.Field[int64] `json:"retries"`
-	// If suspended, no health checks are sent to the origin.
-	Suspended param.Field[bool] `json:"suspended"`
-	// Parameters specific to TCP health check.
-	TCPConfig param.Field[TCPConfigurationParam] `json:"tcp_config"`
-	// The timeout (in seconds) before marking the health check as failed.
-	Timeout param.Field[int64] `json:"timeout"`
-	// The protocol to use for the health check. Currently supported protocols are
-	// 'HTTP', 'HTTPS' and 'TCP'.
-	Type param.Field[string] `json:"type"`
+	ZoneID           param.Field[string]   `path:"zone_id,required"`
+	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck,required"`
 }
 
 func (r HealthcheckNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.QueryHealthcheck)
 }
 
 type HealthcheckNewResponseEnvelope struct {
@@ -507,45 +515,12 @@ func (r HealthcheckNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckUpdateParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The hostname or IP address of the origin server to run health checks on.
-	Address param.Field[string] `json:"address,required"`
-	// A short name to identify the health check. Only alphanumeric characters, hyphens
-	// and underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
-	// A list of regions from which to run health checks. Null means Cloudflare will
-	// pick a default region.
-	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
-	// The number of consecutive fails required from a health check before changing the
-	// health to unhealthy.
-	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
-	// The number of consecutive successes required from a health check before changing
-	// the health to healthy.
-	ConsecutiveSuccesses param.Field[int64] `json:"consecutive_successes"`
-	// A human-readable description of the health check.
-	Description param.Field[string] `json:"description"`
-	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig param.Field[HTTPConfigurationParam] `json:"http_config"`
-	// The interval between each health check. Shorter intervals may give quicker
-	// notifications if the origin status changes, but will increase load on the origin
-	// as we check from multiple locations.
-	Interval param.Field[int64] `json:"interval"`
-	// The number of retries to attempt in case of a timeout before marking the origin
-	// as unhealthy. Retries are attempted immediately.
-	Retries param.Field[int64] `json:"retries"`
-	// If suspended, no health checks are sent to the origin.
-	Suspended param.Field[bool] `json:"suspended"`
-	// Parameters specific to TCP health check.
-	TCPConfig param.Field[TCPConfigurationParam] `json:"tcp_config"`
-	// The timeout (in seconds) before marking the health check as failed.
-	Timeout param.Field[int64] `json:"timeout"`
-	// The protocol to use for the health check. Currently supported protocols are
-	// 'HTTP', 'HTTPS' and 'TCP'.
-	Type param.Field[string] `json:"type"`
+	ZoneID           param.Field[string]   `path:"zone_id,required"`
+	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck,required"`
 }
 
 func (r HealthcheckUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.QueryHealthcheck)
 }
 
 type HealthcheckUpdateResponseEnvelope struct {
@@ -598,8 +573,8 @@ type HealthcheckListParams struct {
 
 type HealthcheckDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r HealthcheckDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -651,45 +626,12 @@ func (r HealthcheckDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The hostname or IP address of the origin server to run health checks on.
-	Address param.Field[string] `json:"address,required"`
-	// A short name to identify the health check. Only alphanumeric characters, hyphens
-	// and underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
-	// A list of regions from which to run health checks. Null means Cloudflare will
-	// pick a default region.
-	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
-	// The number of consecutive fails required from a health check before changing the
-	// health to unhealthy.
-	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
-	// The number of consecutive successes required from a health check before changing
-	// the health to healthy.
-	ConsecutiveSuccesses param.Field[int64] `json:"consecutive_successes"`
-	// A human-readable description of the health check.
-	Description param.Field[string] `json:"description"`
-	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig param.Field[HTTPConfigurationParam] `json:"http_config"`
-	// The interval between each health check. Shorter intervals may give quicker
-	// notifications if the origin status changes, but will increase load on the origin
-	// as we check from multiple locations.
-	Interval param.Field[int64] `json:"interval"`
-	// The number of retries to attempt in case of a timeout before marking the origin
-	// as unhealthy. Retries are attempted immediately.
-	Retries param.Field[int64] `json:"retries"`
-	// If suspended, no health checks are sent to the origin.
-	Suspended param.Field[bool] `json:"suspended"`
-	// Parameters specific to TCP health check.
-	TCPConfig param.Field[TCPConfigurationParam] `json:"tcp_config"`
-	// The timeout (in seconds) before marking the health check as failed.
-	Timeout param.Field[int64] `json:"timeout"`
-	// The protocol to use for the health check. Currently supported protocols are
-	// 'HTTP', 'HTTPS' and 'TCP'.
-	Type param.Field[string] `json:"type"`
+	ZoneID           param.Field[string]   `path:"zone_id,required"`
+	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck,required"`
 }
 
 func (r HealthcheckEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.QueryHealthcheck)
 }
 
 type HealthcheckEditResponseEnvelope struct {

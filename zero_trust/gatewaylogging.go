@@ -83,6 +83,18 @@ func (r loggingSettingJSON) RawJSON() string {
 	return r.raw
 }
 
+type LoggingSettingParam struct {
+	// Redact personally identifiable information from activity logging (PII fields
+	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
+	RedactPii param.Field[bool] `json:"redact_pii"`
+	// Logging settings by rule type.
+	SettingsByRuleType param.Field[UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam] `json:"settings_by_rule_type"`
+}
+
+func (r LoggingSettingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Logging settings by rule type.
 type UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b struct {
 	// Logging settings for DNS firewall.
@@ -127,16 +139,12 @@ func (r UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam) MarshalJSON() (da
 }
 
 type GatewayLoggingUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// Redact personally identifiable information from activity logging (PII fields
-	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
-	RedactPii param.Field[bool] `json:"redact_pii"`
-	// Logging settings by rule type.
-	SettingsByRuleType param.Field[UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam] `json:"settings_by_rule_type"`
+	AccountID      param.Field[string] `path:"account_id,required"`
+	LoggingSetting LoggingSettingParam `json:"logging_setting,required"`
 }
 
 func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.LoggingSetting)
 }
 
 type GatewayLoggingUpdateResponseEnvelope struct {

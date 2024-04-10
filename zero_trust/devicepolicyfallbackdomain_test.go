@@ -33,7 +33,7 @@ func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyFallbackDomainUpdateParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body: cloudflare.F([]zero_trust.FallbackDomainParam{{
+			Body: []zero_trust.FallbackDomainParam{{
 				Description: cloudflare.F("Domain bypass for local development"),
 				DNSServer:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
 				Suffix:      cloudflare.F("example.com"),
@@ -45,7 +45,7 @@ func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
 				Description: cloudflare.F("Domain bypass for local development"),
 				DNSServer:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
 				Suffix:      cloudflare.F("example.com"),
-			}}),
+			}},
 		},
 	)
 	if err != nil {

@@ -379,7 +379,7 @@ func (r lockdownDeleteResponseJSON) RawJSON() string {
 }
 
 type LockdownNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r LockdownNewParams) MarshalJSON() (data []byte, err error) {
@@ -430,7 +430,7 @@ func (r LockdownNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r LockdownUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -517,7 +517,7 @@ func (r LockdownListParams) URLQuery() (v url.Values) {
 }
 
 type LockdownDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r LockdownDeleteParams) MarshalJSON() (data []byte, err error) {

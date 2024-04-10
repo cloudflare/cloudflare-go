@@ -441,8 +441,8 @@ type ListListParams struct {
 
 type ListDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ListDeleteParams) MarshalJSON() (data []byte, err error) {

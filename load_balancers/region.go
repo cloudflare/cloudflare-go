@@ -36,7 +36,7 @@ func NewRegionService(opts ...option.RequestOption) (r *RegionService) {
 }
 
 // List all region mappings.
-func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *RegionListResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegionListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions", params.AccountID)
@@ -59,6 +59,23 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 	}
 	res = &env.Result
 	return
+}
+
+// Union satisfied by [load_balancers.RegionListResponseUnknown] or
+// [shared.UnionString].
+type RegionListResponseUnion interface {
+	ImplementsLoadBalancersRegionListResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RegionListResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 // A list of countries and subdivisions mapped to a region.
@@ -100,9 +117,9 @@ func (r RegionListParams) URLQuery() (v url.Values) {
 }
 
 type RegionListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   RegionListResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    regionListResponseEnvelopeJSON    `json:"-"`

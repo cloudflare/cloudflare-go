@@ -383,8 +383,8 @@ func (r routeGetResponseJSON) RawJSON() string {
 
 type RouteNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
@@ -548,8 +548,8 @@ func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r RouteDeleteParams) MarshalJSON() (data []byte, err error) {

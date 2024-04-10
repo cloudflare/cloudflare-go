@@ -249,8 +249,8 @@ func init() {
 
 type ListItemNewParams struct {
 	// Identifier
-	AccountID param.Field[string]                  `path:"account_id,required"`
-	Body      param.Field[[]ListItemNewParamsBody] `json:"body,required"`
+	AccountID param.Field[string]     `path:"account_id,required"`
+	Body      []ListItemNewParamsBody `json:"body,required"`
 }
 
 func (r ListItemNewParams) MarshalJSON() (data []byte, err error) {
@@ -321,8 +321,8 @@ func (r ListItemNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]                     `path:"account_id,required"`
-	Body      param.Field[[]ListItemUpdateParamsBody] `json:"body,required"`
+	AccountID param.Field[string]        `path:"account_id,required"`
+	Body      []ListItemUpdateParamsBody `json:"body,required"`
 }
 
 func (r ListItemUpdateParams) MarshalJSON() (data []byte, err error) {

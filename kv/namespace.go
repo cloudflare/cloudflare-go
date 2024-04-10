@@ -331,8 +331,8 @@ func (r NamespaceListParamsOrder) IsKnown() bool {
 
 type NamespaceDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r NamespaceDeleteParams) MarshalJSON() (data []byte, err error) {

@@ -10,7 +10,6 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -169,7 +168,7 @@ func (r accessBookmarkDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessBookmarkNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r AccessBookmarkNewParams) MarshalJSON() (data []byte, err error) {
@@ -220,7 +219,7 @@ func (r AccessBookmarkNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r AccessBookmarkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -271,7 +270,7 @@ func (r AccessBookmarkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r AccessBookmarkDeleteParams) MarshalJSON() (data []byte, err error) {

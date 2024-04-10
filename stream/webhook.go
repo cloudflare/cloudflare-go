@@ -34,7 +34,7 @@ func NewWebhookService(opts ...option.RequestOption) (r *WebhookService) {
 }
 
 // Creates a webhook notification.
-func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *WebhookUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", params.AccountID)
@@ -60,7 +60,7 @@ func (r *WebhookService) Delete(ctx context.Context, params WebhookDeleteParams,
 }
 
 // Retrieves a list of webhooks.
-func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *WebhookGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", query.AccountID)
@@ -72,6 +72,23 @@ func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts .
 	return
 }
 
+// Union satisfied by [stream.WebhookUpdateResponseUnknown] or
+// [shared.UnionString].
+type WebhookUpdateResponseUnion interface {
+	ImplementsStreamWebhookUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WebhookUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 // Union satisfied by [stream.WebhookDeleteResponseUnknown] or
 // [shared.UnionString].
 type WebhookDeleteResponseUnion interface {
@@ -81,6 +98,22 @@ type WebhookDeleteResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*WebhookDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [stream.WebhookGetResponseUnknown] or [shared.UnionString].
+type WebhookGetResponseUnion interface {
+	ImplementsStreamWebhookGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WebhookGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -101,9 +134,9 @@ func (r WebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   WebhookUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookUpdateResponseEnvelopeJSON    `json:"-"`
@@ -145,8 +178,8 @@ func (r WebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type WebhookDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r WebhookDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -202,9 +235,9 @@ type WebhookGetParams struct {
 }
 
 type WebhookGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   WebhookGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookGetResponseEnvelopeJSON    `json:"-"`

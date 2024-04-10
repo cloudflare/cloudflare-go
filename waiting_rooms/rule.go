@@ -273,8 +273,8 @@ func (r ruleNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type RuleUpdateParams struct {
 	// Identifier
-	ZoneID param.Field[string]                 `path:"zone_id,required"`
-	Body   param.Field[[]RuleUpdateParamsBody] `json:"body,required"`
+	ZoneID param.Field[string]    `path:"zone_id,required"`
+	Body   []RuleUpdateParamsBody `json:"body,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -394,8 +394,8 @@ type RuleListParams struct {
 
 type RuleDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {

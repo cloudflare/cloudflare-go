@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // DeviceRevokeService contains methods and other services that help with
@@ -33,7 +35,7 @@ func NewDeviceRevokeService(opts ...option.RequestOption) (r *DeviceRevokeServic
 }
 
 // Revokes a list of devices.
-func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewParams, opts ...option.RequestOption) (res *DeviceRevokeNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceRevokeNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/revoke", params.AccountID)
@@ -45,10 +47,27 @@ func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewPar
 	return
 }
 
+// Union satisfied by [zero_trust.DeviceRevokeNewResponseUnknown] or
+// [shared.UnionString].
+type DeviceRevokeNewResponseUnion interface {
+	ImplementsZeroTrustDeviceRevokeNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DeviceRevokeNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type DeviceRevokeNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of device ids to revoke.
-	Body param.Field[[]string] `json:"body,required"`
+	Body []string `json:"body,required"`
 }
 
 func (r DeviceRevokeNewParams) MarshalJSON() (data []byte, err error) {
@@ -56,9 +75,9 @@ func (r DeviceRevokeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceRevokeNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   DeviceRevokeNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceRevokeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceRevokeNewResponseEnvelopeJSON    `json:"-"`

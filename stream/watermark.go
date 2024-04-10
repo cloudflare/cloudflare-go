@@ -37,7 +37,7 @@ func NewWatermarkService(opts ...option.RequestOption) (r *WatermarkService) {
 
 // Creates watermark profiles using a single `HTTP POST multipart/form-data`
 // request.
-func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *WatermarkNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", params.AccountID)
@@ -86,7 +86,7 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, params
 }
 
 // Retrieves details for a single watermark profile.
-func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *WatermarkGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
@@ -159,6 +159,22 @@ func (r watermaksJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [stream.WatermarkNewResponseUnknown] or [shared.UnionString].
+type WatermarkNewResponseUnion interface {
+	ImplementsStreamWatermarkNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WatermarkNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 // Union satisfied by [stream.WatermarkDeleteResponseUnknown] or
 // [shared.UnionString].
 type WatermarkDeleteResponseUnion interface {
@@ -168,6 +184,22 @@ type WatermarkDeleteResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*WatermarkDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [stream.WatermarkGetResponseUnknown] or [shared.UnionString].
+type WatermarkGetResponseUnion interface {
+	ImplementsStreamWatermarkGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WatermarkGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -207,9 +239,9 @@ func (r WatermarkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   WatermarkNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkNewResponseEnvelopeJSON    `json:"-"`
@@ -256,8 +288,8 @@ type WatermarkListParams struct {
 
 type WatermarkDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r WatermarkDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -313,9 +345,9 @@ type WatermarkGetParams struct {
 }
 
 type WatermarkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   WatermarkGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkGetResponseEnvelopeJSON    `json:"-"`

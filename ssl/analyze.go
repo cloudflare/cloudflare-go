@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // AnalyzeService contains methods and other services that help with interacting
@@ -34,7 +36,7 @@ func NewAnalyzeService(opts ...option.RequestOption) (r *AnalyzeService) {
 
 // Returns the set of hostnames, the signature algorithm, and the expiration date
 // of the certificate.
-func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *AnalyzeNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyzeNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/analyze", params.ZoneID)
@@ -46,6 +48,22 @@ func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts 
 	return
 }
 
+// Union satisfied by [ssl.AnalyzeNewResponseUnknown] or [shared.UnionString].
+type AnalyzeNewResponseUnion interface {
+	ImplementsSSLAnalyzeNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AnalyzeNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type AnalyzeNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -53,7 +71,7 @@ type AnalyzeNewParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1] `json:"bundle_method"`
+	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
 }
@@ -63,9 +81,9 @@ func (r AnalyzeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AnalyzeNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   AnalyzeNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyzeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyzeNewResponseEnvelopeJSON    `json:"-"`

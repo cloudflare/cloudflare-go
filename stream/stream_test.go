@@ -31,7 +31,7 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 	)
 	err := client.Stream.New(context.TODO(), stream.StreamNewParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:           cloudflare.F[any](map[string]interface{}{}),
+		Body:           map[string]interface{}{},
 		TusResumable:   cloudflare.F(stream.StreamNewParamsTusResumable1_0_0),
 		UploadLength:   cloudflare.F(int64(0)),
 		UploadCreator:  cloudflare.F("creator-id_abcde12345"),
@@ -99,7 +99,7 @@ func TestStreamDelete(t *testing.T) {
 		"ea95132c15732412d22c1476fa83f27a",
 		stream.StreamDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

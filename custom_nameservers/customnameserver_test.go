@@ -61,7 +61,7 @@ func TestCustomNameserverDelete(t *testing.T) {
 		"ns1.example.com",
 		custom_nameservers.CustomNameserverDeleteParams{
 			AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -141,7 +141,7 @@ func TestCustomNameserverVerify(t *testing.T) {
 	)
 	_, err := client.CustomNameservers.Verify(context.TODO(), custom_nameservers.CustomNameserverVerifyParams{
 		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
-		Body:      cloudflare.F[any](map[string]interface{}{}),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -67,7 +67,7 @@ func TestRuleUpdate(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.RuleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F([]waiting_rooms.RuleUpdateParamsBody{{
+			Body: []waiting_rooms.RuleUpdateParamsBody{{
 				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
@@ -82,7 +82,7 @@ func TestRuleUpdate(t *testing.T) {
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-			}}),
+			}},
 		},
 	)
 	if err != nil {
@@ -144,7 +144,7 @@ func TestRuleDelete(t *testing.T) {
 		"25756b2dfe6e378a06b033b670413757",
 		waiting_rooms.RuleDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:   cloudflare.F[any](map[string]interface{}{}),
+			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {

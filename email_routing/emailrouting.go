@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -174,7 +173,7 @@ func (r SettingsStatus) IsKnown() bool {
 }
 
 type EmailRoutingDisableParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r EmailRoutingDisableParams) MarshalJSON() (data []byte, err error) {
@@ -225,7 +224,7 @@ func (r EmailRoutingDisableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type EmailRoutingEnableParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r EmailRoutingEnableParams) MarshalJSON() (data []byte, err error) {

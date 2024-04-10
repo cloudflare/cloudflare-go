@@ -102,8 +102,8 @@ func init() {
 
 type NamespaceBulkUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]                          `path:"account_id,required"`
-	Body      param.Field[[]NamespaceBulkUpdateParamsBody] `json:"body,required"`
+	AccountID param.Field[string]             `path:"account_id,required"`
+	Body      []NamespaceBulkUpdateParamsBody `json:"body,required"`
 }
 
 func (r NamespaceBulkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -179,8 +179,8 @@ func (r NamespaceBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceBulkDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Body      param.Field[[]string] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      []string            `json:"body,required"`
 }
 
 func (r NamespaceBulkDeleteParams) MarshalJSON() (data []byte, err error) {

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // TokenService contains methods and other services that help with interacting with
@@ -53,7 +55,7 @@ func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...opt
 }
 
 // Update an existing token.
-func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body TokenUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenUpdateResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
@@ -102,7 +104,7 @@ func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, body Tok
 }
 
 // Get information about a specific token.
-func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenGetResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
@@ -246,6 +248,22 @@ func (r tokenNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [user.TokenUpdateResponseUnknown] or [shared.UnionString].
+type TokenUpdateResponseUnion interface {
+	ImplementsUserTokenUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TokenUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type TokenListResponse = interface{}
 
 type TokenDeleteResponse struct {
@@ -268,6 +286,22 @@ func (r *TokenDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r tokenDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [user.TokenGetResponseUnknown] or [shared.UnionString].
+type TokenGetResponseUnion interface {
+	ImplementsUserTokenGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TokenGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type TokenVerifyResponse struct {
@@ -458,9 +492,9 @@ func (r TokenUpdateParamsConditionRequestIP) MarshalJSON() (data []byte, err err
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   TokenUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -534,7 +568,7 @@ func (r TokenListParamsDirection) IsKnown() bool {
 }
 
 type TokenDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r TokenDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -585,9 +619,9 @@ func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TokenGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TokenGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenGetResponseEnvelopeJSON    `json:"-"`

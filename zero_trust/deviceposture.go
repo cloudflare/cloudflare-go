@@ -1986,8 +1986,8 @@ type DevicePostureListParams struct {
 }
 
 type DevicePostureDeleteParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r DevicePostureDeleteParams) MarshalJSON() (data []byte, err error) {

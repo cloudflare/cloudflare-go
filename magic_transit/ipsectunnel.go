@@ -656,8 +656,8 @@ func (r IPSECTunnelListResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r IPSECTunnelDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -757,8 +757,8 @@ func (r IPSECTunnelGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelPSKGenerateParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {

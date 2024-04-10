@@ -350,8 +350,8 @@ func (r IncomingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IncomingDeleteParams struct {
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   param.Field[interface{}] `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r IncomingDeleteParams) MarshalJSON() (data []byte, err error) {

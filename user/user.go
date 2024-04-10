@@ -5,12 +5,14 @@ package user
 import (
 	"context"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // UserService contains methods and other services that help with interacting with
@@ -43,7 +45,7 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 }
 
 // Edit part of your user details.
-func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...option.RequestOption) (res *UserEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UserEditResponseEnvelope
 	path := "user"
@@ -56,7 +58,7 @@ func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...opt
 }
 
 // User Details
-func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (res *UserGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UserGetResponseEnvelope
 	path := "user"
@@ -66,6 +68,38 @@ func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (re
 	}
 	res = &env.Result
 	return
+}
+
+// Union satisfied by [user.UserEditResponseUnknown] or [shared.UnionString].
+type UserEditResponseUnion interface {
+	ImplementsUserUserEditResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserEditResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [user.UserGetResponseUnknown] or [shared.UnionString].
+type UserGetResponseUnion interface {
+	ImplementsUserUserGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type UserEditParams struct {
@@ -86,9 +120,9 @@ func (r UserEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UserEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   UserEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success UserEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userEditResponseEnvelopeJSON    `json:"-"`
@@ -129,9 +163,9 @@ func (r UserEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UserGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   UserGetResponseUnion  `json:"result,required"`
 	// Whether the API call was successful
 	Success UserGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userGetResponseEnvelopeJSON    `json:"-"`

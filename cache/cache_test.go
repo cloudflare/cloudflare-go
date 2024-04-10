@@ -28,9 +28,11 @@ func TestCachePurgeWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Cache.Purge(context.TODO(), cache.CachePurgeParamsCachePurgeTags{
+	_, err := client.Cache.Purge(context.TODO(), cache.CachePurgeParams{
 		ZoneID: cloudflare.F("string"),
-		Tags:   cloudflare.F([]string{"some-tag", "another-tag"}),
+		Body: cache.CachePurgeParamsBodyCachePurgeTags{
+			Tags: cloudflare.F([]string{"some-tag", "another-tag"}),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

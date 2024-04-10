@@ -28,10 +28,12 @@ func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.BotManagement.Update(context.TODO(), bot_management.BotManagementUpdateParamsBotFightModeConfiguration{
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		EnableJs:  cloudflare.F(true),
-		FightMode: cloudflare.F(true),
+	_, err := client.BotManagement.Update(context.TODO(), bot_management.BotManagementUpdateParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body: bot_management.BotFightModeConfigurationParam{
+			EnableJs:  cloudflare.F(true),
+			FightMode: cloudflare.F(true),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

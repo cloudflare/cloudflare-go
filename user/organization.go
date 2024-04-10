@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // OrganizationService contains methods and other services that help with
@@ -67,7 +69,7 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 }
 
 // Gets a specific organization the user is associated with.
-func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationGetResponseEnvelope
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
@@ -148,6 +150,23 @@ func (r *OrganizationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r organizationDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [user.OrganizationGetResponseUnknown] or
+// [shared.UnionString].
+type OrganizationGetResponseUnion interface {
+	ImplementsUserOrganizationGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OrganizationGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type OrganizationListParams struct {
@@ -241,7 +260,7 @@ func (r OrganizationListParamsStatus) IsKnown() bool {
 }
 
 type OrganizationDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r OrganizationDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -249,9 +268,9 @@ func (r OrganizationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OrganizationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   OrganizationGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationGetResponseEnvelopeJSON    `json:"-"`

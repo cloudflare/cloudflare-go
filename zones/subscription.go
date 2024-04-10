@@ -6,14 +6,15 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/user"
+	"github.com/tidwall/gjson"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -35,7 +36,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 }
 
 // Create a zone subscription, either plan or add-ons.
-func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
@@ -71,7 +72,7 @@ func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentif
 }
 
 // Lists zone subscription details.
-func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
@@ -83,99 +84,52 @@ func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts .
 	return
 }
 
+// Union satisfied by [zones.SubscriptionNewResponseUnknown] or
+// [shared.UnionString].
+type SubscriptionNewResponseUnion interface {
+	ImplementsZonesSubscriptionNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SubscriptionNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [zones.SubscriptionGetResponseUnknown] or
+// [shared.UnionString].
+type SubscriptionGetResponseUnion interface {
+	ImplementsZonesSubscriptionGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SubscriptionGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type SubscriptionNewParams struct {
-	App param.Field[SubscriptionNewParamsApp] `json:"app"`
-	// The list of add-ons subscribed to.
-	ComponentValues param.Field[[]SubscriptionNewParamsComponentValue] `json:"component_values"`
-	// How often the subscription is renewed automatically.
-	Frequency param.Field[SubscriptionNewParamsFrequency] `json:"frequency"`
-	// The rate plan applied to the subscription.
-	RatePlan param.Field[SubscriptionNewParamsRatePlan] `json:"rate_plan"`
-	// A simple zone object. May have null properties if not a zone subscription.
-	Zone param.Field[SubscriptionNewParamsZone] `json:"zone"`
+	Subscription user.SubscriptionParam `json:"subscription,required"`
 }
 
 func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SubscriptionNewParamsApp struct {
-	// app install id.
-	InstallID param.Field[string] `json:"install_id"`
-}
-
-func (r SubscriptionNewParamsApp) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A component value for a subscription.
-type SubscriptionNewParamsComponentValue struct {
-	// The default amount assigned.
-	Default param.Field[float64] `json:"default"`
-	// The name of the component value.
-	Name param.Field[string] `json:"name"`
-	// The unit price for the component value.
-	Price param.Field[float64] `json:"price"`
-	// The amount of the component value assigned.
-	Value param.Field[float64] `json:"value"`
-}
-
-func (r SubscriptionNewParamsComponentValue) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// How often the subscription is renewed automatically.
-type SubscriptionNewParamsFrequency string
-
-const (
-	SubscriptionNewParamsFrequencyWeekly    SubscriptionNewParamsFrequency = "weekly"
-	SubscriptionNewParamsFrequencyMonthly   SubscriptionNewParamsFrequency = "monthly"
-	SubscriptionNewParamsFrequencyQuarterly SubscriptionNewParamsFrequency = "quarterly"
-	SubscriptionNewParamsFrequencyYearly    SubscriptionNewParamsFrequency = "yearly"
-)
-
-func (r SubscriptionNewParamsFrequency) IsKnown() bool {
-	switch r {
-	case SubscriptionNewParamsFrequencyWeekly, SubscriptionNewParamsFrequencyMonthly, SubscriptionNewParamsFrequencyQuarterly, SubscriptionNewParamsFrequencyYearly:
-		return true
-	}
-	return false
-}
-
-// The rate plan applied to the subscription.
-type SubscriptionNewParamsRatePlan struct {
-	// The ID of the rate plan.
-	ID param.Field[string] `json:"id"`
-	// The currency applied to the rate plan subscription.
-	Currency param.Field[string] `json:"currency"`
-	// Whether this rate plan is managed externally from Cloudflare.
-	ExternallyManaged param.Field[bool] `json:"externally_managed"`
-	// Whether a rate plan is enterprise-based (or newly adopted term contract).
-	IsContract param.Field[bool] `json:"is_contract"`
-	// The full name of the rate plan.
-	PublicName param.Field[string] `json:"public_name"`
-	// The scope that this rate plan applies to.
-	Scope param.Field[string] `json:"scope"`
-	// The list of sets this rate plan applies to.
-	Sets param.Field[[]string] `json:"sets"`
-}
-
-func (r SubscriptionNewParamsRatePlan) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A simple zone object. May have null properties if not a zone subscription.
-type SubscriptionNewParamsZone struct {
-}
-
-func (r SubscriptionNewParamsZone) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Subscription)
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   SubscriptionNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
@@ -216,9 +170,9 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   SubscriptionGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`

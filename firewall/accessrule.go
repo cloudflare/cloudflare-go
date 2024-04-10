@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // AccessRuleService contains methods and other services that help with interacting
@@ -39,7 +41,7 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 //
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *AccessRuleNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleNewResponseEnvelope
 	var accountOrZone string
@@ -123,7 +125,7 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 // Updates an IP Access rule defined.
 //
 // Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *AccessRuleEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleEditResponseEnvelope
 	var accountOrZone string
@@ -145,7 +147,7 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, pa
 }
 
 // Fetches the details of an IP Access rule defined.
-func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
+func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *AccessRuleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleGetResponseEnvelope
 	var accountOrZone string
@@ -330,6 +332,23 @@ func (r IPV6ConfigurationTarget) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [firewall.AccessRuleNewResponseUnknown] or
+// [shared.UnionString].
+type AccessRuleNewResponseUnion interface {
+	ImplementsFirewallAccessRuleNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessRuleNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type AccessRuleListResponse = interface{}
 
 type AccessRuleDeleteResponse struct {
@@ -352,6 +371,40 @@ func (r *AccessRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [firewall.AccessRuleEditResponseUnknown] or
+// [shared.UnionString].
+type AccessRuleEditResponseUnion interface {
+	ImplementsFirewallAccessRuleEditResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessRuleEditResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [firewall.AccessRuleGetResponseUnknown] or
+// [shared.UnionString].
+type AccessRuleGetResponseUnion interface {
+	ImplementsFirewallAccessRuleGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessRuleGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type AccessRuleNewParams struct {
@@ -437,9 +490,9 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type AccessRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   AccessRuleNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -650,7 +703,7 @@ func (r AccessRuleListParamsOrder) IsKnown() bool {
 }
 
 type AccessRuleDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -788,9 +841,9 @@ func (r AccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type AccessRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   AccessRuleEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
@@ -838,9 +891,9 @@ type AccessRuleGetParams struct {
 }
 
 type AccessRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                                        `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   AccessRuleGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`

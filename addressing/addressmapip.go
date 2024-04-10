@@ -112,8 +112,8 @@ func (r AddressMapIPDeleteResponseArray) ImplementsAddressingAddressMapIPDeleteR
 
 type AddressMapIPUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r AddressMapIPUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -198,8 +198,8 @@ func (r addressMapIPUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type AddressMapIPDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r AddressMapIPDeleteParams) MarshalJSON() (data []byte, err error) {

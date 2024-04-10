@@ -278,8 +278,8 @@ func (r CustomNameserverNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomNameserverDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r CustomNameserverDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -526,8 +526,8 @@ func (r customNameserverGetResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type CustomNameserverVerifyParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r CustomNameserverVerifyParams) MarshalJSON() (data []byte, err error) {

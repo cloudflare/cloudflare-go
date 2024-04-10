@@ -33,7 +33,7 @@ func TestNamespaceBulkUpdate(t *testing.T) {
 		"0f2ac74b498b48028cb68387c421e279",
 		kv.NamespaceBulkUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F([]kv.NamespaceBulkUpdateParamsBody{{
+			Body: []kv.NamespaceBulkUpdateParamsBody{{
 				Base64:        cloudflare.F(true),
 				Expiration:    cloudflare.F(1578435000.000000),
 				ExpirationTTL: cloudflare.F(300.000000),
@@ -60,7 +60,7 @@ func TestNamespaceBulkUpdate(t *testing.T) {
 					"someMetadataKey": "someMetadataValue",
 				}),
 				Value: cloudflare.F("Some string"),
-			}}),
+			}},
 		},
 	)
 	if err != nil {
@@ -91,7 +91,7 @@ func TestNamespaceBulkDelete(t *testing.T) {
 		"0f2ac74b498b48028cb68387c421e279",
 		kv.NamespaceBulkDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F([]string{"My-Key", "My-Key", "My-Key"}),
+			Body:      []string{"My-Key", "My-Key", "My-Key"},
 		},
 	)
 	if err != nil {

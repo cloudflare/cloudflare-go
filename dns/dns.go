@@ -32,35 +32,9 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	return
 }
 
-type UnnamedSchemaRef6595695ff25b0614667b25f66b7bbaba struct {
-	// Array of dimension values, representing the combination of dimension values
-	// corresponding to this row.
-	Dimensions []string `json:"dimensions,required"`
-	// Array with one item per requested metric. Each item is a single value.
-	Metrics []float64                                            `json:"metrics,required"`
-	JSON    unnamedSchemaRef6595695ff25b0614667b25f66b7bbabaJSON `json:"-"`
-}
+type DNSAnalyticsNominalMetric []interface{}
 
-// unnamedSchemaRef6595695ff25b0614667b25f66b7bbabaJSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef6595695ff25b0614667b25f66b7bbaba]
-type unnamedSchemaRef6595695ff25b0614667b25f66b7bbabaJSON struct {
-	Dimensions  apijson.Field
-	Metrics     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef6595695ff25b0614667b25f66b7bbaba) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef6595695ff25b0614667b25f66b7bbabaJSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef65be9614de145bf4a58d0fddf46df7ca []interface{}
-
-type UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2 struct {
+type DNSAnalyticsQuery struct {
 	// Array of dimension names.
 	Dimensions []string `json:"dimensions,required"`
 	// Limit number of returned metrics.
@@ -70,20 +44,20 @@ type UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2 struct {
 	// Start date and time of requesting data period in ISO 8601 format.
 	Since time.Time `json:"since,required" format:"date-time"`
 	// Unit of time to group data by.
-	TimeDelta UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta `json:"time_delta,required"`
+	TimeDelta DNSAnalyticsQueryTimeDelta `json:"time_delta,required"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until time.Time `json:"until,required" format:"date-time"`
 	// Segmentation filter in 'attribute operator value' format.
 	Filters string `json:"filters"`
 	// Array of dimensions to sort by, where each dimension may be prefixed by -
 	// (descending) or + (ascending).
-	Sort []string                                             `json:"sort"`
-	JSON unnamedSchemaRef85b45d163202bbab7456da6b346d9fe2JSON `json:"-"`
+	Sort []string              `json:"sort"`
+	JSON dnsAnalyticsQueryJSON `json:"-"`
 }
 
-// unnamedSchemaRef85b45d163202bbab7456da6b346d9fe2JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2]
-type unnamedSchemaRef85b45d163202bbab7456da6b346d9fe2JSON struct {
+// dnsAnalyticsQueryJSON contains the JSON metadata for the struct
+// [DNSAnalyticsQuery]
+type dnsAnalyticsQueryJSON struct {
 	Dimensions  apijson.Field
 	Limit       apijson.Field
 	Metrics     apijson.Field
@@ -96,33 +70,33 @@ type unnamedSchemaRef85b45d163202bbab7456da6b346d9fe2JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSAnalyticsQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef85b45d163202bbab7456da6b346d9fe2JSON) RawJSON() string {
+func (r dnsAnalyticsQueryJSON) RawJSON() string {
 	return r.raw
 }
 
 // Unit of time to group data by.
-type UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta string
+type DNSAnalyticsQueryTimeDelta string
 
 const (
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaAll        UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "all"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaAuto       UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "auto"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaYear       UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "year"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaQuarter    UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "quarter"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaMonth      UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "month"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaWeek       UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "week"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaDay        UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "day"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaHour       UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "hour"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaDekaminute UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "dekaminute"
-	UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaMinute     UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta = "minute"
+	DNSAnalyticsQueryTimeDeltaAll        DNSAnalyticsQueryTimeDelta = "all"
+	DNSAnalyticsQueryTimeDeltaAuto       DNSAnalyticsQueryTimeDelta = "auto"
+	DNSAnalyticsQueryTimeDeltaYear       DNSAnalyticsQueryTimeDelta = "year"
+	DNSAnalyticsQueryTimeDeltaQuarter    DNSAnalyticsQueryTimeDelta = "quarter"
+	DNSAnalyticsQueryTimeDeltaMonth      DNSAnalyticsQueryTimeDelta = "month"
+	DNSAnalyticsQueryTimeDeltaWeek       DNSAnalyticsQueryTimeDelta = "week"
+	DNSAnalyticsQueryTimeDeltaDay        DNSAnalyticsQueryTimeDelta = "day"
+	DNSAnalyticsQueryTimeDeltaHour       DNSAnalyticsQueryTimeDelta = "hour"
+	DNSAnalyticsQueryTimeDeltaDekaminute DNSAnalyticsQueryTimeDelta = "dekaminute"
+	DNSAnalyticsQueryTimeDeltaMinute     DNSAnalyticsQueryTimeDelta = "minute"
 )
 
-func (r UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDelta) IsKnown() bool {
+func (r DNSAnalyticsQueryTimeDelta) IsKnown() bool {
 	switch r {
-	case UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaAll, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaAuto, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaYear, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaQuarter, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaMonth, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaWeek, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaDay, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaHour, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaDekaminute, UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2TimeDeltaMinute:
+	case DNSAnalyticsQueryTimeDeltaAll, DNSAnalyticsQueryTimeDeltaAuto, DNSAnalyticsQueryTimeDeltaYear, DNSAnalyticsQueryTimeDeltaQuarter, DNSAnalyticsQueryTimeDeltaMonth, DNSAnalyticsQueryTimeDeltaWeek, DNSAnalyticsQueryTimeDeltaDay, DNSAnalyticsQueryTimeDeltaHour, DNSAnalyticsQueryTimeDeltaDekaminute, DNSAnalyticsQueryTimeDeltaMinute:
 		return true
 	}
 	return false

@@ -213,8 +213,8 @@ func (r ProjectDeploymentListParamsEnv) IsKnown() bool {
 
 type ProjectDeploymentDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectDeploymentDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -271,8 +271,8 @@ func (r ProjectDeploymentGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentRetryParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectDeploymentRetryParams) MarshalJSON() (data []byte, err error) {
@@ -324,8 +324,8 @@ func (r ProjectDeploymentRetryResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentRollbackParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectDeploymentRollbackParams) MarshalJSON() (data []byte, err error) {

@@ -581,7 +581,7 @@ func (r hostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfoJ
 }
 
 type HostnameIPFSUniversalPathContentListEntryDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r HostnameIPFSUniversalPathContentListEntryDeleteParams) MarshalJSON() (data []byte, err error) {
