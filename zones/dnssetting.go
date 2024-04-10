@@ -58,16 +58,28 @@ func (r *DNSSettingService) Get(ctx context.Context, query DNSSettingGetParams, 
 }
 
 type DNSSetting struct {
+	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
+	FoundationDNS bool `json:"foundation_dns"`
+	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
+	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
+	// zone apex during outbound zone transfers.
+	MultiProvider bool `json:"multi_provider"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers Nameserver     `json:"nameservers"`
-	JSON        dnsSettingJSON `json:"-"`
+	Nameservers Nameserver `json:"nameservers"`
+	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
+	// flattening at the zone apex.
+	SecondaryOverrides bool           `json:"secondary_overrides"`
+	JSON               dnsSettingJSON `json:"-"`
 }
 
 // dnsSettingJSON contains the JSON metadata for the struct [DNSSetting]
 type dnsSettingJSON struct {
-	Nameservers apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	FoundationDNS      apijson.Field
+	MultiProvider      apijson.Field
+	Nameservers        apijson.Field
+	SecondaryOverrides apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DNSSetting) UnmarshalJSON(data []byte) (err error) {
@@ -79,8 +91,17 @@ func (r dnsSettingJSON) RawJSON() string {
 }
 
 type DNSSettingParam struct {
+	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
+	FoundationDNS param.Field[bool] `json:"foundation_dns"`
+	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
+	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
+	// zone apex during outbound zone transfers.
+	MultiProvider param.Field[bool] `json:"multi_provider"`
 	// Settings determining the nameservers through which the zone should be available.
 	Nameservers param.Field[NameserverParam] `json:"nameservers"`
+	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
+	// flattening at the zone apex.
+	SecondaryOverrides param.Field[bool] `json:"secondary_overrides"`
 }
 
 func (r DNSSettingParam) MarshalJSON() (data []byte, err error) {
@@ -146,10 +167,13 @@ func (r DNSSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSSettingEditResponseEnvelope struct {
-	Errors      []shared.ResponseInfo `json:"errors,required"`
-	Messages    []shared.ResponseInfo `json:"messages,required"`
-	Nameservers interface{}           `json:"nameservers,required"`
-	Result      DNSSetting            `json:"result,required"`
+	Errors             []shared.ResponseInfo `json:"errors,required"`
+	FoundationDNS      interface{}           `json:"foundation_dns,required"`
+	Messages           []shared.ResponseInfo `json:"messages,required"`
+	MultiProvider      interface{}           `json:"multi_provider,required"`
+	Nameservers        interface{}           `json:"nameservers,required"`
+	Result             DNSSetting            `json:"result,required"`
+	SecondaryOverrides interface{}           `json:"secondary_overrides,required"`
 	// Whether the API call was successful
 	Success DNSSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -158,13 +182,16 @@ type DNSSettingEditResponseEnvelope struct {
 // dnsSettingEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [DNSSettingEditResponseEnvelope]
 type dnsSettingEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Nameservers apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Errors             apijson.Field
+	FoundationDNS      apijson.Field
+	Messages           apijson.Field
+	MultiProvider      apijson.Field
+	Nameservers        apijson.Field
+	Result             apijson.Field
+	SecondaryOverrides apijson.Field
+	Success            apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DNSSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
@@ -196,10 +223,13 @@ type DNSSettingGetParams struct {
 }
 
 type DNSSettingGetResponseEnvelope struct {
-	Errors      []shared.ResponseInfo `json:"errors,required"`
-	Messages    []shared.ResponseInfo `json:"messages,required"`
-	Nameservers interface{}           `json:"nameservers,required"`
-	Result      DNSSetting            `json:"result,required"`
+	Errors             []shared.ResponseInfo `json:"errors,required"`
+	FoundationDNS      interface{}           `json:"foundation_dns,required"`
+	Messages           []shared.ResponseInfo `json:"messages,required"`
+	MultiProvider      interface{}           `json:"multi_provider,required"`
+	Nameservers        interface{}           `json:"nameservers,required"`
+	Result             DNSSetting            `json:"result,required"`
+	SecondaryOverrides interface{}           `json:"secondary_overrides,required"`
 	// Whether the API call was successful
 	Success DNSSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsSettingGetResponseEnvelopeJSON    `json:"-"`
@@ -208,13 +238,16 @@ type DNSSettingGetResponseEnvelope struct {
 // dnsSettingGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [DNSSettingGetResponseEnvelope]
 type dnsSettingGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Nameservers apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Errors             apijson.Field
+	FoundationDNS      apijson.Field
+	Messages           apijson.Field
+	MultiProvider      apijson.Field
+	Nameservers        apijson.Field
+	Result             apijson.Field
+	SecondaryOverrides apijson.Field
+	Success            apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DNSSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
