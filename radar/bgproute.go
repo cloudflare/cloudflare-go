@@ -680,6 +680,8 @@ type BGPRouteTimeseriesParams struct {
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[BGPRouteTimeseriesParamsFormat] `query:"format"`
+	// Include data delay meta information
+	IncludeDelay param.Field[bool] `query:"includeDelay"`
 	// Location Alpha2 code.
 	Location param.Field[string] `query:"location"`
 }
