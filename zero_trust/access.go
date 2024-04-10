@@ -48,166 +48,6 @@ func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	return
 }
 
-// Enforces a device posture rule has run successfully
-type AccessDevicePostureRule struct {
-	DevicePosture AccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          accessDevicePostureRuleJSON          `json:"-"`
-}
-
-// accessDevicePostureRuleJSON contains the JSON metadata for the struct
-// [AccessDevicePostureRule]
-type accessDevicePostureRuleJSON struct {
-	DevicePosture apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessDevicePostureRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessDevicePostureRule) implementsZeroTrustAccessRule() {}
-
-type AccessDevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                                   `json:"integration_uid,required"`
-	JSON           accessDevicePostureRuleDevicePostureJSON `json:"-"`
-}
-
-// accessDevicePostureRuleDevicePostureJSON contains the JSON metadata for the
-// struct [AccessDevicePostureRuleDevicePosture]
-type accessDevicePostureRuleDevicePostureJSON struct {
-	IntegrationUid apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessDevicePostureRuleDevicePostureJSON) RawJSON() string {
-	return r.raw
-}
-
-// Enforces a device posture rule has run successfully
-type AccessDevicePostureRuleParam struct {
-	DevicePosture param.Field[AccessDevicePostureRuleDevicePostureParam] `json:"device_posture,required"`
-}
-
-func (r AccessDevicePostureRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
-
-type AccessDevicePostureRuleDevicePostureParam struct {
-	// The ID of a device posture integration.
-	IntegrationUid param.Field[string] `json:"integration_uid,required"`
-}
-
-func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // Matches a specific email.
 type AccessRule struct {
 	Email                interface{}    `json:"email,required"`
@@ -284,7 +124,7 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule],
 // [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
 // [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
-// [zero_trust.AccessDevicePostureRule].
+// [zero_trust.AccessRuleAccessDevicePostureRule].
 type AccessRuleUnion interface {
 	implementsZeroTrustAccessRule()
 }
@@ -367,9 +207,55 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessDevicePostureRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessDevicePostureRule{}),
 		},
 	)
+}
+
+// Enforces a device posture rule has run successfully
+type AccessRuleAccessDevicePostureRule struct {
+	DevicePosture AccessRuleAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          accessRuleAccessDevicePostureRuleJSON          `json:"-"`
+}
+
+// accessRuleAccessDevicePostureRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessDevicePostureRule]
+type accessRuleAccessDevicePostureRuleJSON struct {
+	DevicePosture apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessDevicePostureRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                             `json:"integration_uid,required"`
+	JSON           accessRuleAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// accessRuleAccessDevicePostureRuleDevicePostureJSON contains the JSON metadata
+// for the struct [AccessRuleAccessDevicePostureRuleDevicePosture]
+type accessRuleAccessDevicePostureRuleDevicePostureJSON struct {
+	IntegrationUid apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -413,9 +299,29 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 // [zero_trust.AnyValidServiceTokenRuleParam],
 // [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
 // [zero_trust.AuthenticationMethodRuleParam],
-// [zero_trust.AccessDevicePostureRuleParam], [AccessRuleParam].
+// [zero_trust.AccessRuleAccessDevicePostureRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsZeroTrustAccessRuleUnionParam()
+}
+
+// Enforces a device posture rule has run successfully
+type AccessRuleAccessDevicePostureRuleParam struct {
+	DevicePosture param.Field[AccessRuleAccessDevicePostureRuleDevicePostureParam] `json:"device_posture,required"`
+}
+
+func (r AccessRuleAccessDevicePostureRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessDevicePostureRuleDevicePostureParam struct {
+	// The ID of a device posture integration.
+	IntegrationUid param.Field[string] `json:"integration_uid,required"`
+}
+
+func (r AccessRuleAccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches any valid Access Service Token

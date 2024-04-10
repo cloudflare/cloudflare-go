@@ -38,7 +38,7 @@ func NewDevicePostureService(opts ...option.RequestOption) (r *DevicePostureServ
 }
 
 // Creates a new device posture rule.
-func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewParams, opts ...option.RequestOption) (res *DevicePostureNewResponse, err error) {
+func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture", params.AccountID)
@@ -51,7 +51,7 @@ func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewP
 }
 
 // Updates a device posture rule.
-func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params DevicePostureUpdateParams, opts ...option.RequestOption) (res *DevicePostureUpdateResponse, err error) {
+func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params DevicePostureUpdateParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture/%s", params.AccountID, ruleID)
@@ -64,7 +64,7 @@ func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params
 }
 
 // Fetches device posture rules for a Zero Trust account.
-func (r *DevicePostureService) List(ctx context.Context, query DevicePostureListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DevicePostureListResponse], err error) {
+func (r *DevicePostureService) List(ctx context.Context, query DevicePostureListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DevicePostureRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -82,7 +82,7 @@ func (r *DevicePostureService) List(ctx context.Context, query DevicePostureList
 }
 
 // Fetches device posture rules for a Zero Trust account.
-func (r *DevicePostureService) ListAutoPaging(ctx context.Context, query DevicePostureListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DevicePostureListResponse] {
+func (r *DevicePostureService) ListAutoPaging(ctx context.Context, query DevicePostureListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DevicePostureRule] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -100,7 +100,7 @@ func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, params
 }
 
 // Fetches a single device posture rule.
-func (r *DevicePostureService) Get(ctx context.Context, ruleID string, query DevicePostureGetParams, opts ...option.RequestOption) (res *DevicePostureGetResponse, err error) {
+func (r *DevicePostureService) Get(ctx context.Context, ruleID string, query DevicePostureGetParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture/%s", query.AccountID, ruleID)
@@ -1645,6 +1645,84 @@ func (r DeviceMatchParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type DevicePostureRule struct {
+	// API UUID.
+	ID string `json:"id"`
+	// The description of the device posture rule.
+	Description string `json:"description"`
+	// Sets the expiration time for a posture check result. If empty, the result
+	// remains valid until it is overwritten by new data from the WARP client.
+	Expiration string `json:"expiration"`
+	// The value to be checked against.
+	Input DeviceInput `json:"input"`
+	// The conditions that the client must match to run the rule.
+	Match []DeviceMatch `json:"match"`
+	// The name of the device posture rule.
+	Name string `json:"name"`
+	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
+	// five minutes). Minimum: `1m`.
+	Schedule string `json:"schedule"`
+	// The type of device posture rule.
+	Type DevicePostureRuleType `json:"type"`
+	JSON devicePostureRuleJSON `json:"-"`
+}
+
+// devicePostureRuleJSON contains the JSON metadata for the struct
+// [DevicePostureRule]
+type devicePostureRuleJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Expiration  apijson.Field
+	Input       apijson.Field
+	Match       apijson.Field
+	Name        apijson.Field
+	Schedule    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of device posture rule.
+type DevicePostureRuleType string
+
+const (
+	DevicePostureRuleTypeFile              DevicePostureRuleType = "file"
+	DevicePostureRuleTypeApplication       DevicePostureRuleType = "application"
+	DevicePostureRuleTypeTanium            DevicePostureRuleType = "tanium"
+	DevicePostureRuleTypeGateway           DevicePostureRuleType = "gateway"
+	DevicePostureRuleTypeWARP              DevicePostureRuleType = "warp"
+	DevicePostureRuleTypeDiskEncryption    DevicePostureRuleType = "disk_encryption"
+	DevicePostureRuleTypeSentinelone       DevicePostureRuleType = "sentinelone"
+	DevicePostureRuleTypeCarbonblack       DevicePostureRuleType = "carbonblack"
+	DevicePostureRuleTypeFirewall          DevicePostureRuleType = "firewall"
+	DevicePostureRuleTypeOSVersion         DevicePostureRuleType = "os_version"
+	DevicePostureRuleTypeDomainJoined      DevicePostureRuleType = "domain_joined"
+	DevicePostureRuleTypeClientCertificate DevicePostureRuleType = "client_certificate"
+	DevicePostureRuleTypeUniqueClientID    DevicePostureRuleType = "unique_client_id"
+	DevicePostureRuleTypeKolide            DevicePostureRuleType = "kolide"
+	DevicePostureRuleTypeTaniumS2s         DevicePostureRuleType = "tanium_s2s"
+	DevicePostureRuleTypeCrowdstrikeS2s    DevicePostureRuleType = "crowdstrike_s2s"
+	DevicePostureRuleTypeIntune            DevicePostureRuleType = "intune"
+	DevicePostureRuleTypeWorkspaceOne      DevicePostureRuleType = "workspace_one"
+	DevicePostureRuleTypeSentineloneS2s    DevicePostureRuleType = "sentinelone_s2s"
+)
+
+func (r DevicePostureRuleType) IsKnown() bool {
+	switch r {
+	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s:
+		return true
+	}
+	return false
+}
+
 // operator
 type UnnamedSchemaRef34ef0ad73a63c3f76ed170adca181930 string
 
@@ -1681,240 +1759,6 @@ func (r UnnamedSchemaRef41885dd46b9e0294254c49305a273681) IsKnown() bool {
 	return false
 }
 
-type DevicePostureNewResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The description of the device posture rule.
-	Description string `json:"description"`
-	// Sets the expiration time for a posture check result. If empty, the result
-	// remains valid until it is overwritten by new data from the WARP client.
-	Expiration string `json:"expiration"`
-	// The value to be checked against.
-	Input DeviceInput `json:"input"`
-	// The conditions that the client must match to run the rule.
-	Match []DeviceMatch `json:"match"`
-	// The name of the device posture rule.
-	Name string `json:"name"`
-	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
-	// five minutes). Minimum: `1m`.
-	Schedule string `json:"schedule"`
-	// The type of device posture rule.
-	Type DevicePostureNewResponseType `json:"type"`
-	JSON devicePostureNewResponseJSON `json:"-"`
-}
-
-// devicePostureNewResponseJSON contains the JSON metadata for the struct
-// [DevicePostureNewResponse]
-type devicePostureNewResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expiration  apijson.Field
-	Input       apijson.Field
-	Match       apijson.Field
-	Name        apijson.Field
-	Schedule    apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of device posture rule.
-type DevicePostureNewResponseType string
-
-const (
-	DevicePostureNewResponseTypeFile              DevicePostureNewResponseType = "file"
-	DevicePostureNewResponseTypeApplication       DevicePostureNewResponseType = "application"
-	DevicePostureNewResponseTypeTanium            DevicePostureNewResponseType = "tanium"
-	DevicePostureNewResponseTypeGateway           DevicePostureNewResponseType = "gateway"
-	DevicePostureNewResponseTypeWARP              DevicePostureNewResponseType = "warp"
-	DevicePostureNewResponseTypeDiskEncryption    DevicePostureNewResponseType = "disk_encryption"
-	DevicePostureNewResponseTypeSentinelone       DevicePostureNewResponseType = "sentinelone"
-	DevicePostureNewResponseTypeCarbonblack       DevicePostureNewResponseType = "carbonblack"
-	DevicePostureNewResponseTypeFirewall          DevicePostureNewResponseType = "firewall"
-	DevicePostureNewResponseTypeOSVersion         DevicePostureNewResponseType = "os_version"
-	DevicePostureNewResponseTypeDomainJoined      DevicePostureNewResponseType = "domain_joined"
-	DevicePostureNewResponseTypeClientCertificate DevicePostureNewResponseType = "client_certificate"
-	DevicePostureNewResponseTypeUniqueClientID    DevicePostureNewResponseType = "unique_client_id"
-	DevicePostureNewResponseTypeKolide            DevicePostureNewResponseType = "kolide"
-	DevicePostureNewResponseTypeTaniumS2s         DevicePostureNewResponseType = "tanium_s2s"
-	DevicePostureNewResponseTypeCrowdstrikeS2s    DevicePostureNewResponseType = "crowdstrike_s2s"
-	DevicePostureNewResponseTypeIntune            DevicePostureNewResponseType = "intune"
-	DevicePostureNewResponseTypeWorkspaceOne      DevicePostureNewResponseType = "workspace_one"
-	DevicePostureNewResponseTypeSentineloneS2s    DevicePostureNewResponseType = "sentinelone_s2s"
-)
-
-func (r DevicePostureNewResponseType) IsKnown() bool {
-	switch r {
-	case DevicePostureNewResponseTypeFile, DevicePostureNewResponseTypeApplication, DevicePostureNewResponseTypeTanium, DevicePostureNewResponseTypeGateway, DevicePostureNewResponseTypeWARP, DevicePostureNewResponseTypeDiskEncryption, DevicePostureNewResponseTypeSentinelone, DevicePostureNewResponseTypeCarbonblack, DevicePostureNewResponseTypeFirewall, DevicePostureNewResponseTypeOSVersion, DevicePostureNewResponseTypeDomainJoined, DevicePostureNewResponseTypeClientCertificate, DevicePostureNewResponseTypeUniqueClientID, DevicePostureNewResponseTypeKolide, DevicePostureNewResponseTypeTaniumS2s, DevicePostureNewResponseTypeCrowdstrikeS2s, DevicePostureNewResponseTypeIntune, DevicePostureNewResponseTypeWorkspaceOne, DevicePostureNewResponseTypeSentineloneS2s:
-		return true
-	}
-	return false
-}
-
-type DevicePostureUpdateResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The description of the device posture rule.
-	Description string `json:"description"`
-	// Sets the expiration time for a posture check result. If empty, the result
-	// remains valid until it is overwritten by new data from the WARP client.
-	Expiration string `json:"expiration"`
-	// The value to be checked against.
-	Input DeviceInput `json:"input"`
-	// The conditions that the client must match to run the rule.
-	Match []DeviceMatch `json:"match"`
-	// The name of the device posture rule.
-	Name string `json:"name"`
-	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
-	// five minutes). Minimum: `1m`.
-	Schedule string `json:"schedule"`
-	// The type of device posture rule.
-	Type DevicePostureUpdateResponseType `json:"type"`
-	JSON devicePostureUpdateResponseJSON `json:"-"`
-}
-
-// devicePostureUpdateResponseJSON contains the JSON metadata for the struct
-// [DevicePostureUpdateResponse]
-type devicePostureUpdateResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expiration  apijson.Field
-	Input       apijson.Field
-	Match       apijson.Field
-	Name        apijson.Field
-	Schedule    apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of device posture rule.
-type DevicePostureUpdateResponseType string
-
-const (
-	DevicePostureUpdateResponseTypeFile              DevicePostureUpdateResponseType = "file"
-	DevicePostureUpdateResponseTypeApplication       DevicePostureUpdateResponseType = "application"
-	DevicePostureUpdateResponseTypeTanium            DevicePostureUpdateResponseType = "tanium"
-	DevicePostureUpdateResponseTypeGateway           DevicePostureUpdateResponseType = "gateway"
-	DevicePostureUpdateResponseTypeWARP              DevicePostureUpdateResponseType = "warp"
-	DevicePostureUpdateResponseTypeDiskEncryption    DevicePostureUpdateResponseType = "disk_encryption"
-	DevicePostureUpdateResponseTypeSentinelone       DevicePostureUpdateResponseType = "sentinelone"
-	DevicePostureUpdateResponseTypeCarbonblack       DevicePostureUpdateResponseType = "carbonblack"
-	DevicePostureUpdateResponseTypeFirewall          DevicePostureUpdateResponseType = "firewall"
-	DevicePostureUpdateResponseTypeOSVersion         DevicePostureUpdateResponseType = "os_version"
-	DevicePostureUpdateResponseTypeDomainJoined      DevicePostureUpdateResponseType = "domain_joined"
-	DevicePostureUpdateResponseTypeClientCertificate DevicePostureUpdateResponseType = "client_certificate"
-	DevicePostureUpdateResponseTypeUniqueClientID    DevicePostureUpdateResponseType = "unique_client_id"
-	DevicePostureUpdateResponseTypeKolide            DevicePostureUpdateResponseType = "kolide"
-	DevicePostureUpdateResponseTypeTaniumS2s         DevicePostureUpdateResponseType = "tanium_s2s"
-	DevicePostureUpdateResponseTypeCrowdstrikeS2s    DevicePostureUpdateResponseType = "crowdstrike_s2s"
-	DevicePostureUpdateResponseTypeIntune            DevicePostureUpdateResponseType = "intune"
-	DevicePostureUpdateResponseTypeWorkspaceOne      DevicePostureUpdateResponseType = "workspace_one"
-	DevicePostureUpdateResponseTypeSentineloneS2s    DevicePostureUpdateResponseType = "sentinelone_s2s"
-)
-
-func (r DevicePostureUpdateResponseType) IsKnown() bool {
-	switch r {
-	case DevicePostureUpdateResponseTypeFile, DevicePostureUpdateResponseTypeApplication, DevicePostureUpdateResponseTypeTanium, DevicePostureUpdateResponseTypeGateway, DevicePostureUpdateResponseTypeWARP, DevicePostureUpdateResponseTypeDiskEncryption, DevicePostureUpdateResponseTypeSentinelone, DevicePostureUpdateResponseTypeCarbonblack, DevicePostureUpdateResponseTypeFirewall, DevicePostureUpdateResponseTypeOSVersion, DevicePostureUpdateResponseTypeDomainJoined, DevicePostureUpdateResponseTypeClientCertificate, DevicePostureUpdateResponseTypeUniqueClientID, DevicePostureUpdateResponseTypeKolide, DevicePostureUpdateResponseTypeTaniumS2s, DevicePostureUpdateResponseTypeCrowdstrikeS2s, DevicePostureUpdateResponseTypeIntune, DevicePostureUpdateResponseTypeWorkspaceOne, DevicePostureUpdateResponseTypeSentineloneS2s:
-		return true
-	}
-	return false
-}
-
-type DevicePostureListResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The description of the device posture rule.
-	Description string `json:"description"`
-	// Sets the expiration time for a posture check result. If empty, the result
-	// remains valid until it is overwritten by new data from the WARP client.
-	Expiration string `json:"expiration"`
-	// The value to be checked against.
-	Input DeviceInput `json:"input"`
-	// The conditions that the client must match to run the rule.
-	Match []DeviceMatch `json:"match"`
-	// The name of the device posture rule.
-	Name string `json:"name"`
-	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
-	// five minutes). Minimum: `1m`.
-	Schedule string `json:"schedule"`
-	// The type of device posture rule.
-	Type DevicePostureListResponseType `json:"type"`
-	JSON devicePostureListResponseJSON `json:"-"`
-}
-
-// devicePostureListResponseJSON contains the JSON metadata for the struct
-// [DevicePostureListResponse]
-type devicePostureListResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expiration  apijson.Field
-	Input       apijson.Field
-	Match       apijson.Field
-	Name        apijson.Field
-	Schedule    apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of device posture rule.
-type DevicePostureListResponseType string
-
-const (
-	DevicePostureListResponseTypeFile              DevicePostureListResponseType = "file"
-	DevicePostureListResponseTypeApplication       DevicePostureListResponseType = "application"
-	DevicePostureListResponseTypeTanium            DevicePostureListResponseType = "tanium"
-	DevicePostureListResponseTypeGateway           DevicePostureListResponseType = "gateway"
-	DevicePostureListResponseTypeWARP              DevicePostureListResponseType = "warp"
-	DevicePostureListResponseTypeDiskEncryption    DevicePostureListResponseType = "disk_encryption"
-	DevicePostureListResponseTypeSentinelone       DevicePostureListResponseType = "sentinelone"
-	DevicePostureListResponseTypeCarbonblack       DevicePostureListResponseType = "carbonblack"
-	DevicePostureListResponseTypeFirewall          DevicePostureListResponseType = "firewall"
-	DevicePostureListResponseTypeOSVersion         DevicePostureListResponseType = "os_version"
-	DevicePostureListResponseTypeDomainJoined      DevicePostureListResponseType = "domain_joined"
-	DevicePostureListResponseTypeClientCertificate DevicePostureListResponseType = "client_certificate"
-	DevicePostureListResponseTypeUniqueClientID    DevicePostureListResponseType = "unique_client_id"
-	DevicePostureListResponseTypeKolide            DevicePostureListResponseType = "kolide"
-	DevicePostureListResponseTypeTaniumS2s         DevicePostureListResponseType = "tanium_s2s"
-	DevicePostureListResponseTypeCrowdstrikeS2s    DevicePostureListResponseType = "crowdstrike_s2s"
-	DevicePostureListResponseTypeIntune            DevicePostureListResponseType = "intune"
-	DevicePostureListResponseTypeWorkspaceOne      DevicePostureListResponseType = "workspace_one"
-	DevicePostureListResponseTypeSentineloneS2s    DevicePostureListResponseType = "sentinelone_s2s"
-)
-
-func (r DevicePostureListResponseType) IsKnown() bool {
-	switch r {
-	case DevicePostureListResponseTypeFile, DevicePostureListResponseTypeApplication, DevicePostureListResponseTypeTanium, DevicePostureListResponseTypeGateway, DevicePostureListResponseTypeWARP, DevicePostureListResponseTypeDiskEncryption, DevicePostureListResponseTypeSentinelone, DevicePostureListResponseTypeCarbonblack, DevicePostureListResponseTypeFirewall, DevicePostureListResponseTypeOSVersion, DevicePostureListResponseTypeDomainJoined, DevicePostureListResponseTypeClientCertificate, DevicePostureListResponseTypeUniqueClientID, DevicePostureListResponseTypeKolide, DevicePostureListResponseTypeTaniumS2s, DevicePostureListResponseTypeCrowdstrikeS2s, DevicePostureListResponseTypeIntune, DevicePostureListResponseTypeWorkspaceOne, DevicePostureListResponseTypeSentineloneS2s:
-		return true
-	}
-	return false
-}
-
 type DevicePostureDeleteResponse struct {
 	// API UUID.
 	ID   string                          `json:"id"`
@@ -1935,84 +1779,6 @@ func (r *DevicePostureDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r devicePostureDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type DevicePostureGetResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The description of the device posture rule.
-	Description string `json:"description"`
-	// Sets the expiration time for a posture check result. If empty, the result
-	// remains valid until it is overwritten by new data from the WARP client.
-	Expiration string `json:"expiration"`
-	// The value to be checked against.
-	Input DeviceInput `json:"input"`
-	// The conditions that the client must match to run the rule.
-	Match []DeviceMatch `json:"match"`
-	// The name of the device posture rule.
-	Name string `json:"name"`
-	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
-	// five minutes). Minimum: `1m`.
-	Schedule string `json:"schedule"`
-	// The type of device posture rule.
-	Type DevicePostureGetResponseType `json:"type"`
-	JSON devicePostureGetResponseJSON `json:"-"`
-}
-
-// devicePostureGetResponseJSON contains the JSON metadata for the struct
-// [DevicePostureGetResponse]
-type devicePostureGetResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expiration  apijson.Field
-	Input       apijson.Field
-	Match       apijson.Field
-	Name        apijson.Field
-	Schedule    apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of device posture rule.
-type DevicePostureGetResponseType string
-
-const (
-	DevicePostureGetResponseTypeFile              DevicePostureGetResponseType = "file"
-	DevicePostureGetResponseTypeApplication       DevicePostureGetResponseType = "application"
-	DevicePostureGetResponseTypeTanium            DevicePostureGetResponseType = "tanium"
-	DevicePostureGetResponseTypeGateway           DevicePostureGetResponseType = "gateway"
-	DevicePostureGetResponseTypeWARP              DevicePostureGetResponseType = "warp"
-	DevicePostureGetResponseTypeDiskEncryption    DevicePostureGetResponseType = "disk_encryption"
-	DevicePostureGetResponseTypeSentinelone       DevicePostureGetResponseType = "sentinelone"
-	DevicePostureGetResponseTypeCarbonblack       DevicePostureGetResponseType = "carbonblack"
-	DevicePostureGetResponseTypeFirewall          DevicePostureGetResponseType = "firewall"
-	DevicePostureGetResponseTypeOSVersion         DevicePostureGetResponseType = "os_version"
-	DevicePostureGetResponseTypeDomainJoined      DevicePostureGetResponseType = "domain_joined"
-	DevicePostureGetResponseTypeClientCertificate DevicePostureGetResponseType = "client_certificate"
-	DevicePostureGetResponseTypeUniqueClientID    DevicePostureGetResponseType = "unique_client_id"
-	DevicePostureGetResponseTypeKolide            DevicePostureGetResponseType = "kolide"
-	DevicePostureGetResponseTypeTaniumS2s         DevicePostureGetResponseType = "tanium_s2s"
-	DevicePostureGetResponseTypeCrowdstrikeS2s    DevicePostureGetResponseType = "crowdstrike_s2s"
-	DevicePostureGetResponseTypeIntune            DevicePostureGetResponseType = "intune"
-	DevicePostureGetResponseTypeWorkspaceOne      DevicePostureGetResponseType = "workspace_one"
-	DevicePostureGetResponseTypeSentineloneS2s    DevicePostureGetResponseType = "sentinelone_s2s"
-)
-
-func (r DevicePostureGetResponseType) IsKnown() bool {
-	switch r {
-	case DevicePostureGetResponseTypeFile, DevicePostureGetResponseTypeApplication, DevicePostureGetResponseTypeTanium, DevicePostureGetResponseTypeGateway, DevicePostureGetResponseTypeWARP, DevicePostureGetResponseTypeDiskEncryption, DevicePostureGetResponseTypeSentinelone, DevicePostureGetResponseTypeCarbonblack, DevicePostureGetResponseTypeFirewall, DevicePostureGetResponseTypeOSVersion, DevicePostureGetResponseTypeDomainJoined, DevicePostureGetResponseTypeClientCertificate, DevicePostureGetResponseTypeUniqueClientID, DevicePostureGetResponseTypeKolide, DevicePostureGetResponseTypeTaniumS2s, DevicePostureGetResponseTypeCrowdstrikeS2s, DevicePostureGetResponseTypeIntune, DevicePostureGetResponseTypeWorkspaceOne, DevicePostureGetResponseTypeSentineloneS2s:
-		return true
-	}
-	return false
 }
 
 type DevicePostureNewParams struct {
@@ -2073,9 +1839,9 @@ func (r DevicePostureNewParamsType) IsKnown() bool {
 }
 
 type DevicePostureNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DevicePostureNewResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DevicePostureRule     `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureNewResponseEnvelopeJSON    `json:"-"`
@@ -2173,9 +1939,9 @@ func (r DevicePostureUpdateParamsType) IsKnown() bool {
 }
 
 type DevicePostureUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DevicePostureUpdateResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DevicePostureRule     `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureUpdateResponseEnvelopeJSON    `json:"-"`
@@ -2276,9 +2042,9 @@ type DevicePostureGetParams struct {
 }
 
 type DevicePostureGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DevicePostureGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DevicePostureRule     `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureGetResponseEnvelopeJSON    `json:"-"`
