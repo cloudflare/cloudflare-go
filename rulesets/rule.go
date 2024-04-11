@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -149,7 +151,27 @@ func (r blockRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BlockRule) implementsRulesetsResponseRuleItem() {}
+func (r BlockRule) implementsRulesetsRulesetNewResponseRule() {}
+
+func (r BlockRule) implementsRulesetsRulesetUpdateResponseRule() {}
+
+func (r BlockRule) implementsRulesetsRulesetGetResponseRule() {}
+
+func (r BlockRule) implementsRulesetsPhaseUpdateResponseRule() {}
+
+func (r BlockRule) implementsRulesetsPhaseGetResponseRule() {}
+
+func (r BlockRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+
+func (r BlockRule) implementsRulesetsRuleNewResponseRule() {}
+
+func (r BlockRule) implementsRulesetsRuleDeleteResponseRule() {}
+
+func (r BlockRule) implementsRulesetsRuleEditResponseRule() {}
+
+func (r BlockRule) implementsRulesetsVersionGetResponseRule() {}
+
+func (r BlockRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type BlockRuleAction string
@@ -241,7 +263,11 @@ func (r BlockRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BlockRuleParam) implementsRulesetsRequestRuleUnionItemParam() {}
+func (r BlockRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+
+func (r BlockRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+
+func (r BlockRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type BlockRuleActionParametersParam struct {
@@ -318,7 +344,27 @@ func (r executeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ExecuteRule) implementsRulesetsResponseRuleItem() {}
+func (r ExecuteRule) implementsRulesetsRulesetNewResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsRulesetUpdateResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsRulesetGetResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsPhaseUpdateResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsPhaseGetResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsRuleNewResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsRuleDeleteResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsRuleEditResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsVersionGetResponseRule() {}
+
+func (r ExecuteRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type ExecuteRuleAction string
@@ -571,7 +617,11 @@ func (r ExecuteRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ExecuteRuleParam) implementsRulesetsRequestRuleUnionItemParam() {}
+func (r ExecuteRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+
+func (r ExecuteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+
+func (r ExecuteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type ExecuteRuleActionParametersParam struct {
@@ -704,7 +754,27 @@ func (r logRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LogRule) implementsRulesetsResponseRuleItem() {}
+func (r LogRule) implementsRulesetsRulesetNewResponseRule() {}
+
+func (r LogRule) implementsRulesetsRulesetUpdateResponseRule() {}
+
+func (r LogRule) implementsRulesetsRulesetGetResponseRule() {}
+
+func (r LogRule) implementsRulesetsPhaseUpdateResponseRule() {}
+
+func (r LogRule) implementsRulesetsPhaseGetResponseRule() {}
+
+func (r LogRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+
+func (r LogRule) implementsRulesetsRuleNewResponseRule() {}
+
+func (r LogRule) implementsRulesetsRuleDeleteResponseRule() {}
+
+func (r LogRule) implementsRulesetsRuleEditResponseRule() {}
+
+func (r LogRule) implementsRulesetsVersionGetResponseRule() {}
+
+func (r LogRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type LogRuleAction string
@@ -744,7 +814,11 @@ func (r LogRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LogRuleParam) implementsRulesetsRequestRuleUnionItemParam() {}
+func (r LogRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+
+func (r LogRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+
+func (r LogRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // An object configuring the rule's logging behavior.
 type Logging struct {
@@ -829,7 +903,27 @@ func (r skipRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SkipRule) implementsRulesetsResponseRuleItem() {}
+func (r SkipRule) implementsRulesetsRulesetNewResponseRule() {}
+
+func (r SkipRule) implementsRulesetsRulesetUpdateResponseRule() {}
+
+func (r SkipRule) implementsRulesetsRulesetGetResponseRule() {}
+
+func (r SkipRule) implementsRulesetsPhaseUpdateResponseRule() {}
+
+func (r SkipRule) implementsRulesetsPhaseGetResponseRule() {}
+
+func (r SkipRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+
+func (r SkipRule) implementsRulesetsRuleNewResponseRule() {}
+
+func (r SkipRule) implementsRulesetsRuleDeleteResponseRule() {}
+
+func (r SkipRule) implementsRulesetsRuleEditResponseRule() {}
+
+func (r SkipRule) implementsRulesetsVersionGetResponseRule() {}
+
+func (r SkipRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type SkipRuleAction string
@@ -982,7 +1076,11 @@ func (r SkipRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SkipRuleParam) implementsRulesetsRequestRuleUnionItemParam() {}
+func (r SkipRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+
+func (r SkipRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+
+func (r SkipRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
@@ -1019,7 +1117,7 @@ type RuleNewResponse struct {
 	// The phase of the ruleset.
 	Phase RuleNewResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponseRule `json:"rules,required"`
+	Rules []RuleNewResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -1104,6 +1202,116 @@ func (r RuleNewResponsePhase) IsKnown() bool {
 	return false
 }
 
+type RuleNewResponseRule struct {
+	// The action to perform when the rule matches.
+	Action           RuleNewResponseRulesAction `json:"action"`
+	ActionParameters interface{}                `json:"action_parameters,required"`
+	Categories       interface{}                `json:"categories,required"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref string `json:"ref"`
+	// The version of the rule.
+	Version string                  `json:"version,required"`
+	JSON    ruleNewResponseRuleJSON `json:"-"`
+	union   RuleNewResponseRulesUnion
+}
+
+// ruleNewResponseRuleJSON contains the JSON metadata for the struct
+// [RuleNewResponseRule]
+type ruleNewResponseRuleJSON struct {
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	ID               apijson.Field
+	LastUpdated      apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	Version          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r ruleNewResponseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r RuleNewResponseRule) AsUnion() RuleNewResponseRulesUnion {
+	return r.union
+}
+
+// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
+// [rulesets.LogRule] or [rulesets.SkipRule].
+type RuleNewResponseRulesUnion interface {
+	implementsRulesetsRuleNewResponseRule()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesUnion)(nil)).Elem(),
+		"action",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BlockRule{}),
+			DiscriminatorValue: "block",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ExecuteRule{}),
+			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogRule{}),
+			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SkipRule{}),
+			DiscriminatorValue: "skip",
+		},
+	)
+}
+
+// The action to perform when the rule matches.
+type RuleNewResponseRulesAction string
+
+const (
+	RuleNewResponseRulesActionBlock   RuleNewResponseRulesAction = "block"
+	RuleNewResponseRulesActionExecute RuleNewResponseRulesAction = "execute"
+	RuleNewResponseRulesActionLog     RuleNewResponseRulesAction = "log"
+	RuleNewResponseRulesActionSkip    RuleNewResponseRulesAction = "skip"
+)
+
+func (r RuleNewResponseRulesAction) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesActionBlock, RuleNewResponseRulesActionExecute, RuleNewResponseRulesActionLog, RuleNewResponseRulesActionSkip:
+		return true
+	}
+	return false
+}
+
 // A ruleset object.
 type RuleDeleteResponse struct {
 	// The unique ID of the ruleset.
@@ -1117,7 +1325,7 @@ type RuleDeleteResponse struct {
 	// The phase of the ruleset.
 	Phase RuleDeleteResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponseRule `json:"rules,required"`
+	Rules []RuleDeleteResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -1203,6 +1411,116 @@ func (r RuleDeleteResponsePhase) IsKnown() bool {
 	return false
 }
 
+type RuleDeleteResponseRule struct {
+	// The action to perform when the rule matches.
+	Action           RuleDeleteResponseRulesAction `json:"action"`
+	ActionParameters interface{}                   `json:"action_parameters,required"`
+	Categories       interface{}                   `json:"categories,required"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref string `json:"ref"`
+	// The version of the rule.
+	Version string                     `json:"version,required"`
+	JSON    ruleDeleteResponseRuleJSON `json:"-"`
+	union   RuleDeleteResponseRulesUnion
+}
+
+// ruleDeleteResponseRuleJSON contains the JSON metadata for the struct
+// [RuleDeleteResponseRule]
+type ruleDeleteResponseRuleJSON struct {
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	ID               apijson.Field
+	LastUpdated      apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	Version          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r RuleDeleteResponseRule) AsUnion() RuleDeleteResponseRulesUnion {
+	return r.union
+}
+
+// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
+// [rulesets.LogRule] or [rulesets.SkipRule].
+type RuleDeleteResponseRulesUnion interface {
+	implementsRulesetsRuleDeleteResponseRule()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesUnion)(nil)).Elem(),
+		"action",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BlockRule{}),
+			DiscriminatorValue: "block",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ExecuteRule{}),
+			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogRule{}),
+			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SkipRule{}),
+			DiscriminatorValue: "skip",
+		},
+	)
+}
+
+// The action to perform when the rule matches.
+type RuleDeleteResponseRulesAction string
+
+const (
+	RuleDeleteResponseRulesActionBlock   RuleDeleteResponseRulesAction = "block"
+	RuleDeleteResponseRulesActionExecute RuleDeleteResponseRulesAction = "execute"
+	RuleDeleteResponseRulesActionLog     RuleDeleteResponseRulesAction = "log"
+	RuleDeleteResponseRulesActionSkip    RuleDeleteResponseRulesAction = "skip"
+)
+
+func (r RuleDeleteResponseRulesAction) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesActionBlock, RuleDeleteResponseRulesActionExecute, RuleDeleteResponseRulesActionLog, RuleDeleteResponseRulesActionSkip:
+		return true
+	}
+	return false
+}
+
 // A ruleset object.
 type RuleEditResponse struct {
 	// The unique ID of the ruleset.
@@ -1216,7 +1534,7 @@ type RuleEditResponse struct {
 	// The phase of the ruleset.
 	Phase RuleEditResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponseRule `json:"rules,required"`
+	Rules []RuleEditResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -1297,6 +1615,116 @@ const (
 func (r RuleEditResponsePhase) IsKnown() bool {
 	switch r {
 	case RuleEditResponsePhaseDDoSL4, RuleEditResponsePhaseDDoSL7, RuleEditResponsePhaseHTTPConfigSettings, RuleEditResponsePhaseHTTPCustomErrors, RuleEditResponsePhaseHTTPLogCustomFields, RuleEditResponsePhaseHTTPRatelimit, RuleEditResponsePhaseHTTPRequestCacheSettings, RuleEditResponsePhaseHTTPRequestDynamicRedirect, RuleEditResponsePhaseHTTPRequestFirewallCustom, RuleEditResponsePhaseHTTPRequestFirewallManaged, RuleEditResponsePhaseHTTPRequestLateTransform, RuleEditResponsePhaseHTTPRequestOrigin, RuleEditResponsePhaseHTTPRequestRedirect, RuleEditResponsePhaseHTTPRequestSanitize, RuleEditResponsePhaseHTTPRequestSbfm, RuleEditResponsePhaseHTTPRequestSelectConfiguration, RuleEditResponsePhaseHTTPRequestTransform, RuleEditResponsePhaseHTTPResponseCompression, RuleEditResponsePhaseHTTPResponseFirewallManaged, RuleEditResponsePhaseHTTPResponseHeadersTransform, RuleEditResponsePhaseMagicTransit, RuleEditResponsePhaseMagicTransitIDsManaged, RuleEditResponsePhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
+type RuleEditResponseRule struct {
+	// The action to perform when the rule matches.
+	Action           RuleEditResponseRulesAction `json:"action"`
+	ActionParameters interface{}                 `json:"action_parameters,required"`
+	Categories       interface{}                 `json:"categories,required"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref string `json:"ref"`
+	// The version of the rule.
+	Version string                   `json:"version,required"`
+	JSON    ruleEditResponseRuleJSON `json:"-"`
+	union   RuleEditResponseRulesUnion
+}
+
+// ruleEditResponseRuleJSON contains the JSON metadata for the struct
+// [RuleEditResponseRule]
+type ruleEditResponseRuleJSON struct {
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	ID               apijson.Field
+	LastUpdated      apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	Version          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r ruleEditResponseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r RuleEditResponseRule) AsUnion() RuleEditResponseRulesUnion {
+	return r.union
+}
+
+// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
+// [rulesets.LogRule] or [rulesets.SkipRule].
+type RuleEditResponseRulesUnion interface {
+	implementsRulesetsRuleEditResponseRule()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesUnion)(nil)).Elem(),
+		"action",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BlockRule{}),
+			DiscriminatorValue: "block",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ExecuteRule{}),
+			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogRule{}),
+			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SkipRule{}),
+			DiscriminatorValue: "skip",
+		},
+	)
+}
+
+// The action to perform when the rule matches.
+type RuleEditResponseRulesAction string
+
+const (
+	RuleEditResponseRulesActionBlock   RuleEditResponseRulesAction = "block"
+	RuleEditResponseRulesActionExecute RuleEditResponseRulesAction = "execute"
+	RuleEditResponseRulesActionLog     RuleEditResponseRulesAction = "log"
+	RuleEditResponseRulesActionSkip    RuleEditResponseRulesAction = "skip"
+)
+
+func (r RuleEditResponseRulesAction) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesActionBlock, RuleEditResponseRulesActionExecute, RuleEditResponseRulesActionLog, RuleEditResponseRulesActionSkip:
 		return true
 	}
 	return false

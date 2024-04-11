@@ -2791,13 +2791,8 @@ Methods:
 
 # Rulesets
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RequestRuleParam">RequestRuleParam</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#ResponseRule">ResponseRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Ruleset">Ruleset</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RulesetNewResponse">RulesetNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RulesetUpdateResponse">RulesetUpdateResponse</a>

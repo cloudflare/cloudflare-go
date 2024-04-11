@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // VersionService contains methods and other services that help with interacting
@@ -119,7 +121,7 @@ type VersionGetResponse struct {
 	// The phase of the ruleset.
 	Phase VersionGetResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponseRule `json:"rules,required"`
+	Rules []VersionGetResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -200,6 +202,116 @@ const (
 func (r VersionGetResponsePhase) IsKnown() bool {
 	switch r {
 	case VersionGetResponsePhaseDDoSL4, VersionGetResponsePhaseDDoSL7, VersionGetResponsePhaseHTTPConfigSettings, VersionGetResponsePhaseHTTPCustomErrors, VersionGetResponsePhaseHTTPLogCustomFields, VersionGetResponsePhaseHTTPRatelimit, VersionGetResponsePhaseHTTPRequestCacheSettings, VersionGetResponsePhaseHTTPRequestDynamicRedirect, VersionGetResponsePhaseHTTPRequestFirewallCustom, VersionGetResponsePhaseHTTPRequestFirewallManaged, VersionGetResponsePhaseHTTPRequestLateTransform, VersionGetResponsePhaseHTTPRequestOrigin, VersionGetResponsePhaseHTTPRequestRedirect, VersionGetResponsePhaseHTTPRequestSanitize, VersionGetResponsePhaseHTTPRequestSbfm, VersionGetResponsePhaseHTTPRequestSelectConfiguration, VersionGetResponsePhaseHTTPRequestTransform, VersionGetResponsePhaseHTTPResponseCompression, VersionGetResponsePhaseHTTPResponseFirewallManaged, VersionGetResponsePhaseHTTPResponseHeadersTransform, VersionGetResponsePhaseMagicTransit, VersionGetResponsePhaseMagicTransitIDsManaged, VersionGetResponsePhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
+type VersionGetResponseRule struct {
+	// The action to perform when the rule matches.
+	Action           VersionGetResponseRulesAction `json:"action"`
+	ActionParameters interface{}                   `json:"action_parameters,required"`
+	Categories       interface{}                   `json:"categories,required"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref string `json:"ref"`
+	// The version of the rule.
+	Version string                     `json:"version,required"`
+	JSON    versionGetResponseRuleJSON `json:"-"`
+	union   VersionGetResponseRulesUnion
+}
+
+// versionGetResponseRuleJSON contains the JSON metadata for the struct
+// [VersionGetResponseRule]
+type versionGetResponseRuleJSON struct {
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	ID               apijson.Field
+	LastUpdated      apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	Version          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r versionGetResponseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r VersionGetResponseRule) AsUnion() VersionGetResponseRulesUnion {
+	return r.union
+}
+
+// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
+// [rulesets.LogRule] or [rulesets.SkipRule].
+type VersionGetResponseRulesUnion interface {
+	implementsRulesetsVersionGetResponseRule()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseRulesUnion)(nil)).Elem(),
+		"action",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BlockRule{}),
+			DiscriminatorValue: "block",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ExecuteRule{}),
+			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogRule{}),
+			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SkipRule{}),
+			DiscriminatorValue: "skip",
+		},
+	)
+}
+
+// The action to perform when the rule matches.
+type VersionGetResponseRulesAction string
+
+const (
+	VersionGetResponseRulesActionBlock   VersionGetResponseRulesAction = "block"
+	VersionGetResponseRulesActionExecute VersionGetResponseRulesAction = "execute"
+	VersionGetResponseRulesActionLog     VersionGetResponseRulesAction = "log"
+	VersionGetResponseRulesActionSkip    VersionGetResponseRulesAction = "skip"
+)
+
+func (r VersionGetResponseRulesAction) IsKnown() bool {
+	switch r {
+	case VersionGetResponseRulesActionBlock, VersionGetResponseRulesActionExecute, VersionGetResponseRulesActionLog, VersionGetResponseRulesActionSkip:
 		return true
 	}
 	return false
