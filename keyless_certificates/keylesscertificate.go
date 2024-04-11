@@ -285,6 +285,20 @@ func (r tunnelJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r Tunnel) implementsWARPConnectorWARPConnectorNewResponse() {}
+
+func (r Tunnel) implementsWARPConnectorWARPConnectorListResponse() {}
+
+func (r Tunnel) implementsWARPConnectorWARPConnectorDeleteResponse() {}
+
+func (r Tunnel) implementsWARPConnectorWARPConnectorEditResponse() {}
+
+func (r Tunnel) implementsWARPConnectorWARPConnectorGetResponse() {}
+
+func (r Tunnel) implementsZeroTrustTunnelListResponse() {}
+
+func (r Tunnel) implementsZeroTrustTunnelEditResponse() {}
+
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
 type TunnelParam struct {
 	// Private IP of the Key Server Host
