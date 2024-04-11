@@ -149,7 +149,7 @@ func (r blockRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BlockRule) implementsRulesetsResponeRuleItem() {}
+func (r BlockRule) implementsRulesetsResponseRuleItem() {}
 
 // The action to perform when the rule matches.
 type BlockRuleAction string
@@ -318,7 +318,7 @@ func (r executeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ExecuteRule) implementsRulesetsResponeRuleItem() {}
+func (r ExecuteRule) implementsRulesetsResponseRuleItem() {}
 
 // The action to perform when the rule matches.
 type ExecuteRuleAction string
@@ -704,7 +704,7 @@ func (r logRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LogRule) implementsRulesetsResponeRuleItem() {}
+func (r LogRule) implementsRulesetsResponseRuleItem() {}
 
 // The action to perform when the rule matches.
 type LogRuleAction string
@@ -829,7 +829,7 @@ func (r skipRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SkipRule) implementsRulesetsResponeRuleItem() {}
+func (r SkipRule) implementsRulesetsResponseRuleItem() {}
 
 // The action to perform when the rule matches.
 type SkipRuleAction string
@@ -1019,7 +1019,7 @@ type RuleNewResponse struct {
 	// The phase of the ruleset.
 	Phase RuleNewResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponeRule `json:"rules,required"`
+	Rules ResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -1117,7 +1117,7 @@ type RuleDeleteResponse struct {
 	// The phase of the ruleset.
 	Phase RuleDeleteResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponeRule `json:"rules,required"`
+	Rules ResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -1216,7 +1216,7 @@ type RuleEditResponse struct {
 	// The phase of the ruleset.
 	Phase RuleEditResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponeRule `json:"rules,required"`
+	Rules ResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.

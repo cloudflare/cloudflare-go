@@ -156,7 +156,7 @@ func (r *RulesetService) Get(ctx context.Context, rulesetID string, query Rulese
 
 type RequestRuleParam []RequestRuleUnionItemParam
 
-type ResponeRule []ResponeRuleItem
+type ResponseRule []ResponseRuleItem
 
 // A ruleset object.
 type Ruleset struct {
@@ -266,7 +266,7 @@ type RulesetNewResponse struct {
 	// The phase of the ruleset.
 	Phase RulesetNewResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponeRule `json:"rules,required"`
+	Rules ResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -365,7 +365,7 @@ type RulesetUpdateResponse struct {
 	// The phase of the ruleset.
 	Phase RulesetUpdateResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponeRule `json:"rules,required"`
+	Rules ResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -464,7 +464,7 @@ type RulesetGetResponse struct {
 	// The phase of the ruleset.
 	Phase RulesetGetResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponeRule `json:"rules,required"`
+	Rules ResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
