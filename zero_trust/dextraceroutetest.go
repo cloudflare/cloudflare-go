@@ -83,7 +83,7 @@ type Traceroute struct {
 	Kind     TracerouteKind `json:"kind,required"`
 	// The name of the Traceroute synthetic application test
 	Name                  string                            `json:"name,required"`
-	TargetPolicies        []DeviceExperienceMonitor         `json:"target_policies"`
+	TargetPolicies        []DeviceExperienceMonitor         `json:"target_policies,nullable"`
 	Targeted              bool                              `json:"targeted"`
 	TracerouteStats       TracerouteTracerouteStats         `json:"tracerouteStats,nullable"`
 	TracerouteStatsByColo []TracerouteTracerouteStatsByColo `json:"tracerouteStatsByColo"`
