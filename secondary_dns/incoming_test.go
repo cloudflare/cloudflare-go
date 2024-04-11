@@ -32,7 +32,7 @@ func TestIncomingNew(t *testing.T) {
 		ZoneID:             cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 		AutoRefreshSeconds: cloudflare.F(86400.000000),
 		Name:               cloudflare.F("www.example.com."),
-		Peers:              cloudflare.F([]interface{}{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
+		Peers:              cloudflare.F([]secondary_dns.PeersParam{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,7 +61,7 @@ func TestIncomingUpdate(t *testing.T) {
 		ZoneID:             cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 		AutoRefreshSeconds: cloudflare.F(86400.000000),
 		Name:               cloudflare.F("www.example.com."),
-		Peers:              cloudflare.F([]interface{}{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
+		Peers:              cloudflare.F([]secondary_dns.PeersParam{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
