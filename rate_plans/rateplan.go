@@ -44,56 +44,11 @@ func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts .
 	return
 }
 
-type Component struct {
-	// The default amount allocated.
-	Default float64 `json:"default"`
-	// The unique component.
-	Name ComponentName `json:"name"`
-	// The unit price of the addon.
-	UnitPrice float64       `json:"unit_price"`
-	JSON      componentJSON `json:"-"`
-}
-
-// componentJSON contains the JSON metadata for the struct [Component]
-type componentJSON struct {
-	Default     apijson.Field
-	Name        apijson.Field
-	UnitPrice   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Component) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r componentJSON) RawJSON() string {
-	return r.raw
-}
-
-// The unique component.
-type ComponentName string
-
-const (
-	ComponentNameZones                       ComponentName = "zones"
-	ComponentNamePageRules                   ComponentName = "page_rules"
-	ComponentNameDedicatedCertificates       ComponentName = "dedicated_certificates"
-	ComponentNameDedicatedCertificatesCustom ComponentName = "dedicated_certificates_custom"
-)
-
-func (r ComponentName) IsKnown() bool {
-	switch r {
-	case ComponentNameZones, ComponentNamePageRules, ComponentNameDedicatedCertificates, ComponentNameDedicatedCertificatesCustom:
-		return true
-	}
-	return false
-}
-
 type RatePlan struct {
 	// Plan identifier tag.
 	ID string `json:"id"`
 	// Array of available components values for the plan.
-	Components []Component `json:"components"`
+	Components []RatePlanComponent `json:"components"`
 	// The monetary unit in which pricing information is displayed.
 	Currency string `json:"currency"`
 	// The duration of the plan subscription.
@@ -125,6 +80,52 @@ func (r ratePlanJSON) RawJSON() string {
 	return r.raw
 }
 
+type RatePlanComponent struct {
+	// The default amount allocated.
+	Default float64 `json:"default"`
+	// The unique component.
+	Name RatePlanComponentsName `json:"name"`
+	// The unit price of the addon.
+	UnitPrice float64               `json:"unit_price"`
+	JSON      ratePlanComponentJSON `json:"-"`
+}
+
+// ratePlanComponentJSON contains the JSON metadata for the struct
+// [RatePlanComponent]
+type ratePlanComponentJSON struct {
+	Default     apijson.Field
+	Name        apijson.Field
+	UnitPrice   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RatePlanComponent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ratePlanComponentJSON) RawJSON() string {
+	return r.raw
+}
+
+// The unique component.
+type RatePlanComponentsName string
+
+const (
+	RatePlanComponentsNameZones                       RatePlanComponentsName = "zones"
+	RatePlanComponentsNamePageRules                   RatePlanComponentsName = "page_rules"
+	RatePlanComponentsNameDedicatedCertificates       RatePlanComponentsName = "dedicated_certificates"
+	RatePlanComponentsNameDedicatedCertificatesCustom RatePlanComponentsName = "dedicated_certificates_custom"
+)
+
+func (r RatePlanComponentsName) IsKnown() bool {
+	switch r {
+	case RatePlanComponentsNameZones, RatePlanComponentsNamePageRules, RatePlanComponentsNameDedicatedCertificates, RatePlanComponentsNameDedicatedCertificatesCustom:
+		return true
+	}
+	return false
+}
+
 // The frequency at which you will be billed for this plan.
 type RatePlanFrequency string
 
@@ -145,12 +146,23 @@ func (r RatePlanFrequency) IsKnown() bool {
 
 type RatePlanParam struct {
 	// Array of available components values for the plan.
-	Components param.Field[[]ComponentParam] `json:"components"`
+	Components param.Field[[]RatePlanComponentParam] `json:"components"`
 	// The duration of the plan subscription.
 	Duration param.Field[float64] `json:"duration"`
 }
 
 func (r RatePlanParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RatePlanComponentParam struct {
+	// The default amount allocated.
+	Default param.Field[float64] `json:"default"`
+	// The unique component.
+	Name param.Field[RatePlanComponentsName] `json:"name"`
+}
+
+func (r RatePlanComponentParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
