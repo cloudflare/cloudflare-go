@@ -6,9 +6,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -70,12 +72,12 @@ func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, p
 }
 
 // Lists waiting rooms.
-func (r *WaitingRoomService) List(ctx context.Context, query WaitingRoomListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoom], err error) {
+func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoom], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/waiting_rooms", query.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,8 +90,8 @@ func (r *WaitingRoomService) List(ctx context.Context, query WaitingRoomListPara
 }
 
 // Lists waiting rooms.
-func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, query WaitingRoomListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoom] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoom] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a waiting room.
@@ -1121,6 +1123,18 @@ func (r waitingRoomUpdateResponseEnvelopeJSON) RawJSON() string {
 type WaitingRoomListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Page number of paginated results.
+	Page param.Field[interface{}] `query:"page"`
+	// Maximum number of results per page. Must be a multiple of 5.
+	PerPage param.Field[interface{}] `query:"per_page"`
+}
+
+// URLQuery serializes [WaitingRoomListParams]'s query parameters as `url.Values`.
+func (r WaitingRoomListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type WaitingRoomDeleteParams struct {
