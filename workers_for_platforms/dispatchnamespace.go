@@ -85,7 +85,7 @@ func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace
 	return
 }
 
-// Fetch a Workers for Platforms namespace.
+// Get a Workers for Platforms namespace.
 func (r *DispatchNamespaceService) Get(ctx context.Context, dispatchNamespace string, query DispatchNamespaceGetParams, opts ...option.RequestOption) (res *DispatchNamespaceGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceGetResponseEnvelope
