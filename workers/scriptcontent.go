@@ -65,7 +65,8 @@ type ScriptContentUpdateParams struct {
 	// may be provided as separate named parts, but at least one module must be
 	// present. This should be referenced either in the metadata as `main_module`
 	// (esm)/`body_part` (service worker) or as a header `CF-WORKER-MAIN-MODULE-PART`
-	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name.
+	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name. Source maps may also
+	// be included using the `application/source-map` content type.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
 	Metadata               param.Field[WorkerMetadataParam] `json:"metadata"`

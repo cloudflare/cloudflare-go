@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/workers"
@@ -36,28 +35,53 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Errors: cloudflare.F([]shared.ResponseInfoParam{{
-				Code:    cloudflare.F(int64(1000)),
-				Message: cloudflare.F("string"),
-			}, {
-				Code:    cloudflare.F(int64(1000)),
-				Message: cloudflare.F("string"),
-			}, {
-				Code:    cloudflare.F(int64(1000)),
-				Message: cloudflare.F("string"),
-			}}),
-			Messages: cloudflare.F([]shared.ResponseInfoParam{{
-				Code:    cloudflare.F(int64(1000)),
-				Message: cloudflare.F("string"),
-			}, {
-				Code:    cloudflare.F(int64(1000)),
-				Message: cloudflare.F("string"),
-			}, {
-				Code:    cloudflare.F(int64(1000)),
-				Message: cloudflare.F("string"),
-			}}),
-			Result: cloudflare.F(workers.ScriptSettingParam{
+			Settings: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettings{
+				Bindings: cloudflare.F([]workers.BindingUnionParam{workers.KVNamespaceBindingParam{
+					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
+				}, workers.KVNamespaceBindingParam{
+					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
+				}, workers.KVNamespaceBindingParam{
+					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
+				}}),
+				CompatibilityDate:  cloudflare.F("2022-04-05"),
+				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
+				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsLimits{
+					CPUMs: cloudflare.F(int64(50)),
+				}),
 				Logpush: cloudflare.F(false),
+				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion](workers.SingleStepMigrationParam{
+					NewTag:         cloudflare.F("v2"),
+					OldTag:         cloudflare.F("v1"),
+					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
+					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
+					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
+						From: cloudflare.F("string"),
+						To:   cloudflare.F("string"),
+					}, {
+						From: cloudflare.F("string"),
+						To:   cloudflare.F("string"),
+					}, {
+						From: cloudflare.F("string"),
+						To:   cloudflare.F("string"),
+					}}),
+					TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
+						From:       cloudflare.F("string"),
+						FromScript: cloudflare.F("string"),
+						To:         cloudflare.F("string"),
+					}, {
+						From:       cloudflare.F("string"),
+						FromScript: cloudflare.F("string"),
+						To:         cloudflare.F("string"),
+					}, {
+						From:       cloudflare.F("string"),
+						FromScript: cloudflare.F("string"),
+						To:         cloudflare.F("string"),
+					}}),
+				}),
+				Placement: cloudflare.F(workers.PlacementConfigurationParam{
+					Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
+				}),
+				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
@@ -71,8 +95,8 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
 				}}),
+				UsageModel: cloudflare.F("unbound"),
 			}),
-			Success: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSuccessTrue),
 		},
 	)
 	if err != nil {

@@ -46,7 +46,9 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 	return
 }
 
-// Upload a worker module to a Workers for Platforms namespace.
+// Upload a worker module to a Workers for Platforms namespace. You can find an
+// example of the metadata on our docs:
+// https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/reference/metadata/
 func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
@@ -160,6 +162,8 @@ type DispatchNamespaceScriptUpdateParamsBodyObject struct {
 	// A module comprising a Worker script, often a javascript file. Multiple modules
 	// may be provided as separate named parts, but at least one module must be present
 	// and referenced in the metadata as `main_module` or `body_part` by part name.
+	// Source maps may also be included using the `application/source-map` content
+	// type.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadata] `json:"metadata"`

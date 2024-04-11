@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/workers"
 )
@@ -33,14 +35,63 @@ func NewDispatchNamespaceScriptBindingService(opts ...option.RequestOption) (r *
 
 // Fetch script bindings from a script uploaded to a Workers for Platforms
 // namespace.
-func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *workers.Binding, err error) {
+func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *[]workers.Binding, err error) {
 	opts = append(r.Options[:], opts...)
+	var env DispatchNamespaceScriptBindingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/bindings", query.AccountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type DispatchNamespaceScriptBindingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DispatchNamespaceScriptBindingGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// List of bindings attached to this Worker
+	Result []workers.Binding `json:"result,required"`
+	// Whether the API call was successful
+	Success DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dispatchNamespaceScriptBindingGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [DispatchNamespaceScriptBindingGetResponseEnvelope]
+type dispatchNamespaceScriptBindingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess bool
+
+const (
+	DispatchNamespaceScriptBindingGetResponseEnvelopeSuccessTrue DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess = true
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

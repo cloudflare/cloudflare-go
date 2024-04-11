@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 )
 
 type AuditLog struct {
@@ -214,13 +213,4 @@ func (r *ResponseInfo) UnmarshalJSON(data []byte) (err error) {
 
 func (r responseInfoJSON) RawJSON() string {
 	return r.raw
-}
-
-type ResponseInfoParam struct {
-	Code    param.Field[int64]  `json:"code,required"`
-	Message param.Field[string] `json:"message,required"`
-}
-
-func (r ResponseInfoParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
