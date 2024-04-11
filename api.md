@@ -2235,10 +2235,12 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#PeerParam">PeerParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#PeersParam">PeersParam</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#Peer">Peer</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#Peers">Peers</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#PeerDeleteResponse">PeerDeleteResponse</a>
 
 Methods:
