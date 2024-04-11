@@ -115,8 +115,6 @@ func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params Attac
 
 type IssueClassParam []string
 
-type IssueTypeParam []IssueTypeItem
-
 type ProductParam []string
 
 type SeverityQueryParam string
@@ -373,12 +371,12 @@ func (r attackSurfaceReportIssueTypeResponseJSON) RawJSON() string {
 
 type AttackSurfaceReportIssueListParams struct {
 	// Identifier
-	AccountID     param.Field[string]          `path:"account_id,required"`
-	Dismissed     param.Field[bool]            `query:"dismissed"`
-	IssueClass    param.Field[IssueClassParam] `query:"issue_class"`
-	IssueClassNeq param.Field[IssueClassParam] `query:"issue_class~neq"`
-	IssueType     param.Field[IssueTypeParam]  `query:"issue_type"`
-	IssueTypeNeq  param.Field[IssueTypeParam]  `query:"issue_type~neq"`
+	AccountID     param.Field[string]                                           `path:"account_id,required"`
+	Dismissed     param.Field[bool]                                             `query:"dismissed"`
+	IssueClass    param.Field[IssueClassParam]                                  `query:"issue_class"`
+	IssueClassNeq param.Field[IssueClassParam]                                  `query:"issue_class~neq"`
+	IssueType     param.Field[[]AttackSurfaceReportIssueListParamsIssueType]    `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]AttackSurfaceReportIssueListParamsIssueTypeNeq] `query:"issue_type~neq"`
 	// Current page within paginated list of results
 	Page param.Field[int64] `query:"page"`
 	// Number of results per page of results
@@ -400,20 +398,56 @@ func (r AttackSurfaceReportIssueListParams) URLQuery() (v url.Values) {
 	})
 }
 
+type AttackSurfaceReportIssueListParamsIssueType string
+
+const (
+	AttackSurfaceReportIssueListParamsIssueTypeComplianceViolation   AttackSurfaceReportIssueListParamsIssueType = "compliance_violation"
+	AttackSurfaceReportIssueListParamsIssueTypeEmailSecurity         AttackSurfaceReportIssueListParamsIssueType = "email_security"
+	AttackSurfaceReportIssueListParamsIssueTypeExposedInfrastructure AttackSurfaceReportIssueListParamsIssueType = "exposed_infrastructure"
+	AttackSurfaceReportIssueListParamsIssueTypeInsecureConfiguration AttackSurfaceReportIssueListParamsIssueType = "insecure_configuration"
+	AttackSurfaceReportIssueListParamsIssueTypeWeakAuthentication    AttackSurfaceReportIssueListParamsIssueType = "weak_authentication"
+)
+
+func (r AttackSurfaceReportIssueListParamsIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListParamsIssueTypeComplianceViolation, AttackSurfaceReportIssueListParamsIssueTypeEmailSecurity, AttackSurfaceReportIssueListParamsIssueTypeExposedInfrastructure, AttackSurfaceReportIssueListParamsIssueTypeInsecureConfiguration, AttackSurfaceReportIssueListParamsIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
+type AttackSurfaceReportIssueListParamsIssueTypeNeq string
+
+const (
+	AttackSurfaceReportIssueListParamsIssueTypeNeqComplianceViolation   AttackSurfaceReportIssueListParamsIssueTypeNeq = "compliance_violation"
+	AttackSurfaceReportIssueListParamsIssueTypeNeqEmailSecurity         AttackSurfaceReportIssueListParamsIssueTypeNeq = "email_security"
+	AttackSurfaceReportIssueListParamsIssueTypeNeqExposedInfrastructure AttackSurfaceReportIssueListParamsIssueTypeNeq = "exposed_infrastructure"
+	AttackSurfaceReportIssueListParamsIssueTypeNeqInsecureConfiguration AttackSurfaceReportIssueListParamsIssueTypeNeq = "insecure_configuration"
+	AttackSurfaceReportIssueListParamsIssueTypeNeqWeakAuthentication    AttackSurfaceReportIssueListParamsIssueTypeNeq = "weak_authentication"
+)
+
+func (r AttackSurfaceReportIssueListParamsIssueTypeNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListParamsIssueTypeNeqComplianceViolation, AttackSurfaceReportIssueListParamsIssueTypeNeqEmailSecurity, AttackSurfaceReportIssueListParamsIssueTypeNeqExposedInfrastructure, AttackSurfaceReportIssueListParamsIssueTypeNeqInsecureConfiguration, AttackSurfaceReportIssueListParamsIssueTypeNeqWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueClassParams struct {
 	// Identifier
-	AccountID     param.Field[string]               `path:"account_id,required"`
-	Dismissed     param.Field[bool]                 `query:"dismissed"`
-	IssueClass    param.Field[IssueClassParam]      `query:"issue_class"`
-	IssueClassNeq param.Field[IssueClassParam]      `query:"issue_class~neq"`
-	IssueType     param.Field[IssueTypeParam]       `query:"issue_type"`
-	IssueTypeNeq  param.Field[IssueTypeParam]       `query:"issue_type~neq"`
-	Product       param.Field[ProductParam]         `query:"product"`
-	ProductNeq    param.Field[ProductParam]         `query:"product~neq"`
-	Severity      param.Field[[]SeverityQueryParam] `query:"severity"`
-	SeverityNeq   param.Field[[]SeverityQueryParam] `query:"severity~neq"`
-	Subject       param.Field[SubjectParam]         `query:"subject"`
-	SubjectNeq    param.Field[SubjectParam]         `query:"subject~neq"`
+	AccountID     param.Field[string]                                            `path:"account_id,required"`
+	Dismissed     param.Field[bool]                                              `query:"dismissed"`
+	IssueClass    param.Field[IssueClassParam]                                   `query:"issue_class"`
+	IssueClassNeq param.Field[IssueClassParam]                                   `query:"issue_class~neq"`
+	IssueType     param.Field[[]AttackSurfaceReportIssueClassParamsIssueType]    `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]AttackSurfaceReportIssueClassParamsIssueTypeNeq] `query:"issue_type~neq"`
+	Product       param.Field[ProductParam]                                      `query:"product"`
+	ProductNeq    param.Field[ProductParam]                                      `query:"product~neq"`
+	Severity      param.Field[[]SeverityQueryParam]                              `query:"severity"`
+	SeverityNeq   param.Field[[]SeverityQueryParam]                              `query:"severity~neq"`
+	Subject       param.Field[SubjectParam]                                      `query:"subject"`
+	SubjectNeq    param.Field[SubjectParam]                                      `query:"subject~neq"`
 }
 
 // URLQuery serializes [AttackSurfaceReportIssueClassParams]'s query parameters as
@@ -423,6 +457,42 @@ func (r AttackSurfaceReportIssueClassParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type AttackSurfaceReportIssueClassParamsIssueType string
+
+const (
+	AttackSurfaceReportIssueClassParamsIssueTypeComplianceViolation   AttackSurfaceReportIssueClassParamsIssueType = "compliance_violation"
+	AttackSurfaceReportIssueClassParamsIssueTypeEmailSecurity         AttackSurfaceReportIssueClassParamsIssueType = "email_security"
+	AttackSurfaceReportIssueClassParamsIssueTypeExposedInfrastructure AttackSurfaceReportIssueClassParamsIssueType = "exposed_infrastructure"
+	AttackSurfaceReportIssueClassParamsIssueTypeInsecureConfiguration AttackSurfaceReportIssueClassParamsIssueType = "insecure_configuration"
+	AttackSurfaceReportIssueClassParamsIssueTypeWeakAuthentication    AttackSurfaceReportIssueClassParamsIssueType = "weak_authentication"
+)
+
+func (r AttackSurfaceReportIssueClassParamsIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueClassParamsIssueTypeComplianceViolation, AttackSurfaceReportIssueClassParamsIssueTypeEmailSecurity, AttackSurfaceReportIssueClassParamsIssueTypeExposedInfrastructure, AttackSurfaceReportIssueClassParamsIssueTypeInsecureConfiguration, AttackSurfaceReportIssueClassParamsIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
+type AttackSurfaceReportIssueClassParamsIssueTypeNeq string
+
+const (
+	AttackSurfaceReportIssueClassParamsIssueTypeNeqComplianceViolation   AttackSurfaceReportIssueClassParamsIssueTypeNeq = "compliance_violation"
+	AttackSurfaceReportIssueClassParamsIssueTypeNeqEmailSecurity         AttackSurfaceReportIssueClassParamsIssueTypeNeq = "email_security"
+	AttackSurfaceReportIssueClassParamsIssueTypeNeqExposedInfrastructure AttackSurfaceReportIssueClassParamsIssueTypeNeq = "exposed_infrastructure"
+	AttackSurfaceReportIssueClassParamsIssueTypeNeqInsecureConfiguration AttackSurfaceReportIssueClassParamsIssueTypeNeq = "insecure_configuration"
+	AttackSurfaceReportIssueClassParamsIssueTypeNeqWeakAuthentication    AttackSurfaceReportIssueClassParamsIssueTypeNeq = "weak_authentication"
+)
+
+func (r AttackSurfaceReportIssueClassParamsIssueTypeNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueClassParamsIssueTypeNeqComplianceViolation, AttackSurfaceReportIssueClassParamsIssueTypeNeqEmailSecurity, AttackSurfaceReportIssueClassParamsIssueTypeNeqExposedInfrastructure, AttackSurfaceReportIssueClassParamsIssueTypeNeqInsecureConfiguration, AttackSurfaceReportIssueClassParamsIssueTypeNeqWeakAuthentication:
+		return true
+	}
+	return false
 }
 
 type AttackSurfaceReportIssueClassResponseEnvelope struct {
@@ -523,18 +593,18 @@ func (r AttackSurfaceReportIssueDismissResponseEnvelopeSuccess) IsKnown() bool {
 
 type AttackSurfaceReportIssueSeverityParams struct {
 	// Identifier
-	AccountID     param.Field[string]               `path:"account_id,required"`
-	Dismissed     param.Field[bool]                 `query:"dismissed"`
-	IssueClass    param.Field[IssueClassParam]      `query:"issue_class"`
-	IssueClassNeq param.Field[IssueClassParam]      `query:"issue_class~neq"`
-	IssueType     param.Field[IssueTypeParam]       `query:"issue_type"`
-	IssueTypeNeq  param.Field[IssueTypeParam]       `query:"issue_type~neq"`
-	Product       param.Field[ProductParam]         `query:"product"`
-	ProductNeq    param.Field[ProductParam]         `query:"product~neq"`
-	Severity      param.Field[[]SeverityQueryParam] `query:"severity"`
-	SeverityNeq   param.Field[[]SeverityQueryParam] `query:"severity~neq"`
-	Subject       param.Field[SubjectParam]         `query:"subject"`
-	SubjectNeq    param.Field[SubjectParam]         `query:"subject~neq"`
+	AccountID     param.Field[string]                                               `path:"account_id,required"`
+	Dismissed     param.Field[bool]                                                 `query:"dismissed"`
+	IssueClass    param.Field[IssueClassParam]                                      `query:"issue_class"`
+	IssueClassNeq param.Field[IssueClassParam]                                      `query:"issue_class~neq"`
+	IssueType     param.Field[[]AttackSurfaceReportIssueSeverityParamsIssueType]    `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]AttackSurfaceReportIssueSeverityParamsIssueTypeNeq] `query:"issue_type~neq"`
+	Product       param.Field[ProductParam]                                         `query:"product"`
+	ProductNeq    param.Field[ProductParam]                                         `query:"product~neq"`
+	Severity      param.Field[[]SeverityQueryParam]                                 `query:"severity"`
+	SeverityNeq   param.Field[[]SeverityQueryParam]                                 `query:"severity~neq"`
+	Subject       param.Field[SubjectParam]                                         `query:"subject"`
+	SubjectNeq    param.Field[SubjectParam]                                         `query:"subject~neq"`
 }
 
 // URLQuery serializes [AttackSurfaceReportIssueSeverityParams]'s query parameters
@@ -544,6 +614,42 @@ func (r AttackSurfaceReportIssueSeverityParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type AttackSurfaceReportIssueSeverityParamsIssueType string
+
+const (
+	AttackSurfaceReportIssueSeverityParamsIssueTypeComplianceViolation   AttackSurfaceReportIssueSeverityParamsIssueType = "compliance_violation"
+	AttackSurfaceReportIssueSeverityParamsIssueTypeEmailSecurity         AttackSurfaceReportIssueSeverityParamsIssueType = "email_security"
+	AttackSurfaceReportIssueSeverityParamsIssueTypeExposedInfrastructure AttackSurfaceReportIssueSeverityParamsIssueType = "exposed_infrastructure"
+	AttackSurfaceReportIssueSeverityParamsIssueTypeInsecureConfiguration AttackSurfaceReportIssueSeverityParamsIssueType = "insecure_configuration"
+	AttackSurfaceReportIssueSeverityParamsIssueTypeWeakAuthentication    AttackSurfaceReportIssueSeverityParamsIssueType = "weak_authentication"
+)
+
+func (r AttackSurfaceReportIssueSeverityParamsIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueSeverityParamsIssueTypeComplianceViolation, AttackSurfaceReportIssueSeverityParamsIssueTypeEmailSecurity, AttackSurfaceReportIssueSeverityParamsIssueTypeExposedInfrastructure, AttackSurfaceReportIssueSeverityParamsIssueTypeInsecureConfiguration, AttackSurfaceReportIssueSeverityParamsIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
+type AttackSurfaceReportIssueSeverityParamsIssueTypeNeq string
+
+const (
+	AttackSurfaceReportIssueSeverityParamsIssueTypeNeqComplianceViolation   AttackSurfaceReportIssueSeverityParamsIssueTypeNeq = "compliance_violation"
+	AttackSurfaceReportIssueSeverityParamsIssueTypeNeqEmailSecurity         AttackSurfaceReportIssueSeverityParamsIssueTypeNeq = "email_security"
+	AttackSurfaceReportIssueSeverityParamsIssueTypeNeqExposedInfrastructure AttackSurfaceReportIssueSeverityParamsIssueTypeNeq = "exposed_infrastructure"
+	AttackSurfaceReportIssueSeverityParamsIssueTypeNeqInsecureConfiguration AttackSurfaceReportIssueSeverityParamsIssueTypeNeq = "insecure_configuration"
+	AttackSurfaceReportIssueSeverityParamsIssueTypeNeqWeakAuthentication    AttackSurfaceReportIssueSeverityParamsIssueTypeNeq = "weak_authentication"
+)
+
+func (r AttackSurfaceReportIssueSeverityParamsIssueTypeNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueSeverityParamsIssueTypeNeqComplianceViolation, AttackSurfaceReportIssueSeverityParamsIssueTypeNeqEmailSecurity, AttackSurfaceReportIssueSeverityParamsIssueTypeNeqExposedInfrastructure, AttackSurfaceReportIssueSeverityParamsIssueTypeNeqInsecureConfiguration, AttackSurfaceReportIssueSeverityParamsIssueTypeNeqWeakAuthentication:
+		return true
+	}
+	return false
 }
 
 type AttackSurfaceReportIssueSeverityResponseEnvelope struct {
@@ -591,18 +697,18 @@ func (r AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess) IsKnown() bool 
 
 type AttackSurfaceReportIssueTypeParams struct {
 	// Identifier
-	AccountID     param.Field[string]               `path:"account_id,required"`
-	Dismissed     param.Field[bool]                 `query:"dismissed"`
-	IssueClass    param.Field[IssueClassParam]      `query:"issue_class"`
-	IssueClassNeq param.Field[IssueClassParam]      `query:"issue_class~neq"`
-	IssueType     param.Field[IssueTypeParam]       `query:"issue_type"`
-	IssueTypeNeq  param.Field[IssueTypeParam]       `query:"issue_type~neq"`
-	Product       param.Field[ProductParam]         `query:"product"`
-	ProductNeq    param.Field[ProductParam]         `query:"product~neq"`
-	Severity      param.Field[[]SeverityQueryParam] `query:"severity"`
-	SeverityNeq   param.Field[[]SeverityQueryParam] `query:"severity~neq"`
-	Subject       param.Field[SubjectParam]         `query:"subject"`
-	SubjectNeq    param.Field[SubjectParam]         `query:"subject~neq"`
+	AccountID     param.Field[string]                                           `path:"account_id,required"`
+	Dismissed     param.Field[bool]                                             `query:"dismissed"`
+	IssueClass    param.Field[IssueClassParam]                                  `query:"issue_class"`
+	IssueClassNeq param.Field[IssueClassParam]                                  `query:"issue_class~neq"`
+	IssueType     param.Field[[]AttackSurfaceReportIssueTypeParamsIssueType]    `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]AttackSurfaceReportIssueTypeParamsIssueTypeNeq] `query:"issue_type~neq"`
+	Product       param.Field[ProductParam]                                     `query:"product"`
+	ProductNeq    param.Field[ProductParam]                                     `query:"product~neq"`
+	Severity      param.Field[[]SeverityQueryParam]                             `query:"severity"`
+	SeverityNeq   param.Field[[]SeverityQueryParam]                             `query:"severity~neq"`
+	Subject       param.Field[SubjectParam]                                     `query:"subject"`
+	SubjectNeq    param.Field[SubjectParam]                                     `query:"subject~neq"`
 }
 
 // URLQuery serializes [AttackSurfaceReportIssueTypeParams]'s query parameters as
@@ -612,6 +718,42 @@ func (r AttackSurfaceReportIssueTypeParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type AttackSurfaceReportIssueTypeParamsIssueType string
+
+const (
+	AttackSurfaceReportIssueTypeParamsIssueTypeComplianceViolation   AttackSurfaceReportIssueTypeParamsIssueType = "compliance_violation"
+	AttackSurfaceReportIssueTypeParamsIssueTypeEmailSecurity         AttackSurfaceReportIssueTypeParamsIssueType = "email_security"
+	AttackSurfaceReportIssueTypeParamsIssueTypeExposedInfrastructure AttackSurfaceReportIssueTypeParamsIssueType = "exposed_infrastructure"
+	AttackSurfaceReportIssueTypeParamsIssueTypeInsecureConfiguration AttackSurfaceReportIssueTypeParamsIssueType = "insecure_configuration"
+	AttackSurfaceReportIssueTypeParamsIssueTypeWeakAuthentication    AttackSurfaceReportIssueTypeParamsIssueType = "weak_authentication"
+)
+
+func (r AttackSurfaceReportIssueTypeParamsIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueTypeParamsIssueTypeComplianceViolation, AttackSurfaceReportIssueTypeParamsIssueTypeEmailSecurity, AttackSurfaceReportIssueTypeParamsIssueTypeExposedInfrastructure, AttackSurfaceReportIssueTypeParamsIssueTypeInsecureConfiguration, AttackSurfaceReportIssueTypeParamsIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
+type AttackSurfaceReportIssueTypeParamsIssueTypeNeq string
+
+const (
+	AttackSurfaceReportIssueTypeParamsIssueTypeNeqComplianceViolation   AttackSurfaceReportIssueTypeParamsIssueTypeNeq = "compliance_violation"
+	AttackSurfaceReportIssueTypeParamsIssueTypeNeqEmailSecurity         AttackSurfaceReportIssueTypeParamsIssueTypeNeq = "email_security"
+	AttackSurfaceReportIssueTypeParamsIssueTypeNeqExposedInfrastructure AttackSurfaceReportIssueTypeParamsIssueTypeNeq = "exposed_infrastructure"
+	AttackSurfaceReportIssueTypeParamsIssueTypeNeqInsecureConfiguration AttackSurfaceReportIssueTypeParamsIssueTypeNeq = "insecure_configuration"
+	AttackSurfaceReportIssueTypeParamsIssueTypeNeqWeakAuthentication    AttackSurfaceReportIssueTypeParamsIssueTypeNeq = "weak_authentication"
+)
+
+func (r AttackSurfaceReportIssueTypeParamsIssueTypeNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueTypeParamsIssueTypeNeqComplianceViolation, AttackSurfaceReportIssueTypeParamsIssueTypeNeqEmailSecurity, AttackSurfaceReportIssueTypeParamsIssueTypeNeqExposedInfrastructure, AttackSurfaceReportIssueTypeParamsIssueTypeNeqInsecureConfiguration, AttackSurfaceReportIssueTypeParamsIssueTypeNeqWeakAuthentication:
+		return true
+	}
+	return false
 }
 
 type AttackSurfaceReportIssueTypeResponseEnvelope struct {
