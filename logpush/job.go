@@ -36,7 +36,7 @@ func NewJobService(opts ...option.RequestOption) (r *JobService) {
 }
 
 // Creates a new Logpush job for an account or zone.
-func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *JobNewResponse, err error) {
+func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobNewResponseEnvelope
 	var accountOrZone string
@@ -58,7 +58,7 @@ func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...optio
 }
 
 // Updates a Logpush job.
-func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *JobUpdateResponse, err error) {
+func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobUpdateResponseEnvelope
 	var accountOrZone string
@@ -80,7 +80,7 @@ func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdatePa
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[JobListResponse], err error) {
+func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -107,7 +107,7 @@ func (r *JobService) List(ctx context.Context, query JobListParams, opts ...opti
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[JobListResponse] {
+func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LogpushJob] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -134,7 +134,7 @@ func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeletePa
 }
 
 // Gets the details of a Logpush job.
-func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *JobGetResponse, err error) {
+func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobGetResponseEnvelope
 	var accountOrZone string
@@ -153,6 +153,94 @@ func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, o
 	}
 	res = &env.Result
 	return
+}
+
+type LogpushJob struct {
+	// Unique id of the job.
+	ID int64 `json:"id"`
+	// Name of the dataset.
+	Dataset string `json:"dataset,nullable"`
+	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
+	// Additional configuration parameters supported by the destination may be
+	// included.
+	DestinationConf string `json:"destination_conf" format:"uri"`
+	// Flag that indicates if the job is enabled.
+	Enabled bool `json:"enabled"`
+	// If not null, the job is currently failing. Failures are usually repetitive
+	// (example: no permissions to write to destination bucket). Only the last failure
+	// is recorded. On successful execution of a job the error_message and last_error
+	// are set to null.
+	ErrorMessage time.Time `json:"error_message,nullable" format:"date-time"`
+	// The frequency at which Cloudflare sends batches of logs to your destination.
+	// Setting frequency to high sends your logs in larger quantities of smaller files.
+	// Setting frequency to low sends logs in smaller quantities of larger files.
+	Frequency LogpushJobFrequency `json:"frequency,nullable"`
+	// Records the last time for which logs have been successfully pushed. If the last
+	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
+	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
+	// run or has just been enabled and hasn't run yet then the field will be empty.
+	LastComplete time.Time `json:"last_complete,nullable" format:"date-time"`
+	// Records the last time the job failed. If not null, the job is currently failing.
+	// If null, the job has either never failed or has run successfully at least once
+	// since last failure. See also the error_message field.
+	LastError time.Time `json:"last_error,nullable" format:"date-time"`
+	// This field is deprecated. Use `output_options` instead. Configuration string. It
+	// specifies things like requested fields and timestamp formats. If migrating from
+	// the logpull api, copy the url (full url or just the query string) of your call
+	// here, and logpush will keep on making this call for you, setting start and end
+	// times appropriately.
+	LogpullOptions string `json:"logpull_options,nullable" format:"uri-reference"`
+	// Optional human readable job name. Not unique. Cloudflare suggests that you set
+	// this to a meaningful string, like the domain name, to make it easier to identify
+	// your job.
+	Name string `json:"name,nullable"`
+	// The structured replacement for `logpull_options`. When including this field, the
+	// `logpull_option` field will be ignored.
+	OutputOptions OutputOptions  `json:"output_options,nullable"`
+	JSON          logpushJobJSON `json:"-"`
+}
+
+// logpushJobJSON contains the JSON metadata for the struct [LogpushJob]
+type logpushJobJSON struct {
+	ID              apijson.Field
+	Dataset         apijson.Field
+	DestinationConf apijson.Field
+	Enabled         apijson.Field
+	ErrorMessage    apijson.Field
+	Frequency       apijson.Field
+	LastComplete    apijson.Field
+	LastError       apijson.Field
+	LogpullOptions  apijson.Field
+	Name            apijson.Field
+	OutputOptions   apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *LogpushJob) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobJSON) RawJSON() string {
+	return r.raw
+}
+
+// The frequency at which Cloudflare sends batches of logs to your destination.
+// Setting frequency to high sends your logs in larger quantities of smaller files.
+// Setting frequency to low sends logs in smaller quantities of larger files.
+type LogpushJobFrequency string
+
+const (
+	LogpushJobFrequencyHigh LogpushJobFrequency = "high"
+	LogpushJobFrequencyLow  LogpushJobFrequency = "low"
+)
+
+func (r LogpushJobFrequency) IsKnown() bool {
+	switch r {
+	case LogpushJobFrequencyHigh, LogpushJobFrequencyLow:
+		return true
+	}
+	return false
 }
 
 // The structured replacement for `logpull_options`. When including this field, the
@@ -300,271 +388,6 @@ func (r OutputOptionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type JobNewResponse struct {
-	// Unique id of the job.
-	ID int64 `json:"id"`
-	// Name of the dataset.
-	Dataset string `json:"dataset,nullable"`
-	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
-	// Additional configuration parameters supported by the destination may be
-	// included.
-	DestinationConf string `json:"destination_conf" format:"uri"`
-	// Flag that indicates if the job is enabled.
-	Enabled bool `json:"enabled"`
-	// If not null, the job is currently failing. Failures are usually repetitive
-	// (example: no permissions to write to destination bucket). Only the last failure
-	// is recorded. On successful execution of a job the error_message and last_error
-	// are set to null.
-	ErrorMessage time.Time `json:"error_message,nullable" format:"date-time"`
-	// The frequency at which Cloudflare sends batches of logs to your destination.
-	// Setting frequency to high sends your logs in larger quantities of smaller files.
-	// Setting frequency to low sends logs in smaller quantities of larger files.
-	Frequency JobNewResponseFrequency `json:"frequency,nullable"`
-	// Records the last time for which logs have been successfully pushed. If the last
-	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
-	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
-	// run or has just been enabled and hasn't run yet then the field will be empty.
-	LastComplete time.Time `json:"last_complete,nullable" format:"date-time"`
-	// Records the last time the job failed. If not null, the job is currently failing.
-	// If null, the job has either never failed or has run successfully at least once
-	// since last failure. See also the error_message field.
-	LastError time.Time `json:"last_error,nullable" format:"date-time"`
-	// This field is deprecated. Use `output_options` instead. Configuration string. It
-	// specifies things like requested fields and timestamp formats. If migrating from
-	// the logpull api, copy the url (full url or just the query string) of your call
-	// here, and logpush will keep on making this call for you, setting start and end
-	// times appropriately.
-	LogpullOptions string `json:"logpull_options,nullable" format:"uri-reference"`
-	// Optional human readable job name. Not unique. Cloudflare suggests that you set
-	// this to a meaningful string, like the domain name, to make it easier to identify
-	// your job.
-	Name string `json:"name,nullable"`
-	// The structured replacement for `logpull_options`. When including this field, the
-	// `logpull_option` field will be ignored.
-	OutputOptions OutputOptions      `json:"output_options,nullable"`
-	JSON          jobNewResponseJSON `json:"-"`
-}
-
-// jobNewResponseJSON contains the JSON metadata for the struct [JobNewResponse]
-type jobNewResponseJSON struct {
-	ID              apijson.Field
-	Dataset         apijson.Field
-	DestinationConf apijson.Field
-	Enabled         apijson.Field
-	ErrorMessage    apijson.Field
-	Frequency       apijson.Field
-	LastComplete    apijson.Field
-	LastError       apijson.Field
-	LogpullOptions  apijson.Field
-	Name            apijson.Field
-	OutputOptions   apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *JobNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r jobNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The frequency at which Cloudflare sends batches of logs to your destination.
-// Setting frequency to high sends your logs in larger quantities of smaller files.
-// Setting frequency to low sends logs in smaller quantities of larger files.
-type JobNewResponseFrequency string
-
-const (
-	JobNewResponseFrequencyHigh JobNewResponseFrequency = "high"
-	JobNewResponseFrequencyLow  JobNewResponseFrequency = "low"
-)
-
-func (r JobNewResponseFrequency) IsKnown() bool {
-	switch r {
-	case JobNewResponseFrequencyHigh, JobNewResponseFrequencyLow:
-		return true
-	}
-	return false
-}
-
-type JobUpdateResponse struct {
-	// Unique id of the job.
-	ID int64 `json:"id"`
-	// Name of the dataset.
-	Dataset string `json:"dataset,nullable"`
-	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
-	// Additional configuration parameters supported by the destination may be
-	// included.
-	DestinationConf string `json:"destination_conf" format:"uri"`
-	// Flag that indicates if the job is enabled.
-	Enabled bool `json:"enabled"`
-	// If not null, the job is currently failing. Failures are usually repetitive
-	// (example: no permissions to write to destination bucket). Only the last failure
-	// is recorded. On successful execution of a job the error_message and last_error
-	// are set to null.
-	ErrorMessage time.Time `json:"error_message,nullable" format:"date-time"`
-	// The frequency at which Cloudflare sends batches of logs to your destination.
-	// Setting frequency to high sends your logs in larger quantities of smaller files.
-	// Setting frequency to low sends logs in smaller quantities of larger files.
-	Frequency JobUpdateResponseFrequency `json:"frequency,nullable"`
-	// Records the last time for which logs have been successfully pushed. If the last
-	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
-	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
-	// run or has just been enabled and hasn't run yet then the field will be empty.
-	LastComplete time.Time `json:"last_complete,nullable" format:"date-time"`
-	// Records the last time the job failed. If not null, the job is currently failing.
-	// If null, the job has either never failed or has run successfully at least once
-	// since last failure. See also the error_message field.
-	LastError time.Time `json:"last_error,nullable" format:"date-time"`
-	// This field is deprecated. Use `output_options` instead. Configuration string. It
-	// specifies things like requested fields and timestamp formats. If migrating from
-	// the logpull api, copy the url (full url or just the query string) of your call
-	// here, and logpush will keep on making this call for you, setting start and end
-	// times appropriately.
-	LogpullOptions string `json:"logpull_options,nullable" format:"uri-reference"`
-	// Optional human readable job name. Not unique. Cloudflare suggests that you set
-	// this to a meaningful string, like the domain name, to make it easier to identify
-	// your job.
-	Name string `json:"name,nullable"`
-	// The structured replacement for `logpull_options`. When including this field, the
-	// `logpull_option` field will be ignored.
-	OutputOptions OutputOptions         `json:"output_options,nullable"`
-	JSON          jobUpdateResponseJSON `json:"-"`
-}
-
-// jobUpdateResponseJSON contains the JSON metadata for the struct
-// [JobUpdateResponse]
-type jobUpdateResponseJSON struct {
-	ID              apijson.Field
-	Dataset         apijson.Field
-	DestinationConf apijson.Field
-	Enabled         apijson.Field
-	ErrorMessage    apijson.Field
-	Frequency       apijson.Field
-	LastComplete    apijson.Field
-	LastError       apijson.Field
-	LogpullOptions  apijson.Field
-	Name            apijson.Field
-	OutputOptions   apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *JobUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r jobUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The frequency at which Cloudflare sends batches of logs to your destination.
-// Setting frequency to high sends your logs in larger quantities of smaller files.
-// Setting frequency to low sends logs in smaller quantities of larger files.
-type JobUpdateResponseFrequency string
-
-const (
-	JobUpdateResponseFrequencyHigh JobUpdateResponseFrequency = "high"
-	JobUpdateResponseFrequencyLow  JobUpdateResponseFrequency = "low"
-)
-
-func (r JobUpdateResponseFrequency) IsKnown() bool {
-	switch r {
-	case JobUpdateResponseFrequencyHigh, JobUpdateResponseFrequencyLow:
-		return true
-	}
-	return false
-}
-
-type JobListResponse struct {
-	// Unique id of the job.
-	ID int64 `json:"id"`
-	// Name of the dataset.
-	Dataset string `json:"dataset,nullable"`
-	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
-	// Additional configuration parameters supported by the destination may be
-	// included.
-	DestinationConf string `json:"destination_conf" format:"uri"`
-	// Flag that indicates if the job is enabled.
-	Enabled bool `json:"enabled"`
-	// If not null, the job is currently failing. Failures are usually repetitive
-	// (example: no permissions to write to destination bucket). Only the last failure
-	// is recorded. On successful execution of a job the error_message and last_error
-	// are set to null.
-	ErrorMessage time.Time `json:"error_message,nullable" format:"date-time"`
-	// The frequency at which Cloudflare sends batches of logs to your destination.
-	// Setting frequency to high sends your logs in larger quantities of smaller files.
-	// Setting frequency to low sends logs in smaller quantities of larger files.
-	Frequency JobListResponseFrequency `json:"frequency,nullable"`
-	// Records the last time for which logs have been successfully pushed. If the last
-	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
-	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
-	// run or has just been enabled and hasn't run yet then the field will be empty.
-	LastComplete time.Time `json:"last_complete,nullable" format:"date-time"`
-	// Records the last time the job failed. If not null, the job is currently failing.
-	// If null, the job has either never failed or has run successfully at least once
-	// since last failure. See also the error_message field.
-	LastError time.Time `json:"last_error,nullable" format:"date-time"`
-	// This field is deprecated. Use `output_options` instead. Configuration string. It
-	// specifies things like requested fields and timestamp formats. If migrating from
-	// the logpull api, copy the url (full url or just the query string) of your call
-	// here, and logpush will keep on making this call for you, setting start and end
-	// times appropriately.
-	LogpullOptions string `json:"logpull_options,nullable" format:"uri-reference"`
-	// Optional human readable job name. Not unique. Cloudflare suggests that you set
-	// this to a meaningful string, like the domain name, to make it easier to identify
-	// your job.
-	Name string `json:"name,nullable"`
-	// The structured replacement for `logpull_options`. When including this field, the
-	// `logpull_option` field will be ignored.
-	OutputOptions OutputOptions       `json:"output_options,nullable"`
-	JSON          jobListResponseJSON `json:"-"`
-}
-
-// jobListResponseJSON contains the JSON metadata for the struct [JobListResponse]
-type jobListResponseJSON struct {
-	ID              apijson.Field
-	Dataset         apijson.Field
-	DestinationConf apijson.Field
-	Enabled         apijson.Field
-	ErrorMessage    apijson.Field
-	Frequency       apijson.Field
-	LastComplete    apijson.Field
-	LastError       apijson.Field
-	LogpullOptions  apijson.Field
-	Name            apijson.Field
-	OutputOptions   apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *JobListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r jobListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The frequency at which Cloudflare sends batches of logs to your destination.
-// Setting frequency to high sends your logs in larger quantities of smaller files.
-// Setting frequency to low sends logs in smaller quantities of larger files.
-type JobListResponseFrequency string
-
-const (
-	JobListResponseFrequencyHigh JobListResponseFrequency = "high"
-	JobListResponseFrequencyLow  JobListResponseFrequency = "low"
-)
-
-func (r JobListResponseFrequency) IsKnown() bool {
-	switch r {
-	case JobListResponseFrequencyHigh, JobListResponseFrequencyLow:
-		return true
-	}
-	return false
-}
-
 // Union satisfied by [logpush.JobDeleteResponseUnknown],
 // [logpush.JobDeleteResponseArray] or [shared.UnionString].
 type JobDeleteResponseUnion interface {
@@ -589,94 +412,6 @@ func init() {
 type JobDeleteResponseArray []interface{}
 
 func (r JobDeleteResponseArray) ImplementsLogpushJobDeleteResponseUnion() {}
-
-type JobGetResponse struct {
-	// Unique id of the job.
-	ID int64 `json:"id"`
-	// Name of the dataset.
-	Dataset string `json:"dataset,nullable"`
-	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
-	// Additional configuration parameters supported by the destination may be
-	// included.
-	DestinationConf string `json:"destination_conf" format:"uri"`
-	// Flag that indicates if the job is enabled.
-	Enabled bool `json:"enabled"`
-	// If not null, the job is currently failing. Failures are usually repetitive
-	// (example: no permissions to write to destination bucket). Only the last failure
-	// is recorded. On successful execution of a job the error_message and last_error
-	// are set to null.
-	ErrorMessage time.Time `json:"error_message,nullable" format:"date-time"`
-	// The frequency at which Cloudflare sends batches of logs to your destination.
-	// Setting frequency to high sends your logs in larger quantities of smaller files.
-	// Setting frequency to low sends logs in smaller quantities of larger files.
-	Frequency JobGetResponseFrequency `json:"frequency,nullable"`
-	// Records the last time for which logs have been successfully pushed. If the last
-	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
-	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
-	// run or has just been enabled and hasn't run yet then the field will be empty.
-	LastComplete time.Time `json:"last_complete,nullable" format:"date-time"`
-	// Records the last time the job failed. If not null, the job is currently failing.
-	// If null, the job has either never failed or has run successfully at least once
-	// since last failure. See also the error_message field.
-	LastError time.Time `json:"last_error,nullable" format:"date-time"`
-	// This field is deprecated. Use `output_options` instead. Configuration string. It
-	// specifies things like requested fields and timestamp formats. If migrating from
-	// the logpull api, copy the url (full url or just the query string) of your call
-	// here, and logpush will keep on making this call for you, setting start and end
-	// times appropriately.
-	LogpullOptions string `json:"logpull_options,nullable" format:"uri-reference"`
-	// Optional human readable job name. Not unique. Cloudflare suggests that you set
-	// this to a meaningful string, like the domain name, to make it easier to identify
-	// your job.
-	Name string `json:"name,nullable"`
-	// The structured replacement for `logpull_options`. When including this field, the
-	// `logpull_option` field will be ignored.
-	OutputOptions OutputOptions      `json:"output_options,nullable"`
-	JSON          jobGetResponseJSON `json:"-"`
-}
-
-// jobGetResponseJSON contains the JSON metadata for the struct [JobGetResponse]
-type jobGetResponseJSON struct {
-	ID              apijson.Field
-	Dataset         apijson.Field
-	DestinationConf apijson.Field
-	Enabled         apijson.Field
-	ErrorMessage    apijson.Field
-	Frequency       apijson.Field
-	LastComplete    apijson.Field
-	LastError       apijson.Field
-	LogpullOptions  apijson.Field
-	Name            apijson.Field
-	OutputOptions   apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *JobGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r jobGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The frequency at which Cloudflare sends batches of logs to your destination.
-// Setting frequency to high sends your logs in larger quantities of smaller files.
-// Setting frequency to low sends logs in smaller quantities of larger files.
-type JobGetResponseFrequency string
-
-const (
-	JobGetResponseFrequencyHigh JobGetResponseFrequency = "high"
-	JobGetResponseFrequencyLow  JobGetResponseFrequency = "low"
-)
-
-func (r JobGetResponseFrequency) IsKnown() bool {
-	switch r {
-	case JobGetResponseFrequencyHigh, JobGetResponseFrequencyLow:
-		return true
-	}
-	return false
-}
 
 type JobNewParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
@@ -737,7 +472,7 @@ func (r JobNewParamsFrequency) IsKnown() bool {
 type JobNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   JobNewResponse        `json:"result,required,nullable"`
+	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
@@ -830,7 +565,7 @@ func (r JobUpdateParamsFrequency) IsKnown() bool {
 type JobUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   JobUpdateResponse     `json:"result,required,nullable"`
+	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
@@ -942,7 +677,7 @@ type JobGetParams struct {
 type JobGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   JobGetResponse        `json:"result,required,nullable"`
+	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`

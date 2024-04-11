@@ -107,6 +107,8 @@ func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParam
 	return
 }
 
+type Peer = interface{}
+
 type PeerNewResponse struct {
 	ID string `json:"id,required"`
 	// The name of the peer.
