@@ -36,7 +36,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 				App: cloudflare.F(user.SubscriptionAppParam{
 					InstallID: cloudflare.F("string"),
 				}),
-				ComponentValues: cloudflare.F([]user.SubscriptionComponentValueParam{{
+				ComponentValues: cloudflare.F([]user.SubscriptionComponentParam{{
 					Default: cloudflare.F(5.000000),
 					Name:    cloudflare.F("page_rules"),
 					Price:   cloudflare.F(5.000000),
@@ -53,7 +53,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 					Value:   cloudflare.F(20.000000),
 				}}),
 				Frequency: cloudflare.F(user.SubscriptionFrequencyMonthly),
-				RatePlan: cloudflare.F(user.SubscriptionRatePlanParam{
+				RatePlan: cloudflare.F(user.RatePlanParam{
 					Currency:          cloudflare.F("USD"),
 					ExternallyManaged: cloudflare.F(false),
 					ID:                cloudflare.F("free"),
@@ -127,7 +127,7 @@ func TestSubscriptionEditWithOptionalParams(t *testing.T) {
 				App: cloudflare.F(user.SubscriptionAppParam{
 					InstallID: cloudflare.F("string"),
 				}),
-				ComponentValues: cloudflare.F([]user.SubscriptionComponentValueParam{{
+				ComponentValues: cloudflare.F([]user.SubscriptionComponentParam{{
 					Default: cloudflare.F(5.000000),
 					Name:    cloudflare.F("page_rules"),
 					Price:   cloudflare.F(5.000000),
@@ -144,7 +144,7 @@ func TestSubscriptionEditWithOptionalParams(t *testing.T) {
 					Value:   cloudflare.F(20.000000),
 				}}),
 				Frequency: cloudflare.F(user.SubscriptionFrequencyMonthly),
-				RatePlan: cloudflare.F(user.SubscriptionRatePlanParam{
+				RatePlan: cloudflare.F(user.RatePlanParam{
 					Currency:          cloudflare.F("USD"),
 					ExternallyManaged: cloudflare.F(false),
 					ID:                cloudflare.F("free"),
