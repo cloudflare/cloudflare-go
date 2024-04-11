@@ -32,6 +32,8 @@ type DispatchNamespaceScriptService struct {
 	Content  *DispatchNamespaceScriptContentService
 	Settings *DispatchNamespaceScriptSettingService
 	Bindings *DispatchNamespaceScriptBindingService
+	Secrets  *DispatchNamespaceScriptSecretService
+	Tags     *DispatchNamespaceScriptTagService
 }
 
 // NewDispatchNamespaceScriptService generates a new service that applies the given
@@ -43,6 +45,8 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 	r.Content = NewDispatchNamespaceScriptContentService(opts...)
 	r.Settings = NewDispatchNamespaceScriptSettingService(opts...)
 	r.Bindings = NewDispatchNamespaceScriptBindingService(opts...)
+	r.Secrets = NewDispatchNamespaceScriptSecretService(opts...)
+	r.Tags = NewDispatchNamespaceScriptTagService(opts...)
 	return
 }
 
