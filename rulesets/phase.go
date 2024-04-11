@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // PhaseService contains methods and other services that help with interacting with
@@ -93,7 +91,7 @@ type PhaseUpdateResponse struct {
 	// The phase of the ruleset.
 	Phase PhaseUpdateResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []PhaseUpdateResponseRule `json:"rules,required"`
+	Rules []ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -179,116 +177,6 @@ func (r PhaseUpdateResponsePhase) IsKnown() bool {
 	return false
 }
 
-type PhaseUpdateResponseRule struct {
-	// The action to perform when the rule matches.
-	Action           PhaseUpdateResponseRulesAction `json:"action"`
-	ActionParameters interface{}                    `json:"action_parameters,required"`
-	Categories       interface{}                    `json:"categories,required"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref string `json:"ref"`
-	// The version of the rule.
-	Version string                      `json:"version,required"`
-	JSON    phaseUpdateResponseRuleJSON `json:"-"`
-	union   PhaseUpdateResponseRulesUnion
-}
-
-// phaseUpdateResponseRuleJSON contains the JSON metadata for the struct
-// [PhaseUpdateResponseRule]
-type phaseUpdateResponseRuleJSON struct {
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	ID               apijson.Field
-	LastUpdated      apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	Version          apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r phaseUpdateResponseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *PhaseUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
-	return r.union
-}
-
-// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
-// [rulesets.LogRule] or [rulesets.SkipRule].
-type PhaseUpdateResponseRulesUnion interface {
-	implementsRulesetsPhaseUpdateResponseRule()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PhaseUpdateResponseRulesUnion)(nil)).Elem(),
-		"action",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(BlockRule{}),
-			DiscriminatorValue: "block",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ExecuteRule{}),
-			DiscriminatorValue: "execute",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LogRule{}),
-			DiscriminatorValue: "log",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SkipRule{}),
-			DiscriminatorValue: "skip",
-		},
-	)
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateResponseRulesAction string
-
-const (
-	PhaseUpdateResponseRulesActionBlock   PhaseUpdateResponseRulesAction = "block"
-	PhaseUpdateResponseRulesActionExecute PhaseUpdateResponseRulesAction = "execute"
-	PhaseUpdateResponseRulesActionLog     PhaseUpdateResponseRulesAction = "log"
-	PhaseUpdateResponseRulesActionSkip    PhaseUpdateResponseRulesAction = "skip"
-)
-
-func (r PhaseUpdateResponseRulesAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateResponseRulesActionBlock, PhaseUpdateResponseRulesActionExecute, PhaseUpdateResponseRulesActionLog, PhaseUpdateResponseRulesActionSkip:
-		return true
-	}
-	return false
-}
-
 // A ruleset object.
 type PhaseGetResponse struct {
 	// The unique ID of the ruleset.
@@ -302,7 +190,7 @@ type PhaseGetResponse struct {
 	// The phase of the ruleset.
 	Phase PhaseGetResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []PhaseGetResponseRule `json:"rules,required"`
+	Rules []ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -388,119 +276,9 @@ func (r PhaseGetResponsePhase) IsKnown() bool {
 	return false
 }
 
-type PhaseGetResponseRule struct {
-	// The action to perform when the rule matches.
-	Action           PhaseGetResponseRulesAction `json:"action"`
-	ActionParameters interface{}                 `json:"action_parameters,required"`
-	Categories       interface{}                 `json:"categories,required"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref string `json:"ref"`
-	// The version of the rule.
-	Version string                   `json:"version,required"`
-	JSON    phaseGetResponseRuleJSON `json:"-"`
-	union   PhaseGetResponseRulesUnion
-}
-
-// phaseGetResponseRuleJSON contains the JSON metadata for the struct
-// [PhaseGetResponseRule]
-type phaseGetResponseRuleJSON struct {
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	ID               apijson.Field
-	LastUpdated      apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	Version          apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r phaseGetResponseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *PhaseGetResponseRule) UnmarshalJSON(data []byte) (err error) {
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
-	return r.union
-}
-
-// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
-// [rulesets.LogRule] or [rulesets.SkipRule].
-type PhaseGetResponseRulesUnion interface {
-	implementsRulesetsPhaseGetResponseRule()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PhaseGetResponseRulesUnion)(nil)).Elem(),
-		"action",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(BlockRule{}),
-			DiscriminatorValue: "block",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ExecuteRule{}),
-			DiscriminatorValue: "execute",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LogRule{}),
-			DiscriminatorValue: "log",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SkipRule{}),
-			DiscriminatorValue: "skip",
-		},
-	)
-}
-
-// The action to perform when the rule matches.
-type PhaseGetResponseRulesAction string
-
-const (
-	PhaseGetResponseRulesActionBlock   PhaseGetResponseRulesAction = "block"
-	PhaseGetResponseRulesActionExecute PhaseGetResponseRulesAction = "execute"
-	PhaseGetResponseRulesActionLog     PhaseGetResponseRulesAction = "log"
-	PhaseGetResponseRulesActionSkip    PhaseGetResponseRulesAction = "skip"
-)
-
-func (r PhaseGetResponseRulesAction) IsKnown() bool {
-	switch r {
-	case PhaseGetResponseRulesActionBlock, PhaseGetResponseRulesActionExecute, PhaseGetResponseRulesActionLog, PhaseGetResponseRulesActionSkip:
-		return true
-	}
-	return false
-}
-
 type PhaseUpdateParams struct {
 	// The list of rules in the ruleset.
-	Rules param.Field[[]PhaseUpdateParamsRuleUnion] `json:"rules,required"`
+	Rules param.Field[[]RequestRuleUnionParam] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -551,55 +329,6 @@ const (
 func (r PhaseUpdateParamsRulesetPhase) IsKnown() bool {
 	switch r {
 	case PhaseUpdateParamsRulesetPhaseDDoSL4, PhaseUpdateParamsRulesetPhaseDDoSL7, PhaseUpdateParamsRulesetPhaseHTTPConfigSettings, PhaseUpdateParamsRulesetPhaseHTTPCustomErrors, PhaseUpdateParamsRulesetPhaseHTTPLogCustomFields, PhaseUpdateParamsRulesetPhaseHTTPRatelimit, PhaseUpdateParamsRulesetPhaseHTTPRequestCacheSettings, PhaseUpdateParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseUpdateParamsRulesetPhaseHTTPRequestLateTransform, PhaseUpdateParamsRulesetPhaseHTTPRequestOrigin, PhaseUpdateParamsRulesetPhaseHTTPRequestRedirect, PhaseUpdateParamsRulesetPhaseHTTPRequestSanitize, PhaseUpdateParamsRulesetPhaseHTTPRequestSbfm, PhaseUpdateParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseUpdateParamsRulesetPhaseHTTPRequestTransform, PhaseUpdateParamsRulesetPhaseHTTPResponseCompression, PhaseUpdateParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseUpdateParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseUpdateParamsRulesetPhaseMagicTransit, PhaseUpdateParamsRulesetPhaseMagicTransitIDsManaged, PhaseUpdateParamsRulesetPhaseMagicTransitManaged:
-		return true
-	}
-	return false
-}
-
-type PhaseUpdateParamsRule struct {
-	// The action to perform when the rule matches.
-	Action           param.Field[PhaseUpdateParamsRulesAction] `json:"action"`
-	ActionParameters param.Field[interface{}]                  `json:"action_parameters,required"`
-	Categories       param.Field[interface{}]                  `json:"categories,required"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r PhaseUpdateParamsRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PhaseUpdateParamsRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
-// Satisfied by [rulesets.BlockRuleParam], [rulesets.ExecuteRuleParam],
-// [rulesets.LogRuleParam], [rulesets.SkipRuleParam], [PhaseUpdateParamsRule].
-type PhaseUpdateParamsRuleUnion interface {
-	implementsRulesetsPhaseUpdateParamsRuleUnion()
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateParamsRulesAction string
-
-const (
-	PhaseUpdateParamsRulesActionBlock   PhaseUpdateParamsRulesAction = "block"
-	PhaseUpdateParamsRulesActionExecute PhaseUpdateParamsRulesAction = "execute"
-	PhaseUpdateParamsRulesActionLog     PhaseUpdateParamsRulesAction = "log"
-	PhaseUpdateParamsRulesActionSkip    PhaseUpdateParamsRulesAction = "skip"
-)
-
-func (r PhaseUpdateParamsRulesAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateParamsRulesActionBlock, PhaseUpdateParamsRulesActionExecute, PhaseUpdateParamsRulesActionLog, PhaseUpdateParamsRulesActionSkip:
 		return true
 	}
 	return false

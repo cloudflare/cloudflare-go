@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -140,6 +141,17 @@ func (r RatePlanFrequency) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RatePlanParam struct {
+	// Array of available components values for the plan.
+	Components param.Field[[]ComponentParam] `json:"components"`
+	// The duration of the plan subscription.
+	Duration param.Field[float64] `json:"duration"`
+}
+
+func (r RatePlanParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RatePlanGetResponseEnvelope struct {

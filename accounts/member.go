@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // MemberService contains methods and other services that help with interacting
@@ -138,78 +137,6 @@ func (r memberJSON) RawJSON() string {
 	return r.raw
 }
 
-type MemberRole struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role name.
-	Name        string                 `json:"name,required"`
-	Permissions MemberRolesPermissions `json:"permissions,required"`
-	JSON        memberRoleJSON         `json:"-"`
-}
-
-// memberRoleJSON contains the JSON metadata for the struct [MemberRole]
-type memberRoleJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MemberRole) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberRoleJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberRolesPermissions struct {
-	Analytics    PermissionGrant            `json:"analytics"`
-	Billing      PermissionGrant            `json:"billing"`
-	CachePurge   PermissionGrant            `json:"cache_purge"`
-	DNS          PermissionGrant            `json:"dns"`
-	DNSRecords   PermissionGrant            `json:"dns_records"`
-	Lb           PermissionGrant            `json:"lb"`
-	Logs         PermissionGrant            `json:"logs"`
-	Organization PermissionGrant            `json:"organization"`
-	SSL          PermissionGrant            `json:"ssl"`
-	WAF          PermissionGrant            `json:"waf"`
-	ZoneSettings PermissionGrant            `json:"zone_settings"`
-	Zones        PermissionGrant            `json:"zones"`
-	JSON         memberRolesPermissionsJSON `json:"-"`
-}
-
-// memberRolesPermissionsJSON contains the JSON metadata for the struct
-// [MemberRolesPermissions]
-type memberRolesPermissionsJSON struct {
-	Analytics    apijson.Field
-	Billing      apijson.Field
-	CachePurge   apijson.Field
-	DNS          apijson.Field
-	DNSRecords   apijson.Field
-	Lb           apijson.Field
-	Logs         apijson.Field
-	Organization apijson.Field
-	SSL          apijson.Field
-	WAF          apijson.Field
-	ZoneSettings apijson.Field
-	Zones        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *MemberRolesPermissions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberRolesPermissionsJSON) RawJSON() string {
-	return r.raw
-}
-
 type MemberUser struct {
 	// The contact email address of the user.
 	Email string `json:"email,required"`
@@ -253,6 +180,91 @@ func (r MemberParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type MemberUserParam struct {
+	// The contact email address of the user.
+	Email param.Field[string] `json:"email,required"`
+	// User's first name
+	FirstName param.Field[string] `json:"first_name"`
+	// User's last name
+	LastName param.Field[string] `json:"last_name"`
+}
+
+func (r MemberUserParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MemberRole struct {
+	// Role identifier tag.
+	ID string `json:"id,required"`
+	// Description of role's permissions.
+	Description string `json:"description,required"`
+	// Role name.
+	Name        string                `json:"name,required"`
+	Permissions MemberRolePermissions `json:"permissions,required"`
+	JSON        memberRoleJSON        `json:"-"`
+}
+
+// memberRoleJSON contains the JSON metadata for the struct [MemberRole]
+type memberRoleJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MemberRole) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r memberRoleJSON) RawJSON() string {
+	return r.raw
+}
+
+type MemberRolePermissions struct {
+	Analytics    PermissionGrant           `json:"analytics"`
+	Billing      PermissionGrant           `json:"billing"`
+	CachePurge   PermissionGrant           `json:"cache_purge"`
+	DNS          PermissionGrant           `json:"dns"`
+	DNSRecords   PermissionGrant           `json:"dns_records"`
+	Lb           PermissionGrant           `json:"lb"`
+	Logs         PermissionGrant           `json:"logs"`
+	Organization PermissionGrant           `json:"organization"`
+	SSL          PermissionGrant           `json:"ssl"`
+	WAF          PermissionGrant           `json:"waf"`
+	ZoneSettings PermissionGrant           `json:"zone_settings"`
+	Zones        PermissionGrant           `json:"zones"`
+	JSON         memberRolePermissionsJSON `json:"-"`
+}
+
+// memberRolePermissionsJSON contains the JSON metadata for the struct
+// [MemberRolePermissions]
+type memberRolePermissionsJSON struct {
+	Analytics    apijson.Field
+	Billing      apijson.Field
+	CachePurge   apijson.Field
+	DNS          apijson.Field
+	DNSRecords   apijson.Field
+	Lb           apijson.Field
+	Logs         apijson.Field
+	Organization apijson.Field
+	SSL          apijson.Field
+	WAF          apijson.Field
+	ZoneSettings apijson.Field
+	Zones        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *MemberRolePermissions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r memberRolePermissionsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MemberRoleParam struct {
 	// Role identifier tag.
 	ID param.Field[string] `json:"id,required"`
@@ -262,7 +274,7 @@ func (r MemberRoleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type MemberRolesPermissionsParam struct {
+type MemberRolePermissionsParam struct {
 	Analytics    param.Field[PermissionGrantParam] `json:"analytics"`
 	Billing      param.Field[PermissionGrantParam] `json:"billing"`
 	CachePurge   param.Field[PermissionGrantParam] `json:"cache_purge"`
@@ -277,20 +289,7 @@ type MemberRolesPermissionsParam struct {
 	Zones        param.Field[PermissionGrantParam] `json:"zones"`
 }
 
-func (r MemberRolesPermissionsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MemberUserParam struct {
-	// The contact email address of the user.
-	Email param.Field[string] `json:"email,required"`
-	// User's first name
-	FirstName param.Field[string] `json:"first_name"`
-	// User's last name
-	LastName param.Field[string] `json:"last_name"`
-}
-
-func (r MemberUserParam) MarshalJSON() (data []byte, err error) {
+func (r MemberRolePermissionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -298,9 +297,9 @@ type MemberWithInviteCode struct {
 	// Membership identifier tag.
 	ID string `json:"id,required"`
 	// Roles assigned to this member.
-	Roles  []MemberWithInviteCodeRole `json:"roles,required"`
-	Status interface{}                `json:"status,required"`
-	User   MemberWithInviteCodeUser   `json:"user,required"`
+	Roles  []MemberRole             `json:"roles,required"`
+	Status interface{}              `json:"status,required"`
+	User   MemberWithInviteCodeUser `json:"user,required"`
 	// The unique activation code for the account membership.
 	Code string                   `json:"code"`
 	JSON memberWithInviteCodeJSON `json:"-"`
@@ -323,79 +322,6 @@ func (r *MemberWithInviteCode) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r memberWithInviteCodeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberWithInviteCodeRole struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role name.
-	Name        string                               `json:"name,required"`
-	Permissions MemberWithInviteCodeRolesPermissions `json:"permissions,required"`
-	JSON        memberWithInviteCodeRoleJSON         `json:"-"`
-}
-
-// memberWithInviteCodeRoleJSON contains the JSON metadata for the struct
-// [MemberWithInviteCodeRole]
-type memberWithInviteCodeRoleJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MemberWithInviteCodeRole) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberWithInviteCodeRoleJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberWithInviteCodeRolesPermissions struct {
-	Analytics    PermissionGrant                          `json:"analytics"`
-	Billing      PermissionGrant                          `json:"billing"`
-	CachePurge   PermissionGrant                          `json:"cache_purge"`
-	DNS          PermissionGrant                          `json:"dns"`
-	DNSRecords   PermissionGrant                          `json:"dns_records"`
-	Lb           PermissionGrant                          `json:"lb"`
-	Logs         PermissionGrant                          `json:"logs"`
-	Organization PermissionGrant                          `json:"organization"`
-	SSL          PermissionGrant                          `json:"ssl"`
-	WAF          PermissionGrant                          `json:"waf"`
-	ZoneSettings PermissionGrant                          `json:"zone_settings"`
-	Zones        PermissionGrant                          `json:"zones"`
-	JSON         memberWithInviteCodeRolesPermissionsJSON `json:"-"`
-}
-
-// memberWithInviteCodeRolesPermissionsJSON contains the JSON metadata for the
-// struct [MemberWithInviteCodeRolesPermissions]
-type memberWithInviteCodeRolesPermissionsJSON struct {
-	Analytics    apijson.Field
-	Billing      apijson.Field
-	CachePurge   apijson.Field
-	DNS          apijson.Field
-	DNSRecords   apijson.Field
-	Lb           apijson.Field
-	Logs         apijson.Field
-	Organization apijson.Field
-	SSL          apijson.Field
-	WAF          apijson.Field
-	ZoneSettings apijson.Field
-	Zones        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *MemberWithInviteCodeRolesPermissions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberWithInviteCodeRolesPermissionsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -442,7 +368,7 @@ type MemberListResponse struct {
 	// Member Name.
 	Name string `json:"name,required,nullable"`
 	// Roles assigned to this Member.
-	Roles []MemberListResponseRole `json:"roles,required"`
+	Roles []shared.IamRole `json:"roles,required"`
 	// A member's status in the organization.
 	Status MemberListResponseStatus `json:"status,required"`
 	JSON   memberListResponseJSON   `json:"-"`
@@ -465,37 +391,6 @@ func (r *MemberListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r memberListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberListResponseRole struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role Name.
-	Name string `json:"name,required"`
-	// Access permissions for this User.
-	Permissions []user.Permission          `json:"permissions,required"`
-	JSON        memberListResponseRoleJSON `json:"-"`
-}
-
-// memberListResponseRoleJSON contains the JSON metadata for the struct
-// [MemberListResponseRole]
-type memberListResponseRoleJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MemberListResponseRole) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberListResponseRoleJSON) RawJSON() string {
 	return r.raw
 }
 
