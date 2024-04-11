@@ -34,9 +34,9 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 		Type:        cloudflare.F(zero_trust.DevicePostureNewParamsTypeFile),
 		Description: cloudflare.F("The rule for admin serial numbers"),
 		Expiration:  cloudflare.F("1h"),
-		Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.DeviceInputTeamsDevicesFileInputRequestParam{
+		Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.FileInputParam{
 			Exists:          cloudflare.F(true),
-			OperatingSystem: cloudflare.F(zero_trust.DeviceInputTeamsDevicesFileInputRequestOperatingSystemLinux),
+			OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemLinux),
 			Path:            cloudflare.F("/bin/cat"),
 			Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 			Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
@@ -82,9 +82,9 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 			Type:        cloudflare.F(zero_trust.DevicePostureUpdateParamsTypeFile),
 			Description: cloudflare.F("The rule for admin serial numbers"),
 			Expiration:  cloudflare.F("1h"),
-			Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.DeviceInputTeamsDevicesFileInputRequestParam{
+			Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.FileInputParam{
 				Exists:          cloudflare.F(true),
-				OperatingSystem: cloudflare.F(zero_trust.DeviceInputTeamsDevicesFileInputRequestOperatingSystemLinux),
+				OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemLinux),
 				Path:            cloudflare.F("/bin/cat"),
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
