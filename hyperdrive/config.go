@@ -142,13 +142,12 @@ func init() {
 
 type ConfigNewParams struct {
 	// Identifier
-	AccountID param.Field[string]             `path:"account_id,required"`
-	Name      param.Field[interface{}]        `json:"name,required"`
-	Origin    param.Field[ConfigurationParam] `json:"origin,required"`
+	AccountID  param.Field[string] `path:"account_id,required"`
+	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
 }
 
 func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Hyperdrive)
 }
 
 type ConfigNewResponseEnvelope struct {
@@ -196,13 +195,12 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]             `path:"account_id,required"`
-	Name      param.Field[interface{}]        `json:"name,required"`
-	Origin    param.Field[ConfigurationParam] `json:"origin,required"`
+	AccountID  param.Field[string] `path:"account_id,required"`
+	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
 }
 
 func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Hyperdrive)
 }
 
 type ConfigUpdateResponseEnvelope struct {
@@ -303,12 +301,12 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigEditParams struct {
 	// Identifier
-	AccountID param.Field[string]             `path:"account_id,required"`
-	Origin    param.Field[ConfigurationParam] `json:"origin"`
+	AccountID  param.Field[string] `path:"account_id,required"`
+	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Hyperdrive)
 }
 
 type ConfigEditResponseEnvelope struct {

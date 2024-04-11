@@ -91,7 +91,7 @@ type PhaseUpdateResponse struct {
 	// The phase of the ruleset.
 	Phase PhaseUpdateResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -190,7 +190,7 @@ type PhaseGetResponse struct {
 	// The phase of the ruleset.
 	Phase PhaseGetResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -278,7 +278,7 @@ func (r PhaseGetResponsePhase) IsKnown() bool {
 
 type PhaseUpdateParams struct {
 	// The list of rules in the ruleset.
-	Rules param.Field[[]RequestRuleUnionParam] `json:"rules,required"`
+	Rules param.Field[RequestRuleParam] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.

@@ -73,7 +73,7 @@ type Client struct {
 	// cloudflared with the Zero Trust dashboard.
 	ConfigVersion int64 `json:"config_version"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Conns []Connection `json:"conns"`
+	Conns Connection `json:"conns"`
 	// Features enabled for the Cloudflare Tunnel.
 	Features []string `json:"features"`
 	// Timestamp of when the tunnel connection was started.
