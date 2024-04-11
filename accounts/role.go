@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 	"github.com/tidwall/gjson"
 )
 
@@ -35,7 +36,7 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[shared.IamRole], err error) {
+func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RoleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,7 +54,7 @@ func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...op
 }
 
 // Get all available roles for an account.
-func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[shared.IamRole] {
+func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RoleListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -99,6 +100,37 @@ type PermissionGrantParam struct {
 
 func (r PermissionGrantParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type RoleListResponse struct {
+	// Role identifier tag.
+	ID string `json:"id,required"`
+	// Description of role's permissions.
+	Description string `json:"description,required"`
+	// Role Name.
+	Name string `json:"name,required"`
+	// Access permissions for this User.
+	Permissions []user.Permission    `json:"permissions,required"`
+	JSON        roleListResponseJSON `json:"-"`
+}
+
+// roleListResponseJSON contains the JSON metadata for the struct
+// [RoleListResponse]
+type roleListResponseJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RoleListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r roleListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [accounts.RoleGetResponseUnknown] or [shared.UnionString].

@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // MemberService contains methods and other services that help with interacting
@@ -368,7 +369,7 @@ type MemberListResponse struct {
 	// Member Name.
 	Name string `json:"name,required,nullable"`
 	// Roles assigned to this Member.
-	Roles []shared.IamRole `json:"roles,required"`
+	Roles []MemberListResponseRole `json:"roles,required"`
 	// A member's status in the organization.
 	Status MemberListResponseStatus `json:"status,required"`
 	JSON   memberListResponseJSON   `json:"-"`
@@ -391,6 +392,37 @@ func (r *MemberListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r memberListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type MemberListResponseRole struct {
+	// Role identifier tag.
+	ID string `json:"id,required"`
+	// Description of role's permissions.
+	Description string `json:"description,required"`
+	// Role Name.
+	Name string `json:"name,required"`
+	// Access permissions for this User.
+	Permissions []user.Permission          `json:"permissions,required"`
+	JSON        memberListResponseRoleJSON `json:"-"`
+}
+
+// memberListResponseRoleJSON contains the JSON metadata for the struct
+// [MemberListResponseRole]
+type memberListResponseRoleJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MemberListResponseRole) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r memberListResponseRoleJSON) RawJSON() string {
 	return r.raw
 }
 

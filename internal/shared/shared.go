@@ -7,7 +7,6 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 type AuditLog struct {
@@ -192,36 +191,6 @@ func (r *ErrorData) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r errorDataJSON) RawJSON() string {
-	return r.raw
-}
-
-type IamRole struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role Name.
-	Name string `json:"name,required"`
-	// Access permissions for this User.
-	Permissions []user.Permission `json:"permissions,required"`
-	JSON        iamRoleJSON       `json:"-"`
-}
-
-// iamRoleJSON contains the JSON metadata for the struct [IamRole]
-type iamRoleJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IamRole) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r iamRoleJSON) RawJSON() string {
 	return r.raw
 }
 
