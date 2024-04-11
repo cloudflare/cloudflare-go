@@ -42,9 +42,6 @@ type AuditLogResource = shared.AuditLogResource
 type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
-type IamRole = shared.IamRole
-
-// This is an alias to an internal type.
 type ResponseInfo = shared.ResponseInfo
 
 // This is an alias to an internal type.
