@@ -40,7 +40,7 @@ func NewPrefixService(opts ...option.RequestOption) (r *PrefixService) {
 }
 
 // Add a new prefix under the account.
-func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ...option.RequestOption) (res *PrefixNewResponse, err error) {
+func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes", params.AccountID)
@@ -53,7 +53,7 @@ func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ..
 }
 
 // List all prefixes owned by the account.
-func (r *PrefixService) List(ctx context.Context, query PrefixListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PrefixListResponse], err error) {
+func (r *PrefixService) List(ctx context.Context, query PrefixListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Prefix], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -71,7 +71,7 @@ func (r *PrefixService) List(ctx context.Context, query PrefixListParams, opts .
 }
 
 // List all prefixes owned by the account.
-func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PrefixListResponse] {
+func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Prefix] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -89,7 +89,7 @@ func (r *PrefixService) Delete(ctx context.Context, prefixID string, params Pref
 }
 
 // Modify the description for a prefix owned by the account.
-func (r *PrefixService) Edit(ctx context.Context, prefixID string, params PrefixEditParams, opts ...option.RequestOption) (res *PrefixEditResponse, err error) {
+func (r *PrefixService) Edit(ctx context.Context, prefixID string, params PrefixEditParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
@@ -102,7 +102,7 @@ func (r *PrefixService) Edit(ctx context.Context, prefixID string, params Prefix
 }
 
 // List a particular prefix owned by the account.
-func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGetParams, opts ...option.RequestOption) (res *PrefixGetResponse, err error) {
+func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGetParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", query.AccountID, prefixID)
@@ -114,7 +114,7 @@ func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGe
 	return
 }
 
-type PrefixNewResponse struct {
+type Prefix struct {
 	// Identifier
 	ID string `json:"id"`
 	// Identifier
@@ -142,13 +142,12 @@ type PrefixNewResponse struct {
 	OnDemandEnabled bool `json:"on_demand_enabled"`
 	// Whether advertisement status of the prefix is locked, meaning it cannot be
 	// changed.
-	OnDemandLocked bool                  `json:"on_demand_locked"`
-	JSON           prefixNewResponseJSON `json:"-"`
+	OnDemandLocked bool       `json:"on_demand_locked"`
+	JSON           prefixJSON `json:"-"`
 }
 
-// prefixNewResponseJSON contains the JSON metadata for the struct
-// [PrefixNewResponse]
-type prefixNewResponseJSON struct {
+// prefixJSON contains the JSON metadata for the struct [Prefix]
+type prefixJSON struct {
 	ID                   apijson.Field
 	AccountID            apijson.Field
 	Advertised           apijson.Field
@@ -166,71 +165,11 @@ type prefixNewResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *PrefixNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Prefix) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r prefixNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixListResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Identifier
-	AccountID string `json:"account_id"`
-	// Prefix advertisement status to the Internet. This field is only not 'null' if on
-	// demand is enabled.
-	Advertised bool `json:"advertised,nullable"`
-	// Last time the advertisement status was changed. This field is only not 'null' if
-	// on demand is enabled.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
-	// Approval state of the prefix (P = pending, V = active).
-	Approved string `json:"approved"`
-	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN int64 `json:"asn,nullable"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR      string    `json:"cidr"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Description of the prefix.
-	Description string `json:"description"`
-	// Identifier for the uploaded LOA document.
-	LOADocumentID string    `json:"loa_document_id,nullable"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	// Whether advertisement of the prefix to the Internet may be dynamically enabled
-	// or disabled.
-	OnDemandEnabled bool `json:"on_demand_enabled"`
-	// Whether advertisement status of the prefix is locked, meaning it cannot be
-	// changed.
-	OnDemandLocked bool                   `json:"on_demand_locked"`
-	JSON           prefixListResponseJSON `json:"-"`
-}
-
-// prefixListResponseJSON contains the JSON metadata for the struct
-// [PrefixListResponse]
-type prefixListResponseJSON struct {
-	ID                   apijson.Field
-	AccountID            apijson.Field
-	Advertised           apijson.Field
-	AdvertisedModifiedAt apijson.Field
-	Approved             apijson.Field
-	ASN                  apijson.Field
-	CIDR                 apijson.Field
-	CreatedAt            apijson.Field
-	Description          apijson.Field
-	LOADocumentID        apijson.Field
-	ModifiedAt           apijson.Field
-	OnDemandEnabled      apijson.Field
-	OnDemandLocked       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *PrefixListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixListResponseJSON) RawJSON() string {
+func (r prefixJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -259,126 +198,6 @@ type PrefixDeleteResponseArray []interface{}
 
 func (r PrefixDeleteResponseArray) ImplementsAddressingPrefixDeleteResponseUnion() {}
 
-type PrefixEditResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Identifier
-	AccountID string `json:"account_id"`
-	// Prefix advertisement status to the Internet. This field is only not 'null' if on
-	// demand is enabled.
-	Advertised bool `json:"advertised,nullable"`
-	// Last time the advertisement status was changed. This field is only not 'null' if
-	// on demand is enabled.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
-	// Approval state of the prefix (P = pending, V = active).
-	Approved string `json:"approved"`
-	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN int64 `json:"asn,nullable"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR      string    `json:"cidr"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Description of the prefix.
-	Description string `json:"description"`
-	// Identifier for the uploaded LOA document.
-	LOADocumentID string    `json:"loa_document_id,nullable"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	// Whether advertisement of the prefix to the Internet may be dynamically enabled
-	// or disabled.
-	OnDemandEnabled bool `json:"on_demand_enabled"`
-	// Whether advertisement status of the prefix is locked, meaning it cannot be
-	// changed.
-	OnDemandLocked bool                   `json:"on_demand_locked"`
-	JSON           prefixEditResponseJSON `json:"-"`
-}
-
-// prefixEditResponseJSON contains the JSON metadata for the struct
-// [PrefixEditResponse]
-type prefixEditResponseJSON struct {
-	ID                   apijson.Field
-	AccountID            apijson.Field
-	Advertised           apijson.Field
-	AdvertisedModifiedAt apijson.Field
-	Approved             apijson.Field
-	ASN                  apijson.Field
-	CIDR                 apijson.Field
-	CreatedAt            apijson.Field
-	Description          apijson.Field
-	LOADocumentID        apijson.Field
-	ModifiedAt           apijson.Field
-	OnDemandEnabled      apijson.Field
-	OnDemandLocked       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *PrefixEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixGetResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Identifier
-	AccountID string `json:"account_id"`
-	// Prefix advertisement status to the Internet. This field is only not 'null' if on
-	// demand is enabled.
-	Advertised bool `json:"advertised,nullable"`
-	// Last time the advertisement status was changed. This field is only not 'null' if
-	// on demand is enabled.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
-	// Approval state of the prefix (P = pending, V = active).
-	Approved string `json:"approved"`
-	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN int64 `json:"asn,nullable"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR      string    `json:"cidr"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Description of the prefix.
-	Description string `json:"description"`
-	// Identifier for the uploaded LOA document.
-	LOADocumentID string    `json:"loa_document_id,nullable"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	// Whether advertisement of the prefix to the Internet may be dynamically enabled
-	// or disabled.
-	OnDemandEnabled bool `json:"on_demand_enabled"`
-	// Whether advertisement status of the prefix is locked, meaning it cannot be
-	// changed.
-	OnDemandLocked bool                  `json:"on_demand_locked"`
-	JSON           prefixGetResponseJSON `json:"-"`
-}
-
-// prefixGetResponseJSON contains the JSON metadata for the struct
-// [PrefixGetResponse]
-type prefixGetResponseJSON struct {
-	ID                   apijson.Field
-	AccountID            apijson.Field
-	Advertised           apijson.Field
-	AdvertisedModifiedAt apijson.Field
-	Approved             apijson.Field
-	ASN                  apijson.Field
-	CIDR                 apijson.Field
-	CreatedAt            apijson.Field
-	Description          apijson.Field
-	LOADocumentID        apijson.Field
-	ModifiedAt           apijson.Field
-	OnDemandEnabled      apijson.Field
-	OnDemandLocked       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *PrefixGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type PrefixNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -397,7 +216,7 @@ func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {
 type PrefixNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PrefixNewResponse     `json:"result,required"`
+	Result   Prefix                `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixNewResponseEnvelopeJSON    `json:"-"`
@@ -542,7 +361,7 @@ func (r PrefixEditParams) MarshalJSON() (data []byte, err error) {
 type PrefixEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PrefixEditResponse    `json:"result,required"`
+	Result   Prefix                `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixEditResponseEnvelopeJSON    `json:"-"`
@@ -590,7 +409,7 @@ type PrefixGetParams struct {
 type PrefixGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PrefixGetResponse     `json:"result,required"`
+	Result   Prefix                `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixGetResponseEnvelopeJSON    `json:"-"`
