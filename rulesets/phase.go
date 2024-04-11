@@ -91,7 +91,7 @@ type PhaseUpdateResponse struct {
 	// The phase of the ruleset.
 	Phase PhaseUpdateResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponeRule `json:"rules,required"`
+	Rules ResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -190,7 +190,7 @@ type PhaseGetResponse struct {
 	// The phase of the ruleset.
 	Phase PhaseGetResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules ResponeRule `json:"rules,required"`
+	Rules ResponseRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
