@@ -171,6 +171,8 @@ func (r PeerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type Peers = interface{}
+
 type PeerDeleteResponse struct {
 	ID   string                 `json:"id"`
 	JSON peerDeleteResponseJSON `json:"-"`
