@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -110,10 +111,16 @@ type ZoneAuthenticatedOriginPull struct {
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`
-	// Indicates whether zone-level authenticated origin pulls is enabled.
-	Enabled bool `json:"enabled"`
-	// The zone's private key.
-	PrivateKey string                          `json:"private_key"`
+	// When the certificate from the authority expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// Status of the certificate activation.
+	Status ZoneAuthenticatedOriginPullStatus `json:"status"`
+	// This is the time the certificate was uploaded.
+	UploadedOn time.Time                       `json:"uploaded_on" format:"date-time"`
 	JSON       zoneAuthenticatedOriginPullJSON `json:"-"`
 }
 
@@ -122,8 +129,11 @@ type ZoneAuthenticatedOriginPull struct {
 type zoneAuthenticatedOriginPullJSON struct {
 	ID          apijson.Field
 	Certificate apijson.Field
-	Enabled     apijson.Field
-	PrivateKey  apijson.Field
+	ExpiresOn   apijson.Field
+	Issuer      apijson.Field
+	Signature   apijson.Field
+	Status      apijson.Field
+	UploadedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -134,6 +144,27 @@ func (r *ZoneAuthenticatedOriginPull) UnmarshalJSON(data []byte) (err error) {
 
 func (r zoneAuthenticatedOriginPullJSON) RawJSON() string {
 	return r.raw
+}
+
+// Status of the certificate activation.
+type ZoneAuthenticatedOriginPullStatus string
+
+const (
+	ZoneAuthenticatedOriginPullStatusInitializing       ZoneAuthenticatedOriginPullStatus = "initializing"
+	ZoneAuthenticatedOriginPullStatusPendingDeployment  ZoneAuthenticatedOriginPullStatus = "pending_deployment"
+	ZoneAuthenticatedOriginPullStatusPendingDeletion    ZoneAuthenticatedOriginPullStatus = "pending_deletion"
+	ZoneAuthenticatedOriginPullStatusActive             ZoneAuthenticatedOriginPullStatus = "active"
+	ZoneAuthenticatedOriginPullStatusDeleted            ZoneAuthenticatedOriginPullStatus = "deleted"
+	ZoneAuthenticatedOriginPullStatusDeploymentTimedOut ZoneAuthenticatedOriginPullStatus = "deployment_timed_out"
+	ZoneAuthenticatedOriginPullStatusDeletionTimedOut   ZoneAuthenticatedOriginPullStatus = "deletion_timed_out"
+)
+
+func (r ZoneAuthenticatedOriginPullStatus) IsKnown() bool {
+	switch r {
+	case ZoneAuthenticatedOriginPullStatusInitializing, ZoneAuthenticatedOriginPullStatusPendingDeployment, ZoneAuthenticatedOriginPullStatusPendingDeletion, ZoneAuthenticatedOriginPullStatusActive, ZoneAuthenticatedOriginPullStatusDeleted, ZoneAuthenticatedOriginPullStatusDeploymentTimedOut, ZoneAuthenticatedOriginPullStatusDeletionTimedOut:
+		return true
+	}
+	return false
 }
 
 // Union satisfied by

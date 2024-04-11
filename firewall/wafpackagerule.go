@@ -158,7 +158,7 @@ type WAFPackageRuleListResponse struct {
 	AllowedModes interface{} `json:"allowed_modes"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
-	Mode        WAFPackageRuleListResponseMode `json:"mode,required"`
+	Mode        AllowedModesAnomaly            `json:"mode,required"`
 	DefaultMode interface{}                    `json:"default_mode,required"`
 	JSON        wafPackageRuleListResponseJSON `json:"-"`
 	union       WAFPackageRuleListResponseUnion
@@ -243,7 +243,7 @@ type WAFPackageRuleListResponseWAFManagedRulesAnomalyRule struct {
 	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
-	Mode WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode `json:"mode,required"`
+	Mode AllowedModesAnomaly `json:"mode,required"`
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
@@ -274,23 +274,6 @@ func (r wafPackageRuleListResponseWAFManagedRulesAnomalyRuleJSON) RawJSON() stri
 }
 
 func (r WAFPackageRuleListResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleListResponse() {
-}
-
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
-type WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode string
-
-const (
-	WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleModeOn  WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode = "on"
-	WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleModeOff WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode = "off"
-)
-
-func (r WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode) IsKnown() bool {
-	switch r {
-	case WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleModeOn, WAFPackageRuleListResponseWAFManagedRulesAnomalyRuleModeOff:
-		return true
-	}
-	return false
 }
 
 // When triggered, traditional WAF rules cause the firewall to immediately act upon
@@ -487,28 +470,6 @@ func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode) IsKno
 	return false
 }
 
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
-type WAFPackageRuleListResponseMode string
-
-const (
-	WAFPackageRuleListResponseModeOn        WAFPackageRuleListResponseMode = "on"
-	WAFPackageRuleListResponseModeOff       WAFPackageRuleListResponseMode = "off"
-	WAFPackageRuleListResponseModeDefault   WAFPackageRuleListResponseMode = "default"
-	WAFPackageRuleListResponseModeDisable   WAFPackageRuleListResponseMode = "disable"
-	WAFPackageRuleListResponseModeSimulate  WAFPackageRuleListResponseMode = "simulate"
-	WAFPackageRuleListResponseModeBlock     WAFPackageRuleListResponseMode = "block"
-	WAFPackageRuleListResponseModeChallenge WAFPackageRuleListResponseMode = "challenge"
-)
-
-func (r WAFPackageRuleListResponseMode) IsKnown() bool {
-	switch r {
-	case WAFPackageRuleListResponseModeOn, WAFPackageRuleListResponseModeOff, WAFPackageRuleListResponseModeDefault, WAFPackageRuleListResponseModeDisable, WAFPackageRuleListResponseModeSimulate, WAFPackageRuleListResponseModeBlock, WAFPackageRuleListResponseModeChallenge:
-		return true
-	}
-	return false
-}
-
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
@@ -527,7 +488,7 @@ type WAFPackageRuleEditResponse struct {
 	AllowedModes interface{} `json:"allowed_modes"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
-	Mode        WAFPackageRuleEditResponseMode `json:"mode,required"`
+	Mode        AllowedModesAnomaly            `json:"mode,required"`
 	DefaultMode interface{}                    `json:"default_mode,required"`
 	JSON        wafPackageRuleEditResponseJSON `json:"-"`
 	union       WAFPackageRuleEditResponseUnion
@@ -612,7 +573,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule struct {
 	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
-	Mode WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode `json:"mode,required"`
+	Mode AllowedModesAnomaly `json:"mode,required"`
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
@@ -643,23 +604,6 @@ func (r wafPackageRuleEditResponseWAFManagedRulesAnomalyRuleJSON) RawJSON() stri
 }
 
 func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleEditResponse() {
-}
-
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
-type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode string
-
-const (
-	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleModeOn  WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode = "on"
-	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleModeOff WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode = "off"
-)
-
-func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode) IsKnown() bool {
-	switch r {
-	case WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleModeOn, WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleModeOff:
-		return true
-	}
-	return false
 }
 
 // When triggered, traditional WAF rules cause the firewall to immediately act upon
@@ -851,28 +795,6 @@ const (
 func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode) IsKnown() bool {
 	switch r {
 	case WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleModeOn, WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleModeOff:
-		return true
-	}
-	return false
-}
-
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
-type WAFPackageRuleEditResponseMode string
-
-const (
-	WAFPackageRuleEditResponseModeOn        WAFPackageRuleEditResponseMode = "on"
-	WAFPackageRuleEditResponseModeOff       WAFPackageRuleEditResponseMode = "off"
-	WAFPackageRuleEditResponseModeDefault   WAFPackageRuleEditResponseMode = "default"
-	WAFPackageRuleEditResponseModeDisable   WAFPackageRuleEditResponseMode = "disable"
-	WAFPackageRuleEditResponseModeSimulate  WAFPackageRuleEditResponseMode = "simulate"
-	WAFPackageRuleEditResponseModeBlock     WAFPackageRuleEditResponseMode = "block"
-	WAFPackageRuleEditResponseModeChallenge WAFPackageRuleEditResponseMode = "challenge"
-)
-
-func (r WAFPackageRuleEditResponseMode) IsKnown() bool {
-	switch r {
-	case WAFPackageRuleEditResponseModeOn, WAFPackageRuleEditResponseModeOff, WAFPackageRuleEditResponseModeDefault, WAFPackageRuleEditResponseModeDisable, WAFPackageRuleEditResponseModeSimulate, WAFPackageRuleEditResponseModeBlock, WAFPackageRuleEditResponseModeChallenge:
 		return true
 	}
 	return false
