@@ -37,12 +37,12 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 				URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
 			}),
 		}}),
-		Targets: cloudflare.F([]pagerules.TargesParam{{
-			Constraint: cloudflare.F(pagerules.TargesConstraintParam{
-				Operator: cloudflare.F(pagerules.TargesConstraintOperatorMatches),
+		Targets: cloudflare.F([]pagerules.TargetParam{{
+			Constraint: cloudflare.F(pagerules.TargetConstraintParam{
+				Operator: cloudflare.F(pagerules.TargetConstraintOperatorMatches),
 				Value:    cloudflare.F("*example.com/images/*"),
 			}),
-			Target: cloudflare.F(pagerules.TargesTargetURL),
+			Target: cloudflare.F(pagerules.TargetTargetURL),
 		}}),
 		Priority: cloudflare.F(int64(0)),
 		Status:   cloudflare.F(pagerules.PageruleNewParamsStatusActive),
@@ -82,12 +82,12 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
 				}),
 			}}),
-			Targets: cloudflare.F([]pagerules.TargesParam{{
-				Constraint: cloudflare.F(pagerules.TargesConstraintParam{
-					Operator: cloudflare.F(pagerules.TargesConstraintOperatorMatches),
+			Targets: cloudflare.F([]pagerules.TargetParam{{
+				Constraint: cloudflare.F(pagerules.TargetConstraintParam{
+					Operator: cloudflare.F(pagerules.TargetConstraintOperatorMatches),
 					Value:    cloudflare.F("*example.com/images/*"),
 				}),
-				Target: cloudflare.F(pagerules.TargesTargetURL),
+				Target: cloudflare.F(pagerules.TargetTargetURL),
 			}}),
 			Priority: cloudflare.F(int64(0)),
 			Status:   cloudflare.F(pagerules.PageruleUpdateParamsStatusActive),
@@ -191,12 +191,12 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 			}}),
 			Priority: cloudflare.F(int64(0)),
 			Status:   cloudflare.F(pagerules.PageruleEditParamsStatusActive),
-			Targets: cloudflare.F([]pagerules.TargesParam{{
-				Constraint: cloudflare.F(pagerules.TargesConstraintParam{
-					Operator: cloudflare.F(pagerules.TargesConstraintOperatorMatches),
+			Targets: cloudflare.F([]pagerules.TargetParam{{
+				Constraint: cloudflare.F(pagerules.TargetConstraintParam{
+					Operator: cloudflare.F(pagerules.TargetConstraintOperatorMatches),
 					Value:    cloudflare.F("*example.com/images/*"),
 				}),
-				Target: cloudflare.F(pagerules.TargesTargetURL),
+				Target: cloudflare.F(pagerules.TargetTargetURL),
 			}}),
 		},
 	)

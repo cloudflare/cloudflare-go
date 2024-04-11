@@ -136,7 +136,7 @@ type PageRule struct {
 	// The status of the Page Rule.
 	Status PageRuleStatus `json:"status,required"`
 	// The rule targets to evaluate on each request.
-	Targets []Targes     `json:"targets,required"`
+	Targets []Target     `json:"targets,required"`
 	JSON    pageRuleJSON `json:"-"`
 }
 
@@ -282,113 +282,113 @@ func (r RouteValueParam) MarshalJSON() (data []byte, err error) {
 }
 
 // A request condition target.
-type Targes struct {
+type Target struct {
 	// String constraint.
-	Constraint TargesConstraint `json:"constraint,required"`
+	Constraint TargetConstraint `json:"constraint,required"`
 	// A target based on the URL of the request.
-	Target TargesTarget `json:"target,required"`
-	JSON   targesJSON   `json:"-"`
+	Target TargetTarget `json:"target,required"`
+	JSON   targetJSON   `json:"-"`
 }
 
-// targesJSON contains the JSON metadata for the struct [Targes]
-type targesJSON struct {
+// targetJSON contains the JSON metadata for the struct [Target]
+type targetJSON struct {
 	Constraint  apijson.Field
 	Target      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Targes) UnmarshalJSON(data []byte) (err error) {
+func (r *Target) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r targesJSON) RawJSON() string {
+func (r targetJSON) RawJSON() string {
 	return r.raw
 }
 
 // String constraint.
-type TargesConstraint struct {
+type TargetConstraint struct {
 	// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
-	Operator TargesConstraintOperator `json:"operator,required"`
+	Operator TargetConstraintOperator `json:"operator,required"`
 	// The URL pattern to match against the current request. The pattern may contain up
 	// to four asterisks ('\*') as placeholders.
 	Value string               `json:"value,required"`
-	JSON  targesConstraintJSON `json:"-"`
+	JSON  targetConstraintJSON `json:"-"`
 }
 
-// targesConstraintJSON contains the JSON metadata for the struct
-// [TargesConstraint]
-type targesConstraintJSON struct {
+// targetConstraintJSON contains the JSON metadata for the struct
+// [TargetConstraint]
+type targetConstraintJSON struct {
 	Operator    apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TargesConstraint) UnmarshalJSON(data []byte) (err error) {
+func (r *TargetConstraint) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r targesConstraintJSON) RawJSON() string {
+func (r targetConstraintJSON) RawJSON() string {
 	return r.raw
 }
 
 // The matches operator can use asterisks and pipes as wildcard and 'or' operators.
-type TargesConstraintOperator string
+type TargetConstraintOperator string
 
 const (
-	TargesConstraintOperatorMatches    TargesConstraintOperator = "matches"
-	TargesConstraintOperatorContains   TargesConstraintOperator = "contains"
-	TargesConstraintOperatorEquals     TargesConstraintOperator = "equals"
-	TargesConstraintOperatorNotEqual   TargesConstraintOperator = "not_equal"
-	TargesConstraintOperatorNotContain TargesConstraintOperator = "not_contain"
+	TargetConstraintOperatorMatches    TargetConstraintOperator = "matches"
+	TargetConstraintOperatorContains   TargetConstraintOperator = "contains"
+	TargetConstraintOperatorEquals     TargetConstraintOperator = "equals"
+	TargetConstraintOperatorNotEqual   TargetConstraintOperator = "not_equal"
+	TargetConstraintOperatorNotContain TargetConstraintOperator = "not_contain"
 )
 
-func (r TargesConstraintOperator) IsKnown() bool {
+func (r TargetConstraintOperator) IsKnown() bool {
 	switch r {
-	case TargesConstraintOperatorMatches, TargesConstraintOperatorContains, TargesConstraintOperatorEquals, TargesConstraintOperatorNotEqual, TargesConstraintOperatorNotContain:
+	case TargetConstraintOperatorMatches, TargetConstraintOperatorContains, TargetConstraintOperatorEquals, TargetConstraintOperatorNotEqual, TargetConstraintOperatorNotContain:
 		return true
 	}
 	return false
 }
 
 // A target based on the URL of the request.
-type TargesTarget string
+type TargetTarget string
 
 const (
-	TargesTargetURL TargesTarget = "url"
+	TargetTargetURL TargetTarget = "url"
 )
 
-func (r TargesTarget) IsKnown() bool {
+func (r TargetTarget) IsKnown() bool {
 	switch r {
-	case TargesTargetURL:
+	case TargetTargetURL:
 		return true
 	}
 	return false
 }
 
 // A request condition target.
-type TargesParam struct {
+type TargetParam struct {
 	// String constraint.
-	Constraint param.Field[TargesConstraintParam] `json:"constraint,required"`
+	Constraint param.Field[TargetConstraintParam] `json:"constraint,required"`
 	// A target based on the URL of the request.
-	Target param.Field[TargesTarget] `json:"target,required"`
+	Target param.Field[TargetTarget] `json:"target,required"`
 }
 
-func (r TargesParam) MarshalJSON() (data []byte, err error) {
+func (r TargetParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // String constraint.
-type TargesConstraintParam struct {
+type TargetConstraintParam struct {
 	// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
-	Operator param.Field[TargesConstraintOperator] `json:"operator,required"`
+	Operator param.Field[TargetConstraintOperator] `json:"operator,required"`
 	// The URL pattern to match against the current request. The pattern may contain up
 	// to four asterisks ('\*') as placeholders.
 	Value param.Field[string] `json:"value,required"`
 }
 
-func (r TargesConstraintParam) MarshalJSON() (data []byte, err error) {
+func (r TargetConstraintParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -489,7 +489,7 @@ type PageruleNewParams struct {
 	// Actions can redirect to another URL or override settings, but not both.
 	Actions param.Field[[]RouteParam] `json:"actions,required"`
 	// The rule targets to evaluate on each request.
-	Targets param.Field[[]TargesParam] `json:"targets,required"`
+	Targets param.Field[[]TargetParam] `json:"targets,required"`
 	// The priority of the rule, used to define which Page Rule is processed over
 	// another. A higher number indicates a higher priority. For example, if you have a
 	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
@@ -570,7 +570,7 @@ type PageruleUpdateParams struct {
 	// Actions can redirect to another URL or override settings, but not both.
 	Actions param.Field[[]RouteParam] `json:"actions,required"`
 	// The rule targets to evaluate on each request.
-	Targets param.Field[[]TargesParam] `json:"targets,required"`
+	Targets param.Field[[]TargetParam] `json:"targets,required"`
 	// The priority of the rule, used to define which Page Rule is processed over
 	// another. A higher number indicates a higher priority. For example, if you have a
 	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
@@ -842,7 +842,7 @@ type PageruleEditParams struct {
 	// The status of the Page Rule.
 	Status param.Field[PageruleEditParamsStatus] `json:"status"`
 	// The rule targets to evaluate on each request.
-	Targets param.Field[[]TargesParam] `json:"targets"`
+	Targets param.Field[[]TargetParam] `json:"targets"`
 }
 
 func (r PageruleEditParams) MarshalJSON() (data []byte, err error) {

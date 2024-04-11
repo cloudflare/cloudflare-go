@@ -52,7 +52,7 @@ func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParam
 }
 
 // Get the Hostname Status for Client Authentication
-func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *ID, err error) {
+func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *AuthenticatedOriginPull, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", query.ZoneID, hostname)
@@ -66,48 +66,9 @@ func (r *HostnameService) Get(ctx context.Context, hostname string, query Hostna
 
 type AuthenticatedOriginPull struct {
 	// Identifier
-	ID string `json:"id"`
-	// Identifier
-	CERTID string `json:"cert_id"`
-	// The hostname certificate.
-	Certificate string `json:"certificate"`
-	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
-	// value voids the association.
-	Enabled bool `json:"enabled,nullable"`
-	// The hostname on the origin for which the client certificate uploaded will be
-	// used.
-	Hostname string `json:"hostname"`
-	// The hostname certificate's private key.
-	PrivateKey string                      `json:"private_key"`
-	JSON       authenticatedOriginPullJSON `json:"-"`
-}
-
-// authenticatedOriginPullJSON contains the JSON metadata for the struct
-// [AuthenticatedOriginPull]
-type authenticatedOriginPullJSON struct {
-	ID          apijson.Field
-	CERTID      apijson.Field
-	Certificate apijson.Field
-	Enabled     apijson.Field
-	Hostname    apijson.Field
-	PrivateKey  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AuthenticatedOriginPull) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r authenticatedOriginPullJSON) RawJSON() string {
-	return r.raw
-}
-
-type ID struct {
-	// Identifier
 	CERTID string `json:"cert_id"`
 	// Status of the certificate or the association.
-	CERTStatus IDCERTStatus `json:"cert_status"`
+	CERTStatus AuthenticatedOriginPullCERTStatus `json:"cert_status"`
 	// The time when the certificate was updated.
 	CERTUpdatedAt time.Time `json:"cert_updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
@@ -131,14 +92,15 @@ type ID struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
-	Status IDStatus `json:"status"`
+	Status AuthenticatedOriginPullStatus `json:"status"`
 	// The time when the certificate was updated.
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	JSON      idJSON    `json:"-"`
+	UpdatedAt time.Time                   `json:"updated_at" format:"date-time"`
+	JSON      authenticatedOriginPullJSON `json:"-"`
 }
 
-// idJSON contains the JSON metadata for the struct [ID]
-type idJSON struct {
+// authenticatedOriginPullJSON contains the JSON metadata for the struct
+// [AuthenticatedOriginPull]
+type authenticatedOriginPullJSON struct {
 	CERTID         apijson.Field
 	CERTStatus     apijson.Field
 	CERTUpdatedAt  apijson.Field
@@ -157,51 +119,51 @@ type idJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *ID) UnmarshalJSON(data []byte) (err error) {
+func (r *AuthenticatedOriginPull) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r idJSON) RawJSON() string {
+func (r authenticatedOriginPullJSON) RawJSON() string {
 	return r.raw
 }
 
 // Status of the certificate or the association.
-type IDCERTStatus string
+type AuthenticatedOriginPullCERTStatus string
 
 const (
-	IDCERTStatusInitializing       IDCERTStatus = "initializing"
-	IDCERTStatusPendingDeployment  IDCERTStatus = "pending_deployment"
-	IDCERTStatusPendingDeletion    IDCERTStatus = "pending_deletion"
-	IDCERTStatusActive             IDCERTStatus = "active"
-	IDCERTStatusDeleted            IDCERTStatus = "deleted"
-	IDCERTStatusDeploymentTimedOut IDCERTStatus = "deployment_timed_out"
-	IDCERTStatusDeletionTimedOut   IDCERTStatus = "deletion_timed_out"
+	AuthenticatedOriginPullCERTStatusInitializing       AuthenticatedOriginPullCERTStatus = "initializing"
+	AuthenticatedOriginPullCERTStatusPendingDeployment  AuthenticatedOriginPullCERTStatus = "pending_deployment"
+	AuthenticatedOriginPullCERTStatusPendingDeletion    AuthenticatedOriginPullCERTStatus = "pending_deletion"
+	AuthenticatedOriginPullCERTStatusActive             AuthenticatedOriginPullCERTStatus = "active"
+	AuthenticatedOriginPullCERTStatusDeleted            AuthenticatedOriginPullCERTStatus = "deleted"
+	AuthenticatedOriginPullCERTStatusDeploymentTimedOut AuthenticatedOriginPullCERTStatus = "deployment_timed_out"
+	AuthenticatedOriginPullCERTStatusDeletionTimedOut   AuthenticatedOriginPullCERTStatus = "deletion_timed_out"
 )
 
-func (r IDCERTStatus) IsKnown() bool {
+func (r AuthenticatedOriginPullCERTStatus) IsKnown() bool {
 	switch r {
-	case IDCERTStatusInitializing, IDCERTStatusPendingDeployment, IDCERTStatusPendingDeletion, IDCERTStatusActive, IDCERTStatusDeleted, IDCERTStatusDeploymentTimedOut, IDCERTStatusDeletionTimedOut:
+	case AuthenticatedOriginPullCERTStatusInitializing, AuthenticatedOriginPullCERTStatusPendingDeployment, AuthenticatedOriginPullCERTStatusPendingDeletion, AuthenticatedOriginPullCERTStatusActive, AuthenticatedOriginPullCERTStatusDeleted, AuthenticatedOriginPullCERTStatusDeploymentTimedOut, AuthenticatedOriginPullCERTStatusDeletionTimedOut:
 		return true
 	}
 	return false
 }
 
 // Status of the certificate or the association.
-type IDStatus string
+type AuthenticatedOriginPullStatus string
 
 const (
-	IDStatusInitializing       IDStatus = "initializing"
-	IDStatusPendingDeployment  IDStatus = "pending_deployment"
-	IDStatusPendingDeletion    IDStatus = "pending_deletion"
-	IDStatusActive             IDStatus = "active"
-	IDStatusDeleted            IDStatus = "deleted"
-	IDStatusDeploymentTimedOut IDStatus = "deployment_timed_out"
-	IDStatusDeletionTimedOut   IDStatus = "deletion_timed_out"
+	AuthenticatedOriginPullStatusInitializing       AuthenticatedOriginPullStatus = "initializing"
+	AuthenticatedOriginPullStatusPendingDeployment  AuthenticatedOriginPullStatus = "pending_deployment"
+	AuthenticatedOriginPullStatusPendingDeletion    AuthenticatedOriginPullStatus = "pending_deletion"
+	AuthenticatedOriginPullStatusActive             AuthenticatedOriginPullStatus = "active"
+	AuthenticatedOriginPullStatusDeleted            AuthenticatedOriginPullStatus = "deleted"
+	AuthenticatedOriginPullStatusDeploymentTimedOut AuthenticatedOriginPullStatus = "deployment_timed_out"
+	AuthenticatedOriginPullStatusDeletionTimedOut   AuthenticatedOriginPullStatus = "deletion_timed_out"
 )
 
-func (r IDStatus) IsKnown() bool {
+func (r AuthenticatedOriginPullStatus) IsKnown() bool {
 	switch r {
-	case IDStatusInitializing, IDStatusPendingDeployment, IDStatusPendingDeletion, IDStatusActive, IDStatusDeleted, IDStatusDeploymentTimedOut, IDStatusDeletionTimedOut:
+	case AuthenticatedOriginPullStatusInitializing, AuthenticatedOriginPullStatusPendingDeployment, AuthenticatedOriginPullStatusPendingDeletion, AuthenticatedOriginPullStatusActive, AuthenticatedOriginPullStatusDeleted, AuthenticatedOriginPullStatusDeploymentTimedOut, AuthenticatedOriginPullStatusDeletionTimedOut:
 		return true
 	}
 	return false
@@ -314,9 +276,9 @@ type HostnameGetParams struct {
 }
 
 type HostnameGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ID                    `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   AuthenticatedOriginPull `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`
