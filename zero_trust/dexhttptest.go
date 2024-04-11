@@ -62,7 +62,7 @@ type HTTPDetails struct {
 	Method string `json:"method"`
 	// The name of the HTTP synthetic application test
 	Name           string                    `json:"name"`
-	TargetPolicies []DeviceExperienceMonitor `json:"target_policies"`
+	TargetPolicies []DeviceExperienceMonitor `json:"target_policies,nullable"`
 	Targeted       bool                      `json:"targeted"`
 	JSON           httpDetailsJSON           `json:"-"`
 }
