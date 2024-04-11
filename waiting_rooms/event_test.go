@@ -105,7 +105,7 @@ func TestEventUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestEventList(t *testing.T) {
+func TestEventListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -123,7 +123,9 @@ func TestEventList(t *testing.T) {
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.EventListParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Page:    cloudflare.F[any](map[string]interface{}{}),
+			PerPage: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
