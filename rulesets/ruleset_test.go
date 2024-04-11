@@ -32,7 +32,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		Kind:  cloudflare.F(rulesets.RulesetNewParamsKindRoot),
 		Name:  cloudflare.F("My ruleset"),
 		Phase: cloudflare.F(rulesets.RulesetNewParamsPhaseHTTPRequestFirewallCustom),
-		Rules: cloudflare.F([]rulesets.RequestRuleUnionParam{rulesets.BlockRuleParam{
+		Rules: cloudflare.F([]rulesets.RequestRuleUnionItemParam{rulesets.BlockRuleParam{
 			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 			ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
 				Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
@@ -115,7 +115,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetUpdateParams{
-			Rules: cloudflare.F([]rulesets.RequestRuleUnionParam{rulesets.BlockRuleParam{
+			Rules: cloudflare.F([]rulesets.RequestRuleUnionItemParam{rulesets.BlockRuleParam{
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
 					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{

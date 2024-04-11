@@ -149,7 +149,7 @@ func (r blockRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BlockRule) implementsRulesetsResponeRule() {}
+func (r BlockRule) implementsRulesetsResponeRuleItem() {}
 
 // The action to perform when the rule matches.
 type BlockRuleAction string
@@ -241,7 +241,7 @@ func (r BlockRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BlockRuleParam) implementsRulesetsRequestRuleUnionParam() {}
+func (r BlockRuleParam) implementsRulesetsRequestRuleUnionItemParam() {}
 
 // The parameters configuring the rule's action.
 type BlockRuleActionParametersParam struct {
@@ -318,7 +318,7 @@ func (r executeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ExecuteRule) implementsRulesetsResponeRule() {}
+func (r ExecuteRule) implementsRulesetsResponeRuleItem() {}
 
 // The action to perform when the rule matches.
 type ExecuteRuleAction string
@@ -571,7 +571,7 @@ func (r ExecuteRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ExecuteRuleParam) implementsRulesetsRequestRuleUnionParam() {}
+func (r ExecuteRuleParam) implementsRulesetsRequestRuleUnionItemParam() {}
 
 // The parameters configuring the rule's action.
 type ExecuteRuleActionParametersParam struct {
@@ -704,7 +704,7 @@ func (r logRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LogRule) implementsRulesetsResponeRule() {}
+func (r LogRule) implementsRulesetsResponeRuleItem() {}
 
 // The action to perform when the rule matches.
 type LogRuleAction string
@@ -744,7 +744,7 @@ func (r LogRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LogRuleParam) implementsRulesetsRequestRuleUnionParam() {}
+func (r LogRuleParam) implementsRulesetsRequestRuleUnionItemParam() {}
 
 // An object configuring the rule's logging behavior.
 type Logging struct {
@@ -829,7 +829,7 @@ func (r skipRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SkipRule) implementsRulesetsResponeRule() {}
+func (r SkipRule) implementsRulesetsResponeRuleItem() {}
 
 // The action to perform when the rule matches.
 type SkipRuleAction string
@@ -982,7 +982,7 @@ func (r SkipRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SkipRuleParam) implementsRulesetsRequestRuleUnionParam() {}
+func (r SkipRuleParam) implementsRulesetsRequestRuleUnionItemParam() {}
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
@@ -1019,7 +1019,7 @@ type RuleNewResponse struct {
 	// The phase of the ruleset.
 	Phase RuleNewResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -1117,7 +1117,7 @@ type RuleDeleteResponse struct {
 	// The phase of the ruleset.
 	Phase RuleDeleteResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -1216,7 +1216,7 @@ type RuleEditResponse struct {
 	// The phase of the ruleset.
 	Phase RuleEditResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.

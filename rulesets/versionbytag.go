@@ -58,7 +58,7 @@ type VersionByTagGetResponse struct {
 	// The phase of the ruleset.
 	Phase VersionByTagGetResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.

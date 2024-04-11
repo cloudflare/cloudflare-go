@@ -31,18 +31,18 @@ func TestAttackSurfaceReportIssueListWithOptionalParams(t *testing.T) {
 	_, err := client.Intel.AttackSurfaceReport.Issues.List(context.TODO(), intel.AttackSurfaceReportIssueListParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Dismissed:     cloudflare.F(false),
-		IssueClass:    cloudflare.F([]intel.IssueClassParam{"a_record_dangling", "always_use_https_not_enabled"}),
-		IssueClassNeq: cloudflare.F([]intel.IssueClassParam{"a_record_dangling", "always_use_https_not_enabled"}),
-		IssueType:     cloudflare.F([]intel.IssueType{intel.IssueTypeComplianceViolation, intel.IssueTypeEmailSecurity}),
-		IssueTypeNeq:  cloudflare.F([]intel.IssueType{intel.IssueTypeComplianceViolation, intel.IssueTypeEmailSecurity}),
+		IssueClass:    cloudflare.F([]string{"a_record_dangling", "always_use_https_not_enabled"}),
+		IssueClassNeq: cloudflare.F([]string{"a_record_dangling", "always_use_https_not_enabled"}),
+		IssueType:     cloudflare.F([]intel.IssueTypeItem{intel.IssueTypeItemComplianceViolation, intel.IssueTypeItemEmailSecurity}),
+		IssueTypeNeq:  cloudflare.F([]intel.IssueTypeItem{intel.IssueTypeItemComplianceViolation, intel.IssueTypeItemEmailSecurity}),
 		Page:          cloudflare.F(int64(1)),
 		PerPage:       cloudflare.F(int64(25)),
-		Product:       cloudflare.F([]intel.ProductParam{"access", "dns"}),
-		ProductNeq:    cloudflare.F([]intel.ProductParam{"access", "dns"}),
+		Product:       cloudflare.F([]string{"access", "dns"}),
+		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
-		Subject:       cloudflare.F([]intel.SubjectParam{"example.com", "example.com", "example.com"}),
-		SubjectNeq:    cloudflare.F([]intel.SubjectParam{"example.com", "example.com", "example.com"}),
+		Subject:       cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+		SubjectNeq:    cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -70,16 +70,16 @@ func TestAttackSurfaceReportIssueClassWithOptionalParams(t *testing.T) {
 	_, err := client.Intel.AttackSurfaceReport.Issues.Class(context.TODO(), intel.AttackSurfaceReportIssueClassParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Dismissed:     cloudflare.F(false),
-		IssueClass:    cloudflare.F([]intel.IssueClassParam{"a_record_dangling", "always_use_https_not_enabled"}),
-		IssueClassNeq: cloudflare.F([]intel.IssueClassParam{"a_record_dangling", "always_use_https_not_enabled"}),
-		IssueType:     cloudflare.F([]intel.IssueType{intel.IssueTypeComplianceViolation, intel.IssueTypeEmailSecurity}),
-		IssueTypeNeq:  cloudflare.F([]intel.IssueType{intel.IssueTypeComplianceViolation, intel.IssueTypeEmailSecurity}),
-		Product:       cloudflare.F([]intel.ProductParam{"access", "dns"}),
-		ProductNeq:    cloudflare.F([]intel.ProductParam{"access", "dns"}),
+		IssueClass:    cloudflare.F([]string{"a_record_dangling", "always_use_https_not_enabled"}),
+		IssueClassNeq: cloudflare.F([]string{"a_record_dangling", "always_use_https_not_enabled"}),
+		IssueType:     cloudflare.F([]intel.IssueTypeItem{intel.IssueTypeItemComplianceViolation, intel.IssueTypeItemEmailSecurity}),
+		IssueTypeNeq:  cloudflare.F([]intel.IssueTypeItem{intel.IssueTypeItemComplianceViolation, intel.IssueTypeItemEmailSecurity}),
+		Product:       cloudflare.F([]string{"access", "dns"}),
+		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
-		Subject:       cloudflare.F([]intel.SubjectParam{"example.com", "example.com", "example.com"}),
-		SubjectNeq:    cloudflare.F([]intel.SubjectParam{"example.com", "example.com", "example.com"}),
+		Subject:       cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+		SubjectNeq:    cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -138,16 +138,16 @@ func TestAttackSurfaceReportIssueSeverityWithOptionalParams(t *testing.T) {
 	_, err := client.Intel.AttackSurfaceReport.Issues.Severity(context.TODO(), intel.AttackSurfaceReportIssueSeverityParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Dismissed:     cloudflare.F(false),
-		IssueClass:    cloudflare.F([]intel.IssueClassParam{"a_record_dangling", "always_use_https_not_enabled"}),
-		IssueClassNeq: cloudflare.F([]intel.IssueClassParam{"a_record_dangling", "always_use_https_not_enabled"}),
-		IssueType:     cloudflare.F([]intel.IssueType{intel.IssueTypeComplianceViolation, intel.IssueTypeEmailSecurity}),
-		IssueTypeNeq:  cloudflare.F([]intel.IssueType{intel.IssueTypeComplianceViolation, intel.IssueTypeEmailSecurity}),
-		Product:       cloudflare.F([]intel.ProductParam{"access", "dns"}),
-		ProductNeq:    cloudflare.F([]intel.ProductParam{"access", "dns"}),
+		IssueClass:    cloudflare.F([]string{"a_record_dangling", "always_use_https_not_enabled"}),
+		IssueClassNeq: cloudflare.F([]string{"a_record_dangling", "always_use_https_not_enabled"}),
+		IssueType:     cloudflare.F([]intel.IssueTypeItem{intel.IssueTypeItemComplianceViolation, intel.IssueTypeItemEmailSecurity}),
+		IssueTypeNeq:  cloudflare.F([]intel.IssueTypeItem{intel.IssueTypeItemComplianceViolation, intel.IssueTypeItemEmailSecurity}),
+		Product:       cloudflare.F([]string{"access", "dns"}),
+		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
-		Subject:       cloudflare.F([]intel.SubjectParam{"example.com", "example.com", "example.com"}),
-		SubjectNeq:    cloudflare.F([]intel.SubjectParam{"example.com", "example.com", "example.com"}),
+		Subject:       cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+		SubjectNeq:    cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -175,16 +175,16 @@ func TestAttackSurfaceReportIssueTypeWithOptionalParams(t *testing.T) {
 	_, err := client.Intel.AttackSurfaceReport.Issues.Type(context.TODO(), intel.AttackSurfaceReportIssueTypeParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Dismissed:     cloudflare.F(false),
-		IssueClass:    cloudflare.F([]intel.IssueClassParam{"a_record_dangling", "always_use_https_not_enabled"}),
-		IssueClassNeq: cloudflare.F([]intel.IssueClassParam{"a_record_dangling", "always_use_https_not_enabled"}),
-		IssueType:     cloudflare.F([]intel.IssueType{intel.IssueTypeComplianceViolation, intel.IssueTypeEmailSecurity}),
-		IssueTypeNeq:  cloudflare.F([]intel.IssueType{intel.IssueTypeComplianceViolation, intel.IssueTypeEmailSecurity}),
-		Product:       cloudflare.F([]intel.ProductParam{"access", "dns"}),
-		ProductNeq:    cloudflare.F([]intel.ProductParam{"access", "dns"}),
+		IssueClass:    cloudflare.F([]string{"a_record_dangling", "always_use_https_not_enabled"}),
+		IssueClassNeq: cloudflare.F([]string{"a_record_dangling", "always_use_https_not_enabled"}),
+		IssueType:     cloudflare.F([]intel.IssueTypeItem{intel.IssueTypeItemComplianceViolation, intel.IssueTypeItemEmailSecurity}),
+		IssueTypeNeq:  cloudflare.F([]intel.IssueTypeItem{intel.IssueTypeItemComplianceViolation, intel.IssueTypeItemEmailSecurity}),
+		Product:       cloudflare.F([]string{"access", "dns"}),
+		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
-		Subject:       cloudflare.F([]intel.SubjectParam{"example.com", "example.com", "example.com"}),
-		SubjectNeq:    cloudflare.F([]intel.SubjectParam{"example.com", "example.com", "example.com"}),
+		Subject:       cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+		SubjectNeq:    cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
