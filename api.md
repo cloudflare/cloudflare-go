@@ -4,7 +4,9 @@
 
 # Shared Response Types
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#AuditLog">AuditLog</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ErrorData">ErrorData</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#IamRole">IamRole</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ResponseInfo">ResponseInfo</a>
 
 # Accounts
@@ -31,6 +33,7 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberParam">MemberParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberRoleParam">MemberRoleParam</a>
 
 Response Types:
 
@@ -57,12 +60,11 @@ Params Types:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#PermissionGrant">PermissionGrant</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleListResponse">RoleListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleGetResponseUnion">RoleGetResponseUnion</a>
 
 Methods:
 
-- <code title="get /accounts/{account_id}/roles">client.Accounts.Roles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleListParams">RoleListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleListResponse">RoleListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/roles">client.Accounts.Roles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleListParams">RoleListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#IamRole">IamRole</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/roles/{role_id}">client.Accounts.Roles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, roleID interface{}, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleGetParams">RoleGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleGetResponseUnion">RoleGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # OriginCACertificates
@@ -123,13 +125,9 @@ Methods:
 
 ## AuditLogs
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#AuditLogListResponse">AuditLogListResponse</a>
-
 Methods:
 
-- <code title="get /user/audit_logs">client.User.AuditLogs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#AuditLogService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#AuditLogListParams">AuditLogListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#AuditLogListResponse">AuditLogListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /user/audit_logs">client.User.AuditLogs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#AuditLogService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#AuditLogListParams">AuditLogListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#AuditLog">AuditLog</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Billing
 
@@ -185,11 +183,17 @@ Methods:
 
 Params Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#RatePlanParam">RatePlanParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionParam">SubscriptionParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionComponentParam">SubscriptionComponentParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionZoneParam">SubscriptionZoneParam</a>
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#RatePlan">RatePlan</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#Subscription">Subscription</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionComponent">SubscriptionComponent</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionZone">SubscriptionZone</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionUpdateResponseUnion">SubscriptionUpdateResponseUnion</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionDeleteResponse">SubscriptionDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionEditResponseUnion">SubscriptionEditResponseUnion</a>
@@ -1316,6 +1320,10 @@ Methods:
 - <code title="get /zones/{zone_identifier}/available_plans/{plan_identifier}">client.Plans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#PlanService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, planIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#AvailableRatePlan">AvailableRatePlan</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # RatePlans
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans">rate_plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlanParam">RatePlanParam</a>
 
 Response Types:
 
@@ -2795,8 +2803,13 @@ Methods:
 
 # Rulesets
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RequestRuleUnionParam">RequestRuleUnionParam</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#ResponeRule">ResponeRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Ruleset">Ruleset</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RulesetNewResponse">RulesetNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RulesetUpdateResponse">RulesetUpdateResponse</a>
@@ -3126,13 +3139,9 @@ Methods:
 
 # AuditLogs
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs">audit_logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs#AuditLogListResponse">AuditLogListResponse</a>
-
 Methods:
 
-- <code title="get /accounts/{account_id}/audit_logs">client.AuditLogs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs#AuditLogService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs">audit_logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs#AuditLogListParams">AuditLogListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs">audit_logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs#AuditLogListResponse">AuditLogListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/audit_logs">client.AuditLogs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs#AuditLogService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs">audit_logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/audit_logs#AuditLogListParams">AuditLogListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#AuditLog">AuditLog</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Billing
 
@@ -5072,6 +5081,7 @@ Params Types:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#Tunnel">Tunnel</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#TunnelConnection">TunnelConnection</a>
 
 Methods:
 

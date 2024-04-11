@@ -73,7 +73,7 @@ type Client struct {
 	// cloudflared with the Zero Trust dashboard.
 	ConfigVersion int64 `json:"config_version"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Conns []ClientConn `json:"conns"`
+	Conns []TunnelConnection `json:"conns"`
 	// Features enabled for the Cloudflare Tunnel.
 	Features []string `json:"features"`
 	// Timestamp of when the tunnel connection was started.
@@ -101,51 +101,6 @@ func (r *Client) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r clientJSON) RawJSON() string {
-	return r.raw
-}
-
-type ClientConn struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	UUID string         `json:"uuid"`
-	JSON clientConnJSON `json:"-"`
-}
-
-// clientConnJSON contains the JSON metadata for the struct [ClientConn]
-type clientConnJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	UUID               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *ClientConn) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r clientConnJSON) RawJSON() string {
 	return r.raw
 }
 
