@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // RulesetService contains methods and other services that help with interacting
@@ -156,163 +154,9 @@ func (r *RulesetService) Get(ctx context.Context, rulesetID string, query Rulese
 	return
 }
 
-type RequestRuleParam struct {
-	// The action to perform when the rule matches.
-	Action           param.Field[RequestRuleAction] `json:"action"`
-	ActionParameters param.Field[interface{}]       `json:"action_parameters,required"`
-	Categories       param.Field[interface{}]       `json:"categories,required"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
+type RequestRuleParam []RequestRuleUnionItemParam
 
-func (r RequestRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RequestRuleParam) implementsRulesetsRequestRuleUnionParam() {}
-
-// Satisfied by [rulesets.BlockRuleParam], [rulesets.ExecuteRuleParam],
-// [rulesets.LogRuleParam], [rulesets.SkipRuleParam], [RequestRuleParam].
-type RequestRuleUnionParam interface {
-	implementsRulesetsRequestRuleUnionParam()
-}
-
-// The action to perform when the rule matches.
-type RequestRuleAction string
-
-const (
-	RequestRuleActionBlock   RequestRuleAction = "block"
-	RequestRuleActionExecute RequestRuleAction = "execute"
-	RequestRuleActionLog     RequestRuleAction = "log"
-	RequestRuleActionSkip    RequestRuleAction = "skip"
-)
-
-func (r RequestRuleAction) IsKnown() bool {
-	switch r {
-	case RequestRuleActionBlock, RequestRuleActionExecute, RequestRuleActionLog, RequestRuleActionSkip:
-		return true
-	}
-	return false
-}
-
-type ResponeRule struct {
-	// The action to perform when the rule matches.
-	Action           ResponeRuleAction `json:"action"`
-	ActionParameters interface{}       `json:"action_parameters,required"`
-	Categories       interface{}       `json:"categories,required"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref string `json:"ref"`
-	// The version of the rule.
-	Version string          `json:"version,required"`
-	JSON    responeRuleJSON `json:"-"`
-	union   ResponeRuleUnion
-}
-
-// responeRuleJSON contains the JSON metadata for the struct [ResponeRule]
-type responeRuleJSON struct {
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	ID               apijson.Field
-	LastUpdated      apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	Version          apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r responeRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *ResponeRule) UnmarshalJSON(data []byte) (err error) {
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-func (r ResponeRule) AsUnion() ResponeRuleUnion {
-	return r.union
-}
-
-// Union satisfied by [rulesets.BlockRule], [rulesets.ExecuteRule],
-// [rulesets.LogRule] or [rulesets.SkipRule].
-type ResponeRuleUnion interface {
-	implementsRulesetsResponeRule()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ResponeRuleUnion)(nil)).Elem(),
-		"action",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(BlockRule{}),
-			DiscriminatorValue: "block",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ExecuteRule{}),
-			DiscriminatorValue: "execute",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LogRule{}),
-			DiscriminatorValue: "log",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SkipRule{}),
-			DiscriminatorValue: "skip",
-		},
-	)
-}
-
-// The action to perform when the rule matches.
-type ResponeRuleAction string
-
-const (
-	ResponeRuleActionBlock   ResponeRuleAction = "block"
-	ResponeRuleActionExecute ResponeRuleAction = "execute"
-	ResponeRuleActionLog     ResponeRuleAction = "log"
-	ResponeRuleActionSkip    ResponeRuleAction = "skip"
-)
-
-func (r ResponeRuleAction) IsKnown() bool {
-	switch r {
-	case ResponeRuleActionBlock, ResponeRuleActionExecute, ResponeRuleActionLog, ResponeRuleActionSkip:
-		return true
-	}
-	return false
-}
+type ResponeRule []ResponeRuleItem
 
 // A ruleset object.
 type Ruleset struct {
@@ -422,7 +266,7 @@ type RulesetNewResponse struct {
 	// The phase of the ruleset.
 	Phase RulesetNewResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -521,7 +365,7 @@ type RulesetUpdateResponse struct {
 	// The phase of the ruleset.
 	Phase RulesetUpdateResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -620,7 +464,7 @@ type RulesetGetResponse struct {
 	// The phase of the ruleset.
 	Phase RulesetGetResponsePhase `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules []ResponeRule `json:"rules,required"`
+	Rules ResponeRule `json:"rules,required"`
 	// The version of the ruleset.
 	Version string `json:"version,required"`
 	// An informative description of the ruleset.
@@ -714,7 +558,7 @@ type RulesetNewParams struct {
 	// The phase of the ruleset.
 	Phase param.Field[RulesetNewParamsPhase] `json:"phase,required"`
 	// The list of rules in the ruleset.
-	Rules param.Field[[]RequestRuleUnionParam] `json:"rules,required"`
+	Rules param.Field[RequestRuleParam] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -935,7 +779,7 @@ func (r RulesetNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RulesetUpdateParams struct {
 	// The list of rules in the ruleset.
-	Rules param.Field[[]RequestRuleUnionParam] `json:"rules,required"`
+	Rules param.Field[RequestRuleParam] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.

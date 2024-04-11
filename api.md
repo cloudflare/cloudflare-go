@@ -2235,12 +2235,10 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#PeerParam">PeerParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#PeersParam">PeersParam</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#Peer">Peer</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#Peers">Peers</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#PeerDeleteResponse">PeerDeleteResponse</a>
 
 Methods:
@@ -2795,7 +2793,7 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RequestRuleUnionParam">RequestRuleUnionParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RequestRuleParam">RequestRuleParam</a>
 
 Response Types:
 
@@ -3418,7 +3416,7 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IssueClassParam">IssueClassParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IssueType">IssueType</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IssueTypeParam">IssueTypeParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ProductParam">ProductParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#SeverityQueryParam">SeverityQueryParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#SubjectParam">SubjectParam</a>
@@ -5515,6 +5513,7 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/hyperdrive">hyperdrive</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/hyperdrive#ConfigurationParam">ConfigurationParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/hyperdrive">hyperdrive</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/hyperdrive#HyperdriveParam">HyperdriveParam</a>
 
 Response Types:
 
