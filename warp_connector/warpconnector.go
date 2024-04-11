@@ -227,7 +227,7 @@ type WARPConnectorTunnelCfdTunnel struct {
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []zero_trust.TunnelConnection `json:"connections"`
+	Connections []zero_trust.Connection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
@@ -311,7 +311,7 @@ type WARPConnectorTunnelWARPConnectorTunnel struct {
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []zero_trust.TunnelConnection `json:"connections"`
+	Connections []zero_trust.Connection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
