@@ -6,9 +6,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -66,12 +68,12 @@ func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID
 }
 
 // Lists events for a waiting room.
-func (r *EventService) List(ctx context.Context, waitingRoomID string, query EventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Event], err error) {
+func (r *EventService) List(ctx context.Context, waitingRoomID string, params EventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Event], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", query.ZoneID, waitingRoomID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", params.ZoneID, waitingRoomID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,8 +86,8 @@ func (r *EventService) List(ctx context.Context, waitingRoomID string, query Eve
 }
 
 // Lists events for a waiting room.
-func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string, query EventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Event] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, waitingRoomID, query, opts...))
+func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string, params EventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Event] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, waitingRoomID, params, opts...))
 }
 
 // Deletes an event for a waiting room.
@@ -307,6 +309,18 @@ func (r eventUpdateResponseEnvelopeJSON) RawJSON() string {
 type EventListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Page number of paginated results.
+	Page param.Field[interface{}] `query:"page"`
+	// Maximum number of results per page. Must be a multiple of 5.
+	PerPage param.Field[interface{}] `query:"per_page"`
+}
+
+// URLQuery serializes [EventListParams]'s query parameters as `url.Values`.
+func (r EventListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type EventDeleteParams struct {

@@ -134,7 +134,7 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWaitingRoomList(t *testing.T) {
+func TestWaitingRoomListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -149,7 +149,9 @@ func TestWaitingRoomList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WaitingRooms.List(context.TODO(), waiting_rooms.WaitingRoomListParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:    cloudflare.F[any](map[string]interface{}{}),
+		PerPage: cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
