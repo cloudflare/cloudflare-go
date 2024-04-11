@@ -36,7 +36,7 @@ func NewKeylessCertificateService(opts ...option.RequestOption) (r *KeylessCerti
 }
 
 // Create Keyless SSL Configuration
-func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCertificateNewParams, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCertificateNewParams, opts ...option.RequestOption) (res *KeylessCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates", params.ZoneID)
@@ -86,7 +86,7 @@ func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertifica
 
 // This will update attributes of a Keyless SSL. Consists of one or more of the
 // following: host,name,port.
-func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificateID string, params KeylessCertificateEditParams, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificateID string, params KeylessCertificateEditParams, opts ...option.RequestOption) (res *KeylessCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", params.ZoneID, keylessCertificateID)
@@ -99,7 +99,7 @@ func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificate
 }
 
 // Get details for one Keyless SSL configuration.
-func (r *KeylessCertificateService) Get(ctx context.Context, keylessCertificateID string, query KeylessCertificateGetParams, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *KeylessCertificateService) Get(ctx context.Context, keylessCertificateID string, query KeylessCertificateGetParams, opts ...option.RequestOption) (res *KeylessCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", query.ZoneID, keylessCertificateID)
@@ -347,7 +347,7 @@ func (r KeylessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type KeylessCertificateNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -468,7 +468,7 @@ func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
 type KeylessCertificateEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -516,7 +516,7 @@ type KeylessCertificateGetParams struct {
 type KeylessCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateGetResponseEnvelopeJSON    `json:"-"`
