@@ -117,8 +117,6 @@ type Script struct {
 	Logpush bool `json:"logpush"`
 	// When the script was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Deprecated. Deployment metadata for internal usage.
-	PipelineHash string `json:"pipeline_hash"`
 	// Specifies the placement mode for the Worker (e.g. 'smart').
 	PlacementMode string `json:"placement_mode"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -135,7 +133,6 @@ type scriptJSON struct {
 	Etag          apijson.Field
 	Logpush       apijson.Field
 	ModifiedOn    apijson.Field
-	PipelineHash  apijson.Field
 	PlacementMode apijson.Field
 	TailConsumers apijson.Field
 	UsageModel    apijson.Field
@@ -243,6 +240,8 @@ type ScriptUpdateParamsBodyObject struct {
 	// A module comprising a Worker script, often a javascript file. Multiple modules
 	// may be provided as separate named parts, but at least one module must be present
 	// and referenced in the metadata as `main_module` or `body_part` by part name.
+	// Source maps may also be included using the `application/source-map` content
+	// type.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptUpdateParamsBodyObjectMetadata] `json:"metadata"`

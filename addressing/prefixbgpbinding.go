@@ -186,6 +186,34 @@ func (r ServiceBindingProvisioningState) IsKnown() bool {
 	return false
 }
 
+type ServiceBindingParam struct {
+	// IP Prefix in Classless Inter-Domain Routing format.
+	CIDR param.Field[string] `json:"cidr"`
+	// Status of a Service Binding's deployment to the Cloudflare network
+	Provisioning param.Field[ServiceBindingProvisioningParam] `json:"provisioning"`
+	// Identifier
+	ServiceID param.Field[string] `json:"service_id"`
+	// Name of a service running on the Cloudflare network
+	ServiceName param.Field[string] `json:"service_name"`
+}
+
+func (r ServiceBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ServiceBindingParam) implementsWorkersBindingUnionParam() {}
+
+// Status of a Service Binding's deployment to the Cloudflare network
+type ServiceBindingProvisioningParam struct {
+	// When a binding has been deployed to a majority of Cloudflare datacenters, the
+	// binding will become active and can be used with its associated service.
+	State param.Field[ServiceBindingProvisioningState] `json:"state"`
+}
+
+func (r ServiceBindingProvisioningParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Union satisfied by [addressing.PrefixBGPBindingDeleteResponseUnknown],
 // [addressing.PrefixBGPBindingDeleteResponseArray] or [shared.UnionString].
 type PrefixBGPBindingDeleteResponseUnion interface {
