@@ -33,7 +33,7 @@ func TestSettingMinifyEditWithOptionalParams(t *testing.T) {
 		Value: cloudflare.F(zones.SettingMinifyEditParamsValue{
 			Css:  cloudflare.F(zones.SettingMinifyEditParamsValueCssOn),
 			HTML: cloudflare.F(zones.SettingMinifyEditParamsValueHTMLOn),
-			Js:   cloudflare.F(zones.SettingMinifyEditParamsValueJsOn),
+			JS:   cloudflare.F(zones.SettingMinifyEditParamsValueJSOn),
 		}),
 	})
 	if err != nil {

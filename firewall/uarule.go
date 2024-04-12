@@ -214,13 +214,13 @@ type UARuleListResponseMode string
 const (
 	UARuleListResponseModeBlock            UARuleListResponseMode = "block"
 	UARuleListResponseModeChallenge        UARuleListResponseMode = "challenge"
-	UARuleListResponseModeJsChallenge      UARuleListResponseMode = "js_challenge"
+	UARuleListResponseModeJSChallenge      UARuleListResponseMode = "js_challenge"
 	UARuleListResponseModeManagedChallenge UARuleListResponseMode = "managed_challenge"
 )
 
 func (r UARuleListResponseMode) IsKnown() bool {
 	switch r {
-	case UARuleListResponseModeBlock, UARuleListResponseModeChallenge, UARuleListResponseModeJsChallenge, UARuleListResponseModeManagedChallenge:
+	case UARuleListResponseModeBlock, UARuleListResponseModeChallenge, UARuleListResponseModeJSChallenge, UARuleListResponseModeManagedChallenge:
 		return true
 	}
 	return false

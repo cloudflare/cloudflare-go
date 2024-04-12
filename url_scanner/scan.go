@@ -513,7 +513,7 @@ type ScanGetResponseScanPage struct {
 	Domain                string                                     `json:"domain,required"`
 	Headers               []radar.Browser                            `json:"headers,required"`
 	IP                    string                                     `json:"ip,required"`
-	Js                    ScanGetResponseScanPageJs                  `json:"js,required"`
+	JS                    ScanGetResponseScanPageJS                  `json:"js,required"`
 	SecurityViolations    []ScanGetResponseScanPageSecurityViolation `json:"securityViolations,required"`
 	Status                float64                                    `json:"status,required"`
 	Subdivision1Name      string                                     `json:"subdivision1Name,required"`
@@ -535,7 +535,7 @@ type scanGetResponseScanPageJSON struct {
 	Domain                apijson.Field
 	Headers               apijson.Field
 	IP                    apijson.Field
-	Js                    apijson.Field
+	JS                    apijson.Field
 	SecurityViolations    apijson.Field
 	Status                apijson.Field
 	Subdivision1Name      apijson.Field
@@ -625,47 +625,47 @@ func (r scanGetResponseScanPageCookyJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScanGetResponseScanPageJs struct {
-	Variables []ScanGetResponseScanPageJsVariable `json:"variables,required"`
-	JSON      scanGetResponseScanPageJsJSON       `json:"-"`
+type ScanGetResponseScanPageJS struct {
+	Variables []ScanGetResponseScanPageJSVariable `json:"variables,required"`
+	JSON      scanGetResponseScanPageJSJSON       `json:"-"`
 }
 
-// scanGetResponseScanPageJsJSON contains the JSON metadata for the struct
-// [ScanGetResponseScanPageJs]
-type scanGetResponseScanPageJsJSON struct {
+// scanGetResponseScanPageJSJSON contains the JSON metadata for the struct
+// [ScanGetResponseScanPageJS]
+type scanGetResponseScanPageJSJSON struct {
 	Variables   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScanGetResponseScanPageJs) UnmarshalJSON(data []byte) (err error) {
+func (r *ScanGetResponseScanPageJS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scanGetResponseScanPageJsJSON) RawJSON() string {
+func (r scanGetResponseScanPageJSJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScanGetResponseScanPageJsVariable struct {
+type ScanGetResponseScanPageJSVariable struct {
 	Name string                                `json:"name,required"`
 	Type string                                `json:"type,required"`
-	JSON scanGetResponseScanPageJsVariableJSON `json:"-"`
+	JSON scanGetResponseScanPageJSVariableJSON `json:"-"`
 }
 
-// scanGetResponseScanPageJsVariableJSON contains the JSON metadata for the struct
-// [ScanGetResponseScanPageJsVariable]
-type scanGetResponseScanPageJsVariableJSON struct {
+// scanGetResponseScanPageJSVariableJSON contains the JSON metadata for the struct
+// [ScanGetResponseScanPageJSVariable]
+type scanGetResponseScanPageJSVariableJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScanGetResponseScanPageJsVariable) UnmarshalJSON(data []byte) (err error) {
+func (r *ScanGetResponseScanPageJSVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scanGetResponseScanPageJsVariableJSON) RawJSON() string {
+func (r scanGetResponseScanPageJSVariableJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -119,7 +119,7 @@ type MinifyValue struct {
 	// Automatically minify all HTML files for your website.
 	HTML MinifyValueHTML `json:"html"`
 	// Automatically minify all JavaScript files for your website.
-	Js   MinifyValueJs   `json:"js"`
+	JS   MinifyValueJS   `json:"js"`
 	JSON minifyValueJSON `json:"-"`
 }
 
@@ -127,7 +127,7 @@ type MinifyValue struct {
 type minifyValueJSON struct {
 	Css         apijson.Field
 	HTML        apijson.Field
-	Js          apijson.Field
+	JS          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -173,16 +173,16 @@ func (r MinifyValueHTML) IsKnown() bool {
 }
 
 // Automatically minify all JavaScript files for your website.
-type MinifyValueJs string
+type MinifyValueJS string
 
 const (
-	MinifyValueJsOn  MinifyValueJs = "on"
-	MinifyValueJsOff MinifyValueJs = "off"
+	MinifyValueJSOn  MinifyValueJS = "on"
+	MinifyValueJSOff MinifyValueJS = "off"
 )
 
-func (r MinifyValueJs) IsKnown() bool {
+func (r MinifyValueJS) IsKnown() bool {
 	switch r {
-	case MinifyValueJsOn, MinifyValueJsOff:
+	case MinifyValueJSOn, MinifyValueJSOff:
 		return true
 	}
 	return false
@@ -223,7 +223,7 @@ type SettingMinifyEditParamsValue struct {
 	// Automatically minify all HTML files for your website.
 	HTML param.Field[SettingMinifyEditParamsValueHTML] `json:"html"`
 	// Automatically minify all JavaScript files for your website.
-	Js param.Field[SettingMinifyEditParamsValueJs] `json:"js"`
+	JS param.Field[SettingMinifyEditParamsValueJS] `json:"js"`
 }
 
 func (r SettingMinifyEditParamsValue) MarshalJSON() (data []byte, err error) {
@@ -263,16 +263,16 @@ func (r SettingMinifyEditParamsValueHTML) IsKnown() bool {
 }
 
 // Automatically minify all JavaScript files for your website.
-type SettingMinifyEditParamsValueJs string
+type SettingMinifyEditParamsValueJS string
 
 const (
-	SettingMinifyEditParamsValueJsOn  SettingMinifyEditParamsValueJs = "on"
-	SettingMinifyEditParamsValueJsOff SettingMinifyEditParamsValueJs = "off"
+	SettingMinifyEditParamsValueJSOn  SettingMinifyEditParamsValueJS = "on"
+	SettingMinifyEditParamsValueJSOff SettingMinifyEditParamsValueJS = "off"
 )
 
-func (r SettingMinifyEditParamsValueJs) IsKnown() bool {
+func (r SettingMinifyEditParamsValueJS) IsKnown() bool {
 	switch r {
-	case SettingMinifyEditParamsValueJsOn, SettingMinifyEditParamsValueJsOff:
+	case SettingMinifyEditParamsValueJSOn, SettingMinifyEditParamsValueJSOff:
 		return true
 	}
 	return false

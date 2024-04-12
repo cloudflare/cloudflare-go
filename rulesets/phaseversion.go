@@ -249,7 +249,7 @@ func (r PhaseVersionGetResponseRule) AsUnion() PhaseVersionGetResponseRulesUnion
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -283,7 +283,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -347,7 +347,7 @@ const (
 	PhaseVersionGetResponseRulesActionChallenge        PhaseVersionGetResponseRulesAction = "challenge"
 	PhaseVersionGetResponseRulesActionCompressResponse PhaseVersionGetResponseRulesAction = "compress_response"
 	PhaseVersionGetResponseRulesActionExecute          PhaseVersionGetResponseRulesAction = "execute"
-	PhaseVersionGetResponseRulesActionJsChallenge      PhaseVersionGetResponseRulesAction = "js_challenge"
+	PhaseVersionGetResponseRulesActionJSChallenge      PhaseVersionGetResponseRulesAction = "js_challenge"
 	PhaseVersionGetResponseRulesActionLog              PhaseVersionGetResponseRulesAction = "log"
 	PhaseVersionGetResponseRulesActionManagedChallenge PhaseVersionGetResponseRulesAction = "managed_challenge"
 	PhaseVersionGetResponseRulesActionRedirect         PhaseVersionGetResponseRulesAction = "redirect"
@@ -362,7 +362,7 @@ const (
 
 func (r PhaseVersionGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseVersionGetResponseRulesActionBlock, PhaseVersionGetResponseRulesActionChallenge, PhaseVersionGetResponseRulesActionCompressResponse, PhaseVersionGetResponseRulesActionExecute, PhaseVersionGetResponseRulesActionJsChallenge, PhaseVersionGetResponseRulesActionLog, PhaseVersionGetResponseRulesActionManagedChallenge, PhaseVersionGetResponseRulesActionRedirect, PhaseVersionGetResponseRulesActionRewrite, PhaseVersionGetResponseRulesActionRoute, PhaseVersionGetResponseRulesActionScore, PhaseVersionGetResponseRulesActionServeError, PhaseVersionGetResponseRulesActionSetConfig, PhaseVersionGetResponseRulesActionSkip, PhaseVersionGetResponseRulesActionSetCacheSettings:
+	case PhaseVersionGetResponseRulesActionBlock, PhaseVersionGetResponseRulesActionChallenge, PhaseVersionGetResponseRulesActionCompressResponse, PhaseVersionGetResponseRulesActionExecute, PhaseVersionGetResponseRulesActionJSChallenge, PhaseVersionGetResponseRulesActionLog, PhaseVersionGetResponseRulesActionManagedChallenge, PhaseVersionGetResponseRulesActionRedirect, PhaseVersionGetResponseRulesActionRewrite, PhaseVersionGetResponseRulesActionRoute, PhaseVersionGetResponseRulesActionScore, PhaseVersionGetResponseRulesActionServeError, PhaseVersionGetResponseRulesActionSetConfig, PhaseVersionGetResponseRulesActionSkip, PhaseVersionGetResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
