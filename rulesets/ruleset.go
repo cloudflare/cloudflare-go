@@ -411,7 +411,7 @@ func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -445,7 +445,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -509,7 +509,7 @@ const (
 	RulesetNewResponseRulesActionChallenge        RulesetNewResponseRulesAction = "challenge"
 	RulesetNewResponseRulesActionCompressResponse RulesetNewResponseRulesAction = "compress_response"
 	RulesetNewResponseRulesActionExecute          RulesetNewResponseRulesAction = "execute"
-	RulesetNewResponseRulesActionJsChallenge      RulesetNewResponseRulesAction = "js_challenge"
+	RulesetNewResponseRulesActionJSChallenge      RulesetNewResponseRulesAction = "js_challenge"
 	RulesetNewResponseRulesActionLog              RulesetNewResponseRulesAction = "log"
 	RulesetNewResponseRulesActionManagedChallenge RulesetNewResponseRulesAction = "managed_challenge"
 	RulesetNewResponseRulesActionRedirect         RulesetNewResponseRulesAction = "redirect"
@@ -524,7 +524,7 @@ const (
 
 func (r RulesetNewResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetNewResponseRulesActionBlock, RulesetNewResponseRulesActionChallenge, RulesetNewResponseRulesActionCompressResponse, RulesetNewResponseRulesActionExecute, RulesetNewResponseRulesActionJsChallenge, RulesetNewResponseRulesActionLog, RulesetNewResponseRulesActionManagedChallenge, RulesetNewResponseRulesActionRedirect, RulesetNewResponseRulesActionRewrite, RulesetNewResponseRulesActionRoute, RulesetNewResponseRulesActionScore, RulesetNewResponseRulesActionServeError, RulesetNewResponseRulesActionSetConfig, RulesetNewResponseRulesActionSkip, RulesetNewResponseRulesActionSetCacheSettings:
+	case RulesetNewResponseRulesActionBlock, RulesetNewResponseRulesActionChallenge, RulesetNewResponseRulesActionCompressResponse, RulesetNewResponseRulesActionExecute, RulesetNewResponseRulesActionJSChallenge, RulesetNewResponseRulesActionLog, RulesetNewResponseRulesActionManagedChallenge, RulesetNewResponseRulesActionRedirect, RulesetNewResponseRulesActionRewrite, RulesetNewResponseRulesActionRoute, RulesetNewResponseRulesActionScore, RulesetNewResponseRulesActionServeError, RulesetNewResponseRulesActionSetConfig, RulesetNewResponseRulesActionSkip, RulesetNewResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -690,7 +690,7 @@ func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -724,7 +724,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -788,7 +788,7 @@ const (
 	RulesetUpdateResponseRulesActionChallenge        RulesetUpdateResponseRulesAction = "challenge"
 	RulesetUpdateResponseRulesActionCompressResponse RulesetUpdateResponseRulesAction = "compress_response"
 	RulesetUpdateResponseRulesActionExecute          RulesetUpdateResponseRulesAction = "execute"
-	RulesetUpdateResponseRulesActionJsChallenge      RulesetUpdateResponseRulesAction = "js_challenge"
+	RulesetUpdateResponseRulesActionJSChallenge      RulesetUpdateResponseRulesAction = "js_challenge"
 	RulesetUpdateResponseRulesActionLog              RulesetUpdateResponseRulesAction = "log"
 	RulesetUpdateResponseRulesActionManagedChallenge RulesetUpdateResponseRulesAction = "managed_challenge"
 	RulesetUpdateResponseRulesActionRedirect         RulesetUpdateResponseRulesAction = "redirect"
@@ -803,7 +803,7 @@ const (
 
 func (r RulesetUpdateResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetUpdateResponseRulesActionBlock, RulesetUpdateResponseRulesActionChallenge, RulesetUpdateResponseRulesActionCompressResponse, RulesetUpdateResponseRulesActionExecute, RulesetUpdateResponseRulesActionJsChallenge, RulesetUpdateResponseRulesActionLog, RulesetUpdateResponseRulesActionManagedChallenge, RulesetUpdateResponseRulesActionRedirect, RulesetUpdateResponseRulesActionRewrite, RulesetUpdateResponseRulesActionRoute, RulesetUpdateResponseRulesActionScore, RulesetUpdateResponseRulesActionServeError, RulesetUpdateResponseRulesActionSetConfig, RulesetUpdateResponseRulesActionSkip, RulesetUpdateResponseRulesActionSetCacheSettings:
+	case RulesetUpdateResponseRulesActionBlock, RulesetUpdateResponseRulesActionChallenge, RulesetUpdateResponseRulesActionCompressResponse, RulesetUpdateResponseRulesActionExecute, RulesetUpdateResponseRulesActionJSChallenge, RulesetUpdateResponseRulesActionLog, RulesetUpdateResponseRulesActionManagedChallenge, RulesetUpdateResponseRulesActionRedirect, RulesetUpdateResponseRulesActionRewrite, RulesetUpdateResponseRulesActionRoute, RulesetUpdateResponseRulesActionScore, RulesetUpdateResponseRulesActionServeError, RulesetUpdateResponseRulesActionSetConfig, RulesetUpdateResponseRulesActionSkip, RulesetUpdateResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -969,7 +969,7 @@ func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -1003,7 +1003,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -1067,7 +1067,7 @@ const (
 	RulesetGetResponseRulesActionChallenge        RulesetGetResponseRulesAction = "challenge"
 	RulesetGetResponseRulesActionCompressResponse RulesetGetResponseRulesAction = "compress_response"
 	RulesetGetResponseRulesActionExecute          RulesetGetResponseRulesAction = "execute"
-	RulesetGetResponseRulesActionJsChallenge      RulesetGetResponseRulesAction = "js_challenge"
+	RulesetGetResponseRulesActionJSChallenge      RulesetGetResponseRulesAction = "js_challenge"
 	RulesetGetResponseRulesActionLog              RulesetGetResponseRulesAction = "log"
 	RulesetGetResponseRulesActionManagedChallenge RulesetGetResponseRulesAction = "managed_challenge"
 	RulesetGetResponseRulesActionRedirect         RulesetGetResponseRulesAction = "redirect"
@@ -1082,7 +1082,7 @@ const (
 
 func (r RulesetGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetGetResponseRulesActionBlock, RulesetGetResponseRulesActionChallenge, RulesetGetResponseRulesActionCompressResponse, RulesetGetResponseRulesActionExecute, RulesetGetResponseRulesActionJsChallenge, RulesetGetResponseRulesActionLog, RulesetGetResponseRulesActionManagedChallenge, RulesetGetResponseRulesActionRedirect, RulesetGetResponseRulesActionRewrite, RulesetGetResponseRulesActionRoute, RulesetGetResponseRulesActionScore, RulesetGetResponseRulesActionServeError, RulesetGetResponseRulesActionSetConfig, RulesetGetResponseRulesActionSkip, RulesetGetResponseRulesActionSetCacheSettings:
+	case RulesetGetResponseRulesActionBlock, RulesetGetResponseRulesActionChallenge, RulesetGetResponseRulesActionCompressResponse, RulesetGetResponseRulesActionExecute, RulesetGetResponseRulesActionJSChallenge, RulesetGetResponseRulesActionLog, RulesetGetResponseRulesActionManagedChallenge, RulesetGetResponseRulesActionRedirect, RulesetGetResponseRulesActionRewrite, RulesetGetResponseRulesActionRoute, RulesetGetResponseRulesActionScore, RulesetGetResponseRulesActionServeError, RulesetGetResponseRulesActionSetConfig, RulesetGetResponseRulesActionSkip, RulesetGetResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -1191,7 +1191,7 @@ func (r RulesetNewParamsRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam], [rulesets.ChallengeRuleParam],
 // [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
-// [rulesets.JsChallengeRuleParam], [rulesets.LogRuleParam],
+// [rulesets.JSChallengeRuleParam], [rulesets.LogRuleParam],
 // [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
 // [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
 // [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
@@ -1209,7 +1209,7 @@ const (
 	RulesetNewParamsRulesActionChallenge        RulesetNewParamsRulesAction = "challenge"
 	RulesetNewParamsRulesActionCompressResponse RulesetNewParamsRulesAction = "compress_response"
 	RulesetNewParamsRulesActionExecute          RulesetNewParamsRulesAction = "execute"
-	RulesetNewParamsRulesActionJsChallenge      RulesetNewParamsRulesAction = "js_challenge"
+	RulesetNewParamsRulesActionJSChallenge      RulesetNewParamsRulesAction = "js_challenge"
 	RulesetNewParamsRulesActionLog              RulesetNewParamsRulesAction = "log"
 	RulesetNewParamsRulesActionManagedChallenge RulesetNewParamsRulesAction = "managed_challenge"
 	RulesetNewParamsRulesActionRedirect         RulesetNewParamsRulesAction = "redirect"
@@ -1224,7 +1224,7 @@ const (
 
 func (r RulesetNewParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetNewParamsRulesActionBlock, RulesetNewParamsRulesActionChallenge, RulesetNewParamsRulesActionCompressResponse, RulesetNewParamsRulesActionExecute, RulesetNewParamsRulesActionJsChallenge, RulesetNewParamsRulesActionLog, RulesetNewParamsRulesActionManagedChallenge, RulesetNewParamsRulesActionRedirect, RulesetNewParamsRulesActionRewrite, RulesetNewParamsRulesActionRoute, RulesetNewParamsRulesActionScore, RulesetNewParamsRulesActionServeError, RulesetNewParamsRulesActionSetConfig, RulesetNewParamsRulesActionSkip, RulesetNewParamsRulesActionSetCacheSettings:
+	case RulesetNewParamsRulesActionBlock, RulesetNewParamsRulesActionChallenge, RulesetNewParamsRulesActionCompressResponse, RulesetNewParamsRulesActionExecute, RulesetNewParamsRulesActionJSChallenge, RulesetNewParamsRulesActionLog, RulesetNewParamsRulesActionManagedChallenge, RulesetNewParamsRulesActionRedirect, RulesetNewParamsRulesActionRewrite, RulesetNewParamsRulesActionRoute, RulesetNewParamsRulesActionScore, RulesetNewParamsRulesActionServeError, RulesetNewParamsRulesActionSetConfig, RulesetNewParamsRulesActionSkip, RulesetNewParamsRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -1429,7 +1429,7 @@ func (r RulesetUpdateParamsRule) implementsRulesetsRulesetUpdateParamsRuleUnion(
 
 // Satisfied by [rulesets.BlockRuleParam], [rulesets.ChallengeRuleParam],
 // [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
-// [rulesets.JsChallengeRuleParam], [rulesets.LogRuleParam],
+// [rulesets.JSChallengeRuleParam], [rulesets.LogRuleParam],
 // [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
 // [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
 // [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
@@ -1447,7 +1447,7 @@ const (
 	RulesetUpdateParamsRulesActionChallenge        RulesetUpdateParamsRulesAction = "challenge"
 	RulesetUpdateParamsRulesActionCompressResponse RulesetUpdateParamsRulesAction = "compress_response"
 	RulesetUpdateParamsRulesActionExecute          RulesetUpdateParamsRulesAction = "execute"
-	RulesetUpdateParamsRulesActionJsChallenge      RulesetUpdateParamsRulesAction = "js_challenge"
+	RulesetUpdateParamsRulesActionJSChallenge      RulesetUpdateParamsRulesAction = "js_challenge"
 	RulesetUpdateParamsRulesActionLog              RulesetUpdateParamsRulesAction = "log"
 	RulesetUpdateParamsRulesActionManagedChallenge RulesetUpdateParamsRulesAction = "managed_challenge"
 	RulesetUpdateParamsRulesActionRedirect         RulesetUpdateParamsRulesAction = "redirect"
@@ -1462,7 +1462,7 @@ const (
 
 func (r RulesetUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionJsChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip, RulesetUpdateParamsRulesActionSetCacheSettings:
+	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionJSChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip, RulesetUpdateParamsRulesActionSetCacheSettings:
 		return true
 	}
 	return false

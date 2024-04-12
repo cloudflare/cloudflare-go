@@ -74,7 +74,7 @@ type Script struct {
 	FirstSeenAt             string     `json:"first_seen_at"`
 	Hash                    string     `json:"hash"`
 	Host                    string     `json:"host"`
-	JsIntegrityScore        float64    `json:"js_integrity_score"`
+	JSIntegrityScore        float64    `json:"js_integrity_score"`
 	LastSeenAt              string     `json:"last_seen_at"`
 	ObfuscationScore        float64    `json:"obfuscation_score"`
 	PageURLs                []string   `json:"page_urls"`
@@ -94,7 +94,7 @@ type scriptJSON struct {
 	FirstSeenAt             apijson.Field
 	Hash                    apijson.Field
 	Host                    apijson.Field
-	JsIntegrityScore        apijson.Field
+	JSIntegrityScore        apijson.Field
 	LastSeenAt              apijson.Field
 	ObfuscationScore        apijson.Field
 	PageURLs                apijson.Field
@@ -122,7 +122,7 @@ type ScriptGetResponse struct {
 	FirstSeenAt             string                     `json:"first_seen_at"`
 	Hash                    string                     `json:"hash"`
 	Host                    string                     `json:"host"`
-	JsIntegrityScore        float64                    `json:"js_integrity_score"`
+	JSIntegrityScore        float64                    `json:"js_integrity_score"`
 	LastSeenAt              string                     `json:"last_seen_at"`
 	ObfuscationScore        float64                    `json:"obfuscation_score"`
 	PageURLs                []string                   `json:"page_urls"`
@@ -144,7 +144,7 @@ type scriptGetResponseJSON struct {
 	FirstSeenAt             apijson.Field
 	Hash                    apijson.Field
 	Host                    apijson.Field
-	JsIntegrityScore        apijson.Field
+	JSIntegrityScore        apijson.Field
 	LastSeenAt              apijson.Field
 	ObfuscationScore        apijson.Field
 	PageURLs                apijson.Field
@@ -172,7 +172,7 @@ type ScriptGetResponseVersion struct {
 	// The computed hash of the analyzed script.
 	Hash string `json:"hash,nullable"`
 	// The integrity score of the JavaScript content.
-	JsIntegrityScore int64 `json:"js_integrity_score,nullable"`
+	JSIntegrityScore int64 `json:"js_integrity_score,nullable"`
 	// The obfuscation score of the JavaScript content.
 	ObfuscationScore int64                        `json:"obfuscation_score,nullable"`
 	JSON             scriptGetResponseVersionJSON `json:"-"`
@@ -184,7 +184,7 @@ type scriptGetResponseVersionJSON struct {
 	DataflowScore    apijson.Field
 	FetchedAt        apijson.Field
 	Hash             apijson.Field
-	JsIntegrityScore apijson.Field
+	JSIntegrityScore apijson.Field
 	ObfuscationScore apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field

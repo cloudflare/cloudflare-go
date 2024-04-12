@@ -119,7 +119,7 @@ type Action string
 const (
 	ActionBlock            Action = "block"
 	ActionChallenge        Action = "challenge"
-	ActionJsChallenge      Action = "js_challenge"
+	ActionJSChallenge      Action = "js_challenge"
 	ActionManagedChallenge Action = "managed_challenge"
 	ActionAllow            Action = "allow"
 	ActionLog              Action = "log"
@@ -128,7 +128,7 @@ const (
 
 func (r Action) IsKnown() bool {
 	switch r {
-	case ActionBlock, ActionChallenge, ActionJsChallenge, ActionManagedChallenge, ActionAllow, ActionLog, ActionBypass:
+	case ActionBlock, ActionChallenge, ActionJSChallenge, ActionManagedChallenge, ActionAllow, ActionLog, ActionBypass:
 		return true
 	}
 	return false
@@ -247,13 +247,13 @@ const (
 	RateLimitActionModeSimulate         RateLimitActionMode = "simulate"
 	RateLimitActionModeBan              RateLimitActionMode = "ban"
 	RateLimitActionModeChallenge        RateLimitActionMode = "challenge"
-	RateLimitActionModeJsChallenge      RateLimitActionMode = "js_challenge"
+	RateLimitActionModeJSChallenge      RateLimitActionMode = "js_challenge"
 	RateLimitActionModeManagedChallenge RateLimitActionMode = "managed_challenge"
 )
 
 func (r RateLimitActionMode) IsKnown() bool {
 	switch r {
-	case RateLimitActionModeSimulate, RateLimitActionModeBan, RateLimitActionModeChallenge, RateLimitActionModeJsChallenge, RateLimitActionModeManagedChallenge:
+	case RateLimitActionModeSimulate, RateLimitActionModeBan, RateLimitActionModeChallenge, RateLimitActionModeJSChallenge, RateLimitActionModeManagedChallenge:
 		return true
 	}
 	return false
