@@ -103,7 +103,7 @@ type Output struct {
 	// The streamKey used to authenticate against an output's target.
 	StreamKey string `json:"streamKey"`
 	// A unique identifier for the output.
-	Uid string `json:"uid"`
+	UID string `json:"uid"`
 	// The URL an output uses to restream.
 	URL  string     `json:"url"`
 	JSON outputJSON `json:"-"`
@@ -113,7 +113,7 @@ type Output struct {
 type outputJSON struct {
 	Enabled     apijson.Field
 	StreamKey   apijson.Field
-	Uid         apijson.Field
+	UID         apijson.Field
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

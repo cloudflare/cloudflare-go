@@ -88,7 +88,7 @@ func (r CopyNewParams) MarshalJSON() (data []byte, err error) {
 
 type CopyNewParamsWatermark struct {
 	// The unique identifier for the watermark profile.
-	Uid param.Field[string] `json:"uid"`
+	UID param.Field[string] `json:"uid"`
 }
 
 func (r CopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {

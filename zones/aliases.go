@@ -71,15 +71,3 @@ type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
 type ResponseInfo = shared.ResponseInfo
-
-// This is an alias to an internal type.
-type User = shared.User
-
-// This is an alias to an internal type.
-type UserUser = shared.UserUser
-
-// This is an alias to an internal type.
-type UserParam = shared.UserParam
-
-// This is an alias to an internal type.
-type UserUserParam = shared.UserUserParam

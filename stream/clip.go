@@ -51,7 +51,7 @@ type Clip struct {
 	// viewed on any origin.
 	AllowedOrigins []AllowedOrigins `json:"allowedOrigins"`
 	// The unique video identifier (UID).
-	ClippedFromVideoUid string `json:"clippedFromVideoUID"`
+	ClippedFromVideoUID string `json:"clippedFromVideoUID"`
 	// The date and time the clip was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// A user-defined identifier for the media creator.
@@ -90,7 +90,7 @@ type Clip struct {
 // clipJSON contains the JSON metadata for the struct [Clip]
 type clipJSON struct {
 	AllowedOrigins        apijson.Field
-	ClippedFromVideoUid   apijson.Field
+	ClippedFromVideoUID   apijson.Field
 	Created               apijson.Field
 	Creator               apijson.Field
 	EndTimeSeconds        apijson.Field
@@ -162,13 +162,13 @@ func (r ClipStatus) IsKnown() bool {
 
 type ClipWatermark struct {
 	// The unique identifier for the watermark profile.
-	Uid  string            `json:"uid"`
+	UID  string            `json:"uid"`
 	JSON clipWatermarkJSON `json:"-"`
 }
 
 // clipWatermarkJSON contains the JSON metadata for the struct [ClipWatermark]
 type clipWatermarkJSON struct {
-	Uid         apijson.Field
+	UID         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -185,7 +185,7 @@ type ClipNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The unique video identifier (UID).
-	ClippedFromVideoUid param.Field[string] `json:"clippedFromVideoUID,required"`
+	ClippedFromVideoUID param.Field[string] `json:"clippedFromVideoUID,required"`
 	// Specifies the end time for the video clip in seconds.
 	EndTimeSeconds param.Field[int64] `json:"endTimeSeconds,required"`
 	// Specifies the start time for the video clip in seconds.
@@ -218,7 +218,7 @@ func (r ClipNewParams) MarshalJSON() (data []byte, err error) {
 
 type ClipNewParamsWatermark struct {
 	// The unique identifier for the watermark profile.
-	Uid param.Field[string] `json:"uid"`
+	UID param.Field[string] `json:"uid"`
 }
 
 func (r ClipNewParamsWatermark) MarshalJSON() (data []byte, err error) {

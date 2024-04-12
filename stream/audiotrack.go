@@ -98,7 +98,7 @@ type Audio struct {
 	// Specifies the processing status of the video.
 	Status AudioStatus `json:"status"`
 	// A Cloudflare-generated unique identifier for a media item.
-	Uid  string    `json:"uid"`
+	UID  string    `json:"uid"`
 	JSON audioJSON `json:"-"`
 }
 
@@ -107,7 +107,7 @@ type audioJSON struct {
 	Default     apijson.Field
 	Label       apijson.Field
 	Status      apijson.Field
-	Uid         apijson.Field
+	UID         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
