@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
@@ -103,7 +102,7 @@ type Invite struct {
 	// Organization name.
 	OrganizationName string `json:"organization_name"`
 	// Roles to be assigned to this user.
-	Roles []accounts.Role `json:"roles"`
+	Roles []Role `json:"roles"`
 	// Current status of the invitation.
 	Status InviteStatus `json:"status"`
 	JSON   inviteJSON   `json:"-"`
