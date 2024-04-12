@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // MemberService contains methods and other services that help with interacting
@@ -49,7 +48,7 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 }
 
 // Modify an account member.
-func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *user.User, err error) {
+func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *shared.User, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", params.AccountID, memberID)
@@ -98,7 +97,7 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, params Memb
 }
 
 // Get information about a specific member of an account.
-func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *user.User, err error) {
+func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *shared.User, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", query.AccountID, memberID)
@@ -173,18 +172,18 @@ func (r userWithInviteCodeRoleJSON) RawJSON() string {
 }
 
 type UserWithInviteCodeRolesPermissions struct {
-	Analytics    PermissionGrant                        `json:"analytics"`
-	Billing      PermissionGrant                        `json:"billing"`
-	CachePurge   PermissionGrant                        `json:"cache_purge"`
-	DNS          PermissionGrant                        `json:"dns"`
-	DNSRecords   PermissionGrant                        `json:"dns_records"`
-	Lb           PermissionGrant                        `json:"lb"`
-	Logs         PermissionGrant                        `json:"logs"`
-	Organization PermissionGrant                        `json:"organization"`
-	SSL          PermissionGrant                        `json:"ssl"`
-	WAF          PermissionGrant                        `json:"waf"`
-	ZoneSettings PermissionGrant                        `json:"zone_settings"`
-	Zones        PermissionGrant                        `json:"zones"`
+	Analytics    shared.PermissionGrant                 `json:"analytics"`
+	Billing      shared.PermissionGrant                 `json:"billing"`
+	CachePurge   shared.PermissionGrant                 `json:"cache_purge"`
+	DNS          shared.PermissionGrant                 `json:"dns"`
+	DNSRecords   shared.PermissionGrant                 `json:"dns_records"`
+	LB           shared.PermissionGrant                 `json:"lb"`
+	Logs         shared.PermissionGrant                 `json:"logs"`
+	Organization shared.PermissionGrant                 `json:"organization"`
+	SSL          shared.PermissionGrant                 `json:"ssl"`
+	WAF          shared.PermissionGrant                 `json:"waf"`
+	ZoneSettings shared.PermissionGrant                 `json:"zone_settings"`
+	Zones        shared.PermissionGrant                 `json:"zones"`
 	JSON         userWithInviteCodeRolesPermissionsJSON `json:"-"`
 }
 
@@ -196,7 +195,7 @@ type userWithInviteCodeRolesPermissionsJSON struct {
 	CachePurge   apijson.Field
 	DNS          apijson.Field
 	DNSRecords   apijson.Field
-	Lb           apijson.Field
+	LB           apijson.Field
 	Logs         apijson.Field
 	Organization apijson.Field
 	SSL          apijson.Field
@@ -258,7 +257,7 @@ type MemberListResponse struct {
 	// Member Name.
 	Name string `json:"name,required,nullable"`
 	// Roles assigned to this Member.
-	Roles []user.Role `json:"roles,required"`
+	Roles []shared.Role `json:"roles,required"`
 	// A member's status in the organization.
 	Status MemberListResponseStatus `json:"status,required"`
 	JSON   memberListResponseJSON   `json:"-"`
@@ -395,7 +394,7 @@ func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
-	User      user.UserParam           `json:"user,required"`
+	User      shared.UserParam         `json:"user,required"`
 }
 
 func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -405,7 +404,7 @@ func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
 type MemberUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.User             `json:"result,required"`
+	Result   shared.User           `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberUpdateResponseEnvelopeJSON    `json:"-"`
@@ -577,7 +576,7 @@ type MemberGetParams struct {
 type MemberGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   user.User             `json:"result,required"`
+	Result   shared.User           `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberGetResponseEnvelopeJSON    `json:"-"`

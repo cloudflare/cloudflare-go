@@ -140,18 +140,18 @@ func (r membershipJSON) RawJSON() string {
 
 // All access permissions for the user at the account.
 type MembershipPermissions struct {
-	Analytics    accounts.PermissionGrant  `json:"analytics"`
-	Billing      accounts.PermissionGrant  `json:"billing"`
-	CachePurge   accounts.PermissionGrant  `json:"cache_purge"`
-	DNS          accounts.PermissionGrant  `json:"dns"`
-	DNSRecords   accounts.PermissionGrant  `json:"dns_records"`
-	Lb           accounts.PermissionGrant  `json:"lb"`
-	Logs         accounts.PermissionGrant  `json:"logs"`
-	Organization accounts.PermissionGrant  `json:"organization"`
-	SSL          accounts.PermissionGrant  `json:"ssl"`
-	WAF          accounts.PermissionGrant  `json:"waf"`
-	ZoneSettings accounts.PermissionGrant  `json:"zone_settings"`
-	Zones        accounts.PermissionGrant  `json:"zones"`
+	Analytics    shared.PermissionGrant    `json:"analytics"`
+	Billing      shared.PermissionGrant    `json:"billing"`
+	CachePurge   shared.PermissionGrant    `json:"cache_purge"`
+	DNS          shared.PermissionGrant    `json:"dns"`
+	DNSRecords   shared.PermissionGrant    `json:"dns_records"`
+	LB           shared.PermissionGrant    `json:"lb"`
+	Logs         shared.PermissionGrant    `json:"logs"`
+	Organization shared.PermissionGrant    `json:"organization"`
+	SSL          shared.PermissionGrant    `json:"ssl"`
+	WAF          shared.PermissionGrant    `json:"waf"`
+	ZoneSettings shared.PermissionGrant    `json:"zone_settings"`
+	Zones        shared.PermissionGrant    `json:"zones"`
 	JSON         membershipPermissionsJSON `json:"-"`
 }
 
@@ -163,7 +163,7 @@ type membershipPermissionsJSON struct {
 	CachePurge   apijson.Field
 	DNS          apijson.Field
 	DNSRecords   apijson.Field
-	Lb           apijson.Field
+	LB           apijson.Field
 	Logs         apijson.Field
 	Organization apijson.Field
 	SSL          apijson.Field
