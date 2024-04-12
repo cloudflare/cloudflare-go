@@ -52,6 +52,4 @@ func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, opts .
 	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
-type Permission = string
-
 type TokenPermissionGroupListResponse = interface{}

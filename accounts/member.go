@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // MemberService contains methods and other services that help with interacting
@@ -48,7 +49,7 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 }
 
 // Modify an account member.
-func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *User, err error) {
+func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *user.User, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", params.AccountID, memberID)
@@ -97,7 +98,7 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, params Memb
 }
 
 // Get information about a specific member of an account.
-func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *User, err error) {
+func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *user.User, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", query.AccountID, memberID)
@@ -257,7 +258,7 @@ type MemberListResponse struct {
 	// Member Name.
 	Name string `json:"name,required,nullable"`
 	// Roles assigned to this Member.
-	Roles []Role `json:"roles,required"`
+	Roles []user.Role `json:"roles,required"`
 	// A member's status in the organization.
 	Status MemberListResponseStatus `json:"status,required"`
 	JSON   memberListResponseJSON   `json:"-"`
@@ -394,7 +395,7 @@ func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
-	User      UserParam                `json:"user,required"`
+	User      user.UserParam           `json:"user,required"`
 }
 
 func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -404,7 +405,7 @@ func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
 type MemberUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   User                  `json:"result,required"`
+	Result   user.User             `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberUpdateResponseEnvelopeJSON    `json:"-"`
@@ -576,7 +577,7 @@ type MemberGetParams struct {
 type MemberGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   User                  `json:"result,required"`
+	Result   user.User             `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberGetResponseEnvelopeJSON    `json:"-"`
