@@ -223,12 +223,12 @@ const (
 	TeamnetTunTypeWARPConnector TeamnetTunType = "warp_connector"
 	TeamnetTunTypeIPSec         TeamnetTunType = "ip_sec"
 	TeamnetTunTypeGRE           TeamnetTunType = "gre"
-	TeamnetTunTypeCni           TeamnetTunType = "cni"
+	TeamnetTunTypeCNI           TeamnetTunType = "cni"
 )
 
 func (r TeamnetTunType) IsKnown() bool {
 	switch r {
-	case TeamnetTunTypeCfdTunnel, TeamnetTunTypeWARPConnector, TeamnetTunTypeIPSec, TeamnetTunTypeGRE, TeamnetTunTypeCni:
+	case TeamnetTunTypeCfdTunnel, TeamnetTunTypeWARPConnector, TeamnetTunTypeIPSec, TeamnetTunTypeGRE, TeamnetTunTypeCNI:
 		return true
 	}
 	return false
@@ -410,12 +410,12 @@ const (
 	NetworkRouteEditParamsTunTypeWARPConnector NetworkRouteEditParamsTunType = "warp_connector"
 	NetworkRouteEditParamsTunTypeIPSec         NetworkRouteEditParamsTunType = "ip_sec"
 	NetworkRouteEditParamsTunTypeGRE           NetworkRouteEditParamsTunType = "gre"
-	NetworkRouteEditParamsTunTypeCni           NetworkRouteEditParamsTunType = "cni"
+	NetworkRouteEditParamsTunTypeCNI           NetworkRouteEditParamsTunType = "cni"
 )
 
 func (r NetworkRouteEditParamsTunType) IsKnown() bool {
 	switch r {
-	case NetworkRouteEditParamsTunTypeCfdTunnel, NetworkRouteEditParamsTunTypeWARPConnector, NetworkRouteEditParamsTunTypeIPSec, NetworkRouteEditParamsTunTypeGRE, NetworkRouteEditParamsTunTypeCni:
+	case NetworkRouteEditParamsTunTypeCfdTunnel, NetworkRouteEditParamsTunTypeWARPConnector, NetworkRouteEditParamsTunTypeIPSec, NetworkRouteEditParamsTunTypeGRE, NetworkRouteEditParamsTunTypeCNI:
 		return true
 	}
 	return false

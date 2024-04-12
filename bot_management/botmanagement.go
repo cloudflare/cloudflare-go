@@ -183,13 +183,13 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomated `json:"sbfm_definitely_automated"`
+	SBFMDefinitelyAutomated SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomated `json:"sbfm_definitely_automated"`
 	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
 	// static resources on your application need bot protection. Note: Static resource
 	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
+	SBFMStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBots `json:"sbfm_verified_bots"`
+	SBFMVerifiedBots SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots `json:"sbfm_verified_bots"`
 	// A read-only field that indicates whether the zone currently is running the
 	// latest ML model.
 	UsingLatestModel bool                                         `json:"using_latest_model"`
@@ -201,9 +201,9 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 type superBotFightModeDefinitelyConfigurationJSON struct {
 	EnableJS                     apijson.Field
 	OptimizeWordpress            apijson.Field
-	SbfmDefinitelyAutomated      apijson.Field
-	SbfmStaticResourceProtection apijson.Field
-	SbfmVerifiedBots             apijson.Field
+	SBFMDefinitelyAutomated      apijson.Field
+	SBFMStaticResourceProtection apijson.Field
+	SBFMVerifiedBots             apijson.Field
 	UsingLatestModel             apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
@@ -223,33 +223,33 @@ func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementBotMana
 func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementBotManagementGetResponse() {}
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-type SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomated string
+type SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomated string
 
 const (
-	SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomatedAllow            SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomated = "allow"
-	SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomatedBlock            SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomated = "block"
-	SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomatedManagedChallenge SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomated = "managed_challenge"
+	SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomatedAllow            SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomated = "allow"
+	SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomatedBlock            SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomated = "block"
+	SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomatedManagedChallenge SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomated = "managed_challenge"
 )
 
-func (r SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomated) IsKnown() bool {
+func (r SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomated) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomatedAllow, SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomatedBlock, SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomatedManagedChallenge:
+	case SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomatedAllow, SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomatedBlock, SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomatedManagedChallenge:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-type SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBots string
+type SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots string
 
 const (
-	SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBotsAllow SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBots = "allow"
-	SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBotsBlock SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBots = "block"
+	SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBotsAllow SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots = "allow"
+	SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBotsBlock SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots = "block"
 )
 
-func (r SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBots) IsKnown() bool {
+func (r SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBotsAllow, SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBotsBlock:
+	case SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBotsAllow, SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBotsBlock:
 		return true
 	}
 	return false
@@ -262,13 +262,13 @@ type SuperBotFightModeDefinitelyConfigurationParam struct {
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated param.Field[SuperBotFightModeDefinitelyConfigurationSbfmDefinitelyAutomated] `json:"sbfm_definitely_automated"`
+	SBFMDefinitelyAutomated param.Field[SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomated] `json:"sbfm_definitely_automated"`
 	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
 	// static resources on your application need bot protection. Note: Static resource
 	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
+	SBFMStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots param.Field[SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBots] `json:"sbfm_verified_bots"`
+	SBFMVerifiedBots param.Field[SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots] `json:"sbfm_verified_bots"`
 }
 
 func (r SuperBotFightModeDefinitelyConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -285,15 +285,15 @@ type SuperBotFightModeLikelyConfiguration struct {
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomated `json:"sbfm_definitely_automated"`
+	SBFMDefinitelyAutomated SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomated `json:"sbfm_definitely_automated"`
 	// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-	SbfmLikelyAutomated SuperBotFightModeLikelyConfigurationSbfmLikelyAutomated `json:"sbfm_likely_automated"`
+	SBFMLikelyAutomated SuperBotFightModeLikelyConfigurationSBFMLikelyAutomated `json:"sbfm_likely_automated"`
 	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
 	// static resources on your application need bot protection. Note: Static resource
 	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
+	SBFMStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots SuperBotFightModeLikelyConfigurationSbfmVerifiedBots `json:"sbfm_verified_bots"`
+	SBFMVerifiedBots SuperBotFightModeLikelyConfigurationSBFMVerifiedBots `json:"sbfm_verified_bots"`
 	// A read-only field that indicates whether the zone currently is running the
 	// latest ML model.
 	UsingLatestModel bool                                     `json:"using_latest_model"`
@@ -305,10 +305,10 @@ type SuperBotFightModeLikelyConfiguration struct {
 type superBotFightModeLikelyConfigurationJSON struct {
 	EnableJS                     apijson.Field
 	OptimizeWordpress            apijson.Field
-	SbfmDefinitelyAutomated      apijson.Field
-	SbfmLikelyAutomated          apijson.Field
-	SbfmStaticResourceProtection apijson.Field
-	SbfmVerifiedBots             apijson.Field
+	SBFMDefinitelyAutomated      apijson.Field
+	SBFMLikelyAutomated          apijson.Field
+	SBFMStaticResourceProtection apijson.Field
+	SBFMVerifiedBots             apijson.Field
 	UsingLatestModel             apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
@@ -327,50 +327,50 @@ func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementBotManageme
 func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementBotManagementGetResponse() {}
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-type SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomated string
+type SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomated string
 
 const (
-	SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomatedAllow            SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomated = "allow"
-	SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomatedBlock            SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomated = "block"
-	SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomatedManagedChallenge SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomated = "managed_challenge"
+	SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomatedAllow            SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomated = "allow"
+	SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomatedBlock            SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomated = "block"
+	SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomatedManagedChallenge SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomated = "managed_challenge"
 )
 
-func (r SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomated) IsKnown() bool {
+func (r SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomated) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomatedAllow, SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomatedBlock, SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomatedManagedChallenge:
+	case SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomatedAllow, SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomatedBlock, SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomatedManagedChallenge:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-type SuperBotFightModeLikelyConfigurationSbfmLikelyAutomated string
+type SuperBotFightModeLikelyConfigurationSBFMLikelyAutomated string
 
 const (
-	SuperBotFightModeLikelyConfigurationSbfmLikelyAutomatedAllow            SuperBotFightModeLikelyConfigurationSbfmLikelyAutomated = "allow"
-	SuperBotFightModeLikelyConfigurationSbfmLikelyAutomatedBlock            SuperBotFightModeLikelyConfigurationSbfmLikelyAutomated = "block"
-	SuperBotFightModeLikelyConfigurationSbfmLikelyAutomatedManagedChallenge SuperBotFightModeLikelyConfigurationSbfmLikelyAutomated = "managed_challenge"
+	SuperBotFightModeLikelyConfigurationSBFMLikelyAutomatedAllow            SuperBotFightModeLikelyConfigurationSBFMLikelyAutomated = "allow"
+	SuperBotFightModeLikelyConfigurationSBFMLikelyAutomatedBlock            SuperBotFightModeLikelyConfigurationSBFMLikelyAutomated = "block"
+	SuperBotFightModeLikelyConfigurationSBFMLikelyAutomatedManagedChallenge SuperBotFightModeLikelyConfigurationSBFMLikelyAutomated = "managed_challenge"
 )
 
-func (r SuperBotFightModeLikelyConfigurationSbfmLikelyAutomated) IsKnown() bool {
+func (r SuperBotFightModeLikelyConfigurationSBFMLikelyAutomated) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeLikelyConfigurationSbfmLikelyAutomatedAllow, SuperBotFightModeLikelyConfigurationSbfmLikelyAutomatedBlock, SuperBotFightModeLikelyConfigurationSbfmLikelyAutomatedManagedChallenge:
+	case SuperBotFightModeLikelyConfigurationSBFMLikelyAutomatedAllow, SuperBotFightModeLikelyConfigurationSBFMLikelyAutomatedBlock, SuperBotFightModeLikelyConfigurationSBFMLikelyAutomatedManagedChallenge:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-type SuperBotFightModeLikelyConfigurationSbfmVerifiedBots string
+type SuperBotFightModeLikelyConfigurationSBFMVerifiedBots string
 
 const (
-	SuperBotFightModeLikelyConfigurationSbfmVerifiedBotsAllow SuperBotFightModeLikelyConfigurationSbfmVerifiedBots = "allow"
-	SuperBotFightModeLikelyConfigurationSbfmVerifiedBotsBlock SuperBotFightModeLikelyConfigurationSbfmVerifiedBots = "block"
+	SuperBotFightModeLikelyConfigurationSBFMVerifiedBotsAllow SuperBotFightModeLikelyConfigurationSBFMVerifiedBots = "allow"
+	SuperBotFightModeLikelyConfigurationSBFMVerifiedBotsBlock SuperBotFightModeLikelyConfigurationSBFMVerifiedBots = "block"
 )
 
-func (r SuperBotFightModeLikelyConfigurationSbfmVerifiedBots) IsKnown() bool {
+func (r SuperBotFightModeLikelyConfigurationSBFMVerifiedBots) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeLikelyConfigurationSbfmVerifiedBotsAllow, SuperBotFightModeLikelyConfigurationSbfmVerifiedBotsBlock:
+	case SuperBotFightModeLikelyConfigurationSBFMVerifiedBotsAllow, SuperBotFightModeLikelyConfigurationSBFMVerifiedBotsBlock:
 		return true
 	}
 	return false
@@ -383,15 +383,15 @@ type SuperBotFightModeLikelyConfigurationParam struct {
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated param.Field[SuperBotFightModeLikelyConfigurationSbfmDefinitelyAutomated] `json:"sbfm_definitely_automated"`
+	SBFMDefinitelyAutomated param.Field[SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomated] `json:"sbfm_definitely_automated"`
 	// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-	SbfmLikelyAutomated param.Field[SuperBotFightModeLikelyConfigurationSbfmLikelyAutomated] `json:"sbfm_likely_automated"`
+	SBFMLikelyAutomated param.Field[SuperBotFightModeLikelyConfigurationSBFMLikelyAutomated] `json:"sbfm_likely_automated"`
 	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
 	// static resources on your application need bot protection. Note: Static resource
 	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
+	SBFMStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots param.Field[SuperBotFightModeLikelyConfigurationSbfmVerifiedBots] `json:"sbfm_verified_bots"`
+	SBFMVerifiedBots param.Field[SuperBotFightModeLikelyConfigurationSBFMVerifiedBots] `json:"sbfm_verified_bots"`
 }
 
 func (r SuperBotFightModeLikelyConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -413,15 +413,15 @@ type BotManagementUpdateResponse struct {
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated BotManagementUpdateResponseSbfmDefinitelyAutomated `json:"sbfm_definitely_automated"`
+	SBFMDefinitelyAutomated BotManagementUpdateResponseSBFMDefinitelyAutomated `json:"sbfm_definitely_automated"`
 	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
 	// static resources on your application need bot protection. Note: Static resource
 	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
+	SBFMStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots BotManagementUpdateResponseSbfmVerifiedBots `json:"sbfm_verified_bots"`
+	SBFMVerifiedBots BotManagementUpdateResponseSBFMVerifiedBots `json:"sbfm_verified_bots"`
 	// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-	SbfmLikelyAutomated BotManagementUpdateResponseSbfmLikelyAutomated `json:"sbfm_likely_automated"`
+	SBFMLikelyAutomated BotManagementUpdateResponseSBFMLikelyAutomated `json:"sbfm_likely_automated"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -440,10 +440,10 @@ type botManagementUpdateResponseJSON struct {
 	UsingLatestModel             apijson.Field
 	FightMode                    apijson.Field
 	OptimizeWordpress            apijson.Field
-	SbfmDefinitelyAutomated      apijson.Field
-	SbfmStaticResourceProtection apijson.Field
-	SbfmVerifiedBots             apijson.Field
-	SbfmLikelyAutomated          apijson.Field
+	SBFMDefinitelyAutomated      apijson.Field
+	SBFMStaticResourceProtection apijson.Field
+	SBFMVerifiedBots             apijson.Field
+	SBFMLikelyAutomated          apijson.Field
 	AutoUpdateModel              apijson.Field
 	SuppressSessionScore         apijson.Field
 	raw                          string
@@ -498,50 +498,50 @@ func init() {
 }
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-type BotManagementUpdateResponseSbfmDefinitelyAutomated string
+type BotManagementUpdateResponseSBFMDefinitelyAutomated string
 
 const (
-	BotManagementUpdateResponseSbfmDefinitelyAutomatedAllow            BotManagementUpdateResponseSbfmDefinitelyAutomated = "allow"
-	BotManagementUpdateResponseSbfmDefinitelyAutomatedBlock            BotManagementUpdateResponseSbfmDefinitelyAutomated = "block"
-	BotManagementUpdateResponseSbfmDefinitelyAutomatedManagedChallenge BotManagementUpdateResponseSbfmDefinitelyAutomated = "managed_challenge"
+	BotManagementUpdateResponseSBFMDefinitelyAutomatedAllow            BotManagementUpdateResponseSBFMDefinitelyAutomated = "allow"
+	BotManagementUpdateResponseSBFMDefinitelyAutomatedBlock            BotManagementUpdateResponseSBFMDefinitelyAutomated = "block"
+	BotManagementUpdateResponseSBFMDefinitelyAutomatedManagedChallenge BotManagementUpdateResponseSBFMDefinitelyAutomated = "managed_challenge"
 )
 
-func (r BotManagementUpdateResponseSbfmDefinitelyAutomated) IsKnown() bool {
+func (r BotManagementUpdateResponseSBFMDefinitelyAutomated) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateResponseSbfmDefinitelyAutomatedAllow, BotManagementUpdateResponseSbfmDefinitelyAutomatedBlock, BotManagementUpdateResponseSbfmDefinitelyAutomatedManagedChallenge:
+	case BotManagementUpdateResponseSBFMDefinitelyAutomatedAllow, BotManagementUpdateResponseSBFMDefinitelyAutomatedBlock, BotManagementUpdateResponseSBFMDefinitelyAutomatedManagedChallenge:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-type BotManagementUpdateResponseSbfmVerifiedBots string
+type BotManagementUpdateResponseSBFMVerifiedBots string
 
 const (
-	BotManagementUpdateResponseSbfmVerifiedBotsAllow BotManagementUpdateResponseSbfmVerifiedBots = "allow"
-	BotManagementUpdateResponseSbfmVerifiedBotsBlock BotManagementUpdateResponseSbfmVerifiedBots = "block"
+	BotManagementUpdateResponseSBFMVerifiedBotsAllow BotManagementUpdateResponseSBFMVerifiedBots = "allow"
+	BotManagementUpdateResponseSBFMVerifiedBotsBlock BotManagementUpdateResponseSBFMVerifiedBots = "block"
 )
 
-func (r BotManagementUpdateResponseSbfmVerifiedBots) IsKnown() bool {
+func (r BotManagementUpdateResponseSBFMVerifiedBots) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateResponseSbfmVerifiedBotsAllow, BotManagementUpdateResponseSbfmVerifiedBotsBlock:
+	case BotManagementUpdateResponseSBFMVerifiedBotsAllow, BotManagementUpdateResponseSBFMVerifiedBotsBlock:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-type BotManagementUpdateResponseSbfmLikelyAutomated string
+type BotManagementUpdateResponseSBFMLikelyAutomated string
 
 const (
-	BotManagementUpdateResponseSbfmLikelyAutomatedAllow            BotManagementUpdateResponseSbfmLikelyAutomated = "allow"
-	BotManagementUpdateResponseSbfmLikelyAutomatedBlock            BotManagementUpdateResponseSbfmLikelyAutomated = "block"
-	BotManagementUpdateResponseSbfmLikelyAutomatedManagedChallenge BotManagementUpdateResponseSbfmLikelyAutomated = "managed_challenge"
+	BotManagementUpdateResponseSBFMLikelyAutomatedAllow            BotManagementUpdateResponseSBFMLikelyAutomated = "allow"
+	BotManagementUpdateResponseSBFMLikelyAutomatedBlock            BotManagementUpdateResponseSBFMLikelyAutomated = "block"
+	BotManagementUpdateResponseSBFMLikelyAutomatedManagedChallenge BotManagementUpdateResponseSBFMLikelyAutomated = "managed_challenge"
 )
 
-func (r BotManagementUpdateResponseSbfmLikelyAutomated) IsKnown() bool {
+func (r BotManagementUpdateResponseSBFMLikelyAutomated) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateResponseSbfmLikelyAutomatedAllow, BotManagementUpdateResponseSbfmLikelyAutomatedBlock, BotManagementUpdateResponseSbfmLikelyAutomatedManagedChallenge:
+	case BotManagementUpdateResponseSBFMLikelyAutomatedAllow, BotManagementUpdateResponseSBFMLikelyAutomatedBlock, BotManagementUpdateResponseSBFMLikelyAutomatedManagedChallenge:
 		return true
 	}
 	return false
@@ -559,15 +559,15 @@ type BotManagementGetResponse struct {
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated BotManagementGetResponseSbfmDefinitelyAutomated `json:"sbfm_definitely_automated"`
+	SBFMDefinitelyAutomated BotManagementGetResponseSBFMDefinitelyAutomated `json:"sbfm_definitely_automated"`
 	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
 	// static resources on your application need bot protection. Note: Static resource
 	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
+	SBFMStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots BotManagementGetResponseSbfmVerifiedBots `json:"sbfm_verified_bots"`
+	SBFMVerifiedBots BotManagementGetResponseSBFMVerifiedBots `json:"sbfm_verified_bots"`
 	// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-	SbfmLikelyAutomated BotManagementGetResponseSbfmLikelyAutomated `json:"sbfm_likely_automated"`
+	SBFMLikelyAutomated BotManagementGetResponseSBFMLikelyAutomated `json:"sbfm_likely_automated"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -586,10 +586,10 @@ type botManagementGetResponseJSON struct {
 	UsingLatestModel             apijson.Field
 	FightMode                    apijson.Field
 	OptimizeWordpress            apijson.Field
-	SbfmDefinitelyAutomated      apijson.Field
-	SbfmStaticResourceProtection apijson.Field
-	SbfmVerifiedBots             apijson.Field
-	SbfmLikelyAutomated          apijson.Field
+	SBFMDefinitelyAutomated      apijson.Field
+	SBFMStaticResourceProtection apijson.Field
+	SBFMVerifiedBots             apijson.Field
+	SBFMLikelyAutomated          apijson.Field
 	AutoUpdateModel              apijson.Field
 	SuppressSessionScore         apijson.Field
 	raw                          string
@@ -644,50 +644,50 @@ func init() {
 }
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-type BotManagementGetResponseSbfmDefinitelyAutomated string
+type BotManagementGetResponseSBFMDefinitelyAutomated string
 
 const (
-	BotManagementGetResponseSbfmDefinitelyAutomatedAllow            BotManagementGetResponseSbfmDefinitelyAutomated = "allow"
-	BotManagementGetResponseSbfmDefinitelyAutomatedBlock            BotManagementGetResponseSbfmDefinitelyAutomated = "block"
-	BotManagementGetResponseSbfmDefinitelyAutomatedManagedChallenge BotManagementGetResponseSbfmDefinitelyAutomated = "managed_challenge"
+	BotManagementGetResponseSBFMDefinitelyAutomatedAllow            BotManagementGetResponseSBFMDefinitelyAutomated = "allow"
+	BotManagementGetResponseSBFMDefinitelyAutomatedBlock            BotManagementGetResponseSBFMDefinitelyAutomated = "block"
+	BotManagementGetResponseSBFMDefinitelyAutomatedManagedChallenge BotManagementGetResponseSBFMDefinitelyAutomated = "managed_challenge"
 )
 
-func (r BotManagementGetResponseSbfmDefinitelyAutomated) IsKnown() bool {
+func (r BotManagementGetResponseSBFMDefinitelyAutomated) IsKnown() bool {
 	switch r {
-	case BotManagementGetResponseSbfmDefinitelyAutomatedAllow, BotManagementGetResponseSbfmDefinitelyAutomatedBlock, BotManagementGetResponseSbfmDefinitelyAutomatedManagedChallenge:
+	case BotManagementGetResponseSBFMDefinitelyAutomatedAllow, BotManagementGetResponseSBFMDefinitelyAutomatedBlock, BotManagementGetResponseSBFMDefinitelyAutomatedManagedChallenge:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-type BotManagementGetResponseSbfmVerifiedBots string
+type BotManagementGetResponseSBFMVerifiedBots string
 
 const (
-	BotManagementGetResponseSbfmVerifiedBotsAllow BotManagementGetResponseSbfmVerifiedBots = "allow"
-	BotManagementGetResponseSbfmVerifiedBotsBlock BotManagementGetResponseSbfmVerifiedBots = "block"
+	BotManagementGetResponseSBFMVerifiedBotsAllow BotManagementGetResponseSBFMVerifiedBots = "allow"
+	BotManagementGetResponseSBFMVerifiedBotsBlock BotManagementGetResponseSBFMVerifiedBots = "block"
 )
 
-func (r BotManagementGetResponseSbfmVerifiedBots) IsKnown() bool {
+func (r BotManagementGetResponseSBFMVerifiedBots) IsKnown() bool {
 	switch r {
-	case BotManagementGetResponseSbfmVerifiedBotsAllow, BotManagementGetResponseSbfmVerifiedBotsBlock:
+	case BotManagementGetResponseSBFMVerifiedBotsAllow, BotManagementGetResponseSBFMVerifiedBotsBlock:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-type BotManagementGetResponseSbfmLikelyAutomated string
+type BotManagementGetResponseSBFMLikelyAutomated string
 
 const (
-	BotManagementGetResponseSbfmLikelyAutomatedAllow            BotManagementGetResponseSbfmLikelyAutomated = "allow"
-	BotManagementGetResponseSbfmLikelyAutomatedBlock            BotManagementGetResponseSbfmLikelyAutomated = "block"
-	BotManagementGetResponseSbfmLikelyAutomatedManagedChallenge BotManagementGetResponseSbfmLikelyAutomated = "managed_challenge"
+	BotManagementGetResponseSBFMLikelyAutomatedAllow            BotManagementGetResponseSBFMLikelyAutomated = "allow"
+	BotManagementGetResponseSBFMLikelyAutomatedBlock            BotManagementGetResponseSBFMLikelyAutomated = "block"
+	BotManagementGetResponseSBFMLikelyAutomatedManagedChallenge BotManagementGetResponseSBFMLikelyAutomated = "managed_challenge"
 )
 
-func (r BotManagementGetResponseSbfmLikelyAutomated) IsKnown() bool {
+func (r BotManagementGetResponseSBFMLikelyAutomated) IsKnown() bool {
 	switch r {
-	case BotManagementGetResponseSbfmLikelyAutomatedAllow, BotManagementGetResponseSbfmLikelyAutomatedBlock, BotManagementGetResponseSbfmLikelyAutomatedManagedChallenge:
+	case BotManagementGetResponseSBFMLikelyAutomatedAllow, BotManagementGetResponseSBFMLikelyAutomatedBlock, BotManagementGetResponseSBFMLikelyAutomatedManagedChallenge:
 		return true
 	}
 	return false
@@ -712,15 +712,15 @@ type BotManagementUpdateParamsBody struct {
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated param.Field[BotManagementUpdateParamsBodySbfmDefinitelyAutomated] `json:"sbfm_definitely_automated"`
+	SBFMDefinitelyAutomated param.Field[BotManagementUpdateParamsBodySBFMDefinitelyAutomated] `json:"sbfm_definitely_automated"`
 	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
 	// static resources on your application need bot protection. Note: Static resource
 	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
+	SBFMStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots param.Field[BotManagementUpdateParamsBodySbfmVerifiedBots] `json:"sbfm_verified_bots"`
+	SBFMVerifiedBots param.Field[BotManagementUpdateParamsBodySBFMVerifiedBots] `json:"sbfm_verified_bots"`
 	// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-	SbfmLikelyAutomated param.Field[BotManagementUpdateParamsBodySbfmLikelyAutomated] `json:"sbfm_likely_automated"`
+	SBFMLikelyAutomated param.Field[BotManagementUpdateParamsBodySBFMLikelyAutomated] `json:"sbfm_likely_automated"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -746,50 +746,50 @@ type BotManagementUpdateParamsBodyUnion interface {
 }
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-type BotManagementUpdateParamsBodySbfmDefinitelyAutomated string
+type BotManagementUpdateParamsBodySBFMDefinitelyAutomated string
 
 const (
-	BotManagementUpdateParamsBodySbfmDefinitelyAutomatedAllow            BotManagementUpdateParamsBodySbfmDefinitelyAutomated = "allow"
-	BotManagementUpdateParamsBodySbfmDefinitelyAutomatedBlock            BotManagementUpdateParamsBodySbfmDefinitelyAutomated = "block"
-	BotManagementUpdateParamsBodySbfmDefinitelyAutomatedManagedChallenge BotManagementUpdateParamsBodySbfmDefinitelyAutomated = "managed_challenge"
+	BotManagementUpdateParamsBodySBFMDefinitelyAutomatedAllow            BotManagementUpdateParamsBodySBFMDefinitelyAutomated = "allow"
+	BotManagementUpdateParamsBodySBFMDefinitelyAutomatedBlock            BotManagementUpdateParamsBodySBFMDefinitelyAutomated = "block"
+	BotManagementUpdateParamsBodySBFMDefinitelyAutomatedManagedChallenge BotManagementUpdateParamsBodySBFMDefinitelyAutomated = "managed_challenge"
 )
 
-func (r BotManagementUpdateParamsBodySbfmDefinitelyAutomated) IsKnown() bool {
+func (r BotManagementUpdateParamsBodySBFMDefinitelyAutomated) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateParamsBodySbfmDefinitelyAutomatedAllow, BotManagementUpdateParamsBodySbfmDefinitelyAutomatedBlock, BotManagementUpdateParamsBodySbfmDefinitelyAutomatedManagedChallenge:
+	case BotManagementUpdateParamsBodySBFMDefinitelyAutomatedAllow, BotManagementUpdateParamsBodySBFMDefinitelyAutomatedBlock, BotManagementUpdateParamsBodySBFMDefinitelyAutomatedManagedChallenge:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-type BotManagementUpdateParamsBodySbfmVerifiedBots string
+type BotManagementUpdateParamsBodySBFMVerifiedBots string
 
 const (
-	BotManagementUpdateParamsBodySbfmVerifiedBotsAllow BotManagementUpdateParamsBodySbfmVerifiedBots = "allow"
-	BotManagementUpdateParamsBodySbfmVerifiedBotsBlock BotManagementUpdateParamsBodySbfmVerifiedBots = "block"
+	BotManagementUpdateParamsBodySBFMVerifiedBotsAllow BotManagementUpdateParamsBodySBFMVerifiedBots = "allow"
+	BotManagementUpdateParamsBodySBFMVerifiedBotsBlock BotManagementUpdateParamsBodySBFMVerifiedBots = "block"
 )
 
-func (r BotManagementUpdateParamsBodySbfmVerifiedBots) IsKnown() bool {
+func (r BotManagementUpdateParamsBodySBFMVerifiedBots) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateParamsBodySbfmVerifiedBotsAllow, BotManagementUpdateParamsBodySbfmVerifiedBotsBlock:
+	case BotManagementUpdateParamsBodySBFMVerifiedBotsAllow, BotManagementUpdateParamsBodySBFMVerifiedBotsBlock:
 		return true
 	}
 	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-type BotManagementUpdateParamsBodySbfmLikelyAutomated string
+type BotManagementUpdateParamsBodySBFMLikelyAutomated string
 
 const (
-	BotManagementUpdateParamsBodySbfmLikelyAutomatedAllow            BotManagementUpdateParamsBodySbfmLikelyAutomated = "allow"
-	BotManagementUpdateParamsBodySbfmLikelyAutomatedBlock            BotManagementUpdateParamsBodySbfmLikelyAutomated = "block"
-	BotManagementUpdateParamsBodySbfmLikelyAutomatedManagedChallenge BotManagementUpdateParamsBodySbfmLikelyAutomated = "managed_challenge"
+	BotManagementUpdateParamsBodySBFMLikelyAutomatedAllow            BotManagementUpdateParamsBodySBFMLikelyAutomated = "allow"
+	BotManagementUpdateParamsBodySBFMLikelyAutomatedBlock            BotManagementUpdateParamsBodySBFMLikelyAutomated = "block"
+	BotManagementUpdateParamsBodySBFMLikelyAutomatedManagedChallenge BotManagementUpdateParamsBodySBFMLikelyAutomated = "managed_challenge"
 )
 
-func (r BotManagementUpdateParamsBodySbfmLikelyAutomated) IsKnown() bool {
+func (r BotManagementUpdateParamsBodySBFMLikelyAutomated) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateParamsBodySbfmLikelyAutomatedAllow, BotManagementUpdateParamsBodySbfmLikelyAutomatedBlock, BotManagementUpdateParamsBodySbfmLikelyAutomatedManagedChallenge:
+	case BotManagementUpdateParamsBodySBFMLikelyAutomatedAllow, BotManagementUpdateParamsBodySBFMLikelyAutomatedBlock, BotManagementUpdateParamsBodySBFMLikelyAutomatedManagedChallenge:
 		return true
 	}
 	return false

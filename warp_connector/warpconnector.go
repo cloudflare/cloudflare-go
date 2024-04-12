@@ -199,7 +199,7 @@ func (r WARPConnectorNewResponse) AsUnion() (WARPConnectorNewResponseUnion) {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
-// Union satisfied by [shared.Tunnel] or
+// Union satisfied by [shared.CloudflareTunnel] or
 // [warp_connector.WARPConnectorNewResponseTunnelWARPConnectorTunnel].
 type WARPConnectorNewResponseUnion interface {
   ImplementsWARPConnectorWARPConnectorNewResponse()
@@ -211,7 +211,7 @@ func init() {
     "",
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
-      Type: reflect.TypeOf(shared.Tunnel{}),
+      Type: reflect.TypeOf(shared.CloudflareTunnel{}),
     },
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
@@ -336,12 +336,12 @@ const (
   WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARPConnector WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
   WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeIPSec WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
   WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeGRE WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "gre"
-  WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCni WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "cni"
+  WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCNI WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
 func (r WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType) IsKnown() (bool) {
   switch r {
-  case WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCni:
+  case WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCNI:
       return true
   }
   return false
@@ -355,12 +355,12 @@ const (
   shared.WARPConnectorNewResponseTunTypeWARPConnector shared.WARPConnectorNewResponseTunType = "warp_connector"
   shared.WARPConnectorNewResponseTunTypeIPSec shared.WARPConnectorNewResponseTunType = "ip_sec"
   shared.WARPConnectorNewResponseTunTypeGRE shared.WARPConnectorNewResponseTunType = "gre"
-  shared.WARPConnectorNewResponseTunTypeCni shared.WARPConnectorNewResponseTunType = "cni"
+  shared.WARPConnectorNewResponseTunTypeCNI shared.WARPConnectorNewResponseTunType = "cni"
 )
 
 func (r shared.WARPConnectorNewResponseTunType) IsKnown() (bool) {
   switch r {
-  case shared.WARPConnectorNewResponseTunTypeCfdTunnel, shared.WARPConnectorNewResponseTunTypeWARPConnector, shared.WARPConnectorNewResponseTunTypeIPSec, shared.WARPConnectorNewResponseTunTypeGRE, shared.WARPConnectorNewResponseTunTypeCni:
+  case shared.WARPConnectorNewResponseTunTypeCfdTunnel, shared.WARPConnectorNewResponseTunTypeWARPConnector, shared.WARPConnectorNewResponseTunTypeIPSec, shared.WARPConnectorNewResponseTunTypeGRE, shared.WARPConnectorNewResponseTunTypeCNI:
       return true
   }
   return false
@@ -438,7 +438,7 @@ func (r WARPConnectorListResponse) AsUnion() (WARPConnectorListResponseUnion) {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
-// Union satisfied by [shared.Tunnel] or
+// Union satisfied by [shared.CloudflareTunnel] or
 // [warp_connector.WARPConnectorListResponseTunnelWARPConnectorTunnel].
 type WARPConnectorListResponseUnion interface {
   ImplementsWARPConnectorWARPConnectorListResponse()
@@ -450,7 +450,7 @@ func init() {
     "",
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
-      Type: reflect.TypeOf(shared.Tunnel{}),
+      Type: reflect.TypeOf(shared.CloudflareTunnel{}),
     },
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
@@ -575,12 +575,12 @@ const (
   WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector WARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
   WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeIPSec WARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
   WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeGRE WARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "gre"
-  WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCni WARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "cni"
+  WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCNI WARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
 func (r WARPConnectorListResponseTunnelWARPConnectorTunnelTunType) IsKnown() (bool) {
   switch r {
-  case WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCni:
+  case WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCNI:
       return true
   }
   return false
@@ -594,12 +594,12 @@ const (
   shared.WARPConnectorListResponseTunTypeWARPConnector shared.WARPConnectorListResponseTunType = "warp_connector"
   shared.WARPConnectorListResponseTunTypeIPSec shared.WARPConnectorListResponseTunType = "ip_sec"
   shared.WARPConnectorListResponseTunTypeGRE shared.WARPConnectorListResponseTunType = "gre"
-  shared.WARPConnectorListResponseTunTypeCni shared.WARPConnectorListResponseTunType = "cni"
+  shared.WARPConnectorListResponseTunTypeCNI shared.WARPConnectorListResponseTunType = "cni"
 )
 
 func (r shared.WARPConnectorListResponseTunType) IsKnown() (bool) {
   switch r {
-  case shared.WARPConnectorListResponseTunTypeCfdTunnel, shared.WARPConnectorListResponseTunTypeWARPConnector, shared.WARPConnectorListResponseTunTypeIPSec, shared.WARPConnectorListResponseTunTypeGRE, shared.WARPConnectorListResponseTunTypeCni:
+  case shared.WARPConnectorListResponseTunTypeCfdTunnel, shared.WARPConnectorListResponseTunTypeWARPConnector, shared.WARPConnectorListResponseTunTypeIPSec, shared.WARPConnectorListResponseTunTypeGRE, shared.WARPConnectorListResponseTunTypeCNI:
       return true
   }
   return false
@@ -677,7 +677,7 @@ func (r WARPConnectorDeleteResponse) AsUnion() (WARPConnectorDeleteResponseUnion
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
-// Union satisfied by [shared.Tunnel] or
+// Union satisfied by [shared.CloudflareTunnel] or
 // [warp_connector.WARPConnectorDeleteResponseTunnelWARPConnectorTunnel].
 type WARPConnectorDeleteResponseUnion interface {
   ImplementsWARPConnectorWARPConnectorDeleteResponse()
@@ -689,7 +689,7 @@ func init() {
     "",
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
-      Type: reflect.TypeOf(shared.Tunnel{}),
+      Type: reflect.TypeOf(shared.CloudflareTunnel{}),
     },
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
@@ -814,12 +814,12 @@ const (
   WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARPConnector WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
   WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeIPSec WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
   WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeGRE WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "gre"
-  WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCni WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "cni"
+  WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCNI WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
 func (r WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType) IsKnown() (bool) {
   switch r {
-  case WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCni:
+  case WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCNI:
       return true
   }
   return false
@@ -833,12 +833,12 @@ const (
   shared.WARPConnectorDeleteResponseTunTypeWARPConnector shared.WARPConnectorDeleteResponseTunType = "warp_connector"
   shared.WARPConnectorDeleteResponseTunTypeIPSec shared.WARPConnectorDeleteResponseTunType = "ip_sec"
   shared.WARPConnectorDeleteResponseTunTypeGRE shared.WARPConnectorDeleteResponseTunType = "gre"
-  shared.WARPConnectorDeleteResponseTunTypeCni shared.WARPConnectorDeleteResponseTunType = "cni"
+  shared.WARPConnectorDeleteResponseTunTypeCNI shared.WARPConnectorDeleteResponseTunType = "cni"
 )
 
 func (r shared.WARPConnectorDeleteResponseTunType) IsKnown() (bool) {
   switch r {
-  case shared.WARPConnectorDeleteResponseTunTypeCfdTunnel, shared.WARPConnectorDeleteResponseTunTypeWARPConnector, shared.WARPConnectorDeleteResponseTunTypeIPSec, shared.WARPConnectorDeleteResponseTunTypeGRE, shared.WARPConnectorDeleteResponseTunTypeCni:
+  case shared.WARPConnectorDeleteResponseTunTypeCfdTunnel, shared.WARPConnectorDeleteResponseTunTypeWARPConnector, shared.WARPConnectorDeleteResponseTunTypeIPSec, shared.WARPConnectorDeleteResponseTunTypeGRE, shared.WARPConnectorDeleteResponseTunTypeCNI:
       return true
   }
   return false
@@ -916,7 +916,7 @@ func (r WARPConnectorEditResponse) AsUnion() (WARPConnectorEditResponseUnion) {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
-// Union satisfied by [shared.Tunnel] or
+// Union satisfied by [shared.CloudflareTunnel] or
 // [warp_connector.WARPConnectorEditResponseTunnelWARPConnectorTunnel].
 type WARPConnectorEditResponseUnion interface {
   ImplementsWARPConnectorWARPConnectorEditResponse()
@@ -928,7 +928,7 @@ func init() {
     "",
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
-      Type: reflect.TypeOf(shared.Tunnel{}),
+      Type: reflect.TypeOf(shared.CloudflareTunnel{}),
     },
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
@@ -1053,12 +1053,12 @@ const (
   WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
   WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeIPSec WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
   WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeGRE WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "gre"
-  WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCni WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "cni"
+  WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCNI WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
 func (r WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType) IsKnown() (bool) {
   switch r {
-  case WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCni:
+  case WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCNI:
       return true
   }
   return false
@@ -1072,12 +1072,12 @@ const (
   shared.WARPConnectorEditResponseTunTypeWARPConnector shared.WARPConnectorEditResponseTunType = "warp_connector"
   shared.WARPConnectorEditResponseTunTypeIPSec shared.WARPConnectorEditResponseTunType = "ip_sec"
   shared.WARPConnectorEditResponseTunTypeGRE shared.WARPConnectorEditResponseTunType = "gre"
-  shared.WARPConnectorEditResponseTunTypeCni shared.WARPConnectorEditResponseTunType = "cni"
+  shared.WARPConnectorEditResponseTunTypeCNI shared.WARPConnectorEditResponseTunType = "cni"
 )
 
 func (r shared.WARPConnectorEditResponseTunType) IsKnown() (bool) {
   switch r {
-  case shared.WARPConnectorEditResponseTunTypeCfdTunnel, shared.WARPConnectorEditResponseTunTypeWARPConnector, shared.WARPConnectorEditResponseTunTypeIPSec, shared.WARPConnectorEditResponseTunTypeGRE, shared.WARPConnectorEditResponseTunTypeCni:
+  case shared.WARPConnectorEditResponseTunTypeCfdTunnel, shared.WARPConnectorEditResponseTunTypeWARPConnector, shared.WARPConnectorEditResponseTunTypeIPSec, shared.WARPConnectorEditResponseTunTypeGRE, shared.WARPConnectorEditResponseTunTypeCNI:
       return true
   }
   return false
@@ -1155,7 +1155,7 @@ func (r WARPConnectorGetResponse) AsUnion() (WARPConnectorGetResponseUnion) {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
-// Union satisfied by [shared.Tunnel] or
+// Union satisfied by [shared.CloudflareTunnel] or
 // [warp_connector.WARPConnectorGetResponseTunnelWARPConnectorTunnel].
 type WARPConnectorGetResponseUnion interface {
   ImplementsWARPConnectorWARPConnectorGetResponse()
@@ -1167,7 +1167,7 @@ func init() {
     "",
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
-      Type: reflect.TypeOf(shared.Tunnel{}),
+      Type: reflect.TypeOf(shared.CloudflareTunnel{}),
     },
     apijson.UnionVariant{
       TypeFilter: gjson.JSON,
@@ -1292,12 +1292,12 @@ const (
   WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARPConnector WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
   WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeIPSec WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
   WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeGRE WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "gre"
-  WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCni WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "cni"
+  WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCNI WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
 func (r WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType) IsKnown() (bool) {
   switch r {
-  case WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCni:
+  case WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCNI:
       return true
   }
   return false
@@ -1311,12 +1311,12 @@ const (
   shared.WARPConnectorGetResponseTunTypeWARPConnector shared.WARPConnectorGetResponseTunType = "warp_connector"
   shared.WARPConnectorGetResponseTunTypeIPSec shared.WARPConnectorGetResponseTunType = "ip_sec"
   shared.WARPConnectorGetResponseTunTypeGRE shared.WARPConnectorGetResponseTunType = "gre"
-  shared.WARPConnectorGetResponseTunTypeCni shared.WARPConnectorGetResponseTunType = "cni"
+  shared.WARPConnectorGetResponseTunTypeCNI shared.WARPConnectorGetResponseTunType = "cni"
 )
 
 func (r shared.WARPConnectorGetResponseTunType) IsKnown() (bool) {
   switch r {
-  case shared.WARPConnectorGetResponseTunTypeCfdTunnel, shared.WARPConnectorGetResponseTunTypeWARPConnector, shared.WARPConnectorGetResponseTunTypeIPSec, shared.WARPConnectorGetResponseTunTypeGRE, shared.WARPConnectorGetResponseTunTypeCni:
+  case shared.WARPConnectorGetResponseTunTypeCfdTunnel, shared.WARPConnectorGetResponseTunTypeWARPConnector, shared.WARPConnectorGetResponseTunTypeIPSec, shared.WARPConnectorGetResponseTunTypeGRE, shared.WARPConnectorGetResponseTunTypeCNI:
       return true
   }
   return false

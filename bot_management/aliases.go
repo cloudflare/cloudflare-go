@@ -38,44 +38,36 @@ type AuditLogOwner = shared.AuditLogOwner
 // This is an alias to an internal type.
 type AuditLogResource = shared.AuditLogResource
 
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+//
+// This is an alias to an internal type.
+type CloudflareTunnel = shared.CloudflareTunnel
+
+// This is an alias to an internal type.
+type CloudflareTunnelConnection = shared.CloudflareTunnelConnection
+
+// The type of tunnel.
+//
+// This is an alias to an internal type.
+type CloudflareTunnelTunType = shared.CloudflareTunnelTunType
+
+// This is an alias to an internal value.
+const CloudflareTunnelTunTypeCfdTunnel = shared.CloudflareTunnelTunTypeCfdTunnel
+
+// This is an alias to an internal value.
+const CloudflareTunnelTunTypeWARPConnector = shared.CloudflareTunnelTunTypeWARPConnector
+
+// This is an alias to an internal value.
+const CloudflareTunnelTunTypeIPSec = shared.CloudflareTunnelTunTypeIPSec
+
+// This is an alias to an internal value.
+const CloudflareTunnelTunTypeGRE = shared.CloudflareTunnelTunTypeGRE
+
+// This is an alias to an internal value.
+const CloudflareTunnelTunTypeCNI = shared.CloudflareTunnelTunTypeCNI
+
 // This is an alias to an internal type.
 type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
 type ResponseInfo = shared.ResponseInfo
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-//
-// This is an alias to an internal type.
-type Tunnel = shared.Tunnel
-
-// This is an alias to an internal type.
-type TunnelConnection = shared.TunnelConnection
-
-// The type of tunnel.
-//
-// This is an alias to an internal type.
-type TunnelTunType = shared.TunnelTunType
-
-// This is an alias to an internal value.
-const TunnelTunTypeCfdTunnel = shared.TunnelTunTypeCfdTunnel
-
-// This is an alias to an internal value.
-const TunnelTunTypeWARPConnector = shared.TunnelTunTypeWARPConnector
-
-// This is an alias to an internal value.
-const TunnelTunTypeIPSec = shared.TunnelTunTypeIPSec
-
-// This is an alias to an internal value.
-const TunnelTunTypeGRE = shared.TunnelTunTypeGRE
-
-// This is an alias to an internal value.
-const TunnelTunTypeCni = shared.TunnelTunTypeCni
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-//
-// This is an alias to an internal type.
-type TunnelParam = shared.TunnelParam
-
-// This is an alias to an internal type.
-type TunnelConnectionParam = shared.TunnelConnectionParam

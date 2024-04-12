@@ -232,7 +232,7 @@ const (
 	RulesetPhaseHTTPRequestOrigin              RulesetPhase = "http_request_origin"
 	RulesetPhaseHTTPRequestRedirect            RulesetPhase = "http_request_redirect"
 	RulesetPhaseHTTPRequestSanitize            RulesetPhase = "http_request_sanitize"
-	RulesetPhaseHTTPRequestSbfm                RulesetPhase = "http_request_sbfm"
+	RulesetPhaseHTTPRequestSBFM                RulesetPhase = "http_request_sbfm"
 	RulesetPhaseHTTPRequestSelectConfiguration RulesetPhase = "http_request_select_configuration"
 	RulesetPhaseHTTPRequestTransform           RulesetPhase = "http_request_transform"
 	RulesetPhaseHTTPResponseCompression        RulesetPhase = "http_response_compression"
@@ -245,7 +245,7 @@ const (
 
 func (r RulesetPhase) IsKnown() bool {
 	switch r {
-	case RulesetPhaseDDoSL4, RulesetPhaseDDoSL7, RulesetPhaseHTTPConfigSettings, RulesetPhaseHTTPCustomErrors, RulesetPhaseHTTPLogCustomFields, RulesetPhaseHTTPRatelimit, RulesetPhaseHTTPRequestCacheSettings, RulesetPhaseHTTPRequestDynamicRedirect, RulesetPhaseHTTPRequestFirewallCustom, RulesetPhaseHTTPRequestFirewallManaged, RulesetPhaseHTTPRequestLateTransform, RulesetPhaseHTTPRequestOrigin, RulesetPhaseHTTPRequestRedirect, RulesetPhaseHTTPRequestSanitize, RulesetPhaseHTTPRequestSbfm, RulesetPhaseHTTPRequestSelectConfiguration, RulesetPhaseHTTPRequestTransform, RulesetPhaseHTTPResponseCompression, RulesetPhaseHTTPResponseFirewallManaged, RulesetPhaseHTTPResponseHeadersTransform, RulesetPhaseMagicTransit, RulesetPhaseMagicTransitIDsManaged, RulesetPhaseMagicTransitManaged:
+	case RulesetPhaseDDoSL4, RulesetPhaseDDoSL7, RulesetPhaseHTTPConfigSettings, RulesetPhaseHTTPCustomErrors, RulesetPhaseHTTPLogCustomFields, RulesetPhaseHTTPRatelimit, RulesetPhaseHTTPRequestCacheSettings, RulesetPhaseHTTPRequestDynamicRedirect, RulesetPhaseHTTPRequestFirewallCustom, RulesetPhaseHTTPRequestFirewallManaged, RulesetPhaseHTTPRequestLateTransform, RulesetPhaseHTTPRequestOrigin, RulesetPhaseHTTPRequestRedirect, RulesetPhaseHTTPRequestSanitize, RulesetPhaseHTTPRequestSBFM, RulesetPhaseHTTPRequestSelectConfiguration, RulesetPhaseHTTPRequestTransform, RulesetPhaseHTTPResponseCompression, RulesetPhaseHTTPResponseFirewallManaged, RulesetPhaseHTTPResponseHeadersTransform, RulesetPhaseMagicTransit, RulesetPhaseMagicTransitIDsManaged, RulesetPhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -331,7 +331,7 @@ const (
 	RulesetNewResponsePhaseHTTPRequestOrigin              RulesetNewResponsePhase = "http_request_origin"
 	RulesetNewResponsePhaseHTTPRequestRedirect            RulesetNewResponsePhase = "http_request_redirect"
 	RulesetNewResponsePhaseHTTPRequestSanitize            RulesetNewResponsePhase = "http_request_sanitize"
-	RulesetNewResponsePhaseHTTPRequestSbfm                RulesetNewResponsePhase = "http_request_sbfm"
+	RulesetNewResponsePhaseHTTPRequestSBFM                RulesetNewResponsePhase = "http_request_sbfm"
 	RulesetNewResponsePhaseHTTPRequestSelectConfiguration RulesetNewResponsePhase = "http_request_select_configuration"
 	RulesetNewResponsePhaseHTTPRequestTransform           RulesetNewResponsePhase = "http_request_transform"
 	RulesetNewResponsePhaseHTTPResponseCompression        RulesetNewResponsePhase = "http_response_compression"
@@ -344,7 +344,7 @@ const (
 
 func (r RulesetNewResponsePhase) IsKnown() bool {
 	switch r {
-	case RulesetNewResponsePhaseDDoSL4, RulesetNewResponsePhaseDDoSL7, RulesetNewResponsePhaseHTTPConfigSettings, RulesetNewResponsePhaseHTTPCustomErrors, RulesetNewResponsePhaseHTTPLogCustomFields, RulesetNewResponsePhaseHTTPRatelimit, RulesetNewResponsePhaseHTTPRequestCacheSettings, RulesetNewResponsePhaseHTTPRequestDynamicRedirect, RulesetNewResponsePhaseHTTPRequestFirewallCustom, RulesetNewResponsePhaseHTTPRequestFirewallManaged, RulesetNewResponsePhaseHTTPRequestLateTransform, RulesetNewResponsePhaseHTTPRequestOrigin, RulesetNewResponsePhaseHTTPRequestRedirect, RulesetNewResponsePhaseHTTPRequestSanitize, RulesetNewResponsePhaseHTTPRequestSbfm, RulesetNewResponsePhaseHTTPRequestSelectConfiguration, RulesetNewResponsePhaseHTTPRequestTransform, RulesetNewResponsePhaseHTTPResponseCompression, RulesetNewResponsePhaseHTTPResponseFirewallManaged, RulesetNewResponsePhaseHTTPResponseHeadersTransform, RulesetNewResponsePhaseMagicTransit, RulesetNewResponsePhaseMagicTransitIDsManaged, RulesetNewResponsePhaseMagicTransitManaged:
+	case RulesetNewResponsePhaseDDoSL4, RulesetNewResponsePhaseDDoSL7, RulesetNewResponsePhaseHTTPConfigSettings, RulesetNewResponsePhaseHTTPCustomErrors, RulesetNewResponsePhaseHTTPLogCustomFields, RulesetNewResponsePhaseHTTPRatelimit, RulesetNewResponsePhaseHTTPRequestCacheSettings, RulesetNewResponsePhaseHTTPRequestDynamicRedirect, RulesetNewResponsePhaseHTTPRequestFirewallCustom, RulesetNewResponsePhaseHTTPRequestFirewallManaged, RulesetNewResponsePhaseHTTPRequestLateTransform, RulesetNewResponsePhaseHTTPRequestOrigin, RulesetNewResponsePhaseHTTPRequestRedirect, RulesetNewResponsePhaseHTTPRequestSanitize, RulesetNewResponsePhaseHTTPRequestSBFM, RulesetNewResponsePhaseHTTPRequestSelectConfiguration, RulesetNewResponsePhaseHTTPRequestTransform, RulesetNewResponsePhaseHTTPResponseCompression, RulesetNewResponsePhaseHTTPResponseFirewallManaged, RulesetNewResponsePhaseHTTPResponseHeadersTransform, RulesetNewResponsePhaseMagicTransit, RulesetNewResponsePhaseMagicTransitIDsManaged, RulesetNewResponsePhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -610,7 +610,7 @@ const (
 	RulesetUpdateResponsePhaseHTTPRequestOrigin              RulesetUpdateResponsePhase = "http_request_origin"
 	RulesetUpdateResponsePhaseHTTPRequestRedirect            RulesetUpdateResponsePhase = "http_request_redirect"
 	RulesetUpdateResponsePhaseHTTPRequestSanitize            RulesetUpdateResponsePhase = "http_request_sanitize"
-	RulesetUpdateResponsePhaseHTTPRequestSbfm                RulesetUpdateResponsePhase = "http_request_sbfm"
+	RulesetUpdateResponsePhaseHTTPRequestSBFM                RulesetUpdateResponsePhase = "http_request_sbfm"
 	RulesetUpdateResponsePhaseHTTPRequestSelectConfiguration RulesetUpdateResponsePhase = "http_request_select_configuration"
 	RulesetUpdateResponsePhaseHTTPRequestTransform           RulesetUpdateResponsePhase = "http_request_transform"
 	RulesetUpdateResponsePhaseHTTPResponseCompression        RulesetUpdateResponsePhase = "http_response_compression"
@@ -623,7 +623,7 @@ const (
 
 func (r RulesetUpdateResponsePhase) IsKnown() bool {
 	switch r {
-	case RulesetUpdateResponsePhaseDDoSL4, RulesetUpdateResponsePhaseDDoSL7, RulesetUpdateResponsePhaseHTTPConfigSettings, RulesetUpdateResponsePhaseHTTPCustomErrors, RulesetUpdateResponsePhaseHTTPLogCustomFields, RulesetUpdateResponsePhaseHTTPRatelimit, RulesetUpdateResponsePhaseHTTPRequestCacheSettings, RulesetUpdateResponsePhaseHTTPRequestDynamicRedirect, RulesetUpdateResponsePhaseHTTPRequestFirewallCustom, RulesetUpdateResponsePhaseHTTPRequestFirewallManaged, RulesetUpdateResponsePhaseHTTPRequestLateTransform, RulesetUpdateResponsePhaseHTTPRequestOrigin, RulesetUpdateResponsePhaseHTTPRequestRedirect, RulesetUpdateResponsePhaseHTTPRequestSanitize, RulesetUpdateResponsePhaseHTTPRequestSbfm, RulesetUpdateResponsePhaseHTTPRequestSelectConfiguration, RulesetUpdateResponsePhaseHTTPRequestTransform, RulesetUpdateResponsePhaseHTTPResponseCompression, RulesetUpdateResponsePhaseHTTPResponseFirewallManaged, RulesetUpdateResponsePhaseHTTPResponseHeadersTransform, RulesetUpdateResponsePhaseMagicTransit, RulesetUpdateResponsePhaseMagicTransitIDsManaged, RulesetUpdateResponsePhaseMagicTransitManaged:
+	case RulesetUpdateResponsePhaseDDoSL4, RulesetUpdateResponsePhaseDDoSL7, RulesetUpdateResponsePhaseHTTPConfigSettings, RulesetUpdateResponsePhaseHTTPCustomErrors, RulesetUpdateResponsePhaseHTTPLogCustomFields, RulesetUpdateResponsePhaseHTTPRatelimit, RulesetUpdateResponsePhaseHTTPRequestCacheSettings, RulesetUpdateResponsePhaseHTTPRequestDynamicRedirect, RulesetUpdateResponsePhaseHTTPRequestFirewallCustom, RulesetUpdateResponsePhaseHTTPRequestFirewallManaged, RulesetUpdateResponsePhaseHTTPRequestLateTransform, RulesetUpdateResponsePhaseHTTPRequestOrigin, RulesetUpdateResponsePhaseHTTPRequestRedirect, RulesetUpdateResponsePhaseHTTPRequestSanitize, RulesetUpdateResponsePhaseHTTPRequestSBFM, RulesetUpdateResponsePhaseHTTPRequestSelectConfiguration, RulesetUpdateResponsePhaseHTTPRequestTransform, RulesetUpdateResponsePhaseHTTPResponseCompression, RulesetUpdateResponsePhaseHTTPResponseFirewallManaged, RulesetUpdateResponsePhaseHTTPResponseHeadersTransform, RulesetUpdateResponsePhaseMagicTransit, RulesetUpdateResponsePhaseMagicTransitIDsManaged, RulesetUpdateResponsePhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -889,7 +889,7 @@ const (
 	RulesetGetResponsePhaseHTTPRequestOrigin              RulesetGetResponsePhase = "http_request_origin"
 	RulesetGetResponsePhaseHTTPRequestRedirect            RulesetGetResponsePhase = "http_request_redirect"
 	RulesetGetResponsePhaseHTTPRequestSanitize            RulesetGetResponsePhase = "http_request_sanitize"
-	RulesetGetResponsePhaseHTTPRequestSbfm                RulesetGetResponsePhase = "http_request_sbfm"
+	RulesetGetResponsePhaseHTTPRequestSBFM                RulesetGetResponsePhase = "http_request_sbfm"
 	RulesetGetResponsePhaseHTTPRequestSelectConfiguration RulesetGetResponsePhase = "http_request_select_configuration"
 	RulesetGetResponsePhaseHTTPRequestTransform           RulesetGetResponsePhase = "http_request_transform"
 	RulesetGetResponsePhaseHTTPResponseCompression        RulesetGetResponsePhase = "http_response_compression"
@@ -902,7 +902,7 @@ const (
 
 func (r RulesetGetResponsePhase) IsKnown() bool {
 	switch r {
-	case RulesetGetResponsePhaseDDoSL4, RulesetGetResponsePhaseDDoSL7, RulesetGetResponsePhaseHTTPConfigSettings, RulesetGetResponsePhaseHTTPCustomErrors, RulesetGetResponsePhaseHTTPLogCustomFields, RulesetGetResponsePhaseHTTPRatelimit, RulesetGetResponsePhaseHTTPRequestCacheSettings, RulesetGetResponsePhaseHTTPRequestDynamicRedirect, RulesetGetResponsePhaseHTTPRequestFirewallCustom, RulesetGetResponsePhaseHTTPRequestFirewallManaged, RulesetGetResponsePhaseHTTPRequestLateTransform, RulesetGetResponsePhaseHTTPRequestOrigin, RulesetGetResponsePhaseHTTPRequestRedirect, RulesetGetResponsePhaseHTTPRequestSanitize, RulesetGetResponsePhaseHTTPRequestSbfm, RulesetGetResponsePhaseHTTPRequestSelectConfiguration, RulesetGetResponsePhaseHTTPRequestTransform, RulesetGetResponsePhaseHTTPResponseCompression, RulesetGetResponsePhaseHTTPResponseFirewallManaged, RulesetGetResponsePhaseHTTPResponseHeadersTransform, RulesetGetResponsePhaseMagicTransit, RulesetGetResponsePhaseMagicTransitIDsManaged, RulesetGetResponsePhaseMagicTransitManaged:
+	case RulesetGetResponsePhaseDDoSL4, RulesetGetResponsePhaseDDoSL7, RulesetGetResponsePhaseHTTPConfigSettings, RulesetGetResponsePhaseHTTPCustomErrors, RulesetGetResponsePhaseHTTPLogCustomFields, RulesetGetResponsePhaseHTTPRatelimit, RulesetGetResponsePhaseHTTPRequestCacheSettings, RulesetGetResponsePhaseHTTPRequestDynamicRedirect, RulesetGetResponsePhaseHTTPRequestFirewallCustom, RulesetGetResponsePhaseHTTPRequestFirewallManaged, RulesetGetResponsePhaseHTTPRequestLateTransform, RulesetGetResponsePhaseHTTPRequestOrigin, RulesetGetResponsePhaseHTTPRequestRedirect, RulesetGetResponsePhaseHTTPRequestSanitize, RulesetGetResponsePhaseHTTPRequestSBFM, RulesetGetResponsePhaseHTTPRequestSelectConfiguration, RulesetGetResponsePhaseHTTPRequestTransform, RulesetGetResponsePhaseHTTPResponseCompression, RulesetGetResponsePhaseHTTPResponseFirewallManaged, RulesetGetResponsePhaseHTTPResponseHeadersTransform, RulesetGetResponsePhaseMagicTransit, RulesetGetResponsePhaseMagicTransitIDsManaged, RulesetGetResponsePhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -1145,7 +1145,7 @@ const (
 	RulesetNewParamsPhaseHTTPRequestOrigin              RulesetNewParamsPhase = "http_request_origin"
 	RulesetNewParamsPhaseHTTPRequestRedirect            RulesetNewParamsPhase = "http_request_redirect"
 	RulesetNewParamsPhaseHTTPRequestSanitize            RulesetNewParamsPhase = "http_request_sanitize"
-	RulesetNewParamsPhaseHTTPRequestSbfm                RulesetNewParamsPhase = "http_request_sbfm"
+	RulesetNewParamsPhaseHTTPRequestSBFM                RulesetNewParamsPhase = "http_request_sbfm"
 	RulesetNewParamsPhaseHTTPRequestSelectConfiguration RulesetNewParamsPhase = "http_request_select_configuration"
 	RulesetNewParamsPhaseHTTPRequestTransform           RulesetNewParamsPhase = "http_request_transform"
 	RulesetNewParamsPhaseHTTPResponseCompression        RulesetNewParamsPhase = "http_response_compression"
@@ -1158,7 +1158,7 @@ const (
 
 func (r RulesetNewParamsPhase) IsKnown() bool {
 	switch r {
-	case RulesetNewParamsPhaseDDoSL4, RulesetNewParamsPhaseDDoSL7, RulesetNewParamsPhaseHTTPConfigSettings, RulesetNewParamsPhaseHTTPCustomErrors, RulesetNewParamsPhaseHTTPLogCustomFields, RulesetNewParamsPhaseHTTPRatelimit, RulesetNewParamsPhaseHTTPRequestCacheSettings, RulesetNewParamsPhaseHTTPRequestDynamicRedirect, RulesetNewParamsPhaseHTTPRequestFirewallCustom, RulesetNewParamsPhaseHTTPRequestFirewallManaged, RulesetNewParamsPhaseHTTPRequestLateTransform, RulesetNewParamsPhaseHTTPRequestOrigin, RulesetNewParamsPhaseHTTPRequestRedirect, RulesetNewParamsPhaseHTTPRequestSanitize, RulesetNewParamsPhaseHTTPRequestSbfm, RulesetNewParamsPhaseHTTPRequestSelectConfiguration, RulesetNewParamsPhaseHTTPRequestTransform, RulesetNewParamsPhaseHTTPResponseCompression, RulesetNewParamsPhaseHTTPResponseFirewallManaged, RulesetNewParamsPhaseHTTPResponseHeadersTransform, RulesetNewParamsPhaseMagicTransit, RulesetNewParamsPhaseMagicTransitIDsManaged, RulesetNewParamsPhaseMagicTransitManaged:
+	case RulesetNewParamsPhaseDDoSL4, RulesetNewParamsPhaseDDoSL7, RulesetNewParamsPhaseHTTPConfigSettings, RulesetNewParamsPhaseHTTPCustomErrors, RulesetNewParamsPhaseHTTPLogCustomFields, RulesetNewParamsPhaseHTTPRatelimit, RulesetNewParamsPhaseHTTPRequestCacheSettings, RulesetNewParamsPhaseHTTPRequestDynamicRedirect, RulesetNewParamsPhaseHTTPRequestFirewallCustom, RulesetNewParamsPhaseHTTPRequestFirewallManaged, RulesetNewParamsPhaseHTTPRequestLateTransform, RulesetNewParamsPhaseHTTPRequestOrigin, RulesetNewParamsPhaseHTTPRequestRedirect, RulesetNewParamsPhaseHTTPRequestSanitize, RulesetNewParamsPhaseHTTPRequestSBFM, RulesetNewParamsPhaseHTTPRequestSelectConfiguration, RulesetNewParamsPhaseHTTPRequestTransform, RulesetNewParamsPhaseHTTPResponseCompression, RulesetNewParamsPhaseHTTPResponseFirewallManaged, RulesetNewParamsPhaseHTTPResponseHeadersTransform, RulesetNewParamsPhaseMagicTransit, RulesetNewParamsPhaseMagicTransitIDsManaged, RulesetNewParamsPhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -1504,7 +1504,7 @@ const (
 	RulesetUpdateParamsPhaseHTTPRequestOrigin              RulesetUpdateParamsPhase = "http_request_origin"
 	RulesetUpdateParamsPhaseHTTPRequestRedirect            RulesetUpdateParamsPhase = "http_request_redirect"
 	RulesetUpdateParamsPhaseHTTPRequestSanitize            RulesetUpdateParamsPhase = "http_request_sanitize"
-	RulesetUpdateParamsPhaseHTTPRequestSbfm                RulesetUpdateParamsPhase = "http_request_sbfm"
+	RulesetUpdateParamsPhaseHTTPRequestSBFM                RulesetUpdateParamsPhase = "http_request_sbfm"
 	RulesetUpdateParamsPhaseHTTPRequestSelectConfiguration RulesetUpdateParamsPhase = "http_request_select_configuration"
 	RulesetUpdateParamsPhaseHTTPRequestTransform           RulesetUpdateParamsPhase = "http_request_transform"
 	RulesetUpdateParamsPhaseHTTPResponseCompression        RulesetUpdateParamsPhase = "http_response_compression"
@@ -1517,7 +1517,7 @@ const (
 
 func (r RulesetUpdateParamsPhase) IsKnown() bool {
 	switch r {
-	case RulesetUpdateParamsPhaseDDoSL4, RulesetUpdateParamsPhaseDDoSL7, RulesetUpdateParamsPhaseHTTPConfigSettings, RulesetUpdateParamsPhaseHTTPCustomErrors, RulesetUpdateParamsPhaseHTTPLogCustomFields, RulesetUpdateParamsPhaseHTTPRatelimit, RulesetUpdateParamsPhaseHTTPRequestCacheSettings, RulesetUpdateParamsPhaseHTTPRequestDynamicRedirect, RulesetUpdateParamsPhaseHTTPRequestFirewallCustom, RulesetUpdateParamsPhaseHTTPRequestFirewallManaged, RulesetUpdateParamsPhaseHTTPRequestLateTransform, RulesetUpdateParamsPhaseHTTPRequestOrigin, RulesetUpdateParamsPhaseHTTPRequestRedirect, RulesetUpdateParamsPhaseHTTPRequestSanitize, RulesetUpdateParamsPhaseHTTPRequestSbfm, RulesetUpdateParamsPhaseHTTPRequestSelectConfiguration, RulesetUpdateParamsPhaseHTTPRequestTransform, RulesetUpdateParamsPhaseHTTPResponseCompression, RulesetUpdateParamsPhaseHTTPResponseFirewallManaged, RulesetUpdateParamsPhaseHTTPResponseHeadersTransform, RulesetUpdateParamsPhaseMagicTransit, RulesetUpdateParamsPhaseMagicTransitIDsManaged, RulesetUpdateParamsPhaseMagicTransitManaged:
+	case RulesetUpdateParamsPhaseDDoSL4, RulesetUpdateParamsPhaseDDoSL7, RulesetUpdateParamsPhaseHTTPConfigSettings, RulesetUpdateParamsPhaseHTTPCustomErrors, RulesetUpdateParamsPhaseHTTPLogCustomFields, RulesetUpdateParamsPhaseHTTPRatelimit, RulesetUpdateParamsPhaseHTTPRequestCacheSettings, RulesetUpdateParamsPhaseHTTPRequestDynamicRedirect, RulesetUpdateParamsPhaseHTTPRequestFirewallCustom, RulesetUpdateParamsPhaseHTTPRequestFirewallManaged, RulesetUpdateParamsPhaseHTTPRequestLateTransform, RulesetUpdateParamsPhaseHTTPRequestOrigin, RulesetUpdateParamsPhaseHTTPRequestRedirect, RulesetUpdateParamsPhaseHTTPRequestSanitize, RulesetUpdateParamsPhaseHTTPRequestSBFM, RulesetUpdateParamsPhaseHTTPRequestSelectConfiguration, RulesetUpdateParamsPhaseHTTPRequestTransform, RulesetUpdateParamsPhaseHTTPResponseCompression, RulesetUpdateParamsPhaseHTTPResponseFirewallManaged, RulesetUpdateParamsPhaseHTTPResponseHeadersTransform, RulesetUpdateParamsPhaseMagicTransit, RulesetUpdateParamsPhaseMagicTransitIDsManaged, RulesetUpdateParamsPhaseMagicTransitManaged:
 		return true
 	}
 	return false
