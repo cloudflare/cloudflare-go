@@ -191,7 +191,10 @@ func WithResponseInto(dst **http.Response) RequestOption {
 	}
 }
 
-// WithRequestBody returns a RequestOption that provides a custom serialized body with content type.
+// WithRequestBody returns a RequestOption that provides a custom serialized body with the given
+// content type.
+//
+// body accepts an io.Reader or raw []bytes.
 func WithRequestBody(contentType string, body any) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
 		if reader, ok := body.(io.Reader); ok {
@@ -204,7 +207,7 @@ func WithRequestBody(contentType string, body any) RequestOption {
 			return r.Apply(WithHeader("Content-Type", contentType))
 		}
 
-		return fmt.Errorf("body is must either be a byte slice or implement io.Reader")
+		return fmt.Errorf("body must be a byte slice or implement io.Reader")
 	}
 }
 
