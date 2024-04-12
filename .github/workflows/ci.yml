@@ -15,9 +15,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-  
+
       - name: Setup go
         uses: actions/setup-go@v5
 
       - run: |
           go build ./...
+
+  
