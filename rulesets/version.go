@@ -188,7 +188,7 @@ const (
 	VersionGetResponsePhaseHTTPRequestOrigin              VersionGetResponsePhase = "http_request_origin"
 	VersionGetResponsePhaseHTTPRequestRedirect            VersionGetResponsePhase = "http_request_redirect"
 	VersionGetResponsePhaseHTTPRequestSanitize            VersionGetResponsePhase = "http_request_sanitize"
-	VersionGetResponsePhaseHTTPRequestSbfm                VersionGetResponsePhase = "http_request_sbfm"
+	VersionGetResponsePhaseHTTPRequestSBFM                VersionGetResponsePhase = "http_request_sbfm"
 	VersionGetResponsePhaseHTTPRequestSelectConfiguration VersionGetResponsePhase = "http_request_select_configuration"
 	VersionGetResponsePhaseHTTPRequestTransform           VersionGetResponsePhase = "http_request_transform"
 	VersionGetResponsePhaseHTTPResponseCompression        VersionGetResponsePhase = "http_response_compression"
@@ -201,7 +201,7 @@ const (
 
 func (r VersionGetResponsePhase) IsKnown() bool {
 	switch r {
-	case VersionGetResponsePhaseDDoSL4, VersionGetResponsePhaseDDoSL7, VersionGetResponsePhaseHTTPConfigSettings, VersionGetResponsePhaseHTTPCustomErrors, VersionGetResponsePhaseHTTPLogCustomFields, VersionGetResponsePhaseHTTPRatelimit, VersionGetResponsePhaseHTTPRequestCacheSettings, VersionGetResponsePhaseHTTPRequestDynamicRedirect, VersionGetResponsePhaseHTTPRequestFirewallCustom, VersionGetResponsePhaseHTTPRequestFirewallManaged, VersionGetResponsePhaseHTTPRequestLateTransform, VersionGetResponsePhaseHTTPRequestOrigin, VersionGetResponsePhaseHTTPRequestRedirect, VersionGetResponsePhaseHTTPRequestSanitize, VersionGetResponsePhaseHTTPRequestSbfm, VersionGetResponsePhaseHTTPRequestSelectConfiguration, VersionGetResponsePhaseHTTPRequestTransform, VersionGetResponsePhaseHTTPResponseCompression, VersionGetResponsePhaseHTTPResponseFirewallManaged, VersionGetResponsePhaseHTTPResponseHeadersTransform, VersionGetResponsePhaseMagicTransit, VersionGetResponsePhaseMagicTransitIDsManaged, VersionGetResponsePhaseMagicTransitManaged:
+	case VersionGetResponsePhaseDDoSL4, VersionGetResponsePhaseDDoSL7, VersionGetResponsePhaseHTTPConfigSettings, VersionGetResponsePhaseHTTPCustomErrors, VersionGetResponsePhaseHTTPLogCustomFields, VersionGetResponsePhaseHTTPRatelimit, VersionGetResponsePhaseHTTPRequestCacheSettings, VersionGetResponsePhaseHTTPRequestDynamicRedirect, VersionGetResponsePhaseHTTPRequestFirewallCustom, VersionGetResponsePhaseHTTPRequestFirewallManaged, VersionGetResponsePhaseHTTPRequestLateTransform, VersionGetResponsePhaseHTTPRequestOrigin, VersionGetResponsePhaseHTTPRequestRedirect, VersionGetResponsePhaseHTTPRequestSanitize, VersionGetResponsePhaseHTTPRequestSBFM, VersionGetResponsePhaseHTTPRequestSelectConfiguration, VersionGetResponsePhaseHTTPRequestTransform, VersionGetResponsePhaseHTTPResponseCompression, VersionGetResponsePhaseHTTPResponseFirewallManaged, VersionGetResponsePhaseHTTPResponseHeadersTransform, VersionGetResponsePhaseMagicTransit, VersionGetResponsePhaseMagicTransitIDsManaged, VersionGetResponsePhaseMagicTransitManaged:
 		return true
 	}
 	return false
