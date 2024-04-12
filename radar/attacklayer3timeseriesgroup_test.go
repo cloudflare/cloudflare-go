@@ -41,7 +41,7 @@ func TestAttackLayer3TimeseriesGroupBitrateWithOptionalParams(t *testing.T) {
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupBitrateParamsNormalizationPercentage),
-		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupBitrateParamsProtocol{radar.AttackLayer3TimeseriesGroupBitrateParamsProtocolUdp, radar.AttackLayer3TimeseriesGroupBitrateParamsProtocolTcp, radar.AttackLayer3TimeseriesGroupBitrateParamsProtocolIcmp}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupBitrateParamsProtocol{radar.AttackLayer3TimeseriesGroupBitrateParamsProtocolUdp, radar.AttackLayer3TimeseriesGroupBitrateParamsProtocolTCP, radar.AttackLayer3TimeseriesGroupBitrateParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -78,7 +78,7 @@ func TestAttackLayer3TimeseriesGroupDurationWithOptionalParams(t *testing.T) {
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupDurationParamsNormalizationPercentage),
-		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupDurationParamsProtocol{radar.AttackLayer3TimeseriesGroupDurationParamsProtocolUdp, radar.AttackLayer3TimeseriesGroupDurationParamsProtocolTcp, radar.AttackLayer3TimeseriesGroupDurationParamsProtocolIcmp}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupDurationParamsProtocol{radar.AttackLayer3TimeseriesGroupDurationParamsProtocolUdp, radar.AttackLayer3TimeseriesGroupDurationParamsProtocolTCP, radar.AttackLayer3TimeseriesGroupDurationParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -185,7 +185,7 @@ func TestAttackLayer3TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupIPVersionParamsNormalizationPercentage),
-		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocol{radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocolUdp, radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocolTcp, radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocolIcmp}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocol{radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocolUdp, radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocolTCP, radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -259,7 +259,7 @@ func TestAttackLayer3TimeseriesGroupVectorWithOptionalParams(t *testing.T) {
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupVectorParamsNormalizationPercentage),
-		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupVectorParamsProtocol{radar.AttackLayer3TimeseriesGroupVectorParamsProtocolUdp, radar.AttackLayer3TimeseriesGroupVectorParamsProtocolTcp, radar.AttackLayer3TimeseriesGroupVectorParamsProtocolIcmp}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupVectorParamsProtocol{radar.AttackLayer3TimeseriesGroupVectorParamsProtocolUdp, radar.AttackLayer3TimeseriesGroupVectorParamsProtocolTCP, radar.AttackLayer3TimeseriesGroupVectorParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

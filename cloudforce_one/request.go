@@ -42,7 +42,7 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 // Creating a request adds the request into the Cloudforce One queue for analysis.
 // In addition to the content, a short title, type, priority, and releasability
 // should be provided. If one is not provided a default will be assigned.
-func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *CloudforceOneRequestItem, err error) {
+func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/new", accountIdentifier)
@@ -57,7 +57,7 @@ func (r *RequestService) New(ctx context.Context, accountIdentifier string, body
 // Updating a request alters the request in the Cloudforce One queue. This API may
 // be used to update any attributes of the request after the initial submission.
 // Only fields that you choose to update need to be add to the request body
-func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *CloudforceOneRequestItem, err error) {
+func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
@@ -70,7 +70,7 @@ func (r *RequestService) Update(ctx context.Context, accountIdentifier string, r
 }
 
 // List Requests
-func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CloudforceOneRequestListItem], err error) {
+func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ListItem], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -88,12 +88,12 @@ func (r *RequestService) List(ctx context.Context, accountIdentifier string, bod
 }
 
 // List Requests
-func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[CloudforceOneRequestListItem] {
+func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ListItem] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, body, opts...))
 }
 
 // Delete a Request
-func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *RequestDeleteResponse, err error) {
+func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *RequestDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
@@ -106,7 +106,7 @@ func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, r
 }
 
 // Get Request Priority, Status, and TLP constants
-func (r *RequestService) Constants(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CloudforceOneRequestConstants, err error) {
+func (r *RequestService) Constants(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestConstants, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestConstantsResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/constants", accountIdentifier)
@@ -119,7 +119,7 @@ func (r *RequestService) Constants(ctx context.Context, accountIdentifier string
 }
 
 // Get a Request
-func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *CloudforceOneRequestItem, err error) {
+func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
@@ -132,7 +132,7 @@ func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requ
 }
 
 // Get Request Quota
-func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CloudforceOneQuota, err error) {
+func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *Quota, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestQuotaResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/quota", accountIdentifier)
@@ -145,7 +145,7 @@ func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, op
 }
 
 // Get Request Types
-func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CloudforceOneRequestTypes, err error) {
+func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestTypes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestTypesResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/types", accountIdentifier)
@@ -157,118 +157,7 @@ func (r *RequestService) Types(ctx context.Context, accountIdentifier string, op
 	return
 }
 
-type CloudforceOneQuota struct {
-	// Anniversary date is when annual quota limit is refresh
-	AnniversaryDate time.Time `json:"anniversary_date" format:"date-time"`
-	// Quater anniversary date is when quota limit is refreshed each quarter
-	QuarterAnniversaryDate time.Time `json:"quarter_anniversary_date" format:"date-time"`
-	// Tokens for the quarter
-	Quota int64 `json:"quota"`
-	// Tokens remaining for the quarter
-	Remaining int64                  `json:"remaining"`
-	JSON      cloudforceOneQuotaJSON `json:"-"`
-}
-
-// cloudforceOneQuotaJSON contains the JSON metadata for the struct
-// [CloudforceOneQuota]
-type cloudforceOneQuotaJSON struct {
-	AnniversaryDate        apijson.Field
-	QuarterAnniversaryDate apijson.Field
-	Quota                  apijson.Field
-	Remaining              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *CloudforceOneQuota) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cloudforceOneQuotaJSON) RawJSON() string {
-	return r.raw
-}
-
-type CloudforceOneRequestConstants struct {
-	Priority []CloudforceOneRequestConstantsPriority `json:"priority"`
-	Status   []CloudforceOneRequestConstantsStatus   `json:"status"`
-	Tlp      []CloudforceOneRequestConstantsTlp      `json:"tlp"`
-	JSON     cloudforceOneRequestConstantsJSON       `json:"-"`
-}
-
-// cloudforceOneRequestConstantsJSON contains the JSON metadata for the struct
-// [CloudforceOneRequestConstants]
-type cloudforceOneRequestConstantsJSON struct {
-	Priority    apijson.Field
-	Status      apijson.Field
-	Tlp         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CloudforceOneRequestConstants) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cloudforceOneRequestConstantsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CloudforceOneRequestConstantsPriority string
-
-const (
-	CloudforceOneRequestConstantsPriorityRoutine CloudforceOneRequestConstantsPriority = "routine"
-	CloudforceOneRequestConstantsPriorityHigh    CloudforceOneRequestConstantsPriority = "high"
-	CloudforceOneRequestConstantsPriorityUrgent  CloudforceOneRequestConstantsPriority = "urgent"
-)
-
-func (r CloudforceOneRequestConstantsPriority) IsKnown() bool {
-	switch r {
-	case CloudforceOneRequestConstantsPriorityRoutine, CloudforceOneRequestConstantsPriorityHigh, CloudforceOneRequestConstantsPriorityUrgent:
-		return true
-	}
-	return false
-}
-
-// Request Status
-type CloudforceOneRequestConstantsStatus string
-
-const (
-	CloudforceOneRequestConstantsStatusOpen      CloudforceOneRequestConstantsStatus = "open"
-	CloudforceOneRequestConstantsStatusAccepted  CloudforceOneRequestConstantsStatus = "accepted"
-	CloudforceOneRequestConstantsStatusReported  CloudforceOneRequestConstantsStatus = "reported"
-	CloudforceOneRequestConstantsStatusApproved  CloudforceOneRequestConstantsStatus = "approved"
-	CloudforceOneRequestConstantsStatusCompleted CloudforceOneRequestConstantsStatus = "completed"
-	CloudforceOneRequestConstantsStatusDeclined  CloudforceOneRequestConstantsStatus = "declined"
-)
-
-func (r CloudforceOneRequestConstantsStatus) IsKnown() bool {
-	switch r {
-	case CloudforceOneRequestConstantsStatusOpen, CloudforceOneRequestConstantsStatusAccepted, CloudforceOneRequestConstantsStatusReported, CloudforceOneRequestConstantsStatusApproved, CloudforceOneRequestConstantsStatusCompleted, CloudforceOneRequestConstantsStatusDeclined:
-		return true
-	}
-	return false
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type CloudforceOneRequestConstantsTlp string
-
-const (
-	CloudforceOneRequestConstantsTlpClear       CloudforceOneRequestConstantsTlp = "clear"
-	CloudforceOneRequestConstantsTlpAmber       CloudforceOneRequestConstantsTlp = "amber"
-	CloudforceOneRequestConstantsTlpAmberStrict CloudforceOneRequestConstantsTlp = "amber-strict"
-	CloudforceOneRequestConstantsTlpGreen       CloudforceOneRequestConstantsTlp = "green"
-	CloudforceOneRequestConstantsTlpRed         CloudforceOneRequestConstantsTlp = "red"
-)
-
-func (r CloudforceOneRequestConstantsTlp) IsKnown() bool {
-	switch r {
-	case CloudforceOneRequestConstantsTlpClear, CloudforceOneRequestConstantsTlpAmber, CloudforceOneRequestConstantsTlpAmberStrict, CloudforceOneRequestConstantsTlpGreen, CloudforceOneRequestConstantsTlpRed:
-		return true
-	}
-	return false
-}
-
-type CloudforceOneRequestItem struct {
+type Item struct {
 	// UUID
 	ID string `json:"id,required"`
 	// Request content
@@ -280,23 +169,22 @@ type CloudforceOneRequestItem struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       CloudforceOneRequestItemTlp `json:"tlp,required"`
-	Updated   time.Time                   `json:"updated,required" format:"date-time"`
-	Completed time.Time                   `json:"completed" format:"date-time"`
+	Tlp       ItemTlp   `json:"tlp,required"`
+	Updated   time.Time `json:"updated,required" format:"date-time"`
+	Completed time.Time `json:"completed" format:"date-time"`
 	// Tokens for the request messages
 	MessageTokens int64 `json:"message_tokens"`
 	// Readable Request ID
 	ReadableID string `json:"readable_id"`
 	// Request Status
-	Status CloudforceOneRequestItemStatus `json:"status"`
+	Status ItemStatus `json:"status"`
 	// Tokens for the request
-	Tokens int64                        `json:"tokens"`
-	JSON   cloudforceOneRequestItemJSON `json:"-"`
+	Tokens int64    `json:"tokens"`
+	JSON   itemJSON `json:"-"`
 }
 
-// cloudforceOneRequestItemJSON contains the JSON metadata for the struct
-// [CloudforceOneRequestItem]
-type cloudforceOneRequestItemJSON struct {
+// itemJSON contains the JSON metadata for the struct [Item]
+type itemJSON struct {
 	ID            apijson.Field
 	Content       apijson.Field
 	Created       apijson.Field
@@ -314,65 +202,65 @@ type cloudforceOneRequestItemJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *CloudforceOneRequestItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Item) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r cloudforceOneRequestItemJSON) RawJSON() string {
+func (r itemJSON) RawJSON() string {
 	return r.raw
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type CloudforceOneRequestItemTlp string
+type ItemTlp string
 
 const (
-	CloudforceOneRequestItemTlpClear       CloudforceOneRequestItemTlp = "clear"
-	CloudforceOneRequestItemTlpAmber       CloudforceOneRequestItemTlp = "amber"
-	CloudforceOneRequestItemTlpAmberStrict CloudforceOneRequestItemTlp = "amber-strict"
-	CloudforceOneRequestItemTlpGreen       CloudforceOneRequestItemTlp = "green"
-	CloudforceOneRequestItemTlpRed         CloudforceOneRequestItemTlp = "red"
+	ItemTlpClear       ItemTlp = "clear"
+	ItemTlpAmber       ItemTlp = "amber"
+	ItemTlpAmberStrict ItemTlp = "amber-strict"
+	ItemTlpGreen       ItemTlp = "green"
+	ItemTlpRed         ItemTlp = "red"
 )
 
-func (r CloudforceOneRequestItemTlp) IsKnown() bool {
+func (r ItemTlp) IsKnown() bool {
 	switch r {
-	case CloudforceOneRequestItemTlpClear, CloudforceOneRequestItemTlpAmber, CloudforceOneRequestItemTlpAmberStrict, CloudforceOneRequestItemTlpGreen, CloudforceOneRequestItemTlpRed:
+	case ItemTlpClear, ItemTlpAmber, ItemTlpAmberStrict, ItemTlpGreen, ItemTlpRed:
 		return true
 	}
 	return false
 }
 
 // Request Status
-type CloudforceOneRequestItemStatus string
+type ItemStatus string
 
 const (
-	CloudforceOneRequestItemStatusOpen      CloudforceOneRequestItemStatus = "open"
-	CloudforceOneRequestItemStatusAccepted  CloudforceOneRequestItemStatus = "accepted"
-	CloudforceOneRequestItemStatusReported  CloudforceOneRequestItemStatus = "reported"
-	CloudforceOneRequestItemStatusApproved  CloudforceOneRequestItemStatus = "approved"
-	CloudforceOneRequestItemStatusCompleted CloudforceOneRequestItemStatus = "completed"
-	CloudforceOneRequestItemStatusDeclined  CloudforceOneRequestItemStatus = "declined"
+	ItemStatusOpen      ItemStatus = "open"
+	ItemStatusAccepted  ItemStatus = "accepted"
+	ItemStatusReported  ItemStatus = "reported"
+	ItemStatusApproved  ItemStatus = "approved"
+	ItemStatusCompleted ItemStatus = "completed"
+	ItemStatusDeclined  ItemStatus = "declined"
 )
 
-func (r CloudforceOneRequestItemStatus) IsKnown() bool {
+func (r ItemStatus) IsKnown() bool {
 	switch r {
-	case CloudforceOneRequestItemStatusOpen, CloudforceOneRequestItemStatusAccepted, CloudforceOneRequestItemStatusReported, CloudforceOneRequestItemStatusApproved, CloudforceOneRequestItemStatusCompleted, CloudforceOneRequestItemStatusDeclined:
+	case ItemStatusOpen, ItemStatusAccepted, ItemStatusReported, ItemStatusApproved, ItemStatusCompleted, ItemStatusDeclined:
 		return true
 	}
 	return false
 }
 
-type CloudforceOneRequestListItem struct {
+type ListItem struct {
 	// UUID
 	ID string `json:"id,required"`
 	// Request creation time
-	Created  time.Time                            `json:"created,required" format:"date-time"`
-	Priority CloudforceOneRequestListItemPriority `json:"priority,required"`
+	Created  time.Time        `json:"created,required" format:"date-time"`
+	Priority ListItemPriority `json:"priority,required"`
 	// Requested information from request
 	Request string `json:"request,required"`
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp CloudforceOneRequestListItemTlp `json:"tlp,required"`
+	Tlp ListItemTlp `json:"tlp,required"`
 	// Request last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
 	// Request completion time
@@ -382,15 +270,14 @@ type CloudforceOneRequestListItem struct {
 	// Readable Request ID
 	ReadableID string `json:"readable_id"`
 	// Request Status
-	Status CloudforceOneRequestListItemStatus `json:"status"`
+	Status ListItemStatus `json:"status"`
 	// Tokens for the request
-	Tokens int64                            `json:"tokens"`
-	JSON   cloudforceOneRequestListItemJSON `json:"-"`
+	Tokens int64        `json:"tokens"`
+	JSON   listItemJSON `json:"-"`
 }
 
-// cloudforceOneRequestListItemJSON contains the JSON metadata for the struct
-// [CloudforceOneRequestListItem]
-type cloudforceOneRequestListItemJSON struct {
+// listItemJSON contains the JSON metadata for the struct [ListItem]
+type listItemJSON struct {
 	ID            apijson.Field
 	Created       apijson.Field
 	Priority      apijson.Field
@@ -407,80 +294,190 @@ type cloudforceOneRequestListItemJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *CloudforceOneRequestListItem) UnmarshalJSON(data []byte) (err error) {
+func (r *ListItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r cloudforceOneRequestListItemJSON) RawJSON() string {
+func (r listItemJSON) RawJSON() string {
 	return r.raw
 }
 
-type CloudforceOneRequestListItemPriority string
+type ListItemPriority string
 
 const (
-	CloudforceOneRequestListItemPriorityRoutine CloudforceOneRequestListItemPriority = "routine"
-	CloudforceOneRequestListItemPriorityHigh    CloudforceOneRequestListItemPriority = "high"
-	CloudforceOneRequestListItemPriorityUrgent  CloudforceOneRequestListItemPriority = "urgent"
+	ListItemPriorityRoutine ListItemPriority = "routine"
+	ListItemPriorityHigh    ListItemPriority = "high"
+	ListItemPriorityUrgent  ListItemPriority = "urgent"
 )
 
-func (r CloudforceOneRequestListItemPriority) IsKnown() bool {
+func (r ListItemPriority) IsKnown() bool {
 	switch r {
-	case CloudforceOneRequestListItemPriorityRoutine, CloudforceOneRequestListItemPriorityHigh, CloudforceOneRequestListItemPriorityUrgent:
+	case ListItemPriorityRoutine, ListItemPriorityHigh, ListItemPriorityUrgent:
 		return true
 	}
 	return false
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type CloudforceOneRequestListItemTlp string
+type ListItemTlp string
 
 const (
-	CloudforceOneRequestListItemTlpClear       CloudforceOneRequestListItemTlp = "clear"
-	CloudforceOneRequestListItemTlpAmber       CloudforceOneRequestListItemTlp = "amber"
-	CloudforceOneRequestListItemTlpAmberStrict CloudforceOneRequestListItemTlp = "amber-strict"
-	CloudforceOneRequestListItemTlpGreen       CloudforceOneRequestListItemTlp = "green"
-	CloudforceOneRequestListItemTlpRed         CloudforceOneRequestListItemTlp = "red"
+	ListItemTlpClear       ListItemTlp = "clear"
+	ListItemTlpAmber       ListItemTlp = "amber"
+	ListItemTlpAmberStrict ListItemTlp = "amber-strict"
+	ListItemTlpGreen       ListItemTlp = "green"
+	ListItemTlpRed         ListItemTlp = "red"
 )
 
-func (r CloudforceOneRequestListItemTlp) IsKnown() bool {
+func (r ListItemTlp) IsKnown() bool {
 	switch r {
-	case CloudforceOneRequestListItemTlpClear, CloudforceOneRequestListItemTlpAmber, CloudforceOneRequestListItemTlpAmberStrict, CloudforceOneRequestListItemTlpGreen, CloudforceOneRequestListItemTlpRed:
+	case ListItemTlpClear, ListItemTlpAmber, ListItemTlpAmberStrict, ListItemTlpGreen, ListItemTlpRed:
 		return true
 	}
 	return false
 }
 
 // Request Status
-type CloudforceOneRequestListItemStatus string
+type ListItemStatus string
 
 const (
-	CloudforceOneRequestListItemStatusOpen      CloudforceOneRequestListItemStatus = "open"
-	CloudforceOneRequestListItemStatusAccepted  CloudforceOneRequestListItemStatus = "accepted"
-	CloudforceOneRequestListItemStatusReported  CloudforceOneRequestListItemStatus = "reported"
-	CloudforceOneRequestListItemStatusApproved  CloudforceOneRequestListItemStatus = "approved"
-	CloudforceOneRequestListItemStatusCompleted CloudforceOneRequestListItemStatus = "completed"
-	CloudforceOneRequestListItemStatusDeclined  CloudforceOneRequestListItemStatus = "declined"
+	ListItemStatusOpen      ListItemStatus = "open"
+	ListItemStatusAccepted  ListItemStatus = "accepted"
+	ListItemStatusReported  ListItemStatus = "reported"
+	ListItemStatusApproved  ListItemStatus = "approved"
+	ListItemStatusCompleted ListItemStatus = "completed"
+	ListItemStatusDeclined  ListItemStatus = "declined"
 )
 
-func (r CloudforceOneRequestListItemStatus) IsKnown() bool {
+func (r ListItemStatus) IsKnown() bool {
 	switch r {
-	case CloudforceOneRequestListItemStatusOpen, CloudforceOneRequestListItemStatusAccepted, CloudforceOneRequestListItemStatusReported, CloudforceOneRequestListItemStatusApproved, CloudforceOneRequestListItemStatusCompleted, CloudforceOneRequestListItemStatusDeclined:
+	case ListItemStatusOpen, ListItemStatusAccepted, ListItemStatusReported, ListItemStatusApproved, ListItemStatusCompleted, ListItemStatusDeclined:
 		return true
 	}
 	return false
 }
 
-type CloudforceOneRequestTypes []string
+type Quota struct {
+	// Anniversary date is when annual quota limit is refresh
+	AnniversaryDate time.Time `json:"anniversary_date" format:"date-time"`
+	// Quater anniversary date is when quota limit is refreshed each quarter
+	QuarterAnniversaryDate time.Time `json:"quarter_anniversary_date" format:"date-time"`
+	// Tokens for the quarter
+	Quota int64 `json:"quota"`
+	// Tokens remaining for the quarter
+	Remaining int64     `json:"remaining"`
+	JSON      quotaJSON `json:"-"`
+}
+
+// quotaJSON contains the JSON metadata for the struct [Quota]
+type quotaJSON struct {
+	AnniversaryDate        apijson.Field
+	QuarterAnniversaryDate apijson.Field
+	Quota                  apijson.Field
+	Remaining              apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *Quota) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r quotaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestConstants struct {
+	Priority []RequestConstantsPriority `json:"priority"`
+	Status   []RequestConstantsStatus   `json:"status"`
+	Tlp      []RequestConstantsTlp      `json:"tlp"`
+	JSON     requestConstantsJSON       `json:"-"`
+}
+
+// requestConstantsJSON contains the JSON metadata for the struct
+// [RequestConstants]
+type requestConstantsJSON struct {
+	Priority    apijson.Field
+	Status      apijson.Field
+	Tlp         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestConstants) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestConstantsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestConstantsPriority string
+
+const (
+	RequestConstantsPriorityRoutine RequestConstantsPriority = "routine"
+	RequestConstantsPriorityHigh    RequestConstantsPriority = "high"
+	RequestConstantsPriorityUrgent  RequestConstantsPriority = "urgent"
+)
+
+func (r RequestConstantsPriority) IsKnown() bool {
+	switch r {
+	case RequestConstantsPriorityRoutine, RequestConstantsPriorityHigh, RequestConstantsPriorityUrgent:
+		return true
+	}
+	return false
+}
+
+// Request Status
+type RequestConstantsStatus string
+
+const (
+	RequestConstantsStatusOpen      RequestConstantsStatus = "open"
+	RequestConstantsStatusAccepted  RequestConstantsStatus = "accepted"
+	RequestConstantsStatusReported  RequestConstantsStatus = "reported"
+	RequestConstantsStatusApproved  RequestConstantsStatus = "approved"
+	RequestConstantsStatusCompleted RequestConstantsStatus = "completed"
+	RequestConstantsStatusDeclined  RequestConstantsStatus = "declined"
+)
+
+func (r RequestConstantsStatus) IsKnown() bool {
+	switch r {
+	case RequestConstantsStatusOpen, RequestConstantsStatusAccepted, RequestConstantsStatusReported, RequestConstantsStatusApproved, RequestConstantsStatusCompleted, RequestConstantsStatusDeclined:
+		return true
+	}
+	return false
+}
+
+// The CISA defined Traffic Light Protocol (TLP)
+type RequestConstantsTlp string
+
+const (
+	RequestConstantsTlpClear       RequestConstantsTlp = "clear"
+	RequestConstantsTlpAmber       RequestConstantsTlp = "amber"
+	RequestConstantsTlpAmberStrict RequestConstantsTlp = "amber-strict"
+	RequestConstantsTlpGreen       RequestConstantsTlp = "green"
+	RequestConstantsTlpRed         RequestConstantsTlp = "red"
+)
+
+func (r RequestConstantsTlp) IsKnown() bool {
+	switch r {
+	case RequestConstantsTlpClear, RequestConstantsTlpAmber, RequestConstantsTlpAmberStrict, RequestConstantsTlpGreen, RequestConstantsTlpRed:
+		return true
+	}
+	return false
+}
+
+type RequestTypes []string
 
 // Union satisfied by [cloudforce_one.RequestDeleteResponseUnknown],
 // [cloudforce_one.RequestDeleteResponseArray] or [shared.UnionString].
-type RequestDeleteResponse interface {
-	ImplementsCloudforceOneRequestDeleteResponse()
+type RequestDeleteResponseUnion interface {
+	ImplementsCloudforceOneRequestDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RequestDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*RequestDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -495,7 +492,7 @@ func init() {
 
 type RequestDeleteResponseArray []interface{}
 
-func (r RequestDeleteResponseArray) ImplementsCloudforceOneRequestDeleteResponse() {}
+func (r RequestDeleteResponseArray) ImplementsCloudforceOneRequestDeleteResponseUnion() {}
 
 type RequestNewParams struct {
 	// Request content
@@ -534,9 +531,9 @@ func (r RequestNewParamsTlp) IsKnown() bool {
 }
 
 type RequestNewResponseEnvelope struct {
-	Errors   []RequestNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneRequestItem             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Item                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestNewResponseEnvelopeJSON    `json:"-"`
@@ -558,52 +555,6 @@ func (r *RequestNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r requestNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestNewResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    requestNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RequestNewResponseEnvelopeErrors]
-type requestNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestNewResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    requestNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RequestNewResponseEnvelopeMessages]
-type requestNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -659,9 +610,9 @@ func (r RequestUpdateParamsTlp) IsKnown() bool {
 }
 
 type RequestUpdateResponseEnvelope struct {
-	Errors   []RequestUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneRequestItem                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Item                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestUpdateResponseEnvelopeJSON    `json:"-"`
@@ -683,52 +634,6 @@ func (r *RequestUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r requestUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    requestUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RequestUpdateResponseEnvelopeErrors]
-type requestUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    requestUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RequestUpdateResponseEnvelopeMessages]
-type requestUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -811,9 +716,9 @@ func (r RequestListParamsStatus) IsKnown() bool {
 }
 
 type RequestDeleteResponseEnvelope struct {
-	Errors   []RequestDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   RequestDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestDeleteResponseEnvelopeJSON    `json:"-"`
@@ -838,52 +743,6 @@ func (r requestDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestDeleteResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    requestDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RequestDeleteResponseEnvelopeErrors]
-type requestDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestDeleteResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    requestDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RequestDeleteResponseEnvelopeMessages]
-type requestDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RequestDeleteResponseEnvelopeSuccess bool
 
@@ -900,9 +759,9 @@ func (r RequestDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestConstantsResponseEnvelope struct {
-	Errors   []RequestConstantsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestConstantsResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneRequestConstants              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RequestConstants      `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestConstantsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestConstantsResponseEnvelopeJSON    `json:"-"`
@@ -927,52 +786,6 @@ func (r requestConstantsResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestConstantsResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    requestConstantsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestConstantsResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RequestConstantsResponseEnvelopeErrors]
-type requestConstantsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestConstantsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestConstantsResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestConstantsResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    requestConstantsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestConstantsResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RequestConstantsResponseEnvelopeMessages]
-type requestConstantsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestConstantsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestConstantsResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RequestConstantsResponseEnvelopeSuccess bool
 
@@ -989,9 +802,9 @@ func (r RequestConstantsResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestGetResponseEnvelope struct {
-	Errors   []RequestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneRequestItem             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Item                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestGetResponseEnvelopeJSON    `json:"-"`
@@ -1016,52 +829,6 @@ func (r requestGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    requestGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RequestGetResponseEnvelopeErrors]
-type requestGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    requestGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RequestGetResponseEnvelopeMessages]
-type requestGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RequestGetResponseEnvelopeSuccess bool
 
@@ -1078,9 +845,9 @@ func (r RequestGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestQuotaResponseEnvelope struct {
-	Errors   []RequestQuotaResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestQuotaResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneQuota                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Quota                 `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestQuotaResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestQuotaResponseEnvelopeJSON    `json:"-"`
@@ -1105,52 +872,6 @@ func (r requestQuotaResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestQuotaResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    requestQuotaResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestQuotaResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RequestQuotaResponseEnvelopeErrors]
-type requestQuotaResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestQuotaResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestQuotaResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestQuotaResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    requestQuotaResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestQuotaResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RequestQuotaResponseEnvelopeMessages]
-type requestQuotaResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestQuotaResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestQuotaResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RequestQuotaResponseEnvelopeSuccess bool
 
@@ -1167,9 +888,9 @@ func (r RequestQuotaResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestTypesResponseEnvelope struct {
-	Errors   []RequestTypesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestTypesResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneRequestTypes              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RequestTypes          `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestTypesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestTypesResponseEnvelopeJSON    `json:"-"`
@@ -1191,52 +912,6 @@ func (r *RequestTypesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r requestTypesResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestTypesResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    requestTypesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestTypesResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RequestTypesResponseEnvelopeErrors]
-type requestTypesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestTypesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestTypesResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestTypesResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    requestTypesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestTypesResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RequestTypesResponseEnvelopeMessages]
-type requestTypesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestTypesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestTypesResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

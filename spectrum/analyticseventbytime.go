@@ -38,7 +38,7 @@ func NewAnalyticsEventBytimeService(opts ...option.RequestOption) (r *AnalyticsE
 }
 
 // Retrieves a list of aggregate metrics grouped by time interval.
-func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, query AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponse, err error) {
+func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, query AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventBytimeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/bytime", zone)
@@ -52,13 +52,13 @@ func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, quer
 
 // Union satisfied by [spectrum.AnalyticsEventBytimeGetResponseUnknown] or
 // [shared.UnionString].
-type AnalyticsEventBytimeGetResponse interface {
-	ImplementsSpectrumAnalyticsEventBytimeGetResponse()
+type AnalyticsEventBytimeGetResponseUnion interface {
+	ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AnalyticsEventBytimeGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*AnalyticsEventBytimeGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -76,7 +76,7 @@ type AnalyticsEventBytimeGetParams struct {
 	// | appID     | Application ID                | 40d67c87c6cd4b889a4fd57805225e85                           |
 	// | coloName  | Colo Name                     | SFO                                                        |
 	// | ipVersion | IP version used by the client | 4, 6.                                                      |
-	Dimensions param.Field[[]AnalyticsEventBytimeGetParamsDimension] `query:"dimensions"`
+	Dimensions param.Field[[]Dimension] `query:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
 	// and AND boolean logic. AND takes precedence over OR in all the expressions. The
 	// OR operator is defined using a comma (,) or OR keyword surrounded by whitespace.
@@ -122,26 +122,9 @@ type AnalyticsEventBytimeGetParams struct {
 // `url.Values`.
 func (r AnalyticsEventBytimeGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type AnalyticsEventBytimeGetParamsDimension string
-
-const (
-	AnalyticsEventBytimeGetParamsDimensionEvent     AnalyticsEventBytimeGetParamsDimension = "event"
-	AnalyticsEventBytimeGetParamsDimensionAppID     AnalyticsEventBytimeGetParamsDimension = "appID"
-	AnalyticsEventBytimeGetParamsDimensionColoName  AnalyticsEventBytimeGetParamsDimension = "coloName"
-	AnalyticsEventBytimeGetParamsDimensionIPVersion AnalyticsEventBytimeGetParamsDimension = "ipVersion"
-)
-
-func (r AnalyticsEventBytimeGetParamsDimension) IsKnown() bool {
-	switch r {
-	case AnalyticsEventBytimeGetParamsDimensionEvent, AnalyticsEventBytimeGetParamsDimensionAppID, AnalyticsEventBytimeGetParamsDimensionColoName, AnalyticsEventBytimeGetParamsDimensionIPVersion:
-		return true
-	}
-	return false
 }
 
 type AnalyticsEventBytimeGetParamsMetric string
@@ -187,9 +170,9 @@ func (r AnalyticsEventBytimeGetParamsTimeDelta) IsKnown() bool {
 }
 
 type AnalyticsEventBytimeGetResponseEnvelope struct {
-	Errors   []AnalyticsEventBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsEventBytimeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AnalyticsEventBytimeGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                `json:"errors,required"`
+	Messages []shared.ResponseInfo                `json:"messages,required"`
+	Result   AnalyticsEventBytimeGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsEventBytimeGetResponseEnvelopeJSON    `json:"-"`
@@ -211,52 +194,6 @@ func (r *AnalyticsEventBytimeGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r analyticsEventBytimeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsEventBytimeGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    analyticsEventBytimeGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// analyticsEventBytimeGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AnalyticsEventBytimeGetResponseEnvelopeErrors]
-type analyticsEventBytimeGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsEventBytimeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsEventBytimeGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsEventBytimeGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    analyticsEventBytimeGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// analyticsEventBytimeGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AnalyticsEventBytimeGetResponseEnvelopeMessages]
-type analyticsEventBytimeGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsEventBytimeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsEventBytimeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

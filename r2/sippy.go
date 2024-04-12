@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -31,10 +32,10 @@ func NewSippyService(opts ...option.RequestOption) (r *SippyService) {
 }
 
 // Sets configuration for Sippy for an existing R2 bucket.
-func (r *SippyService) Update(ctx context.Context, bucketName string, params SippyUpdateParams, opts ...option.RequestOption) (res *R2Sippy, err error) {
+func (r *SippyService) Update(ctx context.Context, bucketName string, params SippyUpdateParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SippyUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.getAccountID(), bucketName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -57,7 +58,7 @@ func (r *SippyService) Delete(ctx context.Context, bucketName string, body Sippy
 }
 
 // Gets configuration for Sippy for an existing R2 bucket.
-func (r *SippyService) Get(ctx context.Context, bucketName string, query SippyGetParams, opts ...option.RequestOption) (res *R2Sippy, err error) {
+func (r *SippyService) Get(ctx context.Context, bucketName string, query SippyGetParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SippyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", query.AccountID, bucketName)
@@ -69,18 +70,32 @@ func (r *SippyService) Get(ctx context.Context, bucketName string, query SippyGe
 	return
 }
 
-type R2Sippy struct {
+type Provider string
+
+const (
+	ProviderR2 Provider = "r2"
+)
+
+func (r Provider) IsKnown() bool {
+	switch r {
+	case ProviderR2:
+		return true
+	}
+	return false
+}
+
+type Sippy struct {
 	// Details about the configured destination bucket
-	Destination R2SippyDestination `json:"destination"`
+	Destination SippyDestination `json:"destination"`
 	// State of Sippy for this bucket
 	Enabled bool `json:"enabled"`
 	// Details about the configured source bucket
-	Source R2SippySource `json:"source"`
-	JSON   r2SippyJSON   `json:"-"`
+	Source SippySource `json:"source"`
+	JSON   sippyJSON   `json:"-"`
 }
 
-// r2SippyJSON contains the JSON metadata for the struct [R2Sippy]
-type r2SippyJSON struct {
+// sippyJSON contains the JSON metadata for the struct [Sippy]
+type sippyJSON struct {
 	Destination apijson.Field
 	Enabled     apijson.Field
 	Source      apijson.Field
@@ -88,28 +103,28 @@ type r2SippyJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *R2Sippy) UnmarshalJSON(data []byte) (err error) {
+func (r *Sippy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r r2SippyJSON) RawJSON() string {
+func (r sippyJSON) RawJSON() string {
 	return r.raw
 }
 
 // Details about the configured destination bucket
-type R2SippyDestination struct {
+type SippyDestination struct {
 	// ID of the Cloudflare API token used when writing objects to this bucket
 	AccessKeyID string `json:"accessKeyId"`
 	Account     string `json:"account"`
 	// Name of the bucket on the provider
-	Bucket   string                     `json:"bucket"`
-	Provider R2SippyDestinationProvider `json:"provider"`
-	JSON     r2SippyDestinationJSON     `json:"-"`
+	Bucket   string               `json:"bucket"`
+	Provider Provider             `json:"provider"`
+	JSON     sippyDestinationJSON `json:"-"`
 }
 
-// r2SippyDestinationJSON contains the JSON metadata for the struct
-// [R2SippyDestination]
-type r2SippyDestinationJSON struct {
+// sippyDestinationJSON contains the JSON metadata for the struct
+// [SippyDestination]
+type sippyDestinationJSON struct {
 	AccessKeyID apijson.Field
 	Account     apijson.Field
 	Bucket      apijson.Field
@@ -118,40 +133,26 @@ type r2SippyDestinationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *R2SippyDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *SippyDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r r2SippyDestinationJSON) RawJSON() string {
+func (r sippyDestinationJSON) RawJSON() string {
 	return r.raw
 }
 
-type R2SippyDestinationProvider string
-
-const (
-	R2SippyDestinationProviderR2 R2SippyDestinationProvider = "r2"
-)
-
-func (r R2SippyDestinationProvider) IsKnown() bool {
-	switch r {
-	case R2SippyDestinationProviderR2:
-		return true
-	}
-	return false
-}
-
 // Details about the configured source bucket
-type R2SippySource struct {
+type SippySource struct {
 	// Name of the bucket on the provider
-	Bucket   string                `json:"bucket"`
-	Provider R2SippySourceProvider `json:"provider"`
+	Bucket   string              `json:"bucket"`
+	Provider SippySourceProvider `json:"provider"`
 	// Region where the bucket resides (AWS only)
-	Region string            `json:"region,nullable"`
-	JSON   r2SippySourceJSON `json:"-"`
+	Region string          `json:"region,nullable"`
+	JSON   sippySourceJSON `json:"-"`
 }
 
-// r2SippySourceJSON contains the JSON metadata for the struct [R2SippySource]
-type r2SippySourceJSON struct {
+// sippySourceJSON contains the JSON metadata for the struct [SippySource]
+type sippySourceJSON struct {
 	Bucket      apijson.Field
 	Provider    apijson.Field
 	Region      apijson.Field
@@ -159,24 +160,24 @@ type r2SippySourceJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *R2SippySource) UnmarshalJSON(data []byte) (err error) {
+func (r *SippySource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r r2SippySourceJSON) RawJSON() string {
+func (r sippySourceJSON) RawJSON() string {
 	return r.raw
 }
 
-type R2SippySourceProvider string
+type SippySourceProvider string
 
 const (
-	R2SippySourceProviderAws R2SippySourceProvider = "aws"
-	R2SippySourceProviderGcs R2SippySourceProvider = "gcs"
+	SippySourceProviderAws SippySourceProvider = "aws"
+	SippySourceProviderGcs SippySourceProvider = "gcs"
 )
 
-func (r R2SippySourceProvider) IsKnown() bool {
+func (r SippySourceProvider) IsKnown() bool {
 	switch r {
-	case R2SippySourceProviderAws, R2SippySourceProviderGcs:
+	case SippySourceProviderAws, SippySourceProviderGcs:
 		return true
 	}
 	return false
@@ -217,45 +218,56 @@ func (r SippyDeleteResponseEnabled) IsKnown() bool {
 	return false
 }
 
-// This interface is a union satisfied by one of the following:
-// [SippyUpdateParamsR2EnableSippyAws], [SippyUpdateParamsR2EnableSippyGcs].
-type SippyUpdateParams interface {
-	ImplementsSippyUpdateParams()
-
-	getAccountID() param.Field[string]
-}
-
-type SippyUpdateParamsR2EnableSippyAws struct {
+type SippyUpdateParams struct {
 	// Account ID
-	AccountID param.Field[string] `path:"account_id,required"`
-	// R2 bucket to copy objects to
-	Destination param.Field[SippyUpdateParamsR2EnableSippyAwsDestination] `json:"destination"`
-	// AWS S3 bucket to copy objects from
-	Source param.Field[SippyUpdateParamsR2EnableSippyAwsSource] `json:"source"`
+	AccountID param.Field[string]        `path:"account_id,required"`
+	Body      SippyUpdateParamsBodyUnion `json:"body,required"`
 }
 
-func (r SippyUpdateParamsR2EnableSippyAws) MarshalJSON() (data []byte, err error) {
+func (r SippyUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type SippyUpdateParamsBody struct {
+	Destination param.Field[interface{}] `json:"destination,required"`
+	Source      param.Field[interface{}] `json:"source,required"`
+}
+
+func (r SippyUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SippyUpdateParamsR2EnableSippyAws) getAccountID() param.Field[string] {
-	return r.AccountID
+func (r SippyUpdateParamsBody) implementsR2SippyUpdateParamsBodyUnion() {}
+
+// Satisfied by [r2.SippyUpdateParamsBodyR2EnableSippyAws],
+// [r2.SippyUpdateParamsBodyR2EnableSippyGcs], [SippyUpdateParamsBody].
+type SippyUpdateParamsBodyUnion interface {
+	implementsR2SippyUpdateParamsBodyUnion()
 }
 
-func (SippyUpdateParamsR2EnableSippyAws) ImplementsSippyUpdateParams() {
-
+type SippyUpdateParamsBodyR2EnableSippyAws struct {
+	// R2 bucket to copy objects to
+	Destination param.Field[SippyUpdateParamsBodyR2EnableSippyAwsDestination] `json:"destination"`
+	// AWS S3 bucket to copy objects from
+	Source param.Field[SippyUpdateParamsBodyR2EnableSippyAwsSource] `json:"source"`
 }
+
+func (r SippyUpdateParamsBodyR2EnableSippyAws) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SippyUpdateParamsBodyR2EnableSippyAws) implementsR2SippyUpdateParamsBodyUnion() {}
 
 // R2 bucket to copy objects to
-type SippyUpdateParamsR2EnableSippyAwsDestination struct {
+type SippyUpdateParamsBodyR2EnableSippyAwsDestination struct {
 	// ID of a Cloudflare API token. This is the value labelled "Access Key ID" when
 	// creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]                                               `json:"accessKeyId"`
-	Provider    param.Field[SippyUpdateParamsR2EnableSippyAwsDestinationProvider] `json:"provider"`
+	AccessKeyID param.Field[string]   `json:"accessKeyId"`
+	Provider    param.Field[Provider] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
@@ -265,86 +277,64 @@ type SippyUpdateParamsR2EnableSippyAwsDestination struct {
 	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
 }
 
-func (r SippyUpdateParamsR2EnableSippyAwsDestination) MarshalJSON() (data []byte, err error) {
+func (r SippyUpdateParamsBodyR2EnableSippyAwsDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SippyUpdateParamsR2EnableSippyAwsDestinationProvider string
-
-const (
-	SippyUpdateParamsR2EnableSippyAwsDestinationProviderR2 SippyUpdateParamsR2EnableSippyAwsDestinationProvider = "r2"
-)
-
-func (r SippyUpdateParamsR2EnableSippyAwsDestinationProvider) IsKnown() bool {
-	switch r {
-	case SippyUpdateParamsR2EnableSippyAwsDestinationProviderR2:
-		return true
-	}
-	return false
-}
-
 // AWS S3 bucket to copy objects from
-type SippyUpdateParamsR2EnableSippyAwsSource struct {
+type SippyUpdateParamsBodyR2EnableSippyAwsSource struct {
 	// Access Key ID of an IAM credential (ideally scoped to a single S3 bucket)
 	AccessKeyID param.Field[string] `json:"accessKeyId"`
 	// Name of the AWS S3 bucket
-	Bucket   param.Field[string]                                          `json:"bucket"`
-	Provider param.Field[SippyUpdateParamsR2EnableSippyAwsSourceProvider] `json:"provider"`
+	Bucket   param.Field[string]                                              `json:"bucket"`
+	Provider param.Field[SippyUpdateParamsBodyR2EnableSippyAwsSourceProvider] `json:"provider"`
 	// Name of the AWS availability zone
 	Region param.Field[string] `json:"region"`
 	// Secret Access Key of an IAM credential (ideally scoped to a single S3 bucket)
 	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
 }
 
-func (r SippyUpdateParamsR2EnableSippyAwsSource) MarshalJSON() (data []byte, err error) {
+func (r SippyUpdateParamsBodyR2EnableSippyAwsSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SippyUpdateParamsR2EnableSippyAwsSourceProvider string
+type SippyUpdateParamsBodyR2EnableSippyAwsSourceProvider string
 
 const (
-	SippyUpdateParamsR2EnableSippyAwsSourceProviderAws SippyUpdateParamsR2EnableSippyAwsSourceProvider = "aws"
+	SippyUpdateParamsBodyR2EnableSippyAwsSourceProviderAws SippyUpdateParamsBodyR2EnableSippyAwsSourceProvider = "aws"
 )
 
-func (r SippyUpdateParamsR2EnableSippyAwsSourceProvider) IsKnown() bool {
+func (r SippyUpdateParamsBodyR2EnableSippyAwsSourceProvider) IsKnown() bool {
 	switch r {
-	case SippyUpdateParamsR2EnableSippyAwsSourceProviderAws:
+	case SippyUpdateParamsBodyR2EnableSippyAwsSourceProviderAws:
 		return true
 	}
 	return false
 }
 
-type SippyUpdateParamsR2EnableSippyGcs struct {
-	// Account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+type SippyUpdateParamsBodyR2EnableSippyGcs struct {
 	// R2 bucket to copy objects to
-	Destination param.Field[SippyUpdateParamsR2EnableSippyGcsDestination] `json:"destination"`
+	Destination param.Field[SippyUpdateParamsBodyR2EnableSippyGcsDestination] `json:"destination"`
 	// GCS bucket to copy objects from
-	Source param.Field[SippyUpdateParamsR2EnableSippyGcsSource] `json:"source"`
+	Source param.Field[SippyUpdateParamsBodyR2EnableSippyGcsSource] `json:"source"`
 }
 
-func (r SippyUpdateParamsR2EnableSippyGcs) MarshalJSON() (data []byte, err error) {
+func (r SippyUpdateParamsBodyR2EnableSippyGcs) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SippyUpdateParamsR2EnableSippyGcs) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (SippyUpdateParamsR2EnableSippyGcs) ImplementsSippyUpdateParams() {
-
-}
+func (r SippyUpdateParamsBodyR2EnableSippyGcs) implementsR2SippyUpdateParamsBodyUnion() {}
 
 // R2 bucket to copy objects to
-type SippyUpdateParamsR2EnableSippyGcsDestination struct {
+type SippyUpdateParamsBodyR2EnableSippyGcsDestination struct {
 	// ID of a Cloudflare API token. This is the value labelled "Access Key ID" when
 	// creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]                                               `json:"accessKeyId"`
-	Provider    param.Field[SippyUpdateParamsR2EnableSippyGcsDestinationProvider] `json:"provider"`
+	AccessKeyID param.Field[string]   `json:"accessKeyId"`
+	Provider    param.Field[Provider] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
@@ -354,57 +344,43 @@ type SippyUpdateParamsR2EnableSippyGcsDestination struct {
 	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
 }
 
-func (r SippyUpdateParamsR2EnableSippyGcsDestination) MarshalJSON() (data []byte, err error) {
+func (r SippyUpdateParamsBodyR2EnableSippyGcsDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SippyUpdateParamsR2EnableSippyGcsDestinationProvider string
-
-const (
-	SippyUpdateParamsR2EnableSippyGcsDestinationProviderR2 SippyUpdateParamsR2EnableSippyGcsDestinationProvider = "r2"
-)
-
-func (r SippyUpdateParamsR2EnableSippyGcsDestinationProvider) IsKnown() bool {
-	switch r {
-	case SippyUpdateParamsR2EnableSippyGcsDestinationProviderR2:
-		return true
-	}
-	return false
-}
-
 // GCS bucket to copy objects from
-type SippyUpdateParamsR2EnableSippyGcsSource struct {
+type SippyUpdateParamsBodyR2EnableSippyGcsSource struct {
 	// Name of the GCS bucket
 	Bucket param.Field[string] `json:"bucket"`
 	// Client email of an IAM credential (ideally scoped to a single GCS bucket)
 	ClientEmail param.Field[string] `json:"clientEmail"`
 	// Private Key of an IAM credential (ideally scoped to a single GCS bucket)
-	PrivateKey param.Field[string]                                          `json:"privateKey"`
-	Provider   param.Field[SippyUpdateParamsR2EnableSippyGcsSourceProvider] `json:"provider"`
+	PrivateKey param.Field[string]                                              `json:"privateKey"`
+	Provider   param.Field[SippyUpdateParamsBodyR2EnableSippyGcsSourceProvider] `json:"provider"`
 }
 
-func (r SippyUpdateParamsR2EnableSippyGcsSource) MarshalJSON() (data []byte, err error) {
+func (r SippyUpdateParamsBodyR2EnableSippyGcsSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SippyUpdateParamsR2EnableSippyGcsSourceProvider string
+type SippyUpdateParamsBodyR2EnableSippyGcsSourceProvider string
 
 const (
-	SippyUpdateParamsR2EnableSippyGcsSourceProviderGcs SippyUpdateParamsR2EnableSippyGcsSourceProvider = "gcs"
+	SippyUpdateParamsBodyR2EnableSippyGcsSourceProviderGcs SippyUpdateParamsBodyR2EnableSippyGcsSourceProvider = "gcs"
 )
 
-func (r SippyUpdateParamsR2EnableSippyGcsSourceProvider) IsKnown() bool {
+func (r SippyUpdateParamsBodyR2EnableSippyGcsSourceProvider) IsKnown() bool {
 	switch r {
-	case SippyUpdateParamsR2EnableSippyGcsSourceProviderGcs:
+	case SippyUpdateParamsBodyR2EnableSippyGcsSourceProviderGcs:
 		return true
 	}
 	return false
 }
 
 type SippyUpdateResponseEnvelope struct {
-	Errors   []SippyUpdateResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                            `json:"messages,required"`
-	Result   R2Sippy                             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   Sippy                 `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -429,29 +405,6 @@ func (r sippyUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SippyUpdateResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    sippyUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// sippyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SippyUpdateResponseEnvelopeErrors]
-type sippyUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SippyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sippyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SippyUpdateResponseEnvelopeSuccess bool
 
@@ -473,9 +426,9 @@ type SippyDeleteParams struct {
 }
 
 type SippyDeleteResponseEnvelope struct {
-	Errors   []SippyDeleteResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                            `json:"messages,required"`
-	Result   SippyDeleteResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   SippyDeleteResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -500,29 +453,6 @@ func (r sippyDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SippyDeleteResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    sippyDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// sippyDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SippyDeleteResponseEnvelopeErrors]
-type sippyDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SippyDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sippyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SippyDeleteResponseEnvelopeSuccess bool
 
@@ -544,9 +474,9 @@ type SippyGetParams struct {
 }
 
 type SippyGetResponseEnvelope struct {
-	Errors   []SippyGetResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                         `json:"messages,required"`
-	Result   R2Sippy                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   Sippy                 `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyGetResponseEnvelopeJSON    `json:"-"`
@@ -568,29 +498,6 @@ func (r *SippyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r sippyGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SippyGetResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    sippyGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// sippyGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SippyGetResponseEnvelopeErrors]
-type sippyGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SippyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sippyGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -52,7 +52,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 }
 
 // Fetches a list of enrolled devices.
-func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustDevices], err error) {
+func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Device], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -70,12 +70,12 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 }
 
 // Fetches a list of enrolled devices.
-func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustDevices] {
+func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Device] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Fetches details for a single device.
-func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponse, err error) {
+func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/%s", query.AccountID, deviceID)
@@ -87,14 +87,14 @@ func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGe
 	return
 }
 
-type ZeroTrustDevices struct {
+type Device struct {
 	// Device ID.
 	ID string `json:"id"`
 	// When the device was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// True if the device was deleted.
-	Deleted    bool                       `json:"deleted"`
-	DeviceType ZeroTrustDevicesDeviceType `json:"device_type"`
+	Deleted    bool             `json:"deleted"`
+	DeviceType DeviceDeviceType `json:"device_type"`
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
 	// The device's public key.
@@ -122,16 +122,15 @@ type ZeroTrustDevices struct {
 	// The device serial number.
 	SerialNumber string `json:"serial_number"`
 	// When the device was updated.
-	Updated time.Time            `json:"updated" format:"date-time"`
-	User    ZeroTrustDevicesUser `json:"user"`
+	Updated time.Time  `json:"updated" format:"date-time"`
+	User    DeviceUser `json:"user"`
 	// The WARP client version.
-	Version string               `json:"version"`
-	JSON    zeroTrustDevicesJSON `json:"-"`
+	Version string     `json:"version"`
+	JSON    deviceJSON `json:"-"`
 }
 
-// zeroTrustDevicesJSON contains the JSON metadata for the struct
-// [ZeroTrustDevices]
-type zeroTrustDevicesJSON struct {
+// deviceJSON contains the JSON metadata for the struct [Device]
+type deviceJSON struct {
 	ID               apijson.Field
 	Created          apijson.Field
 	Deleted          apijson.Field
@@ -156,45 +155,44 @@ type zeroTrustDevicesJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ZeroTrustDevices) UnmarshalJSON(data []byte) (err error) {
+func (r *Device) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustDevicesJSON) RawJSON() string {
+func (r deviceJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZeroTrustDevicesDeviceType string
+type DeviceDeviceType string
 
 const (
-	ZeroTrustDevicesDeviceTypeWindows ZeroTrustDevicesDeviceType = "windows"
-	ZeroTrustDevicesDeviceTypeMac     ZeroTrustDevicesDeviceType = "mac"
-	ZeroTrustDevicesDeviceTypeLinux   ZeroTrustDevicesDeviceType = "linux"
-	ZeroTrustDevicesDeviceTypeAndroid ZeroTrustDevicesDeviceType = "android"
-	ZeroTrustDevicesDeviceTypeIos     ZeroTrustDevicesDeviceType = "ios"
+	DeviceDeviceTypeWindows DeviceDeviceType = "windows"
+	DeviceDeviceTypeMac     DeviceDeviceType = "mac"
+	DeviceDeviceTypeLinux   DeviceDeviceType = "linux"
+	DeviceDeviceTypeAndroid DeviceDeviceType = "android"
+	DeviceDeviceTypeIos     DeviceDeviceType = "ios"
 )
 
-func (r ZeroTrustDevicesDeviceType) IsKnown() bool {
+func (r DeviceDeviceType) IsKnown() bool {
 	switch r {
-	case ZeroTrustDevicesDeviceTypeWindows, ZeroTrustDevicesDeviceTypeMac, ZeroTrustDevicesDeviceTypeLinux, ZeroTrustDevicesDeviceTypeAndroid, ZeroTrustDevicesDeviceTypeIos:
+	case DeviceDeviceTypeWindows, DeviceDeviceTypeMac, DeviceDeviceTypeLinux, DeviceDeviceTypeAndroid, DeviceDeviceTypeIos:
 		return true
 	}
 	return false
 }
 
-type ZeroTrustDevicesUser struct {
+type DeviceUser struct {
 	// UUID
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// The enrolled device user's name.
-	Name string                   `json:"name"`
-	JSON zeroTrustDevicesUserJSON `json:"-"`
+	Name string         `json:"name"`
+	JSON deviceUserJSON `json:"-"`
 }
 
-// zeroTrustDevicesUserJSON contains the JSON metadata for the struct
-// [ZeroTrustDevicesUser]
-type zeroTrustDevicesUserJSON struct {
+// deviceUserJSON contains the JSON metadata for the struct [DeviceUser]
+type deviceUserJSON struct {
 	ID          apijson.Field
 	Email       apijson.Field
 	Name        apijson.Field
@@ -202,23 +200,23 @@ type zeroTrustDevicesUserJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDevicesUser) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustDevicesUserJSON) RawJSON() string {
+func (r deviceUserJSON) RawJSON() string {
 	return r.raw
 }
 
 // Union satisfied by [zero_trust.DeviceGetResponseUnknown] or
 // [shared.UnionString].
-type DeviceGetResponse interface {
-	ImplementsZeroTrustDeviceGetResponse()
+type DeviceGetResponseUnion interface {
+	ImplementsZeroTrustDeviceGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DeviceGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*DeviceGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -236,9 +234,9 @@ type DeviceGetParams struct {
 }
 
 type DeviceGetResponseEnvelope struct {
-	Errors   []DeviceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   DeviceGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceGetResponseEnvelopeJSON    `json:"-"`
@@ -260,52 +258,6 @@ func (r *DeviceGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r deviceGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    deviceGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DeviceGetResponseEnvelopeErrors]
-type deviceGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    deviceGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DeviceGetResponseEnvelopeMessages]
-type deviceGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -32,9 +32,9 @@ func TestIndexNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		vectorize.IndexNewParams{
-			Config: cloudflare.F[vectorize.IndexNewParamsConfig](vectorize.IndexNewParamsConfigVectorizeIndexPresetConfiguration(vectorize.IndexNewParamsConfigVectorizeIndexPresetConfiguration{
+			Config: cloudflare.F[vectorize.IndexNewParamsConfigUnion](vectorize.IndexNewParamsConfigVectorizeIndexPresetConfiguration{
 				Preset: cloudflare.F(vectorize.IndexNewParamsConfigVectorizeIndexPresetConfigurationPresetCfBaaiBgeSmallEnV1_5),
-			})),
+			}),
 			Name:        cloudflare.F("example-index"),
 			Description: cloudflare.F("This is my example index."),
 		},
@@ -239,6 +239,9 @@ func TestIndexInsert(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-index",
+		vectorize.IndexInsertParams{
+			Body: map[string]interface{}{},
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -301,6 +304,9 @@ func TestIndexUpsert(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-index",
+		vectorize.IndexUpsertParams{
+			Body: map[string]interface{}{},
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

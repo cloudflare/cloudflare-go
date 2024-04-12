@@ -274,7 +274,7 @@ func (r as112TimeseriesGroupProtocolResponseJSON) RawJSON() string {
 }
 
 type AS112TimeseriesGroupProtocolResponseSerie0 struct {
-	Tcp  []string                                       `json:"tcp,required"`
+	TCP  []string                                       `json:"tcp,required"`
 	Udp  []string                                       `json:"udp,required"`
 	JSON as112TimeseriesGroupProtocolResponseSerie0JSON `json:"-"`
 }
@@ -282,7 +282,7 @@ type AS112TimeseriesGroupProtocolResponseSerie0 struct {
 // as112TimeseriesGroupProtocolResponseSerie0JSON contains the JSON metadata for
 // the struct [AS112TimeseriesGroupProtocolResponseSerie0]
 type as112TimeseriesGroupProtocolResponseSerie0JSON struct {
-	Tcp         apijson.Field
+	TCP         apijson.Field
 	Udp         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -429,7 +429,7 @@ type AS112TimeseriesGroupDNSSECParams struct {
 // `url.Values`.
 func (r AS112TimeseriesGroupDNSSECParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -556,7 +556,7 @@ type AS112TimeseriesGroupEdnsParams struct {
 // `url.Values`.
 func (r AS112TimeseriesGroupEdnsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -683,7 +683,7 @@ type AS112TimeseriesGroupIPVersionParams struct {
 // `url.Values`.
 func (r AS112TimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -810,7 +810,7 @@ type AS112TimeseriesGroupProtocolParams struct {
 // `url.Values`.
 func (r AS112TimeseriesGroupProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -937,7 +937,7 @@ type AS112TimeseriesGroupQueryTypeParams struct {
 // `url.Values`.
 func (r AS112TimeseriesGroupQueryTypeParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1064,7 +1064,7 @@ type AS112TimeseriesGroupResponseCodesParams struct {
 // as `url.Values`.
 func (r AS112TimeseriesGroupResponseCodesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

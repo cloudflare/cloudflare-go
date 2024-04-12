@@ -34,7 +34,7 @@ func TestSettingTLSUpdate(t *testing.T) {
 		"app.example.com",
 		hostnames.SettingTLSUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Value:  cloudflare.F[hostnames.SettingTLSUpdateParamsValue](hostnames.SettingTLSUpdateParamsValueArray([]string{"ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"})),
+			Value:  cloudflare.F[hostnames.SettingValueUnionParam](hostnames.SettingValueArrayParam([]string{"ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"})),
 		},
 	)
 	if err != nil {

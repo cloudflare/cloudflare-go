@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -36,7 +37,7 @@ func NewScriptContentService(opts ...option.RequestOption) (r *ScriptContentServ
 }
 
 // Put script content without touching config or metadata
-func (r *ScriptContentService) Update(ctx context.Context, scriptName string, params ScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkersScript, err error) {
+func (r *ScriptContentService) Update(ctx context.Context, scriptName string, params ScriptContentUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptContentUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content", params.AccountID, scriptName)
@@ -48,6 +49,15 @@ func (r *ScriptContentService) Update(ctx context.Context, scriptName string, pa
 	return
 }
 
+// Fetch script content only
+func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query ScriptContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content/v2", query.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 type ScriptContentUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -55,12 +65,13 @@ type ScriptContentUpdateParams struct {
 	// may be provided as separate named parts, but at least one module must be
 	// present. This should be referenced either in the metadata as `main_module`
 	// (esm)/`body_part` (service worker) or as a header `CF-WORKER-MAIN-MODULE-PART`
-	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name.
+	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name. Source maps may also
+	// be included using the `application/source-map` content type.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[ScriptContentUpdateParamsMetadata] `json:"metadata"`
-	CfWorkerBodyPart       param.Field[string]                            `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]                            `header:"CF-WORKER-MAIN-MODULE-PART"`
+	Metadata               param.Field[WorkerMetadataParam] `json:"metadata"`
+	CfWorkerBodyPart       param.Field[string]              `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]              `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
 func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -78,25 +89,10 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// JSON encoded metadata about the uploaded parts and Worker configuration.
-type ScriptContentUpdateParamsMetadata struct {
-	// Name of the part in the multipart request that contains the script (e.g. the
-	// file adding a listener to the `fetch` event). Indicates a
-	// `service worker syntax` Worker.
-	BodyPart param.Field[string] `json:"body_part"`
-	// Name of the part in the multipart request that contains the main module (e.g.
-	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
-	MainModule param.Field[string] `json:"main_module"`
-}
-
-func (r ScriptContentUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ScriptContentUpdateResponseEnvelope struct {
-	Errors   []ScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersScript                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Script                `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptContentUpdateResponseEnvelopeJSON    `json:"-"`
@@ -121,52 +117,6 @@ func (r scriptContentUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptContentUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    scriptContentUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// scriptContentUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ScriptContentUpdateResponseEnvelopeErrors]
-type scriptContentUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptContentUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptContentUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptContentUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    scriptContentUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// scriptContentUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ScriptContentUpdateResponseEnvelopeMessages]
-type scriptContentUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptContentUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ScriptContentUpdateResponseEnvelopeSuccess bool
 
@@ -180,4 +130,9 @@ func (r ScriptContentUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type ScriptContentGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }

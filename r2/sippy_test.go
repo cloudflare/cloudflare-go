@@ -31,20 +31,22 @@ func TestSippyUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.R2.Sippy.Update(
 		context.TODO(),
 		"example-bucket",
-		r2.SippyUpdateParamsR2EnableSippyAws{
+		r2.SippyUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Destination: cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsDestination{
-				AccessKeyID:     cloudflare.F("string"),
-				Provider:        cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsDestinationProviderR2),
-				SecretAccessKey: cloudflare.F("string"),
-			}),
-			Source: cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsSource{
-				AccessKeyID:     cloudflare.F("string"),
-				Bucket:          cloudflare.F("string"),
-				Provider:        cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsSourceProviderAws),
-				Region:          cloudflare.F("string"),
-				SecretAccessKey: cloudflare.F("string"),
-			}),
+			Body: r2.SippyUpdateParamsBodyR2EnableSippyAws{
+				Destination: cloudflare.F(r2.SippyUpdateParamsBodyR2EnableSippyAwsDestination{
+					AccessKeyID:     cloudflare.F("string"),
+					Provider:        cloudflare.F(r2.ProviderR2),
+					SecretAccessKey: cloudflare.F("string"),
+				}),
+				Source: cloudflare.F(r2.SippyUpdateParamsBodyR2EnableSippyAwsSource{
+					AccessKeyID:     cloudflare.F("string"),
+					Bucket:          cloudflare.F("string"),
+					Provider:        cloudflare.F(r2.SippyUpdateParamsBodyR2EnableSippyAwsSourceProviderAws),
+					Region:          cloudflare.F("string"),
+					SecretAccessKey: cloudflare.F("string"),
+				}),
+			},
 		},
 	)
 	if err != nil {

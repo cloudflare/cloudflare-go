@@ -30,12 +30,14 @@ func TestGatewayLoggingUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Logging.Update(context.TODO(), zero_trust.GatewayLoggingUpdateParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		RedactPii: cloudflare.F(true),
-		SettingsByRuleType: cloudflare.F(zero_trust.GatewayLoggingUpdateParamsSettingsByRuleType{
-			DNS:  cloudflare.F[any](map[string]interface{}{}),
-			HTTP: cloudflare.F[any](map[string]interface{}{}),
-			L4:   cloudflare.F[any](map[string]interface{}{}),
-		}),
+		LoggingSetting: zero_trust.LoggingSettingParam{
+			RedactPii: cloudflare.F(true),
+			SettingsByRuleType: cloudflare.F(zero_trust.LoggingSettingSettingsByRuleTypeParam{
+				DNS:  cloudflare.F[any](map[string]interface{}{}),
+				HTTP: cloudflare.F[any](map[string]interface{}{}),
+				L4:   cloudflare.F[any](map[string]interface{}{}),
+			}),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

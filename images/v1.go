@@ -51,7 +51,7 @@ func NewV1Service(opts ...option.RequestOption) (r *V1Service) {
 func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *Image, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1NewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1", params.getAccountID())
+	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -87,10 +87,10 @@ func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opt
 
 // Delete an image on Cloudflare Images. On success, all copies of the image are
 // deleted and purged from cache.
-func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponse, err error) {
+func (r *V1Service) Delete(ctx context.Context, imageID string, params V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1DeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/%s", body.AccountID, imageID)
+	path := fmt.Sprintf("accounts/%s/images/v1/%s", params.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -140,8 +140,8 @@ type Image struct {
 	// When the media item was uploaded.
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// Object specifying available variants for an image.
-	Variants []ImageVariant `json:"variants" format:"uri"`
-	JSON     imageJSON      `json:"-"`
+	Variants []ImageVariantsUnion `json:"variants" format:"uri"`
+	JSON     imageJSON            `json:"-"`
 }
 
 // imageJSON contains the JSON metadata for the struct [Image]
@@ -168,13 +168,13 @@ func (r imageJSON) RawJSON() string {
 //
 // Union satisfied by [shared.UnionString], [shared.UnionString] or
 // [shared.UnionString].
-type ImageVariant interface {
-	ImplementsImagesImageVariant()
+type ImageVariantsUnion interface {
+	ImplementsImagesImageVariantsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ImageVariant)(nil)).Elem(),
+		reflect.TypeOf((*ImageVariantsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -192,9 +192,9 @@ func init() {
 }
 
 type V1ListResponse struct {
-	Errors   []V1ListResponseError   `json:"errors,required"`
-	Messages []V1ListResponseMessage `json:"messages,required"`
-	Result   V1ListResponseResult    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1ListResponseResult  `json:"result,required"`
 	// Whether the API call was successful
 	Success V1ListResponseSuccess `json:"success,required"`
 	JSON    v1ListResponseJSON    `json:"-"`
@@ -215,52 +215,6 @@ func (r *V1ListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r v1ListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1ListResponseError struct {
-	Code    int64                   `json:"code,required"`
-	Message string                  `json:"message,required"`
-	JSON    v1ListResponseErrorJSON `json:"-"`
-}
-
-// v1ListResponseErrorJSON contains the JSON metadata for the struct
-// [V1ListResponseError]
-type v1ListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1ListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1ListResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1ListResponseMessage struct {
-	Code    int64                     `json:"code,required"`
-	Message string                    `json:"message,required"`
-	JSON    v1ListResponseMessageJSON `json:"-"`
-}
-
-// v1ListResponseMessageJSON contains the JSON metadata for the struct
-// [V1ListResponseMessage]
-type v1ListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1ListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1ListResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -301,13 +255,13 @@ func (r V1ListResponseSuccess) IsKnown() bool {
 }
 
 // Union satisfied by [images.V1DeleteResponseUnknown] or [shared.UnionString].
-type V1DeleteResponse interface {
-	ImplementsImagesV1DeleteResponse()
+type V1DeleteResponseUnion interface {
+	ImplementsImagesV1DeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*V1DeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*V1DeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -316,56 +270,29 @@ func init() {
 	)
 }
 
-// This interface is a union satisfied by one of the following:
-// [V1NewParamsImagesImageUploadViaFile], [V1NewParamsImagesImageUploadViaURL].
-type V1NewParams interface {
-	ImplementsV1NewParams()
-
-	getAccountID() param.Field[string]
-}
-
-type V1NewParamsImagesImageUploadViaFile struct {
+type V1NewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// An image binary data.
-	File param.Field[interface{}] `json:"file,required"`
+	// An image binary data. Only needed when type is uploading a file.
+	File param.Field[interface{}] `json:"file"`
+	// User modifiable key-value store. Can use used for keeping references to another
+	// system of record for managing images.
+	Metadata param.Field[interface{}] `json:"metadata"`
+	// Indicates whether the image requires a signature token for the access.
+	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
+	// A URL to fetch an image from origin. Only needed when type is uploading from a
+	// URL.
+	URL param.Field[string] `json:"url"`
 }
 
-func (r V1NewParamsImagesImageUploadViaFile) MarshalJSON() (data []byte, err error) {
+func (r V1NewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r V1NewParamsImagesImageUploadViaFile) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (V1NewParamsImagesImageUploadViaFile) ImplementsV1NewParams() {
-
-}
-
-type V1NewParamsImagesImageUploadViaURL struct {
-	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// A URL to fetch an image from origin.
-	URL param.Field[string] `json:"url,required"`
-}
-
-func (r V1NewParamsImagesImageUploadViaURL) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r V1NewParamsImagesImageUploadViaURL) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (V1NewParamsImagesImageUploadViaURL) ImplementsV1NewParams() {
-
 }
 
 type V1NewResponseEnvelope struct {
-	Errors   []V1NewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []V1NewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Image                           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Image                 `json:"result,required"`
 	// Whether the API call was successful
 	Success V1NewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1NewResponseEnvelopeJSON    `json:"-"`
@@ -387,52 +314,6 @@ func (r *V1NewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r v1NewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1NewResponseEnvelopeErrors struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    v1NewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// v1NewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [V1NewResponseEnvelopeErrors]
-type v1NewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1NewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1NewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1NewResponseEnvelopeMessages struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    v1NewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// v1NewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [V1NewResponseEnvelopeMessages]
-type v1NewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1NewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1NewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -463,7 +344,7 @@ type V1ListParams struct {
 // URLQuery serializes [V1ListParams]'s query parameters as `url.Values`.
 func (r V1ListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -471,12 +352,17 @@ func (r V1ListParams) URLQuery() (v url.Values) {
 type V1DeleteParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r V1DeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type V1DeleteResponseEnvelope struct {
-	Errors   []V1DeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []V1DeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   V1DeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1DeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success V1DeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1DeleteResponseEnvelopeJSON    `json:"-"`
@@ -498,52 +384,6 @@ func (r *V1DeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r v1DeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1DeleteResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    v1DeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// v1DeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [V1DeleteResponseEnvelopeErrors]
-type v1DeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1DeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1DeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1DeleteResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    v1DeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// v1DeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [V1DeleteResponseEnvelopeMessages]
-type v1DeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1DeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1DeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -579,9 +419,9 @@ func (r V1EditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1EditResponseEnvelope struct {
-	Errors   []V1EditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []V1EditResponseEnvelopeMessages `json:"messages,required"`
-	Result   Image                            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Image                 `json:"result,required"`
 	// Whether the API call was successful
 	Success V1EditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1EditResponseEnvelopeJSON    `json:"-"`
@@ -606,52 +446,6 @@ func (r v1EditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type V1EditResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    v1EditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// v1EditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [V1EditResponseEnvelopeErrors]
-type v1EditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1EditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1EditResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    v1EditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// v1EditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [V1EditResponseEnvelopeMessages]
-type v1EditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1EditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type V1EditResponseEnvelopeSuccess bool
 
@@ -673,9 +467,9 @@ type V1GetParams struct {
 }
 
 type V1GetResponseEnvelope struct {
-	Errors   []V1GetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []V1GetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Image                           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Image                 `json:"result,required"`
 	// Whether the API call was successful
 	Success V1GetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1GetResponseEnvelopeJSON    `json:"-"`
@@ -697,52 +491,6 @@ func (r *V1GetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r v1GetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1GetResponseEnvelopeErrors struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    v1GetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// v1GetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [V1GetResponseEnvelopeErrors]
-type v1GetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1GetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1GetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type V1GetResponseEnvelopeMessages struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    v1GetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// v1GetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [V1GetResponseEnvelopeMessages]
-type v1GetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1GetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1GetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

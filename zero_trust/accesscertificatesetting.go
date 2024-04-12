@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +33,7 @@ func NewAccessCertificateSettingService(opts ...option.RequestOption) (r *Access
 }
 
 // Updates an mTLS certificate's hostname settings.
-func (r *AccessCertificateSettingService) Update(ctx context.Context, params AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]ZeroTrustSettings, err error) {
+func (r *AccessCertificateSettingService) Update(ctx context.Context, params AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]CertificateSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingUpdateResponseEnvelope
 	var accountOrZone string
@@ -54,7 +55,7 @@ func (r *AccessCertificateSettingService) Update(ctx context.Context, params Acc
 }
 
 // List all mTLS hostname settings for this account or zone.
-func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessCertificateSettingGetParams, opts ...option.RequestOption) (res *[]ZeroTrustSettings, err error) {
+func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessCertificateSettingGetParams, opts ...option.RequestOption) (res *[]CertificateSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingGetResponseEnvelope
 	var accountOrZone string
@@ -75,7 +76,7 @@ func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessC
 	return
 }
 
-type ZeroTrustSettings struct {
+type CertificateSettings struct {
 	// Request client certificates for this hostname in China. Can only be set to true
 	// if this zone is china network enabled.
 	ChinaNetwork bool `json:"china_network,required"`
@@ -84,13 +85,13 @@ type ZeroTrustSettings struct {
 	// allow logging on the origin.
 	ClientCertificateForwarding bool `json:"client_certificate_forwarding,required"`
 	// The hostname that these settings apply to.
-	Hostname string                `json:"hostname,required"`
-	JSON     zeroTrustSettingsJSON `json:"-"`
+	Hostname string                  `json:"hostname,required"`
+	JSON     certificateSettingsJSON `json:"-"`
 }
 
-// zeroTrustSettingsJSON contains the JSON metadata for the struct
-// [ZeroTrustSettings]
-type zeroTrustSettingsJSON struct {
+// certificateSettingsJSON contains the JSON metadata for the struct
+// [CertificateSettings]
+type certificateSettingsJSON struct {
 	ChinaNetwork                apijson.Field
 	ClientCertificateForwarding apijson.Field
 	Hostname                    apijson.Field
@@ -98,15 +99,15 @@ type zeroTrustSettingsJSON struct {
 	ExtraFields                 map[string]apijson.Field
 }
 
-func (r *ZeroTrustSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustSettingsJSON) RawJSON() string {
+func (r certificateSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZeroTrustSettingsParam struct {
+type CertificateSettingsParam struct {
 	// Request client certificates for this hostname in China. Can only be set to true
 	// if this zone is china network enabled.
 	ChinaNetwork param.Field[bool] `json:"china_network,required"`
@@ -118,12 +119,12 @@ type ZeroTrustSettingsParam struct {
 	Hostname param.Field[string] `json:"hostname,required"`
 }
 
-func (r ZeroTrustSettingsParam) MarshalJSON() (data []byte, err error) {
+func (r CertificateSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type AccessCertificateSettingUpdateParams struct {
-	Settings param.Field[[]ZeroTrustSettingsParam] `json:"settings,required"`
+	Settings param.Field[[]CertificateSettingsParam] `json:"settings,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -135,9 +136,9 @@ func (r AccessCertificateSettingUpdateParams) MarshalJSON() (data []byte, err er
 }
 
 type AccessCertificateSettingUpdateResponseEnvelope struct {
-	Errors   []AccessCertificateSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustSettings                                      `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []CertificateSettings `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -161,52 +162,6 @@ func (r *AccessCertificateSettingUpdateResponseEnvelope) UnmarshalJSON(data []by
 }
 
 func (r accessCertificateSettingUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCertificateSettingUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    accessCertificateSettingUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCertificateSettingUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessCertificateSettingUpdateResponseEnvelopeErrors]
-type accessCertificateSettingUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateSettingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCertificateSettingUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    accessCertificateSettingUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCertificateSettingUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessCertificateSettingUpdateResponseEnvelopeMessages]
-type accessCertificateSettingUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateSettingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -265,9 +220,9 @@ type AccessCertificateSettingGetParams struct {
 }
 
 type AccessCertificateSettingGetResponseEnvelope struct {
-	Errors   []AccessCertificateSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustSettings                                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []CertificateSettings `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateSettingGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -291,52 +246,6 @@ func (r *AccessCertificateSettingGetResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r accessCertificateSettingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCertificateSettingGetResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    accessCertificateSettingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCertificateSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessCertificateSettingGetResponseEnvelopeErrors]
-type accessCertificateSettingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCertificateSettingGetResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    accessCertificateSettingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCertificateSettingGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessCertificateSettingGetResponseEnvelopeMessages]
-type accessCertificateSettingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

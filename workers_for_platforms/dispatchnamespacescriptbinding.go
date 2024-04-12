@@ -6,13 +6,13 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v2/workers"
 )
 
 // DispatchNamespaceScriptBindingService contains methods and other services that
@@ -35,518 +35,63 @@ func NewDispatchNamespaceScriptBindingService(opts ...option.RequestOption) (r *
 
 // Fetch script bindings from a script uploaded to a Workers for Platforms
 // namespace.
-func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptBindingGetResponse, err error) {
+func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *[]workers.Binding, err error) {
 	opts = append(r.Options[:], opts...)
+	var env DispatchNamespaceScriptBindingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/bindings", query.AccountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
-}
-
-// A binding to allow the Worker to communicate with resources
-//
-// Union satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBinding],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersServiceBinding],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersDoBinding],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersR2Binding],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersQueueBinding],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersD1Binding],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBinding]
-// or
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding].
-type DispatchNamespaceScriptBindingGetResponse interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DispatchNamespaceScriptBindingGetResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBinding{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersServiceBinding{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersDoBinding{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersR2Binding{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersQueueBinding{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersD1Binding{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBinding{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding{}),
-		},
-	)
-}
-
-type DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id,required"`
-	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingType `json:"type,required"`
-	JSON dispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingJSON contains
-// the JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBinding]
-type dispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingJSON struct {
-	Name        apijson.Field
-	NamespaceID apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBinding) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
-}
-
-// The class of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingType string
-
-const (
-	DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingTypeKVNamespace DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingType = "kv_namespace"
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBindingTypeKVNamespace:
-		return true
-	}
-	return false
-}
-
-type DispatchNamespaceScriptBindingGetResponseWorkersServiceBinding struct {
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment,required"`
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Name of Worker to bind to
-	Service string `json:"service,required"`
-	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersServiceBindingType `json:"type,required"`
-	JSON dispatchNamespaceScriptBindingGetResponseWorkersServiceBindingJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersServiceBindingJSON contains the
-// JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersServiceBinding]
-type dispatchNamespaceScriptBindingGetResponseWorkersServiceBindingJSON struct {
-	Environment apijson.Field
-	Name        apijson.Field
-	Service     apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersServiceBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersServiceBinding) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
-}
-
-// The class of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersServiceBindingType string
-
-const (
-	DispatchNamespaceScriptBindingGetResponseWorkersServiceBindingTypeService DispatchNamespaceScriptBindingGetResponseWorkersServiceBindingType = "service"
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersServiceBindingType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersServiceBindingTypeService:
-		return true
-	}
-	return false
-}
-
-type DispatchNamespaceScriptBindingGetResponseWorkersDoBinding struct {
-	// The exported class name of the Durable Object
-	ClassName string `json:"class_name,required"`
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersDoBindingType `json:"type,required"`
-	// The environment of the script_name to bind to
-	Environment string `json:"environment"`
-	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id"`
-	// The script where the Durable Object is defined, if it is external to this Worker
-	ScriptName string                                                        `json:"script_name"`
-	JSON       dispatchNamespaceScriptBindingGetResponseWorkersDoBindingJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersDoBindingJSON contains the JSON
-// metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersDoBinding]
-type dispatchNamespaceScriptBindingGetResponseWorkersDoBindingJSON struct {
-	ClassName   apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	Environment apijson.Field
-	NamespaceID apijson.Field
-	ScriptName  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersDoBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersDoBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersDoBinding) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
-}
-
-// The class of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersDoBindingType string
-
-const (
-	DispatchNamespaceScriptBindingGetResponseWorkersDoBindingTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersDoBindingType = "durable_object_namespace"
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersDoBindingType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersDoBindingTypeDurableObjectNamespace:
-		return true
-	}
-	return false
-}
-
-type DispatchNamespaceScriptBindingGetResponseWorkersR2Binding struct {
-	// R2 bucket to bind to
-	BucketName string `json:"bucket_name,required"`
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersR2BindingType `json:"type,required"`
-	JSON dispatchNamespaceScriptBindingGetResponseWorkersR2BindingJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersR2BindingJSON contains the JSON
-// metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersR2Binding]
-type dispatchNamespaceScriptBindingGetResponseWorkersR2BindingJSON struct {
-	BucketName  apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersR2Binding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersR2BindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersR2Binding) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
-}
-
-// The class of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersR2BindingType string
-
-const (
-	DispatchNamespaceScriptBindingGetResponseWorkersR2BindingTypeR2Bucket DispatchNamespaceScriptBindingGetResponseWorkersR2BindingType = "r2_bucket"
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersR2BindingType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersR2BindingTypeR2Bucket:
-		return true
-	}
-	return false
-}
-
-type DispatchNamespaceScriptBindingGetResponseWorkersQueueBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Name of the Queue to bind to
-	QueueName string `json:"queue_name,required"`
-	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersQueueBindingType `json:"type,required"`
-	JSON dispatchNamespaceScriptBindingGetResponseWorkersQueueBindingJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersQueueBindingJSON contains the
-// JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersQueueBinding]
-type dispatchNamespaceScriptBindingGetResponseWorkersQueueBindingJSON struct {
-	Name        apijson.Field
-	QueueName   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersQueueBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersQueueBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersQueueBinding) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
-}
-
-// The class of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersQueueBindingType string
-
-const (
-	DispatchNamespaceScriptBindingGetResponseWorkersQueueBindingTypeQueue DispatchNamespaceScriptBindingGetResponseWorkersQueueBindingType = "queue"
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersQueueBindingType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersQueueBindingTypeQueue:
-		return true
-	}
-	return false
-}
-
-type DispatchNamespaceScriptBindingGetResponseWorkersD1Binding struct {
-	// ID of the D1 database to bind to
-	ID string `json:"id,required"`
-	// A JavaScript variable name for the binding.
-	Binding string `json:"binding,required"`
-	// The name of the D1 database associated with the 'id' provided.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersD1BindingType `json:"type,required"`
-	JSON dispatchNamespaceScriptBindingGetResponseWorkersD1BindingJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersD1BindingJSON contains the JSON
-// metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersD1Binding]
-type dispatchNamespaceScriptBindingGetResponseWorkersD1BindingJSON struct {
-	ID          apijson.Field
-	Binding     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersD1Binding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersD1BindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersD1Binding) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
-}
-
-// The class of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersD1BindingType string
-
-const (
-	DispatchNamespaceScriptBindingGetResponseWorkersD1BindingTypeD1 DispatchNamespaceScriptBindingGetResponseWorkersD1BindingType = "d1"
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersD1BindingType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersD1BindingTypeD1:
-		return true
-	}
-	return false
-}
-
-type DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Namespace to bind to
-	Namespace string `json:"namespace,required"`
-	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingType `json:"type,required"`
-	// Outbound worker
-	Outbound DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutbound `json:"outbound"`
-	JSON     dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingJSON     `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingJSON
-// contains the JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBinding]
-type dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingJSON struct {
-	Name        apijson.Field
-	Namespace   apijson.Field
-	Type        apijson.Field
-	Outbound    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBinding) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
-}
-
-// The class of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingType string
-
-const (
-	DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingTypeDispatchNamespace DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingType = "dispatch_namespace"
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingTypeDispatchNamespace:
-		return true
-	}
-	return false
-}
-
-// Outbound worker
-type DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutbound struct {
-	// Pass information from the Dispatch Worker to the Outbound Worker through the
-	// parameters
-	Params []string `json:"params"`
-	// Outbound worker
-	Worker DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorker `json:"worker"`
-	JSON   dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundJSON   `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundJSON
-// contains the JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutbound]
-type dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundJSON struct {
-	Params      apijson.Field
-	Worker      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutbound) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundJSON) RawJSON() string {
-	return r.raw
-}
-
-// Outbound worker
-type DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorker struct {
-	// Environment of the outbound worker
-	Environment string `json:"environment"`
-	// Name of the outbound worker
-	Service string                                                                                     `json:"service"`
-	JSON    dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorkerJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorkerJSON
-// contains the JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorker]
-type dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorkerJSON struct {
-	Environment apijson.Field
-	Service     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorkerJSON) RawJSON() string {
-	return r.raw
-}
-
-type DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBindingType `json:"type,required"`
-	// ID of the certificate to bind to
-	CertificateID string                                                              `json:"certificate_id"`
-	JSON          dispatchNamespaceScriptBindingGetResponseWorkersMtlscertBindingJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersMtlscertBindingJSON contains the
-// JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding]
-type dispatchNamespaceScriptBindingGetResponseWorkersMtlscertBindingJSON struct {
-	Name          apijson.Field
-	Type          apijson.Field
-	CertificateID apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersMtlscertBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
-}
-
-// The class of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBindingType string
-
-const (
-	DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBindingTypeMTLSCertificate DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBindingType = "mtls_certificate"
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBindingType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBindingTypeMTLSCertificate:
-		return true
-	}
-	return false
 }
 
 type DispatchNamespaceScriptBindingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DispatchNamespaceScriptBindingGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// List of bindings attached to this Worker
+	Result []workers.Binding `json:"result,required"`
+	// Whether the API call was successful
+	Success DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dispatchNamespaceScriptBindingGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [DispatchNamespaceScriptBindingGetResponseEnvelope]
+type dispatchNamespaceScriptBindingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess bool
+
+const (
+	DispatchNamespaceScriptBindingGetResponseEnvelopeSuccessTrue DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess = true
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

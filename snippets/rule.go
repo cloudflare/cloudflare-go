@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -145,8 +146,8 @@ func (r RuleUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// List of snippet rules
 	Result []RuleUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -170,52 +171,6 @@ func (r *RuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    ruleUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseEnvelopeErrors]
-type ruleUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    ruleUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseEnvelopeMessages]
-type ruleUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

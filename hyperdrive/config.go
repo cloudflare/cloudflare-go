@@ -35,7 +35,7 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 }
 
 // Creates and returns a new Hyperdrive configuration.
-func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *ConfigNewResponse, err error) {
+func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", params.AccountID)
@@ -48,7 +48,7 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 }
 
 // Updates and returns the specified Hyperdrive configuration.
-func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *ConfigUpdateResponse, err error) {
+func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
@@ -61,7 +61,7 @@ func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params 
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConfigListResponse], err error) {
+func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hyperdrive], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,12 +79,12 @@ func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts .
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConfigListResponse] {
+func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hyperdrive] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes the specified Hyperdrive.
-func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body ConfigDeleteParams, opts ...option.RequestOption) (res *ConfigDeleteResponse, err error) {
+func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body ConfigDeleteParams, opts ...option.RequestOption) (res *ConfigDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", body.AccountID, hyperdriveID)
@@ -98,7 +98,7 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 
 // Patches and returns the specified Hyperdrive configuration. Updates to the
 // origin and caching settings are applied with an all-or-nothing approach.
-func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *ConfigEditResponse, err error) {
+func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
@@ -111,7 +111,7 @@ func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params Co
 }
 
 // Returns the specified Hyperdrive configuration.
-func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query ConfigGetParams, opts ...option.RequestOption) (res *ConfigGetResponse, err error) {
+func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query ConfigGetParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", query.AccountID, hyperdriveID)
@@ -123,81 +123,15 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 	return
 }
 
-type ConfigNewResponse struct {
-	// Identifier
-	ID   string                `json:"id"`
-	JSON configNewResponseJSON `json:"-"`
-}
-
-// configNewResponseJSON contains the JSON metadata for the struct
-// [ConfigNewResponse]
-type configNewResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigUpdateResponse struct {
-	// Identifier
-	ID   string                   `json:"id"`
-	JSON configUpdateResponseJSON `json:"-"`
-}
-
-// configUpdateResponseJSON contains the JSON metadata for the struct
-// [ConfigUpdateResponse]
-type configUpdateResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigListResponse struct {
-	// Identifier
-	ID   string                 `json:"id"`
-	JSON configListResponseJSON `json:"-"`
-}
-
-// configListResponseJSON contains the JSON metadata for the struct
-// [ConfigListResponse]
-type configListResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 // Union satisfied by [hyperdrive.ConfigDeleteResponseUnknown] or
 // [shared.UnionString].
-type ConfigDeleteResponse interface {
-	ImplementsHyperdriveConfigDeleteResponse()
+type ConfigDeleteResponseUnion interface {
+	ImplementsHyperdriveConfigDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ConfigDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*ConfigDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -206,74 +140,20 @@ func init() {
 	)
 }
 
-type ConfigEditResponse struct {
-	// Identifier
-	ID   string                 `json:"id"`
-	JSON configEditResponseJSON `json:"-"`
-}
-
-// configEditResponseJSON contains the JSON metadata for the struct
-// [ConfigEditResponse]
-type configEditResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigGetResponse struct {
-	// Identifier
-	ID   string                `json:"id"`
-	JSON configGetResponseJSON `json:"-"`
-}
-
-// configGetResponseJSON contains the JSON metadata for the struct
-// [ConfigGetResponse]
-type configGetResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConfigNewParams struct {
 	// Identifier
-	AccountID param.Field[string]                `path:"account_id,required"`
-	Origin    param.Field[ConfigNewParamsOrigin] `json:"origin,required"`
+	AccountID  param.Field[string] `path:"account_id,required"`
+	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
 }
 
 func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ConfigNewParamsOrigin struct {
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
-	Password param.Field[string] `json:"password,required"`
-}
-
-func (r ConfigNewParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Hyperdrive)
 }
 
 type ConfigNewResponseEnvelope struct {
-	Errors   []ConfigNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ConfigNewResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Hyperdrive            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
@@ -298,52 +178,6 @@ func (r configNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConfigNewResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    configNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConfigNewResponseEnvelopeErrors]
-type configNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigNewResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    configNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ConfigNewResponseEnvelopeMessages]
-type configNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ConfigNewResponseEnvelopeSuccess bool
 
@@ -361,28 +195,18 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]                   `path:"account_id,required"`
-	Origin    param.Field[ConfigUpdateParamsOrigin] `json:"origin,required"`
+	AccountID  param.Field[string] `path:"account_id,required"`
+	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
 }
 
 func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ConfigUpdateParamsOrigin struct {
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
-	Password param.Field[string] `json:"password,required"`
-}
-
-func (r ConfigUpdateParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Hyperdrive)
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []ConfigUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ConfigUpdateResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Hyperdrive            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
@@ -404,52 +228,6 @@ func (r *ConfigUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r configUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    configUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConfigUpdateResponseEnvelopeErrors]
-type configUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    configUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConfigUpdateResponseEnvelopeMessages]
-type configUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -479,9 +257,9 @@ type ConfigDeleteParams struct {
 }
 
 type ConfigDeleteResponseEnvelope struct {
-	Errors   []ConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ConfigDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   ConfigDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
@@ -506,52 +284,6 @@ func (r configDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConfigDeleteResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    configDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConfigDeleteResponseEnvelopeErrors]
-type configDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigDeleteResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    configDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConfigDeleteResponseEnvelopeMessages]
-type configDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ConfigDeleteResponseEnvelopeSuccess bool
 
@@ -569,28 +301,18 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigEditParams struct {
 	// Identifier
-	AccountID param.Field[string]                 `path:"account_id,required"`
-	Origin    param.Field[ConfigEditParamsOrigin] `json:"origin"`
+	AccountID  param.Field[string] `path:"account_id,required"`
+	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ConfigEditParamsOrigin struct {
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
-	Password param.Field[string] `json:"password,required"`
-}
-
-func (r ConfigEditParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Hyperdrive)
 }
 
 type ConfigEditResponseEnvelope struct {
-	Errors   []ConfigEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ConfigEditResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Hyperdrive            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
@@ -615,52 +337,6 @@ func (r configEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConfigEditResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    configEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConfigEditResponseEnvelopeErrors]
-type configEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigEditResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    configEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ConfigEditResponseEnvelopeMessages]
-type configEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ConfigEditResponseEnvelopeSuccess bool
 
@@ -682,9 +358,9 @@ type ConfigGetParams struct {
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []ConfigGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ConfigGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Hyperdrive            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`
@@ -706,52 +382,6 @@ func (r *ConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r configGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    configGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConfigGetResponseEnvelopeErrors]
-type configGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    configGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ConfigGetResponseEnvelopeMessages]
-type configGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -9,11 +9,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -36,7 +36,7 @@ func NewAuditLogService(opts ...option.RequestOption) (r *AuditLogService) {
 
 // Gets a list of audit logs for an account. Can be filtered by who made the
 // change, on which zone, and the timeframe of the change.
-func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AuditLogListResponse], err error) {
+func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.AuditLog], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -55,175 +55,8 @@ func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, o
 
 // Gets a list of audit logs for an account. Can be filtered by who made the
 // change, on which zone, and the timeframe of the change.
-func (r *AuditLogService) ListAutoPaging(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AuditLogListResponse] {
+func (r *AuditLogService) ListAutoPaging(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.AuditLog] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
-}
-
-type AuditLogListResponse struct {
-	// A string that uniquely identifies the audit log.
-	ID     string                     `json:"id"`
-	Action AuditLogListResponseAction `json:"action"`
-	Actor  AuditLogListResponseActor  `json:"actor"`
-	// The source of the event.
-	Interface string `json:"interface"`
-	// An object which can lend more context to the action being logged. This is a
-	// flexible value and varies between different actions.
-	Metadata interface{} `json:"metadata"`
-	// The new value of the resource that was modified.
-	NewValue string `json:"newValue"`
-	// The value of the resource before it was modified.
-	OldValue string                       `json:"oldValue"`
-	Owner    AuditLogListResponseOwner    `json:"owner"`
-	Resource AuditLogListResponseResource `json:"resource"`
-	// A UTC RFC3339 timestamp that specifies when the action being logged occured.
-	When time.Time                `json:"when" format:"date-time"`
-	JSON auditLogListResponseJSON `json:"-"`
-}
-
-// auditLogListResponseJSON contains the JSON metadata for the struct
-// [AuditLogListResponse]
-type auditLogListResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Actor       apijson.Field
-	Interface   apijson.Field
-	Metadata    apijson.Field
-	NewValue    apijson.Field
-	OldValue    apijson.Field
-	Owner       apijson.Field
-	Resource    apijson.Field
-	When        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AuditLogListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r auditLogListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AuditLogListResponseAction struct {
-	// A boolean that indicates if the action attempted was successful.
-	Result bool `json:"result"`
-	// A short string that describes the action that was performed.
-	Type string                         `json:"type"`
-	JSON auditLogListResponseActionJSON `json:"-"`
-}
-
-// auditLogListResponseActionJSON contains the JSON metadata for the struct
-// [AuditLogListResponseAction]
-type auditLogListResponseActionJSON struct {
-	Result      apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AuditLogListResponseAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r auditLogListResponseActionJSON) RawJSON() string {
-	return r.raw
-}
-
-type AuditLogListResponseActor struct {
-	// The ID of the actor that performed the action. If a user performed the action,
-	// this will be their User ID.
-	ID string `json:"id"`
-	// The email of the user that performed the action.
-	Email string `json:"email" format:"email"`
-	// The IP address of the request that performed the action.
-	IP string `json:"ip"`
-	// The type of actor, whether a User, Cloudflare Admin, or an Automated System.
-	Type AuditLogListResponseActorType `json:"type"`
-	JSON auditLogListResponseActorJSON `json:"-"`
-}
-
-// auditLogListResponseActorJSON contains the JSON metadata for the struct
-// [AuditLogListResponseActor]
-type auditLogListResponseActorJSON struct {
-	ID          apijson.Field
-	Email       apijson.Field
-	IP          apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AuditLogListResponseActor) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r auditLogListResponseActorJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of actor, whether a User, Cloudflare Admin, or an Automated System.
-type AuditLogListResponseActorType string
-
-const (
-	AuditLogListResponseActorTypeUser       AuditLogListResponseActorType = "user"
-	AuditLogListResponseActorTypeAdmin      AuditLogListResponseActorType = "admin"
-	AuditLogListResponseActorTypeCloudflare AuditLogListResponseActorType = "Cloudflare"
-)
-
-func (r AuditLogListResponseActorType) IsKnown() bool {
-	switch r {
-	case AuditLogListResponseActorTypeUser, AuditLogListResponseActorTypeAdmin, AuditLogListResponseActorTypeCloudflare:
-		return true
-	}
-	return false
-}
-
-type AuditLogListResponseOwner struct {
-	// Identifier
-	ID   string                        `json:"id"`
-	JSON auditLogListResponseOwnerJSON `json:"-"`
-}
-
-// auditLogListResponseOwnerJSON contains the JSON metadata for the struct
-// [AuditLogListResponseOwner]
-type auditLogListResponseOwnerJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AuditLogListResponseOwner) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r auditLogListResponseOwnerJSON) RawJSON() string {
-	return r.raw
-}
-
-type AuditLogListResponseResource struct {
-	// An identifier for the resource that was affected by the action.
-	ID string `json:"id"`
-	// A short string that describes the resource that was affected by the action.
-	Type string                           `json:"type"`
-	JSON auditLogListResponseResourceJSON `json:"-"`
-}
-
-// auditLogListResponseResourceJSON contains the JSON metadata for the struct
-// [AuditLogListResponseResource]
-type auditLogListResponseResourceJSON struct {
-	ID          apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AuditLogListResponseResource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r auditLogListResponseResourceJSON) RawJSON() string {
-	return r.raw
 }
 
 type AuditLogListParams struct {
@@ -255,7 +88,7 @@ type AuditLogListParams struct {
 // URLQuery serializes [AuditLogListParams]'s query parameters as `url.Values`.
 func (r AuditLogListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -269,7 +102,7 @@ type AuditLogListParamsAction struct {
 // `url.Values`.
 func (r AuditLogListParamsAction) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -286,7 +119,7 @@ type AuditLogListParamsActor struct {
 // `url.Values`.
 func (r AuditLogListParamsActor) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -315,7 +148,7 @@ type AuditLogListParamsZone struct {
 // URLQuery serializes [AuditLogListParamsZone]'s query parameters as `url.Values`.
 func (r AuditLogListParamsZone) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

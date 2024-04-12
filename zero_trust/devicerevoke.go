@@ -35,7 +35,7 @@ func NewDeviceRevokeService(opts ...option.RequestOption) (r *DeviceRevokeServic
 }
 
 // Revokes a list of devices.
-func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewParams, opts ...option.RequestOption) (res *DeviceRevokeNewResponse, err error) {
+func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewParams, opts ...option.RequestOption) (res *DeviceRevokeNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceRevokeNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/revoke", params.AccountID)
@@ -49,13 +49,13 @@ func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewPar
 
 // Union satisfied by [zero_trust.DeviceRevokeNewResponseUnknown] or
 // [shared.UnionString].
-type DeviceRevokeNewResponse interface {
-	ImplementsZeroTrustDeviceRevokeNewResponse()
+type DeviceRevokeNewResponseUnion interface {
+	ImplementsZeroTrustDeviceRevokeNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DeviceRevokeNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*DeviceRevokeNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -67,7 +67,7 @@ func init() {
 type DeviceRevokeNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of device ids to revoke.
-	Body param.Field[[]string] `json:"body,required"`
+	Body []string `json:"body,required"`
 }
 
 func (r DeviceRevokeNewParams) MarshalJSON() (data []byte, err error) {
@@ -75,9 +75,9 @@ func (r DeviceRevokeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceRevokeNewResponseEnvelope struct {
-	Errors   []DeviceRevokeNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceRevokeNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceRevokeNewResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   DeviceRevokeNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceRevokeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceRevokeNewResponseEnvelopeJSON    `json:"-"`
@@ -99,52 +99,6 @@ func (r *DeviceRevokeNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r deviceRevokeNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceRevokeNewResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    deviceRevokeNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceRevokeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceRevokeNewResponseEnvelopeErrors]
-type deviceRevokeNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceRevokeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceRevokeNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceRevokeNewResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    deviceRevokeNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceRevokeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceRevokeNewResponseEnvelopeMessages]
-type deviceRevokeNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceRevokeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceRevokeNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

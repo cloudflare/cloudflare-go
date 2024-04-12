@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +35,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 }
 
 // Attaches a Worker to a zone and hostname.
-func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *WorkersDomain, err error) {
+func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/domains", params.AccountID)
@@ -47,7 +48,7 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 }
 
 // Lists all Worker Domains for an account.
-func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WorkersDomain], err error) {
+func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Domain], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,21 +66,21 @@ func (r *DomainService) List(ctx context.Context, params DomainListParams, opts 
 }
 
 // Lists all Worker Domains for an account.
-func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WorkersDomain] {
+func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Domain] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Detaches a Worker from a zone and hostname.
-func (r *DomainService) Delete(ctx context.Context, domainID string, body DomainDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *DomainService) Delete(ctx context.Context, domainID string, params DomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/domains/%s", body.AccountID, domainID)
+	path := fmt.Sprintf("accounts/%s/workers/domains/%s", params.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
 // Gets a Worker domain.
-func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *WorkersDomain, err error) {
+func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/domains/%s", query.AccountID, domainID)
@@ -91,7 +92,7 @@ func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGe
 	return
 }
 
-type WorkersDomain struct {
+type Domain struct {
 	// Identifer of the Worker Domain.
 	ID string `json:"id"`
 	// Worker environment associated with the zone and hostname.
@@ -103,12 +104,12 @@ type WorkersDomain struct {
 	// Identifier of the zone.
 	ZoneID string `json:"zone_id"`
 	// Name of the zone.
-	ZoneName string            `json:"zone_name"`
-	JSON     workersDomainJSON `json:"-"`
+	ZoneName string     `json:"zone_name"`
+	JSON     domainJSON `json:"-"`
 }
 
-// workersDomainJSON contains the JSON metadata for the struct [WorkersDomain]
-type workersDomainJSON struct {
+// domainJSON contains the JSON metadata for the struct [Domain]
+type domainJSON struct {
 	ID          apijson.Field
 	Environment apijson.Field
 	Hostname    apijson.Field
@@ -119,11 +120,11 @@ type workersDomainJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *Domain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersDomainJSON) RawJSON() string {
+func (r domainJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -144,9 +145,9 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DomainUpdateResponseEnvelope struct {
-	Errors   []DomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersDomain                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Domain                `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -168,52 +169,6 @@ func (r *DomainUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r domainUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    domainUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// domainUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DomainUpdateResponseEnvelopeErrors]
-type domainUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    domainUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// domainUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DomainUpdateResponseEnvelopeMessages]
-type domainUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -249,13 +204,18 @@ type DomainListParams struct {
 // URLQuery serializes [DomainListParams]'s query parameters as `url.Values`.
 func (r DomainListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
 type DomainDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r DomainDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type DomainGetParams struct {
@@ -263,9 +223,9 @@ type DomainGetParams struct {
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []DomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersDomain                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Domain                `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`
@@ -287,52 +247,6 @@ func (r *DomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r domainGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    domainGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// domainGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DomainGetResponseEnvelopeErrors]
-type domainGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    domainGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// domainGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DomainGetResponseEnvelopeMessages]
-type domainGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

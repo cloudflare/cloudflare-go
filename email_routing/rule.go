@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -38,7 +39,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // Rules consist of a set of criteria for matching emails (such as an email being
 // sent to a specific custom email address) plus a set of actions to take on the
 // email (like forwarding it to a specific destination address).
-func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *RuleNewResponse, err error) {
+func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules", zoneIdentifier)
@@ -51,7 +52,7 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 }
 
 // Update actions and matches, or enable/disable specific routing rules.
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, ruleIdentifier string, body RuleUpdateParams, opts ...option.RequestOption) (res *RuleUpdateResponse, err error) {
+func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, ruleIdentifier string, body RuleUpdateParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", zoneIdentifier, ruleIdentifier)
@@ -64,7 +65,7 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, ruleIde
 }
 
 // Lists existing routing rules.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RuleListResponse], err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EmailRoutingRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -82,12 +83,12 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query Rul
 }
 
 // Lists existing routing rules.
-func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RuleListResponse] {
+func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EmailRoutingRule] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Delete a specific routing rule.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
+func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", zoneIdentifier, ruleIdentifier)
@@ -100,7 +101,7 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, ruleIde
 }
 
 // Get information for a specific routing rule already created.
-func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *RuleGetResponse, err error) {
+func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", zoneIdentifier, ruleIdentifier)
@@ -112,340 +113,79 @@ func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, ruleIdenti
 	return
 }
 
-type RuleNewResponse struct {
-	// Routing rule identifier.
-	ID string `json:"id"`
-	// List actions patterns.
-	Actions []RuleNewResponseAction `json:"actions"`
-	// Routing rule status.
-	Enabled RuleNewResponseEnabled `json:"enabled"`
-	// Matching patterns to forward to your actions.
-	Matchers []RuleNewResponseMatcher `json:"matchers"`
-	// Routing rule name.
-	Name string `json:"name"`
-	// Priority of the routing rule.
-	Priority float64 `json:"priority"`
-	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
-	Tag  string              `json:"tag"`
-	JSON ruleNewResponseJSON `json:"-"`
-}
-
-// ruleNewResponseJSON contains the JSON metadata for the struct [RuleNewResponse]
-type ruleNewResponseJSON struct {
-	ID          apijson.Field
-	Actions     apijson.Field
-	Enabled     apijson.Field
-	Matchers    apijson.Field
-	Name        apijson.Field
-	Priority    apijson.Field
-	Tag         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 // Actions pattern.
-type RuleNewResponseAction struct {
+type Action struct {
 	// Type of supported action.
-	Type  RuleNewResponseActionsType `json:"type,required"`
-	Value []string                   `json:"value,required"`
-	JSON  ruleNewResponseActionJSON  `json:"-"`
+	Type  ActionType `json:"type,required"`
+	Value []string   `json:"value,required"`
+	JSON  actionJSON `json:"-"`
 }
 
-// ruleNewResponseActionJSON contains the JSON metadata for the struct
-// [RuleNewResponseAction]
-type ruleNewResponseActionJSON struct {
+// actionJSON contains the JSON metadata for the struct [Action]
+type actionJSON struct {
 	Type        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleNewResponseAction) UnmarshalJSON(data []byte) (err error) {
+func (r *Action) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleNewResponseActionJSON) RawJSON() string {
+func (r actionJSON) RawJSON() string {
 	return r.raw
 }
 
 // Type of supported action.
-type RuleNewResponseActionsType string
+type ActionType string
 
 const (
-	RuleNewResponseActionsTypeDrop    RuleNewResponseActionsType = "drop"
-	RuleNewResponseActionsTypeForward RuleNewResponseActionsType = "forward"
-	RuleNewResponseActionsTypeWorker  RuleNewResponseActionsType = "worker"
+	ActionTypeDrop    ActionType = "drop"
+	ActionTypeForward ActionType = "forward"
+	ActionTypeWorker  ActionType = "worker"
 )
 
-func (r RuleNewResponseActionsType) IsKnown() bool {
+func (r ActionType) IsKnown() bool {
 	switch r {
-	case RuleNewResponseActionsTypeDrop, RuleNewResponseActionsTypeForward, RuleNewResponseActionsTypeWorker:
+	case ActionTypeDrop, ActionTypeForward, ActionTypeWorker:
 		return true
 	}
 	return false
-}
-
-// Routing rule status.
-type RuleNewResponseEnabled bool
-
-const (
-	RuleNewResponseEnabledTrue  RuleNewResponseEnabled = true
-	RuleNewResponseEnabledFalse RuleNewResponseEnabled = false
-)
-
-func (r RuleNewResponseEnabled) IsKnown() bool {
-	switch r {
-	case RuleNewResponseEnabledTrue, RuleNewResponseEnabledFalse:
-		return true
-	}
-	return false
-}
-
-// Matching pattern to forward your actions.
-type RuleNewResponseMatcher struct {
-	// Field for type matcher.
-	Field RuleNewResponseMatchersField `json:"field,required"`
-	// Type of matcher.
-	Type RuleNewResponseMatchersType `json:"type,required"`
-	// Value for matcher.
-	Value string                     `json:"value,required"`
-	JSON  ruleNewResponseMatcherJSON `json:"-"`
-}
-
-// ruleNewResponseMatcherJSON contains the JSON metadata for the struct
-// [RuleNewResponseMatcher]
-type ruleNewResponseMatcherJSON struct {
-	Field       apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseMatcher) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseMatcherJSON) RawJSON() string {
-	return r.raw
-}
-
-// Field for type matcher.
-type RuleNewResponseMatchersField string
-
-const (
-	RuleNewResponseMatchersFieldTo RuleNewResponseMatchersField = "to"
-)
-
-func (r RuleNewResponseMatchersField) IsKnown() bool {
-	switch r {
-	case RuleNewResponseMatchersFieldTo:
-		return true
-	}
-	return false
-}
-
-// Type of matcher.
-type RuleNewResponseMatchersType string
-
-const (
-	RuleNewResponseMatchersTypeLiteral RuleNewResponseMatchersType = "literal"
-)
-
-func (r RuleNewResponseMatchersType) IsKnown() bool {
-	switch r {
-	case RuleNewResponseMatchersTypeLiteral:
-		return true
-	}
-	return false
-}
-
-type RuleUpdateResponse struct {
-	// Routing rule identifier.
-	ID string `json:"id"`
-	// List actions patterns.
-	Actions []RuleUpdateResponseAction `json:"actions"`
-	// Routing rule status.
-	Enabled RuleUpdateResponseEnabled `json:"enabled"`
-	// Matching patterns to forward to your actions.
-	Matchers []RuleUpdateResponseMatcher `json:"matchers"`
-	// Routing rule name.
-	Name string `json:"name"`
-	// Priority of the routing rule.
-	Priority float64 `json:"priority"`
-	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
-	Tag  string                 `json:"tag"`
-	JSON ruleUpdateResponseJSON `json:"-"`
-}
-
-// ruleUpdateResponseJSON contains the JSON metadata for the struct
-// [RuleUpdateResponse]
-type ruleUpdateResponseJSON struct {
-	ID          apijson.Field
-	Actions     apijson.Field
-	Enabled     apijson.Field
-	Matchers    apijson.Field
-	Name        apijson.Field
-	Priority    apijson.Field
-	Tag         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 // Actions pattern.
-type RuleUpdateResponseAction struct {
+type ActionParam struct {
 	// Type of supported action.
-	Type  RuleUpdateResponseActionsType `json:"type,required"`
-	Value []string                      `json:"value,required"`
-	JSON  ruleUpdateResponseActionJSON  `json:"-"`
+	Type  param.Field[ActionType] `json:"type,required"`
+	Value param.Field[[]string]   `json:"value,required"`
 }
 
-// ruleUpdateResponseActionJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseAction]
-type ruleUpdateResponseActionJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ActionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *RuleUpdateResponseAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of supported action.
-type RuleUpdateResponseActionsType string
-
-const (
-	RuleUpdateResponseActionsTypeDrop    RuleUpdateResponseActionsType = "drop"
-	RuleUpdateResponseActionsTypeForward RuleUpdateResponseActionsType = "forward"
-	RuleUpdateResponseActionsTypeWorker  RuleUpdateResponseActionsType = "worker"
-)
-
-func (r RuleUpdateResponseActionsType) IsKnown() bool {
-	switch r {
-	case RuleUpdateResponseActionsTypeDrop, RuleUpdateResponseActionsTypeForward, RuleUpdateResponseActionsTypeWorker:
-		return true
-	}
-	return false
-}
-
-// Routing rule status.
-type RuleUpdateResponseEnabled bool
-
-const (
-	RuleUpdateResponseEnabledTrue  RuleUpdateResponseEnabled = true
-	RuleUpdateResponseEnabledFalse RuleUpdateResponseEnabled = false
-)
-
-func (r RuleUpdateResponseEnabled) IsKnown() bool {
-	switch r {
-	case RuleUpdateResponseEnabledTrue, RuleUpdateResponseEnabledFalse:
-		return true
-	}
-	return false
-}
-
-// Matching pattern to forward your actions.
-type RuleUpdateResponseMatcher struct {
-	// Field for type matcher.
-	Field RuleUpdateResponseMatchersField `json:"field,required"`
-	// Type of matcher.
-	Type RuleUpdateResponseMatchersType `json:"type,required"`
-	// Value for matcher.
-	Value string                        `json:"value,required"`
-	JSON  ruleUpdateResponseMatcherJSON `json:"-"`
-}
-
-// ruleUpdateResponseMatcherJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseMatcher]
-type ruleUpdateResponseMatcherJSON struct {
-	Field       apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseMatcher) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseMatcherJSON) RawJSON() string {
-	return r.raw
-}
-
-// Field for type matcher.
-type RuleUpdateResponseMatchersField string
-
-const (
-	RuleUpdateResponseMatchersFieldTo RuleUpdateResponseMatchersField = "to"
-)
-
-func (r RuleUpdateResponseMatchersField) IsKnown() bool {
-	switch r {
-	case RuleUpdateResponseMatchersFieldTo:
-		return true
-	}
-	return false
-}
-
-// Type of matcher.
-type RuleUpdateResponseMatchersType string
-
-const (
-	RuleUpdateResponseMatchersTypeLiteral RuleUpdateResponseMatchersType = "literal"
-)
-
-func (r RuleUpdateResponseMatchersType) IsKnown() bool {
-	switch r {
-	case RuleUpdateResponseMatchersTypeLiteral:
-		return true
-	}
-	return false
-}
-
-type RuleListResponse struct {
+type EmailRoutingRule struct {
 	// Routing rule identifier.
 	ID string `json:"id"`
 	// List actions patterns.
-	Actions []RuleListResponseAction `json:"actions"`
+	Actions []Action `json:"actions"`
 	// Routing rule status.
-	Enabled RuleListResponseEnabled `json:"enabled"`
+	Enabled EmailRoutingRuleEnabled `json:"enabled"`
 	// Matching patterns to forward to your actions.
-	Matchers []RuleListResponseMatcher `json:"matchers"`
+	Matchers []Matcher `json:"matchers"`
 	// Routing rule name.
 	Name string `json:"name"`
 	// Priority of the routing rule.
 	Priority float64 `json:"priority"`
 	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
 	Tag  string               `json:"tag"`
-	JSON ruleListResponseJSON `json:"-"`
+	JSON emailRoutingRuleJSON `json:"-"`
 }
 
-// ruleListResponseJSON contains the JSON metadata for the struct
-// [RuleListResponse]
-type ruleListResponseJSON struct {
+// emailRoutingRuleJSON contains the JSON metadata for the struct
+// [EmailRoutingRule]
+type emailRoutingRuleJSON struct {
 	ID          apijson.Field
 	Actions     apijson.Field
 	Enabled     apijson.Field
@@ -457,86 +197,43 @@ type ruleListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleListResponseJSON) RawJSON() string {
+func (r emailRoutingRuleJSON) RawJSON() string {
 	return r.raw
-}
-
-// Actions pattern.
-type RuleListResponseAction struct {
-	// Type of supported action.
-	Type  RuleListResponseActionsType `json:"type,required"`
-	Value []string                    `json:"value,required"`
-	JSON  ruleListResponseActionJSON  `json:"-"`
-}
-
-// ruleListResponseActionJSON contains the JSON metadata for the struct
-// [RuleListResponseAction]
-type ruleListResponseActionJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListResponseAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleListResponseActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of supported action.
-type RuleListResponseActionsType string
-
-const (
-	RuleListResponseActionsTypeDrop    RuleListResponseActionsType = "drop"
-	RuleListResponseActionsTypeForward RuleListResponseActionsType = "forward"
-	RuleListResponseActionsTypeWorker  RuleListResponseActionsType = "worker"
-)
-
-func (r RuleListResponseActionsType) IsKnown() bool {
-	switch r {
-	case RuleListResponseActionsTypeDrop, RuleListResponseActionsTypeForward, RuleListResponseActionsTypeWorker:
-		return true
-	}
-	return false
 }
 
 // Routing rule status.
-type RuleListResponseEnabled bool
+type EmailRoutingRuleEnabled bool
 
 const (
-	RuleListResponseEnabledTrue  RuleListResponseEnabled = true
-	RuleListResponseEnabledFalse RuleListResponseEnabled = false
+	EmailRoutingRuleEnabledTrue  EmailRoutingRuleEnabled = true
+	EmailRoutingRuleEnabledFalse EmailRoutingRuleEnabled = false
 )
 
-func (r RuleListResponseEnabled) IsKnown() bool {
+func (r EmailRoutingRuleEnabled) IsKnown() bool {
 	switch r {
-	case RuleListResponseEnabledTrue, RuleListResponseEnabledFalse:
+	case EmailRoutingRuleEnabledTrue, EmailRoutingRuleEnabledFalse:
 		return true
 	}
 	return false
 }
 
 // Matching pattern to forward your actions.
-type RuleListResponseMatcher struct {
+type Matcher struct {
 	// Field for type matcher.
-	Field RuleListResponseMatchersField `json:"field,required"`
+	Field MatcherField `json:"field,required"`
 	// Type of matcher.
-	Type RuleListResponseMatchersType `json:"type,required"`
+	Type MatcherType `json:"type,required"`
 	// Value for matcher.
-	Value string                      `json:"value,required"`
-	JSON  ruleListResponseMatcherJSON `json:"-"`
+	Value string      `json:"value,required"`
+	JSON  matcherJSON `json:"-"`
 }
 
-// ruleListResponseMatcherJSON contains the JSON metadata for the struct
-// [RuleListResponseMatcher]
-type ruleListResponseMatcherJSON struct {
+// matcherJSON contains the JSON metadata for the struct [Matcher]
+type matcherJSON struct {
 	Field       apijson.Field
 	Type        apijson.Field
 	Value       apijson.Field
@@ -544,362 +241,63 @@ type ruleListResponseMatcherJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListResponseMatcher) UnmarshalJSON(data []byte) (err error) {
+func (r *Matcher) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleListResponseMatcherJSON) RawJSON() string {
+func (r matcherJSON) RawJSON() string {
 	return r.raw
 }
 
 // Field for type matcher.
-type RuleListResponseMatchersField string
+type MatcherField string
 
 const (
-	RuleListResponseMatchersFieldTo RuleListResponseMatchersField = "to"
+	MatcherFieldTo MatcherField = "to"
 )
 
-func (r RuleListResponseMatchersField) IsKnown() bool {
+func (r MatcherField) IsKnown() bool {
 	switch r {
-	case RuleListResponseMatchersFieldTo:
+	case MatcherFieldTo:
 		return true
 	}
 	return false
 }
 
 // Type of matcher.
-type RuleListResponseMatchersType string
+type MatcherType string
 
 const (
-	RuleListResponseMatchersTypeLiteral RuleListResponseMatchersType = "literal"
+	MatcherTypeLiteral MatcherType = "literal"
 )
 
-func (r RuleListResponseMatchersType) IsKnown() bool {
+func (r MatcherType) IsKnown() bool {
 	switch r {
-	case RuleListResponseMatchersTypeLiteral:
-		return true
-	}
-	return false
-}
-
-type RuleDeleteResponse struct {
-	// Routing rule identifier.
-	ID string `json:"id"`
-	// List actions patterns.
-	Actions []RuleDeleteResponseAction `json:"actions"`
-	// Routing rule status.
-	Enabled RuleDeleteResponseEnabled `json:"enabled"`
-	// Matching patterns to forward to your actions.
-	Matchers []RuleDeleteResponseMatcher `json:"matchers"`
-	// Routing rule name.
-	Name string `json:"name"`
-	// Priority of the routing rule.
-	Priority float64 `json:"priority"`
-	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
-	Tag  string                 `json:"tag"`
-	JSON ruleDeleteResponseJSON `json:"-"`
-}
-
-// ruleDeleteResponseJSON contains the JSON metadata for the struct
-// [RuleDeleteResponse]
-type ruleDeleteResponseJSON struct {
-	ID          apijson.Field
-	Actions     apijson.Field
-	Enabled     apijson.Field
-	Matchers    apijson.Field
-	Name        apijson.Field
-	Priority    apijson.Field
-	Tag         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Actions pattern.
-type RuleDeleteResponseAction struct {
-	// Type of supported action.
-	Type  RuleDeleteResponseActionsType `json:"type,required"`
-	Value []string                      `json:"value,required"`
-	JSON  ruleDeleteResponseActionJSON  `json:"-"`
-}
-
-// ruleDeleteResponseActionJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseAction]
-type ruleDeleteResponseActionJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of supported action.
-type RuleDeleteResponseActionsType string
-
-const (
-	RuleDeleteResponseActionsTypeDrop    RuleDeleteResponseActionsType = "drop"
-	RuleDeleteResponseActionsTypeForward RuleDeleteResponseActionsType = "forward"
-	RuleDeleteResponseActionsTypeWorker  RuleDeleteResponseActionsType = "worker"
-)
-
-func (r RuleDeleteResponseActionsType) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseActionsTypeDrop, RuleDeleteResponseActionsTypeForward, RuleDeleteResponseActionsTypeWorker:
-		return true
-	}
-	return false
-}
-
-// Routing rule status.
-type RuleDeleteResponseEnabled bool
-
-const (
-	RuleDeleteResponseEnabledTrue  RuleDeleteResponseEnabled = true
-	RuleDeleteResponseEnabledFalse RuleDeleteResponseEnabled = false
-)
-
-func (r RuleDeleteResponseEnabled) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseEnabledTrue, RuleDeleteResponseEnabledFalse:
+	case MatcherTypeLiteral:
 		return true
 	}
 	return false
 }
 
 // Matching pattern to forward your actions.
-type RuleDeleteResponseMatcher struct {
+type MatcherParam struct {
 	// Field for type matcher.
-	Field RuleDeleteResponseMatchersField `json:"field,required"`
+	Field param.Field[MatcherField] `json:"field,required"`
 	// Type of matcher.
-	Type RuleDeleteResponseMatchersType `json:"type,required"`
+	Type param.Field[MatcherType] `json:"type,required"`
 	// Value for matcher.
-	Value string                        `json:"value,required"`
-	JSON  ruleDeleteResponseMatcherJSON `json:"-"`
+	Value param.Field[string] `json:"value,required"`
 }
 
-// ruleDeleteResponseMatcherJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseMatcher]
-type ruleDeleteResponseMatcherJSON struct {
-	Field       apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseMatcher) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseMatcherJSON) RawJSON() string {
-	return r.raw
-}
-
-// Field for type matcher.
-type RuleDeleteResponseMatchersField string
-
-const (
-	RuleDeleteResponseMatchersFieldTo RuleDeleteResponseMatchersField = "to"
-)
-
-func (r RuleDeleteResponseMatchersField) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseMatchersFieldTo:
-		return true
-	}
-	return false
-}
-
-// Type of matcher.
-type RuleDeleteResponseMatchersType string
-
-const (
-	RuleDeleteResponseMatchersTypeLiteral RuleDeleteResponseMatchersType = "literal"
-)
-
-func (r RuleDeleteResponseMatchersType) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseMatchersTypeLiteral:
-		return true
-	}
-	return false
-}
-
-type RuleGetResponse struct {
-	// Routing rule identifier.
-	ID string `json:"id"`
-	// List actions patterns.
-	Actions []RuleGetResponseAction `json:"actions"`
-	// Routing rule status.
-	Enabled RuleGetResponseEnabled `json:"enabled"`
-	// Matching patterns to forward to your actions.
-	Matchers []RuleGetResponseMatcher `json:"matchers"`
-	// Routing rule name.
-	Name string `json:"name"`
-	// Priority of the routing rule.
-	Priority float64 `json:"priority"`
-	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
-	Tag  string              `json:"tag"`
-	JSON ruleGetResponseJSON `json:"-"`
-}
-
-// ruleGetResponseJSON contains the JSON metadata for the struct [RuleGetResponse]
-type ruleGetResponseJSON struct {
-	ID          apijson.Field
-	Actions     apijson.Field
-	Enabled     apijson.Field
-	Matchers    apijson.Field
-	Name        apijson.Field
-	Priority    apijson.Field
-	Tag         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Actions pattern.
-type RuleGetResponseAction struct {
-	// Type of supported action.
-	Type  RuleGetResponseActionsType `json:"type,required"`
-	Value []string                   `json:"value,required"`
-	JSON  ruleGetResponseActionJSON  `json:"-"`
-}
-
-// ruleGetResponseActionJSON contains the JSON metadata for the struct
-// [RuleGetResponseAction]
-type ruleGetResponseActionJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleGetResponseAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleGetResponseActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of supported action.
-type RuleGetResponseActionsType string
-
-const (
-	RuleGetResponseActionsTypeDrop    RuleGetResponseActionsType = "drop"
-	RuleGetResponseActionsTypeForward RuleGetResponseActionsType = "forward"
-	RuleGetResponseActionsTypeWorker  RuleGetResponseActionsType = "worker"
-)
-
-func (r RuleGetResponseActionsType) IsKnown() bool {
-	switch r {
-	case RuleGetResponseActionsTypeDrop, RuleGetResponseActionsTypeForward, RuleGetResponseActionsTypeWorker:
-		return true
-	}
-	return false
-}
-
-// Routing rule status.
-type RuleGetResponseEnabled bool
-
-const (
-	RuleGetResponseEnabledTrue  RuleGetResponseEnabled = true
-	RuleGetResponseEnabledFalse RuleGetResponseEnabled = false
-)
-
-func (r RuleGetResponseEnabled) IsKnown() bool {
-	switch r {
-	case RuleGetResponseEnabledTrue, RuleGetResponseEnabledFalse:
-		return true
-	}
-	return false
-}
-
-// Matching pattern to forward your actions.
-type RuleGetResponseMatcher struct {
-	// Field for type matcher.
-	Field RuleGetResponseMatchersField `json:"field,required"`
-	// Type of matcher.
-	Type RuleGetResponseMatchersType `json:"type,required"`
-	// Value for matcher.
-	Value string                     `json:"value,required"`
-	JSON  ruleGetResponseMatcherJSON `json:"-"`
-}
-
-// ruleGetResponseMatcherJSON contains the JSON metadata for the struct
-// [RuleGetResponseMatcher]
-type ruleGetResponseMatcherJSON struct {
-	Field       apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleGetResponseMatcher) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleGetResponseMatcherJSON) RawJSON() string {
-	return r.raw
-}
-
-// Field for type matcher.
-type RuleGetResponseMatchersField string
-
-const (
-	RuleGetResponseMatchersFieldTo RuleGetResponseMatchersField = "to"
-)
-
-func (r RuleGetResponseMatchersField) IsKnown() bool {
-	switch r {
-	case RuleGetResponseMatchersFieldTo:
-		return true
-	}
-	return false
-}
-
-// Type of matcher.
-type RuleGetResponseMatchersType string
-
-const (
-	RuleGetResponseMatchersTypeLiteral RuleGetResponseMatchersType = "literal"
-)
-
-func (r RuleGetResponseMatchersType) IsKnown() bool {
-	switch r {
-	case RuleGetResponseMatchersTypeLiteral:
-		return true
-	}
-	return false
+func (r MatcherParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RuleNewParams struct {
 	// List actions patterns.
-	Actions param.Field[[]RuleNewParamsAction] `json:"actions,required"`
+	Actions param.Field[[]ActionParam] `json:"actions,required"`
 	// Matching patterns to forward to your actions.
-	Matchers param.Field[[]RuleNewParamsMatcher] `json:"matchers,required"`
+	Matchers param.Field[[]MatcherParam] `json:"matchers,required"`
 	// Routing rule status.
 	Enabled param.Field[RuleNewParamsEnabled] `json:"enabled"`
 	// Routing rule name.
@@ -910,78 +308,6 @@ type RuleNewParams struct {
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Actions pattern.
-type RuleNewParamsAction struct {
-	// Type of supported action.
-	Type  param.Field[RuleNewParamsActionsType] `json:"type,required"`
-	Value param.Field[[]string]                 `json:"value,required"`
-}
-
-func (r RuleNewParamsAction) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Type of supported action.
-type RuleNewParamsActionsType string
-
-const (
-	RuleNewParamsActionsTypeDrop    RuleNewParamsActionsType = "drop"
-	RuleNewParamsActionsTypeForward RuleNewParamsActionsType = "forward"
-	RuleNewParamsActionsTypeWorker  RuleNewParamsActionsType = "worker"
-)
-
-func (r RuleNewParamsActionsType) IsKnown() bool {
-	switch r {
-	case RuleNewParamsActionsTypeDrop, RuleNewParamsActionsTypeForward, RuleNewParamsActionsTypeWorker:
-		return true
-	}
-	return false
-}
-
-// Matching pattern to forward your actions.
-type RuleNewParamsMatcher struct {
-	// Field for type matcher.
-	Field param.Field[RuleNewParamsMatchersField] `json:"field,required"`
-	// Type of matcher.
-	Type param.Field[RuleNewParamsMatchersType] `json:"type,required"`
-	// Value for matcher.
-	Value param.Field[string] `json:"value,required"`
-}
-
-func (r RuleNewParamsMatcher) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Field for type matcher.
-type RuleNewParamsMatchersField string
-
-const (
-	RuleNewParamsMatchersFieldTo RuleNewParamsMatchersField = "to"
-)
-
-func (r RuleNewParamsMatchersField) IsKnown() bool {
-	switch r {
-	case RuleNewParamsMatchersFieldTo:
-		return true
-	}
-	return false
-}
-
-// Type of matcher.
-type RuleNewParamsMatchersType string
-
-const (
-	RuleNewParamsMatchersTypeLiteral RuleNewParamsMatchersType = "literal"
-)
-
-func (r RuleNewParamsMatchersType) IsKnown() bool {
-	switch r {
-	case RuleNewParamsMatchersTypeLiteral:
-		return true
-	}
-	return false
 }
 
 // Routing rule status.
@@ -1001,9 +327,9 @@ func (r RuleNewParamsEnabled) IsKnown() bool {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []RuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   RuleNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
@@ -1028,52 +354,6 @@ func (r ruleNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RuleNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    ruleNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleNewResponseEnvelopeErrors]
-type ruleNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    ruleNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleNewResponseEnvelopeMessages]
-type ruleNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RuleNewResponseEnvelopeSuccess bool
 
@@ -1091,9 +371,9 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleUpdateParams struct {
 	// List actions patterns.
-	Actions param.Field[[]RuleUpdateParamsAction] `json:"actions,required"`
+	Actions param.Field[[]ActionParam] `json:"actions,required"`
 	// Matching patterns to forward to your actions.
-	Matchers param.Field[[]RuleUpdateParamsMatcher] `json:"matchers,required"`
+	Matchers param.Field[[]MatcherParam] `json:"matchers,required"`
 	// Routing rule status.
 	Enabled param.Field[RuleUpdateParamsEnabled] `json:"enabled"`
 	// Routing rule name.
@@ -1104,78 +384,6 @@ type RuleUpdateParams struct {
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Actions pattern.
-type RuleUpdateParamsAction struct {
-	// Type of supported action.
-	Type  param.Field[RuleUpdateParamsActionsType] `json:"type,required"`
-	Value param.Field[[]string]                    `json:"value,required"`
-}
-
-func (r RuleUpdateParamsAction) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Type of supported action.
-type RuleUpdateParamsActionsType string
-
-const (
-	RuleUpdateParamsActionsTypeDrop    RuleUpdateParamsActionsType = "drop"
-	RuleUpdateParamsActionsTypeForward RuleUpdateParamsActionsType = "forward"
-	RuleUpdateParamsActionsTypeWorker  RuleUpdateParamsActionsType = "worker"
-)
-
-func (r RuleUpdateParamsActionsType) IsKnown() bool {
-	switch r {
-	case RuleUpdateParamsActionsTypeDrop, RuleUpdateParamsActionsTypeForward, RuleUpdateParamsActionsTypeWorker:
-		return true
-	}
-	return false
-}
-
-// Matching pattern to forward your actions.
-type RuleUpdateParamsMatcher struct {
-	// Field for type matcher.
-	Field param.Field[RuleUpdateParamsMatchersField] `json:"field,required"`
-	// Type of matcher.
-	Type param.Field[RuleUpdateParamsMatchersType] `json:"type,required"`
-	// Value for matcher.
-	Value param.Field[string] `json:"value,required"`
-}
-
-func (r RuleUpdateParamsMatcher) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Field for type matcher.
-type RuleUpdateParamsMatchersField string
-
-const (
-	RuleUpdateParamsMatchersFieldTo RuleUpdateParamsMatchersField = "to"
-)
-
-func (r RuleUpdateParamsMatchersField) IsKnown() bool {
-	switch r {
-	case RuleUpdateParamsMatchersFieldTo:
-		return true
-	}
-	return false
-}
-
-// Type of matcher.
-type RuleUpdateParamsMatchersType string
-
-const (
-	RuleUpdateParamsMatchersTypeLiteral RuleUpdateParamsMatchersType = "literal"
-)
-
-func (r RuleUpdateParamsMatchersType) IsKnown() bool {
-	switch r {
-	case RuleUpdateParamsMatchersTypeLiteral:
-		return true
-	}
-	return false
 }
 
 // Routing rule status.
@@ -1195,9 +403,9 @@ func (r RuleUpdateParamsEnabled) IsKnown() bool {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   RuleUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1219,52 +427,6 @@ func (r *RuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    ruleUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseEnvelopeErrors]
-type ruleUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    ruleUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseEnvelopeMessages]
-type ruleUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1295,7 +457,7 @@ type RuleListParams struct {
 // URLQuery serializes [RuleListParams]'s query parameters as `url.Values`.
 func (r RuleListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1317,9 +479,9 @@ func (r RuleListParamsEnabled) IsKnown() bool {
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []RuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   RuleDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1344,52 +506,6 @@ func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RuleDeleteResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    ruleDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseEnvelopeErrors]
-type ruleDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleDeleteResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    ruleDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseEnvelopeMessages]
-type ruleDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RuleDeleteResponseEnvelopeSuccess bool
 
@@ -1406,9 +522,9 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   []RuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   RuleGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
@@ -1430,52 +546,6 @@ func (r *RuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    ruleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleGetResponseEnvelopeErrors]
-type ruleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    ruleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleGetResponseEnvelopeMessages]
-type ruleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

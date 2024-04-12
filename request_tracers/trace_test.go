@@ -28,46 +28,43 @@ func TestTraceNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RequestTracers.Traces.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		request_tracers.TraceNewParams{
-			Method: cloudflare.F("PUT"),
-			URL:    cloudflare.F("https://some.zone/some_path"),
-			Body: cloudflare.F(request_tracers.TraceNewParamsBody{
-				Base64:    cloudflare.F("c29tZV9yZXF1ZXN0X2JvZHk="),
-				Json:      cloudflare.F[any](map[string]interface{}{}),
-				PlainText: cloudflare.F("string"),
+	_, err := client.RequestTracers.Traces.New(context.TODO(), request_tracers.TraceNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Method:    cloudflare.F("PUT"),
+		URL:       cloudflare.F("https://some.zone/some_path"),
+		Body: cloudflare.F(request_tracers.TraceNewParamsBody{
+			Base64:    cloudflare.F("c29tZV9yZXF1ZXN0X2JvZHk="),
+			Json:      cloudflare.F[any](map[string]interface{}{}),
+			PlainText: cloudflare.F("string"),
+		}),
+		Context: cloudflare.F(request_tracers.TraceNewParamsContext{
+			BotScore: cloudflare.F(int64(0)),
+			Geoloc: cloudflare.F(request_tracers.TraceNewParamsContextGeoloc{
+				City:                cloudflare.F("London"),
+				Continent:           cloudflare.F("string"),
+				IsEuCountry:         cloudflare.F(true),
+				ISOCode:             cloudflare.F("string"),
+				Latitude:            cloudflare.F(0.000000),
+				Longitude:           cloudflare.F(0.000000),
+				PostalCode:          cloudflare.F("string"),
+				RegionCode:          cloudflare.F("string"),
+				Subdivision2ISOCode: cloudflare.F("string"),
+				Timezone:            cloudflare.F("string"),
 			}),
-			Context: cloudflare.F(request_tracers.TraceNewParamsContext{
-				BotScore: cloudflare.F(int64(0)),
-				Geoloc: cloudflare.F(request_tracers.TraceNewParamsContextGeoloc{
-					City:                cloudflare.F("London"),
-					Continent:           cloudflare.F("string"),
-					IsEuCountry:         cloudflare.F(true),
-					ISOCode:             cloudflare.F("string"),
-					Latitude:            cloudflare.F(0.000000),
-					Longitude:           cloudflare.F(0.000000),
-					PostalCode:          cloudflare.F("string"),
-					RegionCode:          cloudflare.F("string"),
-					Subdivision2ISOCode: cloudflare.F("string"),
-					Timezone:            cloudflare.F("string"),
-				}),
-				SkipChallenge: cloudflare.F(true),
-				ThreatScore:   cloudflare.F(int64(0)),
-			}),
-			Cookies: cloudflare.F(map[string]string{
-				"cookie_name_1": "cookie_value_1",
-				"cookie_name_2": "cookie_value_2",
-			}),
-			Headers: cloudflare.F(map[string]string{
-				"header_name_1": "header_value_1",
-				"header_name_2": "header_value_2",
-			}),
-			Protocol:     cloudflare.F("HTTP/1.1"),
-			SkipResponse: cloudflare.F(true),
-		},
-	)
+			SkipChallenge: cloudflare.F(true),
+			ThreatScore:   cloudflare.F(int64(0)),
+		}),
+		Cookies: cloudflare.F(map[string]string{
+			"cookie_name_1": "cookie_value_1",
+			"cookie_name_2": "cookie_value_2",
+		}),
+		Headers: cloudflare.F(map[string]string{
+			"header_name_1": "header_value_1",
+			"header_name_2": "header_value_2",
+		}),
+		Protocol:     cloudflare.F("HTTP/1.1"),
+		SkipResponse: cloudflare.F(true),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

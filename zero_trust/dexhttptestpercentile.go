@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,7 +36,7 @@ func NewDEXHTTPTestPercentileService(opts ...option.RequestOption) (r *DEXHTTPTe
 
 // Get percentiles for an http test for a given time period between 1 hour and 7
 // days.
-func (r *DEXHTTPTestPercentileService) Get(ctx context.Context, testID string, params DEXHTTPTestPercentileGetParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringHTTPDetailsPercentiles, err error) {
+func (r *DEXHTTPTestPercentileService) Get(ctx context.Context, testID string, params DEXHTTPTestPercentileGetParams, opts ...option.RequestOption) (res *HTTPDetailsPercentiles, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DexhttpTestPercentileGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s/percentiles", params.AccountID, testID)
@@ -47,16 +48,16 @@ func (r *DEXHTTPTestPercentileService) Get(ctx context.Context, testID string, p
 	return
 }
 
-type DigitalExperienceMonitoringHTTPDetailsPercentiles struct {
-	DNSResponseTimeMs    DigitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMs    `json:"dnsResponseTimeMs"`
-	ResourceFetchTimeMs  DigitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMs  `json:"resourceFetchTimeMs"`
-	ServerResponseTimeMs DigitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMs `json:"serverResponseTimeMs"`
-	JSON                 digitalExperienceMonitoringHTTPDetailsPercentilesJSON                 `json:"-"`
+type HTTPDetailsPercentiles struct {
+	DNSResponseTimeMs    Percentiles                `json:"dnsResponseTimeMs"`
+	ResourceFetchTimeMs  Percentiles                `json:"resourceFetchTimeMs"`
+	ServerResponseTimeMs Percentiles                `json:"serverResponseTimeMs"`
+	JSON                 httpDetailsPercentilesJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsPercentilesJSON contains the JSON metadata
-// for the struct [DigitalExperienceMonitoringHTTPDetailsPercentiles]
-type digitalExperienceMonitoringHTTPDetailsPercentilesJSON struct {
+// httpDetailsPercentilesJSON contains the JSON metadata for the struct
+// [HTTPDetailsPercentiles]
+type httpDetailsPercentilesJSON struct {
 	DNSResponseTimeMs    apijson.Field
 	ResourceFetchTimeMs  apijson.Field
 	ServerResponseTimeMs apijson.Field
@@ -64,107 +65,64 @@ type digitalExperienceMonitoringHTTPDetailsPercentilesJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsPercentiles) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsPercentiles) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsPercentilesJSON) RawJSON() string {
+func (r httpDetailsPercentilesJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMs struct {
-	// p50 observed in the time period
-	P50 float64 `json:"p50,nullable"`
-	// p90 observed in the time period
-	P90 float64 `json:"p90,nullable"`
-	// p95 observed in the time period
-	P95 float64 `json:"p95,nullable"`
-	// p99 observed in the time period
-	P99  float64                                                                `json:"p99,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMsJSON `json:"-"`
+type TestStatOverTime struct {
+	Slots []TestStatOverTimeSlot `json:"slots,required"`
+	// average observed in the time period
+	Avg int64 `json:"avg,nullable"`
+	// highest observed in the time period
+	Max int64 `json:"max,nullable"`
+	// lowest observed in the time period
+	Min  int64                `json:"min,nullable"`
+	JSON testStatOverTimeJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMsJSON contains
-// the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMs]
-type digitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMsJSON struct {
-	P50         apijson.Field
-	P90         apijson.Field
-	P95         apijson.Field
-	P99         apijson.Field
+// testStatOverTimeJSON contains the JSON metadata for the struct
+// [TestStatOverTime]
+type testStatOverTimeJSON struct {
+	Slots       apijson.Field
+	Avg         apijson.Field
+	Max         apijson.Field
+	Min         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *TestStatOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMsJSON) RawJSON() string {
+func (r testStatOverTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMs struct {
-	// p50 observed in the time period
-	P50 float64 `json:"p50,nullable"`
-	// p90 observed in the time period
-	P90 float64 `json:"p90,nullable"`
-	// p95 observed in the time period
-	P95 float64 `json:"p95,nullable"`
-	// p99 observed in the time period
-	P99  float64                                                                  `json:"p99,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMsJSON `json:"-"`
+type TestStatOverTimeSlot struct {
+	Timestamp string                   `json:"timestamp,required"`
+	Value     int64                    `json:"value,required"`
+	JSON      testStatOverTimeSlotJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMsJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMs]
-type digitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMsJSON struct {
-	P50         apijson.Field
-	P90         apijson.Field
-	P95         apijson.Field
-	P99         apijson.Field
+// testStatOverTimeSlotJSON contains the JSON metadata for the struct
+// [TestStatOverTimeSlot]
+type testStatOverTimeSlotJSON struct {
+	Timestamp   apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *TestStatOverTimeSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMs struct {
-	// p50 observed in the time period
-	P50 float64 `json:"p50,nullable"`
-	// p90 observed in the time period
-	P90 float64 `json:"p90,nullable"`
-	// p95 observed in the time period
-	P95 float64 `json:"p95,nullable"`
-	// p99 observed in the time period
-	P99  float64                                                                   `json:"p99,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMs]
-type digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSON struct {
-	P50         apijson.Field
-	P90         apijson.Field
-	P95         apijson.Field
-	P99         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSON) RawJSON() string {
+func (r testStatOverTimeSlotJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -186,15 +144,15 @@ type DEXHTTPTestPercentileGetParams struct {
 // `url.Values`.
 func (r DEXHTTPTestPercentileGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
 type DexhttpTestPercentileGetResponseEnvelope struct {
-	Errors   []DexhttpTestPercentileGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexhttpTestPercentileGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DigitalExperienceMonitoringHTTPDetailsPercentiles  `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   HTTPDetailsPercentiles `json:"result,required"`
 	// Whether the API call was successful
 	Success DexhttpTestPercentileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexhttpTestPercentileGetResponseEnvelopeJSON    `json:"-"`
@@ -216,52 +174,6 @@ func (r *DexhttpTestPercentileGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r dexhttpTestPercentileGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DexhttpTestPercentileGetResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    dexhttpTestPercentileGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dexhttpTestPercentileGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [DexhttpTestPercentileGetResponseEnvelopeErrors]
-type dexhttpTestPercentileGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexhttpTestPercentileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexhttpTestPercentileGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DexhttpTestPercentileGetResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    dexhttpTestPercentileGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dexhttpTestPercentileGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DexhttpTestPercentileGetResponseEnvelopeMessages]
-type dexhttpTestPercentileGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexhttpTestPercentileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexhttpTestPercentileGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

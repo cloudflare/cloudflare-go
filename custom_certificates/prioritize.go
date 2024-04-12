@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -69,9 +70,9 @@ func (r PrioritizeUpdateParamsCertificate) MarshalJSON() (data []byte, err error
 }
 
 type PrioritizeUpdateResponseEnvelope struct {
-	Errors   []PrioritizeUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrioritizeUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CustomCertificate                        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []CustomCertificate   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PrioritizeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PrioritizeUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -95,52 +96,6 @@ func (r *PrioritizeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r prioritizeUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrioritizeUpdateResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    prioritizeUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prioritizeUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrioritizeUpdateResponseEnvelopeErrors]
-type prioritizeUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrioritizeUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prioritizeUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrioritizeUpdateResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    prioritizeUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prioritizeUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PrioritizeUpdateResponseEnvelopeMessages]
-type prioritizeUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrioritizeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prioritizeUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

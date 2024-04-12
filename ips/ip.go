@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -110,14 +111,50 @@ func (r JDCloudIPsJSON) RawJSON() string {
 
 func (r JDCloudIPs) implementsIPsIPListResponse() {}
 
+type IPListResponse struct {
+	// A digest of the IP data. Useful for determining if the data has changed.
+	Etag         string             `json:"etag"`
+	IPV4CIDRs    interface{}        `json:"ipv4_cidrs,required"`
+	IPV6CIDRs    interface{}        `json:"ipv6_cidrs,required"`
+	JDCloudCIDRs interface{}        `json:"jdcloud_cidrs,required"`
+	JSON         ipListResponseJSON `json:"-"`
+	union        IPListResponseUnion
+}
+
+// ipListResponseJSON contains the JSON metadata for the struct [IPListResponse]
+type ipListResponseJSON struct {
+	Etag         apijson.Field
+	IPV4CIDRs    apijson.Field
+	IPV6CIDRs    apijson.Field
+	JDCloudCIDRs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r ipListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *IPListResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r IPListResponse) AsUnion() IPListResponseUnion {
+	return r.union
+}
+
 // Union satisfied by [ips.IPs] or [ips.JDCloudIPs].
-type IPListResponse interface {
+type IPListResponseUnion interface {
 	implementsIPsIPListResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*IPListResponse)(nil)).Elem(),
+		reflect.TypeOf((*IPListResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -138,15 +175,15 @@ type IPListParams struct {
 // URLQuery serializes [IPListParams]'s query parameters as `url.Values`.
 func (r IPListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
 type IPListResponseEnvelope struct {
-	Errors   []IPListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPListResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPListResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IPListResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success IPListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipListResponseEnvelopeJSON    `json:"-"`
@@ -168,52 +205,6 @@ func (r *IPListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ipListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPListResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    ipListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ipListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IPListResponseEnvelopeErrors]
-type ipListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPListResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    ipListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ipListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [IPListResponseEnvelopeMessages]
-type ipListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

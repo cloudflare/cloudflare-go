@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +33,7 @@ func NewAccessApplicationUserPolicyCheckService(opts ...option.RequestOption) (r
 }
 
 // Tests if a specific user has permission to access an application.
-func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AccessApplicationUserPolicyCheckListParamsAppID, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
+func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AppIDUnionParam, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationUserPolicyCheckListResponseEnvelope
 	var accountOrZone string
@@ -51,6 +52,27 @@ func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appI
 	}
 	res = &env.Result
 	return
+}
+
+type UserPolicyCheckGeo struct {
+	Country string                 `json:"country"`
+	JSON    userPolicyCheckGeoJSON `json:"-"`
+}
+
+// userPolicyCheckGeoJSON contains the JSON metadata for the struct
+// [UserPolicyCheckGeo]
+type userPolicyCheckGeoJSON struct {
+	Country     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserPolicyCheckGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userPolicyCheckGeoJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationUserPolicyCheckListResponse struct {
@@ -78,7 +100,7 @@ func (r accessApplicationUserPolicyCheckListResponseJSON) RawJSON() string {
 
 type AccessApplicationUserPolicyCheckListResponseAppState struct {
 	// UUID
-	AppUid   string                                                   `json:"app_uid"`
+	AppUID   string                                                   `json:"app_uid"`
 	Aud      string                                                   `json:"aud"`
 	Hostname string                                                   `json:"hostname"`
 	Name     string                                                   `json:"name"`
@@ -90,7 +112,7 @@ type AccessApplicationUserPolicyCheckListResponseAppState struct {
 // accessApplicationUserPolicyCheckListResponseAppStateJSON contains the JSON
 // metadata for the struct [AccessApplicationUserPolicyCheckListResponseAppState]
 type accessApplicationUserPolicyCheckListResponseAppStateJSON struct {
-	AppUid      apijson.Field
+	AppUID      apijson.Field
 	Aud         apijson.Field
 	Hostname    apijson.Field
 	Name        apijson.Field
@@ -109,15 +131,15 @@ func (r accessApplicationUserPolicyCheckListResponseAppStateJSON) RawJSON() stri
 }
 
 type AccessApplicationUserPolicyCheckListResponseUserIdentity struct {
-	ID             string                                                      `json:"id"`
-	AccountID      string                                                      `json:"account_id"`
-	DeviceSessions interface{}                                                 `json:"device_sessions"`
-	Email          string                                                      `json:"email"`
-	Geo            AccessApplicationUserPolicyCheckListResponseUserIdentityGeo `json:"geo"`
-	Iat            int64                                                       `json:"iat"`
-	IsGateway      bool                                                        `json:"is_gateway"`
-	IsWARP         bool                                                        `json:"is_warp"`
-	Name           string                                                      `json:"name"`
+	ID             string             `json:"id"`
+	AccountID      string             `json:"account_id"`
+	DeviceSessions interface{}        `json:"device_sessions"`
+	Email          string             `json:"email"`
+	Geo            UserPolicyCheckGeo `json:"geo"`
+	Iat            int64              `json:"iat"`
+	IsGateway      bool               `json:"is_gateway"`
+	IsWARP         bool               `json:"is_warp"`
+	Name           string             `json:"name"`
 	// UUID
 	UserUUID string                                                       `json:"user_uuid"`
 	Version  int64                                                        `json:"version"`
@@ -151,28 +173,6 @@ func (r accessApplicationUserPolicyCheckListResponseUserIdentityJSON) RawJSON() 
 	return r.raw
 }
 
-type AccessApplicationUserPolicyCheckListResponseUserIdentityGeo struct {
-	Country string                                                          `json:"country"`
-	JSON    accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON `json:"-"`
-}
-
-// accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUserPolicyCheckListResponseUserIdentityGeo]
-type accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON struct {
-	Country     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUserPolicyCheckListResponseUserIdentityGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON) RawJSON() string {
-	return r.raw
-}
-
 type AccessApplicationUserPolicyCheckListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -180,17 +180,10 @@ type AccessApplicationUserPolicyCheckListParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
-// Identifier
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUserPolicyCheckListParamsAppID interface {
-	ImplementsZeroTrustAccessApplicationUserPolicyCheckListParamsAppID()
-}
-
 type AccessApplicationUserPolicyCheckListResponseEnvelope struct {
-	Errors   []AccessApplicationUserPolicyCheckListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationUserPolicyCheckListResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApplicationUserPolicyCheckListResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                        `json:"messages,required"`
+	Result   AccessApplicationUserPolicyCheckListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeJSON    `json:"-"`
@@ -212,54 +205,6 @@ func (r *AccessApplicationUserPolicyCheckListResponseEnvelope) UnmarshalJSON(dat
 }
 
 func (r accessApplicationUserPolicyCheckListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUserPolicyCheckListResponseEnvelopeErrors struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationUserPolicyCheckListResponseEnvelopeErrors]
-type accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUserPolicyCheckListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUserPolicyCheckListResponseEnvelopeMessages struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUserPolicyCheckListResponseEnvelopeMessages]
-type accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUserPolicyCheckListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

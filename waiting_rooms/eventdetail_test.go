@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/waiting_rooms"
 )
 
 func TestEventDetailGet(t *testing.T) {
@@ -29,9 +30,11 @@ func TestEventDetailGet(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.Events.Details.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
 		"25756b2dfe6e378a06b033b670413757",
+		waiting_rooms.EventDetailGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

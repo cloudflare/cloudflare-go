@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -47,10 +48,10 @@ func NewStatusService(opts ...option.RequestOption) (r *StatusService) {
 //     currently active on the origin.
 //  5. `max_estimated_time_minutes`: Integer of the maximum estimated time currently
 //     presented to the users.
-func (r *StatusService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *StatusGetResponse, err error) {
+func (r *StatusService) Get(ctx context.Context, waitingRoomID string, query StatusGetParams, opts ...option.RequestOption) (res *StatusGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StatusGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/status", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/status", query.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -104,15 +105,26 @@ func (r StatusGetResponseStatus) IsKnown() bool {
 	return false
 }
 
+type StatusGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type StatusGetResponseEnvelope struct {
-	Result StatusGetResponse             `json:"result,required"`
-	JSON   statusGetResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                   `json:"errors,required"`
+	Messages interface{}                   `json:"messages,required"`
+	Result   StatusGetResponse             `json:"result,required"`
+	Success  interface{}                   `json:"success,required"`
+	JSON     statusGetResponseEnvelopeJSON `json:"-"`
 }
 
 // statusGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [StatusGetResponseEnvelope]
 type statusGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -35,7 +35,7 @@ func NewDestinationEligibleService(opts ...option.RequestOption) (r *Destination
 }
 
 // Get a list of all delivery mechanism types for which an account is eligible.
-func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationEligibleGetParams, opts ...option.RequestOption) (res *DestinationEligibleGetResponse, err error) {
+func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationEligibleGetParams, opts ...option.RequestOption) (res *DestinationEligibleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationEligibleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", query.AccountID)
@@ -49,13 +49,13 @@ func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationE
 
 // Union satisfied by [alerting.DestinationEligibleGetResponseUnknown],
 // [alerting.DestinationEligibleGetResponseArray] or [shared.UnionString].
-type DestinationEligibleGetResponse interface {
-	ImplementsAlertingDestinationEligibleGetResponse()
+type DestinationEligibleGetResponseUnion interface {
+	ImplementsAlertingDestinationEligibleGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DestinationEligibleGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*DestinationEligibleGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -70,7 +70,8 @@ func init() {
 
 type DestinationEligibleGetResponseArray []interface{}
 
-func (r DestinationEligibleGetResponseArray) ImplementsAlertingDestinationEligibleGetResponse() {}
+func (r DestinationEligibleGetResponseArray) ImplementsAlertingDestinationEligibleGetResponseUnion() {
+}
 
 type DestinationEligibleGetParams struct {
 	// The account id
@@ -78,9 +79,9 @@ type DestinationEligibleGetParams struct {
 }
 
 type DestinationEligibleGetResponseEnvelope struct {
-	Errors   []DestinationEligibleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationEligibleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DestinationEligibleGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   DestinationEligibleGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationEligibleGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationEligibleGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -104,52 +105,6 @@ func (r *DestinationEligibleGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r destinationEligibleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationEligibleGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    destinationEligibleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// destinationEligibleGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DestinationEligibleGetResponseEnvelopeErrors]
-type destinationEligibleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationEligibleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationEligibleGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationEligibleGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    destinationEligibleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// destinationEligibleGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DestinationEligibleGetResponseEnvelopeMessages]
-type destinationEligibleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationEligibleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationEligibleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

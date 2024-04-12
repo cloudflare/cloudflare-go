@@ -32,7 +32,7 @@ func TestFilterNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		filters.FilterNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -63,7 +63,7 @@ func TestFilterUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b61",
 		filters.FilterUpdateParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -93,6 +93,7 @@ func TestFilterListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		filters.FilterListParams{
+			ID:          cloudflare.F("372e67954025e0ba6aaa6d586b9e0b61"),
 			Description: cloudflare.F("browsers"),
 			Expression:  cloudflare.F("php"),
 			Page:        cloudflare.F(1.000000),
@@ -128,6 +129,9 @@ func TestFilterDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b61",
+		filters.FilterDeleteParams{
+			Body: map[string]interface{}{},
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

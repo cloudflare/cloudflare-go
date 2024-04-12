@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +35,7 @@ func NewSettingBrotliService(opts ...option.RequestOption) (r *SettingBrotliServ
 
 // When the client requesting an asset supports the Brotli compression algorithm,
 // Cloudflare will serve a Brotli compressed version of the asset.
-func (r *SettingBrotliService) Edit(ctx context.Context, params SettingBrotliEditParams, opts ...option.RequestOption) (res *ZoneSettingBrotli, err error) {
+func (r *SettingBrotliService) Edit(ctx context.Context, params SettingBrotliEditParams, opts ...option.RequestOption) (res *Brotli, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrotliEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/brotli", params.ZoneID)
@@ -48,7 +49,7 @@ func (r *SettingBrotliService) Edit(ctx context.Context, params SettingBrotliEdi
 
 // When the client requesting an asset supports the Brotli compression algorithm,
 // Cloudflare will serve a Brotli compressed version of the asset.
-func (r *SettingBrotliService) Get(ctx context.Context, query SettingBrotliGetParams, opts ...option.RequestOption) (res *ZoneSettingBrotli, err error) {
+func (r *SettingBrotliService) Get(ctx context.Context, query SettingBrotliGetParams, opts ...option.RequestOption) (res *Brotli, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrotliGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/brotli", query.ZoneID)
@@ -62,22 +63,21 @@ func (r *SettingBrotliService) Get(ctx context.Context, query SettingBrotliGetPa
 
 // When the client requesting an asset supports the Brotli compression algorithm,
 // Cloudflare will serve a Brotli compressed version of the asset.
-type ZoneSettingBrotli struct {
+type Brotli struct {
 	// ID of the zone setting.
-	ID ZoneSettingBrotliID `json:"id,required"`
+	ID BrotliID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingBrotliValue `json:"value,required"`
+	Value BrotliValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingBrotliEditable `json:"editable"`
+	Editable BrotliEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingBrotliJSON `json:"-"`
+	ModifiedOn time.Time  `json:"modified_on,nullable" format:"date-time"`
+	JSON       brotliJSON `json:"-"`
 }
 
-// zoneSettingBrotliJSON contains the JSON metadata for the struct
-// [ZoneSettingBrotli]
-type zoneSettingBrotliJSON struct {
+// brotliJSON contains the JSON metadata for the struct [Brotli]
+type brotliJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,44 +86,40 @@ type zoneSettingBrotliJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingBrotli) UnmarshalJSON(data []byte) (err error) {
+func (r *Brotli) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingBrotliJSON) RawJSON() string {
+func (r brotliJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingBrotli) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingBrotli) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingBrotliID string
+type BrotliID string
 
 const (
-	ZoneSettingBrotliIDBrotli ZoneSettingBrotliID = "brotli"
+	BrotliIDBrotli BrotliID = "brotli"
 )
 
-func (r ZoneSettingBrotliID) IsKnown() bool {
+func (r BrotliID) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrotliIDBrotli:
+	case BrotliIDBrotli:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingBrotliValue string
+type BrotliValue string
 
 const (
-	ZoneSettingBrotliValueOff ZoneSettingBrotliValue = "off"
-	ZoneSettingBrotliValueOn  ZoneSettingBrotliValue = "on"
+	BrotliValueOff BrotliValue = "off"
+	BrotliValueOn  BrotliValue = "on"
 )
 
-func (r ZoneSettingBrotliValue) IsKnown() bool {
+func (r BrotliValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrotliValueOff, ZoneSettingBrotliValueOn:
+	case BrotliValueOff, BrotliValueOn:
 		return true
 	}
 	return false
@@ -131,35 +127,20 @@ func (r ZoneSettingBrotliValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingBrotliEditable bool
+type BrotliEditable bool
 
 const (
-	ZoneSettingBrotliEditableTrue  ZoneSettingBrotliEditable = true
-	ZoneSettingBrotliEditableFalse ZoneSettingBrotliEditable = false
+	BrotliEditableTrue  BrotliEditable = true
+	BrotliEditableFalse BrotliEditable = false
 )
 
-func (r ZoneSettingBrotliEditable) IsKnown() bool {
+func (r BrotliEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrotliEditableTrue, ZoneSettingBrotliEditableFalse:
+	case BrotliEditableTrue, BrotliEditableFalse:
 		return true
 	}
 	return false
 }
-
-// When the client requesting an asset supports the Brotli compression algorithm,
-// Cloudflare will serve a Brotli compressed version of the asset.
-type ZoneSettingBrotliParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingBrotliID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingBrotliValue] `json:"value,required"`
-}
-
-func (r ZoneSettingBrotliParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingBrotliParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingBrotliEditParams struct {
 	// Identifier
@@ -189,13 +170,13 @@ func (r SettingBrotliEditParamsValue) IsKnown() bool {
 }
 
 type SettingBrotliEditResponseEnvelope struct {
-	Errors   []SettingBrotliEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrotliEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting an asset supports the Brotli compression algorithm,
 	// Cloudflare will serve a Brotli compressed version of the asset.
-	Result ZoneSettingBrotli                     `json:"result"`
+	Result Brotli                                `json:"result"`
 	JSON   settingBrotliEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -218,65 +199,19 @@ func (r settingBrotliEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingBrotliEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingBrotliEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrotliEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingBrotliEditResponseEnvelopeErrors]
-type settingBrotliEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrotliEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrotliEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrotliEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingBrotliEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrotliEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingBrotliEditResponseEnvelopeMessages]
-type settingBrotliEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrotliEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrotliEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingBrotliGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingBrotliGetResponseEnvelope struct {
-	Errors   []SettingBrotliGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrotliGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting an asset supports the Brotli compression algorithm,
 	// Cloudflare will serve a Brotli compressed version of the asset.
-	Result ZoneSettingBrotli                    `json:"result"`
+	Result Brotli                               `json:"result"`
 	JSON   settingBrotliGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -296,51 +231,5 @@ func (r *SettingBrotliGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingBrotliGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrotliGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingBrotliGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrotliGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingBrotliGetResponseEnvelopeErrors]
-type settingBrotliGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrotliGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrotliGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrotliGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingBrotliGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrotliGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingBrotliGetResponseEnvelopeMessages]
-type settingBrotliGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrotliGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrotliGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

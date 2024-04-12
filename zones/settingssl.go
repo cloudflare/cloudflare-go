@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -47,7 +48,7 @@ func NewSettingSSLService(opts ...option.RequestOption) (r *SettingSSLService) {
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *SettingSSLService) Edit(ctx context.Context, params SettingSSLEditParams, opts ...option.RequestOption) (res *ZoneSettingSSL, err error) {
+func (r *SettingSSLService) Edit(ctx context.Context, params SettingSSLEditParams, opts ...option.RequestOption) (res *SSL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ssl", params.ZoneID)
@@ -75,7 +76,7 @@ func (r *SettingSSLService) Edit(ctx context.Context, params SettingSSLEditParam
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *SettingSSLService) Get(ctx context.Context, query SettingSSLGetParams, opts ...option.RequestOption) (res *ZoneSettingSSL, err error) {
+func (r *SettingSSLService) Get(ctx context.Context, query SettingSSLGetParams, opts ...option.RequestOption) (res *SSL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ssl", query.ZoneID)
@@ -103,21 +104,21 @@ func (r *SettingSSLService) Get(ctx context.Context, query SettingSSLGetParams, 
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-type ZoneSettingSSL struct {
+type SSL struct {
 	// ID of the zone setting.
-	ID ZoneSettingSSLID `json:"id,required"`
+	ID SSLID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingSSLValue `json:"value,required"`
+	Value SSLValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingSSLEditable `json:"editable"`
+	Editable SSLEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time          `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingSSLJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	JSON       sslJSON   `json:"-"`
 }
 
-// zoneSettingSSLJSON contains the JSON metadata for the struct [ZoneSettingSSL]
-type zoneSettingSSLJSON struct {
+// sslJSON contains the JSON metadata for the struct [SSL]
+type sslJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -126,46 +127,42 @@ type zoneSettingSSLJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSSL) UnmarshalJSON(data []byte) (err error) {
+func (r *SSL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingSSLJSON) RawJSON() string {
+func (r sslJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingSSL) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingSSL) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingSSLID string
+type SSLID string
 
 const (
-	ZoneSettingSSLIDSSL ZoneSettingSSLID = "ssl"
+	SSLIDSSL SSLID = "ssl"
 )
 
-func (r ZoneSettingSSLID) IsKnown() bool {
+func (r SSLID) IsKnown() bool {
 	switch r {
-	case ZoneSettingSSLIDSSL:
+	case SSLIDSSL:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingSSLValue string
+type SSLValue string
 
 const (
-	ZoneSettingSSLValueOff      ZoneSettingSSLValue = "off"
-	ZoneSettingSSLValueFlexible ZoneSettingSSLValue = "flexible"
-	ZoneSettingSSLValueFull     ZoneSettingSSLValue = "full"
-	ZoneSettingSSLValueStrict   ZoneSettingSSLValue = "strict"
+	SSLValueOff      SSLValue = "off"
+	SSLValueFlexible SSLValue = "flexible"
+	SSLValueFull     SSLValue = "full"
+	SSLValueStrict   SSLValue = "strict"
 )
 
-func (r ZoneSettingSSLValue) IsKnown() bool {
+func (r SSLValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingSSLValueOff, ZoneSettingSSLValueFlexible, ZoneSettingSSLValueFull, ZoneSettingSSLValueStrict:
+	case SSLValueOff, SSLValueFlexible, SSLValueFull, SSLValueStrict:
 		return true
 	}
 	return false
@@ -173,49 +170,20 @@ func (r ZoneSettingSSLValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingSSLEditable bool
+type SSLEditable bool
 
 const (
-	ZoneSettingSSLEditableTrue  ZoneSettingSSLEditable = true
-	ZoneSettingSSLEditableFalse ZoneSettingSSLEditable = false
+	SSLEditableTrue  SSLEditable = true
+	SSLEditableFalse SSLEditable = false
 )
 
-func (r ZoneSettingSSLEditable) IsKnown() bool {
+func (r SSLEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingSSLEditableTrue, ZoneSettingSSLEditableFalse:
+	case SSLEditableTrue, SSLEditableFalse:
 		return true
 	}
 	return false
 }
-
-// SSL encrypts your visitor's connection and safeguards credit card numbers and
-// other personal data to and from your website. SSL can take up to 5 minutes to
-// fully activate. Requires Cloudflare active on your root domain or www domain.
-// Off: no SSL between the visitor and Cloudflare, and no SSL between Cloudflare
-// and your web server (all HTTP traffic). Flexible: SSL between the visitor and
-// Cloudflare -- visitor sees HTTPS on your site, but no SSL between Cloudflare and
-// your web server. You don't need to have an SSL cert on your web server, but your
-// vistors will still see the site as being HTTPS enabled. Full: SSL between the
-// visitor and Cloudflare -- visitor sees HTTPS on your site, and SSL between
-// Cloudflare and your web server. You'll need to have your own SSL cert or
-// self-signed cert at the very least. Full (Strict): SSL between the visitor and
-// Cloudflare -- visitor sees HTTPS on your site, and SSL between Cloudflare and
-// your web server. You'll need to have a valid SSL certificate installed on your
-// web server. This certificate must be signed by a certificate authority, have an
-// expiration date in the future, and respond for the request domain name
-// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-type ZoneSettingSSLParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingSSLID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingSSLValue] `json:"value,required"`
-}
-
-func (r ZoneSettingSSLParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingSSLParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingSSLEditParams struct {
 	// Identifier
@@ -247,8 +215,8 @@ func (r SettingSSLEditParamsValue) IsKnown() bool {
 }
 
 type SettingSSLEditResponseEnvelope struct {
-	Errors   []SettingSSLEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSSLEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// SSL encrypts your visitor's connection and safeguards credit card numbers and
@@ -267,7 +235,7 @@ type SettingSSLEditResponseEnvelope struct {
 	// web server. This certificate must be signed by a certificate authority, have an
 	// expiration date in the future, and respond for the request domain name
 	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-	Result ZoneSettingSSL                     `json:"result"`
+	Result SSL                                `json:"result"`
 	JSON   settingSSLEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -290,60 +258,14 @@ func (r settingSSLEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingSSLEditResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    settingSSLEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingSSLEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingSSLEditResponseEnvelopeErrors]
-type settingSSLEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSSLEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSSLEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSSLEditResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingSSLEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSSLEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingSSLEditResponseEnvelopeMessages]
-type settingSSLEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSSLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSSLEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingSSLGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingSSLGetResponseEnvelope struct {
-	Errors   []SettingSSLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSSLGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// SSL encrypts your visitor's connection and safeguards credit card numbers and
@@ -362,7 +284,7 @@ type SettingSSLGetResponseEnvelope struct {
 	// web server. This certificate must be signed by a certificate authority, have an
 	// expiration date in the future, and respond for the request domain name
 	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-	Result ZoneSettingSSL                    `json:"result"`
+	Result SSL                               `json:"result"`
 	JSON   settingSSLGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -382,51 +304,5 @@ func (r *SettingSSLGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r settingSSLGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSSLGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    settingSSLGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingSSLGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingSSLGetResponseEnvelopeErrors]
-type settingSSLGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSSLGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSSLGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSSLGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    settingSSLGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSSLGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingSSLGetResponseEnvelopeMessages]
-type settingSSLGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSSLGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSSLGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

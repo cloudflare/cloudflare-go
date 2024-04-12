@@ -32,7 +32,7 @@ func TestSeatEdit(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.SeatEditParams{
-			Body: cloudflare.F([]zero_trust.SeatEditParamsBody{{
+			Body: []zero_trust.SeatEditParamsBody{{
 				AccessSeat:  cloudflare.F(false),
 				GatewaySeat: cloudflare.F(false),
 			}, {
@@ -41,7 +41,7 @@ func TestSeatEdit(t *testing.T) {
 			}, {
 				AccessSeat:  cloudflare.F(false),
 				GatewaySeat: cloudflare.F(false),
-			}}),
+			}},
 		},
 	)
 	if err != nil {

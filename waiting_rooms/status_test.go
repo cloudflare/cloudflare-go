@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/waiting_rooms"
 )
 
 func TestStatusGet(t *testing.T) {
@@ -29,8 +30,10 @@ func TestStatusGet(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.Statuses.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
+		waiting_rooms.StatusGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

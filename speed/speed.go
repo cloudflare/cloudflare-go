@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -54,7 +55,7 @@ func (r *SpeedService) Delete(ctx context.Context, url string, params SpeedDelet
 }
 
 // Retrieves the test schedule for a page in a specific region.
-func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params SpeedScheduleGetParams, opts ...option.RequestOption) (res *ObservatorySchedule, err error) {
+func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params SpeedScheduleGetParams, opts ...option.RequestOption) (res *Schedule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedScheduleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", params.ZoneID, url)
@@ -67,7 +68,7 @@ func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params Speed
 }
 
 // Lists the core web vital metrics trend over time for a specific page.
-func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedTrendsListParams, opts ...option.RequestOption) (res *ObservatoryTrend, err error) {
+func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedTrendsListParams, opts ...option.RequestOption) (res *Trend, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTrendsListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", params.ZoneID, url)
@@ -79,87 +80,201 @@ func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedT
 	return
 }
 
-// The test schedule.
-type ObservatorySchedule struct {
-	// The frequency of the test.
-	Frequency ObservatoryScheduleFrequency `json:"frequency"`
+// A test region with a label.
+type LabeledRegion struct {
+	Label string `json:"label"`
 	// A test region.
-	Region ObservatoryScheduleRegion `json:"region"`
-	// A URL.
-	URL  string                  `json:"url"`
-	JSON observatoryScheduleJSON `json:"-"`
+	Value LabeledRegionValue `json:"value"`
+	JSON  labeledRegionJSON  `json:"-"`
 }
 
-// observatoryScheduleJSON contains the JSON metadata for the struct
-// [ObservatorySchedule]
-type observatoryScheduleJSON struct {
-	Frequency   apijson.Field
-	Region      apijson.Field
-	URL         apijson.Field
+// labeledRegionJSON contains the JSON metadata for the struct [LabeledRegion]
+type labeledRegionJSON struct {
+	Label       apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ObservatorySchedule) UnmarshalJSON(data []byte) (err error) {
+func (r *LabeledRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observatoryScheduleJSON) RawJSON() string {
+func (r labeledRegionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The frequency of the test.
-type ObservatoryScheduleFrequency string
-
-const (
-	ObservatoryScheduleFrequencyDaily  ObservatoryScheduleFrequency = "DAILY"
-	ObservatoryScheduleFrequencyWeekly ObservatoryScheduleFrequency = "WEEKLY"
-)
-
-func (r ObservatoryScheduleFrequency) IsKnown() bool {
-	switch r {
-	case ObservatoryScheduleFrequencyDaily, ObservatoryScheduleFrequencyWeekly:
-		return true
-	}
-	return false
-}
-
 // A test region.
-type ObservatoryScheduleRegion string
+type LabeledRegionValue string
 
 const (
-	ObservatoryScheduleRegionAsiaEast1           ObservatoryScheduleRegion = "asia-east1"
-	ObservatoryScheduleRegionAsiaNortheast1      ObservatoryScheduleRegion = "asia-northeast1"
-	ObservatoryScheduleRegionAsiaNortheast2      ObservatoryScheduleRegion = "asia-northeast2"
-	ObservatoryScheduleRegionAsiaSouth1          ObservatoryScheduleRegion = "asia-south1"
-	ObservatoryScheduleRegionAsiaSoutheast1      ObservatoryScheduleRegion = "asia-southeast1"
-	ObservatoryScheduleRegionAustraliaSoutheast1 ObservatoryScheduleRegion = "australia-southeast1"
-	ObservatoryScheduleRegionEuropeNorth1        ObservatoryScheduleRegion = "europe-north1"
-	ObservatoryScheduleRegionEuropeSouthwest1    ObservatoryScheduleRegion = "europe-southwest1"
-	ObservatoryScheduleRegionEuropeWest1         ObservatoryScheduleRegion = "europe-west1"
-	ObservatoryScheduleRegionEuropeWest2         ObservatoryScheduleRegion = "europe-west2"
-	ObservatoryScheduleRegionEuropeWest3         ObservatoryScheduleRegion = "europe-west3"
-	ObservatoryScheduleRegionEuropeWest4         ObservatoryScheduleRegion = "europe-west4"
-	ObservatoryScheduleRegionEuropeWest8         ObservatoryScheduleRegion = "europe-west8"
-	ObservatoryScheduleRegionEuropeWest9         ObservatoryScheduleRegion = "europe-west9"
-	ObservatoryScheduleRegionMeWest1             ObservatoryScheduleRegion = "me-west1"
-	ObservatoryScheduleRegionSouthamericaEast1   ObservatoryScheduleRegion = "southamerica-east1"
-	ObservatoryScheduleRegionUsCentral1          ObservatoryScheduleRegion = "us-central1"
-	ObservatoryScheduleRegionUsEast1             ObservatoryScheduleRegion = "us-east1"
-	ObservatoryScheduleRegionUsEast4             ObservatoryScheduleRegion = "us-east4"
-	ObservatoryScheduleRegionUsSouth1            ObservatoryScheduleRegion = "us-south1"
-	ObservatoryScheduleRegionUsWest1             ObservatoryScheduleRegion = "us-west1"
+	LabeledRegionValueAsiaEast1           LabeledRegionValue = "asia-east1"
+	LabeledRegionValueAsiaNortheast1      LabeledRegionValue = "asia-northeast1"
+	LabeledRegionValueAsiaNortheast2      LabeledRegionValue = "asia-northeast2"
+	LabeledRegionValueAsiaSouth1          LabeledRegionValue = "asia-south1"
+	LabeledRegionValueAsiaSoutheast1      LabeledRegionValue = "asia-southeast1"
+	LabeledRegionValueAustraliaSoutheast1 LabeledRegionValue = "australia-southeast1"
+	LabeledRegionValueEuropeNorth1        LabeledRegionValue = "europe-north1"
+	LabeledRegionValueEuropeSouthwest1    LabeledRegionValue = "europe-southwest1"
+	LabeledRegionValueEuropeWest1         LabeledRegionValue = "europe-west1"
+	LabeledRegionValueEuropeWest2         LabeledRegionValue = "europe-west2"
+	LabeledRegionValueEuropeWest3         LabeledRegionValue = "europe-west3"
+	LabeledRegionValueEuropeWest4         LabeledRegionValue = "europe-west4"
+	LabeledRegionValueEuropeWest8         LabeledRegionValue = "europe-west8"
+	LabeledRegionValueEuropeWest9         LabeledRegionValue = "europe-west9"
+	LabeledRegionValueMeWest1             LabeledRegionValue = "me-west1"
+	LabeledRegionValueSouthamericaEast1   LabeledRegionValue = "southamerica-east1"
+	LabeledRegionValueUsCentral1          LabeledRegionValue = "us-central1"
+	LabeledRegionValueUsEast1             LabeledRegionValue = "us-east1"
+	LabeledRegionValueUsEast4             LabeledRegionValue = "us-east4"
+	LabeledRegionValueUsSouth1            LabeledRegionValue = "us-south1"
+	LabeledRegionValueUsWest1             LabeledRegionValue = "us-west1"
 )
 
-func (r ObservatoryScheduleRegion) IsKnown() bool {
+func (r LabeledRegionValue) IsKnown() bool {
 	switch r {
-	case ObservatoryScheduleRegionAsiaEast1, ObservatoryScheduleRegionAsiaNortheast1, ObservatoryScheduleRegionAsiaNortheast2, ObservatoryScheduleRegionAsiaSouth1, ObservatoryScheduleRegionAsiaSoutheast1, ObservatoryScheduleRegionAustraliaSoutheast1, ObservatoryScheduleRegionEuropeNorth1, ObservatoryScheduleRegionEuropeSouthwest1, ObservatoryScheduleRegionEuropeWest1, ObservatoryScheduleRegionEuropeWest2, ObservatoryScheduleRegionEuropeWest3, ObservatoryScheduleRegionEuropeWest4, ObservatoryScheduleRegionEuropeWest8, ObservatoryScheduleRegionEuropeWest9, ObservatoryScheduleRegionMeWest1, ObservatoryScheduleRegionSouthamericaEast1, ObservatoryScheduleRegionUsCentral1, ObservatoryScheduleRegionUsEast1, ObservatoryScheduleRegionUsEast4, ObservatoryScheduleRegionUsSouth1, ObservatoryScheduleRegionUsWest1:
+	case LabeledRegionValueAsiaEast1, LabeledRegionValueAsiaNortheast1, LabeledRegionValueAsiaNortheast2, LabeledRegionValueAsiaSouth1, LabeledRegionValueAsiaSoutheast1, LabeledRegionValueAustraliaSoutheast1, LabeledRegionValueEuropeNorth1, LabeledRegionValueEuropeSouthwest1, LabeledRegionValueEuropeWest1, LabeledRegionValueEuropeWest2, LabeledRegionValueEuropeWest3, LabeledRegionValueEuropeWest4, LabeledRegionValueEuropeWest8, LabeledRegionValueEuropeWest9, LabeledRegionValueMeWest1, LabeledRegionValueSouthamericaEast1, LabeledRegionValueUsCentral1, LabeledRegionValueUsEast1, LabeledRegionValueUsEast4, LabeledRegionValueUsSouth1, LabeledRegionValueUsWest1:
 		return true
 	}
 	return false
 }
 
-type ObservatoryTrend struct {
+// The Lighthouse report.
+type LighthouseReport struct {
+	// Cumulative Layout Shift.
+	Cls float64 `json:"cls"`
+	// The type of device.
+	DeviceType LighthouseReportDeviceType `json:"deviceType"`
+	Error      LighthouseReportError      `json:"error"`
+	// First Contentful Paint.
+	Fcp float64 `json:"fcp"`
+	// The URL to the full Lighthouse JSON report.
+	JsonReportURL string `json:"jsonReportUrl"`
+	// Largest Contentful Paint.
+	Lcp float64 `json:"lcp"`
+	// The Lighthouse performance score.
+	PerformanceScore float64 `json:"performanceScore"`
+	// Speed Index.
+	Si float64 `json:"si"`
+	// The state of the Lighthouse report.
+	State LighthouseReportState `json:"state"`
+	// Total Blocking Time.
+	Tbt float64 `json:"tbt"`
+	// Time To First Byte.
+	Ttfb float64 `json:"ttfb"`
+	// Time To Interactive.
+	Tti  float64              `json:"tti"`
+	JSON lighthouseReportJSON `json:"-"`
+}
+
+// lighthouseReportJSON contains the JSON metadata for the struct
+// [LighthouseReport]
+type lighthouseReportJSON struct {
+	Cls              apijson.Field
+	DeviceType       apijson.Field
+	Error            apijson.Field
+	Fcp              apijson.Field
+	JsonReportURL    apijson.Field
+	Lcp              apijson.Field
+	PerformanceScore apijson.Field
+	Si               apijson.Field
+	State            apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *LighthouseReport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r lighthouseReportJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of device.
+type LighthouseReportDeviceType string
+
+const (
+	LighthouseReportDeviceTypeDesktop LighthouseReportDeviceType = "DESKTOP"
+	LighthouseReportDeviceTypeMobile  LighthouseReportDeviceType = "MOBILE"
+)
+
+func (r LighthouseReportDeviceType) IsKnown() bool {
+	switch r {
+	case LighthouseReportDeviceTypeDesktop, LighthouseReportDeviceTypeMobile:
+		return true
+	}
+	return false
+}
+
+type LighthouseReportError struct {
+	// The error code of the Lighthouse result.
+	Code LighthouseReportErrorCode `json:"code"`
+	// Detailed error message.
+	Detail string `json:"detail"`
+	// The final URL displayed to the user.
+	FinalDisplayedURL string                    `json:"finalDisplayedUrl"`
+	JSON              lighthouseReportErrorJSON `json:"-"`
+}
+
+// lighthouseReportErrorJSON contains the JSON metadata for the struct
+// [LighthouseReportError]
+type lighthouseReportErrorJSON struct {
+	Code              apijson.Field
+	Detail            apijson.Field
+	FinalDisplayedURL apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *LighthouseReportError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r lighthouseReportErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+// The error code of the Lighthouse result.
+type LighthouseReportErrorCode string
+
+const (
+	LighthouseReportErrorCodeNotReachable      LighthouseReportErrorCode = "NOT_REACHABLE"
+	LighthouseReportErrorCodeDNSFailure        LighthouseReportErrorCode = "DNS_FAILURE"
+	LighthouseReportErrorCodeNotHTML           LighthouseReportErrorCode = "NOT_HTML"
+	LighthouseReportErrorCodeLighthouseTimeout LighthouseReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	LighthouseReportErrorCodeUnknown           LighthouseReportErrorCode = "UNKNOWN"
+)
+
+func (r LighthouseReportErrorCode) IsKnown() bool {
+	switch r {
+	case LighthouseReportErrorCodeNotReachable, LighthouseReportErrorCodeDNSFailure, LighthouseReportErrorCodeNotHTML, LighthouseReportErrorCodeLighthouseTimeout, LighthouseReportErrorCodeUnknown:
+		return true
+	}
+	return false
+}
+
+// The state of the Lighthouse report.
+type LighthouseReportState string
+
+const (
+	LighthouseReportStateRunning  LighthouseReportState = "RUNNING"
+	LighthouseReportStateComplete LighthouseReportState = "COMPLETE"
+	LighthouseReportStateFailed   LighthouseReportState = "FAILED"
+)
+
+func (r LighthouseReportState) IsKnown() bool {
+	switch r {
+	case LighthouseReportStateRunning, LighthouseReportStateComplete, LighthouseReportStateFailed:
+		return true
+	}
+	return false
+}
+
+type Trend struct {
 	// Cumulative Layout Shift trend.
 	Cls []float64 `json:"cls"`
 	// First Contentful Paint trend.
@@ -175,13 +290,12 @@ type ObservatoryTrend struct {
 	// Time To First Byte trend.
 	Ttfb []float64 `json:"ttfb"`
 	// Time To Interactive trend.
-	Tti  []float64            `json:"tti"`
-	JSON observatoryTrendJSON `json:"-"`
+	Tti  []float64 `json:"tti"`
+	JSON trendJSON `json:"-"`
 }
 
-// observatoryTrendJSON contains the JSON metadata for the struct
-// [ObservatoryTrend]
-type observatoryTrendJSON struct {
+// trendJSON contains the JSON metadata for the struct [Trend]
+type trendJSON struct {
 	Cls              apijson.Field
 	Fcp              apijson.Field
 	Lcp              apijson.Field
@@ -194,11 +308,11 @@ type observatoryTrendJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ObservatoryTrend) UnmarshalJSON(data []byte) (err error) {
+func (r *Trend) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observatoryTrendJSON) RawJSON() string {
+func (r trendJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -234,7 +348,7 @@ type SpeedDeleteParams struct {
 // URLQuery serializes [SpeedDeleteParams]'s query parameters as `url.Values`.
 func (r SpeedDeleteParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -275,13 +389,19 @@ func (r SpeedDeleteParamsRegion) IsKnown() bool {
 }
 
 type SpeedDeleteResponseEnvelope struct {
-	Result SpeedDeleteResponse             `json:"result"`
-	JSON   speedDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                     `json:"errors,required"`
+	Messages interface{}                     `json:"messages,required"`
+	Success  interface{}                     `json:"success,required"`
+	Result   SpeedDeleteResponse             `json:"result"`
+	JSON     speedDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // speedDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SpeedDeleteResponseEnvelope]
 type speedDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -305,7 +425,7 @@ type SpeedScheduleGetParams struct {
 // URLQuery serializes [SpeedScheduleGetParams]'s query parameters as `url.Values`.
 func (r SpeedScheduleGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -346,14 +466,20 @@ func (r SpeedScheduleGetParamsRegion) IsKnown() bool {
 }
 
 type SpeedScheduleGetResponseEnvelope struct {
+	Errors   interface{} `json:"errors,required"`
+	Messages interface{} `json:"messages,required"`
+	Success  interface{} `json:"success,required"`
 	// The test schedule.
-	Result ObservatorySchedule                  `json:"result"`
+	Result Schedule                             `json:"result"`
 	JSON   speedScheduleGetResponseEnvelopeJSON `json:"-"`
 }
 
 // speedScheduleGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SpeedScheduleGetResponseEnvelope]
 type speedScheduleGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -376,14 +502,16 @@ type SpeedTrendsListParams struct {
 	Metrics param.Field[string] `query:"metrics,required"`
 	// A test region.
 	Region param.Field[SpeedTrendsListParamsRegion] `query:"region,required"`
+	Start  param.Field[time.Time]                   `query:"start,required" format:"date-time"`
 	// The timezone of the start and end timestamps.
-	Tz param.Field[string] `query:"tz,required"`
+	Tz  param.Field[string]    `query:"tz,required"`
+	End param.Field[time.Time] `query:"end" format:"date-time"`
 }
 
 // URLQuery serializes [SpeedTrendsListParams]'s query parameters as `url.Values`.
 func (r SpeedTrendsListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -440,13 +568,19 @@ func (r SpeedTrendsListParamsRegion) IsKnown() bool {
 }
 
 type SpeedTrendsListResponseEnvelope struct {
-	Result ObservatoryTrend                    `json:"result"`
-	JSON   speedTrendsListResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                         `json:"errors,required"`
+	Messages interface{}                         `json:"messages,required"`
+	Success  interface{}                         `json:"success,required"`
+	Result   Trend                               `json:"result"`
+	JSON     speedTrendsListResponseEnvelopeJSON `json:"-"`
 }
 
 // speedTrendsListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SpeedTrendsListResponseEnvelope]
 type speedTrendsListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

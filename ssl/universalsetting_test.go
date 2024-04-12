@@ -29,8 +29,10 @@ func TestUniversalSettingEditWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SSL.Universal.Settings.Edit(context.TODO(), ssl.UniversalSettingEditParams{
-		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Enabled: cloudflare.F(true),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		UniversalSSLSettings: ssl.UniversalSSLSettingsParam{
+			Enabled: cloudflare.F(true),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

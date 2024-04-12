@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -156,9 +157,9 @@ func (r IndicatorFeedPermissionNewParams) MarshalJSON() (data []byte, err error)
 }
 
 type IndicatorFeedPermissionNewResponseEnvelope struct {
-	Errors   []IndicatorFeedPermissionNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedPermissionNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndicatorFeedPermissionNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   IndicatorFeedPermissionNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedPermissionNewResponseEnvelopeJSON    `json:"-"`
@@ -183,52 +184,6 @@ func (r indicatorFeedPermissionNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type IndicatorFeedPermissionNewResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    indicatorFeedPermissionNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indicatorFeedPermissionNewResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [IndicatorFeedPermissionNewResponseEnvelopeErrors]
-type indicatorFeedPermissionNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedPermissionNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedPermissionNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedPermissionNewResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    indicatorFeedPermissionNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indicatorFeedPermissionNewResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [IndicatorFeedPermissionNewResponseEnvelopeMessages]
-type indicatorFeedPermissionNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedPermissionNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedPermissionNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type IndicatorFeedPermissionNewResponseEnvelopeSuccess bool
 
@@ -250,9 +205,9 @@ type IndicatorFeedPermissionListParams struct {
 }
 
 type IndicatorFeedPermissionListResponseEnvelope struct {
-	Errors   []IndicatorFeedPermissionListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedPermissionListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IndicatorFeedPermissionListResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Result   []IndicatorFeedPermissionListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedPermissionListResponseEnvelopeJSON    `json:"-"`
@@ -274,52 +229,6 @@ func (r *IndicatorFeedPermissionListResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r indicatorFeedPermissionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedPermissionListResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    indicatorFeedPermissionListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indicatorFeedPermissionListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [IndicatorFeedPermissionListResponseEnvelopeErrors]
-type indicatorFeedPermissionListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedPermissionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedPermissionListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedPermissionListResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    indicatorFeedPermissionListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indicatorFeedPermissionListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [IndicatorFeedPermissionListResponseEnvelopeMessages]
-type indicatorFeedPermissionListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedPermissionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedPermissionListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -352,9 +261,9 @@ func (r IndicatorFeedPermissionDeleteParams) MarshalJSON() (data []byte, err err
 }
 
 type IndicatorFeedPermissionDeleteResponseEnvelope struct {
-	Errors   []IndicatorFeedPermissionDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedPermissionDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndicatorFeedPermissionDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Result   IndicatorFeedPermissionDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedPermissionDeleteResponseEnvelopeJSON    `json:"-"`
@@ -376,52 +285,6 @@ func (r *IndicatorFeedPermissionDeleteResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r indicatorFeedPermissionDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedPermissionDeleteResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    indicatorFeedPermissionDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indicatorFeedPermissionDeleteResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [IndicatorFeedPermissionDeleteResponseEnvelopeErrors]
-type indicatorFeedPermissionDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedPermissionDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedPermissionDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedPermissionDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    indicatorFeedPermissionDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indicatorFeedPermissionDeleteResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [IndicatorFeedPermissionDeleteResponseEnvelopeMessages]
-type indicatorFeedPermissionDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedPermissionDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedPermissionDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

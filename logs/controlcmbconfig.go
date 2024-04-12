@@ -48,10 +48,10 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 }
 
 // Deletes CMB config.
-func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponse, err error) {
+func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -94,15 +94,24 @@ func (r cmbConfigJSON) RawJSON() string {
 	return r.raw
 }
 
+type CmbConfigParam struct {
+	// Comma-separated list of regions.
+	Regions param.Field[string] `json:"regions"`
+}
+
+func (r CmbConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Union satisfied by [logs.ControlCmbConfigDeleteResponseUnknown],
 // [logs.ControlCmbConfigDeleteResponseArray] or [shared.UnionString].
-type ControlCmbConfigDeleteResponse interface {
-	ImplementsLogsControlCmbConfigDeleteResponse()
+type ControlCmbConfigDeleteResponseUnion interface {
+	ImplementsLogsControlCmbConfigDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ControlCmbConfigDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*ControlCmbConfigDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -117,23 +126,22 @@ func init() {
 
 type ControlCmbConfigDeleteResponseArray []interface{}
 
-func (r ControlCmbConfigDeleteResponseArray) ImplementsLogsControlCmbConfigDeleteResponse() {}
+func (r ControlCmbConfigDeleteResponseArray) ImplementsLogsControlCmbConfigDeleteResponseUnion() {}
 
 type ControlCmbConfigNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Comma-separated list of regions.
-	Regions param.Field[string] `json:"regions"`
+	CmbConfig CmbConfigParam      `json:"cmb_config,required"`
 }
 
 func (r ControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.CmbConfig)
 }
 
 type ControlCmbConfigNewResponseEnvelope struct {
-	Errors   []ControlCmbConfigNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlCmbConfigNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CmbConfig                                     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CmbConfig             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigNewResponseEnvelopeJSON    `json:"-"`
@@ -158,52 +166,6 @@ func (r controlCmbConfigNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ControlCmbConfigNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    controlCmbConfigNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// controlCmbConfigNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ControlCmbConfigNewResponseEnvelopeErrors]
-type controlCmbConfigNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlCmbConfigNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlCmbConfigNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ControlCmbConfigNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    controlCmbConfigNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// controlCmbConfigNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ControlCmbConfigNewResponseEnvelopeMessages]
-type controlCmbConfigNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlCmbConfigNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlCmbConfigNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ControlCmbConfigNewResponseEnvelopeSuccess bool
 
@@ -222,12 +184,17 @@ func (r ControlCmbConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 type ControlCmbConfigDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r ControlCmbConfigDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ControlCmbConfigDeleteResponseEnvelope struct {
-	Errors   []ControlCmbConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlCmbConfigDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ControlCmbConfigDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   ControlCmbConfigDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigDeleteResponseEnvelopeJSON    `json:"-"`
@@ -252,52 +219,6 @@ func (r controlCmbConfigDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ControlCmbConfigDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    controlCmbConfigDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// controlCmbConfigDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ControlCmbConfigDeleteResponseEnvelopeErrors]
-type controlCmbConfigDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlCmbConfigDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlCmbConfigDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ControlCmbConfigDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    controlCmbConfigDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// controlCmbConfigDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ControlCmbConfigDeleteResponseEnvelopeMessages]
-type controlCmbConfigDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlCmbConfigDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlCmbConfigDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ControlCmbConfigDeleteResponseEnvelopeSuccess bool
 
@@ -319,9 +240,9 @@ type ControlCmbConfigGetParams struct {
 }
 
 type ControlCmbConfigGetResponseEnvelope struct {
-	Errors   []ControlCmbConfigGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlCmbConfigGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CmbConfig                                     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CmbConfig             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigGetResponseEnvelopeJSON    `json:"-"`
@@ -343,52 +264,6 @@ func (r *ControlCmbConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r controlCmbConfigGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ControlCmbConfigGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    controlCmbConfigGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// controlCmbConfigGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ControlCmbConfigGetResponseEnvelopeErrors]
-type controlCmbConfigGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlCmbConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlCmbConfigGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ControlCmbConfigGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    controlCmbConfigGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// controlCmbConfigGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ControlCmbConfigGetResponseEnvelopeMessages]
-type controlCmbConfigGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlCmbConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlCmbConfigGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

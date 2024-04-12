@@ -33,7 +33,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 }
 
 // Show the DNS records needed to configure your Email Routing zone.
-func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]EmailDNSRecord, err error) {
+func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
@@ -46,7 +46,7 @@ func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...opt
 }
 
 // List of records needed to enable an Email Routing zone.
-type EmailDNSRecord struct {
+type DNSRecord struct {
 	// DNS record content.
 	Content string `json:"content"`
 	// DNS record name (or @ for the zone apex).
@@ -56,14 +56,14 @@ type EmailDNSRecord struct {
 	Priority float64 `json:"priority"`
 	// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 	// for 'automatic'.
-	TTL EmailDNSRecordTTL `json:"ttl"`
+	TTL DNSRecordTTLUnion `json:"ttl"`
 	// DNS record type.
-	Type EmailDNSRecordType `json:"type"`
-	JSON emailDNSRecordJSON `json:"-"`
+	Type DNSRecordType `json:"type"`
+	JSON dnsRecordJSON `json:"-"`
 }
 
-// emailDNSRecordJSON contains the JSON metadata for the struct [EmailDNSRecord]
-type emailDNSRecordJSON struct {
+// dnsRecordJSON contains the JSON metadata for the struct [DNSRecord]
+type dnsRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -73,26 +73,25 @@ type emailDNSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailDNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailDNSRecordJSON) RawJSON() string {
+func (r dnsRecordJSON) RawJSON() string {
 	return r.raw
 }
 
 // Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 // for 'automatic'.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [email_routing.EmailDNSRecordTTLNumber].
-type EmailDNSRecordTTL interface {
-	ImplementsEmailRoutingEmailDNSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [email_routing.DNSRecordTTLNumber].
+type DNSRecordTTLUnion interface {
+	ImplementsEmailRoutingDNSRecordTTLUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*EmailDNSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordTTLUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -100,61 +99,61 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(EmailDNSRecordTTLNumber(0)),
+			Type:       reflect.TypeOf(DNSRecordTTLNumber(0)),
 		},
 	)
 }
 
-type EmailDNSRecordTTLNumber float64
+type DNSRecordTTLNumber float64
 
 const (
-	EmailDNSRecordTTLNumber1 EmailDNSRecordTTLNumber = 1
+	DNSRecordTTLNumber1 DNSRecordTTLNumber = 1
 )
 
-func (r EmailDNSRecordTTLNumber) IsKnown() bool {
+func (r DNSRecordTTLNumber) IsKnown() bool {
 	switch r {
-	case EmailDNSRecordTTLNumber1:
+	case DNSRecordTTLNumber1:
 		return true
 	}
 	return false
 }
 
 // DNS record type.
-type EmailDNSRecordType string
+type DNSRecordType string
 
 const (
-	EmailDNSRecordTypeA      EmailDNSRecordType = "A"
-	EmailDNSRecordTypeAAAA   EmailDNSRecordType = "AAAA"
-	EmailDNSRecordTypeCNAME  EmailDNSRecordType = "CNAME"
-	EmailDNSRecordTypeHTTPS  EmailDNSRecordType = "HTTPS"
-	EmailDNSRecordTypeTXT    EmailDNSRecordType = "TXT"
-	EmailDNSRecordTypeSRV    EmailDNSRecordType = "SRV"
-	EmailDNSRecordTypeLOC    EmailDNSRecordType = "LOC"
-	EmailDNSRecordTypeMX     EmailDNSRecordType = "MX"
-	EmailDNSRecordTypeNS     EmailDNSRecordType = "NS"
-	EmailDNSRecordTypeCERT   EmailDNSRecordType = "CERT"
-	EmailDNSRecordTypeDNSKEY EmailDNSRecordType = "DNSKEY"
-	EmailDNSRecordTypeDS     EmailDNSRecordType = "DS"
-	EmailDNSRecordTypeNAPTR  EmailDNSRecordType = "NAPTR"
-	EmailDNSRecordTypeSMIMEA EmailDNSRecordType = "SMIMEA"
-	EmailDNSRecordTypeSSHFP  EmailDNSRecordType = "SSHFP"
-	EmailDNSRecordTypeSVCB   EmailDNSRecordType = "SVCB"
-	EmailDNSRecordTypeTLSA   EmailDNSRecordType = "TLSA"
-	EmailDNSRecordTypeURI    EmailDNSRecordType = "URI"
+	DNSRecordTypeA      DNSRecordType = "A"
+	DNSRecordTypeAAAA   DNSRecordType = "AAAA"
+	DNSRecordTypeCNAME  DNSRecordType = "CNAME"
+	DNSRecordTypeHTTPS  DNSRecordType = "HTTPS"
+	DNSRecordTypeTXT    DNSRecordType = "TXT"
+	DNSRecordTypeSRV    DNSRecordType = "SRV"
+	DNSRecordTypeLOC    DNSRecordType = "LOC"
+	DNSRecordTypeMX     DNSRecordType = "MX"
+	DNSRecordTypeNS     DNSRecordType = "NS"
+	DNSRecordTypeCERT   DNSRecordType = "CERT"
+	DNSRecordTypeDNSKEY DNSRecordType = "DNSKEY"
+	DNSRecordTypeDS     DNSRecordType = "DS"
+	DNSRecordTypeNAPTR  DNSRecordType = "NAPTR"
+	DNSRecordTypeSMIMEA DNSRecordType = "SMIMEA"
+	DNSRecordTypeSSHFP  DNSRecordType = "SSHFP"
+	DNSRecordTypeSVCB   DNSRecordType = "SVCB"
+	DNSRecordTypeTLSA   DNSRecordType = "TLSA"
+	DNSRecordTypeURI    DNSRecordType = "URI"
 )
 
-func (r EmailDNSRecordType) IsKnown() bool {
+func (r DNSRecordType) IsKnown() bool {
 	switch r {
-	case EmailDNSRecordTypeA, EmailDNSRecordTypeAAAA, EmailDNSRecordTypeCNAME, EmailDNSRecordTypeHTTPS, EmailDNSRecordTypeTXT, EmailDNSRecordTypeSRV, EmailDNSRecordTypeLOC, EmailDNSRecordTypeMX, EmailDNSRecordTypeNS, EmailDNSRecordTypeCERT, EmailDNSRecordTypeDNSKEY, EmailDNSRecordTypeDS, EmailDNSRecordTypeNAPTR, EmailDNSRecordTypeSMIMEA, EmailDNSRecordTypeSSHFP, EmailDNSRecordTypeSVCB, EmailDNSRecordTypeTLSA, EmailDNSRecordTypeURI:
+	case DNSRecordTypeA, DNSRecordTypeAAAA, DNSRecordTypeCNAME, DNSRecordTypeHTTPS, DNSRecordTypeTXT, DNSRecordTypeSRV, DNSRecordTypeLOC, DNSRecordTypeMX, DNSRecordTypeNS, DNSRecordTypeCERT, DNSRecordTypeDNSKEY, DNSRecordTypeDS, DNSRecordTypeNAPTR, DNSRecordTypeSMIMEA, DNSRecordTypeSSHFP, DNSRecordTypeSVCB, DNSRecordTypeTLSA, DNSRecordTypeURI:
 		return true
 	}
 	return false
 }
 
 type DNSGetResponseEnvelope struct {
-	Errors   []DNSGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []EmailDNSRecord                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []DNSRecord           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DNSGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DNSGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -178,52 +177,6 @@ func (r *DNSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnsGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    dnsGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnsGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DNSGetResponseEnvelopeErrors]
-type dnsGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    dnsGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnsGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DNSGetResponseEnvelopeMessages]
-type dnsGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

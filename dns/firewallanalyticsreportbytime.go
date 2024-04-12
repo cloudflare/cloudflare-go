@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -39,7 +40,7 @@ func NewFirewallAnalyticsReportBytimeService(opts ...option.RequestOption) (r *F
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSAnalyticsReportByTime, err error) {
+func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *ByTime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAnalyticsReportBytimeGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", params.AccountID, dnsFirewallID)
@@ -77,7 +78,7 @@ type FirewallAnalyticsReportBytimeGetParams struct {
 // as `url.Values`.
 func (r FirewallAnalyticsReportBytimeGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -107,9 +108,9 @@ func (r FirewallAnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
 }
 
 type FirewallAnalyticsReportBytimeGetResponseEnvelope struct {
-	Errors   []FirewallAnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallAnalyticsReportBytimeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSAnalyticsReportByTime                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ByTime                `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAnalyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`
@@ -131,53 +132,6 @@ func (r *FirewallAnalyticsReportBytimeGetResponseEnvelope) UnmarshalJSON(data []
 }
 
 func (r firewallAnalyticsReportBytimeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAnalyticsReportBytimeGetResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    firewallAnalyticsReportBytimeGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallAnalyticsReportBytimeGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [FirewallAnalyticsReportBytimeGetResponseEnvelopeErrors]
-type firewallAnalyticsReportBytimeGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAnalyticsReportBytimeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAnalyticsReportBytimeGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAnalyticsReportBytimeGetResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    firewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [FirewallAnalyticsReportBytimeGetResponseEnvelopeMessages]
-type firewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAnalyticsReportBytimeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

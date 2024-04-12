@@ -48,10 +48,10 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 }
 
 // Delete Account Custom Nameserver
-func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponse, err error) {
+func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, params CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNSID)
+	path := fmt.Sprintf("accounts/%s/custom_ns/%s", params.AccountID, customNSID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -87,10 +87,10 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 }
 
 // Verify Account Custom Nameserver Glue Records
-func (r *CustomNameserverService) Verify(ctx context.Context, body CustomNameserverVerifyParams, opts ...option.RequestOption) (res *[]CustomNameserver, err error) {
+func (r *CustomNameserverService) Verify(ctx context.Context, params CustomNameserverVerifyParams, opts ...option.RequestOption) (res *[]CustomNameserver, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverVerifyResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/verify", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/custom_ns/verify", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -195,13 +195,13 @@ func (r CustomNameserverStatus) IsKnown() bool {
 // Union satisfied by [custom_nameservers.CustomNameserverDeleteResponseUnknown],
 // [custom_nameservers.CustomNameserverDeleteResponseArray] or
 // [shared.UnionString].
-type CustomNameserverDeleteResponse interface {
-	ImplementsCustomNameserversCustomNameserverDeleteResponse()
+type CustomNameserverDeleteResponseUnion interface {
+	ImplementsCustomNameserversCustomNameserverDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomNameserverDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*CustomNameserverDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -216,7 +216,7 @@ func init() {
 
 type CustomNameserverDeleteResponseArray []interface{}
 
-func (r CustomNameserverDeleteResponseArray) ImplementsCustomNameserversCustomNameserverDeleteResponse() {
+func (r CustomNameserverDeleteResponseArray) ImplementsCustomNameserversCustomNameserverDeleteResponseUnion() {
 }
 
 type CustomNameserverNewParams struct {
@@ -233,8 +233,8 @@ func (r CustomNameserverNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverNewResponseEnvelope struct {
-	Errors   []CustomNameserverNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A single account custom nameserver.
 	Result CustomNameserver `json:"result,required"`
 	// Whether the API call was successful
@@ -261,52 +261,6 @@ func (r customNameserverNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomNameserverNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    customNameserverNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customNameserverNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CustomNameserverNewResponseEnvelopeErrors]
-type customNameserverNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    customNameserverNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customNameserverNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomNameserverNewResponseEnvelopeMessages]
-type customNameserverNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CustomNameserverNewResponseEnvelopeSuccess bool
 
@@ -325,12 +279,17 @@ func (r CustomNameserverNewResponseEnvelopeSuccess) IsKnown() bool {
 type CustomNameserverDeleteParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r CustomNameserverDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomNameserverDeleteResponseEnvelope struct {
-	Errors   []CustomNameserverDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomNameserverDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   CustomNameserverDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -354,52 +313,6 @@ func (r *CustomNameserverDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r customNameserverDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    customNameserverDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customNameserverDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomNameserverDeleteResponseEnvelopeErrors]
-type customNameserverDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    customNameserverDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customNameserverDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CustomNameserverDeleteResponseEnvelopeMessages]
-type customNameserverDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -455,9 +368,9 @@ type CustomNameserverAvailabiltyParams struct {
 }
 
 type CustomNameserverAvailabiltyResponseEnvelope struct {
-	Errors   []CustomNameserverAvailabiltyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverAvailabiltyResponseEnvelopeMessages `json:"messages,required"`
-	Result   []string                                              `json:"result,required,nullable" format:"hostname"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []string              `json:"result,required,nullable" format:"hostname"`
 	// Whether the API call was successful
 	Success    CustomNameserverAvailabiltyResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverAvailabiltyResponseEnvelopeResultInfo `json:"result_info"`
@@ -481,52 +394,6 @@ func (r *CustomNameserverAvailabiltyResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r customNameserverAvailabiltyResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverAvailabiltyResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    customNameserverAvailabiltyResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customNameserverAvailabiltyResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [CustomNameserverAvailabiltyResponseEnvelopeErrors]
-type customNameserverAvailabiltyResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverAvailabiltyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverAvailabiltyResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverAvailabiltyResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    customNameserverAvailabiltyResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customNameserverAvailabiltyResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [CustomNameserverAvailabiltyResponseEnvelopeMessages]
-type customNameserverAvailabiltyResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverAvailabiltyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverAvailabiltyResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -582,9 +449,9 @@ type CustomNameserverGetParams struct {
 }
 
 type CustomNameserverGetResponseEnvelope struct {
-	Errors   []CustomNameserverGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CustomNameserver                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []CustomNameserver    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -608,52 +475,6 @@ func (r *CustomNameserverGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r customNameserverGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    customNameserverGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customNameserverGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CustomNameserverGetResponseEnvelopeErrors]
-type customNameserverGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    customNameserverGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customNameserverGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomNameserverGetResponseEnvelopeMessages]
-type customNameserverGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -706,12 +527,17 @@ func (r customNameserverGetResponseEnvelopeResultInfoJSON) RawJSON() string {
 type CustomNameserverVerifyParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r CustomNameserverVerifyParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomNameserverVerifyResponseEnvelope struct {
-	Errors   []CustomNameserverVerifyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverVerifyResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CustomNameserver                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []CustomNameserver    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverVerifyResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverVerifyResponseEnvelopeResultInfo `json:"result_info"`
@@ -735,52 +561,6 @@ func (r *CustomNameserverVerifyResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r customNameserverVerifyResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverVerifyResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    customNameserverVerifyResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customNameserverVerifyResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomNameserverVerifyResponseEnvelopeErrors]
-type customNameserverVerifyResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverVerifyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverVerifyResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverVerifyResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    customNameserverVerifyResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customNameserverVerifyResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CustomNameserverVerifyResponseEnvelopeMessages]
-type customNameserverVerifyResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverVerifyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverVerifyResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

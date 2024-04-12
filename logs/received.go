@@ -45,7 +45,7 @@ func NewReceivedService(opts ...option.RequestOption) (r *ReceivedService) {
 // `start=2018-05-20T10:00:00Z&end=2018-05-20T10:01:00Z`, then
 // `start=2018-05-20T10:01:00Z&end=2018-05-20T10:02:00Z` and so on; the overlap
 // will be handled properly.
-func (r *ReceivedService) Get(ctx context.Context, zoneIdentifier string, query ReceivedGetParams, opts ...option.RequestOption) (res *ReceivedGetResponse, err error) {
+func (r *ReceivedService) Get(ctx context.Context, zoneIdentifier string, query ReceivedGetParams, opts ...option.RequestOption) (res *ReceivedGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/received", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -53,13 +53,13 @@ func (r *ReceivedService) Get(ctx context.Context, zoneIdentifier string, query 
 }
 
 // Union satisfied by [shared.UnionString] or [logs.ReceivedGetResponseUnknown].
-type ReceivedGetResponse interface {
-	ImplementsLogsReceivedGetResponse()
+type ReceivedGetResponseUnion interface {
+	ImplementsLogsReceivedGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ReceivedGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*ReceivedGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -74,7 +74,7 @@ type ReceivedGetParams struct {
 	// RFC 3339. `end` must be at least five minutes earlier than now and must be later
 	// than `start`. Difference between `start` and `end` must be not greater than one
 	// hour.
-	End param.Field[ReceivedGetParamsEnd] `query:"end,required"`
+	End param.Field[ReceivedGetParamsEndUnion] `query:"end,required"`
 	// When `?count=` is provided, the response will contain up to `count` results.
 	// Since results are not sorted, you are likely to get different data for repeated
 	// requests. `count` must be an integer > 0.
@@ -104,7 +104,7 @@ type ReceivedGetParams struct {
 	// timestamp (in seconds or nanoseconds), or an absolute timestamp that conforms to
 	// RFC 3339. At this point in time, it cannot exceed a time in the past greater
 	// than seven days.
-	Start param.Field[ReceivedGetParamsStart] `query:"start"`
+	Start param.Field[ReceivedGetParamsStartUnion] `query:"start"`
 	// By default, timestamps in responses are returned as Unix nanosecond integers.
 	// The `?timestamps=` argument can be set to change the format in which response
 	// timestamps are returned. Possible values are: `unix`, `unixnano`, `rfc3339`.
@@ -116,7 +116,7 @@ type ReceivedGetParams struct {
 // URLQuery serializes [ReceivedGetParams]'s query parameters as `url.Values`.
 func (r ReceivedGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -128,8 +128,8 @@ func (r ReceivedGetParams) URLQuery() (v url.Values) {
 // hour.
 //
 // Satisfied by [shared.UnionString], [shared.UnionInt].
-type ReceivedGetParamsEnd interface {
-	ImplementsLogsReceivedGetParamsEnd()
+type ReceivedGetParamsEndUnion interface {
+	ImplementsLogsReceivedGetParamsEndUnion()
 }
 
 // Sets the (inclusive) beginning of the requested time frame. This can be a unix
@@ -138,8 +138,8 @@ type ReceivedGetParamsEnd interface {
 // than seven days.
 //
 // Satisfied by [shared.UnionString], [shared.UnionInt].
-type ReceivedGetParamsStart interface {
-	ImplementsLogsReceivedGetParamsStart()
+type ReceivedGetParamsStartUnion interface {
+	ImplementsLogsReceivedGetParamsStartUnion()
 }
 
 // By default, timestamps in responses are returned as Unix nanosecond integers.

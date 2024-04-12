@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,7 +34,7 @@ func NewSettingSecurityHeaderService(opts ...option.RequestOption) (r *SettingSe
 }
 
 // Cloudflare security header for a zone.
-func (r *SettingSecurityHeaderService) Edit(ctx context.Context, params SettingSecurityHeaderEditParams, opts ...option.RequestOption) (res *ZoneSettingSecurityHeader, err error) {
+func (r *SettingSecurityHeaderService) Edit(ctx context.Context, params SettingSecurityHeaderEditParams, opts ...option.RequestOption) (res *SecurityHeaders, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSecurityHeaderEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/security_header", params.ZoneID)
@@ -46,7 +47,7 @@ func (r *SettingSecurityHeaderService) Edit(ctx context.Context, params SettingS
 }
 
 // Cloudflare security header for a zone.
-func (r *SettingSecurityHeaderService) Get(ctx context.Context, query SettingSecurityHeaderGetParams, opts ...option.RequestOption) (res *ZoneSettingSecurityHeader, err error) {
+func (r *SettingSecurityHeaderService) Get(ctx context.Context, query SettingSecurityHeaderGetParams, opts ...option.RequestOption) (res *SecurityHeaders, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSecurityHeaderGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/security_header", query.ZoneID)
@@ -59,22 +60,21 @@ func (r *SettingSecurityHeaderService) Get(ctx context.Context, query SettingSec
 }
 
 // Cloudflare security header for a zone.
-type ZoneSettingSecurityHeader struct {
+type SecurityHeaders struct {
 	// ID of the zone's security header.
-	ID ZoneSettingSecurityHeaderID `json:"id,required"`
+	ID SecurityHeadersID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingSecurityHeaderValue `json:"value,required"`
+	Value SecurityHeadersValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingSecurityHeaderEditable `json:"editable"`
+	Editable SecurityHeadersEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingSecurityHeaderJSON `json:"-"`
+	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
+	JSON       securityHeadersJSON `json:"-"`
 }
 
-// zoneSettingSecurityHeaderJSON contains the JSON metadata for the struct
-// [ZoneSettingSecurityHeader]
-type zoneSettingSecurityHeaderJSON struct {
+// securityHeadersJSON contains the JSON metadata for the struct [SecurityHeaders]
+type securityHeadersJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,58 +83,54 @@ type zoneSettingSecurityHeaderJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSecurityHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *SecurityHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingSecurityHeaderJSON) RawJSON() string {
+func (r securityHeadersJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingSecurityHeader) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingSecurityHeader) implementsZonesSettingGetResponse() {}
-
 // ID of the zone's security header.
-type ZoneSettingSecurityHeaderID string
+type SecurityHeadersID string
 
 const (
-	ZoneSettingSecurityHeaderIDSecurityHeader ZoneSettingSecurityHeaderID = "security_header"
+	SecurityHeadersIDSecurityHeader SecurityHeadersID = "security_header"
 )
 
-func (r ZoneSettingSecurityHeaderID) IsKnown() bool {
+func (r SecurityHeadersID) IsKnown() bool {
 	switch r {
-	case ZoneSettingSecurityHeaderIDSecurityHeader:
+	case SecurityHeadersIDSecurityHeader:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingSecurityHeaderValue struct {
+type SecurityHeadersValue struct {
 	// Strict Transport Security.
-	StrictTransportSecurity ZoneSettingSecurityHeaderValueStrictTransportSecurity `json:"strict_transport_security"`
-	JSON                    zoneSettingSecurityHeaderValueJSON                    `json:"-"`
+	StrictTransportSecurity SecurityHeadersValueStrictTransportSecurity `json:"strict_transport_security"`
+	JSON                    securityHeadersValueJSON                    `json:"-"`
 }
 
-// zoneSettingSecurityHeaderValueJSON contains the JSON metadata for the struct
-// [ZoneSettingSecurityHeaderValue]
-type zoneSettingSecurityHeaderValueJSON struct {
+// securityHeadersValueJSON contains the JSON metadata for the struct
+// [SecurityHeadersValue]
+type securityHeadersValueJSON struct {
 	StrictTransportSecurity apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *ZoneSettingSecurityHeaderValue) UnmarshalJSON(data []byte) (err error) {
+func (r *SecurityHeadersValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingSecurityHeaderValueJSON) RawJSON() string {
+func (r securityHeadersValueJSON) RawJSON() string {
 	return r.raw
 }
 
 // Strict Transport Security.
-type ZoneSettingSecurityHeaderValueStrictTransportSecurity struct {
+type SecurityHeadersValueStrictTransportSecurity struct {
 	// Whether or not strict transport security is enabled.
 	Enabled bool `json:"enabled"`
 	// Include all subdomains for strict transport security.
@@ -142,13 +138,13 @@ type ZoneSettingSecurityHeaderValueStrictTransportSecurity struct {
 	// Max age in seconds of the strict transport security.
 	MaxAge float64 `json:"max_age"`
 	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
-	Nosniff bool                                                      `json:"nosniff"`
-	JSON    zoneSettingSecurityHeaderValueStrictTransportSecurityJSON `json:"-"`
+	Nosniff bool                                            `json:"nosniff"`
+	JSON    securityHeadersValueStrictTransportSecurityJSON `json:"-"`
 }
 
-// zoneSettingSecurityHeaderValueStrictTransportSecurityJSON contains the JSON
-// metadata for the struct [ZoneSettingSecurityHeaderValueStrictTransportSecurity]
-type zoneSettingSecurityHeaderValueStrictTransportSecurityJSON struct {
+// securityHeadersValueStrictTransportSecurityJSON contains the JSON metadata for
+// the struct [SecurityHeadersValueStrictTransportSecurity]
+type securityHeadersValueStrictTransportSecurityJSON struct {
 	Enabled           apijson.Field
 	IncludeSubdomains apijson.Field
 	MaxAge            apijson.Field
@@ -157,69 +153,29 @@ type zoneSettingSecurityHeaderValueStrictTransportSecurityJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ZoneSettingSecurityHeaderValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
+func (r *SecurityHeadersValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingSecurityHeaderValueStrictTransportSecurityJSON) RawJSON() string {
+func (r securityHeadersValueStrictTransportSecurityJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingSecurityHeaderEditable bool
+type SecurityHeadersEditable bool
 
 const (
-	ZoneSettingSecurityHeaderEditableTrue  ZoneSettingSecurityHeaderEditable = true
-	ZoneSettingSecurityHeaderEditableFalse ZoneSettingSecurityHeaderEditable = false
+	SecurityHeadersEditableTrue  SecurityHeadersEditable = true
+	SecurityHeadersEditableFalse SecurityHeadersEditable = false
 )
 
-func (r ZoneSettingSecurityHeaderEditable) IsKnown() bool {
+func (r SecurityHeadersEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingSecurityHeaderEditableTrue, ZoneSettingSecurityHeaderEditableFalse:
+	case SecurityHeadersEditableTrue, SecurityHeadersEditableFalse:
 		return true
 	}
 	return false
-}
-
-// Cloudflare security header for a zone.
-type ZoneSettingSecurityHeaderParam struct {
-	// ID of the zone's security header.
-	ID param.Field[ZoneSettingSecurityHeaderID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingSecurityHeaderValueParam] `json:"value,required"`
-}
-
-func (r ZoneSettingSecurityHeaderParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingSecurityHeaderParam) implementsZonesSettingEditParamsItem() {}
-
-// Current value of the zone setting.
-type ZoneSettingSecurityHeaderValueParam struct {
-	// Strict Transport Security.
-	StrictTransportSecurity param.Field[ZoneSettingSecurityHeaderValueStrictTransportSecurityParam] `json:"strict_transport_security"`
-}
-
-func (r ZoneSettingSecurityHeaderValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Strict Transport Security.
-type ZoneSettingSecurityHeaderValueStrictTransportSecurityParam struct {
-	// Whether or not strict transport security is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Include all subdomains for strict transport security.
-	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
-	// Max age in seconds of the strict transport security.
-	MaxAge param.Field[float64] `json:"max_age"`
-	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
-	Nosniff param.Field[bool] `json:"nosniff"`
-}
-
-func (r ZoneSettingSecurityHeaderValueStrictTransportSecurityParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type SettingSecurityHeaderEditParams struct {
@@ -258,12 +214,12 @@ func (r SettingSecurityHeaderEditParamsValueStrictTransportSecurity) MarshalJSON
 }
 
 type SettingSecurityHeaderEditResponseEnvelope struct {
-	Errors   []SettingSecurityHeaderEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSecurityHeaderEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare security header for a zone.
-	Result ZoneSettingSecurityHeader                     `json:"result"`
+	Result SecurityHeaders                               `json:"result"`
 	JSON   settingSecurityHeaderEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -286,64 +242,18 @@ func (r settingSecurityHeaderEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingSecurityHeaderEditResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingSecurityHeaderEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingSecurityHeaderEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingSecurityHeaderEditResponseEnvelopeErrors]
-type settingSecurityHeaderEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityHeaderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSecurityHeaderEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSecurityHeaderEditResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingSecurityHeaderEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSecurityHeaderEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingSecurityHeaderEditResponseEnvelopeMessages]
-type settingSecurityHeaderEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityHeaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSecurityHeaderEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingSecurityHeaderGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingSecurityHeaderGetResponseEnvelope struct {
-	Errors   []SettingSecurityHeaderGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSecurityHeaderGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare security header for a zone.
-	Result ZoneSettingSecurityHeader                    `json:"result"`
+	Result SecurityHeaders                              `json:"result"`
 	JSON   settingSecurityHeaderGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -363,51 +273,5 @@ func (r *SettingSecurityHeaderGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r settingSecurityHeaderGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSecurityHeaderGetResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingSecurityHeaderGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingSecurityHeaderGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingSecurityHeaderGetResponseEnvelopeErrors]
-type settingSecurityHeaderGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityHeaderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSecurityHeaderGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSecurityHeaderGetResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingSecurityHeaderGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSecurityHeaderGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingSecurityHeaderGetResponseEnvelopeMessages]
-type settingSecurityHeaderGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityHeaderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSecurityHeaderGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

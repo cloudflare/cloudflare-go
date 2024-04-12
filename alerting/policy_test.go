@@ -33,27 +33,27 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeUniversalSSLEventType),
 		Enabled:   cloudflare.F(true),
-		Mechanisms: cloudflare.F(map[string][]alerting.PolicyNewParamsMechanisms{
-			"email": {{
-				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsID](shared.UnionString("test@example.com")),
+		Mechanisms: cloudflare.F(alerting.MechanismParam{
+			"email": []alerting.MechanismParam{{
+				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("test@example.com")),
 			}},
-			"pagerduty": {{
-				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsID](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+			"pagerduty": []alerting.MechanismParam{{
+				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
 			}},
-			"webhooks": {{
-				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsID](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+			"webhooks": []alerting.MechanismParam{{
+				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 			}},
 		}),
 		Name:        cloudflare.F("SSL Notification Event Policy"),
 		Description: cloudflare.F("Something describing the policy."),
-		Filters: cloudflare.F(alerting.PolicyNewParamsFilters{
+		Filters: cloudflare.F(alerting.PolicyFilterParam{
 			Actions:                      cloudflare.F([]string{"string", "string", "string"}),
 			AffectedASNs:                 cloudflare.F([]string{"string", "string", "string"}),
 			AffectedComponents:           cloudflare.F([]string{"string", "string", "string"}),
 			AffectedLocations:            cloudflare.F([]string{"string", "string", "string"}),
 			AirportCode:                  cloudflare.F([]string{"string", "string", "string"}),
 			AlertTriggerPreferences:      cloudflare.F([]string{"string", "string", "string"}),
-			AlertTriggerPreferencesValue: cloudflare.F([]alerting.PolicyNewParamsFiltersAlertTriggerPreferencesValue{alerting.PolicyNewParamsFiltersAlertTriggerPreferencesValue99_0, alerting.PolicyNewParamsFiltersAlertTriggerPreferencesValue98_0, alerting.PolicyNewParamsFiltersAlertTriggerPreferencesValue97_0}),
+			AlertTriggerPreferencesValue: cloudflare.F([]alerting.PolicyFilterAlertTriggerPreferencesValue{alerting.PolicyFilterAlertTriggerPreferencesValue99_0, alerting.PolicyFilterAlertTriggerPreferencesValue98_0, alerting.PolicyFilterAlertTriggerPreferencesValue97_0}),
 			Enabled:                      cloudflare.F([]string{"string", "string", "string"}),
 			Environment:                  cloudflare.F([]string{"string", "string", "string"}),
 			Event:                        cloudflare.F([]string{"string", "string", "string"}),
@@ -61,7 +61,7 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 			EventType:                    cloudflare.F([]string{"string", "string", "string"}),
 			GroupBy:                      cloudflare.F([]string{"string", "string", "string"}),
 			HealthCheckID:                cloudflare.F([]string{"string", "string", "string"}),
-			IncidentImpact:               cloudflare.F([]alerting.PolicyNewParamsFiltersIncidentImpact{alerting.PolicyNewParamsFiltersIncidentImpactIncidentImpactNone, alerting.PolicyNewParamsFiltersIncidentImpactIncidentImpactMinor, alerting.PolicyNewParamsFiltersIncidentImpactIncidentImpactMajor}),
+			IncidentImpact:               cloudflare.F([]alerting.PolicyFilterIncidentImpact{alerting.PolicyFilterIncidentImpactIncidentImpactNone, alerting.PolicyFilterIncidentImpactIncidentImpactMinor, alerting.PolicyFilterIncidentImpactIncidentImpactMajor}),
 			InputID:                      cloudflare.F([]string{"string", "string", "string"}),
 			Limit:                        cloudflare.F([]string{"string", "string", "string"}),
 			LogoTag:                      cloudflare.F([]string{"string", "string", "string"}),
@@ -82,7 +82,7 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 			TargetHostname:               cloudflare.F([]string{"string", "string", "string"}),
 			TargetIP:                     cloudflare.F([]string{"string", "string", "string"}),
 			TargetZoneName:               cloudflare.F([]string{"string", "string", "string"}),
-			TrafficExclusions:            cloudflare.F([]alerting.PolicyNewParamsFiltersTrafficExclusion{alerting.PolicyNewParamsFiltersTrafficExclusionSecurityEvents}),
+			TrafficExclusions:            cloudflare.F([]alerting.PolicyFilterTrafficExclusion{alerting.PolicyFilterTrafficExclusionSecurityEvents}),
 			TunnelID:                     cloudflare.F([]string{"string", "string", "string"}),
 			TunnelName:                   cloudflare.F([]string{"string", "string", "string"}),
 			Where:                        cloudflare.F([]string{"string", "string", "string"}),
@@ -120,14 +120,14 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 			AlertType:   cloudflare.F(alerting.PolicyUpdateParamsAlertTypeUniversalSSLEventType),
 			Description: cloudflare.F("Something describing the policy."),
 			Enabled:     cloudflare.F(true),
-			Filters: cloudflare.F(alerting.PolicyUpdateParamsFilters{
+			Filters: cloudflare.F(alerting.PolicyFilterParam{
 				Actions:                      cloudflare.F([]string{"string", "string", "string"}),
 				AffectedASNs:                 cloudflare.F([]string{"string", "string", "string"}),
 				AffectedComponents:           cloudflare.F([]string{"string", "string", "string"}),
 				AffectedLocations:            cloudflare.F([]string{"string", "string", "string"}),
 				AirportCode:                  cloudflare.F([]string{"string", "string", "string"}),
 				AlertTriggerPreferences:      cloudflare.F([]string{"string", "string", "string"}),
-				AlertTriggerPreferencesValue: cloudflare.F([]alerting.PolicyUpdateParamsFiltersAlertTriggerPreferencesValue{alerting.PolicyUpdateParamsFiltersAlertTriggerPreferencesValue99_0, alerting.PolicyUpdateParamsFiltersAlertTriggerPreferencesValue98_0, alerting.PolicyUpdateParamsFiltersAlertTriggerPreferencesValue97_0}),
+				AlertTriggerPreferencesValue: cloudflare.F([]alerting.PolicyFilterAlertTriggerPreferencesValue{alerting.PolicyFilterAlertTriggerPreferencesValue99_0, alerting.PolicyFilterAlertTriggerPreferencesValue98_0, alerting.PolicyFilterAlertTriggerPreferencesValue97_0}),
 				Enabled:                      cloudflare.F([]string{"string", "string", "string"}),
 				Environment:                  cloudflare.F([]string{"string", "string", "string"}),
 				Event:                        cloudflare.F([]string{"string", "string", "string"}),
@@ -135,7 +135,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				EventType:                    cloudflare.F([]string{"string", "string", "string"}),
 				GroupBy:                      cloudflare.F([]string{"string", "string", "string"}),
 				HealthCheckID:                cloudflare.F([]string{"string", "string", "string"}),
-				IncidentImpact:               cloudflare.F([]alerting.PolicyUpdateParamsFiltersIncidentImpact{alerting.PolicyUpdateParamsFiltersIncidentImpactIncidentImpactNone, alerting.PolicyUpdateParamsFiltersIncidentImpactIncidentImpactMinor, alerting.PolicyUpdateParamsFiltersIncidentImpactIncidentImpactMajor}),
+				IncidentImpact:               cloudflare.F([]alerting.PolicyFilterIncidentImpact{alerting.PolicyFilterIncidentImpactIncidentImpactNone, alerting.PolicyFilterIncidentImpactIncidentImpactMinor, alerting.PolicyFilterIncidentImpactIncidentImpactMajor}),
 				InputID:                      cloudflare.F([]string{"string", "string", "string"}),
 				Limit:                        cloudflare.F([]string{"string", "string", "string"}),
 				LogoTag:                      cloudflare.F([]string{"string", "string", "string"}),
@@ -156,21 +156,21 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				TargetHostname:               cloudflare.F([]string{"string", "string", "string"}),
 				TargetIP:                     cloudflare.F([]string{"string", "string", "string"}),
 				TargetZoneName:               cloudflare.F([]string{"string", "string", "string"}),
-				TrafficExclusions:            cloudflare.F([]alerting.PolicyUpdateParamsFiltersTrafficExclusion{alerting.PolicyUpdateParamsFiltersTrafficExclusionSecurityEvents}),
+				TrafficExclusions:            cloudflare.F([]alerting.PolicyFilterTrafficExclusion{alerting.PolicyFilterTrafficExclusionSecurityEvents}),
 				TunnelID:                     cloudflare.F([]string{"string", "string", "string"}),
 				TunnelName:                   cloudflare.F([]string{"string", "string", "string"}),
 				Where:                        cloudflare.F([]string{"string", "string", "string"}),
 				Zones:                        cloudflare.F([]string{"string", "string", "string"}),
 			}),
-			Mechanisms: cloudflare.F(map[string][]alerting.PolicyUpdateParamsMechanisms{
-				"email": {{
-					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsID](shared.UnionString("test@example.com")),
+			Mechanisms: cloudflare.F(alerting.MechanismParam{
+				"email": []alerting.MechanismParam{{
+					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("test@example.com")),
 				}},
-				"pagerduty": {{
-					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsID](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+				"pagerduty": []alerting.MechanismParam{{
+					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
 				}},
-				"webhooks": {{
-					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsID](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+				"webhooks": []alerting.MechanismParam{{
+					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 				}},
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),

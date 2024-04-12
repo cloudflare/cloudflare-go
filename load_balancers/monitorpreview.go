@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -134,7 +135,7 @@ type MonitorPreviewNewParamsType string
 const (
 	MonitorPreviewNewParamsTypeHTTP     MonitorPreviewNewParamsType = "http"
 	MonitorPreviewNewParamsTypeHTTPS    MonitorPreviewNewParamsType = "https"
-	MonitorPreviewNewParamsTypeTcp      MonitorPreviewNewParamsType = "tcp"
+	MonitorPreviewNewParamsTypeTCP      MonitorPreviewNewParamsType = "tcp"
 	MonitorPreviewNewParamsTypeUdpIcmp  MonitorPreviewNewParamsType = "udp_icmp"
 	MonitorPreviewNewParamsTypeIcmpPing MonitorPreviewNewParamsType = "icmp_ping"
 	MonitorPreviewNewParamsTypeSmtp     MonitorPreviewNewParamsType = "smtp"
@@ -142,16 +143,16 @@ const (
 
 func (r MonitorPreviewNewParamsType) IsKnown() bool {
 	switch r {
-	case MonitorPreviewNewParamsTypeHTTP, MonitorPreviewNewParamsTypeHTTPS, MonitorPreviewNewParamsTypeTcp, MonitorPreviewNewParamsTypeUdpIcmp, MonitorPreviewNewParamsTypeIcmpPing, MonitorPreviewNewParamsTypeSmtp:
+	case MonitorPreviewNewParamsTypeHTTP, MonitorPreviewNewParamsTypeHTTPS, MonitorPreviewNewParamsTypeTCP, MonitorPreviewNewParamsTypeUdpIcmp, MonitorPreviewNewParamsTypeIcmpPing, MonitorPreviewNewParamsTypeSmtp:
 		return true
 	}
 	return false
 }
 
 type MonitorPreviewNewResponseEnvelope struct {
-	Errors   []MonitorPreviewNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MonitorPreviewNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   MonitorPreviewNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   MonitorPreviewNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorPreviewNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorPreviewNewResponseEnvelopeJSON    `json:"-"`
@@ -173,52 +174,6 @@ func (r *MonitorPreviewNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r monitorPreviewNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MonitorPreviewNewResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    monitorPreviewNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// monitorPreviewNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MonitorPreviewNewResponseEnvelopeErrors]
-type monitorPreviewNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorPreviewNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorPreviewNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MonitorPreviewNewResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    monitorPreviewNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// monitorPreviewNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [MonitorPreviewNewResponseEnvelopeMessages]
-type monitorPreviewNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorPreviewNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorPreviewNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

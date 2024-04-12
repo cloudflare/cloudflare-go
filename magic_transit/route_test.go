@@ -30,7 +30,7 @@ func TestRouteNew(t *testing.T) {
 	)
 	_, err := client.MagicTransit.Routes.New(context.TODO(), magic_transit.RouteNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      cloudflare.F[any](map[string]interface{}{}),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -64,7 +64,7 @@ func TestRouteUpdateWithOptionalParams(t *testing.T) {
 			Prefix:      cloudflare.F("192.0.2.0/24"),
 			Priority:    cloudflare.F(int64(0)),
 			Description: cloudflare.F("New route for new prefix 203.0.113.1"),
-			Scope: cloudflare.F(magic_transit.RouteUpdateParamsScope{
+			Scope: cloudflare.F(magic_transit.ScopeParam{
 				ColoNames:   cloudflare.F([]string{"den01", "den01", "den01"}),
 				ColoRegions: cloudflare.F([]string{"APAC", "APAC", "APAC"}),
 			}),
@@ -125,6 +125,7 @@ func TestRouteDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.RouteDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

@@ -105,6 +105,7 @@ func TestDevicePolicyDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

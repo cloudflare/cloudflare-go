@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -37,7 +38,7 @@ func NewDEXHTTPTestService(opts ...option.RequestOption) (r *DEXHTTPTestService)
 
 // Get test details and aggregate performance metrics for an http test for a given
 // time period between 1 hour and 7 days.
-func (r *DEXHTTPTestService) Get(ctx context.Context, testID string, params DEXHTTPTestGetParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringHTTPDetails, err error) {
+func (r *DEXHTTPTestService) Get(ctx context.Context, testID string, params DEXHTTPTestGetParams, opts ...option.RequestOption) (res *HTTPDetails, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DexhttpTestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s", params.AccountID, testID)
@@ -49,24 +50,25 @@ func (r *DEXHTTPTestService) Get(ctx context.Context, testID string, params DEXH
 	return
 }
 
-type DigitalExperienceMonitoringHTTPDetails struct {
+type HTTPDetails struct {
 	// The url of the HTTP synthetic application test
-	Host            string                                                  `json:"host"`
-	HTTPStats       DigitalExperienceMonitoringHTTPDetailsHTTPStats         `json:"httpStats,nullable"`
-	HTTPStatsByColo []DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColo `json:"httpStatsByColo"`
+	Host            string                       `json:"host"`
+	HTTPStats       HTTPDetailsHTTPStats         `json:"httpStats,nullable"`
+	HTTPStatsByColo []HTTPDetailsHTTPStatsByColo `json:"httpStatsByColo"`
 	// The interval at which the HTTP synthetic application test is set to run.
-	Interval string                                     `json:"interval"`
-	Kind     DigitalExperienceMonitoringHTTPDetailsKind `json:"kind"`
+	Interval string          `json:"interval"`
+	Kind     HTTPDetailsKind `json:"kind"`
 	// The HTTP method to use when running the test
 	Method string `json:"method"`
 	// The name of the HTTP synthetic application test
-	Name string                                     `json:"name"`
-	JSON digitalExperienceMonitoringHTTPDetailsJSON `json:"-"`
+	Name           string                    `json:"name"`
+	TargetPolicies []DeviceExperienceMonitor `json:"target_policies,nullable"`
+	Targeted       bool                      `json:"targeted"`
+	JSON           httpDetailsJSON           `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsJSON contains the JSON metadata for the
-// struct [DigitalExperienceMonitoringHTTPDetails]
-type digitalExperienceMonitoringHTTPDetailsJSON struct {
+// httpDetailsJSON contains the JSON metadata for the struct [HTTPDetails]
+type httpDetailsJSON struct {
 	Host            apijson.Field
 	HTTPStats       apijson.Field
 	HTTPStatsByColo apijson.Field
@@ -74,31 +76,35 @@ type digitalExperienceMonitoringHTTPDetailsJSON struct {
 	Kind            apijson.Field
 	Method          apijson.Field
 	Name            apijson.Field
+	TargetPolicies  apijson.Field
+	Targeted        apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetails) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetails) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsJSON) RawJSON() string {
+func (r httpDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStats struct {
-	DNSResponseTimeMs    DigitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMs    `json:"dnsResponseTimeMs,required"`
-	HTTPStatusCode       []DigitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCode     `json:"httpStatusCode,required"`
-	ResourceFetchTimeMs  DigitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMs  `json:"resourceFetchTimeMs,required"`
-	ServerResponseTimeMs DigitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMs `json:"serverResponseTimeMs,required"`
+type HTTPDetailsHTTPStats struct {
+	AvailabilityPct      HTTPDetailsHTTPStatsAvailabilityPct  `json:"availabilityPct,required"`
+	DNSResponseTimeMs    TestStatOverTime                     `json:"dnsResponseTimeMs,required"`
+	HTTPStatusCode       []HTTPDetailsHTTPStatsHTTPStatusCode `json:"httpStatusCode,required"`
+	ResourceFetchTimeMs  TestStatOverTime                     `json:"resourceFetchTimeMs,required"`
+	ServerResponseTimeMs TestStatOverTime                     `json:"serverResponseTimeMs,required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                                               `json:"uniqueDevicesTotal,required"`
-	JSON               digitalExperienceMonitoringHTTPDetailsHTTPStatsJSON `json:"-"`
+	UniqueDevicesTotal int64                    `json:"uniqueDevicesTotal,required"`
+	JSON               httpDetailsHTTPStatsJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsJSON contains the JSON metadata
-// for the struct [DigitalExperienceMonitoringHTTPDetailsHTTPStats]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsJSON struct {
+// httpDetailsHTTPStatsJSON contains the JSON metadata for the struct
+// [HTTPDetailsHTTPStats]
+type httpDetailsHTTPStatsJSON struct {
+	AvailabilityPct      apijson.Field
 	DNSResponseTimeMs    apijson.Field
 	HTTPStatusCode       apijson.Field
 	ResourceFetchTimeMs  apijson.Field
@@ -108,29 +114,28 @@ type digitalExperienceMonitoringHTTPDetailsHTTPStatsJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStats) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsHTTPStats) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsJSON) RawJSON() string {
+func (r httpDetailsHTTPStatsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMs struct {
-	Slots []DigitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsSlot `json:"slots,required"`
+type HTTPDetailsHTTPStatsAvailabilityPct struct {
+	Slots []HTTPDetailsHTTPStatsAvailabilityPctSlot `json:"slots,required"`
 	// average observed in the time period
-	Avg int64 `json:"avg,nullable"`
+	Avg float64 `json:"avg,nullable"`
 	// highest observed in the time period
-	Max int64 `json:"max,nullable"`
+	Max float64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                                `json:"min,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsJSON `json:"-"`
+	Min  float64                                 `json:"min,nullable"`
+	JSON httpDetailsHTTPStatsAvailabilityPctJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsJSON contains
-// the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMs]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsJSON struct {
+// httpDetailsHTTPStatsAvailabilityPctJSON contains the JSON metadata for the
+// struct [HTTPDetailsHTTPStatsAvailabilityPct]
+type httpDetailsHTTPStatsAvailabilityPctJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -139,51 +144,49 @@ type digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsJSON struct
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsHTTPStatsAvailabilityPct) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsJSON) RawJSON() string {
+func (r httpDetailsHTTPStatsAvailabilityPctJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsSlot struct {
-	Timestamp string                                                                   `json:"timestamp,required"`
-	Value     int64                                                                    `json:"value,required"`
-	JSON      digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsSlotJSON `json:"-"`
+type HTTPDetailsHTTPStatsAvailabilityPctSlot struct {
+	Timestamp string                                      `json:"timestamp,required"`
+	Value     float64                                     `json:"value,required"`
+	JSON      httpDetailsHTTPStatsAvailabilityPctSlotJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsSlotJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsSlot]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsSlotJSON struct {
+// httpDetailsHTTPStatsAvailabilityPctSlotJSON contains the JSON metadata for the
+// struct [HTTPDetailsHTTPStatsAvailabilityPctSlot]
+type httpDetailsHTTPStatsAvailabilityPctSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsHTTPStatsAvailabilityPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsDNSResponseTimeMsSlotJSON) RawJSON() string {
+func (r httpDetailsHTTPStatsAvailabilityPctSlotJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCode struct {
-	Status200 int64                                                             `json:"status200,required"`
-	Status300 int64                                                             `json:"status300,required"`
-	Status400 int64                                                             `json:"status400,required"`
-	Status500 int64                                                             `json:"status500,required"`
-	Timestamp string                                                            `json:"timestamp,required"`
-	JSON      digitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCodeJSON `json:"-"`
+type HTTPDetailsHTTPStatsHTTPStatusCode struct {
+	Status200 int64                                  `json:"status200,required"`
+	Status300 int64                                  `json:"status300,required"`
+	Status400 int64                                  `json:"status400,required"`
+	Status500 int64                                  `json:"status500,required"`
+	Timestamp string                                 `json:"timestamp,required"`
+	JSON      httpDetailsHTTPStatsHTTPStatusCodeJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCodeJSON contains the
-// JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCode]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCodeJSON struct {
+// httpDetailsHTTPStatsHTTPStatusCodeJSON contains the JSON metadata for the struct
+// [HTTPDetailsHTTPStatsHTTPStatusCode]
+type httpDetailsHTTPStatsHTTPStatusCodeJSON struct {
 	Status200   apijson.Field
 	Status300   apijson.Field
 	Status400   apijson.Field
@@ -193,138 +196,30 @@ type digitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCodeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsHTTPStatsHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsHTTPStatusCodeJSON) RawJSON() string {
+func (r httpDetailsHTTPStatsHTTPStatusCodeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMs struct {
-	Slots []DigitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsSlot `json:"slots,required"`
-	// average observed in the time period
-	Avg int64 `json:"avg,nullable"`
-	// highest observed in the time period
-	Max int64 `json:"max,nullable"`
-	// lowest observed in the time period
-	Min  int64                                                                  `json:"min,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsJSON contains
-// the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMs]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsJSON struct {
-	Slots       apijson.Field
-	Avg         apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsSlot struct {
-	Timestamp string                                                                     `json:"timestamp,required"`
-	Value     int64                                                                      `json:"value,required"`
-	JSON      digitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsSlotJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsSlotJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsSlot]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsSlotJSON struct {
-	Timestamp   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsResourceFetchTimeMsSlotJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMs struct {
-	Slots []DigitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsSlot `json:"slots,required"`
-	// average observed in the time period
-	Avg int64 `json:"avg,nullable"`
-	// highest observed in the time period
-	Max int64 `json:"max,nullable"`
-	// lowest observed in the time period
-	Min  int64                                                                   `json:"min,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsJSON contains
-// the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMs]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsJSON struct {
-	Slots       apijson.Field
-	Avg         apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsSlot struct {
-	Timestamp string                                                                      `json:"timestamp,required"`
-	Value     int64                                                                       `json:"value,required"`
-	JSON      digitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsSlotJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsSlotJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsSlot]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsSlotJSON struct {
-	Timestamp   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsServerResponseTimeMsSlotJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColo struct {
-	Colo                 string                                                                    `json:"colo,required"`
-	DNSResponseTimeMs    DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMs    `json:"dnsResponseTimeMs,required"`
-	HTTPStatusCode       []DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCode     `json:"httpStatusCode,required"`
-	ResourceFetchTimeMs  DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMs  `json:"resourceFetchTimeMs,required"`
-	ServerResponseTimeMs DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMs `json:"serverResponseTimeMs,required"`
+type HTTPDetailsHTTPStatsByColo struct {
+	AvailabilityPct      HTTPDetailsHTTPStatsByColoAvailabilityPct  `json:"availabilityPct,required"`
+	Colo                 string                                     `json:"colo,required"`
+	DNSResponseTimeMs    TestStatOverTime                           `json:"dnsResponseTimeMs,required"`
+	HTTPStatusCode       []HTTPDetailsHTTPStatsByColoHTTPStatusCode `json:"httpStatusCode,required"`
+	ResourceFetchTimeMs  TestStatOverTime                           `json:"resourceFetchTimeMs,required"`
+	ServerResponseTimeMs TestStatOverTime                           `json:"serverResponseTimeMs,required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                                                     `json:"uniqueDevicesTotal,required"`
-	JSON               digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoJSON `json:"-"`
+	UniqueDevicesTotal int64                          `json:"uniqueDevicesTotal,required"`
+	JSON               httpDetailsHTTPStatsByColoJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoJSON contains the JSON
-// metadata for the struct [DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColo]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoJSON struct {
+// httpDetailsHTTPStatsByColoJSON contains the JSON metadata for the struct
+// [HTTPDetailsHTTPStatsByColo]
+type httpDetailsHTTPStatsByColoJSON struct {
+	AvailabilityPct      apijson.Field
 	Colo                 apijson.Field
 	DNSResponseTimeMs    apijson.Field
 	HTTPStatusCode       apijson.Field
@@ -335,29 +230,28 @@ type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColo) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsHTTPStatsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoJSON) RawJSON() string {
+func (r httpDetailsHTTPStatsByColoJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMs struct {
-	Slots []DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsSlot `json:"slots,required"`
+type HTTPDetailsHTTPStatsByColoAvailabilityPct struct {
+	Slots []HTTPDetailsHTTPStatsByColoAvailabilityPctSlot `json:"slots,required"`
 	// average observed in the time period
-	Avg int64 `json:"avg,nullable"`
+	Avg float64 `json:"avg,nullable"`
 	// highest observed in the time period
-	Max int64 `json:"max,nullable"`
+	Max float64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                                      `json:"min,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsJSON `json:"-"`
+	Min  float64                                       `json:"min,nullable"`
+	JSON httpDetailsHTTPStatsByColoAvailabilityPctJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMs]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsJSON struct {
+// httpDetailsHTTPStatsByColoAvailabilityPctJSON contains the JSON metadata for the
+// struct [HTTPDetailsHTTPStatsByColoAvailabilityPct]
+type httpDetailsHTTPStatsByColoAvailabilityPctJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -366,51 +260,49 @@ type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsJSON 
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsHTTPStatsByColoAvailabilityPct) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsJSON) RawJSON() string {
+func (r httpDetailsHTTPStatsByColoAvailabilityPctJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsSlot struct {
-	Timestamp string                                                                         `json:"timestamp,required"`
-	Value     int64                                                                          `json:"value,required"`
-	JSON      digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsSlotJSON `json:"-"`
+type HTTPDetailsHTTPStatsByColoAvailabilityPctSlot struct {
+	Timestamp string                                            `json:"timestamp,required"`
+	Value     float64                                           `json:"value,required"`
+	JSON      httpDetailsHTTPStatsByColoAvailabilityPctSlotJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsSlotJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsSlot]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsSlotJSON struct {
+// httpDetailsHTTPStatsByColoAvailabilityPctSlotJSON contains the JSON metadata for
+// the struct [HTTPDetailsHTTPStatsByColoAvailabilityPctSlot]
+type httpDetailsHTTPStatsByColoAvailabilityPctSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsHTTPStatsByColoAvailabilityPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoDNSResponseTimeMsSlotJSON) RawJSON() string {
+func (r httpDetailsHTTPStatsByColoAvailabilityPctSlotJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCode struct {
-	Status200 int64                                                                   `json:"status200,required"`
-	Status300 int64                                                                   `json:"status300,required"`
-	Status400 int64                                                                   `json:"status400,required"`
-	Status500 int64                                                                   `json:"status500,required"`
-	Timestamp string                                                                  `json:"timestamp,required"`
-	JSON      digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCodeJSON `json:"-"`
+type HTTPDetailsHTTPStatsByColoHTTPStatusCode struct {
+	Status200 int64                                        `json:"status200,required"`
+	Status300 int64                                        `json:"status300,required"`
+	Status400 int64                                        `json:"status400,required"`
+	Status500 int64                                        `json:"status500,required"`
+	Timestamp string                                       `json:"timestamp,required"`
+	JSON      httpDetailsHTTPStatsByColoHTTPStatusCodeJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCodeJSON contains
-// the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCode]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCodeJSON struct {
+// httpDetailsHTTPStatsByColoHTTPStatusCodeJSON contains the JSON metadata for the
+// struct [HTTPDetailsHTTPStatsByColoHTTPStatusCode]
+type httpDetailsHTTPStatsByColoHTTPStatusCodeJSON struct {
 	Status200   apijson.Field
 	Status300   apijson.Field
 	Status400   apijson.Field
@@ -420,133 +312,23 @@ type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCodeJSON str
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPDetailsHTTPStatsByColoHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoHTTPStatusCodeJSON) RawJSON() string {
+func (r httpDetailsHTTPStatsByColoHTTPStatusCodeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMs struct {
-	Slots []DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsSlot `json:"slots,required"`
-	// average observed in the time period
-	Avg int64 `json:"avg,nullable"`
-	// highest observed in the time period
-	Max int64 `json:"max,nullable"`
-	// lowest observed in the time period
-	Min  int64                                                                        `json:"min,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMs]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsJSON struct {
-	Slots       apijson.Field
-	Avg         apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsSlot struct {
-	Timestamp string                                                                           `json:"timestamp,required"`
-	Value     int64                                                                            `json:"value,required"`
-	JSON      digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsSlotJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsSlotJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsSlot]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsSlotJSON struct {
-	Timestamp   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoResourceFetchTimeMsSlotJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMs struct {
-	Slots []DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsSlot `json:"slots,required"`
-	// average observed in the time period
-	Avg int64 `json:"avg,nullable"`
-	// highest observed in the time period
-	Max int64 `json:"max,nullable"`
-	// lowest observed in the time period
-	Min  int64                                                                         `json:"min,nullable"`
-	JSON digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMs]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsJSON struct {
-	Slots       apijson.Field
-	Avg         apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsSlot struct {
-	Timestamp string                                                                            `json:"timestamp,required"`
-	Value     int64                                                                             `json:"value,required"`
-	JSON      digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsSlotJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsSlotJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsSlot]
-type digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsSlotJSON struct {
-	Timestamp   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsHTTPStatsByColoServerResponseTimeMsSlotJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringHTTPDetailsKind string
+type HTTPDetailsKind string
 
 const (
-	DigitalExperienceMonitoringHTTPDetailsKindHTTP DigitalExperienceMonitoringHTTPDetailsKind = "http"
+	HTTPDetailsKindHTTP HTTPDetailsKind = "http"
 )
 
-func (r DigitalExperienceMonitoringHTTPDetailsKind) IsKnown() bool {
+func (r HTTPDetailsKind) IsKnown() bool {
 	switch r {
-	case DigitalExperienceMonitoringHTTPDetailsKindHTTP:
+	case HTTPDetailsKindHTTP:
 		return true
 	}
 	return false
@@ -571,7 +353,7 @@ type DEXHTTPTestGetParams struct {
 // URLQuery serializes [DEXHTTPTestGetParams]'s query parameters as `url.Values`.
 func (r DEXHTTPTestGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -593,9 +375,9 @@ func (r DexhttpTestGetParamsInterval) IsKnown() bool {
 }
 
 type DexhttpTestGetResponseEnvelope struct {
-	Errors   []DexhttpTestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexhttpTestGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DigitalExperienceMonitoringHTTPDetails   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   HTTPDetails           `json:"result,required"`
 	// Whether the API call was successful
 	Success DexhttpTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexhttpTestGetResponseEnvelopeJSON    `json:"-"`
@@ -617,52 +399,6 @@ func (r *DexhttpTestGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r dexhttpTestGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DexhttpTestGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    dexhttpTestGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dexhttpTestGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DexhttpTestGetResponseEnvelopeErrors]
-type dexhttpTestGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexhttpTestGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexhttpTestGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DexhttpTestGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    dexhttpTestGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dexhttpTestGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DexhttpTestGetResponseEnvelopeMessages]
-type dexhttpTestGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexhttpTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexhttpTestGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

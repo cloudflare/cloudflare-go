@@ -42,7 +42,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 }
 
 // Update an existing account.
-func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponse, err error) {
+func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", params.AccountID)
@@ -78,7 +78,7 @@ func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListPa
 }
 
 // Get information about a specific account that you are a member of.
-func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponse, err error) {
+func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", query.AccountID)
@@ -187,15 +187,53 @@ func (r AccountSettingsDefaultNameservers) IsKnown() bool {
 	return false
 }
 
+type AccountParam struct {
+	// Account name
+	Name param.Field[string] `json:"name,required"`
+	// Account settings
+	Settings param.Field[AccountSettingsParam] `json:"settings"`
+}
+
+func (r AccountParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Account settings
+type AccountSettingsParam struct {
+	// Specifies the default nameservers to be used for new zones added to this
+	// account.
+	//
+	// - `cloudflare.standard` for Cloudflare-branded nameservers
+	// - `custom.account` for account custom nameservers
+	// - `custom.tenant` for tenant custom nameservers
+	//
+	// See
+	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
+	// for more information.
+	DefaultNameservers param.Field[AccountSettingsDefaultNameservers] `json:"default_nameservers"`
+	// Indicates whether membership in this account requires that Two-Factor
+	// Authentication is enabled
+	EnforceTwofactor param.Field[bool] `json:"enforce_twofactor"`
+	// Indicates whether new zones should use the account-level custom nameservers by
+	// default.
+	//
+	// Deprecated in favor of `default_nameservers`.
+	UseAccountCustomNSByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
+}
+
+func (r AccountSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Union satisfied by [accounts.AccountUpdateResponseUnknown] or
 // [shared.UnionString].
-type AccountUpdateResponse interface {
-	ImplementsAccountsAccountUpdateResponse()
+type AccountUpdateResponseUnion interface {
+	ImplementsAccountsAccountUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccountUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccountUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -207,13 +245,13 @@ func init() {
 type AccountListResponse = interface{}
 
 // Union satisfied by [accounts.AccountGetResponseUnknown] or [shared.UnionString].
-type AccountGetResponse interface {
-	ImplementsAccountsAccountGetResponse()
+type AccountGetResponseUnion interface {
+	ImplementsAccountsAccountGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccountGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccountGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -224,73 +262,17 @@ func init() {
 
 type AccountUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
-	// Account name
-	Name param.Field[string] `json:"name,required"`
-	// Account settings
-	Settings param.Field[AccountUpdateParamsSettings] `json:"settings"`
+	Account   AccountParam             `json:"account,required"`
 }
 
 func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Account settings
-type AccountUpdateParamsSettings struct {
-	// Specifies the default nameservers to be used for new zones added to this
-	// account.
-	//
-	// - `cloudflare.standard` for Cloudflare-branded nameservers
-	// - `custom.account` for account custom nameservers
-	// - `custom.tenant` for tenant custom nameservers
-	//
-	// See
-	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
-	// for more information.
-	DefaultNameservers param.Field[AccountUpdateParamsSettingsDefaultNameservers] `json:"default_nameservers"`
-	// Indicates whether membership in this account requires that Two-Factor
-	// Authentication is enabled
-	EnforceTwofactor param.Field[bool] `json:"enforce_twofactor"`
-	// Indicates whether new zones should use the account-level custom nameservers by
-	// default.
-	//
-	// Deprecated in favor of `default_nameservers`.
-	UseAccountCustomNSByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
-}
-
-func (r AccountUpdateParamsSettings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Specifies the default nameservers to be used for new zones added to this
-// account.
-//
-// - `cloudflare.standard` for Cloudflare-branded nameservers
-// - `custom.account` for account custom nameservers
-// - `custom.tenant` for tenant custom nameservers
-//
-// See
-// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
-// for more information.
-type AccountUpdateParamsSettingsDefaultNameservers string
-
-const (
-	AccountUpdateParamsSettingsDefaultNameserversCloudflareStandard AccountUpdateParamsSettingsDefaultNameservers = "cloudflare.standard"
-	AccountUpdateParamsSettingsDefaultNameserversCustomAccount      AccountUpdateParamsSettingsDefaultNameservers = "custom.account"
-	AccountUpdateParamsSettingsDefaultNameserversCustomTenant       AccountUpdateParamsSettingsDefaultNameservers = "custom.tenant"
-)
-
-func (r AccountUpdateParamsSettingsDefaultNameservers) IsKnown() bool {
-	switch r {
-	case AccountUpdateParamsSettingsDefaultNameserversCloudflareStandard, AccountUpdateParamsSettingsDefaultNameserversCustomAccount, AccountUpdateParamsSettingsDefaultNameserversCustomTenant:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.Account)
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Errors   []AccountUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccountUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   AccountUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
@@ -315,52 +297,6 @@ func (r accountUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccountUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    accountUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accountUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccountUpdateResponseEnvelopeErrors]
-type accountUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccountUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accountUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accountUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccountUpdateResponseEnvelopeMessages]
-type accountUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type AccountUpdateResponseEnvelopeSuccess bool
 
@@ -379,6 +315,8 @@ func (r AccountUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type AccountListParams struct {
 	// Direction to order results.
 	Direction param.Field[AccountListParamsDirection] `query:"direction"`
+	// Name of the account.
+	Name param.Field[string] `query:"name"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page.
@@ -388,7 +326,7 @@ type AccountListParams struct {
 // URLQuery serializes [AccountListParams]'s query parameters as `url.Values`.
 func (r AccountListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -414,9 +352,9 @@ type AccountGetParams struct {
 }
 
 type AccountGetResponseEnvelope struct {
-	Errors   []AccountGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccountGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   AccountGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountGetResponseEnvelopeJSON    `json:"-"`
@@ -438,52 +376,6 @@ func (r *AccountGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accountGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccountGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    accountGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accountGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [AccountGetResponseEnvelopeErrors]
-type accountGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccountGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    accountGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accountGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [AccountGetResponseEnvelopeMessages]
-type accountGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

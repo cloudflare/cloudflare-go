@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,7 +34,7 @@ func NewDeviceDEXTestService(opts ...option.RequestOption) (r *DeviceDEXTestServ
 }
 
 // Create a DEX test.
-func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewParams, opts ...option.RequestOption) (res *DEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewParams, opts ...option.RequestOption) (res *SchemaHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests", params.AccountID)
@@ -46,7 +47,7 @@ func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewP
 }
 
 // Update a DEX test.
-func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, params DeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *DEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, params DeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *SchemaHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", params.AccountID, dexTestID)
@@ -59,7 +60,7 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 }
 
 // Fetch all DEX tests.
-func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DEXTestSchemasHTTP], err error) {
+func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SchemaHTTP], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,13 +78,13 @@ func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestList
 }
 
 // Fetch all DEX tests.
-func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DEXTestSchemasHTTP] {
+func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SchemaHTTP] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Device DEX test. Returns the remaining device dex tests for the
 // account.
-func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body DeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]DEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body DeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]SchemaHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", body.AccountID, dexTestID)
@@ -96,7 +97,7 @@ func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, bod
 }
 
 // Fetch a single DEX test.
-func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query DeviceDEXTestGetParams, opts ...option.RequestOption) (res *DEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query DeviceDEXTestGetParams, opts ...option.RequestOption) (res *SchemaHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", query.AccountID, dexTestID)
@@ -108,56 +109,20 @@ func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query 
 	return
 }
 
-type DEXTestSchemasHTTP struct {
-	// The configuration object which contains the details for the WARP client to
-	// conduct the test.
-	Data DEXTestSchemasHTTPData `json:"data,required"`
-	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
-	// How often the test will run.
-	Interval string `json:"interval,required"`
-	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
-	// Additional details about the test.
-	Description string                 `json:"description"`
-	JSON        dexTestSchemasHTTPJSON `json:"-"`
-}
-
-// dexTestSchemasHTTPJSON contains the JSON metadata for the struct
-// [DEXTestSchemasHTTP]
-type dexTestSchemasHTTPJSON struct {
-	Data        apijson.Field
-	Enabled     apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTestSchemasHTTP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTestSchemasHTTPJSON) RawJSON() string {
-	return r.raw
-}
-
 // The configuration object which contains the details for the WARP client to
 // conduct the test.
-type DEXTestSchemasHTTPData struct {
+type SchemaData struct {
 	// The desired endpoint to test.
 	Host string `json:"host"`
 	// The type of test.
 	Kind string `json:"kind"`
 	// The HTTP request method type.
-	Method string                     `json:"method"`
-	JSON   dexTestSchemasHTTPDataJSON `json:"-"`
+	Method string         `json:"method"`
+	JSON   schemaDataJSON `json:"-"`
 }
 
-// dexTestSchemasHTTPDataJSON contains the JSON metadata for the struct
-// [DEXTestSchemasHTTPData]
-type dexTestSchemasHTTPDataJSON struct {
+// schemaDataJSON contains the JSON metadata for the struct [SchemaData]
+type schemaDataJSON struct {
 	Host        apijson.Field
 	Kind        apijson.Field
 	Method      apijson.Field
@@ -165,36 +130,17 @@ type dexTestSchemasHTTPDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTestSchemasHTTPData) UnmarshalJSON(data []byte) (err error) {
+func (r *SchemaData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTestSchemasHTTPDataJSON) RawJSON() string {
+func (r schemaDataJSON) RawJSON() string {
 	return r.raw
-}
-
-type DeviceDEXTestNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The configuration object which contains the details for the WARP client to
-	// conduct the test.
-	Data param.Field[DeviceDEXTestNewParamsData] `json:"data,required"`
-	// Determines whether or not the test is active.
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// How often the test will run.
-	Interval param.Field[string] `json:"interval,required"`
-	// The name of the DEX test. Must be unique.
-	Name param.Field[string] `json:"name,required"`
-	// Additional details about the test.
-	Description param.Field[string] `json:"description"`
-}
-
-func (r DeviceDEXTestNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // The configuration object which contains the details for the WARP client to
 // conduct the test.
-type DeviceDEXTestNewParamsData struct {
+type SchemaDataParam struct {
 	// The desired endpoint to test.
 	Host param.Field[string] `json:"host"`
 	// The type of test.
@@ -203,14 +149,124 @@ type DeviceDEXTestNewParamsData struct {
 	Method param.Field[string] `json:"method"`
 }
 
-func (r DeviceDEXTestNewParamsData) MarshalJSON() (data []byte, err error) {
+func (r SchemaDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type SchemaHTTP struct {
+	// The configuration object which contains the details for the WARP client to
+	// conduct the test.
+	Data SchemaData `json:"data,required"`
+	// Determines whether or not the test is active.
+	Enabled bool `json:"enabled,required"`
+	// How often the test will run.
+	Interval string `json:"interval,required"`
+	// The name of the DEX test. Must be unique.
+	Name string `json:"name,required"`
+	// Additional details about the test.
+	Description string `json:"description"`
+	// Device settings profiles targeted by this test
+	TargetPolicies []SchemaHTTPTargetPolicy `json:"target_policies"`
+	Targeted       bool                     `json:"targeted"`
+	JSON           schemaHTTPJSON           `json:"-"`
+}
+
+// schemaHTTPJSON contains the JSON metadata for the struct [SchemaHTTP]
+type schemaHTTPJSON struct {
+	Data           apijson.Field
+	Enabled        apijson.Field
+	Interval       apijson.Field
+	Name           apijson.Field
+	Description    apijson.Field
+	TargetPolicies apijson.Field
+	Targeted       apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *SchemaHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r schemaHTTPJSON) RawJSON() string {
+	return r.raw
+}
+
+type SchemaHTTPTargetPolicy struct {
+	// The id of the device settings profile
+	ID string `json:"id"`
+	// Whether the profile is the account default
+	Default bool `json:"default"`
+	// The name of the device settings profile
+	Name string                     `json:"name"`
+	JSON schemaHTTPTargetPolicyJSON `json:"-"`
+}
+
+// schemaHTTPTargetPolicyJSON contains the JSON metadata for the struct
+// [SchemaHTTPTargetPolicy]
+type schemaHTTPTargetPolicyJSON struct {
+	ID          apijson.Field
+	Default     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SchemaHTTPTargetPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r schemaHTTPTargetPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type SchemaHTTPParam struct {
+	// The configuration object which contains the details for the WARP client to
+	// conduct the test.
+	Data param.Field[SchemaDataParam] `json:"data,required"`
+	// Determines whether or not the test is active.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// How often the test will run.
+	Interval param.Field[string] `json:"interval,required"`
+	// The name of the DEX test. Must be unique.
+	Name param.Field[string] `json:"name,required"`
+	// Additional details about the test.
+	Description param.Field[string] `json:"description"`
+	// Device settings profiles targeted by this test
+	TargetPolicies param.Field[[]SchemaHTTPTargetPolicyParam] `json:"target_policies"`
+	Targeted       param.Field[bool]                          `json:"targeted"`
+}
+
+func (r SchemaHTTPParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SchemaHTTPTargetPolicyParam struct {
+	// The id of the device settings profile
+	ID param.Field[string] `json:"id"`
+	// Whether the profile is the account default
+	Default param.Field[bool] `json:"default"`
+	// The name of the device settings profile
+	Name param.Field[string] `json:"name"`
+}
+
+func (r SchemaHTTPTargetPolicyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DeviceDEXTestNewParams struct {
+	AccountID  param.Field[string] `path:"account_id,required"`
+	SchemaHTTP SchemaHTTPParam     `json:"schema_http,required"`
+}
+
+func (r DeviceDEXTestNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.SchemaHTTP)
+}
+
 type DeviceDEXTestNewResponseEnvelope struct {
-	Errors   []DeviceDEXTestNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DEXTestSchemasHTTP                         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SchemaHTTP            `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestNewResponseEnvelopeJSON    `json:"-"`
@@ -235,52 +291,6 @@ func (r deviceDEXTestNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DeviceDEXTestNewResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    deviceDEXTestNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceDEXTestNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceDEXTestNewResponseEnvelopeErrors]
-type deviceDEXTestNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceDEXTestNewResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    deviceDEXTestNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceDEXTestNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceDEXTestNewResponseEnvelopeMessages]
-type deviceDEXTestNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful.
 type DeviceDEXTestNewResponseEnvelopeSuccess bool
 
@@ -297,43 +307,18 @@ func (r DeviceDEXTestNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceDEXTestUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The configuration object which contains the details for the WARP client to
-	// conduct the test.
-	Data param.Field[DeviceDEXTestUpdateParamsData] `json:"data,required"`
-	// Determines whether or not the test is active.
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// How often the test will run.
-	Interval param.Field[string] `json:"interval,required"`
-	// The name of the DEX test. Must be unique.
-	Name param.Field[string] `json:"name,required"`
-	// Additional details about the test.
-	Description param.Field[string] `json:"description"`
+	AccountID  param.Field[string] `path:"account_id,required"`
+	SchemaHTTP SchemaHTTPParam     `json:"schema_http,required"`
 }
 
 func (r DeviceDEXTestUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The configuration object which contains the details for the WARP client to
-// conduct the test.
-type DeviceDEXTestUpdateParamsData struct {
-	// The desired endpoint to test.
-	Host param.Field[string] `json:"host"`
-	// The type of test.
-	Kind param.Field[string] `json:"kind"`
-	// The HTTP request method type.
-	Method param.Field[string] `json:"method"`
-}
-
-func (r DeviceDEXTestUpdateParamsData) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.SchemaHTTP)
 }
 
 type DeviceDEXTestUpdateResponseEnvelope struct {
-	Errors   []DeviceDEXTestUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DEXTestSchemasHTTP                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SchemaHTTP            `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestUpdateResponseEnvelopeJSON    `json:"-"`
@@ -355,52 +340,6 @@ func (r *DeviceDEXTestUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r deviceDEXTestUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceDEXTestUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    deviceDEXTestUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceDEXTestUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceDEXTestUpdateResponseEnvelopeErrors]
-type deviceDEXTestUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceDEXTestUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    deviceDEXTestUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceDEXTestUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DeviceDEXTestUpdateResponseEnvelopeMessages]
-type deviceDEXTestUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -428,9 +367,9 @@ type DeviceDEXTestDeleteParams struct {
 }
 
 type DeviceDEXTestDeleteResponseEnvelope struct {
-	Errors   []DeviceDEXTestDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DEXTestSchemasHTTP                          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []SchemaHTTP          `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestDeleteResponseEnvelopeJSON    `json:"-"`
@@ -455,52 +394,6 @@ func (r deviceDEXTestDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DeviceDEXTestDeleteResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    deviceDEXTestDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceDEXTestDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceDEXTestDeleteResponseEnvelopeErrors]
-type deviceDEXTestDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceDEXTestDeleteResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    deviceDEXTestDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceDEXTestDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DeviceDEXTestDeleteResponseEnvelopeMessages]
-type deviceDEXTestDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful.
 type DeviceDEXTestDeleteResponseEnvelopeSuccess bool
 
@@ -521,9 +414,9 @@ type DeviceDEXTestGetParams struct {
 }
 
 type DeviceDEXTestGetResponseEnvelope struct {
-	Errors   []DeviceDEXTestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DEXTestSchemasHTTP                         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SchemaHTTP            `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestGetResponseEnvelopeJSON    `json:"-"`
@@ -545,52 +438,6 @@ func (r *DeviceDEXTestGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r deviceDEXTestGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceDEXTestGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    deviceDEXTestGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceDEXTestGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceDEXTestGetResponseEnvelopeErrors]
-type deviceDEXTestGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceDEXTestGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    deviceDEXTestGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceDEXTestGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceDEXTestGetResponseEnvelopeMessages]
-type deviceDEXTestGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

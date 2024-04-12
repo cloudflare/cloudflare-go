@@ -38,7 +38,7 @@ func NewNetworkVirtualNetworkService(opts ...option.RequestOption) (r *NetworkVi
 }
 
 // Adds a new virtual network to an account.
-func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVirtualNetworkNewParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkNewResponse, err error) {
+func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVirtualNetworkNewParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", params.AccountID)
@@ -51,7 +51,7 @@ func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVi
 }
 
 // Lists and filters virtual networks in an account.
-func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TunnelVirtualNetwork], err error) {
+func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[VirtualNetwork], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -69,15 +69,15 @@ func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkV
 }
 
 // Lists and filters virtual networks in an account.
-func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TunnelVirtualNetwork] {
+func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[VirtualNetwork] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing virtual network.
-func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, body NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkDeleteResponse, err error) {
+func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", body.AccountID, virtualNetworkID)
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", params.AccountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -87,7 +87,7 @@ func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetwor
 }
 
 // Updates an existing virtual network.
-func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkEditParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkEditResponse, err error) {
+func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkEditParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", params.AccountID, virtualNetworkID)
@@ -99,7 +99,7 @@ func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkI
 	return
 }
 
-type TunnelVirtualNetwork struct {
+type VirtualNetwork struct {
 	// UUID of the virtual network.
 	ID string `json:"id,required"`
 	// Optional remark describing the virtual network.
@@ -112,13 +112,12 @@ type TunnelVirtualNetwork struct {
 	Name string `json:"name,required"`
 	// Timestamp of when the virtual network was deleted. If `null`, the virtual
 	// network has not been deleted.
-	DeletedAt interface{}              `json:"deleted_at"`
-	JSON      tunnelVirtualNetworkJSON `json:"-"`
+	DeletedAt interface{}        `json:"deleted_at"`
+	JSON      virtualNetworkJSON `json:"-"`
 }
 
-// tunnelVirtualNetworkJSON contains the JSON metadata for the struct
-// [TunnelVirtualNetwork]
-type tunnelVirtualNetworkJSON struct {
+// virtualNetworkJSON contains the JSON metadata for the struct [VirtualNetwork]
+type virtualNetworkJSON struct {
 	ID               apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
@@ -129,23 +128,23 @@ type tunnelVirtualNetworkJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TunnelVirtualNetwork) UnmarshalJSON(data []byte) (err error) {
+func (r *VirtualNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelVirtualNetworkJSON) RawJSON() string {
+func (r virtualNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
 // Union satisfied by [zero_trust.NetworkVirtualNetworkNewResponseUnknown],
 // [zero_trust.NetworkVirtualNetworkNewResponseArray] or [shared.UnionString].
-type NetworkVirtualNetworkNewResponse interface {
-	ImplementsZeroTrustNetworkVirtualNetworkNewResponse()
+type NetworkVirtualNetworkNewResponseUnion interface {
+	ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*NetworkVirtualNetworkNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*NetworkVirtualNetworkNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -160,18 +159,18 @@ func init() {
 
 type NetworkVirtualNetworkNewResponseArray []interface{}
 
-func (r NetworkVirtualNetworkNewResponseArray) ImplementsZeroTrustNetworkVirtualNetworkNewResponse() {
+func (r NetworkVirtualNetworkNewResponseArray) ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion() {
 }
 
 // Union satisfied by [zero_trust.NetworkVirtualNetworkDeleteResponseUnknown],
 // [zero_trust.NetworkVirtualNetworkDeleteResponseArray] or [shared.UnionString].
-type NetworkVirtualNetworkDeleteResponse interface {
-	ImplementsZeroTrustNetworkVirtualNetworkDeleteResponse()
+type NetworkVirtualNetworkDeleteResponseUnion interface {
+	ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*NetworkVirtualNetworkDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*NetworkVirtualNetworkDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -186,18 +185,18 @@ func init() {
 
 type NetworkVirtualNetworkDeleteResponseArray []interface{}
 
-func (r NetworkVirtualNetworkDeleteResponseArray) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponse() {
+func (r NetworkVirtualNetworkDeleteResponseArray) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion() {
 }
 
 // Union satisfied by [zero_trust.NetworkVirtualNetworkEditResponseUnknown],
 // [zero_trust.NetworkVirtualNetworkEditResponseArray] or [shared.UnionString].
-type NetworkVirtualNetworkEditResponse interface {
-	ImplementsZeroTrustNetworkVirtualNetworkEditResponse()
+type NetworkVirtualNetworkEditResponseUnion interface {
+	ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*NetworkVirtualNetworkEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*NetworkVirtualNetworkEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -212,7 +211,7 @@ func init() {
 
 type NetworkVirtualNetworkEditResponseArray []interface{}
 
-func (r NetworkVirtualNetworkEditResponseArray) ImplementsZeroTrustNetworkVirtualNetworkEditResponse() {
+func (r NetworkVirtualNetworkEditResponseArray) ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion() {
 }
 
 type NetworkVirtualNetworkNewParams struct {
@@ -231,9 +230,9 @@ func (r NetworkVirtualNetworkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkVirtualNetworkNewResponseEnvelope struct {
-	Errors   []NetworkVirtualNetworkNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []NetworkVirtualNetworkNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkVirtualNetworkNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Result   NetworkVirtualNetworkNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -255,52 +254,6 @@ func (r *NetworkVirtualNetworkNewResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r networkVirtualNetworkNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkVirtualNetworkNewResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    networkVirtualNetworkNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// networkVirtualNetworkNewResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [NetworkVirtualNetworkNewResponseEnvelopeErrors]
-type networkVirtualNetworkNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkVirtualNetworkNewResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    networkVirtualNetworkNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// networkVirtualNetworkNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [NetworkVirtualNetworkNewResponseEnvelopeMessages]
-type networkVirtualNetworkNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -330,6 +283,8 @@ type NetworkVirtualNetworkListParams struct {
 	IsDeleted param.Field[interface{}] `query:"is_deleted"`
 	// A user-friendly name for the virtual network.
 	Name param.Field[string] `query:"name"`
+	// UUID of the virtual network.
+	VnetID param.Field[string] `query:"vnet_id"`
 	// A user-friendly name for the virtual network.
 	VnetName param.Field[string] `query:"vnet_name"`
 }
@@ -338,7 +293,7 @@ type NetworkVirtualNetworkListParams struct {
 // `url.Values`.
 func (r NetworkVirtualNetworkListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -346,12 +301,17 @@ func (r NetworkVirtualNetworkListParams) URLQuery() (v url.Values) {
 type NetworkVirtualNetworkDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r NetworkVirtualNetworkDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type NetworkVirtualNetworkDeleteResponseEnvelope struct {
-	Errors   []NetworkVirtualNetworkDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []NetworkVirtualNetworkDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkVirtualNetworkDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo                    `json:"errors,required"`
+	Messages []shared.ResponseInfo                    `json:"messages,required"`
+	Result   NetworkVirtualNetworkDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -373,52 +333,6 @@ func (r *NetworkVirtualNetworkDeleteResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r networkVirtualNetworkDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkVirtualNetworkDeleteResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    networkVirtualNetworkDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// networkVirtualNetworkDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [NetworkVirtualNetworkDeleteResponseEnvelopeErrors]
-type networkVirtualNetworkDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkVirtualNetworkDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    networkVirtualNetworkDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// networkVirtualNetworkDeleteResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [NetworkVirtualNetworkDeleteResponseEnvelopeMessages]
-type networkVirtualNetworkDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -453,9 +367,9 @@ func (r NetworkVirtualNetworkEditParams) MarshalJSON() (data []byte, err error) 
 }
 
 type NetworkVirtualNetworkEditResponseEnvelope struct {
-	Errors   []NetworkVirtualNetworkEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []NetworkVirtualNetworkEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkVirtualNetworkEditResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
+	Result   NetworkVirtualNetworkEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkEditResponseEnvelopeJSON    `json:"-"`
@@ -477,52 +391,6 @@ func (r *NetworkVirtualNetworkEditResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r networkVirtualNetworkEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkVirtualNetworkEditResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    networkVirtualNetworkEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// networkVirtualNetworkEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [NetworkVirtualNetworkEditResponseEnvelopeErrors]
-type networkVirtualNetworkEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkVirtualNetworkEditResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    networkVirtualNetworkEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// networkVirtualNetworkEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [NetworkVirtualNetworkEditResponseEnvelopeMessages]
-type networkVirtualNetworkEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

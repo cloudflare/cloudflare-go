@@ -35,71 +35,73 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Workers.Scripts.Update(
 		context.TODO(),
 		"this-is_my_script-01",
-		workers.ScriptUpdateParamsVariant0{
-			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			RollbackTo:  cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
-			Metadata: cloudflare.F(workers.ScriptUpdateParamsVariant0Metadata{
-				Bindings: cloudflare.F([]interface{}{map[string]interface{}{
-					"name": "MY_ENV_VAR",
-					"text": "my_data",
-					"type": "plain_text",
-				}}),
-				BodyPart:           cloudflare.F("worker.js"),
-				CompatibilityDate:  cloudflare.F("2023-07-25"),
-				CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
-				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
-				Logpush:            cloudflare.F(false),
-				MainModule:         cloudflare.F("worker.js"),
-				Migrations: cloudflare.F[workers.ScriptUpdateParamsVariant0MetadataMigrations](workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations(workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations{
-					NewTag:         cloudflare.F("v2"),
-					OldTag:         cloudflare.F("v1"),
-					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
-					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
-					}, {
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
-					}, {
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
+		workers.ScriptUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body: workers.ScriptUpdateParamsBodyObject{
+				AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+				Metadata: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadata{
+					Bindings: cloudflare.F([]interface{}{map[string]interface{}{
+						"name": "MY_ENV_VAR",
+						"text": "my_data",
+						"type": "plain_text",
 					}}),
-					TransferredClasses: cloudflare.F([]workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
+					BodyPart:           cloudflare.F("worker.js"),
+					CompatibilityDate:  cloudflare.F("2023-07-25"),
+					CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
+					KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
+					Logpush:            cloudflare.F(false),
+					MainModule:         cloudflare.F("worker.js"),
+					Migrations: cloudflare.F[workers.ScriptUpdateParamsBodyObjectMetadataMigrationsUnion](workers.SingleStepMigrationParam{
+						NewTag:         cloudflare.F("v2"),
+						OldTag:         cloudflare.F("v1"),
+						DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
+						NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
+						RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
+							From: cloudflare.F("string"),
+							To:   cloudflare.F("string"),
+						}, {
+							From: cloudflare.F("string"),
+							To:   cloudflare.F("string"),
+						}, {
+							From: cloudflare.F("string"),
+							To:   cloudflare.F("string"),
+						}}),
+						TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
+							From:       cloudflare.F("string"),
+							FromScript: cloudflare.F("string"),
+							To:         cloudflare.F("string"),
+						}, {
+							From:       cloudflare.F("string"),
+							FromScript: cloudflare.F("string"),
+							To:         cloudflare.F("string"),
+						}, {
+							From:       cloudflare.F("string"),
+							FromScript: cloudflare.F("string"),
+							To:         cloudflare.F("string"),
+						}}),
+					}),
+					Placement: cloudflare.F(workers.PlacementConfigurationParam{
+						Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
+					}),
+					Tags: cloudflare.F([]string{"string", "string", "string"}),
+					TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+						Environment: cloudflare.F("production"),
+						Namespace:   cloudflare.F("my-namespace"),
+						Service:     cloudflare.F("my-log-consumer"),
 					}, {
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
+						Environment: cloudflare.F("production"),
+						Namespace:   cloudflare.F("my-namespace"),
+						Service:     cloudflare.F("my-log-consumer"),
 					}, {
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
+						Environment: cloudflare.F("production"),
+						Namespace:   cloudflare.F("my-namespace"),
+						Service:     cloudflare.F("my-log-consumer"),
 					}}),
-				})),
-				Placement: cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataPlacement{
-					Mode: cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataPlacementModeSmart),
+					UsageModel:  cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
+					VersionTags: cloudflare.F[any](map[string]interface{}{}),
 				}),
-				Tags: cloudflare.F([]string{"string", "string", "string"}),
-				TailConsumers: cloudflare.F([]workers.ScriptUpdateParamsVariant0MetadataTailConsumer{{
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
-				}, {
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
-				}, {
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
-				}}),
-				UsageModel:  cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataUsageModelBundled),
-				VersionTags: cloudflare.F[any](map[string]interface{}{}),
-			}),
+			},
+			RollbackTo: cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 		},
 	)
 	if err != nil {
@@ -156,6 +158,7 @@ func TestScriptDeleteWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 			Force:     cloudflare.F(true),
 		},
 	)

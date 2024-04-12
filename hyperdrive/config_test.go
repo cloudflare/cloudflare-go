@@ -30,9 +30,12 @@ func TestConfigNew(t *testing.T) {
 	)
 	_, err := client.Hyperdrive.Configs.New(context.TODO(), hyperdrive.ConfigNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Origin: cloudflare.F(hyperdrive.ConfigNewParamsOrigin{
-			Password: cloudflare.F("password1234!"),
-		}),
+		Hyperdrive: hyperdrive.HyperdriveParam{
+			Origin: cloudflare.F(hyperdrive.ConfigurationParam{
+				Password: cloudflare.F("password1234!"),
+			}),
+			Name: cloudflare.F[any](map[string]interface{}{}),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,9 +65,12 @@ func TestConfigUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		hyperdrive.ConfigUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Origin: cloudflare.F(hyperdrive.ConfigUpdateParamsOrigin{
-				Password: cloudflare.F("password1234!"),
-			}),
+			Hyperdrive: hyperdrive.HyperdriveParam{
+				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
+					Password: cloudflare.F("password1234!"),
+				}),
+				Name: cloudflare.F[any](map[string]interface{}{}),
+			},
 		},
 	)
 	if err != nil {
@@ -151,9 +157,11 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		hyperdrive.ConfigEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Origin: cloudflare.F(hyperdrive.ConfigEditParamsOrigin{
-				Password: cloudflare.F("password1234!"),
-			}),
+			Hyperdrive: hyperdrive.HyperdriveParam{
+				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
+					Password: cloudflare.F("password1234!"),
+				}),
+			},
 		},
 	)
 	if err != nil {

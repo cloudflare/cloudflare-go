@@ -35,10 +35,10 @@ func NewAddressMapIPService(opts ...option.RequestOption) (r *AddressMapIPServic
 }
 
 // Add an IP from a prefix owned by the account to a particular address map.
-func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, body AddressMapIPUpdateParams, opts ...option.RequestOption) (res *AddressMapIPUpdateResponse, err error) {
+func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPUpdateParams, opts ...option.RequestOption) (res *AddressMapIPUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -48,10 +48,10 @@ func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, i
 }
 
 // Remove an IP from a particular address map.
-func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, body AddressMapIPDeleteParams, opts ...option.RequestOption) (res *AddressMapIPDeleteResponse, err error) {
+func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPDeleteParams, opts ...option.RequestOption) (res *AddressMapIPDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -62,13 +62,13 @@ func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, i
 
 // Union satisfied by [addressing.AddressMapIPUpdateResponseUnknown],
 // [addressing.AddressMapIPUpdateResponseArray] or [shared.UnionString].
-type AddressMapIPUpdateResponse interface {
-	ImplementsAddressingAddressMapIPUpdateResponse()
+type AddressMapIPUpdateResponseUnion interface {
+	ImplementsAddressingAddressMapIPUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapIPUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*AddressMapIPUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -83,17 +83,17 @@ func init() {
 
 type AddressMapIPUpdateResponseArray []interface{}
 
-func (r AddressMapIPUpdateResponseArray) ImplementsAddressingAddressMapIPUpdateResponse() {}
+func (r AddressMapIPUpdateResponseArray) ImplementsAddressingAddressMapIPUpdateResponseUnion() {}
 
 // Union satisfied by [addressing.AddressMapIPDeleteResponseUnknown],
 // [addressing.AddressMapIPDeleteResponseArray] or [shared.UnionString].
-type AddressMapIPDeleteResponse interface {
-	ImplementsAddressingAddressMapIPDeleteResponse()
+type AddressMapIPDeleteResponseUnion interface {
+	ImplementsAddressingAddressMapIPDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapIPDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*AddressMapIPDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -108,17 +108,22 @@ func init() {
 
 type AddressMapIPDeleteResponseArray []interface{}
 
-func (r AddressMapIPDeleteResponseArray) ImplementsAddressingAddressMapIPDeleteResponse() {}
+func (r AddressMapIPDeleteResponseArray) ImplementsAddressingAddressMapIPDeleteResponseUnion() {}
 
 type AddressMapIPUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r AddressMapIPUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapIPUpdateResponseEnvelope struct {
-	Errors   []AddressMapIPUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapIPUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressMapIPUpdateResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   AddressMapIPUpdateResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapIPUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapIPUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -142,52 +147,6 @@ func (r *AddressMapIPUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r addressMapIPUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapIPUpdateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    addressMapIPUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressMapIPUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AddressMapIPUpdateResponseEnvelopeErrors]
-type addressMapIPUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapIPUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapIPUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapIPUpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    addressMapIPUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressMapIPUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AddressMapIPUpdateResponseEnvelopeMessages]
-type addressMapIPUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapIPUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapIPUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -240,12 +199,17 @@ func (r addressMapIPUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 type AddressMapIPDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r AddressMapIPDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapIPDeleteResponseEnvelope struct {
-	Errors   []AddressMapIPDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapIPDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressMapIPDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   AddressMapIPDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapIPDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapIPDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -269,52 +233,6 @@ func (r *AddressMapIPDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r addressMapIPDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapIPDeleteResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    addressMapIPDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressMapIPDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AddressMapIPDeleteResponseEnvelopeErrors]
-type addressMapIPDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapIPDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapIPDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapIPDeleteResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    addressMapIPDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressMapIPDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AddressMapIPDeleteResponseEnvelopeMessages]
-type addressMapIPDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapIPDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapIPDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

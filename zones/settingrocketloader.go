@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -42,7 +43,7 @@ func NewSettingRocketLoaderService(opts ...option.RequestOption) (r *SettingRock
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-func (r *SettingRocketLoaderService) Edit(ctx context.Context, params SettingRocketLoaderEditParams, opts ...option.RequestOption) (res *ZoneSettingRocketLoader, err error) {
+func (r *SettingRocketLoaderService) Edit(ctx context.Context, params SettingRocketLoaderEditParams, opts ...option.RequestOption) (res *RocketLoader, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingRocketLoaderEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/rocket_loader", params.ZoneID)
@@ -64,7 +65,7 @@ func (r *SettingRocketLoaderService) Edit(ctx context.Context, params SettingRoc
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-func (r *SettingRocketLoaderService) Get(ctx context.Context, query SettingRocketLoaderGetParams, opts ...option.RequestOption) (res *ZoneSettingRocketLoader, err error) {
+func (r *SettingRocketLoaderService) Get(ctx context.Context, query SettingRocketLoaderGetParams, opts ...option.RequestOption) (res *RocketLoader, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingRocketLoaderGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/rocket_loader", query.ZoneID)
@@ -86,22 +87,21 @@ func (r *SettingRocketLoaderService) Get(ctx context.Context, query SettingRocke
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-type ZoneSettingRocketLoader struct {
+type RocketLoader struct {
 	// ID of the zone setting.
-	ID ZoneSettingRocketLoaderID `json:"id,required"`
+	ID RocketLoaderID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingRocketLoaderValue `json:"value,required"`
+	Value RocketLoaderValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingRocketLoaderEditable `json:"editable"`
+	Editable RocketLoaderEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingRocketLoaderJSON `json:"-"`
+	ModifiedOn time.Time        `json:"modified_on,nullable" format:"date-time"`
+	JSON       rocketLoaderJSON `json:"-"`
 }
 
-// zoneSettingRocketLoaderJSON contains the JSON metadata for the struct
-// [ZoneSettingRocketLoader]
-type zoneSettingRocketLoaderJSON struct {
+// rocketLoaderJSON contains the JSON metadata for the struct [RocketLoader]
+type rocketLoaderJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -110,44 +110,40 @@ type zoneSettingRocketLoaderJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingRocketLoader) UnmarshalJSON(data []byte) (err error) {
+func (r *RocketLoader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingRocketLoaderJSON) RawJSON() string {
+func (r rocketLoaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingRocketLoader) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingRocketLoader) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingRocketLoaderID string
+type RocketLoaderID string
 
 const (
-	ZoneSettingRocketLoaderIDRocketLoader ZoneSettingRocketLoaderID = "rocket_loader"
+	RocketLoaderIDRocketLoader RocketLoaderID = "rocket_loader"
 )
 
-func (r ZoneSettingRocketLoaderID) IsKnown() bool {
+func (r RocketLoaderID) IsKnown() bool {
 	switch r {
-	case ZoneSettingRocketLoaderIDRocketLoader:
+	case RocketLoaderIDRocketLoader:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingRocketLoaderValue string
+type RocketLoaderValue string
 
 const (
-	ZoneSettingRocketLoaderValueOn  ZoneSettingRocketLoaderValue = "on"
-	ZoneSettingRocketLoaderValueOff ZoneSettingRocketLoaderValue = "off"
+	RocketLoaderValueOn  RocketLoaderValue = "on"
+	RocketLoaderValueOff RocketLoaderValue = "off"
 )
 
-func (r ZoneSettingRocketLoaderValue) IsKnown() bool {
+func (r RocketLoaderValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingRocketLoaderValueOn, ZoneSettingRocketLoaderValueOff:
+	case RocketLoaderValueOn, RocketLoaderValueOff:
 		return true
 	}
 	return false
@@ -155,16 +151,16 @@ func (r ZoneSettingRocketLoaderValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingRocketLoaderEditable bool
+type RocketLoaderEditable bool
 
 const (
-	ZoneSettingRocketLoaderEditableTrue  ZoneSettingRocketLoaderEditable = true
-	ZoneSettingRocketLoaderEditableFalse ZoneSettingRocketLoaderEditable = false
+	RocketLoaderEditableTrue  RocketLoaderEditable = true
+	RocketLoaderEditableFalse RocketLoaderEditable = false
 )
 
-func (r ZoneSettingRocketLoaderEditable) IsKnown() bool {
+func (r RocketLoaderEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingRocketLoaderEditableTrue, ZoneSettingRocketLoaderEditableFalse:
+	case RocketLoaderEditableTrue, RocketLoaderEditableFalse:
 		return true
 	}
 	return false
@@ -180,18 +176,16 @@ func (r ZoneSettingRocketLoaderEditable) IsKnown() bool {
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-type ZoneSettingRocketLoaderParam struct {
+type RocketLoaderParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZoneSettingRocketLoaderID] `json:"id,required"`
+	ID param.Field[RocketLoaderID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZoneSettingRocketLoaderValue] `json:"value,required"`
+	Value param.Field[RocketLoaderValue] `json:"value,required"`
 }
 
-func (r ZoneSettingRocketLoaderParam) MarshalJSON() (data []byte, err error) {
+func (r RocketLoaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingRocketLoaderParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingRocketLoaderEditParams struct {
 	// Identifier
@@ -206,7 +200,7 @@ type SettingRocketLoaderEditParams struct {
 	// with no configuration required. Refer to
 	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 	// for more information.
-	Value param.Field[ZoneSettingRocketLoaderParam] `json:"value,required"`
+	Value param.Field[RocketLoaderParam] `json:"value,required"`
 }
 
 func (r SettingRocketLoaderEditParams) MarshalJSON() (data []byte, err error) {
@@ -214,8 +208,8 @@ func (r SettingRocketLoaderEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingRocketLoaderEditResponseEnvelope struct {
-	Errors   []SettingRocketLoaderEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingRocketLoaderEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
@@ -228,7 +222,7 @@ type SettingRocketLoaderEditResponseEnvelope struct {
 	// with no configuration required. Refer to
 	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 	// for more information.
-	Result ZoneSettingRocketLoader                     `json:"result"`
+	Result RocketLoader                                `json:"result"`
 	JSON   settingRocketLoaderEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -251,60 +245,14 @@ func (r settingRocketLoaderEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingRocketLoaderEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingRocketLoaderEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingRocketLoaderEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingRocketLoaderEditResponseEnvelopeErrors]
-type settingRocketLoaderEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingRocketLoaderEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingRocketLoaderEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingRocketLoaderEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingRocketLoaderEditResponseEnvelopeMessages]
-type settingRocketLoaderEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingRocketLoaderGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingRocketLoaderGetResponseEnvelope struct {
-	Errors   []SettingRocketLoaderGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingRocketLoaderGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
@@ -317,7 +265,7 @@ type SettingRocketLoaderGetResponseEnvelope struct {
 	// with no configuration required. Refer to
 	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 	// for more information.
-	Result ZoneSettingRocketLoader                    `json:"result"`
+	Result RocketLoader                               `json:"result"`
 	JSON   settingRocketLoaderGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -337,51 +285,5 @@ func (r *SettingRocketLoaderGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r settingRocketLoaderGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingRocketLoaderGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingRocketLoaderGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingRocketLoaderGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingRocketLoaderGetResponseEnvelopeErrors]
-type settingRocketLoaderGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingRocketLoaderGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingRocketLoaderGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingRocketLoaderGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingRocketLoaderGetResponseEnvelopeMessages]
-type settingRocketLoaderGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

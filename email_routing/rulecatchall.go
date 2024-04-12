@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,7 +34,7 @@ func NewRuleCatchAllService(opts ...option.RequestOption) (r *RuleCatchAllServic
 
 // Enable or disable catch-all routing rule, or change action to forward to
 // specific destination address.
-func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string, body RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *EmailCatchAllRule, err error) {
+func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string, body RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *RuleCatchAllUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleCatchAllUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", zoneIdentifier)
@@ -46,7 +47,7 @@ func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string,
 }
 
 // Get information on the default catch-all routing rule.
-func (r *RuleCatchAllService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *EmailCatchAllRule, err error) {
+func (r *RuleCatchAllService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *RuleCatchAllGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleCatchAllGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", zoneIdentifier)
@@ -58,25 +59,124 @@ func (r *RuleCatchAllService) Get(ctx context.Context, zoneIdentifier string, op
 	return
 }
 
-type EmailCatchAllRule struct {
+// Action for the catch-all routing rule.
+type CatchAllAction struct {
+	// Type of action for catch-all rule.
+	Type  CatchAllActionType `json:"type,required"`
+	Value []string           `json:"value"`
+	JSON  catchAllActionJSON `json:"-"`
+}
+
+// catchAllActionJSON contains the JSON metadata for the struct [CatchAllAction]
+type catchAllActionJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CatchAllAction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r catchAllActionJSON) RawJSON() string {
+	return r.raw
+}
+
+// Type of action for catch-all rule.
+type CatchAllActionType string
+
+const (
+	CatchAllActionTypeDrop    CatchAllActionType = "drop"
+	CatchAllActionTypeForward CatchAllActionType = "forward"
+	CatchAllActionTypeWorker  CatchAllActionType = "worker"
+)
+
+func (r CatchAllActionType) IsKnown() bool {
+	switch r {
+	case CatchAllActionTypeDrop, CatchAllActionTypeForward, CatchAllActionTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Action for the catch-all routing rule.
+type CatchAllActionParam struct {
+	// Type of action for catch-all rule.
+	Type  param.Field[CatchAllActionType] `json:"type,required"`
+	Value param.Field[[]string]           `json:"value"`
+}
+
+func (r CatchAllActionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matcher for catch-all routing rule.
+type CatchAllMatcher struct {
+	// Type of matcher. Default is 'all'.
+	Type CatchAllMatcherType `json:"type,required"`
+	JSON catchAllMatcherJSON `json:"-"`
+}
+
+// catchAllMatcherJSON contains the JSON metadata for the struct [CatchAllMatcher]
+type catchAllMatcherJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CatchAllMatcher) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r catchAllMatcherJSON) RawJSON() string {
+	return r.raw
+}
+
+// Type of matcher. Default is 'all'.
+type CatchAllMatcherType string
+
+const (
+	CatchAllMatcherTypeAll CatchAllMatcherType = "all"
+)
+
+func (r CatchAllMatcherType) IsKnown() bool {
+	switch r {
+	case CatchAllMatcherTypeAll:
+		return true
+	}
+	return false
+}
+
+// Matcher for catch-all routing rule.
+type CatchAllMatcherParam struct {
+	// Type of matcher. Default is 'all'.
+	Type param.Field[CatchAllMatcherType] `json:"type,required"`
+}
+
+func (r CatchAllMatcherParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleCatchAllUpdateResponse struct {
 	// Routing rule identifier.
 	ID string `json:"id"`
 	// List actions for the catch-all routing rule.
-	Actions []EmailCatchAllRuleAction `json:"actions"`
+	Actions []CatchAllAction `json:"actions"`
 	// Routing rule status.
-	Enabled EmailCatchAllRuleEnabled `json:"enabled"`
+	Enabled RuleCatchAllUpdateResponseEnabled `json:"enabled"`
 	// List of matchers for the catch-all routing rule.
-	Matchers []EmailCatchAllRuleMatcher `json:"matchers"`
+	Matchers []CatchAllMatcher `json:"matchers"`
 	// Routing rule name.
 	Name string `json:"name"`
 	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
-	Tag  string                `json:"tag"`
-	JSON emailCatchAllRuleJSON `json:"-"`
+	Tag  string                         `json:"tag"`
+	JSON ruleCatchAllUpdateResponseJSON `json:"-"`
 }
 
-// emailCatchAllRuleJSON contains the JSON metadata for the struct
-// [EmailCatchAllRule]
-type emailCatchAllRuleJSON struct {
+// ruleCatchAllUpdateResponseJSON contains the JSON metadata for the struct
+// [RuleCatchAllUpdateResponse]
+type ruleCatchAllUpdateResponseJSON struct {
 	ID          apijson.Field
 	Actions     apijson.Field
 	Enabled     apijson.Field
@@ -87,105 +187,78 @@ type emailCatchAllRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailCatchAllRule) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleCatchAllUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailCatchAllRuleJSON) RawJSON() string {
+func (r ruleCatchAllUpdateResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// Action for the catch-all routing rule.
-type EmailCatchAllRuleAction struct {
-	// Type of action for catch-all rule.
-	Type  EmailCatchAllRuleActionsType `json:"type,required"`
-	Value []string                     `json:"value"`
-	JSON  emailCatchAllRuleActionJSON  `json:"-"`
-}
-
-// emailCatchAllRuleActionJSON contains the JSON metadata for the struct
-// [EmailCatchAllRuleAction]
-type emailCatchAllRuleActionJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailCatchAllRuleAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailCatchAllRuleActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of action for catch-all rule.
-type EmailCatchAllRuleActionsType string
-
-const (
-	EmailCatchAllRuleActionsTypeDrop    EmailCatchAllRuleActionsType = "drop"
-	EmailCatchAllRuleActionsTypeForward EmailCatchAllRuleActionsType = "forward"
-	EmailCatchAllRuleActionsTypeWorker  EmailCatchAllRuleActionsType = "worker"
-)
-
-func (r EmailCatchAllRuleActionsType) IsKnown() bool {
-	switch r {
-	case EmailCatchAllRuleActionsTypeDrop, EmailCatchAllRuleActionsTypeForward, EmailCatchAllRuleActionsTypeWorker:
-		return true
-	}
-	return false
 }
 
 // Routing rule status.
-type EmailCatchAllRuleEnabled bool
+type RuleCatchAllUpdateResponseEnabled bool
 
 const (
-	EmailCatchAllRuleEnabledTrue  EmailCatchAllRuleEnabled = true
-	EmailCatchAllRuleEnabledFalse EmailCatchAllRuleEnabled = false
+	RuleCatchAllUpdateResponseEnabledTrue  RuleCatchAllUpdateResponseEnabled = true
+	RuleCatchAllUpdateResponseEnabledFalse RuleCatchAllUpdateResponseEnabled = false
 )
 
-func (r EmailCatchAllRuleEnabled) IsKnown() bool {
+func (r RuleCatchAllUpdateResponseEnabled) IsKnown() bool {
 	switch r {
-	case EmailCatchAllRuleEnabledTrue, EmailCatchAllRuleEnabledFalse:
+	case RuleCatchAllUpdateResponseEnabledTrue, RuleCatchAllUpdateResponseEnabledFalse:
 		return true
 	}
 	return false
 }
 
-// Matcher for catch-all routing rule.
-type EmailCatchAllRuleMatcher struct {
-	// Type of matcher. Default is 'all'.
-	Type EmailCatchAllRuleMatchersType `json:"type,required"`
-	JSON emailCatchAllRuleMatcherJSON  `json:"-"`
+type RuleCatchAllGetResponse struct {
+	// Routing rule identifier.
+	ID string `json:"id"`
+	// List actions for the catch-all routing rule.
+	Actions []CatchAllAction `json:"actions"`
+	// Routing rule status.
+	Enabled RuleCatchAllGetResponseEnabled `json:"enabled"`
+	// List of matchers for the catch-all routing rule.
+	Matchers []CatchAllMatcher `json:"matchers"`
+	// Routing rule name.
+	Name string `json:"name"`
+	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
+	Tag  string                      `json:"tag"`
+	JSON ruleCatchAllGetResponseJSON `json:"-"`
 }
 
-// emailCatchAllRuleMatcherJSON contains the JSON metadata for the struct
-// [EmailCatchAllRuleMatcher]
-type emailCatchAllRuleMatcherJSON struct {
-	Type        apijson.Field
+// ruleCatchAllGetResponseJSON contains the JSON metadata for the struct
+// [RuleCatchAllGetResponse]
+type ruleCatchAllGetResponseJSON struct {
+	ID          apijson.Field
+	Actions     apijson.Field
+	Enabled     apijson.Field
+	Matchers    apijson.Field
+	Name        apijson.Field
+	Tag         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailCatchAllRuleMatcher) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleCatchAllGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailCatchAllRuleMatcherJSON) RawJSON() string {
+func (r ruleCatchAllGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of matcher. Default is 'all'.
-type EmailCatchAllRuleMatchersType string
+// Routing rule status.
+type RuleCatchAllGetResponseEnabled bool
 
 const (
-	EmailCatchAllRuleMatchersTypeAll EmailCatchAllRuleMatchersType = "all"
+	RuleCatchAllGetResponseEnabledTrue  RuleCatchAllGetResponseEnabled = true
+	RuleCatchAllGetResponseEnabledFalse RuleCatchAllGetResponseEnabled = false
 )
 
-func (r EmailCatchAllRuleMatchersType) IsKnown() bool {
+func (r RuleCatchAllGetResponseEnabled) IsKnown() bool {
 	switch r {
-	case EmailCatchAllRuleMatchersTypeAll:
+	case RuleCatchAllGetResponseEnabledTrue, RuleCatchAllGetResponseEnabledFalse:
 		return true
 	}
 	return false
@@ -193,9 +266,9 @@ func (r EmailCatchAllRuleMatchersType) IsKnown() bool {
 
 type RuleCatchAllUpdateParams struct {
 	// List actions for the catch-all routing rule.
-	Actions param.Field[[]RuleCatchAllUpdateParamsAction] `json:"actions,required"`
+	Actions param.Field[[]CatchAllActionParam] `json:"actions,required"`
 	// List of matchers for the catch-all routing rule.
-	Matchers param.Field[[]RuleCatchAllUpdateParamsMatcher] `json:"matchers,required"`
+	Matchers param.Field[[]CatchAllMatcherParam] `json:"matchers,required"`
 	// Routing rule status.
 	Enabled param.Field[RuleCatchAllUpdateParamsEnabled] `json:"enabled"`
 	// Routing rule name.
@@ -204,59 +277,6 @@ type RuleCatchAllUpdateParams struct {
 
 func (r RuleCatchAllUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Action for the catch-all routing rule.
-type RuleCatchAllUpdateParamsAction struct {
-	// Type of action for catch-all rule.
-	Type  param.Field[RuleCatchAllUpdateParamsActionsType] `json:"type,required"`
-	Value param.Field[[]string]                            `json:"value"`
-}
-
-func (r RuleCatchAllUpdateParamsAction) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Type of action for catch-all rule.
-type RuleCatchAllUpdateParamsActionsType string
-
-const (
-	RuleCatchAllUpdateParamsActionsTypeDrop    RuleCatchAllUpdateParamsActionsType = "drop"
-	RuleCatchAllUpdateParamsActionsTypeForward RuleCatchAllUpdateParamsActionsType = "forward"
-	RuleCatchAllUpdateParamsActionsTypeWorker  RuleCatchAllUpdateParamsActionsType = "worker"
-)
-
-func (r RuleCatchAllUpdateParamsActionsType) IsKnown() bool {
-	switch r {
-	case RuleCatchAllUpdateParamsActionsTypeDrop, RuleCatchAllUpdateParamsActionsTypeForward, RuleCatchAllUpdateParamsActionsTypeWorker:
-		return true
-	}
-	return false
-}
-
-// Matcher for catch-all routing rule.
-type RuleCatchAllUpdateParamsMatcher struct {
-	// Type of matcher. Default is 'all'.
-	Type param.Field[RuleCatchAllUpdateParamsMatchersType] `json:"type,required"`
-}
-
-func (r RuleCatchAllUpdateParamsMatcher) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Type of matcher. Default is 'all'.
-type RuleCatchAllUpdateParamsMatchersType string
-
-const (
-	RuleCatchAllUpdateParamsMatchersTypeAll RuleCatchAllUpdateParamsMatchersType = "all"
-)
-
-func (r RuleCatchAllUpdateParamsMatchersType) IsKnown() bool {
-	switch r {
-	case RuleCatchAllUpdateParamsMatchersTypeAll:
-		return true
-	}
-	return false
 }
 
 // Routing rule status.
@@ -276,9 +296,9 @@ func (r RuleCatchAllUpdateParamsEnabled) IsKnown() bool {
 }
 
 type RuleCatchAllUpdateResponseEnvelope struct {
-	Errors   []RuleCatchAllUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleCatchAllUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   EmailCatchAllRule                            `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   RuleCatchAllUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleCatchAllUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleCatchAllUpdateResponseEnvelopeJSON    `json:"-"`
@@ -303,52 +323,6 @@ func (r ruleCatchAllUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RuleCatchAllUpdateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    ruleCatchAllUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleCatchAllUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RuleCatchAllUpdateResponseEnvelopeErrors]
-type ruleCatchAllUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCatchAllUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleCatchAllUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleCatchAllUpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    ruleCatchAllUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleCatchAllUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RuleCatchAllUpdateResponseEnvelopeMessages]
-type ruleCatchAllUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCatchAllUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleCatchAllUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RuleCatchAllUpdateResponseEnvelopeSuccess bool
 
@@ -365,9 +339,9 @@ func (r RuleCatchAllUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleCatchAllGetResponseEnvelope struct {
-	Errors   []RuleCatchAllGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleCatchAllGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   EmailCatchAllRule                         `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   RuleCatchAllGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleCatchAllGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleCatchAllGetResponseEnvelopeJSON    `json:"-"`
@@ -389,52 +363,6 @@ func (r *RuleCatchAllGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r ruleCatchAllGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleCatchAllGetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    ruleCatchAllGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleCatchAllGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RuleCatchAllGetResponseEnvelopeErrors]
-type ruleCatchAllGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCatchAllGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleCatchAllGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleCatchAllGetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    ruleCatchAllGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleCatchAllGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RuleCatchAllGetResponseEnvelopeMessages]
-type ruleCatchAllGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCatchAllGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleCatchAllGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

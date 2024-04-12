@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,7 +36,7 @@ func NewSettingPolishService(opts ...option.RequestOption) (r *SettingPolishServ
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/polish-solving-mobile-speed)
 // for more information.
-func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEditParams, opts ...option.RequestOption) (res *ZoneSettingPolish, err error) {
+func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEditParams, opts ...option.RequestOption) (res *Polish, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/polish", params.ZoneID)
@@ -50,7 +51,7 @@ func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEdi
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/polish-solving-mobile-speed)
 // for more information.
-func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetParams, opts ...option.RequestOption) (res *ZoneSettingPolish, err error) {
+func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetParams, opts ...option.RequestOption) (res *Polish, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/polish", query.ZoneID)
@@ -68,22 +69,21 @@ func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetPa
 // image loading. Larger JPEGs are converted to progressive images, loading a
 // lower-resolution image first and ending in a higher-resolution version. Not
 // recommended for hi-res photography sites.
-type ZoneSettingPolish struct {
+type Polish struct {
 	// ID of the zone setting.
-	ID ZoneSettingPolishID `json:"id,required"`
+	ID PolishID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingPolishValue `json:"value,required"`
+	Value PolishValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingPolishEditable `json:"editable"`
+	Editable PolishEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingPolishJSON `json:"-"`
+	ModifiedOn time.Time  `json:"modified_on,nullable" format:"date-time"`
+	JSON       polishJSON `json:"-"`
 }
 
-// zoneSettingPolishJSON contains the JSON metadata for the struct
-// [ZoneSettingPolish]
-type zoneSettingPolishJSON struct {
+// polishJSON contains the JSON metadata for the struct [Polish]
+type polishJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,45 +92,41 @@ type zoneSettingPolishJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingPolish) UnmarshalJSON(data []byte) (err error) {
+func (r *Polish) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingPolishJSON) RawJSON() string {
+func (r polishJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingPolish) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingPolish) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingPolishID string
+type PolishID string
 
 const (
-	ZoneSettingPolishIDPolish ZoneSettingPolishID = "polish"
+	PolishIDPolish PolishID = "polish"
 )
 
-func (r ZoneSettingPolishID) IsKnown() bool {
+func (r PolishID) IsKnown() bool {
 	switch r {
-	case ZoneSettingPolishIDPolish:
+	case PolishIDPolish:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingPolishValue string
+type PolishValue string
 
 const (
-	ZoneSettingPolishValueOff      ZoneSettingPolishValue = "off"
-	ZoneSettingPolishValueLossless ZoneSettingPolishValue = "lossless"
-	ZoneSettingPolishValueLossy    ZoneSettingPolishValue = "lossy"
+	PolishValueOff      PolishValue = "off"
+	PolishValueLossless PolishValue = "lossless"
+	PolishValueLossy    PolishValue = "lossy"
 )
 
-func (r ZoneSettingPolishValue) IsKnown() bool {
+func (r PolishValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingPolishValueOff, ZoneSettingPolishValueLossless, ZoneSettingPolishValueLossy:
+	case PolishValueOff, PolishValueLossless, PolishValueLossy:
 		return true
 	}
 	return false
@@ -138,16 +134,16 @@ func (r ZoneSettingPolishValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingPolishEditable bool
+type PolishEditable bool
 
 const (
-	ZoneSettingPolishEditableTrue  ZoneSettingPolishEditable = true
-	ZoneSettingPolishEditableFalse ZoneSettingPolishEditable = false
+	PolishEditableTrue  PolishEditable = true
+	PolishEditableFalse PolishEditable = false
 )
 
-func (r ZoneSettingPolishEditable) IsKnown() bool {
+func (r PolishEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingPolishEditableTrue, ZoneSettingPolishEditableFalse:
+	case PolishEditableTrue, PolishEditableFalse:
 		return true
 	}
 	return false
@@ -159,18 +155,16 @@ func (r ZoneSettingPolishEditable) IsKnown() bool {
 // image loading. Larger JPEGs are converted to progressive images, loading a
 // lower-resolution image first and ending in a higher-resolution version. Not
 // recommended for hi-res photography sites.
-type ZoneSettingPolishParam struct {
+type PolishParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZoneSettingPolishID] `json:"id,required"`
+	ID param.Field[PolishID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZoneSettingPolishValue] `json:"value,required"`
+	Value param.Field[PolishValue] `json:"value,required"`
 }
 
-func (r ZoneSettingPolishParam) MarshalJSON() (data []byte, err error) {
+func (r PolishParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingPolishParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingPolishEditParams struct {
 	// Identifier
@@ -181,7 +175,7 @@ type SettingPolishEditParams struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Value param.Field[ZoneSettingPolishParam] `json:"value,required"`
+	Value param.Field[PolishParam] `json:"value,required"`
 }
 
 func (r SettingPolishEditParams) MarshalJSON() (data []byte, err error) {
@@ -189,8 +183,8 @@ func (r SettingPolishEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingPolishEditResponseEnvelope struct {
-	Errors   []SettingPolishEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPolishEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Removes metadata and compresses your images for faster page load times. Basic
@@ -199,7 +193,7 @@ type SettingPolishEditResponseEnvelope struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Result ZoneSettingPolish                     `json:"result"`
+	Result Polish                                `json:"result"`
 	JSON   settingPolishEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -222,60 +216,14 @@ func (r settingPolishEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingPolishEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingPolishEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingPolishEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingPolishEditResponseEnvelopeErrors]
-type settingPolishEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPolishEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPolishEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingPolishEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPolishEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingPolishEditResponseEnvelopeMessages]
-type settingPolishEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPolishEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingPolishGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingPolishGetResponseEnvelope struct {
-	Errors   []SettingPolishGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPolishGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Removes metadata and compresses your images for faster page load times. Basic
@@ -284,7 +232,7 @@ type SettingPolishGetResponseEnvelope struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Result ZoneSettingPolish                    `json:"result"`
+	Result Polish                               `json:"result"`
 	JSON   settingPolishGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -304,51 +252,5 @@ func (r *SettingPolishGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingPolishGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPolishGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingPolishGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingPolishGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingPolishGetResponseEnvelopeErrors]
-type settingPolishGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPolishGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPolishGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingPolishGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPolishGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingPolishGetResponseEnvelopeMessages]
-type settingPolishGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPolishGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

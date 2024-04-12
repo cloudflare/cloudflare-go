@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +33,7 @@ func NewACLService(opts ...option.RequestOption) (r *ACLService) {
 }
 
 // Create ACL.
-func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
+func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", params.AccountID)
@@ -45,7 +46,7 @@ func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...optio
 }
 
 // Modify ACL.
-func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
+func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", params.AccountID, aclID)
@@ -58,7 +59,7 @@ func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateP
 }
 
 // List ACLs.
-func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSACL], err error) {
+func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ACL], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,15 +77,15 @@ func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...opti
 }
 
 // List ACLs.
-func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSACL] {
+func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ACL] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete ACL.
-func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
+func (r *ACLService) Delete(ctx context.Context, aclID string, params ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", body.AccountID, aclID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", params.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -94,7 +95,7 @@ func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeletePar
 }
 
 // Get ACL.
-func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
+func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", query.AccountID, aclID)
@@ -106,7 +107,7 @@ func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, 
 	return
 }
 
-type SecondaryDNSACL struct {
+type ACL struct {
 	ID string `json:"id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
@@ -115,12 +116,12 @@ type SecondaryDNSACL struct {
 	// IPv6 respectively.
 	IPRange string `json:"ip_range,required"`
 	// The name of the acl.
-	Name string              `json:"name,required"`
-	JSON secondaryDnsaclJSON `json:"-"`
+	Name string  `json:"name,required"`
+	JSON aclJSON `json:"-"`
 }
 
-// secondaryDnsaclJSON contains the JSON metadata for the struct [SecondaryDNSACL]
-type secondaryDnsaclJSON struct {
+// aclJSON contains the JSON metadata for the struct [ACL]
+type aclJSON struct {
 	ID          apijson.Field
 	IPRange     apijson.Field
 	Name        apijson.Field
@@ -128,12 +129,27 @@ type secondaryDnsaclJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSACL) UnmarshalJSON(data []byte) (err error) {
+func (r *ACL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r secondaryDnsaclJSON) RawJSON() string {
+func (r aclJSON) RawJSON() string {
 	return r.raw
+}
+
+type ACLParam struct {
+	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
+	// be applied for the entire account. The IP range is used to allow additional
+	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
+	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
+	// IPv6 respectively.
+	IPRange param.Field[string] `json:"ip_range,required"`
+	// The name of the acl.
+	Name param.Field[string] `json:"name,required"`
+}
+
+func (r ACLParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ACLDeleteResponse struct {
@@ -158,8 +174,8 @@ func (r aclDeleteResponseJSON) RawJSON() string {
 }
 
 type ACLNewParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ACLNewParams) MarshalJSON() (data []byte, err error) {
@@ -167,9 +183,9 @@ func (r ACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ACLNewResponseEnvelope struct {
-	Errors   []ACLNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ACLNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSACL                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclNewResponseEnvelopeJSON    `json:"-"`
@@ -194,52 +210,6 @@ func (r aclNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ACLNewResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    aclNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// aclNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ACLNewResponseEnvelopeErrors]
-type aclNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ACLNewResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    aclNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// aclNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ACLNewResponseEnvelopeMessages]
-type aclNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ACLNewResponseEnvelopeSuccess bool
 
@@ -257,24 +227,17 @@ func (r ACLNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ACLUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
-	// be applied for the entire account. The IP range is used to allow additional
-	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
-	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
-	// IPv6 respectively.
-	IPRange param.Field[string] `json:"ip_range,required"`
-	// The name of the acl.
-	Name param.Field[string] `json:"name,required"`
+	ACL       ACLParam            `json:"acl,required"`
 }
 
 func (r ACLUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.ACL)
 }
 
 type ACLUpdateResponseEnvelope struct {
-	Errors   []ACLUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ACLUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSACL                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclUpdateResponseEnvelopeJSON    `json:"-"`
@@ -299,52 +262,6 @@ func (r aclUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ACLUpdateResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    aclUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// aclUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ACLUpdateResponseEnvelopeErrors]
-type aclUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ACLUpdateResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    aclUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// aclUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ACLUpdateResponseEnvelopeMessages]
-type aclUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ACLUpdateResponseEnvelopeSuccess bool
 
@@ -366,12 +283,17 @@ type ACLListParams struct {
 
 type ACLDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r ACLDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ACLDeleteResponseEnvelope struct {
-	Errors   []ACLDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ACLDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ACLDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ACLDeleteResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclDeleteResponseEnvelopeJSON    `json:"-"`
@@ -396,52 +318,6 @@ func (r aclDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ACLDeleteResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    aclDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// aclDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ACLDeleteResponseEnvelopeErrors]
-type aclDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ACLDeleteResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    aclDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// aclDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ACLDeleteResponseEnvelopeMessages]
-type aclDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ACLDeleteResponseEnvelopeSuccess bool
 
@@ -462,9 +338,9 @@ type ACLGetParams struct {
 }
 
 type ACLGetResponseEnvelope struct {
-	Errors   []ACLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ACLGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSACL                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclGetResponseEnvelopeJSON    `json:"-"`
@@ -486,52 +362,6 @@ func (r *ACLGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r aclGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ACLGetResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    aclGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// aclGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ACLGetResponseEnvelopeErrors]
-type aclGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ACLGetResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    aclGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// aclGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ACLGetResponseEnvelopeMessages]
-type aclGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

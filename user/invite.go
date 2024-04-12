@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
@@ -37,7 +36,7 @@ func NewInviteService(opts ...option.RequestOption) (r *InviteService) {
 }
 
 // Lists all invitations associated with my user.
-func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[InviteListResponse], err error) {
+func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[Invite], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -55,12 +54,12 @@ func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) 
 }
 
 // Lists all invitations associated with my user.
-func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InviteListResponse] {
+func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Invite] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
 // Responds to an invitation.
-func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponse, err error) {
+func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteEditResponseEnvelope
 	path := fmt.Sprintf("user/invites/%s", inviteID)
@@ -73,7 +72,7 @@ func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEd
 }
 
 // Gets the details of an invitation.
-func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponse, err error) {
+func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteGetResponseEnvelope
 	path := fmt.Sprintf("user/invites/%s", inviteID)
@@ -85,7 +84,7 @@ func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option
 	return
 }
 
-type InviteListResponse struct {
+type Invite struct {
 	// ID of the user to add to the organization.
 	InvitedMemberID string `json:"invited_member_id,required,nullable"`
 	// ID of the organization the user will be added to.
@@ -103,15 +102,14 @@ type InviteListResponse struct {
 	// Organization name.
 	OrganizationName string `json:"organization_name"`
 	// Roles to be assigned to this user.
-	Roles []accounts.Role `json:"roles"`
+	Roles []shared.Role `json:"roles"`
 	// Current status of the invitation.
-	Status InviteListResponseStatus `json:"status"`
-	JSON   inviteListResponseJSON   `json:"-"`
+	Status InviteStatus `json:"status"`
+	JSON   inviteJSON   `json:"-"`
 }
 
-// inviteListResponseJSON contains the JSON metadata for the struct
-// [InviteListResponse]
-type inviteListResponseJSON struct {
+// inviteJSON contains the JSON metadata for the struct [Invite]
+type inviteJSON struct {
 	InvitedMemberID    apijson.Field
 	OrganizationID     apijson.Field
 	ID                 apijson.Field
@@ -126,40 +124,40 @@ type inviteListResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *InviteListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Invite) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r inviteListResponseJSON) RawJSON() string {
+func (r inviteJSON) RawJSON() string {
 	return r.raw
 }
 
 // Current status of the invitation.
-type InviteListResponseStatus string
+type InviteStatus string
 
 const (
-	InviteListResponseStatusPending  InviteListResponseStatus = "pending"
-	InviteListResponseStatusAccepted InviteListResponseStatus = "accepted"
-	InviteListResponseStatusRejected InviteListResponseStatus = "rejected"
-	InviteListResponseStatusExpired  InviteListResponseStatus = "expired"
+	InviteStatusPending  InviteStatus = "pending"
+	InviteStatusAccepted InviteStatus = "accepted"
+	InviteStatusRejected InviteStatus = "rejected"
+	InviteStatusExpired  InviteStatus = "expired"
 )
 
-func (r InviteListResponseStatus) IsKnown() bool {
+func (r InviteStatus) IsKnown() bool {
 	switch r {
-	case InviteListResponseStatusPending, InviteListResponseStatusAccepted, InviteListResponseStatusRejected, InviteListResponseStatusExpired:
+	case InviteStatusPending, InviteStatusAccepted, InviteStatusRejected, InviteStatusExpired:
 		return true
 	}
 	return false
 }
 
 // Union satisfied by [user.InviteEditResponseUnknown] or [shared.UnionString].
-type InviteEditResponse interface {
-	ImplementsUserInviteEditResponse()
+type InviteEditResponseUnion interface {
+	ImplementsUserInviteEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*InviteEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*InviteEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -169,13 +167,13 @@ func init() {
 }
 
 // Union satisfied by [user.InviteGetResponseUnknown] or [shared.UnionString].
-type InviteGetResponse interface {
-	ImplementsUserInviteGetResponse()
+type InviteGetResponseUnion interface {
+	ImplementsUserInviteGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*InviteGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*InviteGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -210,9 +208,9 @@ func (r InviteEditParamsStatus) IsKnown() bool {
 }
 
 type InviteEditResponseEnvelope struct {
-	Errors   []InviteEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InviteEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   InviteEditResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   InviteEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success InviteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    inviteEditResponseEnvelopeJSON    `json:"-"`
@@ -237,52 +235,6 @@ func (r inviteEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type InviteEditResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    inviteEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// inviteEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [InviteEditResponseEnvelopeErrors]
-type inviteEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InviteEditResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    inviteEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// inviteEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [InviteEditResponseEnvelopeMessages]
-type inviteEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type InviteEditResponseEnvelopeSuccess bool
 
@@ -299,9 +251,9 @@ func (r InviteEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InviteGetResponseEnvelope struct {
-	Errors   []InviteGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InviteGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   InviteGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   InviteGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success InviteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    inviteGetResponseEnvelopeJSON    `json:"-"`
@@ -323,52 +275,6 @@ func (r *InviteGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r inviteGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type InviteGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    inviteGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// inviteGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [InviteGetResponseEnvelopeErrors]
-type inviteGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InviteGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    inviteGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// inviteGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [InviteGetResponseEnvelopeMessages]
-type inviteGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

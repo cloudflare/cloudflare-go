@@ -36,7 +36,7 @@ func NewRegionService(opts ...option.RequestOption) (r *RegionService) {
 }
 
 // List all region mappings.
-func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *RegionListResponse, err error) {
+func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *RegionListResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegionListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions", params.AccountID)
@@ -49,7 +49,7 @@ func (r *RegionService) List(ctx context.Context, params RegionListParams, opts 
 }
 
 // Get a single region mapping.
-func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionID, query RegionGetParams, opts ...option.RequestOption) (res *RegionGetResponse, err error) {
+func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionID, query RegionGetParams, opts ...option.RequestOption) (res *RegionGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegionGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions/%v", query.AccountID, regionID)
@@ -63,13 +63,13 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 
 // Union satisfied by [load_balancers.RegionListResponseUnknown] or
 // [shared.UnionString].
-type RegionListResponse interface {
-	ImplementsLoadBalancersRegionListResponse()
+type RegionListResponseUnion interface {
+	ImplementsLoadBalancersRegionListResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RegionListResponse)(nil)).Elem(),
+		reflect.TypeOf((*RegionListResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -82,13 +82,13 @@ func init() {
 //
 // Union satisfied by [load_balancers.RegionGetResponseUnknown] or
 // [shared.UnionString].
-type RegionGetResponse interface {
-	ImplementsLoadBalancersRegionGetResponse()
+type RegionGetResponseUnion interface {
+	ImplementsLoadBalancersRegionGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RegionGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*RegionGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -111,15 +111,15 @@ type RegionListParams struct {
 // URLQuery serializes [RegionListParams]'s query parameters as `url.Values`.
 func (r RegionListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
 type RegionListResponseEnvelope struct {
-	Errors   []RegionListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionListResponseEnvelopeMessages `json:"messages,required"`
-	Result   RegionListResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   RegionListResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    regionListResponseEnvelopeJSON    `json:"-"`
@@ -141,52 +141,6 @@ func (r *RegionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r regionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    regionListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// regionListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RegionListResponseEnvelopeErrors]
-type regionListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    regionListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// regionListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RegionListResponseEnvelopeMessages]
-type regionListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -242,10 +196,10 @@ func (r RegionGetParamsRegionID) IsKnown() bool {
 }
 
 type RegionGetResponseEnvelope struct {
-	Errors   []RegionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A list of countries and subdivisions mapped to a region.
-	Result RegionGetResponse `json:"result,required"`
+	Result RegionGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    regionGetResponseEnvelopeJSON    `json:"-"`
@@ -267,52 +221,6 @@ func (r *RegionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r regionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    regionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// regionGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RegionGetResponseEnvelopeErrors]
-type regionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    regionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// regionGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RegionGetResponseEnvelopeMessages]
-type regionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

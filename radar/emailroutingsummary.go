@@ -112,9 +112,9 @@ func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRouting
 }
 
 type EmailRoutingSummaryARCResponse struct {
-	Meta     EmailRoutingSummaryARCResponseMeta     `json:"meta,required"`
-	Summary0 EmailRoutingSummaryARCResponseSummary0 `json:"summary_0,required"`
-	JSON     emailRoutingSummaryARCResponseJSON     `json:"-"`
+	Meta     EmailRoutingSummaryARCResponseMeta `json:"meta,required"`
+	Summary0 RadarEmailSummary                  `json:"summary_0,required"`
+	JSON     emailRoutingSummaryARCResponseJSON `json:"-"`
 }
 
 // emailRoutingSummaryARCResponseJSON contains the JSON metadata for the struct
@@ -243,35 +243,10 @@ func (r emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON(
 	return r.raw
 }
 
-type EmailRoutingSummaryARCResponseSummary0 struct {
-	Fail string                                     `json:"FAIL,required"`
-	None string                                     `json:"NONE,required"`
-	Pass string                                     `json:"PASS,required"`
-	JSON emailRoutingSummaryARCResponseSummary0JSON `json:"-"`
-}
-
-// emailRoutingSummaryARCResponseSummary0JSON contains the JSON metadata for the
-// struct [EmailRoutingSummaryARCResponseSummary0]
-type emailRoutingSummaryARCResponseSummary0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryARCResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryARCResponseSummary0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailRoutingSummaryDKIMResponse struct {
-	Meta     EmailRoutingSummaryDKIMResponseMeta     `json:"meta,required"`
-	Summary0 EmailRoutingSummaryDKIMResponseSummary0 `json:"summary_0,required"`
-	JSON     emailRoutingSummaryDKIMResponseJSON     `json:"-"`
+	Meta     EmailRoutingSummaryDKIMResponseMeta `json:"meta,required"`
+	Summary0 RadarEmailSummary                   `json:"summary_0,required"`
+	JSON     emailRoutingSummaryDKIMResponseJSON `json:"-"`
 }
 
 // emailRoutingSummaryDKIMResponseJSON contains the JSON metadata for the struct
@@ -400,35 +375,10 @@ func (r emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON) RawJSON
 	return r.raw
 }
 
-type EmailRoutingSummaryDKIMResponseSummary0 struct {
-	Fail string                                      `json:"FAIL,required"`
-	None string                                      `json:"NONE,required"`
-	Pass string                                      `json:"PASS,required"`
-	JSON emailRoutingSummaryDKIMResponseSummary0JSON `json:"-"`
-}
-
-// emailRoutingSummaryDKIMResponseSummary0JSON contains the JSON metadata for the
-// struct [EmailRoutingSummaryDKIMResponseSummary0]
-type emailRoutingSummaryDKIMResponseSummary0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryDKIMResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryDKIMResponseSummary0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailRoutingSummaryDMARCResponse struct {
-	Meta     EmailRoutingSummaryDMARCResponseMeta     `json:"meta,required"`
-	Summary0 EmailRoutingSummaryDMARCResponseSummary0 `json:"summary_0,required"`
-	JSON     emailRoutingSummaryDMARCResponseJSON     `json:"-"`
+	Meta     EmailRoutingSummaryDMARCResponseMeta `json:"meta,required"`
+	Summary0 RadarEmailSummary                    `json:"summary_0,required"`
+	JSON     emailRoutingSummaryDMARCResponseJSON `json:"-"`
 }
 
 // emailRoutingSummaryDMARCResponseJSON contains the JSON metadata for the struct
@@ -554,31 +504,6 @@ func (r *EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation) Unmarshal
 }
 
 func (r emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingSummaryDMARCResponseSummary0 struct {
-	Fail string                                       `json:"FAIL,required"`
-	None string                                       `json:"NONE,required"`
-	Pass string                                       `json:"PASS,required"`
-	JSON emailRoutingSummaryDMARCResponseSummary0JSON `json:"-"`
-}
-
-// emailRoutingSummaryDMARCResponseSummary0JSON contains the JSON metadata for the
-// struct [EmailRoutingSummaryDMARCResponseSummary0]
-type emailRoutingSummaryDMARCResponseSummary0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryDMARCResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryDMARCResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -893,9 +818,9 @@ func (r emailRoutingSummaryIPVersionResponseSummary0JSON) RawJSON() string {
 }
 
 type EmailRoutingSummarySPFResponse struct {
-	Meta     EmailRoutingSummarySPFResponseMeta     `json:"meta,required"`
-	Summary0 EmailRoutingSummarySPFResponseSummary0 `json:"summary_0,required"`
-	JSON     emailRoutingSummarySPFResponseJSON     `json:"-"`
+	Meta     EmailRoutingSummarySPFResponseMeta `json:"meta,required"`
+	Summary0 RadarEmailSummary                  `json:"summary_0,required"`
+	JSON     emailRoutingSummarySPFResponseJSON `json:"-"`
 }
 
 // emailRoutingSummarySPFResponseJSON contains the JSON metadata for the struct
@@ -1024,31 +949,6 @@ func (r emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON) RawJSON(
 	return r.raw
 }
 
-type EmailRoutingSummarySPFResponseSummary0 struct {
-	Fail string                                     `json:"FAIL,required"`
-	None string                                     `json:"NONE,required"`
-	Pass string                                     `json:"PASS,required"`
-	JSON emailRoutingSummarySPFResponseSummary0JSON `json:"-"`
-}
-
-// emailRoutingSummarySPFResponseSummary0JSON contains the JSON metadata for the
-// struct [EmailRoutingSummarySPFResponseSummary0]
-type emailRoutingSummarySPFResponseSummary0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummarySPFResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummarySPFResponseSummary0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailRoutingSummaryARCParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
@@ -1078,7 +978,7 @@ type EmailRoutingSummaryARCParams struct {
 // `url.Values`.
 func (r EmailRoutingSummaryARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1257,7 +1157,7 @@ type EmailRoutingSummaryDKIMParams struct {
 // `url.Values`.
 func (r EmailRoutingSummaryDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1436,7 +1336,7 @@ type EmailRoutingSummaryDMARCParams struct {
 // `url.Values`.
 func (r EmailRoutingSummaryDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1615,7 +1515,7 @@ type EmailRoutingSummaryEncryptedParams struct {
 // `url.Values`.
 func (r EmailRoutingSummaryEncryptedParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1795,7 +1695,7 @@ type EmailRoutingSummaryIPVersionParams struct {
 // `url.Values`.
 func (r EmailRoutingSummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1975,7 +1875,7 @@ type EmailRoutingSummarySPFParams struct {
 // `url.Values`.
 func (r EmailRoutingSummarySPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

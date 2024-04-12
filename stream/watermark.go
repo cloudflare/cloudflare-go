@@ -37,7 +37,7 @@ func NewWatermarkService(opts ...option.RequestOption) (r *WatermarkService) {
 
 // Creates watermark profiles using a single `HTTP POST multipart/form-data`
 // request.
-func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *WatermarkNewResponse, err error) {
+func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *WatermarkNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", params.AccountID)
@@ -50,7 +50,7 @@ func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, o
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamWatermarks], err error) {
+func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Watermaks], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,15 +68,15 @@ func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, 
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamWatermarks] {
+func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Watermaks] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a watermark profile.
-func (r *WatermarkService) Delete(ctx context.Context, identifier string, body WatermarkDeleteParams, opts ...option.RequestOption) (res *WatermarkDeleteResponse, err error) {
+func (r *WatermarkService) Delete(ctx context.Context, identifier string, params WatermarkDeleteParams, opts ...option.RequestOption) (res *WatermarkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", body.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -86,7 +86,7 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, body W
 }
 
 // Retrieves details for a single watermark profile.
-func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *WatermarkGetResponse, err error) {
+func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *WatermarkGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
@@ -98,7 +98,7 @@ func (r *WatermarkService) Get(ctx context.Context, identifier string, query Wat
 	return
 }
 
-type StreamWatermarks struct {
+type Watermaks struct {
 	// The date and a time a watermark profile was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The source URL for a downloaded image. If the watermark profile was created via
@@ -128,15 +128,14 @@ type StreamWatermarks struct {
 	// The size of the image in bytes.
 	Size float64 `json:"size"`
 	// The unique identifier for a watermark profile.
-	Uid string `json:"uid"`
+	UID string `json:"uid"`
 	// The width of the image in pixels.
-	Width int64                `json:"width"`
-	JSON  streamWatermarksJSON `json:"-"`
+	Width int64         `json:"width"`
+	JSON  watermaksJSON `json:"-"`
 }
 
-// streamWatermarksJSON contains the JSON metadata for the struct
-// [StreamWatermarks]
-type streamWatermarksJSON struct {
+// watermaksJSON contains the JSON metadata for the struct [Watermaks]
+type watermaksJSON struct {
 	Created        apijson.Field
 	DownloadedFrom apijson.Field
 	Height         apijson.Field
@@ -146,28 +145,28 @@ type streamWatermarksJSON struct {
 	Position       apijson.Field
 	Scale          apijson.Field
 	Size           apijson.Field
-	Uid            apijson.Field
+	UID            apijson.Field
 	Width          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *StreamWatermarks) UnmarshalJSON(data []byte) (err error) {
+func (r *Watermaks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamWatermarksJSON) RawJSON() string {
+func (r watermaksJSON) RawJSON() string {
 	return r.raw
 }
 
 // Union satisfied by [stream.WatermarkNewResponseUnknown] or [shared.UnionString].
-type WatermarkNewResponse interface {
-	ImplementsStreamWatermarkNewResponse()
+type WatermarkNewResponseUnion interface {
+	ImplementsStreamWatermarkNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WatermarkNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*WatermarkNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -178,13 +177,13 @@ func init() {
 
 // Union satisfied by [stream.WatermarkDeleteResponseUnknown] or
 // [shared.UnionString].
-type WatermarkDeleteResponse interface {
-	ImplementsStreamWatermarkDeleteResponse()
+type WatermarkDeleteResponseUnion interface {
+	ImplementsStreamWatermarkDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WatermarkDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*WatermarkDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -194,13 +193,13 @@ func init() {
 }
 
 // Union satisfied by [stream.WatermarkGetResponseUnknown] or [shared.UnionString].
-type WatermarkGetResponse interface {
-	ImplementsStreamWatermarkGetResponse()
+type WatermarkGetResponseUnion interface {
+	ImplementsStreamWatermarkGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WatermarkGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*WatermarkGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -240,9 +239,9 @@ func (r WatermarkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkNewResponseEnvelope struct {
-	Errors   []WatermarkNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   WatermarkNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   WatermarkNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkNewResponseEnvelopeJSON    `json:"-"`
@@ -264,52 +263,6 @@ func (r *WatermarkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r watermarkNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkNewResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    watermarkNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// watermarkNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WatermarkNewResponseEnvelopeErrors]
-type watermarkNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkNewResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    watermarkNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// watermarkNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WatermarkNewResponseEnvelopeMessages]
-type watermarkNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -336,12 +289,17 @@ type WatermarkListParams struct {
 type WatermarkDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r WatermarkDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type WatermarkDeleteResponseEnvelope struct {
-	Errors   []WatermarkDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   WatermarkDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   WatermarkDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -366,52 +324,6 @@ func (r watermarkDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type WatermarkDeleteResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    watermarkDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// watermarkDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WatermarkDeleteResponseEnvelopeErrors]
-type watermarkDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkDeleteResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    watermarkDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// watermarkDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WatermarkDeleteResponseEnvelopeMessages]
-type watermarkDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type WatermarkDeleteResponseEnvelopeSuccess bool
 
@@ -433,9 +345,9 @@ type WatermarkGetParams struct {
 }
 
 type WatermarkGetResponseEnvelope struct {
-	Errors   []WatermarkGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WatermarkGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   WatermarkGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkGetResponseEnvelopeJSON    `json:"-"`
@@ -457,52 +369,6 @@ func (r *WatermarkGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r watermarkGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkGetResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    watermarkGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// watermarkGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WatermarkGetResponseEnvelopeErrors]
-type watermarkGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkGetResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    watermarkGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// watermarkGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WatermarkGetResponseEnvelopeMessages]
-type watermarkGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

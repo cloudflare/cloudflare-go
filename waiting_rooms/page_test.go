@@ -28,13 +28,10 @@ func TestPagePreview(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WaitingRooms.Page.Preview(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		waiting_rooms.PagePreviewParams{
-			CustomHTML: cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"),
-		},
-	)
+	_, err := client.WaitingRooms.Page.Preview(context.TODO(), waiting_rooms.PagePreviewParams{
+		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		CustomHTML: cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

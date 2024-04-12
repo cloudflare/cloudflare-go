@@ -35,7 +35,7 @@ func NewMiscategorizationService(opts ...option.RequestOption) (r *Miscategoriza
 }
 
 // Create Miscategorization
-func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *MiscategorizationNewResponse, err error) {
+func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *MiscategorizationNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MiscategorizationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/miscategorization", params.AccountID)
@@ -49,13 +49,13 @@ func (r *MiscategorizationService) New(ctx context.Context, params Miscategoriza
 
 // Union satisfied by [intel.MiscategorizationNewResponseUnknown] or
 // [shared.UnionString].
-type MiscategorizationNewResponse interface {
-	ImplementsIntelMiscategorizationNewResponse()
+type MiscategorizationNewResponseUnion interface {
+	ImplementsIntelMiscategorizationNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*MiscategorizationNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*MiscategorizationNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -106,9 +106,9 @@ func (r MiscategorizationNewParamsIndicatorType) IsKnown() bool {
 }
 
 type MiscategorizationNewResponseEnvelope struct {
-	Errors   []MiscategorizationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MiscategorizationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   MiscategorizationNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   MiscategorizationNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MiscategorizationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    miscategorizationNewResponseEnvelopeJSON    `json:"-"`
@@ -130,52 +130,6 @@ func (r *MiscategorizationNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r miscategorizationNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MiscategorizationNewResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    miscategorizationNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// miscategorizationNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [MiscategorizationNewResponseEnvelopeErrors]
-type miscategorizationNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MiscategorizationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r miscategorizationNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MiscategorizationNewResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    miscategorizationNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// miscategorizationNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MiscategorizationNewResponseEnvelopeMessages]
-type miscategorizationNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MiscategorizationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r miscategorizationNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

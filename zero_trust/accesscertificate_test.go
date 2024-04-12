@@ -33,7 +33,7 @@ func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
 		Name:                cloudflare.F("Allow devs"),
 		AccountID:           cloudflare.F("string"),
 		ZoneID:              cloudflare.F("string"),
-		AssociatedHostnames: cloudflare.F([]string{"admin.example.com", "admin.example.com", "admin.example.com"}),
+		AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com", "admin.example.com", "admin.example.com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,7 +62,7 @@ func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessCertificateUpdateParams{
-			AssociatedHostnames: cloudflare.F([]string{"admin.example.com", "admin.example.com", "admin.example.com"}),
+			AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com", "admin.example.com", "admin.example.com"}),
 			AccountID:           cloudflare.F("string"),
 			ZoneID:              cloudflare.F("string"),
 			Name:                cloudflare.F("Allow devs"),

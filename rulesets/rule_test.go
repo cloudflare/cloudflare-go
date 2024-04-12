@@ -31,25 +31,12 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 	_, err := client.Rulesets.Rules.New(
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
-		rulesets.RuleNewParamsRulesetsBlockRule{
+		rulesets.RuleNewParams{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
-			ID:        cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Action:    cloudflare.F(rulesets.RuleNewParamsRulesetsBlockRuleActionBlock),
-			ActionParameters: cloudflare.F(rulesets.RuleNewParamsRulesetsBlockRuleActionParameters{
-				Response: cloudflare.F(rulesets.RuleNewParamsRulesetsBlockRuleActionParametersResponse{
-					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
-					ContentType: cloudflare.F("application/json"),
-					StatusCode:  cloudflare.F(int64(400)),
-				}),
+			Position: cloudflare.F[rulesets.RuleNewParamsPositionUnion](rulesets.RuleNewParamsPositionBeforePosition{
+				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
 			}),
-			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			Logging: cloudflare.F(rulesets.RuleNewParamsRulesetsBlockRuleLogging{
-				Enabled: cloudflare.F(true),
-			}),
-			Ref: cloudflare.F("my_ref"),
 		},
 	)
 	if err != nil {
@@ -111,25 +98,12 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		"3a03d665bac047339bb530ecb439a90d",
-		rulesets.RuleEditParamsRulesetsBlockRule{
+		rulesets.RuleEditParams{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
-			ID:        cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Action:    cloudflare.F(rulesets.RuleEditParamsRulesetsBlockRuleActionBlock),
-			ActionParameters: cloudflare.F(rulesets.RuleEditParamsRulesetsBlockRuleActionParameters{
-				Response: cloudflare.F(rulesets.RuleEditParamsRulesetsBlockRuleActionParametersResponse{
-					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
-					ContentType: cloudflare.F("application/json"),
-					StatusCode:  cloudflare.F(int64(400)),
-				}),
+			Position: cloudflare.F[rulesets.RuleEditParamsPositionUnion](rulesets.RuleEditParamsPositionBeforePosition{
+				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
 			}),
-			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			Logging: cloudflare.F(rulesets.RuleEditParamsRulesetsBlockRuleLogging{
-				Enabled: cloudflare.F(true),
-			}),
-			Ref: cloudflare.F("my_ref"),
 		},
 	)
 	if err != nil {

@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,7 +34,7 @@ func NewASNService(opts ...option.RequestOption) (r *ASNService) {
 }
 
 // Get ASN Overview
-func (r *ASNService) Get(ctx context.Context, asn IntelASNParam, query ASNGetParams, opts ...option.RequestOption) (res *IntelASN, err error) {
+func (r *ASNService) Get(ctx context.Context, asn ASNParam, query ASNGetParams, opts ...option.RequestOption) (res *ASN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ASNGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v", query.AccountID, asn)
@@ -45,9 +46,9 @@ func (r *ASNService) Get(ctx context.Context, asn IntelASNParam, query ASNGetPar
 	return
 }
 
-type IntelASN = int64
+type ASN = int64
 
-type IntelASNParam = int64
+type ASNParam = int64
 
 type ASNGetParams struct {
 	// Identifier
@@ -55,9 +56,9 @@ type ASNGetParams struct {
 }
 
 type ASNGetResponseEnvelope struct {
-	Errors   []ASNGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ASNGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelASN                         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ASN                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ASNGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    asnGetResponseEnvelopeJSON    `json:"-"`
@@ -79,52 +80,6 @@ func (r *ASNGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r asnGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ASNGetResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    asnGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// asnGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ASNGetResponseEnvelopeErrors]
-type asnGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ASNGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r asnGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ASNGetResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    asnGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// asnGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ASNGetResponseEnvelopeMessages]
-type asnGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ASNGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r asnGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

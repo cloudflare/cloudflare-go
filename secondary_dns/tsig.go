@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +33,7 @@ func NewTSIGService(opts ...option.RequestOption) (r *TSIGService) {
 }
 
 // Create TSIG.
-func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", params.AccountID)
@@ -45,7 +46,7 @@ func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...opt
 }
 
 // Modify TSIG.
-func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpdateParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", params.AccountID, tsigID)
@@ -58,7 +59,7 @@ func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpda
 }
 
 // List TSIGs.
-func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSTSIG], err error) {
+func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TSIG], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,15 +77,15 @@ func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...op
 }
 
 // List TSIGs.
-func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSTSIG] {
+func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TSIG] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete TSIG.
-func (r *TSIGService) Delete(ctx context.Context, tsigID string, body TSIGDeleteParams, opts ...option.RequestOption) (res *TSIGDeleteResponse, err error) {
+func (r *TSIGService) Delete(ctx context.Context, tsigID string, params TSIGDeleteParams, opts ...option.RequestOption) (res *TSIGDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", body.AccountID, tsigID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", params.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -94,7 +95,7 @@ func (r *TSIGService) Delete(ctx context.Context, tsigID string, body TSIGDelete
 }
 
 // Get TSIG.
-func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", query.AccountID, tsigID)
@@ -106,20 +107,19 @@ func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParam
 	return
 }
 
-type SecondaryDNSTSIG struct {
+type TSIG struct {
 	ID string `json:"id,required"`
 	// TSIG algorithm.
 	Algo string `json:"algo,required"`
 	// TSIG key name.
 	Name string `json:"name,required"`
 	// TSIG secret.
-	Secret string               `json:"secret,required"`
-	JSON   secondaryDnstsigJSON `json:"-"`
+	Secret string   `json:"secret,required"`
+	JSON   tsigJSON `json:"-"`
 }
 
-// secondaryDnstsigJSON contains the JSON metadata for the struct
-// [SecondaryDNSTSIG]
-type secondaryDnstsigJSON struct {
+// tsigJSON contains the JSON metadata for the struct [TSIG]
+type tsigJSON struct {
 	ID          apijson.Field
 	Algo        apijson.Field
 	Name        apijson.Field
@@ -128,12 +128,25 @@ type secondaryDnstsigJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSTSIG) UnmarshalJSON(data []byte) (err error) {
+func (r *TSIG) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r secondaryDnstsigJSON) RawJSON() string {
+func (r tsigJSON) RawJSON() string {
 	return r.raw
+}
+
+type TSIGParam struct {
+	// TSIG algorithm.
+	Algo param.Field[string] `json:"algo,required"`
+	// TSIG key name.
+	Name param.Field[string] `json:"name,required"`
+	// TSIG secret.
+	Secret param.Field[string] `json:"secret,required"`
+}
+
+func (r TSIGParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type TSIGDeleteResponse struct {
@@ -159,22 +172,17 @@ func (r tsigDeleteResponseJSON) RawJSON() string {
 
 type TSIGNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// TSIG algorithm.
-	Algo param.Field[string] `json:"algo,required"`
-	// TSIG key name.
-	Name param.Field[string] `json:"name,required"`
-	// TSIG secret.
-	Secret param.Field[string] `json:"secret,required"`
+	TSIG      TSIGParam           `json:"tsig,required"`
 }
 
 func (r TSIGNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.TSIG)
 }
 
 type TSIGNewResponseEnvelope struct {
-	Errors   []TSIGNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TSIG                  `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigNewResponseEnvelopeJSON    `json:"-"`
@@ -199,52 +207,6 @@ func (r tsigNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type TSIGNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    tsigNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGNewResponseEnvelopeErrors]
-type tsigNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    tsigNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGNewResponseEnvelopeMessages]
-type tsigNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type TSIGNewResponseEnvelopeSuccess bool
 
@@ -262,22 +224,17 @@ func (r TSIGNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TSIGUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// TSIG algorithm.
-	Algo param.Field[string] `json:"algo,required"`
-	// TSIG key name.
-	Name param.Field[string] `json:"name,required"`
-	// TSIG secret.
-	Secret param.Field[string] `json:"secret,required"`
+	TSIG      TSIGParam           `json:"tsig,required"`
 }
 
 func (r TSIGUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.TSIG)
 }
 
 type TSIGUpdateResponseEnvelope struct {
-	Errors   []TSIGUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TSIG                  `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigUpdateResponseEnvelopeJSON    `json:"-"`
@@ -302,52 +259,6 @@ func (r tsigUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type TSIGUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    tsigUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGUpdateResponseEnvelopeErrors]
-type tsigUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    tsigUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGUpdateResponseEnvelopeMessages]
-type tsigUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type TSIGUpdateResponseEnvelopeSuccess bool
 
@@ -369,12 +280,17 @@ type TSIGListParams struct {
 
 type TSIGDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r TSIGDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type TSIGDeleteResponseEnvelope struct {
-	Errors   []TSIGDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   TSIGDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TSIGDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigDeleteResponseEnvelopeJSON    `json:"-"`
@@ -399,52 +315,6 @@ func (r tsigDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type TSIGDeleteResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    tsigDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGDeleteResponseEnvelopeErrors]
-type tsigDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGDeleteResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    tsigDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGDeleteResponseEnvelopeMessages]
-type tsigDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type TSIGDeleteResponseEnvelopeSuccess bool
 
@@ -465,9 +335,9 @@ type TSIGGetParams struct {
 }
 
 type TSIGGetResponseEnvelope struct {
-	Errors   []TSIGGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TSIG                  `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigGetResponseEnvelopeJSON    `json:"-"`
@@ -489,52 +359,6 @@ func (r *TSIGGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r tsigGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    tsigGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGGetResponseEnvelopeErrors]
-type tsigGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    tsigGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGGetResponseEnvelopeMessages]
-type tsigGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

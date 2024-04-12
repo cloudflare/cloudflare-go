@@ -32,7 +32,7 @@ func TestRateLimitNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		rate_limits.RateLimitNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -93,6 +93,9 @@ func TestRateLimitDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
+		rate_limits.RateLimitDeleteParams{
+			Body: map[string]interface{}{},
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -122,7 +125,7 @@ func TestRateLimitEdit(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		rate_limits.RateLimitEditParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {

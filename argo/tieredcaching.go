@@ -35,7 +35,7 @@ func NewTieredCachingService(opts ...option.RequestOption) (r *TieredCachingServ
 }
 
 // Updates enablement of Tiered Caching
-func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponse, err error) {
+func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", params.ZoneID)
@@ -48,7 +48,7 @@ func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEdi
 }
 
 // Get Tiered Caching setting
-func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponse, err error) {
+func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", query.ZoneID)
@@ -62,13 +62,13 @@ func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetPa
 
 // Union satisfied by [argo.TieredCachingEditResponseUnknown] or
 // [shared.UnionString].
-type TieredCachingEditResponse interface {
-	ImplementsArgoTieredCachingEditResponse()
+type TieredCachingEditResponseUnion interface {
+	ImplementsArgoTieredCachingEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TieredCachingEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*TieredCachingEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -79,13 +79,13 @@ func init() {
 
 // Union satisfied by [argo.TieredCachingGetResponseUnknown] or
 // [shared.UnionString].
-type TieredCachingGetResponse interface {
-	ImplementsArgoTieredCachingGetResponse()
+type TieredCachingGetResponseUnion interface {
+	ImplementsArgoTieredCachingGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TieredCachingGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*TieredCachingGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -122,9 +122,9 @@ func (r TieredCachingEditParamsValue) IsKnown() bool {
 }
 
 type TieredCachingEditResponseEnvelope struct {
-	Errors   []TieredCachingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TieredCachingEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   TieredCachingEditResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   TieredCachingEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingEditResponseEnvelopeJSON    `json:"-"`
@@ -149,52 +149,6 @@ func (r tieredCachingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type TieredCachingEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    tieredCachingEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tieredCachingEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [TieredCachingEditResponseEnvelopeErrors]
-type tieredCachingEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TieredCachingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tieredCachingEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TieredCachingEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    tieredCachingEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tieredCachingEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TieredCachingEditResponseEnvelopeMessages]
-type tieredCachingEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TieredCachingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tieredCachingEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type TieredCachingEditResponseEnvelopeSuccess bool
 
@@ -216,9 +170,9 @@ type TieredCachingGetParams struct {
 }
 
 type TieredCachingGetResponseEnvelope struct {
-	Errors   []TieredCachingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TieredCachingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TieredCachingGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   TieredCachingGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingGetResponseEnvelopeJSON    `json:"-"`
@@ -240,52 +194,6 @@ func (r *TieredCachingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r tieredCachingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TieredCachingGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    tieredCachingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tieredCachingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [TieredCachingGetResponseEnvelopeErrors]
-type tieredCachingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TieredCachingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tieredCachingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TieredCachingGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    tieredCachingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tieredCachingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TieredCachingGetResponseEnvelopeMessages]
-type tieredCachingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TieredCachingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tieredCachingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

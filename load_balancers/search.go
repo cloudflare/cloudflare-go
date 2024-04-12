@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -58,7 +59,7 @@ type SearchGetParams struct {
 // URLQuery serializes [SearchGetParams]'s query parameters as `url.Values`.
 func (r SearchGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -74,7 +75,7 @@ type SearchGetParamsSearchParams struct {
 // `url.Values`.
 func (r SearchGetParamsSearchParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -98,9 +99,9 @@ func (r SearchGetParamsSearchParamsReferences) IsKnown() bool {
 }
 
 type SearchGetResponseEnvelope struct {
-	Errors   []SearchGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SearchGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []SearchGetResponse                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []SearchGetResponse   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SearchGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SearchGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -124,52 +125,6 @@ func (r *SearchGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r searchGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SearchGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    searchGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// searchGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SearchGetResponseEnvelopeErrors]
-type searchGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SearchGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r searchGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SearchGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    searchGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// searchGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SearchGetResponseEnvelopeMessages]
-type searchGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SearchGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r searchGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

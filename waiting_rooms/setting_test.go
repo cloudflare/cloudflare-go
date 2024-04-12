@@ -28,13 +28,10 @@ func TestSettingUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WaitingRooms.Settings.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		waiting_rooms.SettingUpdateParams{
-			SearchEngineCrawlerBypass: cloudflare.F(true),
-		},
-	)
+	_, err := client.WaitingRooms.Settings.Update(context.TODO(), waiting_rooms.SettingUpdateParams{
+		ZoneID:                    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		SearchEngineCrawlerBypass: cloudflare.F(true),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -58,13 +55,10 @@ func TestSettingEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WaitingRooms.Settings.Edit(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		waiting_rooms.SettingEditParams{
-			SearchEngineCrawlerBypass: cloudflare.F(true),
-		},
-	)
+	_, err := client.WaitingRooms.Settings.Edit(context.TODO(), waiting_rooms.SettingEditParams{
+		ZoneID:                    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		SearchEngineCrawlerBypass: cloudflare.F(true),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -88,7 +82,9 @@ func TestSettingGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WaitingRooms.Settings.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.WaitingRooms.Settings.Get(context.TODO(), waiting_rooms.SettingGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

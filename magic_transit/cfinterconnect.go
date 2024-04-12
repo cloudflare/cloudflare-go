@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -196,13 +197,13 @@ type CfInterconnectListResponseInterconnectsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate CfInterconnectListResponseInterconnectsHealthCheckRate `json:"rate"`
+	Rate HealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type CfInterconnectListResponseInterconnectsHealthCheckType `json:"type"`
+	Type HealthCheckType                                        `json:"type"`
 	JSON cfInterconnectListResponseInterconnectsHealthCheckJSON `json:"-"`
 }
 
@@ -223,39 +224,6 @@ func (r *CfInterconnectListResponseInterconnectsHealthCheck) UnmarshalJSON(data 
 
 func (r cfInterconnectListResponseInterconnectsHealthCheckJSON) RawJSON() string {
 	return r.raw
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type CfInterconnectListResponseInterconnectsHealthCheckRate string
-
-const (
-	CfInterconnectListResponseInterconnectsHealthCheckRateLow  CfInterconnectListResponseInterconnectsHealthCheckRate = "low"
-	CfInterconnectListResponseInterconnectsHealthCheckRateMid  CfInterconnectListResponseInterconnectsHealthCheckRate = "mid"
-	CfInterconnectListResponseInterconnectsHealthCheckRateHigh CfInterconnectListResponseInterconnectsHealthCheckRate = "high"
-)
-
-func (r CfInterconnectListResponseInterconnectsHealthCheckRate) IsKnown() bool {
-	switch r {
-	case CfInterconnectListResponseInterconnectsHealthCheckRateLow, CfInterconnectListResponseInterconnectsHealthCheckRateMid, CfInterconnectListResponseInterconnectsHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type CfInterconnectListResponseInterconnectsHealthCheckType string
-
-const (
-	CfInterconnectListResponseInterconnectsHealthCheckTypeReply   CfInterconnectListResponseInterconnectsHealthCheckType = "reply"
-	CfInterconnectListResponseInterconnectsHealthCheckTypeRequest CfInterconnectListResponseInterconnectsHealthCheckType = "request"
-)
-
-func (r CfInterconnectListResponseInterconnectsHealthCheckType) IsKnown() bool {
-	switch r {
-	case CfInterconnectListResponseInterconnectsHealthCheckTypeReply, CfInterconnectListResponseInterconnectsHealthCheckTypeRequest:
-		return true
-	}
-	return false
 }
 
 type CfInterconnectGetResponse struct {
@@ -315,56 +283,23 @@ type CfInterconnectUpdateParamsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[CfInterconnectUpdateParamsHealthCheckRate] `json:"rate"`
+	Rate param.Field[HealthCheckRate] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[CfInterconnectUpdateParamsHealthCheckType] `json:"type"`
+	Type param.Field[HealthCheckType] `json:"type"`
 }
 
 func (r CfInterconnectUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// How frequent the health check is run. The default value is `mid`.
-type CfInterconnectUpdateParamsHealthCheckRate string
-
-const (
-	CfInterconnectUpdateParamsHealthCheckRateLow  CfInterconnectUpdateParamsHealthCheckRate = "low"
-	CfInterconnectUpdateParamsHealthCheckRateMid  CfInterconnectUpdateParamsHealthCheckRate = "mid"
-	CfInterconnectUpdateParamsHealthCheckRateHigh CfInterconnectUpdateParamsHealthCheckRate = "high"
-)
-
-func (r CfInterconnectUpdateParamsHealthCheckRate) IsKnown() bool {
-	switch r {
-	case CfInterconnectUpdateParamsHealthCheckRateLow, CfInterconnectUpdateParamsHealthCheckRateMid, CfInterconnectUpdateParamsHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type CfInterconnectUpdateParamsHealthCheckType string
-
-const (
-	CfInterconnectUpdateParamsHealthCheckTypeReply   CfInterconnectUpdateParamsHealthCheckType = "reply"
-	CfInterconnectUpdateParamsHealthCheckTypeRequest CfInterconnectUpdateParamsHealthCheckType = "request"
-)
-
-func (r CfInterconnectUpdateParamsHealthCheckType) IsKnown() bool {
-	switch r {
-	case CfInterconnectUpdateParamsHealthCheckTypeReply, CfInterconnectUpdateParamsHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type CfInterconnectUpdateResponseEnvelope struct {
-	Errors   []CfInterconnectUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CfInterconnectUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CfInterconnectUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   CfInterconnectUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectUpdateResponseEnvelopeJSON    `json:"-"`
@@ -389,52 +324,6 @@ func (r cfInterconnectUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CfInterconnectUpdateResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    cfInterconnectUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cfInterconnectUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CfInterconnectUpdateResponseEnvelopeErrors]
-type cfInterconnectUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CfInterconnectUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CfInterconnectUpdateResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    cfInterconnectUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cfInterconnectUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CfInterconnectUpdateResponseEnvelopeMessages]
-type cfInterconnectUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CfInterconnectUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CfInterconnectUpdateResponseEnvelopeSuccess bool
 
@@ -456,9 +345,9 @@ type CfInterconnectListParams struct {
 }
 
 type CfInterconnectListResponseEnvelope struct {
-	Errors   []CfInterconnectListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CfInterconnectListResponseEnvelopeMessages `json:"messages,required"`
-	Result   CfInterconnectListResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   CfInterconnectListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectListResponseEnvelopeJSON    `json:"-"`
@@ -483,52 +372,6 @@ func (r cfInterconnectListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CfInterconnectListResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    cfInterconnectListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cfInterconnectListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CfInterconnectListResponseEnvelopeErrors]
-type cfInterconnectListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CfInterconnectListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CfInterconnectListResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    cfInterconnectListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cfInterconnectListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CfInterconnectListResponseEnvelopeMessages]
-type cfInterconnectListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CfInterconnectListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CfInterconnectListResponseEnvelopeSuccess bool
 
@@ -550,9 +393,9 @@ type CfInterconnectGetParams struct {
 }
 
 type CfInterconnectGetResponseEnvelope struct {
-	Errors   []CfInterconnectGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CfInterconnectGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CfInterconnectGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   CfInterconnectGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectGetResponseEnvelopeJSON    `json:"-"`
@@ -574,52 +417,6 @@ func (r *CfInterconnectGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r cfInterconnectGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CfInterconnectGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    cfInterconnectGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cfInterconnectGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CfInterconnectGetResponseEnvelopeErrors]
-type cfInterconnectGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CfInterconnectGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CfInterconnectGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    cfInterconnectGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cfInterconnectGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [CfInterconnectGetResponseEnvelopeMessages]
-type cfInterconnectGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CfInterconnectGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

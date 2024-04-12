@@ -33,7 +33,7 @@ func TestGatewayListNewWithOptionalParams(t *testing.T) {
 		Name:        cloudflare.F("Admin Serial Numbers"),
 		Type:        cloudflare.F(zero_trust.GatewayListNewParamsTypeSerial),
 		Description: cloudflare.F("The serial numbers for administrators"),
-		Items: cloudflare.F([]zero_trust.GatewayListNewParamsItem{{
+		Items: cloudflare.F([]zero_trust.GatewayItemParam{{
 			Value: cloudflare.F("8GE8721REF"),
 		}, {
 			Value: cloudflare.F("8GE8721REF"),
@@ -127,6 +127,7 @@ func TestGatewayListDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -157,7 +158,7 @@ func TestGatewayListEditWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListEditParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Append: cloudflare.F([]zero_trust.GatewayListEditParamsAppend{{
+			Append: cloudflare.F([]zero_trust.GatewayItemParam{{
 				Value: cloudflare.F("8GE8721REF"),
 			}, {
 				Value: cloudflare.F("8GE8721REF"),

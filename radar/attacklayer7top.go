@@ -240,9 +240,9 @@ func (r attackLayer7TopAttacksResponseTop0JSON) RawJSON() string {
 }
 
 type AttackLayer7TopIndustryResponse struct {
-	Meta AttackLayer7TopIndustryResponseMeta   `json:"meta,required"`
-	Top0 []AttackLayer7TopIndustryResponseTop0 `json:"top_0,required"`
-	JSON attackLayer7TopIndustryResponseJSON   `json:"-"`
+	Meta AttackLayer7TopIndustryResponseMeta `json:"meta,required"`
+	Top0 []Browser                           `json:"top_0,required"`
+	JSON attackLayer7TopIndustryResponseJSON `json:"-"`
 }
 
 // attackLayer7TopIndustryResponseJSON contains the JSON metadata for the struct
@@ -369,33 +369,10 @@ func (r attackLayer7TopIndustryResponseMetaConfidenceInfoAnnotationJSON) RawJSON
 	return r.raw
 }
 
-type AttackLayer7TopIndustryResponseTop0 struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
-	JSON  attackLayer7TopIndustryResponseTop0JSON `json:"-"`
-}
-
-// attackLayer7TopIndustryResponseTop0JSON contains the JSON metadata for the
-// struct [AttackLayer7TopIndustryResponseTop0]
-type attackLayer7TopIndustryResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer7TopIndustryResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer7TopIndustryResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer7TopVerticalResponse struct {
-	Meta AttackLayer7TopVerticalResponseMeta   `json:"meta,required"`
-	Top0 []AttackLayer7TopVerticalResponseTop0 `json:"top_0,required"`
-	JSON attackLayer7TopVerticalResponseJSON   `json:"-"`
+	Meta AttackLayer7TopVerticalResponseMeta `json:"meta,required"`
+	Top0 []Browser                           `json:"top_0,required"`
+	JSON attackLayer7TopVerticalResponseJSON `json:"-"`
 }
 
 // attackLayer7TopVerticalResponseJSON contains the JSON metadata for the struct
@@ -522,29 +499,6 @@ func (r attackLayer7TopVerticalResponseMetaConfidenceInfoAnnotationJSON) RawJSON
 	return r.raw
 }
 
-type AttackLayer7TopVerticalResponseTop0 struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
-	JSON  attackLayer7TopVerticalResponseTop0JSON `json:"-"`
-}
-
-// attackLayer7TopVerticalResponseTop0JSON contains the JSON metadata for the
-// struct [AttackLayer7TopVerticalResponseTop0]
-type attackLayer7TopVerticalResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer7TopVerticalResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer7TopVerticalResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer7TopAttacksParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
@@ -588,7 +542,7 @@ type AttackLayer7TopAttacksParams struct {
 // `url.Values`.
 func (r AttackLayer7TopAttacksParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -728,7 +682,7 @@ type AttackLayer7TopIndustryParams struct {
 // `url.Values`.
 func (r AttackLayer7TopIndustryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -833,7 +787,7 @@ type AttackLayer7TopVerticalParams struct {
 // `url.Values`.
 func (r AttackLayer7TopVerticalParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

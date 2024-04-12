@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -56,7 +57,7 @@ type CertificatePackOrderNewResponse struct {
 	CloudflareBranding bool `json:"cloudflare_branding"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []string `json:"hosts"`
+	Hosts []Host `json:"hosts"`
 	// Status of certificate pack.
 	Status CertificatePackOrderNewResponseStatus `json:"status"`
 	// Type of certificate pack.
@@ -203,7 +204,7 @@ type CertificatePackOrderNewParams struct {
 	CertificateAuthority param.Field[CertificatePackOrderNewParamsCertificateAuthority] `json:"certificate_authority,required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts param.Field[[]string] `json:"hosts,required"`
+	Hosts param.Field[[]HostParam] `json:"hosts,required"`
 	// Type of certificate pack.
 	Type param.Field[CertificatePackOrderNewParamsType] `json:"type,required"`
 	// Validation Method selected for the order.
@@ -288,9 +289,9 @@ func (r CertificatePackOrderNewParamsValidityDays) IsKnown() bool {
 }
 
 type CertificatePackOrderNewResponseEnvelope struct {
-	Errors   []CertificatePackOrderNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackOrderNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CertificatePackOrderNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   CertificatePackOrderNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackOrderNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackOrderNewResponseEnvelopeJSON    `json:"-"`
@@ -312,52 +313,6 @@ func (r *CertificatePackOrderNewResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r certificatePackOrderNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackOrderNewResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    certificatePackOrderNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// certificatePackOrderNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CertificatePackOrderNewResponseEnvelopeErrors]
-type certificatePackOrderNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackOrderNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackOrderNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackOrderNewResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    certificatePackOrderNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// certificatePackOrderNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CertificatePackOrderNewResponseEnvelopeMessages]
-type certificatePackOrderNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackOrderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackOrderNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

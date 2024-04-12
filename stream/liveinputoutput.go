@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,7 +36,7 @@ func NewLiveInputOutputService(opts ...option.RequestOption) (r *LiveInputOutput
 // Creates a new output that can be used to simulcast or restream live video to
 // other RTMP or SRT destinations. Outputs are always linked to a specific live
 // input — one live input can have many outputs.
-func (r *LiveInputOutputService) New(ctx context.Context, liveInputIdentifier string, params LiveInputOutputNewParams, opts ...option.RequestOption) (res *StreamOutput, err error) {
+func (r *LiveInputOutputService) New(ctx context.Context, liveInputIdentifier string, params LiveInputOutputNewParams, opts ...option.RequestOption) (res *Output, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputOutputNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", params.AccountID, liveInputIdentifier)
@@ -48,7 +49,7 @@ func (r *LiveInputOutputService) New(ctx context.Context, liveInputIdentifier st
 }
 
 // Updates the state of an output.
-func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params LiveInputOutputUpdateParams, opts ...option.RequestOption) (res *StreamOutput, err error) {
+func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params LiveInputOutputUpdateParams, opts ...option.RequestOption) (res *Output, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputOutputUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", params.AccountID, liveInputIdentifier, outputIdentifier)
@@ -61,7 +62,7 @@ func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamOutput], err error) {
+func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Output], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,20 +80,20 @@ func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier s
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamOutput] {
+func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Output] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, liveInputIdentifier, query, opts...))
 }
 
 // Deletes an output and removes it from the associated live input.
-func (r *LiveInputOutputService) Delete(ctx context.Context, liveInputIdentifier string, outputIdentifier string, body LiveInputOutputDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *LiveInputOutputService) Delete(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params LiveInputOutputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", body.AccountID, liveInputIdentifier, outputIdentifier)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", params.AccountID, liveInputIdentifier, outputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
-type StreamOutput struct {
+type Output struct {
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
 	// even when streaming to the associated live input. Use this to control precisely
@@ -102,27 +103,27 @@ type StreamOutput struct {
 	// The streamKey used to authenticate against an output's target.
 	StreamKey string `json:"streamKey"`
 	// A unique identifier for the output.
-	Uid string `json:"uid"`
+	UID string `json:"uid"`
 	// The URL an output uses to restream.
-	URL  string           `json:"url"`
-	JSON streamOutputJSON `json:"-"`
+	URL  string     `json:"url"`
+	JSON outputJSON `json:"-"`
 }
 
-// streamOutputJSON contains the JSON metadata for the struct [StreamOutput]
-type streamOutputJSON struct {
+// outputJSON contains the JSON metadata for the struct [Output]
+type outputJSON struct {
 	Enabled     apijson.Field
 	StreamKey   apijson.Field
-	Uid         apijson.Field
+	UID         apijson.Field
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamOutput) UnmarshalJSON(data []byte) (err error) {
+func (r *Output) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamOutputJSON) RawJSON() string {
+func (r outputJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -146,9 +147,9 @@ func (r LiveInputOutputNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LiveInputOutputNewResponseEnvelope struct {
-	Errors   []LiveInputOutputNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LiveInputOutputNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamOutput                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Output                `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputOutputNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    liveInputOutputNewResponseEnvelopeJSON    `json:"-"`
@@ -170,52 +171,6 @@ func (r *LiveInputOutputNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r liveInputOutputNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LiveInputOutputNewResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    liveInputOutputNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// liveInputOutputNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [LiveInputOutputNewResponseEnvelopeErrors]
-type liveInputOutputNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputOutputNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputOutputNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LiveInputOutputNewResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    liveInputOutputNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// liveInputOutputNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [LiveInputOutputNewResponseEnvelopeMessages]
-type liveInputOutputNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputOutputNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputOutputNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -250,9 +205,9 @@ func (r LiveInputOutputUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LiveInputOutputUpdateResponseEnvelope struct {
-	Errors   []LiveInputOutputUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LiveInputOutputUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamOutput                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Output                `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputOutputUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    liveInputOutputUpdateResponseEnvelopeJSON    `json:"-"`
@@ -274,52 +229,6 @@ func (r *LiveInputOutputUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r liveInputOutputUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LiveInputOutputUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    liveInputOutputUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// liveInputOutputUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LiveInputOutputUpdateResponseEnvelopeErrors]
-type liveInputOutputUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputOutputUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputOutputUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LiveInputOutputUpdateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    liveInputOutputUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// liveInputOutputUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [LiveInputOutputUpdateResponseEnvelopeMessages]
-type liveInputOutputUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputOutputUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputOutputUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -346,4 +255,9 @@ type LiveInputOutputListParams struct {
 type LiveInputOutputDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r LiveInputOutputDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }

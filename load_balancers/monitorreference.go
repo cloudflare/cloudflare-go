@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -93,8 +94,8 @@ type MonitorReferenceGetParams struct {
 }
 
 type MonitorReferenceGetResponseEnvelope struct {
-	Errors   []MonitorReferenceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MonitorReferenceGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// List of resources that reference a given monitor.
 	Result []MonitorReferenceGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -120,52 +121,6 @@ func (r *MonitorReferenceGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r monitorReferenceGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MonitorReferenceGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    monitorReferenceGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// monitorReferenceGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MonitorReferenceGetResponseEnvelopeErrors]
-type monitorReferenceGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorReferenceGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorReferenceGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MonitorReferenceGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    monitorReferenceGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// monitorReferenceGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MonitorReferenceGetResponseEnvelopeMessages]
-type monitorReferenceGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorReferenceGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorReferenceGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -39,7 +40,7 @@ func NewSettingHotlinkProtectionService(opts ...option.RequestOption) (r *Settin
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, params SettingHotlinkProtectionEditParams, opts ...option.RequestOption) (res *ZoneSettingHotlinkProtection, err error) {
+func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, params SettingHotlinkProtectionEditParams, opts ...option.RequestOption) (res *HotlinkProtection, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHotlinkProtectionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", params.ZoneID)
@@ -58,7 +59,7 @@ func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, params Setti
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-func (r *SettingHotlinkProtectionService) Get(ctx context.Context, query SettingHotlinkProtectionGetParams, opts ...option.RequestOption) (res *ZoneSettingHotlinkProtection, err error) {
+func (r *SettingHotlinkProtectionService) Get(ctx context.Context, query SettingHotlinkProtectionGetParams, opts ...option.RequestOption) (res *HotlinkProtection, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHotlinkProtectionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", query.ZoneID)
@@ -77,22 +78,22 @@ func (r *SettingHotlinkProtectionService) Get(ctx context.Context, query Setting
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type ZoneSettingHotlinkProtection struct {
+type HotlinkProtection struct {
 	// ID of the zone setting.
-	ID ZoneSettingHotlinkProtectionID `json:"id,required"`
+	ID HotlinkProtectionID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingHotlinkProtectionValue `json:"value,required"`
+	Value HotlinkProtectionValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingHotlinkProtectionEditable `json:"editable"`
+	Editable HotlinkProtectionEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingHotlinkProtectionJSON `json:"-"`
+	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
+	JSON       hotlinkProtectionJSON `json:"-"`
 }
 
-// zoneSettingHotlinkProtectionJSON contains the JSON metadata for the struct
-// [ZoneSettingHotlinkProtection]
-type zoneSettingHotlinkProtectionJSON struct {
+// hotlinkProtectionJSON contains the JSON metadata for the struct
+// [HotlinkProtection]
+type hotlinkProtectionJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -101,44 +102,40 @@ type zoneSettingHotlinkProtectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingHotlinkProtection) UnmarshalJSON(data []byte) (err error) {
+func (r *HotlinkProtection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingHotlinkProtectionJSON) RawJSON() string {
+func (r hotlinkProtectionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingHotlinkProtection) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingHotlinkProtection) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingHotlinkProtectionID string
+type HotlinkProtectionID string
 
 const (
-	ZoneSettingHotlinkProtectionIDHotlinkProtection ZoneSettingHotlinkProtectionID = "hotlink_protection"
+	HotlinkProtectionIDHotlinkProtection HotlinkProtectionID = "hotlink_protection"
 )
 
-func (r ZoneSettingHotlinkProtectionID) IsKnown() bool {
+func (r HotlinkProtectionID) IsKnown() bool {
 	switch r {
-	case ZoneSettingHotlinkProtectionIDHotlinkProtection:
+	case HotlinkProtectionIDHotlinkProtection:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingHotlinkProtectionValue string
+type HotlinkProtectionValue string
 
 const (
-	ZoneSettingHotlinkProtectionValueOn  ZoneSettingHotlinkProtectionValue = "on"
-	ZoneSettingHotlinkProtectionValueOff ZoneSettingHotlinkProtectionValue = "off"
+	HotlinkProtectionValueOn  HotlinkProtectionValue = "on"
+	HotlinkProtectionValueOff HotlinkProtectionValue = "off"
 )
 
-func (r ZoneSettingHotlinkProtectionValue) IsKnown() bool {
+func (r HotlinkProtectionValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingHotlinkProtectionValueOn, ZoneSettingHotlinkProtectionValueOff:
+	case HotlinkProtectionValueOn, HotlinkProtectionValueOff:
 		return true
 	}
 	return false
@@ -146,40 +143,20 @@ func (r ZoneSettingHotlinkProtectionValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingHotlinkProtectionEditable bool
+type HotlinkProtectionEditable bool
 
 const (
-	ZoneSettingHotlinkProtectionEditableTrue  ZoneSettingHotlinkProtectionEditable = true
-	ZoneSettingHotlinkProtectionEditableFalse ZoneSettingHotlinkProtectionEditable = false
+	HotlinkProtectionEditableTrue  HotlinkProtectionEditable = true
+	HotlinkProtectionEditableFalse HotlinkProtectionEditable = false
 )
 
-func (r ZoneSettingHotlinkProtectionEditable) IsKnown() bool {
+func (r HotlinkProtectionEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingHotlinkProtectionEditableTrue, ZoneSettingHotlinkProtectionEditableFalse:
+	case HotlinkProtectionEditableTrue, HotlinkProtectionEditableFalse:
 		return true
 	}
 	return false
 }
-
-// When enabled, the Hotlink Protection option ensures that other sites cannot suck
-// up your bandwidth by building pages that use images hosted on your site. Anytime
-// a request for an image on your site hits Cloudflare, we check to ensure that
-// it's not another site requesting them. People will still be able to download and
-// view images from your page, but other sites won't be able to steal them for use
-// on their own pages.
-// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type ZoneSettingHotlinkProtectionParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingHotlinkProtectionID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingHotlinkProtectionValue] `json:"value,required"`
-}
-
-func (r ZoneSettingHotlinkProtectionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingHotlinkProtectionParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingHotlinkProtectionEditParams struct {
 	// Identifier
@@ -209,8 +186,8 @@ func (r SettingHotlinkProtectionEditParamsValue) IsKnown() bool {
 }
 
 type SettingHotlinkProtectionEditResponseEnvelope struct {
-	Errors   []SettingHotlinkProtectionEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHotlinkProtectionEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, the Hotlink Protection option ensures that other sites cannot suck
@@ -220,7 +197,7 @@ type SettingHotlinkProtectionEditResponseEnvelope struct {
 	// view images from your page, but other sites won't be able to steal them for use
 	// on their own pages.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-	Result ZoneSettingHotlinkProtection                     `json:"result"`
+	Result HotlinkProtection                                `json:"result"`
 	JSON   settingHotlinkProtectionEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -243,60 +220,14 @@ func (r settingHotlinkProtectionEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingHotlinkProtectionEditResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingHotlinkProtectionEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingHotlinkProtectionEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingHotlinkProtectionEditResponseEnvelopeErrors]
-type settingHotlinkProtectionEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHotlinkProtectionEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHotlinkProtectionEditResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingHotlinkProtectionEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHotlinkProtectionEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingHotlinkProtectionEditResponseEnvelopeMessages]
-type settingHotlinkProtectionEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHotlinkProtectionEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingHotlinkProtectionGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingHotlinkProtectionGetResponseEnvelope struct {
-	Errors   []SettingHotlinkProtectionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHotlinkProtectionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, the Hotlink Protection option ensures that other sites cannot suck
@@ -306,7 +237,7 @@ type SettingHotlinkProtectionGetResponseEnvelope struct {
 	// view images from your page, but other sites won't be able to steal them for use
 	// on their own pages.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-	Result ZoneSettingHotlinkProtection                    `json:"result"`
+	Result HotlinkProtection                               `json:"result"`
 	JSON   settingHotlinkProtectionGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -326,51 +257,5 @@ func (r *SettingHotlinkProtectionGetResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r settingHotlinkProtectionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHotlinkProtectionGetResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingHotlinkProtectionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingHotlinkProtectionGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingHotlinkProtectionGetResponseEnvelopeErrors]
-type settingHotlinkProtectionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHotlinkProtectionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHotlinkProtectionGetResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingHotlinkProtectionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHotlinkProtectionGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingHotlinkProtectionGetResponseEnvelopeMessages]
-type settingHotlinkProtectionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHotlinkProtectionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

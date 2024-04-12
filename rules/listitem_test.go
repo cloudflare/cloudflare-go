@@ -33,55 +33,55 @@ func TestListItemNew(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		rules.ListItemNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F([]rules.ListItemNewParamsBody{{
+			Body: []rules.ListItemNewParamsBody{{
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				Hostname: cloudflare.F(rules.ListItemNewParamsBodyHostname{
+				Hostname: cloudflare.F(rules.HostnameParam{
 					URLHostname: cloudflare.F("example.com"),
 				}),
 				IP: cloudflare.F("10.0.0.1"),
-				Redirect: cloudflare.F(rules.ListItemNewParamsBodyRedirect{
+				Redirect: cloudflare.F(rules.RedirectParam{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
 					SourceURL:           cloudflare.F("example.com/arch"),
-					StatusCode:          cloudflare.F(rules.ListItemNewParamsBodyRedirectStatusCode301),
+					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				Hostname: cloudflare.F(rules.ListItemNewParamsBodyHostname{
+				Hostname: cloudflare.F(rules.HostnameParam{
 					URLHostname: cloudflare.F("example.com"),
 				}),
 				IP: cloudflare.F("10.0.0.1"),
-				Redirect: cloudflare.F(rules.ListItemNewParamsBodyRedirect{
+				Redirect: cloudflare.F(rules.RedirectParam{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
 					SourceURL:           cloudflare.F("example.com/arch"),
-					StatusCode:          cloudflare.F(rules.ListItemNewParamsBodyRedirectStatusCode301),
+					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				Hostname: cloudflare.F(rules.ListItemNewParamsBodyHostname{
+				Hostname: cloudflare.F(rules.HostnameParam{
 					URLHostname: cloudflare.F("example.com"),
 				}),
 				IP: cloudflare.F("10.0.0.1"),
-				Redirect: cloudflare.F(rules.ListItemNewParamsBodyRedirect{
+				Redirect: cloudflare.F(rules.RedirectParam{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
 					SourceURL:           cloudflare.F("example.com/arch"),
-					StatusCode:          cloudflare.F(rules.ListItemNewParamsBodyRedirectStatusCode301),
+					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
-			}}),
+			}},
 		},
 	)
 	if err != nil {
@@ -112,55 +112,55 @@ func TestListItemUpdate(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		rules.ListItemUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F([]rules.ListItemUpdateParamsBody{{
+			Body: []rules.ListItemUpdateParamsBody{{
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				Hostname: cloudflare.F(rules.ListItemUpdateParamsBodyHostname{
+				Hostname: cloudflare.F(rules.HostnameParam{
 					URLHostname: cloudflare.F("example.com"),
 				}),
 				IP: cloudflare.F("10.0.0.1"),
-				Redirect: cloudflare.F(rules.ListItemUpdateParamsBodyRedirect{
+				Redirect: cloudflare.F(rules.RedirectParam{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
 					SourceURL:           cloudflare.F("example.com/arch"),
-					StatusCode:          cloudflare.F(rules.ListItemUpdateParamsBodyRedirectStatusCode301),
+					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				Hostname: cloudflare.F(rules.ListItemUpdateParamsBodyHostname{
+				Hostname: cloudflare.F(rules.HostnameParam{
 					URLHostname: cloudflare.F("example.com"),
 				}),
 				IP: cloudflare.F("10.0.0.1"),
-				Redirect: cloudflare.F(rules.ListItemUpdateParamsBodyRedirect{
+				Redirect: cloudflare.F(rules.RedirectParam{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
 					SourceURL:           cloudflare.F("example.com/arch"),
-					StatusCode:          cloudflare.F(rules.ListItemUpdateParamsBodyRedirectStatusCode301),
+					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				Hostname: cloudflare.F(rules.ListItemUpdateParamsBodyHostname{
+				Hostname: cloudflare.F(rules.HostnameParam{
 					URLHostname: cloudflare.F("example.com"),
 				}),
 				IP: cloudflare.F("10.0.0.1"),
-				Redirect: cloudflare.F(rules.ListItemUpdateParamsBodyRedirect{
+				Redirect: cloudflare.F(rules.RedirectParam{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
 					SourceURL:           cloudflare.F("example.com/arch"),
-					StatusCode:          cloudflare.F(rules.ListItemUpdateParamsBodyRedirectStatusCode301),
+					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
-			}}),
+			}},
 		},
 	)
 	if err != nil {

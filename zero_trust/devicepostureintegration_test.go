@@ -30,12 +30,12 @@ func TestDevicePostureIntegrationNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.Posture.Integrations.New(context.TODO(), zero_trust.DevicePostureIntegrationNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Config: cloudflare.F[zero_trust.DevicePostureIntegrationNewParamsConfig](zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest(zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
+		Config: cloudflare.F[zero_trust.DevicePostureIntegrationNewParamsConfigUnion](zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
 			APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
 			AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
 			ClientID:     cloudflare.F("example client id"),
 			ClientSecret: cloudflare.F("example client secret"),
-		})),
+		}),
 		Interval: cloudflare.F("10m"),
 		Name:     cloudflare.F("My Workspace One Integration"),
 		Type:     cloudflare.F(zero_trust.DevicePostureIntegrationNewParamsTypeWorkspaceOne),
@@ -94,6 +94,7 @@ func TestDevicePostureIntegrationDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureIntegrationDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -124,12 +125,12 @@ func TestDevicePostureIntegrationEditWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureIntegrationEditParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Config: cloudflare.F[zero_trust.DevicePostureIntegrationEditParamsConfig](zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest(zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
+			Config: cloudflare.F[zero_trust.DevicePostureIntegrationEditParamsConfigUnion](zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
 				APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
 				AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
 				ClientID:     cloudflare.F("example client id"),
 				ClientSecret: cloudflare.F("example client secret"),
-			})),
+			}),
 			Interval: cloudflare.F("10m"),
 			Name:     cloudflare.F("My Workspace One Integration"),
 			Type:     cloudflare.F(zero_trust.DevicePostureIntegrationEditParamsTypeWorkspaceOne),

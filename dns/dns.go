@@ -3,6 +3,9 @@
 package dns
 
 import (
+	"time"
+
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -27,4 +30,74 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	r.Analytics = NewAnalyticsService(opts...)
 	r.Firewall = NewFirewallService(opts...)
 	return
+}
+
+type DNSAnalyticsNominalMetric []interface{}
+
+type DNSAnalyticsQuery struct {
+	// Array of dimension names.
+	Dimensions []string `json:"dimensions,required"`
+	// Limit number of returned metrics.
+	Limit int64 `json:"limit,required"`
+	// Array of metric names.
+	Metrics []string `json:"metrics,required"`
+	// Start date and time of requesting data period in ISO 8601 format.
+	Since time.Time `json:"since,required" format:"date-time"`
+	// Unit of time to group data by.
+	TimeDelta DNSAnalyticsQueryTimeDelta `json:"time_delta,required"`
+	// End date and time of requesting data period in ISO 8601 format.
+	Until time.Time `json:"until,required" format:"date-time"`
+	// Segmentation filter in 'attribute operator value' format.
+	Filters string `json:"filters"`
+	// Array of dimensions to sort by, where each dimension may be prefixed by -
+	// (descending) or + (ascending).
+	Sort []string              `json:"sort"`
+	JSON dnsAnalyticsQueryJSON `json:"-"`
+}
+
+// dnsAnalyticsQueryJSON contains the JSON metadata for the struct
+// [DNSAnalyticsQuery]
+type dnsAnalyticsQueryJSON struct {
+	Dimensions  apijson.Field
+	Limit       apijson.Field
+	Metrics     apijson.Field
+	Since       apijson.Field
+	TimeDelta   apijson.Field
+	Until       apijson.Field
+	Filters     apijson.Field
+	Sort        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSAnalyticsQuery) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsAnalyticsQueryJSON) RawJSON() string {
+	return r.raw
+}
+
+// Unit of time to group data by.
+type DNSAnalyticsQueryTimeDelta string
+
+const (
+	DNSAnalyticsQueryTimeDeltaAll        DNSAnalyticsQueryTimeDelta = "all"
+	DNSAnalyticsQueryTimeDeltaAuto       DNSAnalyticsQueryTimeDelta = "auto"
+	DNSAnalyticsQueryTimeDeltaYear       DNSAnalyticsQueryTimeDelta = "year"
+	DNSAnalyticsQueryTimeDeltaQuarter    DNSAnalyticsQueryTimeDelta = "quarter"
+	DNSAnalyticsQueryTimeDeltaMonth      DNSAnalyticsQueryTimeDelta = "month"
+	DNSAnalyticsQueryTimeDeltaWeek       DNSAnalyticsQueryTimeDelta = "week"
+	DNSAnalyticsQueryTimeDeltaDay        DNSAnalyticsQueryTimeDelta = "day"
+	DNSAnalyticsQueryTimeDeltaHour       DNSAnalyticsQueryTimeDelta = "hour"
+	DNSAnalyticsQueryTimeDeltaDekaminute DNSAnalyticsQueryTimeDelta = "dekaminute"
+	DNSAnalyticsQueryTimeDeltaMinute     DNSAnalyticsQueryTimeDelta = "minute"
+)
+
+func (r DNSAnalyticsQueryTimeDelta) IsKnown() bool {
+	switch r {
+	case DNSAnalyticsQueryTimeDeltaAll, DNSAnalyticsQueryTimeDeltaAuto, DNSAnalyticsQueryTimeDeltaYear, DNSAnalyticsQueryTimeDeltaQuarter, DNSAnalyticsQueryTimeDeltaMonth, DNSAnalyticsQueryTimeDeltaWeek, DNSAnalyticsQueryTimeDeltaDay, DNSAnalyticsQueryTimeDeltaHour, DNSAnalyticsQueryTimeDeltaDekaminute, DNSAnalyticsQueryTimeDeltaMinute:
+		return true
+	}
+	return false
 }

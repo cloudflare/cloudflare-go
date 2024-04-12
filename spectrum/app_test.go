@@ -33,22 +33,22 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		spectrum.AppNewParams{
-			DNS: cloudflare.F(spectrum.AppNewParamsDNS{
+			DNS: cloudflare.F(spectrum.DNSParam{
 				Name: cloudflare.F("ssh.example.com"),
-				Type: cloudflare.F(spectrum.AppNewParamsDNSTypeCNAME),
+				Type: cloudflare.F(spectrum.DNSTypeCNAME),
 			}),
-			OriginDNS: cloudflare.F(spectrum.AppNewParamsOriginDNS{
+			OriginDNS: cloudflare.F(spectrum.OriginDNSParam{
 				Name: cloudflare.F("origin.example.com"),
 				TTL:  cloudflare.F(int64(600)),
-				Type: cloudflare.F(spectrum.AppNewParamsOriginDNSTypeEmpty),
+				Type: cloudflare.F(spectrum.OriginDNSTypeEmpty),
 			}),
-			OriginPort:       cloudflare.F[spectrum.AppNewParamsOriginPort](shared.UnionInt(int64(22))),
+			OriginPort:       cloudflare.F[spectrum.OriginPortUnionParam](shared.UnionInt(int64(22))),
 			Protocol:         cloudflare.F("tcp/22"),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[spectrum.AppNewParamsEdgeIPs](spectrum.AppNewParamsEdgeIPsEyeballIPs(spectrum.AppNewParamsEdgeIPsEyeballIPs{
-				Connectivity: cloudflare.F(spectrum.AppNewParamsEdgeIPsEyeballIPsConnectivityAll),
-				Type:         cloudflare.F(spectrum.AppNewParamsEdgeIPsEyeballIPsTypeDynamic),
-			})),
+			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsObjectParam{
+				Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
+				Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
+			}),
 			IPFirewall:    cloudflare.F(true),
 			ProxyProtocol: cloudflare.F(spectrum.AppNewParamsProxyProtocolOff),
 			TLS:           cloudflare.F(spectrum.AppNewParamsTLSFull),
@@ -83,22 +83,22 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
 		spectrum.AppUpdateParams{
-			DNS: cloudflare.F(spectrum.AppUpdateParamsDNS{
+			DNS: cloudflare.F(spectrum.DNSParam{
 				Name: cloudflare.F("ssh.example.com"),
-				Type: cloudflare.F(spectrum.AppUpdateParamsDNSTypeCNAME),
+				Type: cloudflare.F(spectrum.DNSTypeCNAME),
 			}),
-			OriginDNS: cloudflare.F(spectrum.AppUpdateParamsOriginDNS{
+			OriginDNS: cloudflare.F(spectrum.OriginDNSParam{
 				Name: cloudflare.F("origin.example.com"),
 				TTL:  cloudflare.F(int64(600)),
-				Type: cloudflare.F(spectrum.AppUpdateParamsOriginDNSTypeEmpty),
+				Type: cloudflare.F(spectrum.OriginDNSTypeEmpty),
 			}),
-			OriginPort:       cloudflare.F[spectrum.AppUpdateParamsOriginPort](shared.UnionInt(int64(22))),
+			OriginPort:       cloudflare.F[spectrum.OriginPortUnionParam](shared.UnionInt(int64(22))),
 			Protocol:         cloudflare.F("tcp/22"),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[spectrum.AppUpdateParamsEdgeIPs](spectrum.AppUpdateParamsEdgeIPsEyeballIPs(spectrum.AppUpdateParamsEdgeIPsEyeballIPs{
-				Connectivity: cloudflare.F(spectrum.AppUpdateParamsEdgeIPsEyeballIPsConnectivityAll),
-				Type:         cloudflare.F(spectrum.AppUpdateParamsEdgeIPsEyeballIPsTypeDynamic),
-			})),
+			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsObjectParam{
+				Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
+				Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
+			}),
 			IPFirewall:    cloudflare.F(true),
 			ProxyProtocol: cloudflare.F(spectrum.AppUpdateParamsProxyProtocolOff),
 			TLS:           cloudflare.F(spectrum.AppUpdateParamsTLSFull),
@@ -165,6 +165,9 @@ func TestAppDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		spectrum.AppDeleteParams{
+			Body: map[string]interface{}{},
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

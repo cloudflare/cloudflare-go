@@ -30,7 +30,7 @@ func TestV1KeyUpdate(t *testing.T) {
 	)
 	_, err := client.Images.V1.Keys.Update(
 		context.TODO(),
-		"string",
+		"someKey",
 		images.V1KeyUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -86,7 +86,7 @@ func TestV1KeyDelete(t *testing.T) {
 	)
 	_, err := client.Images.V1.Keys.Delete(
 		context.TODO(),
-		"string",
+		"someKey",
 		images.V1KeyDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

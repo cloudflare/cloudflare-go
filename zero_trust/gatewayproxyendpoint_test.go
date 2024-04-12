@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestGatewayProxyEndpointNewWithOptionalParams(t *testing.T) {
+func TestGatewayProxyEndpointNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,9 +30,8 @@ func TestGatewayProxyEndpointNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.New(context.TODO(), zero_trust.GatewayProxyEndpointNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		IPs:       cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
+		IPs:       cloudflare.F([]zero_trust.GatewayIPsParam{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
 		Name:      cloudflare.F("Devops team"),
-		Subdomain: cloudflare.F("oli3n9zkz5.proxy.cloudflare-gateway.com"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -88,6 +87,7 @@ func TestGatewayProxyEndpointDelete(t *testing.T) {
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayProxyEndpointDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -118,9 +118,8 @@ func TestGatewayProxyEndpointEditWithOptionalParams(t *testing.T) {
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayProxyEndpointEditParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			IPs:       cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
+			IPs:       cloudflare.F([]zero_trust.GatewayIPsParam{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
 			Name:      cloudflare.F("Devops team"),
-			Subdomain: cloudflare.F("oli3n9zkz5.proxy.cloudflare-gateway.com"),
 		},
 	)
 	if err != nil {

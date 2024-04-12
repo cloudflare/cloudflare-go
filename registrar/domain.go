@@ -36,7 +36,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 }
 
 // Update individual domain.
-func (r *DomainService) Update(ctx context.Context, domainName string, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponse, err error) {
+func (r *DomainService) Update(ctx context.Context, domainName string, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", params.AccountID, domainName)
@@ -49,7 +49,7 @@ func (r *DomainService) Update(ctx context.Context, domainName string, params Do
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DomainListResponse], err error) {
+func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Domain], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,12 +67,12 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DomainListResponse] {
+func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Domain] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Show individual domain.
-func (r *DomainService) Get(ctx context.Context, domainName string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponse, err error) {
+func (r *DomainService) Get(ctx context.Context, domainName string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", query.AccountID, domainName)
@@ -84,32 +84,7 @@ func (r *DomainService) Get(ctx context.Context, domainName string, query Domain
 	return
 }
 
-// Union satisfied by [registrar.DomainUpdateResponseUnknown],
-// [registrar.DomainUpdateResponseArray] or [shared.UnionString].
-type DomainUpdateResponse interface {
-	ImplementsRegistrarDomainUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DomainUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DomainUpdateResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type DomainUpdateResponseArray []interface{}
-
-func (r DomainUpdateResponseArray) ImplementsRegistrarDomainUpdateResponse() {}
-
-type DomainListResponse struct {
+type Domain struct {
 	// Domain identifier.
 	ID string `json:"id"`
 	// Shows if a domain is available for transferring into Cloudflare Registrar.
@@ -125,7 +100,7 @@ type DomainListResponse struct {
 	// Shows whether a registrar lock is in place for a domain.
 	Locked bool `json:"locked"`
 	// Shows contact information for domain registrant.
-	RegistrantContact DomainListResponseRegistrantContact `json:"registrant_contact"`
+	RegistrantContact DomainRegistrantContact `json:"registrant_contact"`
 	// A comma-separated list of registry status codes. A full list of status codes can
 	// be found at
 	// [EPP Status Codes](https://www.icann.org/resources/pages/epp-status-codes-2014-06-16-en).
@@ -135,15 +110,14 @@ type DomainListResponse struct {
 	// supported TLDs.
 	SupportedTld bool `json:"supported_tld"`
 	// Statuses for domain transfers into Cloudflare Registrar.
-	TransferIn DomainListResponseTransferIn `json:"transfer_in"`
+	TransferIn DomainTransferIn `json:"transfer_in"`
 	// Last updated.
-	UpdatedAt time.Time              `json:"updated_at" format:"date-time"`
-	JSON      domainListResponseJSON `json:"-"`
+	UpdatedAt time.Time  `json:"updated_at" format:"date-time"`
+	JSON      domainJSON `json:"-"`
 }
 
-// domainListResponseJSON contains the JSON metadata for the struct
-// [DomainListResponse]
-type domainListResponseJSON struct {
+// domainJSON contains the JSON metadata for the struct [Domain]
+type domainJSON struct {
 	ID                apijson.Field
 	Available         apijson.Field
 	CanRegister       apijson.Field
@@ -160,16 +134,16 @@ type domainListResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DomainListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Domain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r domainListResponseJSON) RawJSON() string {
+func (r domainJSON) RawJSON() string {
 	return r.raw
 }
 
 // Shows contact information for domain registrant.
-type DomainListResponseRegistrantContact struct {
+type DomainRegistrantContact struct {
 	// Address.
 	Address string `json:"address,required"`
 	// City.
@@ -195,13 +169,13 @@ type DomainListResponseRegistrantContact struct {
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// Contact fax number.
-	Fax  string                                  `json:"fax"`
-	JSON domainListResponseRegistrantContactJSON `json:"-"`
+	Fax  string                      `json:"fax"`
+	JSON domainRegistrantContactJSON `json:"-"`
 }
 
-// domainListResponseRegistrantContactJSON contains the JSON metadata for the
-// struct [DomainListResponseRegistrantContact]
-type domainListResponseRegistrantContactJSON struct {
+// domainRegistrantContactJSON contains the JSON metadata for the struct
+// [DomainRegistrantContact]
+type domainRegistrantContactJSON struct {
 	Address      apijson.Field
 	City         apijson.Field
 	Country      apijson.Field
@@ -219,16 +193,16 @@ type domainListResponseRegistrantContactJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DomainListResponseRegistrantContact) UnmarshalJSON(data []byte) (err error) {
+func (r *DomainRegistrantContact) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r domainListResponseRegistrantContactJSON) RawJSON() string {
+func (r domainRegistrantContactJSON) RawJSON() string {
 	return r.raw
 }
 
 // Statuses for domain transfers into Cloudflare Registrar.
-type DomainListResponseTransferIn struct {
+type DomainTransferIn struct {
 	// Form of authorization has been accepted by the registrant.
 	AcceptFoa string `json:"accept_foa"`
 	// Shows transfer status with the registry.
@@ -240,13 +214,13 @@ type DomainListResponseTransferIn struct {
 	// Auth code has been entered and verified.
 	EnterAuthCode string `json:"enter_auth_code"`
 	// Domain is unlocked at the foreign registrar.
-	UnlockDomain interface{}                      `json:"unlock_domain"`
-	JSON         domainListResponseTransferInJSON `json:"-"`
+	UnlockDomain interface{}          `json:"unlock_domain"`
+	JSON         domainTransferInJSON `json:"-"`
 }
 
-// domainListResponseTransferInJSON contains the JSON metadata for the struct
-// [DomainListResponseTransferIn]
-type domainListResponseTransferInJSON struct {
+// domainTransferInJSON contains the JSON metadata for the struct
+// [DomainTransferIn]
+type domainTransferInJSON struct {
 	AcceptFoa         apijson.Field
 	ApproveTransfer   apijson.Field
 	CanCancelTransfer apijson.Field
@@ -257,23 +231,48 @@ type domainListResponseTransferInJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DomainListResponseTransferIn) UnmarshalJSON(data []byte) (err error) {
+func (r *DomainTransferIn) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r domainListResponseTransferInJSON) RawJSON() string {
+func (r domainTransferInJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [registrar.DomainGetResponseUnknown],
-// [registrar.DomainGetResponseArray] or [shared.UnionString].
-type DomainGetResponse interface {
-	ImplementsRegistrarDomainGetResponse()
+// Union satisfied by [registrar.DomainUpdateResponseUnknown],
+// [registrar.DomainUpdateResponseArray] or [shared.UnionString].
+type DomainUpdateResponseUnion interface {
+	ImplementsRegistrarDomainUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DomainGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*DomainUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DomainUpdateResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DomainUpdateResponseArray []interface{}
+
+func (r DomainUpdateResponseArray) ImplementsRegistrarDomainUpdateResponseUnion() {}
+
+// Union satisfied by [registrar.DomainGetResponseUnknown],
+// [registrar.DomainGetResponseArray] or [shared.UnionString].
+type DomainGetResponseUnion interface {
+	ImplementsRegistrarDomainGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DomainGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -288,7 +287,7 @@ func init() {
 
 type DomainGetResponseArray []interface{}
 
-func (r DomainGetResponseArray) ImplementsRegistrarDomainGetResponse() {}
+func (r DomainGetResponseArray) ImplementsRegistrarDomainGetResponseUnion() {}
 
 type DomainUpdateParams struct {
 	// Identifier
@@ -307,9 +306,9 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DomainUpdateResponseEnvelope struct {
-	Errors   []DomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DomainUpdateResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   DomainUpdateResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -331,52 +330,6 @@ func (r *DomainUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r domainUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    domainUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// domainUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DomainUpdateResponseEnvelopeErrors]
-type domainUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    domainUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// domainUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DomainUpdateResponseEnvelopeMessages]
-type domainUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -406,9 +359,9 @@ type DomainGetParams struct {
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []DomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DomainGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   DomainGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`
@@ -430,52 +383,6 @@ func (r *DomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r domainGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    domainGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// domainGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DomainGetResponseEnvelopeErrors]
-type domainGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    domainGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// domainGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DomainGetResponseEnvelopeMessages]
-type domainGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

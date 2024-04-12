@@ -39,7 +39,7 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 }
 
 // Creates a new queue.
-func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *QueueNewResponse, err error) {
+func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *QueueCreated, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues", params.AccountID)
@@ -52,7 +52,7 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 }
 
 // Updates a queue.
-func (r *QueueService) Update(ctx context.Context, queueID string, params QueueUpdateParams, opts ...option.RequestOption) (res *QueueUpdateResponse, err error) {
+func (r *QueueService) Update(ctx context.Context, queueID string, params QueueUpdateParams, opts ...option.RequestOption) (res *QueueUpdated, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
@@ -65,7 +65,7 @@ func (r *QueueService) Update(ctx context.Context, queueID string, params QueueU
 }
 
 // Returns the queues owned by an account.
-func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...option.RequestOption) (res *pagination.SinglePage[QueueListResponse], err error) {
+func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Queue], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,15 +83,15 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 }
 
 // Returns the queues owned by an account.
-func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[QueueListResponse] {
+func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Queue] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a queue.
-func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
+func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/queues/%s", body.AccountID, queueID)
+	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -101,7 +101,7 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 }
 
 // Get information about a specific queue.
-func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetParams, opts ...option.RequestOption) (res *QueueGetResponse, err error) {
+func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetParams, opts ...option.RequestOption) (res *Queue, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues/%s", query.AccountID, queueID)
@@ -113,75 +113,20 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 	return
 }
 
-type QueueNewResponse struct {
-	CreatedOn  interface{}          `json:"created_on"`
-	ModifiedOn interface{}          `json:"modified_on"`
-	QueueID    interface{}          `json:"queue_id"`
-	QueueName  string               `json:"queue_name"`
-	JSON       queueNewResponseJSON `json:"-"`
+type Queue struct {
+	Consumers           interface{} `json:"consumers"`
+	ConsumersTotalCount interface{} `json:"consumers_total_count"`
+	CreatedOn           interface{} `json:"created_on"`
+	ModifiedOn          interface{} `json:"modified_on"`
+	Producers           interface{} `json:"producers"`
+	ProducersTotalCount interface{} `json:"producers_total_count"`
+	QueueID             string      `json:"queue_id"`
+	QueueName           string      `json:"queue_name"`
+	JSON                queueJSON   `json:"-"`
 }
 
-// queueNewResponseJSON contains the JSON metadata for the struct
-// [QueueNewResponse]
-type queueNewResponseJSON struct {
-	CreatedOn   apijson.Field
-	ModifiedOn  apijson.Field
-	QueueID     apijson.Field
-	QueueName   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueUpdateResponse struct {
-	CreatedOn  interface{}             `json:"created_on"`
-	ModifiedOn interface{}             `json:"modified_on"`
-	QueueID    interface{}             `json:"queue_id"`
-	QueueName  string                  `json:"queue_name"`
-	JSON       queueUpdateResponseJSON `json:"-"`
-}
-
-// queueUpdateResponseJSON contains the JSON metadata for the struct
-// [QueueUpdateResponse]
-type queueUpdateResponseJSON struct {
-	CreatedOn   apijson.Field
-	ModifiedOn  apijson.Field
-	QueueID     apijson.Field
-	QueueName   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueListResponse struct {
-	Consumers           interface{}           `json:"consumers"`
-	ConsumersTotalCount interface{}           `json:"consumers_total_count"`
-	CreatedOn           interface{}           `json:"created_on"`
-	ModifiedOn          interface{}           `json:"modified_on"`
-	Producers           interface{}           `json:"producers"`
-	ProducersTotalCount interface{}           `json:"producers_total_count"`
-	QueueID             string                `json:"queue_id"`
-	QueueName           string                `json:"queue_name"`
-	JSON                queueListResponseJSON `json:"-"`
-}
-
-// queueListResponseJSON contains the JSON metadata for the struct
-// [QueueListResponse]
-type queueListResponseJSON struct {
+// queueJSON contains the JSON metadata for the struct [Queue]
+type queueJSON struct {
 	Consumers           apijson.Field
 	ConsumersTotalCount apijson.Field
 	CreatedOn           apijson.Field
@@ -194,23 +139,75 @@ type queueListResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *QueueListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Queue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r queueListResponseJSON) RawJSON() string {
+func (r queueJSON) RawJSON() string {
+	return r.raw
+}
+
+type QueueCreated struct {
+	CreatedOn  interface{}      `json:"created_on"`
+	ModifiedOn interface{}      `json:"modified_on"`
+	QueueID    interface{}      `json:"queue_id"`
+	QueueName  string           `json:"queue_name"`
+	JSON       queueCreatedJSON `json:"-"`
+}
+
+// queueCreatedJSON contains the JSON metadata for the struct [QueueCreated]
+type queueCreatedJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueCreated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueCreatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type QueueUpdated struct {
+	CreatedOn  interface{}      `json:"created_on"`
+	ModifiedOn interface{}      `json:"modified_on"`
+	QueueID    interface{}      `json:"queue_id"`
+	QueueName  string           `json:"queue_name"`
+	JSON       queueUpdatedJSON `json:"-"`
+}
+
+// queueUpdatedJSON contains the JSON metadata for the struct [QueueUpdated]
+type queueUpdatedJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueUpdated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueUpdatedJSON) RawJSON() string {
 	return r.raw
 }
 
 // Union satisfied by [queues.QueueDeleteResponseUnknown],
 // [queues.QueueDeleteResponseArray] or [shared.UnionString].
-type QueueDeleteResponse interface {
-	ImplementsQueuesQueueDeleteResponse()
+type QueueDeleteResponseUnion interface {
+	ImplementsQueuesQueueDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*QueueDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*QueueDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -225,47 +222,12 @@ func init() {
 
 type QueueDeleteResponseArray []interface{}
 
-func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponse() {}
-
-type QueueGetResponse struct {
-	Consumers           interface{}          `json:"consumers"`
-	ConsumersTotalCount interface{}          `json:"consumers_total_count"`
-	CreatedOn           interface{}          `json:"created_on"`
-	ModifiedOn          interface{}          `json:"modified_on"`
-	Producers           interface{}          `json:"producers"`
-	ProducersTotalCount interface{}          `json:"producers_total_count"`
-	QueueID             string               `json:"queue_id"`
-	QueueName           string               `json:"queue_name"`
-	JSON                queueGetResponseJSON `json:"-"`
-}
-
-// queueGetResponseJSON contains the JSON metadata for the struct
-// [QueueGetResponse]
-type queueGetResponseJSON struct {
-	Consumers           apijson.Field
-	ConsumersTotalCount apijson.Field
-	CreatedOn           apijson.Field
-	ModifiedOn          apijson.Field
-	Producers           apijson.Field
-	ProducersTotalCount apijson.Field
-	QueueID             apijson.Field
-	QueueName           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *QueueGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueGetResponseJSON) RawJSON() string {
-	return r.raw
-}
+func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponseUnion() {}
 
 type QueueNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
@@ -273,9 +235,13 @@ func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueNewResponseEnvelope struct {
-	Errors   []QueueNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QueueNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueNewResponse                   `json:"result,required,nullable"`
+	CreatedOn  interface{}           `json:"created_on,required"`
+	Errors     []shared.ResponseInfo `json:"errors,required"`
+	Messages   []shared.ResponseInfo `json:"messages,required"`
+	ModifiedOn interface{}           `json:"modified_on,required"`
+	QueueID    interface{}           `json:"queue_id,required"`
+	QueueName  interface{}           `json:"queue_name,required"`
+	Result     QueueCreated          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -285,8 +251,12 @@ type QueueNewResponseEnvelope struct {
 // queueNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueNewResponseEnvelope]
 type queueNewResponseEnvelopeJSON struct {
+	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field
@@ -299,52 +269,6 @@ func (r *QueueNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueNewResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    queueNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// queueNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [QueueNewResponseEnvelopeErrors]
-type queueNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueNewResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    queueNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// queueNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [QueueNewResponseEnvelopeMessages]
-type queueNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -396,8 +320,8 @@ func (r queueNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type QueueUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -405,9 +329,13 @@ func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueUpdateResponseEnvelope struct {
-	Errors   []QueueUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QueueUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueUpdateResponse                   `json:"result,required,nullable"`
+	CreatedOn  interface{}           `json:"created_on,required"`
+	Errors     []shared.ResponseInfo `json:"errors,required"`
+	Messages   []shared.ResponseInfo `json:"messages,required"`
+	ModifiedOn interface{}           `json:"modified_on,required"`
+	QueueID    interface{}           `json:"queue_id,required"`
+	QueueName  interface{}           `json:"queue_name,required"`
+	Result     QueueUpdated          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -417,8 +345,12 @@ type QueueUpdateResponseEnvelope struct {
 // queueUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueUpdateResponseEnvelope]
 type queueUpdateResponseEnvelopeJSON struct {
+	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field
@@ -431,52 +363,6 @@ func (r *QueueUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueUpdateResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    queueUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// queueUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [QueueUpdateResponseEnvelopeErrors]
-type queueUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueUpdateResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    queueUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// queueUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [QueueUpdateResponseEnvelopeMessages]
-type queueUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -534,12 +420,17 @@ type QueueListParams struct {
 type QueueDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r QueueDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type QueueDeleteResponseEnvelope struct {
-	Errors   []QueueDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QueueDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   QueueDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -563,52 +454,6 @@ func (r *QueueDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueDeleteResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    queueDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// queueDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [QueueDeleteResponseEnvelopeErrors]
-type queueDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueDeleteResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    queueDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// queueDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [QueueDeleteResponseEnvelopeMessages]
-type queueDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -664,9 +509,13 @@ type QueueGetParams struct {
 }
 
 type QueueGetResponseEnvelope struct {
-	Errors   []QueueGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QueueGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueGetResponse                   `json:"result,required,nullable"`
+	CreatedOn  interface{}           `json:"created_on,required"`
+	Errors     []shared.ResponseInfo `json:"errors,required"`
+	Messages   []shared.ResponseInfo `json:"messages,required"`
+	ModifiedOn interface{}           `json:"modified_on,required"`
+	QueueID    interface{}           `json:"queue_id,required"`
+	QueueName  interface{}           `json:"queue_name,required"`
+	Result     Queue                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -676,8 +525,12 @@ type QueueGetResponseEnvelope struct {
 // queueGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueGetResponseEnvelope]
 type queueGetResponseEnvelopeJSON struct {
+	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field
@@ -690,52 +543,6 @@ func (r *QueueGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueGetResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    queueGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// queueGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [QueueGetResponseEnvelopeErrors]
-type queueGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueGetResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    queueGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// queueGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [QueueGetResponseEnvelopeMessages]
-type queueGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

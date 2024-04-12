@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -50,9 +51,9 @@ func (r *ListBulkOperationService) Get(ctx context.Context, accountIdentifier st
 type ListBulkOperationGetResponse = interface{}
 
 type ListBulkOperationGetResponseEnvelope struct {
-	Errors   []ListBulkOperationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ListBulkOperationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ListBulkOperationGetResponse                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   []ListBulkOperationGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListBulkOperationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listBulkOperationGetResponseEnvelopeJSON    `json:"-"`
@@ -74,52 +75,6 @@ func (r *ListBulkOperationGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r listBulkOperationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ListBulkOperationGetResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    listBulkOperationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// listBulkOperationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ListBulkOperationGetResponseEnvelopeErrors]
-type listBulkOperationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListBulkOperationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listBulkOperationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ListBulkOperationGetResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    listBulkOperationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// listBulkOperationGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ListBulkOperationGetResponseEnvelopeMessages]
-type listBulkOperationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListBulkOperationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listBulkOperationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -212,13 +212,19 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleNewResponseEnvelope struct {
-	Result RUMRule                     `json:"result"`
-	JSON   ruleNewResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                 `json:"errors,required"`
+	Messages interface{}                 `json:"messages,required"`
+	Success  interface{}                 `json:"success,required"`
+	Result   RUMRule                     `json:"result"`
+	JSON     ruleNewResponseEnvelopeJSON `json:"-"`
 }
 
 // ruleNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RuleNewResponseEnvelope]
 type ruleNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -248,13 +254,19 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Result RUMRule                        `json:"result"`
-	JSON   ruleUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                    `json:"errors,required"`
+	Messages interface{}                    `json:"messages,required"`
+	Success  interface{}                    `json:"success,required"`
+	Result   RUMRule                        `json:"result"`
+	JSON     ruleUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // ruleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RuleUpdateResponseEnvelope]
 type ruleUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -274,13 +286,19 @@ type RuleListParams struct {
 }
 
 type RuleListResponseEnvelope struct {
-	Result RuleListResponse             `json:"result"`
-	JSON   ruleListResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                  `json:"errors,required"`
+	Messages interface{}                  `json:"messages,required"`
+	Success  interface{}                  `json:"success,required"`
+	Result   RuleListResponse             `json:"result"`
+	JSON     ruleListResponseEnvelopeJSON `json:"-"`
 }
 
 // ruleListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RuleListResponseEnvelope]
 type ruleListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -300,13 +318,19 @@ type RuleDeleteParams struct {
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Result RuleDeleteResponse             `json:"result"`
-	JSON   ruleDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                    `json:"errors,required"`
+	Messages interface{}                    `json:"messages,required"`
+	Success  interface{}                    `json:"success,required"`
+	Result   RuleDeleteResponse             `json:"result"`
+	JSON     ruleDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // ruleDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RuleDeleteResponseEnvelope]
 type ruleDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

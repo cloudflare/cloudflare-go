@@ -707,7 +707,7 @@ func (r as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON) RawJSON() 
 }
 
 type AS112SummaryProtocolResponseSummary0 struct {
-	Tcp  string                                   `json:"tcp,required"`
+	TCP  string                                   `json:"tcp,required"`
 	Udp  string                                   `json:"udp,required"`
 	JSON as112SummaryProtocolResponseSummary0JSON `json:"-"`
 }
@@ -715,7 +715,7 @@ type AS112SummaryProtocolResponseSummary0 struct {
 // as112SummaryProtocolResponseSummary0JSON contains the JSON metadata for the
 // struct [AS112SummaryProtocolResponseSummary0]
 type as112SummaryProtocolResponseSummary0JSON struct {
-	Tcp         apijson.Field
+	TCP         apijson.Field
 	Udp         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1076,7 +1076,7 @@ type AS112SummaryDNSSECParams struct {
 // `url.Values`.
 func (r AS112SummaryDNSSECParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1178,7 +1178,7 @@ type AS112SummaryEdnsParams struct {
 // URLQuery serializes [AS112SummaryEdnsParams]'s query parameters as `url.Values`.
 func (r AS112SummaryEdnsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1281,7 +1281,7 @@ type AS112SummaryIPVersionParams struct {
 // `url.Values`.
 func (r AS112SummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1384,7 +1384,7 @@ type AS112SummaryProtocolParams struct {
 // `url.Values`.
 func (r AS112SummaryProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1487,7 +1487,7 @@ type AS112SummaryQueryTypeParams struct {
 // `url.Values`.
 func (r AS112SummaryQueryTypeParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1590,7 +1590,7 @@ type AS112SummaryResponseCodesParams struct {
 // `url.Values`.
 func (r AS112SummaryResponseCodesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

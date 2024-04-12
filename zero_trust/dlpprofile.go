@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -39,7 +40,7 @@ func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPProfiles], err error) {
+func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Profile], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -57,7 +58,7 @@ func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DLPProfiles] {
+func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Profile] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -74,50 +75,147 @@ func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLP
 	return
 }
 
-// Union satisfied by [zero_trust.DLPPredefinedProfile],
-// [zero_trust.DLPCustomProfile] or [zero_trust.DLPProfilesDLPIntegrationProfile].
-type DLPProfiles interface {
-	implementsZeroTrustDLPProfiles()
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type ContextAwareness struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled bool `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip SkipConfiguration    `json:"skip,required"`
+	JSON contextAwarenessJSON `json:"-"`
+}
+
+// contextAwarenessJSON contains the JSON metadata for the struct
+// [ContextAwareness]
+type contextAwarenessJSON struct {
+	Enabled     apijson.Field
+	Skip        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ContextAwareness) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r contextAwarenessJSON) RawJSON() string {
+	return r.raw
+}
+
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type ContextAwarenessParam struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip param.Field[SkipConfigurationParam] `json:"skip,required"`
+}
+
+func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type Profile struct {
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount float64 `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness ContextAwareness `json:"context_awareness"`
+	Entries          interface{}      `json:"entries,required"`
+	// The ID for this profile
+	ID string `json:"id"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// If true, scan images via OCR to determine if any text present matches filters.
+	OCREnabled bool `json:"ocr_enabled"`
+	// The type of the profile.
+	Type      ProfileType `json:"type"`
+	CreatedAt time.Time   `json:"created_at" format:"date-time"`
+	// The description of the profile.
+	Description string      `json:"description"`
+	UpdatedAt   time.Time   `json:"updated_at" format:"date-time"`
+	JSON        profileJSON `json:"-"`
+	union       ProfileUnion
+}
+
+// profileJSON contains the JSON metadata for the struct [Profile]
+type profileJSON struct {
+	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
+	Entries           apijson.Field
+	ID                apijson.Field
+	Name              apijson.Field
+	OCREnabled        apijson.Field
+	Type              apijson.Field
+	CreatedAt         apijson.Field
+	Description       apijson.Field
+	UpdatedAt         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r profileJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *Profile) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r Profile) AsUnion() ProfileUnion {
+	return r.union
+}
+
+// Union satisfied by [zero_trust.PredefinedProfile], [zero_trust.CustomProfile] or
+// [zero_trust.ProfileDLPIntegrationProfile].
+type ProfileUnion interface {
+	implementsZeroTrustProfile()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfiles)(nil)).Elem(),
+		reflect.TypeOf((*ProfileUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPPredefinedProfile{}),
+			Type:       reflect.TypeOf(PredefinedProfile{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPCustomProfile{}),
+			Type:       reflect.TypeOf(CustomProfile{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPProfilesDLPIntegrationProfile{}),
+			Type:       reflect.TypeOf(ProfileDLPIntegrationProfile{}),
 		},
 	)
 }
 
-type DLPProfilesDLPIntegrationProfile struct {
+type ProfileDLPIntegrationProfile struct {
 	// The ID for this profile
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
-	Entries []DLPProfilesDLPIntegrationProfileEntry `json:"entries"`
+	Entries []ProfileDLPIntegrationProfileEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type      DLPProfilesDLPIntegrationProfileType `json:"type"`
-	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
-	JSON      dlpProfilesDLPIntegrationProfileJSON `json:"-"`
+	Type      ProfileDLPIntegrationProfileType `json:"type"`
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      profileDLPIntegrationProfileJSON `json:"-"`
 }
 
-// dlpProfilesDLPIntegrationProfileJSON contains the JSON metadata for the struct
-// [DLPProfilesDLPIntegrationProfile]
-type dlpProfilesDLPIntegrationProfileJSON struct {
+// profileDLPIntegrationProfileJSON contains the JSON metadata for the struct
+// [ProfileDLPIntegrationProfile]
+type profileDLPIntegrationProfileJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Description apijson.Field
@@ -129,18 +227,18 @@ type dlpProfilesDLPIntegrationProfileJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfilesDLPIntegrationProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileDLPIntegrationProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpProfilesDLPIntegrationProfileJSON) RawJSON() string {
+func (r profileDLPIntegrationProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPProfilesDLPIntegrationProfile) implementsZeroTrustDLPProfiles() {}
+func (r ProfileDLPIntegrationProfile) implementsZeroTrustProfile() {}
 
 // An entry derived from an integration
-type DLPProfilesDLPIntegrationProfileEntry struct {
+type ProfileDLPIntegrationProfileEntry struct {
 	// The ID for this entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -149,14 +247,14 @@ type DLPProfilesDLPIntegrationProfileEntry struct {
 	// The name of the entry.
 	Name string `json:"name"`
 	// ID of the parent profile
-	ProfileID interface{}                               `json:"profile_id"`
-	UpdatedAt time.Time                                 `json:"updated_at" format:"date-time"`
-	JSON      dlpProfilesDLPIntegrationProfileEntryJSON `json:"-"`
+	ProfileID interface{}                           `json:"profile_id"`
+	UpdatedAt time.Time                             `json:"updated_at" format:"date-time"`
+	JSON      profileDLPIntegrationProfileEntryJSON `json:"-"`
 }
 
-// dlpProfilesDLPIntegrationProfileEntryJSON contains the JSON metadata for the
-// struct [DLPProfilesDLPIntegrationProfileEntry]
-type dlpProfilesDLPIntegrationProfileEntryJSON struct {
+// profileDLPIntegrationProfileEntryJSON contains the JSON metadata for the struct
+// [ProfileDLPIntegrationProfileEntry]
+type profileDLPIntegrationProfileEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -167,47 +265,152 @@ type dlpProfilesDLPIntegrationProfileEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfilesDLPIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileDLPIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpProfilesDLPIntegrationProfileEntryJSON) RawJSON() string {
+func (r profileDLPIntegrationProfileEntryJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of the profile.
-type DLPProfilesDLPIntegrationProfileType string
+type ProfileDLPIntegrationProfileType string
 
 const (
-	DLPProfilesDLPIntegrationProfileTypeIntegration DLPProfilesDLPIntegrationProfileType = "integration"
+	ProfileDLPIntegrationProfileTypeIntegration ProfileDLPIntegrationProfileType = "integration"
 )
 
-func (r DLPProfilesDLPIntegrationProfileType) IsKnown() bool {
+func (r ProfileDLPIntegrationProfileType) IsKnown() bool {
 	switch r {
-	case DLPProfilesDLPIntegrationProfileTypeIntegration:
+	case ProfileDLPIntegrationProfileTypeIntegration:
 		return true
 	}
 	return false
 }
 
-// Union satisfied by [zero_trust.DLPPredefinedProfile],
-// [zero_trust.DLPCustomProfile] or
+// The type of the profile.
+type ProfileType string
+
+const (
+	ProfileTypePredefined  ProfileType = "predefined"
+	ProfileTypeCustom      ProfileType = "custom"
+	ProfileTypeIntegration ProfileType = "integration"
+)
+
+func (r ProfileType) IsKnown() bool {
+	switch r {
+	case ProfileTypePredefined, ProfileTypeCustom, ProfileTypeIntegration:
+		return true
+	}
+	return false
+}
+
+// Content types to exclude from context analysis and return all matches.
+type SkipConfiguration struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files bool                  `json:"files,required"`
+	JSON  skipConfigurationJSON `json:"-"`
+}
+
+// skipConfigurationJSON contains the JSON metadata for the struct
+// [SkipConfiguration]
+type skipConfigurationJSON struct {
+	Files       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SkipConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r skipConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Content types to exclude from context analysis and return all matches.
+type SkipConfigurationParam struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files param.Field[bool] `json:"files,required"`
+}
+
+func (r SkipConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DLPProfileGetResponse struct {
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount float64 `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness ContextAwareness `json:"context_awareness"`
+	Entries          interface{}      `json:"entries,required"`
+	// The ID for this profile
+	ID string `json:"id"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// If true, scan images via OCR to determine if any text present matches filters.
+	OCREnabled bool `json:"ocr_enabled"`
+	// The type of the profile.
+	Type      DLPProfileGetResponseType `json:"type"`
+	CreatedAt time.Time                 `json:"created_at" format:"date-time"`
+	// The description of the profile.
+	Description string                    `json:"description"`
+	UpdatedAt   time.Time                 `json:"updated_at" format:"date-time"`
+	JSON        dlpProfileGetResponseJSON `json:"-"`
+	union       DLPProfileGetResponseUnion
+}
+
+// dlpProfileGetResponseJSON contains the JSON metadata for the struct
+// [DLPProfileGetResponse]
+type dlpProfileGetResponseJSON struct {
+	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
+	Entries           apijson.Field
+	ID                apijson.Field
+	Name              apijson.Field
+	OCREnabled        apijson.Field
+	Type              apijson.Field
+	CreatedAt         apijson.Field
+	Description       apijson.Field
+	UpdatedAt         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r dlpProfileGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *DLPProfileGetResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r DLPProfileGetResponse) AsUnion() DLPProfileGetResponseUnion {
+	return r.union
+}
+
+// Union satisfied by [zero_trust.PredefinedProfile], [zero_trust.CustomProfile] or
 // [zero_trust.DLPProfileGetResponseDLPIntegrationProfile].
-type DLPProfileGetResponse interface {
+type DLPProfileGetResponseUnion interface {
 	implementsZeroTrustDLPProfileGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*DLPProfileGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPPredefinedProfile{}),
+			Type:       reflect.TypeOf(PredefinedProfile{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPCustomProfile{}),
+			Type:       reflect.TypeOf(CustomProfile{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -307,6 +510,23 @@ func (r DLPProfileGetResponseDLPIntegrationProfileType) IsKnown() bool {
 	return false
 }
 
+// The type of the profile.
+type DLPProfileGetResponseType string
+
+const (
+	DLPProfileGetResponseTypePredefined  DLPProfileGetResponseType = "predefined"
+	DLPProfileGetResponseTypeCustom      DLPProfileGetResponseType = "custom"
+	DLPProfileGetResponseTypeIntegration DLPProfileGetResponseType = "integration"
+)
+
+func (r DLPProfileGetResponseType) IsKnown() bool {
+	switch r {
+	case DLPProfileGetResponseTypePredefined, DLPProfileGetResponseTypeCustom, DLPProfileGetResponseTypeIntegration:
+		return true
+	}
+	return false
+}
+
 type DLPProfileListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -318,9 +538,9 @@ type DLPProfileGetParams struct {
 }
 
 type DLPProfileGetResponseEnvelope struct {
-	Errors   []DLPProfileGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DLPProfileGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DLPProfileGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileGetResponseEnvelopeJSON    `json:"-"`
@@ -342,52 +562,6 @@ func (r *DLPProfileGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dlpProfileGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    dlpProfileGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpProfileGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DLPProfileGetResponseEnvelopeErrors]
-type dlpProfileGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    dlpProfileGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpProfileGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DLPProfileGetResponseEnvelopeMessages]
-type dlpProfileGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

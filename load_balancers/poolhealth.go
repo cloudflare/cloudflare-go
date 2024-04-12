@@ -48,7 +48,7 @@ func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolH
 }
 
 // Fetch the latest pool health status for a single pool.
-func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHealthGetParams, opts ...option.RequestOption) (res *PoolHealthGetResponse, err error) {
+func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHealthGetParams, opts ...option.RequestOption) (res *PoolHealthGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolHealthGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/health", query.AccountID, poolID)
@@ -89,13 +89,13 @@ func (r poolHealthNewResponseJSON) RawJSON() string {
 //
 // Union satisfied by [load_balancers.PoolHealthGetResponseUnknown] or
 // [shared.UnionString].
-type PoolHealthGetResponse interface {
-	ImplementsLoadBalancersPoolHealthGetResponse()
+type PoolHealthGetResponseUnion interface {
+	ImplementsLoadBalancersPoolHealthGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PoolHealthGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*PoolHealthGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -169,7 +169,7 @@ type PoolHealthNewParamsType string
 const (
 	PoolHealthNewParamsTypeHTTP     PoolHealthNewParamsType = "http"
 	PoolHealthNewParamsTypeHTTPS    PoolHealthNewParamsType = "https"
-	PoolHealthNewParamsTypeTcp      PoolHealthNewParamsType = "tcp"
+	PoolHealthNewParamsTypeTCP      PoolHealthNewParamsType = "tcp"
 	PoolHealthNewParamsTypeUdpIcmp  PoolHealthNewParamsType = "udp_icmp"
 	PoolHealthNewParamsTypeIcmpPing PoolHealthNewParamsType = "icmp_ping"
 	PoolHealthNewParamsTypeSmtp     PoolHealthNewParamsType = "smtp"
@@ -177,16 +177,16 @@ const (
 
 func (r PoolHealthNewParamsType) IsKnown() bool {
 	switch r {
-	case PoolHealthNewParamsTypeHTTP, PoolHealthNewParamsTypeHTTPS, PoolHealthNewParamsTypeTcp, PoolHealthNewParamsTypeUdpIcmp, PoolHealthNewParamsTypeIcmpPing, PoolHealthNewParamsTypeSmtp:
+	case PoolHealthNewParamsTypeHTTP, PoolHealthNewParamsTypeHTTPS, PoolHealthNewParamsTypeTCP, PoolHealthNewParamsTypeUdpIcmp, PoolHealthNewParamsTypeIcmpPing, PoolHealthNewParamsTypeSmtp:
 		return true
 	}
 	return false
 }
 
 type PoolHealthNewResponseEnvelope struct {
-	Errors   []PoolHealthNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PoolHealthNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   PoolHealthNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PoolHealthNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolHealthNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolHealthNewResponseEnvelopeJSON    `json:"-"`
@@ -211,52 +211,6 @@ func (r poolHealthNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PoolHealthNewResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    poolHealthNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// poolHealthNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PoolHealthNewResponseEnvelopeErrors]
-type poolHealthNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolHealthNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolHealthNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PoolHealthNewResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    poolHealthNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// poolHealthNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PoolHealthNewResponseEnvelopeMessages]
-type poolHealthNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolHealthNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolHealthNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PoolHealthNewResponseEnvelopeSuccess bool
 
@@ -278,11 +232,11 @@ type PoolHealthGetParams struct {
 }
 
 type PoolHealthGetResponseEnvelope struct {
-	Errors   []PoolHealthGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PoolHealthGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	Result PoolHealthGetResponse `json:"result,required"`
+	Result PoolHealthGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolHealthGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolHealthGetResponseEnvelopeJSON    `json:"-"`
@@ -304,52 +258,6 @@ func (r *PoolHealthGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r poolHealthGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PoolHealthGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    poolHealthGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// poolHealthGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PoolHealthGetResponseEnvelopeErrors]
-type poolHealthGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolHealthGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolHealthGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PoolHealthGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    poolHealthGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// poolHealthGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PoolHealthGetResponseEnvelopeMessages]
-type poolHealthGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolHealthGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolHealthGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

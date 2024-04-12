@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -37,7 +38,7 @@ func NewSettingBrowserCheckService(opts ...option.RequestOption) (r *SettingBrow
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBrowserCheckEditParams, opts ...option.RequestOption) (res *ZoneSettingBrowserCheck, err error) {
+func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBrowserCheckEditParams, opts ...option.RequestOption) (res *BrowserCheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCheckEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/browser_check", params.ZoneID)
@@ -54,7 +55,7 @@ func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBro
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-func (r *SettingBrowserCheckService) Get(ctx context.Context, query SettingBrowserCheckGetParams, opts ...option.RequestOption) (res *ZoneSettingBrowserCheck, err error) {
+func (r *SettingBrowserCheckService) Get(ctx context.Context, query SettingBrowserCheckGetParams, opts ...option.RequestOption) (res *BrowserCheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCheckGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/browser_check", query.ZoneID)
@@ -71,22 +72,21 @@ func (r *SettingBrowserCheckService) Get(ctx context.Context, query SettingBrows
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-type ZoneSettingBrowserCheck struct {
+type BrowserCheck struct {
 	// ID of the zone setting.
-	ID ZoneSettingBrowserCheckID `json:"id,required"`
+	ID BrowserCheckID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingBrowserCheckValue `json:"value,required"`
+	Value BrowserCheckValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingBrowserCheckEditable `json:"editable"`
+	Editable BrowserCheckEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingBrowserCheckJSON `json:"-"`
+	ModifiedOn time.Time        `json:"modified_on,nullable" format:"date-time"`
+	JSON       browserCheckJSON `json:"-"`
 }
 
-// zoneSettingBrowserCheckJSON contains the JSON metadata for the struct
-// [ZoneSettingBrowserCheck]
-type zoneSettingBrowserCheckJSON struct {
+// browserCheckJSON contains the JSON metadata for the struct [BrowserCheck]
+type browserCheckJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -95,44 +95,40 @@ type zoneSettingBrowserCheckJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingBrowserCheck) UnmarshalJSON(data []byte) (err error) {
+func (r *BrowserCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingBrowserCheckJSON) RawJSON() string {
+func (r browserCheckJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingBrowserCheck) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingBrowserCheck) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingBrowserCheckID string
+type BrowserCheckID string
 
 const (
-	ZoneSettingBrowserCheckIDBrowserCheck ZoneSettingBrowserCheckID = "browser_check"
+	BrowserCheckIDBrowserCheck BrowserCheckID = "browser_check"
 )
 
-func (r ZoneSettingBrowserCheckID) IsKnown() bool {
+func (r BrowserCheckID) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrowserCheckIDBrowserCheck:
+	case BrowserCheckIDBrowserCheck:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingBrowserCheckValue string
+type BrowserCheckValue string
 
 const (
-	ZoneSettingBrowserCheckValueOn  ZoneSettingBrowserCheckValue = "on"
-	ZoneSettingBrowserCheckValueOff ZoneSettingBrowserCheckValue = "off"
+	BrowserCheckValueOn  BrowserCheckValue = "on"
+	BrowserCheckValueOff BrowserCheckValue = "off"
 )
 
-func (r ZoneSettingBrowserCheckValue) IsKnown() bool {
+func (r BrowserCheckValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrowserCheckValueOn, ZoneSettingBrowserCheckValueOff:
+	case BrowserCheckValueOn, BrowserCheckValueOff:
 		return true
 	}
 	return false
@@ -140,38 +136,20 @@ func (r ZoneSettingBrowserCheckValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingBrowserCheckEditable bool
+type BrowserCheckEditable bool
 
 const (
-	ZoneSettingBrowserCheckEditableTrue  ZoneSettingBrowserCheckEditable = true
-	ZoneSettingBrowserCheckEditableFalse ZoneSettingBrowserCheckEditable = false
+	BrowserCheckEditableTrue  BrowserCheckEditable = true
+	BrowserCheckEditableFalse BrowserCheckEditable = false
 )
 
-func (r ZoneSettingBrowserCheckEditable) IsKnown() bool {
+func (r BrowserCheckEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrowserCheckEditableTrue, ZoneSettingBrowserCheckEditableFalse:
+	case BrowserCheckEditableTrue, BrowserCheckEditableFalse:
 		return true
 	}
 	return false
 }
-
-// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
-// headers abused most commonly by spammers and denies access to your page. It will
-// also challenge visitors that do not have a user agent or a non standard user
-// agent (also commonly used by abuse bots, crawlers or visitors).
-// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-type ZoneSettingBrowserCheckParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingBrowserCheckID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingBrowserCheckValue] `json:"value,required"`
-}
-
-func (r ZoneSettingBrowserCheckParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingBrowserCheckParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingBrowserCheckEditParams struct {
 	// Identifier
@@ -201,8 +179,8 @@ func (r SettingBrowserCheckEditParamsValue) IsKnown() bool {
 }
 
 type SettingBrowserCheckEditResponseEnvelope struct {
-	Errors   []SettingBrowserCheckEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrowserCheckEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
@@ -210,7 +188,7 @@ type SettingBrowserCheckEditResponseEnvelope struct {
 	// also challenge visitors that do not have a user agent or a non standard user
 	// agent (also commonly used by abuse bots, crawlers or visitors).
 	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-	Result ZoneSettingBrowserCheck                     `json:"result"`
+	Result BrowserCheck                                `json:"result"`
 	JSON   settingBrowserCheckEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -233,60 +211,14 @@ func (r settingBrowserCheckEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingBrowserCheckEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingBrowserCheckEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrowserCheckEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingBrowserCheckEditResponseEnvelopeErrors]
-type settingBrowserCheckEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCheckEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingBrowserCheckEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrowserCheckEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingBrowserCheckEditResponseEnvelopeMessages]
-type settingBrowserCheckEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingBrowserCheckGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingBrowserCheckGetResponseEnvelope struct {
-	Errors   []SettingBrowserCheckGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrowserCheckGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
@@ -294,7 +226,7 @@ type SettingBrowserCheckGetResponseEnvelope struct {
 	// also challenge visitors that do not have a user agent or a non standard user
 	// agent (also commonly used by abuse bots, crawlers or visitors).
 	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-	Result ZoneSettingBrowserCheck                    `json:"result"`
+	Result BrowserCheck                               `json:"result"`
 	JSON   settingBrowserCheckGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -314,51 +246,5 @@ func (r *SettingBrowserCheckGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r settingBrowserCheckGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCheckGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingBrowserCheckGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrowserCheckGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingBrowserCheckGetResponseEnvelopeErrors]
-type settingBrowserCheckGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCheckGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingBrowserCheckGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrowserCheckGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingBrowserCheckGetResponseEnvelopeMessages]
-type settingBrowserCheckGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

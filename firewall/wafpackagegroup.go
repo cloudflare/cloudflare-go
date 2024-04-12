@@ -41,7 +41,7 @@ func NewWAFPackageGroupService(opts ...option.RequestOption) (r *WAFPackageGroup
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFManagedRulesGroup], err error) {
+func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Group], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -62,7 +62,7 @@ func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, par
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFManagedRulesGroup] {
+func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Group] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, packageID, params, opts...))
 }
 
@@ -71,7 +71,7 @@ func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID s
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params WAFPackageGroupEditParams, opts ...option.RequestOption) (res *WAFPackageGroupEditResponse, err error) {
+func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params WAFPackageGroupEditParams, opts ...option.RequestOption) (res *WAFPackageGroupEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", params.ZoneID, packageID, groupID)
@@ -87,7 +87,7 @@ func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, gro
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query WAFPackageGroupGetParams, opts ...option.RequestOption) (res *WAFPackageGroupGetResponse, err error) {
+func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query WAFPackageGroupGetParams, opts ...option.RequestOption) (res *WAFPackageGroupGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", query.ZoneID, packageID, groupID)
@@ -99,31 +99,30 @@ func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, grou
 	return
 }
 
-type WAFManagedRulesGroup struct {
+type Group struct {
 	// The unique identifier of the rule group.
 	ID string `json:"id,required"`
 	// An informative summary of what the rule group does.
 	Description string `json:"description,required,nullable"`
 	// The state of the rules contained in the rule group. When `on`, the rules in the
 	// group are configurable/usable.
-	Mode WAFManagedRulesGroupMode `json:"mode,required"`
+	Mode GroupMode `json:"mode,required"`
 	// The name of the rule group.
 	Name string `json:"name,required"`
 	// The number of rules in the current rule group.
 	RulesCount float64 `json:"rules_count,required"`
 	// The available states for the rule group.
-	AllowedModes []WAFManagedRulesGroupAllowedMode `json:"allowed_modes"`
+	AllowedModes []GroupAllowedMode `json:"allowed_modes"`
 	// The number of rules within the group that have been modified from their default
 	// configuration.
 	ModifiedRulesCount float64 `json:"modified_rules_count"`
 	// The unique identifier of a WAF package.
-	PackageID string                   `json:"package_id"`
-	JSON      wafManagedRulesGroupJSON `json:"-"`
+	PackageID string    `json:"package_id"`
+	JSON      groupJSON `json:"-"`
 }
 
-// wafManagedRulesGroupJSON contains the JSON metadata for the struct
-// [WAFManagedRulesGroup]
-type wafManagedRulesGroupJSON struct {
+// groupJSON contains the JSON metadata for the struct [Group]
+type groupJSON struct {
 	ID                 apijson.Field
 	Description        apijson.Field
 	Mode               apijson.Field
@@ -136,26 +135,26 @@ type wafManagedRulesGroupJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WAFManagedRulesGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *Group) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r wafManagedRulesGroupJSON) RawJSON() string {
+func (r groupJSON) RawJSON() string {
 	return r.raw
 }
 
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
-type WAFManagedRulesGroupMode string
+type GroupMode string
 
 const (
-	WAFManagedRulesGroupModeOn  WAFManagedRulesGroupMode = "on"
-	WAFManagedRulesGroupModeOff WAFManagedRulesGroupMode = "off"
+	GroupModeOn  GroupMode = "on"
+	GroupModeOff GroupMode = "off"
 )
 
-func (r WAFManagedRulesGroupMode) IsKnown() bool {
+func (r GroupMode) IsKnown() bool {
 	switch r {
-	case WAFManagedRulesGroupModeOn, WAFManagedRulesGroupModeOff:
+	case GroupModeOn, GroupModeOff:
 		return true
 	}
 	return false
@@ -163,35 +162,31 @@ func (r WAFManagedRulesGroupMode) IsKnown() bool {
 
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
-type WAFManagedRulesGroupAllowedMode string
+type GroupAllowedMode string
 
 const (
-	WAFManagedRulesGroupAllowedModeOn  WAFManagedRulesGroupAllowedMode = "on"
-	WAFManagedRulesGroupAllowedModeOff WAFManagedRulesGroupAllowedMode = "off"
+	GroupAllowedModeOn  GroupAllowedMode = "on"
+	GroupAllowedModeOff GroupAllowedMode = "off"
 )
 
-func (r WAFManagedRulesGroupAllowedMode) IsKnown() bool {
+func (r GroupAllowedMode) IsKnown() bool {
 	switch r {
-	case WAFManagedRulesGroupAllowedModeOn, WAFManagedRulesGroupAllowedModeOff:
+	case GroupAllowedModeOn, GroupAllowedModeOff:
 		return true
 	}
 	return false
 }
 
-// Union satisfied by [firewall.WAFPackageGroupEditResponseUnknown],
-// [firewall.WAFPackageGroupEditResponseArray] or [shared.UnionString].
-type WAFPackageGroupEditResponse interface {
-	ImplementsFirewallWAFPackageGroupEditResponse()
+// Union satisfied by [firewall.WAFPackageGroupEditResponseUnknown] or
+// [shared.UnionString].
+type WAFPackageGroupEditResponseUnion interface {
+	ImplementsFirewallWAFPackageGroupEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageGroupEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageGroupEditResponseUnion)(nil)).Elem(),
 		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageGroupEditResponseArray{}),
-		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
@@ -199,34 +194,22 @@ func init() {
 	)
 }
 
-type WAFPackageGroupEditResponseArray []interface{}
-
-func (r WAFPackageGroupEditResponseArray) ImplementsFirewallWAFPackageGroupEditResponse() {}
-
-// Union satisfied by [firewall.WAFPackageGroupGetResponseUnknown],
-// [firewall.WAFPackageGroupGetResponseArray] or [shared.UnionString].
-type WAFPackageGroupGetResponse interface {
-	ImplementsFirewallWAFPackageGroupGetResponse()
+// Union satisfied by [firewall.WAFPackageGroupGetResponseUnknown] or
+// [shared.UnionString].
+type WAFPackageGroupGetResponseUnion interface {
+	ImplementsFirewallWAFPackageGroupGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageGroupGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageGroupGetResponseUnion)(nil)).Elem(),
 		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageGroupGetResponseArray{}),
-		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
-
-type WAFPackageGroupGetResponseArray []interface{}
-
-func (r WAFPackageGroupGetResponseArray) ImplementsFirewallWAFPackageGroupGetResponse() {}
 
 type WAFPackageGroupListParams struct {
 	// Identifier
@@ -239,19 +222,23 @@ type WAFPackageGroupListParams struct {
 	// The state of the rules contained in the rule group. When `on`, the rules in the
 	// group are configurable/usable.
 	Mode param.Field[WAFPackageGroupListParamsMode] `query:"mode"`
+	// The name of the rule group.
+	Name param.Field[string] `query:"name"`
 	// The field used to sort returned rule groups.
 	Order param.Field[WAFPackageGroupListParamsOrder] `query:"order"`
 	// The page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// The number of rule groups per page.
 	PerPage param.Field[float64] `query:"per_page"`
+	// The number of rules in the current rule group.
+	RulesCount param.Field[float64] `query:"rules_count"`
 }
 
 // URLQuery serializes [WAFPackageGroupListParams]'s query parameters as
 // `url.Values`.
 func (r WAFPackageGroupListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -352,9 +339,9 @@ func (r WAFPackageGroupEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageGroupEditResponseEnvelope struct {
-	Errors   []WAFPackageGroupEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WAFPackageGroupEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   WAFPackageGroupEditResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   WAFPackageGroupEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupEditResponseEnvelopeJSON    `json:"-"`
@@ -379,52 +366,6 @@ func (r wafPackageGroupEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type WAFPackageGroupEditResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    wafPackageGroupEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// wafPackageGroupEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WAFPackageGroupEditResponseEnvelopeErrors]
-type wafPackageGroupEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGroupEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGroupEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageGroupEditResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    wafPackageGroupEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// wafPackageGroupEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WAFPackageGroupEditResponseEnvelopeMessages]
-type wafPackageGroupEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGroupEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGroupEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type WAFPackageGroupEditResponseEnvelopeSuccess bool
 
@@ -446,9 +387,9 @@ type WAFPackageGroupGetParams struct {
 }
 
 type WAFPackageGroupGetResponseEnvelope struct {
-	Errors   []WAFPackageGroupGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WAFPackageGroupGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WAFPackageGroupGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   WAFPackageGroupGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupGetResponseEnvelopeJSON    `json:"-"`
@@ -470,52 +411,6 @@ func (r *WAFPackageGroupGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r wafPackageGroupGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageGroupGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    wafPackageGroupGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// wafPackageGroupGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WAFPackageGroupGetResponseEnvelopeErrors]
-type wafPackageGroupGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGroupGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGroupGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageGroupGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    wafPackageGroupGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// wafPackageGroupGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WAFPackageGroupGetResponseEnvelopeMessages]
-type wafPackageGroupGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGroupGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGroupGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

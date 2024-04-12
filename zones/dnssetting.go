@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -31,7 +32,7 @@ func NewDNSSettingService(opts ...option.RequestOption) (r *DNSSettingService) {
 }
 
 // Update DNS settings for a zone
-func (r *DNSSettingService) Edit(ctx context.Context, params DNSSettingEditParams, opts ...option.RequestOption) (res *DNSSettingEditResponse, err error) {
+func (r *DNSSettingService) Edit(ctx context.Context, params DNSSettingEditParams, opts ...option.RequestOption) (res *DNSSetting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSettingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_settings", params.ZoneID)
@@ -44,7 +45,7 @@ func (r *DNSSettingService) Edit(ctx context.Context, params DNSSettingEditParam
 }
 
 // Show DNS settings for a zone
-func (r *DNSSettingService) Get(ctx context.Context, query DNSSettingGetParams, opts ...option.RequestOption) (res *DNSSettingGetResponse, err error) {
+func (r *DNSSettingService) Get(ctx context.Context, query DNSSettingGetParams, opts ...option.RequestOption) (res *DNSSetting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_settings", query.ZoneID)
@@ -56,169 +57,123 @@ func (r *DNSSettingService) Get(ctx context.Context, query DNSSettingGetParams, 
 	return
 }
 
-type DNSSettingEditResponse struct {
+type DNSSetting struct {
+	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
+	FoundationDNS bool `json:"foundation_dns"`
+	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
+	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
+	// zone apex during outbound zone transfers.
+	MultiProvider bool `json:"multi_provider"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers DNSSettingEditResponseNameservers `json:"nameservers"`
-	JSON        dnsSettingEditResponseJSON        `json:"-"`
+	Nameservers Nameserver `json:"nameservers"`
+	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
+	// flattening at the zone apex.
+	SecondaryOverrides bool           `json:"secondary_overrides"`
+	JSON               dnsSettingJSON `json:"-"`
 }
 
-// dnsSettingEditResponseJSON contains the JSON metadata for the struct
-// [DNSSettingEditResponse]
-type dnsSettingEditResponseJSON struct {
-	Nameservers apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// dnsSettingJSON contains the JSON metadata for the struct [DNSSetting]
+type dnsSettingJSON struct {
+	FoundationDNS      apijson.Field
+	MultiProvider      apijson.Field
+	Nameservers        apijson.Field
+	SecondaryOverrides apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DNSSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSSetting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsSettingEditResponseJSON) RawJSON() string {
+func (r dnsSettingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings determining the nameservers through which the zone should be available.
-type DNSSettingEditResponseNameservers struct {
-	// Nameserver type
-	Type DNSSettingEditResponseNameserversType `json:"type,required"`
-	JSON dnsSettingEditResponseNameserversJSON `json:"-"`
+type DNSSettingParam struct {
+	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
+	FoundationDNS param.Field[bool] `json:"foundation_dns"`
+	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
+	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
+	// zone apex during outbound zone transfers.
+	MultiProvider param.Field[bool] `json:"multi_provider"`
+	// Settings determining the nameservers through which the zone should be available.
+	Nameservers param.Field[NameserverParam] `json:"nameservers"`
+	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
+	// flattening at the zone apex.
+	SecondaryOverrides param.Field[bool] `json:"secondary_overrides"`
 }
 
-// dnsSettingEditResponseNameserversJSON contains the JSON metadata for the struct
-// [DNSSettingEditResponseNameservers]
-type dnsSettingEditResponseNameserversJSON struct {
+func (r DNSSettingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Settings determining the nameservers through which the zone should be available.
+type Nameserver struct {
+	// Nameserver type
+	Type NameserverType `json:"type,required"`
+	JSON nameserverJSON `json:"-"`
+}
+
+// nameserverJSON contains the JSON metadata for the struct [Nameserver]
+type nameserverJSON struct {
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingEditResponseNameservers) UnmarshalJSON(data []byte) (err error) {
+func (r *Nameserver) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsSettingEditResponseNameserversJSON) RawJSON() string {
+func (r nameserverJSON) RawJSON() string {
 	return r.raw
 }
 
 // Nameserver type
-type DNSSettingEditResponseNameserversType string
+type NameserverType string
 
 const (
-	DNSSettingEditResponseNameserversTypeCloudflareStandard      DNSSettingEditResponseNameserversType = "cloudflare.standard"
-	DNSSettingEditResponseNameserversTypeCloudflareFoundationDNS DNSSettingEditResponseNameserversType = "cloudflare.foundation_dns"
+	NameserverTypeCloudflareStandard      NameserverType = "cloudflare.standard"
+	NameserverTypeCloudflareFoundationDNS NameserverType = "cloudflare.foundation_dns"
 )
 
-func (r DNSSettingEditResponseNameserversType) IsKnown() bool {
+func (r NameserverType) IsKnown() bool {
 	switch r {
-	case DNSSettingEditResponseNameserversTypeCloudflareStandard, DNSSettingEditResponseNameserversTypeCloudflareFoundationDNS:
+	case NameserverTypeCloudflareStandard, NameserverTypeCloudflareFoundationDNS:
 		return true
 	}
 	return false
-}
-
-type DNSSettingGetResponse struct {
-	// Settings determining the nameservers through which the zone should be available.
-	Nameservers DNSSettingGetResponseNameservers `json:"nameservers"`
-	JSON        dnsSettingGetResponseJSON        `json:"-"`
-}
-
-// dnsSettingGetResponseJSON contains the JSON metadata for the struct
-// [DNSSettingGetResponse]
-type dnsSettingGetResponseJSON struct {
-	Nameservers apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsSettingGetResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 // Settings determining the nameservers through which the zone should be available.
-type DNSSettingGetResponseNameservers struct {
+type NameserverParam struct {
 	// Nameserver type
-	Type DNSSettingGetResponseNameserversType `json:"type,required"`
-	JSON dnsSettingGetResponseNameserversJSON `json:"-"`
+	Type param.Field[NameserverType] `json:"type,required"`
 }
 
-// dnsSettingGetResponseNameserversJSON contains the JSON metadata for the struct
-// [DNSSettingGetResponseNameservers]
-type dnsSettingGetResponseNameserversJSON struct {
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSettingGetResponseNameservers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsSettingGetResponseNameserversJSON) RawJSON() string {
-	return r.raw
-}
-
-// Nameserver type
-type DNSSettingGetResponseNameserversType string
-
-const (
-	DNSSettingGetResponseNameserversTypeCloudflareStandard      DNSSettingGetResponseNameserversType = "cloudflare.standard"
-	DNSSettingGetResponseNameserversTypeCloudflareFoundationDNS DNSSettingGetResponseNameserversType = "cloudflare.foundation_dns"
-)
-
-func (r DNSSettingGetResponseNameserversType) IsKnown() bool {
-	switch r {
-	case DNSSettingGetResponseNameserversTypeCloudflareStandard, DNSSettingGetResponseNameserversTypeCloudflareFoundationDNS:
-		return true
-	}
-	return false
+func (r NameserverParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DNSSettingEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Settings determining the nameservers through which the zone should be available.
-	Nameservers param.Field[DNSSettingEditParamsNameservers] `json:"nameservers"`
+	ZoneID     param.Field[string] `path:"zone_id,required"`
+	DNSSetting DNSSettingParam     `json:"dns_setting,required"`
 }
 
 func (r DNSSettingEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Settings determining the nameservers through which the zone should be available.
-type DNSSettingEditParamsNameservers struct {
-	// Nameserver type
-	Type param.Field[DNSSettingEditParamsNameserversType] `json:"type,required"`
-}
-
-func (r DNSSettingEditParamsNameservers) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Nameserver type
-type DNSSettingEditParamsNameserversType string
-
-const (
-	DNSSettingEditParamsNameserversTypeCloudflareStandard      DNSSettingEditParamsNameserversType = "cloudflare.standard"
-	DNSSettingEditParamsNameserversTypeCloudflareFoundationDNS DNSSettingEditParamsNameserversType = "cloudflare.foundation_dns"
-)
-
-func (r DNSSettingEditParamsNameserversType) IsKnown() bool {
-	switch r {
-	case DNSSettingEditParamsNameserversTypeCloudflareStandard, DNSSettingEditParamsNameserversTypeCloudflareFoundationDNS:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.DNSSetting)
 }
 
 type DNSSettingEditResponseEnvelope struct {
-	Errors   []DNSSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSSettingEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSSettingEditResponse                   `json:"result,required"`
+	Errors             []shared.ResponseInfo `json:"errors,required"`
+	FoundationDNS      interface{}           `json:"foundation_dns,required"`
+	Messages           []shared.ResponseInfo `json:"messages,required"`
+	MultiProvider      interface{}           `json:"multi_provider,required"`
+	Nameservers        interface{}           `json:"nameservers,required"`
+	Result             DNSSetting            `json:"result,required"`
+	SecondaryOverrides interface{}           `json:"secondary_overrides,required"`
 	// Whether the API call was successful
 	Success DNSSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -227,12 +182,16 @@ type DNSSettingEditResponseEnvelope struct {
 // dnsSettingEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [DNSSettingEditResponseEnvelope]
 type dnsSettingEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Errors             apijson.Field
+	FoundationDNS      apijson.Field
+	Messages           apijson.Field
+	MultiProvider      apijson.Field
+	Nameservers        apijson.Field
+	Result             apijson.Field
+	SecondaryOverrides apijson.Field
+	Success            apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DNSSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
@@ -240,52 +199,6 @@ func (r *DNSSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r dnsSettingEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSSettingEditResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    dnsSettingEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnsSettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DNSSettingEditResponseEnvelopeErrors]
-type dnsSettingEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSSettingEditResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    dnsSettingEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnsSettingEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DNSSettingEditResponseEnvelopeMessages]
-type dnsSettingEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -310,9 +223,13 @@ type DNSSettingGetParams struct {
 }
 
 type DNSSettingGetResponseEnvelope struct {
-	Errors   []DNSSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSSettingGetResponse                   `json:"result,required"`
+	Errors             []shared.ResponseInfo `json:"errors,required"`
+	FoundationDNS      interface{}           `json:"foundation_dns,required"`
+	Messages           []shared.ResponseInfo `json:"messages,required"`
+	MultiProvider      interface{}           `json:"multi_provider,required"`
+	Nameservers        interface{}           `json:"nameservers,required"`
+	Result             DNSSetting            `json:"result,required"`
+	SecondaryOverrides interface{}           `json:"secondary_overrides,required"`
 	// Whether the API call was successful
 	Success DNSSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsSettingGetResponseEnvelopeJSON    `json:"-"`
@@ -321,12 +238,16 @@ type DNSSettingGetResponseEnvelope struct {
 // dnsSettingGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [DNSSettingGetResponseEnvelope]
 type dnsSettingGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Errors             apijson.Field
+	FoundationDNS      apijson.Field
+	Messages           apijson.Field
+	MultiProvider      apijson.Field
+	Nameservers        apijson.Field
+	Result             apijson.Field
+	SecondaryOverrides apijson.Field
+	Success            apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DNSSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
@@ -334,52 +255,6 @@ func (r *DNSSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnsSettingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSSettingGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    dnsSettingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnsSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DNSSettingGetResponseEnvelopeErrors]
-type dnsSettingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSSettingGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    dnsSettingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnsSettingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DNSSettingGetResponseEnvelopeMessages]
-type dnsSettingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

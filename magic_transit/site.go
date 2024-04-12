@@ -6,10 +6,13 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -65,11 +68,11 @@ func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpda
 // Lists Sites associated with an account. Use connector_identifier query param to
 // return sites where connector_identifier matches either site.ConnectorID or
 // site.SecondaryConnectorID.
-func (r *SiteService) List(ctx context.Context, query SiteListParams, opts ...option.RequestOption) (res *SiteListResponse, err error) {
+func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...option.RequestOption) (res *SiteListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/sites", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,10 +81,10 @@ func (r *SiteService) List(ctx context.Context, query SiteListParams, opts ...op
 }
 
 // Remove a specific Site.
-func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDeleteParams, opts ...option.RequestOption) (res *SiteDeleteResponse, err error) {
+func (r *SiteService) Delete(ctx context.Context, siteID string, params SiteDeleteParams, opts ...option.RequestOption) (res *SiteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s", body.AccountID, siteID)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -103,8 +106,84 @@ func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParam
 	return
 }
 
+type Site struct {
+	// Identifier
+	ID string `json:"id"`
+	// Magic WAN Connector identifier tag.
+	ConnectorID string `json:"connector_id"`
+	Description string `json:"description"`
+	// Site high availability mode. If set to true, the site can have two connectors
+	// and runs in high availability mode.
+	HaMode bool `json:"ha_mode"`
+	// Location of site in latitude and longitude.
+	Location SiteLocation `json:"location"`
+	// The name of the site.
+	Name string `json:"name"`
+	// Magic WAN Connector identifier tag. Used when high availability mode is on.
+	SecondaryConnectorID string   `json:"secondary_connector_id"`
+	JSON                 siteJSON `json:"-"`
+}
+
+// siteJSON contains the JSON metadata for the struct [Site]
+type siteJSON struct {
+	ID                   apijson.Field
+	ConnectorID          apijson.Field
+	Description          apijson.Field
+	HaMode               apijson.Field
+	Location             apijson.Field
+	Name                 apijson.Field
+	SecondaryConnectorID apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *Site) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of site in latitude and longitude.
+type SiteLocation struct {
+	// Latitude
+	Lat string `json:"lat"`
+	// Longitude
+	Lon  string           `json:"lon"`
+	JSON siteLocationJSON `json:"-"`
+}
+
+// siteLocationJSON contains the JSON metadata for the struct [SiteLocation]
+type siteLocationJSON struct {
+	Lat         apijson.Field
+	Lon         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLocation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLocationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of site in latitude and longitude.
+type SiteLocationParam struct {
+	// Latitude
+	Lat param.Field[string] `json:"lat"`
+	// Longitude
+	Lon param.Field[string] `json:"lon"`
+}
+
+func (r SiteLocationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SiteNewResponse struct {
-	Site SiteNewResponseSite `json:"site"`
+	Site Site                `json:"site"`
 	JSON siteNewResponseJSON `json:"-"`
 }
 
@@ -123,74 +202,8 @@ func (r siteNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteNewResponseSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteNewResponseSiteLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                  `json:"secondary_connector_id"`
-	JSON                 siteNewResponseSiteJSON `json:"-"`
-}
-
-// siteNewResponseSiteJSON contains the JSON metadata for the struct
-// [SiteNewResponseSite]
-type siteNewResponseSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteNewResponseSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteNewResponseSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteNewResponseSiteLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                          `json:"lon"`
-	JSON siteNewResponseSiteLocationJSON `json:"-"`
-}
-
-// siteNewResponseSiteLocationJSON contains the JSON metadata for the struct
-// [SiteNewResponseSiteLocation]
-type siteNewResponseSiteLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteNewResponseSiteLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteNewResponseSiteLocationJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteUpdateResponse struct {
-	Site SiteUpdateResponseSite `json:"site"`
+	Site Site                   `json:"site"`
 	JSON siteUpdateResponseJSON `json:"-"`
 }
 
@@ -210,75 +223,9 @@ func (r siteUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteUpdateResponseSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteUpdateResponseSiteLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                     `json:"secondary_connector_id"`
-	JSON                 siteUpdateResponseSiteJSON `json:"-"`
-}
-
-// siteUpdateResponseSiteJSON contains the JSON metadata for the struct
-// [SiteUpdateResponseSite]
-type siteUpdateResponseSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteUpdateResponseSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteUpdateResponseSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteUpdateResponseSiteLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                             `json:"lon"`
-	JSON siteUpdateResponseSiteLocationJSON `json:"-"`
-}
-
-// siteUpdateResponseSiteLocationJSON contains the JSON metadata for the struct
-// [SiteUpdateResponseSiteLocation]
-type siteUpdateResponseSiteLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteUpdateResponseSiteLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteUpdateResponseSiteLocationJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteListResponse struct {
-	Sites []SiteListResponseSite `json:"sites"`
-	JSON  siteListResponseJSON   `json:"-"`
+	Sites []Site               `json:"sites"`
+	JSON  siteListResponseJSON `json:"-"`
 }
 
 // siteListResponseJSON contains the JSON metadata for the struct
@@ -297,76 +244,10 @@ func (r siteListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteListResponseSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteListResponseSitesLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                   `json:"secondary_connector_id"`
-	JSON                 siteListResponseSiteJSON `json:"-"`
-}
-
-// siteListResponseSiteJSON contains the JSON metadata for the struct
-// [SiteListResponseSite]
-type siteListResponseSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteListResponseSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteListResponseSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteListResponseSitesLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                            `json:"lon"`
-	JSON siteListResponseSitesLocationJSON `json:"-"`
-}
-
-// siteListResponseSitesLocationJSON contains the JSON metadata for the struct
-// [SiteListResponseSitesLocation]
-type siteListResponseSitesLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteListResponseSitesLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteListResponseSitesLocationJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteDeleteResponse struct {
-	Deleted     bool                          `json:"deleted"`
-	DeletedSite SiteDeleteResponseDeletedSite `json:"deleted_site"`
-	JSON        siteDeleteResponseJSON        `json:"-"`
+	Deleted     bool                   `json:"deleted"`
+	DeletedSite Site                   `json:"deleted_site"`
+	JSON        siteDeleteResponseJSON `json:"-"`
 }
 
 // siteDeleteResponseJSON contains the JSON metadata for the struct
@@ -386,74 +267,8 @@ func (r siteDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteDeleteResponseDeletedSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteDeleteResponseDeletedSiteLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                            `json:"secondary_connector_id"`
-	JSON                 siteDeleteResponseDeletedSiteJSON `json:"-"`
-}
-
-// siteDeleteResponseDeletedSiteJSON contains the JSON metadata for the struct
-// [SiteDeleteResponseDeletedSite]
-type siteDeleteResponseDeletedSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteDeleteResponseDeletedSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteDeleteResponseDeletedSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteDeleteResponseDeletedSiteLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                                    `json:"lon"`
-	JSON siteDeleteResponseDeletedSiteLocationJSON `json:"-"`
-}
-
-// siteDeleteResponseDeletedSiteLocationJSON contains the JSON metadata for the
-// struct [SiteDeleteResponseDeletedSiteLocation]
-type siteDeleteResponseDeletedSiteLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteDeleteResponseDeletedSiteLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteDeleteResponseDeletedSiteLocationJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteGetResponse struct {
-	Site SiteGetResponseSite `json:"site"`
+	Site Site                `json:"site"`
 	JSON siteGetResponseJSON `json:"-"`
 }
 
@@ -469,72 +284,6 @@ func (r *SiteGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteGetResponseSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteGetResponseSiteLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                  `json:"secondary_connector_id"`
-	JSON                 siteGetResponseSiteJSON `json:"-"`
-}
-
-// siteGetResponseSiteJSON contains the JSON metadata for the struct
-// [SiteGetResponseSite]
-type siteGetResponseSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteGetResponseSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteGetResponseSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteGetResponseSiteLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                          `json:"lon"`
-	JSON siteGetResponseSiteLocationJSON `json:"-"`
-}
-
-// siteGetResponseSiteLocationJSON contains the JSON metadata for the struct
-// [SiteGetResponseSiteLocation]
-type siteGetResponseSiteLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteGetResponseSiteLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteGetResponseSiteLocationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -558,7 +307,7 @@ type SiteNewParamsSite struct {
 	// and runs in high availability mode.
 	HaMode param.Field[bool] `json:"ha_mode"`
 	// Location of site in latitude and longitude.
-	Location param.Field[SiteNewParamsSiteLocation] `json:"location"`
+	Location param.Field[SiteLocationParam] `json:"location"`
 	// Magic WAN Connector identifier tag. Used when high availability mode is on.
 	SecondaryConnectorID param.Field[string] `json:"secondary_connector_id"`
 }
@@ -567,22 +316,10 @@ func (r SiteNewParamsSite) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Location of site in latitude and longitude.
-type SiteNewParamsSiteLocation struct {
-	// Latitude
-	Lat param.Field[string] `json:"lat"`
-	// Longitude
-	Lon param.Field[string] `json:"lon"`
-}
-
-func (r SiteNewParamsSiteLocation) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type SiteNewResponseEnvelope struct {
-	Errors   []SiteNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteNewResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteNewResponseEnvelopeJSON    `json:"-"`
@@ -604,52 +341,6 @@ func (r *SiteNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    siteNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteNewResponseEnvelopeErrors]
-type siteNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    siteNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteNewResponseEnvelopeMessages]
-type siteNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -683,7 +374,7 @@ type SiteUpdateParamsSite struct {
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
 	// Location of site in latitude and longitude.
-	Location param.Field[SiteUpdateParamsSiteLocation] `json:"location"`
+	Location param.Field[SiteLocationParam] `json:"location"`
 	// The name of the site.
 	Name param.Field[string] `json:"name"`
 	// Magic WAN Connector identifier tag. Used when high availability mode is on.
@@ -694,22 +385,10 @@ func (r SiteUpdateParamsSite) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Location of site in latitude and longitude.
-type SiteUpdateParamsSiteLocation struct {
-	// Latitude
-	Lat param.Field[string] `json:"lat"`
-	// Longitude
-	Lon param.Field[string] `json:"lon"`
-}
-
-func (r SiteUpdateParamsSiteLocation) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type SiteUpdateResponseEnvelope struct {
-	Errors   []SiteUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteUpdateResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteUpdateResponseEnvelopeJSON    `json:"-"`
@@ -734,52 +413,6 @@ func (r siteUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    siteUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteUpdateResponseEnvelopeErrors]
-type siteUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    siteUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteUpdateResponseEnvelopeMessages]
-type siteUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SiteUpdateResponseEnvelopeSuccess bool
 
@@ -798,12 +431,22 @@ func (r SiteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type SiteListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Identifier
+	ConnectorIdentifier param.Field[string] `query:"connector_identifier"`
+}
+
+// URLQuery serializes [SiteListParams]'s query parameters as `url.Values`.
+func (r SiteListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type SiteListResponseEnvelope struct {
-	Errors   []SiteListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteListResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteListResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteListResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteListResponseEnvelopeJSON    `json:"-"`
@@ -828,52 +471,6 @@ func (r siteListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    siteListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteListResponseEnvelopeErrors]
-type siteListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    siteListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteListResponseEnvelopeMessages]
-type siteListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SiteListResponseEnvelopeSuccess bool
 
@@ -892,12 +489,17 @@ func (r SiteListResponseEnvelopeSuccess) IsKnown() bool {
 type SiteDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r SiteDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type SiteDeleteResponseEnvelope struct {
-	Errors   []SiteDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -922,52 +524,6 @@ func (r siteDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteDeleteResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    siteDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteDeleteResponseEnvelopeErrors]
-type siteDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteDeleteResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    siteDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteDeleteResponseEnvelopeMessages]
-type siteDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SiteDeleteResponseEnvelopeSuccess bool
 
@@ -989,9 +545,9 @@ type SiteGetParams struct {
 }
 
 type SiteGetResponseEnvelope struct {
-	Errors   []SiteGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteGetResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteGetResponseEnvelopeJSON    `json:"-"`
@@ -1013,52 +569,6 @@ func (r *SiteGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    siteGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteGetResponseEnvelopeErrors]
-type siteGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    siteGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteGetResponseEnvelopeMessages]
-type siteGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

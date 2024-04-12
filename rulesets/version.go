@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // VersionService contains methods and other services that help with interacting
@@ -35,7 +37,7 @@ func NewVersionService(opts ...option.RequestOption) (r *VersionService) {
 }
 
 // Fetches the versions of an account or zone ruleset.
-func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[VersionListResponse], err error) {
+func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Ruleset], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -62,7 +64,7 @@ func (r *VersionService) List(ctx context.Context, rulesetID string, query Versi
 }
 
 // Fetches the versions of an account or zone ruleset.
-func (r *VersionService) ListAutoPaging(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[VersionListResponse] {
+func (r *VersionService) ListAutoPaging(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Ruleset] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, rulesetID, query, opts...))
 }
 
@@ -85,7 +87,7 @@ func (r *VersionService) Delete(ctx context.Context, rulesetID string, rulesetVe
 }
 
 // Fetches a specific version of an account or zone ruleset.
-func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersion string, query VersionGetParams, opts ...option.RequestOption) (res *Ruleset, err error) {
+func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersion string, query VersionGetParams, opts ...option.RequestOption) (res *VersionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VersionGetResponseEnvelope
 	var accountOrZone string
@@ -107,96 +109,279 @@ func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersi
 }
 
 // A ruleset object.
-type VersionListResponse struct {
+type VersionGetResponse struct {
+	// The unique ID of the ruleset.
+	ID string `json:"id,required"`
 	// The kind of the ruleset.
-	Kind VersionListResponseKind `json:"kind,required"`
+	Kind VersionGetResponseKind `json:"kind,required"`
+	// The timestamp of when the ruleset was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name,required"`
 	// The phase of the ruleset.
-	Phase VersionListResponsePhase `json:"phase,required"`
-	// The unique ID of the ruleset.
-	ID string `json:"id"`
-	// An informative description of the ruleset.
-	Description string `json:"description"`
-	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated" format:"date-time"`
+	Phase VersionGetResponsePhase `json:"phase,required"`
+	// The list of rules in the ruleset.
+	Rules []VersionGetResponseRule `json:"rules,required"`
 	// The version of the ruleset.
-	Version string                  `json:"version"`
-	JSON    versionListResponseJSON `json:"-"`
+	Version string `json:"version,required"`
+	// An informative description of the ruleset.
+	Description string                 `json:"description"`
+	JSON        versionGetResponseJSON `json:"-"`
 }
 
-// versionListResponseJSON contains the JSON metadata for the struct
-// [VersionListResponse]
-type versionListResponseJSON struct {
+// versionGetResponseJSON contains the JSON metadata for the struct
+// [VersionGetResponse]
+type versionGetResponseJSON struct {
+	ID          apijson.Field
 	Kind        apijson.Field
+	LastUpdated apijson.Field
 	Name        apijson.Field
 	Phase       apijson.Field
-	ID          apijson.Field
-	Description apijson.Field
-	LastUpdated apijson.Field
+	Rules       apijson.Field
 	Version     apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VersionListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionListResponseJSON) RawJSON() string {
+func (r versionGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The kind of the ruleset.
-type VersionListResponseKind string
+type VersionGetResponseKind string
 
 const (
-	VersionListResponseKindManaged VersionListResponseKind = "managed"
-	VersionListResponseKindCustom  VersionListResponseKind = "custom"
-	VersionListResponseKindRoot    VersionListResponseKind = "root"
-	VersionListResponseKindZone    VersionListResponseKind = "zone"
+	VersionGetResponseKindManaged VersionGetResponseKind = "managed"
+	VersionGetResponseKindCustom  VersionGetResponseKind = "custom"
+	VersionGetResponseKindRoot    VersionGetResponseKind = "root"
+	VersionGetResponseKindZone    VersionGetResponseKind = "zone"
 )
 
-func (r VersionListResponseKind) IsKnown() bool {
+func (r VersionGetResponseKind) IsKnown() bool {
 	switch r {
-	case VersionListResponseKindManaged, VersionListResponseKindCustom, VersionListResponseKindRoot, VersionListResponseKindZone:
+	case VersionGetResponseKindManaged, VersionGetResponseKindCustom, VersionGetResponseKindRoot, VersionGetResponseKindZone:
 		return true
 	}
 	return false
 }
 
 // The phase of the ruleset.
-type VersionListResponsePhase string
+type VersionGetResponsePhase string
 
 const (
-	VersionListResponsePhaseDDoSL4                         VersionListResponsePhase = "ddos_l4"
-	VersionListResponsePhaseDDoSL7                         VersionListResponsePhase = "ddos_l7"
-	VersionListResponsePhaseHTTPConfigSettings             VersionListResponsePhase = "http_config_settings"
-	VersionListResponsePhaseHTTPCustomErrors               VersionListResponsePhase = "http_custom_errors"
-	VersionListResponsePhaseHTTPLogCustomFields            VersionListResponsePhase = "http_log_custom_fields"
-	VersionListResponsePhaseHTTPRatelimit                  VersionListResponsePhase = "http_ratelimit"
-	VersionListResponsePhaseHTTPRequestCacheSettings       VersionListResponsePhase = "http_request_cache_settings"
-	VersionListResponsePhaseHTTPRequestDynamicRedirect     VersionListResponsePhase = "http_request_dynamic_redirect"
-	VersionListResponsePhaseHTTPRequestFirewallCustom      VersionListResponsePhase = "http_request_firewall_custom"
-	VersionListResponsePhaseHTTPRequestFirewallManaged     VersionListResponsePhase = "http_request_firewall_managed"
-	VersionListResponsePhaseHTTPRequestLateTransform       VersionListResponsePhase = "http_request_late_transform"
-	VersionListResponsePhaseHTTPRequestOrigin              VersionListResponsePhase = "http_request_origin"
-	VersionListResponsePhaseHTTPRequestRedirect            VersionListResponsePhase = "http_request_redirect"
-	VersionListResponsePhaseHTTPRequestSanitize            VersionListResponsePhase = "http_request_sanitize"
-	VersionListResponsePhaseHTTPRequestSbfm                VersionListResponsePhase = "http_request_sbfm"
-	VersionListResponsePhaseHTTPRequestSelectConfiguration VersionListResponsePhase = "http_request_select_configuration"
-	VersionListResponsePhaseHTTPRequestTransform           VersionListResponsePhase = "http_request_transform"
-	VersionListResponsePhaseHTTPResponseCompression        VersionListResponsePhase = "http_response_compression"
-	VersionListResponsePhaseHTTPResponseFirewallManaged    VersionListResponsePhase = "http_response_firewall_managed"
-	VersionListResponsePhaseHTTPResponseHeadersTransform   VersionListResponsePhase = "http_response_headers_transform"
-	VersionListResponsePhaseMagicTransit                   VersionListResponsePhase = "magic_transit"
-	VersionListResponsePhaseMagicTransitIDsManaged         VersionListResponsePhase = "magic_transit_ids_managed"
-	VersionListResponsePhaseMagicTransitManaged            VersionListResponsePhase = "magic_transit_managed"
+	VersionGetResponsePhaseDDoSL4                         VersionGetResponsePhase = "ddos_l4"
+	VersionGetResponsePhaseDDoSL7                         VersionGetResponsePhase = "ddos_l7"
+	VersionGetResponsePhaseHTTPConfigSettings             VersionGetResponsePhase = "http_config_settings"
+	VersionGetResponsePhaseHTTPCustomErrors               VersionGetResponsePhase = "http_custom_errors"
+	VersionGetResponsePhaseHTTPLogCustomFields            VersionGetResponsePhase = "http_log_custom_fields"
+	VersionGetResponsePhaseHTTPRatelimit                  VersionGetResponsePhase = "http_ratelimit"
+	VersionGetResponsePhaseHTTPRequestCacheSettings       VersionGetResponsePhase = "http_request_cache_settings"
+	VersionGetResponsePhaseHTTPRequestDynamicRedirect     VersionGetResponsePhase = "http_request_dynamic_redirect"
+	VersionGetResponsePhaseHTTPRequestFirewallCustom      VersionGetResponsePhase = "http_request_firewall_custom"
+	VersionGetResponsePhaseHTTPRequestFirewallManaged     VersionGetResponsePhase = "http_request_firewall_managed"
+	VersionGetResponsePhaseHTTPRequestLateTransform       VersionGetResponsePhase = "http_request_late_transform"
+	VersionGetResponsePhaseHTTPRequestOrigin              VersionGetResponsePhase = "http_request_origin"
+	VersionGetResponsePhaseHTTPRequestRedirect            VersionGetResponsePhase = "http_request_redirect"
+	VersionGetResponsePhaseHTTPRequestSanitize            VersionGetResponsePhase = "http_request_sanitize"
+	VersionGetResponsePhaseHTTPRequestSBFM                VersionGetResponsePhase = "http_request_sbfm"
+	VersionGetResponsePhaseHTTPRequestSelectConfiguration VersionGetResponsePhase = "http_request_select_configuration"
+	VersionGetResponsePhaseHTTPRequestTransform           VersionGetResponsePhase = "http_request_transform"
+	VersionGetResponsePhaseHTTPResponseCompression        VersionGetResponsePhase = "http_response_compression"
+	VersionGetResponsePhaseHTTPResponseFirewallManaged    VersionGetResponsePhase = "http_response_firewall_managed"
+	VersionGetResponsePhaseHTTPResponseHeadersTransform   VersionGetResponsePhase = "http_response_headers_transform"
+	VersionGetResponsePhaseMagicTransit                   VersionGetResponsePhase = "magic_transit"
+	VersionGetResponsePhaseMagicTransitIDsManaged         VersionGetResponsePhase = "magic_transit_ids_managed"
+	VersionGetResponsePhaseMagicTransitManaged            VersionGetResponsePhase = "magic_transit_managed"
 )
 
-func (r VersionListResponsePhase) IsKnown() bool {
+func (r VersionGetResponsePhase) IsKnown() bool {
 	switch r {
-	case VersionListResponsePhaseDDoSL4, VersionListResponsePhaseDDoSL7, VersionListResponsePhaseHTTPConfigSettings, VersionListResponsePhaseHTTPCustomErrors, VersionListResponsePhaseHTTPLogCustomFields, VersionListResponsePhaseHTTPRatelimit, VersionListResponsePhaseHTTPRequestCacheSettings, VersionListResponsePhaseHTTPRequestDynamicRedirect, VersionListResponsePhaseHTTPRequestFirewallCustom, VersionListResponsePhaseHTTPRequestFirewallManaged, VersionListResponsePhaseHTTPRequestLateTransform, VersionListResponsePhaseHTTPRequestOrigin, VersionListResponsePhaseHTTPRequestRedirect, VersionListResponsePhaseHTTPRequestSanitize, VersionListResponsePhaseHTTPRequestSbfm, VersionListResponsePhaseHTTPRequestSelectConfiguration, VersionListResponsePhaseHTTPRequestTransform, VersionListResponsePhaseHTTPResponseCompression, VersionListResponsePhaseHTTPResponseFirewallManaged, VersionListResponsePhaseHTTPResponseHeadersTransform, VersionListResponsePhaseMagicTransit, VersionListResponsePhaseMagicTransitIDsManaged, VersionListResponsePhaseMagicTransitManaged:
+	case VersionGetResponsePhaseDDoSL4, VersionGetResponsePhaseDDoSL7, VersionGetResponsePhaseHTTPConfigSettings, VersionGetResponsePhaseHTTPCustomErrors, VersionGetResponsePhaseHTTPLogCustomFields, VersionGetResponsePhaseHTTPRatelimit, VersionGetResponsePhaseHTTPRequestCacheSettings, VersionGetResponsePhaseHTTPRequestDynamicRedirect, VersionGetResponsePhaseHTTPRequestFirewallCustom, VersionGetResponsePhaseHTTPRequestFirewallManaged, VersionGetResponsePhaseHTTPRequestLateTransform, VersionGetResponsePhaseHTTPRequestOrigin, VersionGetResponsePhaseHTTPRequestRedirect, VersionGetResponsePhaseHTTPRequestSanitize, VersionGetResponsePhaseHTTPRequestSBFM, VersionGetResponsePhaseHTTPRequestSelectConfiguration, VersionGetResponsePhaseHTTPRequestTransform, VersionGetResponsePhaseHTTPResponseCompression, VersionGetResponsePhaseHTTPResponseFirewallManaged, VersionGetResponsePhaseHTTPResponseHeadersTransform, VersionGetResponsePhaseMagicTransit, VersionGetResponsePhaseMagicTransitIDsManaged, VersionGetResponsePhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
+type VersionGetResponseRule struct {
+	// The action to perform when the rule matches.
+	Action           VersionGetResponseRulesAction `json:"action"`
+	ActionParameters interface{}                   `json:"action_parameters,required"`
+	Categories       interface{}                   `json:"categories,required"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref string `json:"ref"`
+	// The version of the rule.
+	Version string                     `json:"version,required"`
+	JSON    versionGetResponseRuleJSON `json:"-"`
+	union   VersionGetResponseRulesUnion
+}
+
+// versionGetResponseRuleJSON contains the JSON metadata for the struct
+// [VersionGetResponseRule]
+type versionGetResponseRuleJSON struct {
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	ID               apijson.Field
+	LastUpdated      apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	Version          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r versionGetResponseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r VersionGetResponseRule) AsUnion() VersionGetResponseRulesUnion {
+	return r.union
+}
+
+// Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
+// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
+// [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
+// [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
+type VersionGetResponseRulesUnion interface {
+	implementsRulesetsVersionGetResponseRule()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseRulesUnion)(nil)).Elem(),
+		"action",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BlockRule{}),
+			DiscriminatorValue: "block",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ChallengeRule{}),
+			DiscriminatorValue: "challenge",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CompressResponseRule{}),
+			DiscriminatorValue: "compress_response",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ExecuteRule{}),
+			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(JSChallengeRule{}),
+			DiscriminatorValue: "js_challenge",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogRule{}),
+			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ManagedChallengeRule{}),
+			DiscriminatorValue: "managed_challenge",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RedirectRule{}),
+			DiscriminatorValue: "redirect",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RewriteRule{}),
+			DiscriminatorValue: "rewrite",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RouteRule{}),
+			DiscriminatorValue: "route",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScoreRule{}),
+			DiscriminatorValue: "score",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ServeErrorRule{}),
+			DiscriminatorValue: "serve_error",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SetConfigRule{}),
+			DiscriminatorValue: "set_config",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SkipRule{}),
+			DiscriminatorValue: "skip",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
+			DiscriminatorValue: "set_cache_settings",
+		},
+	)
+}
+
+// The action to perform when the rule matches.
+type VersionGetResponseRulesAction string
+
+const (
+	VersionGetResponseRulesActionBlock            VersionGetResponseRulesAction = "block"
+	VersionGetResponseRulesActionChallenge        VersionGetResponseRulesAction = "challenge"
+	VersionGetResponseRulesActionCompressResponse VersionGetResponseRulesAction = "compress_response"
+	VersionGetResponseRulesActionExecute          VersionGetResponseRulesAction = "execute"
+	VersionGetResponseRulesActionJSChallenge      VersionGetResponseRulesAction = "js_challenge"
+	VersionGetResponseRulesActionLog              VersionGetResponseRulesAction = "log"
+	VersionGetResponseRulesActionManagedChallenge VersionGetResponseRulesAction = "managed_challenge"
+	VersionGetResponseRulesActionRedirect         VersionGetResponseRulesAction = "redirect"
+	VersionGetResponseRulesActionRewrite          VersionGetResponseRulesAction = "rewrite"
+	VersionGetResponseRulesActionRoute            VersionGetResponseRulesAction = "route"
+	VersionGetResponseRulesActionScore            VersionGetResponseRulesAction = "score"
+	VersionGetResponseRulesActionServeError       VersionGetResponseRulesAction = "serve_error"
+	VersionGetResponseRulesActionSetConfig        VersionGetResponseRulesAction = "set_config"
+	VersionGetResponseRulesActionSkip             VersionGetResponseRulesAction = "skip"
+	VersionGetResponseRulesActionSetCacheSettings VersionGetResponseRulesAction = "set_cache_settings"
+)
+
+func (r VersionGetResponseRulesAction) IsKnown() bool {
+	switch r {
+	case VersionGetResponseRulesActionBlock, VersionGetResponseRulesActionChallenge, VersionGetResponseRulesActionCompressResponse, VersionGetResponseRulesActionExecute, VersionGetResponseRulesActionJSChallenge, VersionGetResponseRulesActionLog, VersionGetResponseRulesActionManagedChallenge, VersionGetResponseRulesActionRedirect, VersionGetResponseRulesActionRewrite, VersionGetResponseRulesActionRoute, VersionGetResponseRulesActionScore, VersionGetResponseRulesActionServeError, VersionGetResponseRulesActionSetConfig, VersionGetResponseRulesActionSkip, VersionGetResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -229,8 +414,8 @@ type VersionGetResponseEnvelope struct {
 	Errors []VersionGetResponseEnvelopeErrors `json:"errors,required"`
 	// A list of warning messages.
 	Messages []VersionGetResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
-	Result Ruleset `json:"result,required"`
+	// A ruleset object.
+	Result VersionGetResponse `json:"result,required"`
 	// Whether the API call was successful.
 	Success VersionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    versionGetResponseEnvelopeJSON    `json:"-"`

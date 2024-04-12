@@ -33,7 +33,7 @@ func TestConsumerNew(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F[any](map[string]interface{}{
+			Body: map[string]interface{}{
 				"dead_letter_queue": "example-dlq",
 				"environment":       "production",
 				"script_name":       "example-consumer",
@@ -42,7 +42,7 @@ func TestConsumerNew(t *testing.T) {
 					"max_retries":      int64(3),
 					"max_wait_time_ms": int64(5000),
 				},
-			}),
+			},
 		},
 	)
 	if err != nil {
@@ -74,14 +74,14 @@ func TestConsumerUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F[any](map[string]interface{}{
+			Body: map[string]interface{}{
 				"dead_letter_queue": "updated-example-dlq",
 				"environment":       "production",
 				"script_name":       "example-consumer",
 				"settings": map[string]interface{}{
 					"batch_size": int64(100),
 				},
-			}),
+			},
 		},
 	)
 	if err != nil {
@@ -113,6 +113,7 @@ func TestConsumerDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

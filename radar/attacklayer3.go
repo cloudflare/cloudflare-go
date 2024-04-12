@@ -76,7 +76,7 @@ func (r attackLayer3TimeseriesResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TimeseriesResponseSerie0 struct {
-	Timestamps []string                                 `json:"timestamps,required"`
+	Timestamps []time.Time                              `json:"timestamps,required" format:"date-time"`
 	Values     []string                                 `json:"values,required"`
 	JSON       attackLayer3TimeseriesResponseSerie0JSON `json:"-"`
 }
@@ -145,7 +145,7 @@ type AttackLayer3TimeseriesParams struct {
 // `url.Values`.
 func (r AttackLayer3TimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -283,14 +283,14 @@ type AttackLayer3TimeseriesParamsProtocol string
 
 const (
 	AttackLayer3TimeseriesParamsProtocolUdp  AttackLayer3TimeseriesParamsProtocol = "UDP"
-	AttackLayer3TimeseriesParamsProtocolTcp  AttackLayer3TimeseriesParamsProtocol = "TCP"
+	AttackLayer3TimeseriesParamsProtocolTCP  AttackLayer3TimeseriesParamsProtocol = "TCP"
 	AttackLayer3TimeseriesParamsProtocolIcmp AttackLayer3TimeseriesParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesParamsProtocolGRE  AttackLayer3TimeseriesParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TimeseriesParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesParamsProtocolUdp, AttackLayer3TimeseriesParamsProtocolTcp, AttackLayer3TimeseriesParamsProtocolIcmp, AttackLayer3TimeseriesParamsProtocolGRE:
+	case AttackLayer3TimeseriesParamsProtocolUdp, AttackLayer3TimeseriesParamsProtocolTCP, AttackLayer3TimeseriesParamsProtocolIcmp, AttackLayer3TimeseriesParamsProtocolGRE:
 		return true
 	}
 	return false

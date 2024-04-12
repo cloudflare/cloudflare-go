@@ -36,7 +36,7 @@ func NewProjectDomainService(opts ...option.RequestOption) (r *ProjectDomainServ
 }
 
 // Add a new domain for the Pages project.
-func (r *ProjectDomainService) New(ctx context.Context, projectName string, params ProjectDomainNewParams, opts ...option.RequestOption) (res *ProjectDomainNewResponse, err error) {
+func (r *ProjectDomainService) New(ctx context.Context, projectName string, params ProjectDomainNewParams, opts ...option.RequestOption) (res *ProjectDomainNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", params.AccountID, projectName)
@@ -72,18 +72,18 @@ func (r *ProjectDomainService) ListAutoPaging(ctx context.Context, projectName s
 }
 
 // Delete a Pages project's domain.
-func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, domainName string, body ProjectDomainDeleteParams, opts ...option.RequestOption) (res *ProjectDomainDeleteResponse, err error) {
+func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, domainName string, params ProjectDomainDeleteParams, opts ...option.RequestOption) (res *ProjectDomainDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", params.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
 // Retry the validation status of a single domain.
-func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, body ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponse, err error) {
+func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, params ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", params.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -93,7 +93,7 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 }
 
 // Fetch a single domain.
-func (r *ProjectDomainService) Get(ctx context.Context, projectName string, domainName string, query ProjectDomainGetParams, opts ...option.RequestOption) (res *ProjectDomainGetResponse, err error) {
+func (r *ProjectDomainService) Get(ctx context.Context, projectName string, domainName string, query ProjectDomainGetParams, opts ...option.RequestOption) (res *ProjectDomainGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", query.AccountID, projectName, domainName)
@@ -107,13 +107,13 @@ func (r *ProjectDomainService) Get(ctx context.Context, projectName string, doma
 
 // Union satisfied by [pages.ProjectDomainNewResponseUnknown],
 // [pages.ProjectDomainNewResponseArray] or [shared.UnionString].
-type ProjectDomainNewResponse interface {
-	ImplementsPagesProjectDomainNewResponse()
+type ProjectDomainNewResponseUnion interface {
+	ImplementsPagesProjectDomainNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectDomainNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectDomainNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -128,7 +128,7 @@ func init() {
 
 type ProjectDomainNewResponseArray []interface{}
 
-func (r ProjectDomainNewResponseArray) ImplementsPagesProjectDomainNewResponse() {}
+func (r ProjectDomainNewResponseArray) ImplementsPagesProjectDomainNewResponseUnion() {}
 
 type ProjectDomainListResponse = interface{}
 
@@ -136,13 +136,13 @@ type ProjectDomainDeleteResponse = interface{}
 
 // Union satisfied by [pages.ProjectDomainEditResponseUnknown],
 // [pages.ProjectDomainEditResponseArray] or [shared.UnionString].
-type ProjectDomainEditResponse interface {
-	ImplementsPagesProjectDomainEditResponse()
+type ProjectDomainEditResponseUnion interface {
+	ImplementsPagesProjectDomainEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectDomainEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectDomainEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -157,17 +157,17 @@ func init() {
 
 type ProjectDomainEditResponseArray []interface{}
 
-func (r ProjectDomainEditResponseArray) ImplementsPagesProjectDomainEditResponse() {}
+func (r ProjectDomainEditResponseArray) ImplementsPagesProjectDomainEditResponseUnion() {}
 
 // Union satisfied by [pages.ProjectDomainGetResponseUnknown],
 // [pages.ProjectDomainGetResponseArray] or [shared.UnionString].
-type ProjectDomainGetResponse interface {
-	ImplementsPagesProjectDomainGetResponse()
+type ProjectDomainGetResponseUnion interface {
+	ImplementsPagesProjectDomainGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectDomainGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectDomainGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -182,12 +182,12 @@ func init() {
 
 type ProjectDomainGetResponseArray []interface{}
 
-func (r ProjectDomainGetResponseArray) ImplementsPagesProjectDomainGetResponse() {}
+func (r ProjectDomainGetResponseArray) ImplementsPagesProjectDomainGetResponseUnion() {}
 
 type ProjectDomainNewParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
@@ -195,9 +195,9 @@ func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainNewResponseEnvelope struct {
-	Errors   []ProjectDomainNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDomainNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDomainNewResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   ProjectDomainNewResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainNewResponseEnvelopeJSON    `json:"-"`
@@ -219,52 +219,6 @@ func (r *ProjectDomainNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r projectDomainNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDomainNewResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    projectDomainNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDomainNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ProjectDomainNewResponseEnvelopeErrors]
-type projectDomainNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDomainNewResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    projectDomainNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDomainNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ProjectDomainNewResponseEnvelopeMessages]
-type projectDomainNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -291,17 +245,27 @@ type ProjectDomainListParams struct {
 type ProjectDomainDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r ProjectDomainDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectDomainEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r ProjectDomainEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectDomainEditResponseEnvelope struct {
-	Errors   []ProjectDomainEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDomainEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDomainEditResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   ProjectDomainEditResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainEditResponseEnvelopeJSON    `json:"-"`
@@ -326,52 +290,6 @@ func (r projectDomainEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ProjectDomainEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    projectDomainEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDomainEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ProjectDomainEditResponseEnvelopeErrors]
-type projectDomainEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDomainEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    projectDomainEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDomainEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ProjectDomainEditResponseEnvelopeMessages]
-type projectDomainEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ProjectDomainEditResponseEnvelopeSuccess bool
 
@@ -393,9 +311,9 @@ type ProjectDomainGetParams struct {
 }
 
 type ProjectDomainGetResponseEnvelope struct {
-	Errors   []ProjectDomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDomainGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   ProjectDomainGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainGetResponseEnvelopeJSON    `json:"-"`
@@ -417,52 +335,6 @@ func (r *ProjectDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r projectDomainGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDomainGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    projectDomainGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDomainGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ProjectDomainGetResponseEnvelopeErrors]
-type projectDomainGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDomainGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    projectDomainGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDomainGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ProjectDomainGetResponseEnvelopeMessages]
-type projectDomainGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v2/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -42,7 +43,7 @@ func NewCustomCertificateService(opts ...option.RequestOption) (r *CustomCertifi
 }
 
 // Upload a new SSL certificate for a zone.
-func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponse, err error) {
+func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
@@ -82,10 +83,10 @@ func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params Cu
 }
 
 // Remove a SSL certificate from a zone.
-func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, body CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
+func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, params CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_certificates/%s", body.ZoneID, customCertificateID)
+	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -97,7 +98,7 @@ func (r *CustomCertificateService) Delete(ctx context.Context, customCertificate
 // Upload a new private key and/or PEM/CRT for the SSL certificate. Note: PATCHing
 // a configuration for sni_custom certificates will result in a new resource id
 // being returned, and the previous one being deleted.
-func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponse, err error) {
+func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
@@ -110,7 +111,7 @@ func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID
 }
 
 // SSL Configuration Details
-func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponse, err error) {
+func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", query.ZoneID, customCertificateID)
@@ -129,7 +130,7 @@ type CustomCertificate struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod CustomCertificateBundleMethod `json:"bundle_method,required"`
+	BundleMethod custom_hostnames.BundleMethod `json:"bundle_method,required"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
 	Hosts     []string  `json:"hosts,required"`
@@ -157,8 +158,8 @@ type CustomCertificate struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions CustomCertificateGeoRestrictions                `json:"geo_restrictions"`
-	KeylessServer   keyless_certificates.KeylessCertificateHostname `json:"keyless_server"`
+	GeoRestrictions GeoRestrictions                         `json:"geo_restrictions"`
+	KeylessServer   keyless_certificates.KeylessCertificate `json:"keyless_server"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -201,26 +202,6 @@ func (r customCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomCertificateBundleMethod string
-
-const (
-	CustomCertificateBundleMethodUbiquitous CustomCertificateBundleMethod = "ubiquitous"
-	CustomCertificateBundleMethodOptimal    CustomCertificateBundleMethod = "optimal"
-	CustomCertificateBundleMethodForce      CustomCertificateBundleMethod = "force"
-)
-
-func (r CustomCertificateBundleMethod) IsKnown() bool {
-	switch r {
-	case CustomCertificateBundleMethodUbiquitous, CustomCertificateBundleMethodOptimal, CustomCertificateBundleMethodForce:
-		return true
-	}
-	return false
-}
-
 // Status of the zone's custom SSL.
 type CustomCertificateStatus string
 
@@ -247,52 +228,66 @@ func (r CustomCertificateStatus) IsKnown() bool {
 // only to U.S. data centers, only to E.U. data centers, or only to highest
 // security data centers. Default distribution is to all Cloudflare datacenters,
 // for optimal performance.
-type CustomCertificateGeoRestrictions struct {
-	Label CustomCertificateGeoRestrictionsLabel `json:"label"`
-	JSON  customCertificateGeoRestrictionsJSON  `json:"-"`
+type GeoRestrictions struct {
+	Label GeoRestrictionsLabel `json:"label"`
+	JSON  geoRestrictionsJSON  `json:"-"`
 }
 
-// customCertificateGeoRestrictionsJSON contains the JSON metadata for the struct
-// [CustomCertificateGeoRestrictions]
-type customCertificateGeoRestrictionsJSON struct {
+// geoRestrictionsJSON contains the JSON metadata for the struct [GeoRestrictions]
+type geoRestrictionsJSON struct {
 	Label       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificateGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+func (r *GeoRestrictions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r customCertificateGeoRestrictionsJSON) RawJSON() string {
+func (r geoRestrictionsJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomCertificateGeoRestrictionsLabel string
+type GeoRestrictionsLabel string
 
 const (
-	CustomCertificateGeoRestrictionsLabelUs              CustomCertificateGeoRestrictionsLabel = "us"
-	CustomCertificateGeoRestrictionsLabelEu              CustomCertificateGeoRestrictionsLabel = "eu"
-	CustomCertificateGeoRestrictionsLabelHighestSecurity CustomCertificateGeoRestrictionsLabel = "highest_security"
+	GeoRestrictionsLabelUs              GeoRestrictionsLabel = "us"
+	GeoRestrictionsLabelEu              GeoRestrictionsLabel = "eu"
+	GeoRestrictionsLabelHighestSecurity GeoRestrictionsLabel = "highest_security"
 )
 
-func (r CustomCertificateGeoRestrictionsLabel) IsKnown() bool {
+func (r GeoRestrictionsLabel) IsKnown() bool {
 	switch r {
-	case CustomCertificateGeoRestrictionsLabelUs, CustomCertificateGeoRestrictionsLabelEu, CustomCertificateGeoRestrictionsLabelHighestSecurity:
+	case GeoRestrictionsLabelUs, GeoRestrictionsLabelEu, GeoRestrictionsLabelHighestSecurity:
 		return true
 	}
 	return false
 }
 
+// Specify the region where your private key can be held locally for optimal TLS
+// performance. HTTPS connections to any excluded data center will still be fully
+// encrypted, but will incur some latency while Keyless SSL is used to complete the
+// handshake with the nearest allowed data center. Options allow distribution to
+// only to U.S. data centers, only to E.U. data centers, or only to highest
+// security data centers. Default distribution is to all Cloudflare datacenters,
+// for optimal performance.
+type GeoRestrictionsParam struct {
+	Label param.Field[GeoRestrictionsLabel] `json:"label"`
+}
+
+func (r GeoRestrictionsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Union satisfied by [custom_certificates.CustomCertificateNewResponseUnknown] or
 // [shared.UnionString].
-type CustomCertificateNewResponse interface {
-	ImplementsCustomCertificatesCustomCertificateNewResponse()
+type CustomCertificateNewResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*CustomCertificateNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -325,13 +320,13 @@ func (r customCertificateDeleteResponseJSON) RawJSON() string {
 
 // Union satisfied by [custom_certificates.CustomCertificateEditResponseUnknown] or
 // [shared.UnionString].
-type CustomCertificateEditResponse interface {
-	ImplementsCustomCertificatesCustomCertificateEditResponse()
+type CustomCertificateEditResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*CustomCertificateEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -342,13 +337,13 @@ func init() {
 
 // Union satisfied by [custom_certificates.CustomCertificateGetResponseUnknown] or
 // [shared.UnionString].
-type CustomCertificateGetResponse interface {
-	ImplementsCustomCertificatesCustomCertificateGetResponse()
+type CustomCertificateGetResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*CustomCertificateGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -368,7 +363,7 @@ type CustomCertificateNewParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[CustomCertificateNewParamsBundleMethod] `json:"bundle_method"`
+	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -376,7 +371,7 @@ type CustomCertificateNewParams struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions param.Field[CustomCertificateNewParamsGeoRestrictions] `json:"geo_restrictions"`
+	GeoRestrictions param.Field[GeoRestrictionsParam] `json:"geo_restrictions"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -394,57 +389,6 @@ type CustomCertificateNewParams struct {
 
 func (r CustomCertificateNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomCertificateNewParamsBundleMethod string
-
-const (
-	CustomCertificateNewParamsBundleMethodUbiquitous CustomCertificateNewParamsBundleMethod = "ubiquitous"
-	CustomCertificateNewParamsBundleMethodOptimal    CustomCertificateNewParamsBundleMethod = "optimal"
-	CustomCertificateNewParamsBundleMethodForce      CustomCertificateNewParamsBundleMethod = "force"
-)
-
-func (r CustomCertificateNewParamsBundleMethod) IsKnown() bool {
-	switch r {
-	case CustomCertificateNewParamsBundleMethodUbiquitous, CustomCertificateNewParamsBundleMethodOptimal, CustomCertificateNewParamsBundleMethodForce:
-		return true
-	}
-	return false
-}
-
-// Specify the region where your private key can be held locally for optimal TLS
-// performance. HTTPS connections to any excluded data center will still be fully
-// encrypted, but will incur some latency while Keyless SSL is used to complete the
-// handshake with the nearest allowed data center. Options allow distribution to
-// only to U.S. data centers, only to E.U. data centers, or only to highest
-// security data centers. Default distribution is to all Cloudflare datacenters,
-// for optimal performance.
-type CustomCertificateNewParamsGeoRestrictions struct {
-	Label param.Field[CustomCertificateNewParamsGeoRestrictionsLabel] `json:"label"`
-}
-
-func (r CustomCertificateNewParamsGeoRestrictions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CustomCertificateNewParamsGeoRestrictionsLabel string
-
-const (
-	CustomCertificateNewParamsGeoRestrictionsLabelUs              CustomCertificateNewParamsGeoRestrictionsLabel = "us"
-	CustomCertificateNewParamsGeoRestrictionsLabelEu              CustomCertificateNewParamsGeoRestrictionsLabel = "eu"
-	CustomCertificateNewParamsGeoRestrictionsLabelHighestSecurity CustomCertificateNewParamsGeoRestrictionsLabel = "highest_security"
-)
-
-func (r CustomCertificateNewParamsGeoRestrictionsLabel) IsKnown() bool {
-	switch r {
-	case CustomCertificateNewParamsGeoRestrictionsLabelUs, CustomCertificateNewParamsGeoRestrictionsLabelEu, CustomCertificateNewParamsGeoRestrictionsLabelHighestSecurity:
-		return true
-	}
-	return false
 }
 
 // The type 'legacy_custom' enables support for legacy clients which do not include
@@ -465,9 +409,9 @@ func (r CustomCertificateNewParamsType) IsKnown() bool {
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []CustomCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomCertificateNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   CustomCertificateNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -489,52 +433,6 @@ func (r *CustomCertificateNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r customCertificateNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateNewResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    customCertificateNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateNewResponseEnvelopeErrors]
-type customCertificateNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateNewResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    customCertificateNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomCertificateNewResponseEnvelopeMessages]
-type customCertificateNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -562,13 +460,15 @@ type CustomCertificateListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Number of zones per page.
 	PerPage param.Field[float64] `query:"per_page"`
+	// Status of the zone's custom SSL.
+	Status param.Field[CustomCertificateListParamsStatus] `query:"status"`
 }
 
 // URLQuery serializes [CustomCertificateListParams]'s query parameters as
 // `url.Values`.
 func (r CustomCertificateListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -589,15 +489,39 @@ func (r CustomCertificateListParamsMatch) IsKnown() bool {
 	return false
 }
 
+// Status of the zone's custom SSL.
+type CustomCertificateListParamsStatus string
+
+const (
+	CustomCertificateListParamsStatusActive       CustomCertificateListParamsStatus = "active"
+	CustomCertificateListParamsStatusExpired      CustomCertificateListParamsStatus = "expired"
+	CustomCertificateListParamsStatusDeleted      CustomCertificateListParamsStatus = "deleted"
+	CustomCertificateListParamsStatusPending      CustomCertificateListParamsStatus = "pending"
+	CustomCertificateListParamsStatusInitializing CustomCertificateListParamsStatus = "initializing"
+)
+
+func (r CustomCertificateListParamsStatus) IsKnown() bool {
+	switch r {
+	case CustomCertificateListParamsStatusActive, CustomCertificateListParamsStatusExpired, CustomCertificateListParamsStatusDeleted, CustomCertificateListParamsStatusPending, CustomCertificateListParamsStatusInitializing:
+		return true
+	}
+	return false
+}
+
 type CustomCertificateDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r CustomCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomCertificateDeleteResponseEnvelope struct {
-	Errors   []CustomCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomCertificateDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   CustomCertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -619,52 +543,6 @@ func (r *CustomCertificateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r customCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateDeleteResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    customCertificateDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateDeleteResponseEnvelopeErrors]
-type customCertificateDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateDeleteResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    customCertificateDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CustomCertificateDeleteResponseEnvelopeMessages]
-type customCertificateDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -690,7 +568,7 @@ type CustomCertificateEditParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[CustomCertificateEditParamsBundleMethod] `json:"bundle_method"`
+	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
 	// Specify the region where your private key can be held locally for optimal TLS
@@ -700,7 +578,7 @@ type CustomCertificateEditParams struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions param.Field[CustomCertificateEditParamsGeoRestrictions] `json:"geo_restrictions"`
+	GeoRestrictions param.Field[GeoRestrictionsParam] `json:"geo_restrictions"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -719,61 +597,10 @@ func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomCertificateEditParamsBundleMethod string
-
-const (
-	CustomCertificateEditParamsBundleMethodUbiquitous CustomCertificateEditParamsBundleMethod = "ubiquitous"
-	CustomCertificateEditParamsBundleMethodOptimal    CustomCertificateEditParamsBundleMethod = "optimal"
-	CustomCertificateEditParamsBundleMethodForce      CustomCertificateEditParamsBundleMethod = "force"
-)
-
-func (r CustomCertificateEditParamsBundleMethod) IsKnown() bool {
-	switch r {
-	case CustomCertificateEditParamsBundleMethodUbiquitous, CustomCertificateEditParamsBundleMethodOptimal, CustomCertificateEditParamsBundleMethodForce:
-		return true
-	}
-	return false
-}
-
-// Specify the region where your private key can be held locally for optimal TLS
-// performance. HTTPS connections to any excluded data center will still be fully
-// encrypted, but will incur some latency while Keyless SSL is used to complete the
-// handshake with the nearest allowed data center. Options allow distribution to
-// only to U.S. data centers, only to E.U. data centers, or only to highest
-// security data centers. Default distribution is to all Cloudflare datacenters,
-// for optimal performance.
-type CustomCertificateEditParamsGeoRestrictions struct {
-	Label param.Field[CustomCertificateEditParamsGeoRestrictionsLabel] `json:"label"`
-}
-
-func (r CustomCertificateEditParamsGeoRestrictions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CustomCertificateEditParamsGeoRestrictionsLabel string
-
-const (
-	CustomCertificateEditParamsGeoRestrictionsLabelUs              CustomCertificateEditParamsGeoRestrictionsLabel = "us"
-	CustomCertificateEditParamsGeoRestrictionsLabelEu              CustomCertificateEditParamsGeoRestrictionsLabel = "eu"
-	CustomCertificateEditParamsGeoRestrictionsLabelHighestSecurity CustomCertificateEditParamsGeoRestrictionsLabel = "highest_security"
-)
-
-func (r CustomCertificateEditParamsGeoRestrictionsLabel) IsKnown() bool {
-	switch r {
-	case CustomCertificateEditParamsGeoRestrictionsLabelUs, CustomCertificateEditParamsGeoRestrictionsLabelEu, CustomCertificateEditParamsGeoRestrictionsLabelHighestSecurity:
-		return true
-	}
-	return false
-}
-
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []CustomCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomCertificateEditResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   CustomCertificateEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -798,52 +625,6 @@ func (r customCertificateEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomCertificateEditResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    customCertificateEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateEditResponseEnvelopeErrors]
-type customCertificateEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateEditResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    customCertificateEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomCertificateEditResponseEnvelopeMessages]
-type customCertificateEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CustomCertificateEditResponseEnvelopeSuccess bool
 
@@ -865,9 +646,9 @@ type CustomCertificateGetParams struct {
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []CustomCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomCertificateGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   CustomCertificateGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateGetResponseEnvelopeJSON    `json:"-"`
@@ -889,52 +670,6 @@ func (r *CustomCertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r customCertificateGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateGetResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    customCertificateGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateGetResponseEnvelopeErrors]
-type customCertificateGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateGetResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    customCertificateGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomCertificateGetResponseEnvelopeMessages]
-type customCertificateGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

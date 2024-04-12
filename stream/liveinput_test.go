@@ -138,6 +138,7 @@ func TestLiveInputDelete(t *testing.T) {
 		"66be4bf738797e01e1fca35a7bdecdcd",
 		stream.LiveInputDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

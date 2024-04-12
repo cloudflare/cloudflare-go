@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -50,9 +51,9 @@ type AttackSurfaceReportIssueTypeGetParams struct {
 }
 
 type AttackSurfaceReportIssueTypeGetResponseEnvelope struct {
-	Errors   []AttackSurfaceReportIssueTypeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AttackSurfaceReportIssueTypeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []string                                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []string              `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueTypeGetResponseEnvelopeJSON    `json:"-"`
@@ -74,53 +75,6 @@ func (r *AttackSurfaceReportIssueTypeGetResponseEnvelope) UnmarshalJSON(data []b
 }
 
 func (r attackSurfaceReportIssueTypeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackSurfaceReportIssueTypeGetResponseEnvelopeErrors struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    attackSurfaceReportIssueTypeGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// attackSurfaceReportIssueTypeGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AttackSurfaceReportIssueTypeGetResponseEnvelopeErrors]
-type attackSurfaceReportIssueTypeGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackSurfaceReportIssueTypeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackSurfaceReportIssueTypeGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackSurfaceReportIssueTypeGetResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    attackSurfaceReportIssueTypeGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// attackSurfaceReportIssueTypeGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [AttackSurfaceReportIssueTypeGetResponseEnvelopeMessages]
-type attackSurfaceReportIssueTypeGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackSurfaceReportIssueTypeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackSurfaceReportIssueTypeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

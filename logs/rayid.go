@@ -37,7 +37,7 @@ func NewRayIDService(opts ...option.RequestOption) (r *RayIDService) {
 
 // The `/rayids` api route allows lookups by specific rayid. The rayids route will
 // return zero, one, or more records (ray ids are not unique).
-func (r *RayIDService) Get(ctx context.Context, zoneIdentifier string, rayIdentifier string, query RayIDGetParams, opts ...option.RequestOption) (res *RayIDGetResponse, err error) {
+func (r *RayIDService) Get(ctx context.Context, zoneIdentifier string, rayIdentifier string, query RayIDGetParams, opts ...option.RequestOption) (res *RayIDGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/rayids/%s", zoneIdentifier, rayIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -45,13 +45,13 @@ func (r *RayIDService) Get(ctx context.Context, zoneIdentifier string, rayIdenti
 }
 
 // Union satisfied by [shared.UnionString] or [logs.RayIDGetResponseUnknown].
-type RayIDGetResponse interface {
-	ImplementsLogsRayIDGetResponse()
+type RayIDGetResponseUnion interface {
+	ImplementsLogsRayIDGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RayIDGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*RayIDGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -84,7 +84,7 @@ type RayIDGetParams struct {
 // URLQuery serializes [RayIDGetParams]'s query parameters as `url.Values`.
 func (r RayIDGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

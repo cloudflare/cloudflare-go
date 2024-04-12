@@ -30,7 +30,7 @@ func TestV1VariantNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Images.V1.Variants.New(context.TODO(), images.V1VariantNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ID:        cloudflare.F("string"),
+		ID:        cloudflare.F("hero"),
 		Options: cloudflare.F(images.V1VariantNewParamsOptions{
 			Fit:      cloudflare.F(images.V1VariantNewParamsOptionsFitScaleDown),
 			Height:   cloudflare.F(768.000000),
@@ -90,9 +90,10 @@ func TestV1VariantDelete(t *testing.T) {
 	)
 	_, err := client.Images.V1.Variants.Delete(
 		context.TODO(),
-		"string",
+		"hero",
 		images.V1VariantDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -120,7 +121,7 @@ func TestV1VariantEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Images.V1.Variants.Edit(
 		context.TODO(),
-		"string",
+		"hero",
 		images.V1VariantEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Options: cloudflare.F(images.V1VariantEditParamsOptions{
@@ -157,7 +158,7 @@ func TestV1VariantGet(t *testing.T) {
 	)
 	_, err := client.Images.V1.Variants.Get(
 		context.TODO(),
-		"string",
+		"hero",
 		images.V1VariantGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

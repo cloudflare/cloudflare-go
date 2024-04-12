@@ -41,7 +41,7 @@ func TestAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
 		LimitPerLocation: cloudflare.F(int64(10)),
 		Location:         cloudflare.F([]string{"string", "string", "string"}),
 		Name:             cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:         cloudflare.F([]radar.AttackLayer3TopAttacksParamsProtocol{radar.AttackLayer3TopAttacksParamsProtocolUdp, radar.AttackLayer3TopAttacksParamsProtocolTcp, radar.AttackLayer3TopAttacksParamsProtocolIcmp}),
+		Protocol:         cloudflare.F([]radar.AttackLayer3TopAttacksParamsProtocol{radar.AttackLayer3TopAttacksParamsProtocolUdp, radar.AttackLayer3TopAttacksParamsProtocolTCP, radar.AttackLayer3TopAttacksParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -76,7 +76,7 @@ func TestAttackLayer3TopIndustryWithOptionalParams(t *testing.T) {
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3TopIndustryParamsProtocol{radar.AttackLayer3TopIndustryParamsProtocolUdp, radar.AttackLayer3TopIndustryParamsProtocolTcp, radar.AttackLayer3TopIndustryParamsProtocolIcmp}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3TopIndustryParamsProtocol{radar.AttackLayer3TopIndustryParamsProtocolUdp, radar.AttackLayer3TopIndustryParamsProtocolTCP, radar.AttackLayer3TopIndustryParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -111,7 +111,7 @@ func TestAttackLayer3TopVerticalWithOptionalParams(t *testing.T) {
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3TopVerticalParamsProtocol{radar.AttackLayer3TopVerticalParamsProtocolUdp, radar.AttackLayer3TopVerticalParamsProtocolTcp, radar.AttackLayer3TopVerticalParamsProtocolIcmp}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3TopVerticalParamsProtocol{radar.AttackLayer3TopVerticalParamsProtocolUdp, radar.AttackLayer3TopVerticalParamsProtocolTCP, radar.AttackLayer3TopVerticalParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

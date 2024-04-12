@@ -65,10 +65,10 @@ func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params Cert
 }
 
 // For a given zone, delete an advanced certificate pack.
-func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, body CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
+func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, params CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -80,10 +80,10 @@ func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID s
 // For a given zone, restart validation for an advanced certificate pack. This is
 // only a validation operation for a Certificate Pack in a validation_timed_out
 // status.
-func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID string, body CertificatePackEditParams, opts ...option.RequestOption) (res *CertificatePackEditResponse, err error) {
+func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID string, params CertificatePackEditParams, opts ...option.RequestOption) (res *CertificatePackEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -93,7 +93,7 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 }
 
 // For a given zone, get a certificate pack.
-func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponse, err error) {
+func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", query.ZoneID, certificatePackID)
@@ -104,6 +104,10 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 	res = &env.Result
 	return
 }
+
+type Host = string
+
+type HostParam = string
 
 type CertificatePackListResponse = interface{}
 
@@ -141,7 +145,7 @@ type CertificatePackEditResponse struct {
 	CloudflareBranding bool `json:"cloudflare_branding"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []string `json:"hosts"`
+	Hosts []Host `json:"hosts"`
 	// Status of certificate pack.
 	Status CertificatePackEditResponseStatus `json:"status"`
 	// Type of certificate pack.
@@ -281,13 +285,13 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 
 // Union satisfied by [ssl.CertificatePackGetResponseUnknown] or
 // [shared.UnionString].
-type CertificatePackGetResponse interface {
-	ImplementsSSLCertificatePackGetResponse()
+type CertificatePackGetResponseUnion interface {
+	ImplementsSSLCertificatePackGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CertificatePackGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*CertificatePackGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -307,7 +311,7 @@ type CertificatePackListParams struct {
 // `url.Values`.
 func (r CertificatePackListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -330,12 +334,17 @@ func (r CertificatePackListParamsStatus) IsKnown() bool {
 type CertificatePackDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r CertificatePackDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CertificatePackDeleteResponseEnvelope struct {
-	Errors   []CertificatePackDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   CertificatePackDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   CertificatePackDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackDeleteResponseEnvelopeJSON    `json:"-"`
@@ -360,52 +369,6 @@ func (r certificatePackDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CertificatePackDeleteResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    certificatePackDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// certificatePackDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CertificatePackDeleteResponseEnvelopeErrors]
-type certificatePackDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackDeleteResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    certificatePackDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// certificatePackDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CertificatePackDeleteResponseEnvelopeMessages]
-type certificatePackDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CertificatePackDeleteResponseEnvelopeSuccess bool
 
@@ -424,12 +387,17 @@ func (r CertificatePackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type CertificatePackEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CertificatePackEditResponseEnvelope struct {
-	Errors   []CertificatePackEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   CertificatePackEditResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   CertificatePackEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackEditResponseEnvelopeJSON    `json:"-"`
@@ -454,52 +422,6 @@ func (r certificatePackEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CertificatePackEditResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    certificatePackEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// certificatePackEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CertificatePackEditResponseEnvelopeErrors]
-type certificatePackEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackEditResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    certificatePackEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// certificatePackEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CertificatePackEditResponseEnvelopeMessages]
-type certificatePackEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CertificatePackEditResponseEnvelopeSuccess bool
 
@@ -521,9 +443,9 @@ type CertificatePackGetParams struct {
 }
 
 type CertificatePackGetResponseEnvelope struct {
-	Errors   []CertificatePackGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CertificatePackGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   CertificatePackGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackGetResponseEnvelopeJSON    `json:"-"`
@@ -545,52 +467,6 @@ func (r *CertificatePackGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r certificatePackGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    certificatePackGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// certificatePackGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CertificatePackGetResponseEnvelopeErrors]
-type certificatePackGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    certificatePackGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// certificatePackGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CertificatePackGetResponseEnvelopeMessages]
-type certificatePackGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

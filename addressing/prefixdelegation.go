@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +35,7 @@ func NewPrefixDelegationService(opts ...option.RequestOption) (r *PrefixDelegati
 }
 
 // Create a new account delegation for a given IP prefix.
-func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, params PrefixDelegationNewParams, opts ...option.RequestOption) (res *AddressingIpamDelegations, err error) {
+func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, params PrefixDelegationNewParams, opts ...option.RequestOption) (res *Delegations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDelegationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", params.AccountID, prefixID)
@@ -47,7 +48,7 @@ func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, para
 }
 
 // List all delegations for a given account IP prefix.
-func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AddressingIpamDelegations], err error) {
+func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Delegations], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,15 +66,15 @@ func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, que
 }
 
 // List all delegations for a given account IP prefix.
-func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AddressingIpamDelegations] {
+func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Delegations] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
 // Delete an account delegation for a given IP prefix.
-func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, delegationID string, body PrefixDelegationDeleteParams, opts ...option.RequestOption) (res *PrefixDelegationDeleteResponse, err error) {
+func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, delegationID string, params PrefixDelegationDeleteParams, opts ...option.RequestOption) (res *PrefixDelegationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDelegationDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", body.AccountID, prefixID, delegationID)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", params.AccountID, prefixID, delegationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -82,7 +83,7 @@ func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, d
 	return
 }
 
-type AddressingIpamDelegations struct {
+type Delegations struct {
 	// Delegation identifier tag.
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -92,13 +93,12 @@ type AddressingIpamDelegations struct {
 	DelegatedAccountID string    `json:"delegated_account_id"`
 	ModifiedAt         time.Time `json:"modified_at" format:"date-time"`
 	// Identifier
-	ParentPrefixID string                        `json:"parent_prefix_id"`
-	JSON           addressingIpamDelegationsJSON `json:"-"`
+	ParentPrefixID string          `json:"parent_prefix_id"`
+	JSON           delegationsJSON `json:"-"`
 }
 
-// addressingIpamDelegationsJSON contains the JSON metadata for the struct
-// [AddressingIpamDelegations]
-type addressingIpamDelegationsJSON struct {
+// delegationsJSON contains the JSON metadata for the struct [Delegations]
+type delegationsJSON struct {
 	ID                 apijson.Field
 	CIDR               apijson.Field
 	CreatedAt          apijson.Field
@@ -109,11 +109,11 @@ type addressingIpamDelegationsJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AddressingIpamDelegations) UnmarshalJSON(data []byte) (err error) {
+func (r *Delegations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r addressingIpamDelegationsJSON) RawJSON() string {
+func (r delegationsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -153,9 +153,9 @@ func (r PrefixDelegationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDelegationNewResponseEnvelope struct {
-	Errors   []PrefixDelegationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixDelegationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingIpamDelegations                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Delegations           `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixDelegationNewResponseEnvelopeJSON    `json:"-"`
@@ -177,52 +177,6 @@ func (r *PrefixDelegationNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r prefixDelegationNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    prefixDelegationNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixDelegationNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixDelegationNewResponseEnvelopeErrors]
-type prefixDelegationNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    prefixDelegationNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixDelegationNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixDelegationNewResponseEnvelopeMessages]
-type prefixDelegationNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -249,12 +203,17 @@ type PrefixDelegationListParams struct {
 type PrefixDelegationDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r PrefixDelegationDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type PrefixDelegationDeleteResponseEnvelope struct {
-	Errors   []PrefixDelegationDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixDelegationDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   PrefixDelegationDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   PrefixDelegationDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixDelegationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -276,52 +235,6 @@ func (r *PrefixDelegationDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r prefixDelegationDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    prefixDelegationDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixDelegationDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [PrefixDelegationDeleteResponseEnvelopeErrors]
-type prefixDelegationDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    prefixDelegationDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixDelegationDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [PrefixDelegationDeleteResponseEnvelopeMessages]
-type prefixDelegationDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

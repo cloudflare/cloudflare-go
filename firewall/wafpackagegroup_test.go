@@ -32,13 +32,15 @@ func TestWAFPackageGroupListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		firewall.WAFPackageGroupListParams{
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Direction: cloudflare.F(firewall.WAFPackageGroupListParamsDirectionDesc),
-			Match:     cloudflare.F(firewall.WAFPackageGroupListParamsMatchAny),
-			Mode:      cloudflare.F(firewall.WAFPackageGroupListParamsModeOn),
-			Order:     cloudflare.F(firewall.WAFPackageGroupListParamsOrderMode),
-			Page:      cloudflare.F(1.000000),
-			PerPage:   cloudflare.F(5.000000),
+			ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Direction:  cloudflare.F(firewall.WAFPackageGroupListParamsDirectionDesc),
+			Match:      cloudflare.F(firewall.WAFPackageGroupListParamsMatchAny),
+			Mode:       cloudflare.F(firewall.WAFPackageGroupListParamsModeOn),
+			Name:       cloudflare.F("Project Honey Pot"),
+			Order:      cloudflare.F(firewall.WAFPackageGroupListParamsOrderMode),
+			Page:       cloudflare.F(1.000000),
+			PerPage:    cloudflare.F(5.000000),
+			RulesCount: cloudflare.F(10.000000),
 		},
 	)
 	if err != nil {

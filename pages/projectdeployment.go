@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -38,7 +39,7 @@ func NewProjectDeploymentService(opts ...option.RequestOption) (r *ProjectDeploy
 
 // Start a new deployment from production. The repository and account must have
 // already been authorized on the Cloudflare Pages dashboard.
-func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, params ProjectDeploymentNewParams, opts ...option.RequestOption) (res *PagesDeployments, err error) {
+func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, params ProjectDeploymentNewParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", params.AccountID, projectName)
@@ -51,7 +52,7 @@ func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, 
 }
 
 // Fetch a list of project deployments.
-func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PagesDeployments], err error) {
+func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Deployment], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -69,20 +70,20 @@ func (r *ProjectDeploymentService) List(ctx context.Context, projectName string,
 }
 
 // Fetch a list of project deployments.
-func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PagesDeployments] {
+func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Deployment] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, projectName, params, opts...))
 }
 
 // Delete a deployment.
-func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
+func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", body.AccountID, projectName, deploymentID)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", params.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
 // Fetch information about a deployment.
-func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentGetParams, opts ...option.RequestOption) (res *PagesDeployments, err error) {
+func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentGetParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", query.AccountID, projectName, deploymentID)
@@ -95,10 +96,10 @@ func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, 
 }
 
 // Retry a previous deployment.
-func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentRetryParams, opts ...option.RequestOption) (res *PagesDeployments, err error) {
+func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentRetryParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentRetryResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", body.AccountID, projectName, deploymentID)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", params.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -109,10 +110,10 @@ func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string
 
 // Rollback the production deployment to a previous deployment. You can only
 // rollback to succesful builds on production.
-func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentRollbackParams, opts ...option.RequestOption) (res *PagesDeployments, err error) {
+func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentRollbackParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentRollbackResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", body.AccountID, projectName, deploymentID)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", params.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -136,9 +137,9 @@ func (r ProjectDeploymentNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDeploymentNewResponseEnvelope struct {
-	Errors   []ProjectDeploymentNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   PagesDeployments                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentNewResponseEnvelopeJSON    `json:"-"`
@@ -160,52 +161,6 @@ func (r *ProjectDeploymentNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r projectDeploymentNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentNewResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    projectDeploymentNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentNewResponseEnvelopeErrors]
-type projectDeploymentNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentNewResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    projectDeploymentNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentNewResponseEnvelopeMessages]
-type projectDeploymentNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -235,7 +190,7 @@ type ProjectDeploymentListParams struct {
 // `url.Values`.
 func (r ProjectDeploymentListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -259,6 +214,11 @@ func (r ProjectDeploymentListParamsEnv) IsKnown() bool {
 type ProjectDeploymentDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r ProjectDeploymentDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectDeploymentGetParams struct {
@@ -267,9 +227,9 @@ type ProjectDeploymentGetParams struct {
 }
 
 type ProjectDeploymentGetResponseEnvelope struct {
-	Errors   []ProjectDeploymentGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   PagesDeployments                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentGetResponseEnvelopeJSON    `json:"-"`
@@ -294,52 +254,6 @@ func (r projectDeploymentGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ProjectDeploymentGetResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    projectDeploymentGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentGetResponseEnvelopeErrors]
-type projectDeploymentGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentGetResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    projectDeploymentGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentGetResponseEnvelopeMessages]
-type projectDeploymentGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ProjectDeploymentGetResponseEnvelopeSuccess bool
 
@@ -358,12 +272,17 @@ func (r ProjectDeploymentGetResponseEnvelopeSuccess) IsKnown() bool {
 type ProjectDeploymentRetryParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r ProjectDeploymentRetryParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectDeploymentRetryResponseEnvelope struct {
-	Errors   []ProjectDeploymentRetryResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentRetryResponseEnvelopeMessages `json:"messages,required"`
-	Result   PagesDeployments                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRetryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRetryResponseEnvelopeJSON    `json:"-"`
@@ -388,52 +307,6 @@ func (r projectDeploymentRetryResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ProjectDeploymentRetryResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    projectDeploymentRetryResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentRetryResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentRetryResponseEnvelopeErrors]
-type projectDeploymentRetryResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentRetryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentRetryResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentRetryResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    projectDeploymentRetryResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentRetryResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ProjectDeploymentRetryResponseEnvelopeMessages]
-type projectDeploymentRetryResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentRetryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentRetryResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ProjectDeploymentRetryResponseEnvelopeSuccess bool
 
@@ -452,12 +325,17 @@ func (r ProjectDeploymentRetryResponseEnvelopeSuccess) IsKnown() bool {
 type ProjectDeploymentRollbackParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r ProjectDeploymentRollbackParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectDeploymentRollbackResponseEnvelope struct {
-	Errors   []ProjectDeploymentRollbackResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentRollbackResponseEnvelopeMessages `json:"messages,required"`
-	Result   PagesDeployments                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRollbackResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRollbackResponseEnvelopeJSON    `json:"-"`
@@ -479,52 +357,6 @@ func (r *ProjectDeploymentRollbackResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r projectDeploymentRollbackResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentRollbackResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    projectDeploymentRollbackResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentRollbackResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [ProjectDeploymentRollbackResponseEnvelopeErrors]
-type projectDeploymentRollbackResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentRollbackResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentRollbackResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentRollbackResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    projectDeploymentRollbackResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentRollbackResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ProjectDeploymentRollbackResponseEnvelopeMessages]
-type projectDeploymentRollbackResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentRollbackResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentRollbackResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -35,7 +35,7 @@ func NewAvailableAlertService(opts ...option.RequestOption) (r *AvailableAlertSe
 }
 
 // Gets a list of all alert types for which an account is eligible.
-func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *AvailableAlertListResponse, err error) {
+func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *AvailableAlertListResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailableAlertListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/available_alerts", query.AccountID)
@@ -49,13 +49,13 @@ func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertLi
 
 // Union satisfied by [alerting.AvailableAlertListResponseUnknown],
 // [alerting.AvailableAlertListResponseArray] or [shared.UnionString].
-type AvailableAlertListResponse interface {
-	ImplementsAlertingAvailableAlertListResponse()
+type AvailableAlertListResponseUnion interface {
+	ImplementsAlertingAvailableAlertListResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AvailableAlertListResponse)(nil)).Elem(),
+		reflect.TypeOf((*AvailableAlertListResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -70,7 +70,7 @@ func init() {
 
 type AvailableAlertListResponseArray []interface{}
 
-func (r AvailableAlertListResponseArray) ImplementsAlertingAvailableAlertListResponse() {}
+func (r AvailableAlertListResponseArray) ImplementsAlertingAvailableAlertListResponseUnion() {}
 
 type AvailableAlertListParams struct {
 	// The account id
@@ -78,9 +78,9 @@ type AvailableAlertListParams struct {
 }
 
 type AvailableAlertListResponseEnvelope struct {
-	Errors   []AvailableAlertListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AvailableAlertListResponseEnvelopeMessages `json:"messages,required"`
-	Result   AvailableAlertListResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   AvailableAlertListResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AvailableAlertListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AvailableAlertListResponseEnvelopeResultInfo `json:"result_info"`
@@ -104,52 +104,6 @@ func (r *AvailableAlertListResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r availableAlertListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AvailableAlertListResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    availableAlertListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// availableAlertListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AvailableAlertListResponseEnvelopeErrors]
-type availableAlertListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AvailableAlertListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r availableAlertListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AvailableAlertListResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    availableAlertListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// availableAlertListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AvailableAlertListResponseEnvelopeMessages]
-type availableAlertListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AvailableAlertListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r availableAlertListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -36,10 +37,10 @@ func NewCacheReserveService(opts ...option.RequestOption) (r *CacheReserveServic
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
-func (r *CacheReserveService) Clear(ctx context.Context, body CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
+func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveClearResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -100,13 +101,43 @@ func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStat
 	return
 }
 
+// ID of the zone setting.
+type CacheReserve string
+
+const (
+	CacheReserveCacheReserve CacheReserve = "cache_reserve"
+)
+
+func (r CacheReserve) IsKnown() bool {
+	switch r {
+	case CacheReserveCacheReserve:
+		return true
+	}
+	return false
+}
+
+// ID of the zone setting.
+type CacheReserveClear string
+
+const (
+	CacheReserveClearCacheReserveClear CacheReserveClear = "cache_reserve_clear"
+)
+
+func (r CacheReserveClear) IsKnown() bool {
+	switch r {
+	case CacheReserveClearCacheReserveClear:
+		return true
+	}
+	return false
+}
+
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
 type CacheReserveClearResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveClearResponseID `json:"id,required"`
+	ID CacheReserveClear `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// The time that the latest Cache Reserve Clear operation started.
@@ -138,21 +169,6 @@ func (r cacheReserveClearResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type CacheReserveClearResponseID string
-
-const (
-	CacheReserveClearResponseIDCacheReserveClear CacheReserveClearResponseID = "cache_reserve_clear"
-)
-
-func (r CacheReserveClearResponseID) IsKnown() bool {
-	switch r {
-	case CacheReserveClearResponseIDCacheReserveClear:
-		return true
-	}
-	return false
-}
-
 // The current state of the Cache Reserve Clear operation.
 type CacheReserveClearResponseState string
 
@@ -177,7 +193,7 @@ func (r CacheReserveClearResponseState) IsKnown() bool {
 // for more information.
 type CacheReserveEditResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveEditResponseID `json:"id,required"`
+	ID CacheReserve `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Cache Reserve zone setting.
@@ -201,21 +217,6 @@ func (r *CacheReserveEditResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r cacheReserveEditResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// ID of the zone setting.
-type CacheReserveEditResponseID string
-
-const (
-	CacheReserveEditResponseIDCacheReserve CacheReserveEditResponseID = "cache_reserve"
-)
-
-func (r CacheReserveEditResponseID) IsKnown() bool {
-	switch r {
-	case CacheReserveEditResponseIDCacheReserve:
-		return true
-	}
-	return false
 }
 
 // Value of the Cache Reserve zone setting.
@@ -242,7 +243,7 @@ func (r CacheReserveEditResponseValue) IsKnown() bool {
 // for more information.
 type CacheReserveGetResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveGetResponseID `json:"id,required"`
+	ID CacheReserve `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Cache Reserve zone setting.
@@ -268,21 +269,6 @@ func (r cacheReserveGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type CacheReserveGetResponseID string
-
-const (
-	CacheReserveGetResponseIDCacheReserve CacheReserveGetResponseID = "cache_reserve"
-)
-
-func (r CacheReserveGetResponseID) IsKnown() bool {
-	switch r {
-	case CacheReserveGetResponseIDCacheReserve:
-		return true
-	}
-	return false
-}
-
 // Value of the Cache Reserve zone setting.
 type CacheReserveGetResponseValue string
 
@@ -305,7 +291,7 @@ func (r CacheReserveGetResponseValue) IsKnown() bool {
 // that you cannot undo or cancel this operation.
 type CacheReserveStatusResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveStatusResponseID `json:"id,required"`
+	ID CacheReserveClear `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// The time that the latest Cache Reserve Clear operation started.
@@ -337,21 +323,6 @@ func (r cacheReserveStatusResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type CacheReserveStatusResponseID string
-
-const (
-	CacheReserveStatusResponseIDCacheReserveClear CacheReserveStatusResponseID = "cache_reserve_clear"
-)
-
-func (r CacheReserveStatusResponseID) IsKnown() bool {
-	switch r {
-	case CacheReserveStatusResponseIDCacheReserveClear:
-		return true
-	}
-	return false
-}
-
 // The current state of the Cache Reserve Clear operation.
 type CacheReserveStatusResponseState string
 
@@ -371,11 +342,16 @@ func (r CacheReserveStatusResponseState) IsKnown() bool {
 type CacheReserveClearParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CacheReserveClearResponseEnvelope struct {
-	Errors   []CacheReserveClearResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CacheReserveClearResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -402,52 +378,6 @@ func (r *CacheReserveClearResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r cacheReserveClearResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CacheReserveClearResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    cacheReserveClearResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cacheReserveClearResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CacheReserveClearResponseEnvelopeErrors]
-type cacheReserveClearResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveClearResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheReserveClearResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CacheReserveClearResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    cacheReserveClearResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cacheReserveClearResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [CacheReserveClearResponseEnvelopeMessages]
-type cacheReserveClearResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveClearResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheReserveClearResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -494,8 +424,8 @@ func (r CacheReserveEditParamsValue) IsKnown() bool {
 }
 
 type CacheReserveEditResponseEnvelope struct {
-	Errors   []CacheReserveEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CacheReserveEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Increase cache lifetimes by automatically storing all cacheable files into
 	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
 	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
@@ -527,52 +457,6 @@ func (r cacheReserveEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CacheReserveEditResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    cacheReserveEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cacheReserveEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CacheReserveEditResponseEnvelopeErrors]
-type cacheReserveEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheReserveEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CacheReserveEditResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    cacheReserveEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cacheReserveEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [CacheReserveEditResponseEnvelopeMessages]
-type cacheReserveEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheReserveEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CacheReserveEditResponseEnvelopeSuccess bool
 
@@ -594,8 +478,8 @@ type CacheReserveGetParams struct {
 }
 
 type CacheReserveGetResponseEnvelope struct {
-	Errors   []CacheReserveGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CacheReserveGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Increase cache lifetimes by automatically storing all cacheable files into
 	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
 	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
@@ -627,52 +511,6 @@ func (r cacheReserveGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CacheReserveGetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    cacheReserveGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cacheReserveGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CacheReserveGetResponseEnvelopeErrors]
-type cacheReserveGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheReserveGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CacheReserveGetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    cacheReserveGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cacheReserveGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [CacheReserveGetResponseEnvelopeMessages]
-type cacheReserveGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheReserveGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CacheReserveGetResponseEnvelopeSuccess bool
 
@@ -694,8 +532,8 @@ type CacheReserveStatusParams struct {
 }
 
 type CacheReserveStatusResponseEnvelope struct {
-	Errors   []CacheReserveStatusResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CacheReserveStatusResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -722,52 +560,6 @@ func (r *CacheReserveStatusResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r cacheReserveStatusResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CacheReserveStatusResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    cacheReserveStatusResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cacheReserveStatusResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CacheReserveStatusResponseEnvelopeErrors]
-type cacheReserveStatusResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveStatusResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheReserveStatusResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CacheReserveStatusResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    cacheReserveStatusResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cacheReserveStatusResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CacheReserveStatusResponseEnvelopeMessages]
-type cacheReserveStatusResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveStatusResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheReserveStatusResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

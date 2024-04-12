@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +33,7 @@ func NewAccessLogAccessRequestService(opts ...option.RequestOption) (r *AccessLo
 }
 
 // Gets a list of Access authentication audit logs for an account.
-func (r *AccessLogAccessRequestService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]ZeroTrustAccessRequests, err error) {
+func (r *AccessLogAccessRequestService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessRequests, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessLogAccessRequestListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/logs/access_requests", identifier)
@@ -44,7 +45,7 @@ func (r *AccessLogAccessRequestService) List(ctx context.Context, identifier str
 	return
 }
 
-type ZeroTrustAccessRequests struct {
+type AccessRequests struct {
 	// The event that occurred, such as a login attempt.
 	Action string `json:"action"`
 	// The result of the authentication event.
@@ -52,7 +53,7 @@ type ZeroTrustAccessRequests struct {
 	// The URL of the Access application.
 	AppDomain string `json:"app_domain"`
 	// The unique identifier for the Access application.
-	AppUid string `json:"app_uid"`
+	AppUID string `json:"app_uid"`
 	// The IdP used to authenticate.
 	Connection string    `json:"connection"`
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`
@@ -61,17 +62,16 @@ type ZeroTrustAccessRequests struct {
 	// The unique identifier for the request to Cloudflare.
 	RayID string `json:"ray_id"`
 	// The email address of the authenticating user.
-	UserEmail string                      `json:"user_email" format:"email"`
-	JSON      zeroTrustAccessRequestsJSON `json:"-"`
+	UserEmail string             `json:"user_email" format:"email"`
+	JSON      accessRequestsJSON `json:"-"`
 }
 
-// zeroTrustAccessRequestsJSON contains the JSON metadata for the struct
-// [ZeroTrustAccessRequests]
-type zeroTrustAccessRequestsJSON struct {
+// accessRequestsJSON contains the JSON metadata for the struct [AccessRequests]
+type accessRequestsJSON struct {
 	Action      apijson.Field
 	Allowed     apijson.Field
 	AppDomain   apijson.Field
-	AppUid      apijson.Field
+	AppUID      apijson.Field
 	Connection  apijson.Field
 	CreatedAt   apijson.Field
 	IPAddress   apijson.Field
@@ -81,18 +81,18 @@ type zeroTrustAccessRequestsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustAccessRequests) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessRequests) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustAccessRequestsJSON) RawJSON() string {
+func (r accessRequestsJSON) RawJSON() string {
 	return r.raw
 }
 
 type AccessLogAccessRequestListResponseEnvelope struct {
-	Errors   []AccessLogAccessRequestListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessLogAccessRequestListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustAccessRequests                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []AccessRequests      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessLogAccessRequestListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessLogAccessRequestListResponseEnvelopeResultInfo `json:"result_info"`
@@ -116,52 +116,6 @@ func (r *AccessLogAccessRequestListResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r accessLogAccessRequestListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessLogAccessRequestListResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    accessLogAccessRequestListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessLogAccessRequestListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessLogAccessRequestListResponseEnvelopeErrors]
-type accessLogAccessRequestListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessLogAccessRequestListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessLogAccessRequestListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessLogAccessRequestListResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    accessLogAccessRequestListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessLogAccessRequestListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessLogAccessRequestListResponseEnvelopeMessages]
-type accessLogAccessRequestListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessLogAccessRequestListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessLogAccessRequestListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

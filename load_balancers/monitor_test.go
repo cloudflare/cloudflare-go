@@ -161,6 +161,7 @@ func TestMonitorDelete(t *testing.T) {
 		"f1aba936b94213e5b8dca0c0dbf1f9cc",
 		load_balancers.MonitorDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

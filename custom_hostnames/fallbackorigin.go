@@ -35,7 +35,7 @@ func NewFallbackOriginService(opts ...option.RequestOption) (r *FallbackOriginSe
 }
 
 // Update Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponse, err error) {
+func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
@@ -48,10 +48,10 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 }
 
 // Delete Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponse, err error) {
+func (r *FallbackOriginService) Delete(ctx context.Context, params FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -61,7 +61,7 @@ func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginD
 }
 
 // Get Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponse, err error) {
+func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", query.ZoneID)
@@ -75,13 +75,13 @@ func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGet
 
 // Union satisfied by [custom_hostnames.FallbackOriginUpdateResponseUnknown] or
 // [shared.UnionString].
-type FallbackOriginUpdateResponse interface {
-	ImplementsCustomHostnamesFallbackOriginUpdateResponse()
+type FallbackOriginUpdateResponseUnion interface {
+	ImplementsCustomHostnamesFallbackOriginUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*FallbackOriginUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -92,13 +92,13 @@ func init() {
 
 // Union satisfied by [custom_hostnames.FallbackOriginDeleteResponseUnknown] or
 // [shared.UnionString].
-type FallbackOriginDeleteResponse interface {
-	ImplementsCustomHostnamesFallbackOriginDeleteResponse()
+type FallbackOriginDeleteResponseUnion interface {
+	ImplementsCustomHostnamesFallbackOriginDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*FallbackOriginDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -109,13 +109,13 @@ func init() {
 
 // Union satisfied by [custom_hostnames.FallbackOriginGetResponseUnknown] or
 // [shared.UnionString].
-type FallbackOriginGetResponse interface {
-	ImplementsCustomHostnamesFallbackOriginGetResponse()
+type FallbackOriginGetResponseUnion interface {
+	ImplementsCustomHostnamesFallbackOriginGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*FallbackOriginGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -136,9 +136,9 @@ func (r FallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginUpdateResponseEnvelope struct {
-	Errors   []FallbackOriginUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   FallbackOriginUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   FallbackOriginUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    fallbackOriginUpdateResponseEnvelopeJSON    `json:"-"`
@@ -163,52 +163,6 @@ func (r fallbackOriginUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type FallbackOriginUpdateResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    fallbackOriginUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// fallbackOriginUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FallbackOriginUpdateResponseEnvelopeErrors]
-type fallbackOriginUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FallbackOriginUpdateResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    fallbackOriginUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// fallbackOriginUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [FallbackOriginUpdateResponseEnvelopeMessages]
-type fallbackOriginUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type FallbackOriginUpdateResponseEnvelopeSuccess bool
 
@@ -227,12 +181,17 @@ func (r FallbackOriginUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type FallbackOriginDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r FallbackOriginDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type FallbackOriginDeleteResponseEnvelope struct {
-	Errors   []FallbackOriginDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   FallbackOriginDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   FallbackOriginDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    fallbackOriginDeleteResponseEnvelopeJSON    `json:"-"`
@@ -257,52 +216,6 @@ func (r fallbackOriginDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type FallbackOriginDeleteResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    fallbackOriginDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// fallbackOriginDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FallbackOriginDeleteResponseEnvelopeErrors]
-type fallbackOriginDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FallbackOriginDeleteResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    fallbackOriginDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// fallbackOriginDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [FallbackOriginDeleteResponseEnvelopeMessages]
-type fallbackOriginDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type FallbackOriginDeleteResponseEnvelopeSuccess bool
 
@@ -324,9 +237,9 @@ type FallbackOriginGetParams struct {
 }
 
 type FallbackOriginGetResponseEnvelope struct {
-	Errors   []FallbackOriginGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   FallbackOriginGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   FallbackOriginGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    fallbackOriginGetResponseEnvelopeJSON    `json:"-"`
@@ -348,52 +261,6 @@ func (r *FallbackOriginGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r fallbackOriginGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type FallbackOriginGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    fallbackOriginGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// fallbackOriginGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [FallbackOriginGetResponseEnvelopeErrors]
-type fallbackOriginGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FallbackOriginGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    fallbackOriginGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// fallbackOriginGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [FallbackOriginGetResponseEnvelopeMessages]
-type fallbackOriginGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

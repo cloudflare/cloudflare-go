@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,7 +34,7 @@ func NewSettingCipherService(opts ...option.RequestOption) (r *SettingCipherServ
 }
 
 // Changes ciphers setting.
-func (r *SettingCipherService) Edit(ctx context.Context, params SettingCipherEditParams, opts ...option.RequestOption) (res *ZoneSettingCiphers, err error) {
+func (r *SettingCipherService) Edit(ctx context.Context, params SettingCipherEditParams, opts ...option.RequestOption) (res *Ciphers, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingCipherEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ciphers", params.ZoneID)
@@ -46,7 +47,7 @@ func (r *SettingCipherService) Edit(ctx context.Context, params SettingCipherEdi
 }
 
 // Gets ciphers setting.
-func (r *SettingCipherService) Get(ctx context.Context, query SettingCipherGetParams, opts ...option.RequestOption) (res *ZoneSettingCiphers, err error) {
+func (r *SettingCipherService) Get(ctx context.Context, query SettingCipherGetParams, opts ...option.RequestOption) (res *Ciphers, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingCipherGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ciphers", query.ZoneID)
@@ -60,22 +61,21 @@ func (r *SettingCipherService) Get(ctx context.Context, query SettingCipherGetPa
 
 // An allowlist of ciphers for TLS termination. These ciphers must be in the
 // BoringSSL format.
-type ZoneSettingCiphers struct {
+type Ciphers struct {
 	// ID of the zone setting.
-	ID ZoneSettingCiphersID `json:"id,required"`
+	ID CiphersID `json:"id,required"`
 	// Current value of the zone setting.
 	Value []string `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingCiphersEditable `json:"editable"`
+	Editable CiphersEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingCiphersJSON `json:"-"`
+	ModifiedOn time.Time   `json:"modified_on,nullable" format:"date-time"`
+	JSON       ciphersJSON `json:"-"`
 }
 
-// zoneSettingCiphersJSON contains the JSON metadata for the struct
-// [ZoneSettingCiphers]
-type zoneSettingCiphersJSON struct {
+// ciphersJSON contains the JSON metadata for the struct [Ciphers]
+type ciphersJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -84,28 +84,24 @@ type zoneSettingCiphersJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingCiphers) UnmarshalJSON(data []byte) (err error) {
+func (r *Ciphers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingCiphersJSON) RawJSON() string {
+func (r ciphersJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingCiphers) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingCiphers) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingCiphersID string
+type CiphersID string
 
 const (
-	ZoneSettingCiphersIDCiphers ZoneSettingCiphersID = "ciphers"
+	CiphersIDCiphers CiphersID = "ciphers"
 )
 
-func (r ZoneSettingCiphersID) IsKnown() bool {
+func (r CiphersID) IsKnown() bool {
 	switch r {
-	case ZoneSettingCiphersIDCiphers:
+	case CiphersIDCiphers:
 		return true
 	}
 	return false
@@ -113,35 +109,20 @@ func (r ZoneSettingCiphersID) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingCiphersEditable bool
+type CiphersEditable bool
 
 const (
-	ZoneSettingCiphersEditableTrue  ZoneSettingCiphersEditable = true
-	ZoneSettingCiphersEditableFalse ZoneSettingCiphersEditable = false
+	CiphersEditableTrue  CiphersEditable = true
+	CiphersEditableFalse CiphersEditable = false
 )
 
-func (r ZoneSettingCiphersEditable) IsKnown() bool {
+func (r CiphersEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingCiphersEditableTrue, ZoneSettingCiphersEditableFalse:
+	case CiphersEditableTrue, CiphersEditableFalse:
 		return true
 	}
 	return false
 }
-
-// An allowlist of ciphers for TLS termination. These ciphers must be in the
-// BoringSSL format.
-type ZoneSettingCiphersParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingCiphersID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[[]string] `json:"value,required"`
-}
-
-func (r ZoneSettingCiphersParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingCiphersParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingCipherEditParams struct {
 	// Identifier
@@ -155,13 +136,13 @@ func (r SettingCipherEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingCipherEditResponseEnvelope struct {
-	Errors   []SettingCipherEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingCipherEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
-	Result ZoneSettingCiphers                    `json:"result"`
+	Result Ciphers                               `json:"result"`
 	JSON   settingCipherEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -184,65 +165,19 @@ func (r settingCipherEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingCipherEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingCipherEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingCipherEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingCipherEditResponseEnvelopeErrors]
-type settingCipherEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCipherEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCipherEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingCipherEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingCipherEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingCipherEditResponseEnvelopeMessages]
-type settingCipherEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCipherEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingCipherGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingCipherGetResponseEnvelope struct {
-	Errors   []SettingCipherGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingCipherGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
-	Result ZoneSettingCiphers                   `json:"result"`
+	Result Ciphers                              `json:"result"`
 	JSON   settingCipherGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -262,51 +197,5 @@ func (r *SettingCipherGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingCipherGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCipherGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingCipherGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingCipherGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingCipherGetResponseEnvelopeErrors]
-type settingCipherGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCipherGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCipherGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingCipherGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingCipherGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingCipherGetResponseEnvelopeMessages]
-type settingCipherGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCipherGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

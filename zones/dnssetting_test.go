@@ -30,9 +30,14 @@ func TestDNSSettingEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.DNSSettings.Edit(context.TODO(), zones.DNSSettingEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Nameservers: cloudflare.F(zones.DNSSettingEditParamsNameservers{
-			Type: cloudflare.F(zones.DNSSettingEditParamsNameserversTypeCloudflareStandard),
-		}),
+		DNSSetting: zones.DNSSettingParam{
+			FoundationDNS: cloudflare.F(false),
+			MultiProvider: cloudflare.F(false),
+			Nameservers: cloudflare.F(zones.NameserverParam{
+				Type: cloudflare.F(zones.NameserverTypeCloudflareStandard),
+			}),
+			SecondaryOverrides: cloudflare.F(false),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

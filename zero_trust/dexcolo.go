@@ -75,7 +75,7 @@ type DEXColoListParams struct {
 // URLQuery serializes [DEXColoListParams]'s query parameters as `url.Values`.
 func (r DEXColoListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

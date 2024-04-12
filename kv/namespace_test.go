@@ -121,6 +121,7 @@ func TestNamespaceDelete(t *testing.T) {
 		"0f2ac74b498b48028cb68387c421e279",
 		kv.NamespaceDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

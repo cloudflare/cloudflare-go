@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -51,11 +52,11 @@ type DirectUploadNewResponse struct {
 	// scheduled deletion. If specified, must be at least 30 days from upload time.
 	ScheduledDeletion time.Time `json:"scheduledDeletion" format:"date-time"`
 	// A Cloudflare-generated unique identifier for a media item.
-	Uid string `json:"uid"`
+	UID string `json:"uid"`
 	// The URL an unauthenticated upload can use for a single
 	// `HTTP POST multipart/form-data` request.
 	UploadURL string                      `json:"uploadURL"`
-	Watermark StreamWatermarks            `json:"watermark"`
+	Watermark Watermaks                   `json:"watermark"`
 	JSON      directUploadNewResponseJSON `json:"-"`
 }
 
@@ -63,7 +64,7 @@ type DirectUploadNewResponse struct {
 // [DirectUploadNewResponse]
 type directUploadNewResponseJSON struct {
 	ScheduledDeletion apijson.Field
-	Uid               apijson.Field
+	UID               apijson.Field
 	UploadURL         apijson.Field
 	Watermark         apijson.Field
 	raw               string
@@ -89,7 +90,7 @@ type DirectUploadNewParams struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
-	AllowedOrigins param.Field[[]string] `json:"allowedOrigins"`
+	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowedOrigins"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `json:"creator"`
 	// The date and time after upload when videos will not be accepted.
@@ -120,7 +121,7 @@ func (r DirectUploadNewParams) MarshalJSON() (data []byte, err error) {
 
 type DirectUploadNewParamsWatermark struct {
 	// The unique identifier for the watermark profile.
-	Uid param.Field[string] `json:"uid"`
+	UID param.Field[string] `json:"uid"`
 }
 
 func (r DirectUploadNewParamsWatermark) MarshalJSON() (data []byte, err error) {
@@ -128,9 +129,9 @@ func (r DirectUploadNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type DirectUploadNewResponseEnvelope struct {
-	Errors   []DirectUploadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DirectUploadNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DirectUploadNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   DirectUploadNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DirectUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    directUploadNewResponseEnvelopeJSON    `json:"-"`
@@ -152,52 +153,6 @@ func (r *DirectUploadNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r directUploadNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DirectUploadNewResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    directUploadNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// directUploadNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DirectUploadNewResponseEnvelopeErrors]
-type directUploadNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DirectUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r directUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DirectUploadNewResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    directUploadNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// directUploadNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DirectUploadNewResponseEnvelopeMessages]
-type directUploadNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DirectUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r directUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

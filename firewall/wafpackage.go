@@ -80,41 +80,20 @@ func (r *WAFPackageService) Get(ctx context.Context, zoneIdentifier string, iden
 	return
 }
 
-// Union satisfied by
-// [firewall.WAFPackageListResponseLegacyJhsAPIResponseCollection] or
-// [firewall.WAFPackageListResponseObject].
-type WAFPackageListResponse interface {
-	implementsFirewallWAFPackageListResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageListResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageListResponseLegacyJhsAPIResponseCollection{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageListResponseObject{}),
-		},
-	)
-}
-
-type WAFPackageListResponseLegacyJhsAPIResponseCollection struct {
-	Errors   []WAFPackageListResponseLegacyJhsAPIResponseCollectionError   `json:"errors,required"`
-	Messages []WAFPackageListResponseLegacyJhsAPIResponseCollectionMessage `json:"messages,required"`
-	Result   WAFPackageListResponseLegacyJhsAPIResponseCollectionResult    `json:"result,required,nullable"`
+type WAFPackageListResponse struct {
+	Errors   interface{} `json:"errors,required"`
+	Messages interface{} `json:"messages,required"`
+	Result   interface{} `json:"result,required"`
 	// Whether the API call was successful
-	Success    WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess    `json:"success,required"`
-	ResultInfo WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo `json:"result_info"`
-	JSON       wafPackageListResponseLegacyJhsAPIResponseCollectionJSON       `json:"-"`
+	Success    WAFPackageListResponseSuccess `json:"success"`
+	ResultInfo interface{}                   `json:"result_info,required"`
+	JSON       wafPackageListResponseJSON    `json:"-"`
+	union      WAFPackageListResponseUnion
 }
 
-// wafPackageListResponseLegacyJhsAPIResponseCollectionJSON contains the JSON
-// metadata for the struct [WAFPackageListResponseLegacyJhsAPIResponseCollection]
-type wafPackageListResponseLegacyJhsAPIResponseCollectionJSON struct {
+// wafPackageListResponseJSON contains the JSON metadata for the struct
+// [WAFPackageListResponse]
+type wafPackageListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -124,80 +103,92 @@ type wafPackageListResponseLegacyJhsAPIResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WAFPackageListResponseLegacyJhsAPIResponseCollection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageListResponseLegacyJhsAPIResponseCollectionJSON) RawJSON() string {
+func (r wafPackageListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WAFPackageListResponseLegacyJhsAPIResponseCollection) implementsFirewallWAFPackageListResponse() {
+func (r *WAFPackageListResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
 }
 
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionError struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    wafPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON `json:"-"`
-}
-
-// wafPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON contains the JSON
-// metadata for the struct
-// [WAFPackageListResponseLegacyJhsAPIResponseCollectionError]
-type wafPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageListResponseLegacyJhsAPIResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionMessage struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    wafPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON `json:"-"`
-}
-
-// wafPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON contains the
-// JSON metadata for the struct
-// [WAFPackageListResponseLegacyJhsAPIResponseCollectionMessage]
-type wafPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageListResponseLegacyJhsAPIResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON) RawJSON() string {
-	return r.raw
+func (r WAFPackageListResponse) AsUnion() WAFPackageListResponseUnion {
+	return r.union
 }
 
 // Union satisfied by
-// [firewall.WAFPackageListResponseLegacyJhsAPIResponseCollectionResultUnknown],
-// [firewall.WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray] or
-// [shared.UnionString].
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionResult interface {
-	ImplementsFirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResult()
+// [firewall.WAFPackageListResponseFirewallAPIResponseCollection] or
+// [firewall.WAFPackageListResponseObject].
+type WAFPackageListResponseUnion interface {
+	implementsFirewallWAFPackageListResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageListResponseLegacyJhsAPIResponseCollectionResult)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageListResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray{}),
+			Type:       reflect.TypeOf(WAFPackageListResponseFirewallAPIResponseCollection{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WAFPackageListResponseObject{}),
+		},
+	)
+}
+
+type WAFPackageListResponseFirewallAPIResponseCollection struct {
+	Errors   []shared.ResponseInfo                                          `json:"errors,required"`
+	Messages []shared.ResponseInfo                                          `json:"messages,required"`
+	Result   WAFPackageListResponseFirewallAPIResponseCollectionResultUnion `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    WAFPackageListResponseFirewallAPIResponseCollectionSuccess    `json:"success,required"`
+	ResultInfo WAFPackageListResponseFirewallAPIResponseCollectionResultInfo `json:"result_info"`
+	JSON       wafPackageListResponseFirewallAPIResponseCollectionJSON       `json:"-"`
+}
+
+// wafPackageListResponseFirewallAPIResponseCollectionJSON contains the JSON
+// metadata for the struct [WAFPackageListResponseFirewallAPIResponseCollection]
+type wafPackageListResponseFirewallAPIResponseCollectionJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFPackageListResponseFirewallAPIResponseCollection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafPackageListResponseFirewallAPIResponseCollectionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r WAFPackageListResponseFirewallAPIResponseCollection) implementsFirewallWAFPackageListResponse() {
+}
+
+// Union satisfied by
+// [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultUnknown],
+// [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultArray] or
+// [shared.UnionString].
+type WAFPackageListResponseFirewallAPIResponseCollectionResultUnion interface {
+	ImplementsFirewallWAFPackageListResponseFirewallAPIResponseCollectionResultUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WAFPackageListResponseFirewallAPIResponseCollectionResultUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WAFPackageListResponseFirewallAPIResponseCollectionResultArray{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -206,27 +197,27 @@ func init() {
 	)
 }
 
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray []interface{}
+type WAFPackageListResponseFirewallAPIResponseCollectionResultArray []interface{}
 
-func (r WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray) ImplementsFirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResult() {
+func (r WAFPackageListResponseFirewallAPIResponseCollectionResultArray) ImplementsFirewallWAFPackageListResponseFirewallAPIResponseCollectionResultUnion() {
 }
 
 // Whether the API call was successful
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess bool
+type WAFPackageListResponseFirewallAPIResponseCollectionSuccess bool
 
 const (
-	WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccessTrue WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess = true
+	WAFPackageListResponseFirewallAPIResponseCollectionSuccessTrue WAFPackageListResponseFirewallAPIResponseCollectionSuccess = true
 )
 
-func (r WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess) IsKnown() bool {
+func (r WAFPackageListResponseFirewallAPIResponseCollectionSuccess) IsKnown() bool {
 	switch r {
-	case WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccessTrue:
+	case WAFPackageListResponseFirewallAPIResponseCollectionSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo struct {
+type WAFPackageListResponseFirewallAPIResponseCollectionResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -234,14 +225,14 @@ type WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                            `json:"total_count"`
-	JSON       wafPackageListResponseLegacyJhsAPIResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                           `json:"total_count"`
+	JSON       wafPackageListResponseFirewallAPIResponseCollectionResultInfoJSON `json:"-"`
 }
 
-// wafPackageListResponseLegacyJhsAPIResponseCollectionResultInfoJSON contains the
+// wafPackageListResponseFirewallAPIResponseCollectionResultInfoJSON contains the
 // JSON metadata for the struct
-// [WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo]
-type wafPackageListResponseLegacyJhsAPIResponseCollectionResultInfoJSON struct {
+// [WAFPackageListResponseFirewallAPIResponseCollectionResultInfo]
+type wafPackageListResponseFirewallAPIResponseCollectionResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -250,11 +241,11 @@ type wafPackageListResponseLegacyJhsAPIResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *WAFPackageListResponseFirewallAPIResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r wafPackageListResponseLegacyJhsAPIResponseCollectionResultInfoJSON) RawJSON() string {
+func (r wafPackageListResponseFirewallAPIResponseCollectionResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -281,30 +272,91 @@ func (r wafPackageListResponseObjectJSON) RawJSON() string {
 
 func (r WAFPackageListResponseObject) implementsFirewallWAFPackageListResponse() {}
 
+type WAFPackageListResponseObjectResult struct {
+	// A summary of the purpose/function of the WAF package.
+	Description string `json:"description,required"`
+	// The mode that defines how rules within the package are evaluated during the
+	// course of a request. When a package uses anomaly detection mode (`anomaly`
+	// value), each rule is given a score when triggered. If the total score of all
+	// triggered rules exceeds the sensitivity defined in the WAF package, the action
+	// configured in the package will be performed. Traditional detection mode
+	// (`traditional` value) will decide the action to take when it is triggered by the
+	// request. If multiple rules are triggered, the action providing the highest
+	// protection will be applied (for example, a 'block' action will win over a
+	// 'challenge' action).
+	DetectionMode WAFPackageListResponseObjectResultDetectionMode `json:"detection_mode,required"`
+	// Identifier
+	ID string `json:"id,required"`
+	// The name of the WAF package.
+	Name string `json:"name,required"`
+	// When set to `active`, indicates that the WAF package will be applied to the
+	// zone.
+	Status WAFPackageListResponseObjectResultStatus `json:"status"`
+	// Identifier
+	ZoneID string `json:"zone_id,required"`
+	// The default action performed by the rules in the WAF package.
+	ActionMode WAFPackageListResponseObjectResultActionMode `json:"action_mode"`
+	// The sensitivity of the WAF package.
+	Sensitivity WAFPackageListResponseObjectResultSensitivity `json:"sensitivity"`
+	JSON        wafPackageListResponseObjectResultJSON        `json:"-"`
+	union       WAFPackageListResponseObjectResultUnion
+}
+
+// wafPackageListResponseObjectResultJSON contains the JSON metadata for the struct
+// [WAFPackageListResponseObjectResult]
+type wafPackageListResponseObjectResultJSON struct {
+	Description   apijson.Field
+	DetectionMode apijson.Field
+	ID            apijson.Field
+	Name          apijson.Field
+	Status        apijson.Field
+	ZoneID        apijson.Field
+	ActionMode    apijson.Field
+	Sensitivity   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r wafPackageListResponseObjectResultJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *WAFPackageListResponseObjectResult) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r WAFPackageListResponseObjectResult) AsUnion() WAFPackageListResponseObjectResultUnion {
+	return r.union
+}
+
 // Union satisfied by
-// [firewall.WAFPackageListResponseObjectResultLegacyJhsPackageDefinition] or
-// [firewall.WAFPackageListResponseObjectResultLegacyJhsAnomalyPackage].
-type WAFPackageListResponseObjectResult interface {
+// [firewall.WAFPackageListResponseObjectResultFirewallPackageDefinition] or
+// [firewall.WAFPackageListResponseObjectResultFirewallAnomalyPackage].
+type WAFPackageListResponseObjectResultUnion interface {
 	implementsFirewallWAFPackageListResponseObjectResult()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageListResponseObjectResult)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageListResponseObjectResultUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageListResponseObjectResultLegacyJhsPackageDefinition{}),
+			Type:       reflect.TypeOf(WAFPackageListResponseObjectResultFirewallPackageDefinition{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageListResponseObjectResultLegacyJhsAnomalyPackage{}),
+			Type:       reflect.TypeOf(WAFPackageListResponseObjectResultFirewallAnomalyPackage{}),
 		},
 	)
 }
 
-type WAFPackageListResponseObjectResultLegacyJhsPackageDefinition struct {
-	// The unique identifier of a WAF package.
+type WAFPackageListResponseObjectResultFirewallPackageDefinition struct {
+	// Identifier
 	ID string `json:"id,required"`
 	// A summary of the purpose/function of the WAF package.
 	Description string `json:"description,required"`
@@ -317,21 +369,21 @@ type WAFPackageListResponseObjectResultLegacyJhsPackageDefinition struct {
 	// request. If multiple rules are triggered, the action providing the highest
 	// protection will be applied (for example, a 'block' action will win over a
 	// 'challenge' action).
-	DetectionMode WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionMode `json:"detection_mode,required"`
+	DetectionMode WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionMode `json:"detection_mode,required"`
 	// The name of the WAF package.
 	Name string `json:"name,required"`
 	// Identifier
 	ZoneID string `json:"zone_id,required"`
 	// When set to `active`, indicates that the WAF package will be applied to the
 	// zone.
-	Status WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatus `json:"status"`
-	JSON   wafPackageListResponseObjectResultLegacyJhsPackageDefinitionJSON   `json:"-"`
+	Status WAFPackageListResponseObjectResultFirewallPackageDefinitionStatus `json:"status"`
+	JSON   wafPackageListResponseObjectResultFirewallPackageDefinitionJSON   `json:"-"`
 }
 
-// wafPackageListResponseObjectResultLegacyJhsPackageDefinitionJSON contains the
+// wafPackageListResponseObjectResultFirewallPackageDefinitionJSON contains the
 // JSON metadata for the struct
-// [WAFPackageListResponseObjectResultLegacyJhsPackageDefinition]
-type wafPackageListResponseObjectResultLegacyJhsPackageDefinitionJSON struct {
+// [WAFPackageListResponseObjectResultFirewallPackageDefinition]
+type wafPackageListResponseObjectResultFirewallPackageDefinitionJSON struct {
 	ID            apijson.Field
 	Description   apijson.Field
 	DetectionMode apijson.Field
@@ -342,15 +394,15 @@ type wafPackageListResponseObjectResultLegacyJhsPackageDefinitionJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WAFPackageListResponseObjectResultLegacyJhsPackageDefinition) UnmarshalJSON(data []byte) (err error) {
+func (r *WAFPackageListResponseObjectResultFirewallPackageDefinition) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r wafPackageListResponseObjectResultLegacyJhsPackageDefinitionJSON) RawJSON() string {
+func (r wafPackageListResponseObjectResultFirewallPackageDefinitionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WAFPackageListResponseObjectResultLegacyJhsPackageDefinition) implementsFirewallWAFPackageListResponseObjectResult() {
+func (r WAFPackageListResponseObjectResultFirewallPackageDefinition) implementsFirewallWAFPackageListResponseObjectResult() {
 }
 
 // The mode that defines how rules within the package are evaluated during the
@@ -362,16 +414,16 @@ func (r WAFPackageListResponseObjectResultLegacyJhsPackageDefinition) implements
 // request. If multiple rules are triggered, the action providing the highest
 // protection will be applied (for example, a 'block' action will win over a
 // 'challenge' action).
-type WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionMode string
+type WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionMode string
 
 const (
-	WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionModeAnomaly     WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionMode = "anomaly"
-	WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionModeTraditional WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionMode = "traditional"
+	WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionModeAnomaly     WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionMode = "anomaly"
+	WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionModeTraditional WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionMode = "traditional"
 )
 
-func (r WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionMode) IsKnown() bool {
+func (r WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionMode) IsKnown() bool {
 	switch r {
-	case WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionModeAnomaly, WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionModeTraditional:
+	case WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionModeAnomaly, WAFPackageListResponseObjectResultFirewallPackageDefinitionDetectionModeTraditional:
 		return true
 	}
 	return false
@@ -379,47 +431,47 @@ func (r WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionMod
 
 // When set to `active`, indicates that the WAF package will be applied to the
 // zone.
-type WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatus string
+type WAFPackageListResponseObjectResultFirewallPackageDefinitionStatus string
 
 const (
-	WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatusActive WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatus = "active"
+	WAFPackageListResponseObjectResultFirewallPackageDefinitionStatusActive WAFPackageListResponseObjectResultFirewallPackageDefinitionStatus = "active"
 )
 
-func (r WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatus) IsKnown() bool {
+func (r WAFPackageListResponseObjectResultFirewallPackageDefinitionStatus) IsKnown() bool {
 	switch r {
-	case WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatusActive:
+	case WAFPackageListResponseObjectResultFirewallPackageDefinitionStatusActive:
 		return true
 	}
 	return false
 }
 
-type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackage struct {
-	// The unique identifier of a WAF package.
+type WAFPackageListResponseObjectResultFirewallAnomalyPackage struct {
+	// Identifier
 	ID string `json:"id,required"`
 	// A summary of the purpose/function of the WAF package.
 	Description string `json:"description,required"`
 	// When a WAF package uses anomaly detection, each rule is given a score when
 	// triggered. If the total score of all triggered rules exceeds the sensitivity
 	// defined on the WAF package, the action defined on the package will be taken.
-	DetectionMode WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionMode `json:"detection_mode,required"`
+	DetectionMode WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionMode `json:"detection_mode,required"`
 	// The name of the WAF package.
 	Name string `json:"name,required"`
 	// Identifier
 	ZoneID string `json:"zone_id,required"`
 	// The default action performed by the rules in the WAF package.
-	ActionMode WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode `json:"action_mode"`
+	ActionMode WAFPackageListResponseObjectResultFirewallAnomalyPackageActionMode `json:"action_mode"`
 	// The sensitivity of the WAF package.
-	Sensitivity WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity `json:"sensitivity"`
+	Sensitivity WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivity `json:"sensitivity"`
 	// When set to `active`, indicates that the WAF package will be applied to the
 	// zone.
-	Status WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatus `json:"status"`
-	JSON   wafPackageListResponseObjectResultLegacyJhsAnomalyPackageJSON   `json:"-"`
+	Status WAFPackageListResponseObjectResultFirewallAnomalyPackageStatus `json:"status"`
+	JSON   wafPackageListResponseObjectResultFirewallAnomalyPackageJSON   `json:"-"`
 }
 
-// wafPackageListResponseObjectResultLegacyJhsAnomalyPackageJSON contains the JSON
+// wafPackageListResponseObjectResultFirewallAnomalyPackageJSON contains the JSON
 // metadata for the struct
-// [WAFPackageListResponseObjectResultLegacyJhsAnomalyPackage]
-type wafPackageListResponseObjectResultLegacyJhsAnomalyPackageJSON struct {
+// [WAFPackageListResponseObjectResultFirewallAnomalyPackage]
+type wafPackageListResponseObjectResultFirewallAnomalyPackageJSON struct {
 	ID            apijson.Field
 	Description   apijson.Field
 	DetectionMode apijson.Field
@@ -432,65 +484,65 @@ type wafPackageListResponseObjectResultLegacyJhsAnomalyPackageJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WAFPackageListResponseObjectResultLegacyJhsAnomalyPackage) UnmarshalJSON(data []byte) (err error) {
+func (r *WAFPackageListResponseObjectResultFirewallAnomalyPackage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r wafPackageListResponseObjectResultLegacyJhsAnomalyPackageJSON) RawJSON() string {
+func (r wafPackageListResponseObjectResultFirewallAnomalyPackageJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackage) implementsFirewallWAFPackageListResponseObjectResult() {
+func (r WAFPackageListResponseObjectResultFirewallAnomalyPackage) implementsFirewallWAFPackageListResponseObjectResult() {
 }
 
 // When a WAF package uses anomaly detection, each rule is given a score when
 // triggered. If the total score of all triggered rules exceeds the sensitivity
 // defined on the WAF package, the action defined on the package will be taken.
-type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionMode string
+type WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionMode string
 
 const (
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionModeAnomaly     WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionMode = "anomaly"
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionModeTraditional WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionMode = "traditional"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionModeAnomaly     WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionMode = "anomaly"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionModeTraditional WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionMode = "traditional"
 )
 
-func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionMode) IsKnown() bool {
+func (r WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionMode) IsKnown() bool {
 	switch r {
-	case WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionModeAnomaly, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionModeTraditional:
+	case WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionModeAnomaly, WAFPackageListResponseObjectResultFirewallAnomalyPackageDetectionModeTraditional:
 		return true
 	}
 	return false
 }
 
 // The default action performed by the rules in the WAF package.
-type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode string
+type WAFPackageListResponseObjectResultFirewallAnomalyPackageActionMode string
 
 const (
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeSimulate  WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode = "simulate"
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeBlock     WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode = "block"
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeChallenge WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode = "challenge"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageActionModeSimulate  WAFPackageListResponseObjectResultFirewallAnomalyPackageActionMode = "simulate"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageActionModeBlock     WAFPackageListResponseObjectResultFirewallAnomalyPackageActionMode = "block"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageActionModeChallenge WAFPackageListResponseObjectResultFirewallAnomalyPackageActionMode = "challenge"
 )
 
-func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode) IsKnown() bool {
+func (r WAFPackageListResponseObjectResultFirewallAnomalyPackageActionMode) IsKnown() bool {
 	switch r {
-	case WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeSimulate, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeBlock, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeChallenge:
+	case WAFPackageListResponseObjectResultFirewallAnomalyPackageActionModeSimulate, WAFPackageListResponseObjectResultFirewallAnomalyPackageActionModeBlock, WAFPackageListResponseObjectResultFirewallAnomalyPackageActionModeChallenge:
 		return true
 	}
 	return false
 }
 
 // The sensitivity of the WAF package.
-type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity string
+type WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivity string
 
 const (
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityHigh   WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity = "high"
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityMedium WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity = "medium"
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityLow    WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity = "low"
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityOff    WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity = "off"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivityHigh   WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivity = "high"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivityMedium WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivity = "medium"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivityLow    WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivity = "low"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivityOff    WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivity = "off"
 )
 
-func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity) IsKnown() bool {
+func (r WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivity) IsKnown() bool {
 	switch r {
-	case WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityHigh, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityMedium, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityLow, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityOff:
+	case WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivityHigh, WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivityMedium, WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivityLow, WAFPackageListResponseObjectResultFirewallAnomalyPackageSensitivityOff:
 		return true
 	}
 	return false
@@ -498,53 +550,123 @@ func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity) Is
 
 // When set to `active`, indicates that the WAF package will be applied to the
 // zone.
-type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatus string
+type WAFPackageListResponseObjectResultFirewallAnomalyPackageStatus string
 
 const (
-	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatusActive WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatus = "active"
+	WAFPackageListResponseObjectResultFirewallAnomalyPackageStatusActive WAFPackageListResponseObjectResultFirewallAnomalyPackageStatus = "active"
 )
 
-func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatus) IsKnown() bool {
+func (r WAFPackageListResponseObjectResultFirewallAnomalyPackageStatus) IsKnown() bool {
 	switch r {
-	case WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatusActive:
+	case WAFPackageListResponseObjectResultFirewallAnomalyPackageStatusActive:
 		return true
 	}
 	return false
 }
 
-// Union satisfied by [firewall.WAFPackageGetResponseLegacyJhsAPIResponseSingle] or
-// [firewall.WAFPackageGetResponseObject].
-type WAFPackageGetResponse interface {
-	implementsFirewallWAFPackageGetResponse()
+// The mode that defines how rules within the package are evaluated during the
+// course of a request. When a package uses anomaly detection mode (`anomaly`
+// value), each rule is given a score when triggered. If the total score of all
+// triggered rules exceeds the sensitivity defined in the WAF package, the action
+// configured in the package will be performed. Traditional detection mode
+// (`traditional` value) will decide the action to take when it is triggered by the
+// request. If multiple rules are triggered, the action providing the highest
+// protection will be applied (for example, a 'block' action will win over a
+// 'challenge' action).
+type WAFPackageListResponseObjectResultDetectionMode string
+
+const (
+	WAFPackageListResponseObjectResultDetectionModeAnomaly     WAFPackageListResponseObjectResultDetectionMode = "anomaly"
+	WAFPackageListResponseObjectResultDetectionModeTraditional WAFPackageListResponseObjectResultDetectionMode = "traditional"
+)
+
+func (r WAFPackageListResponseObjectResultDetectionMode) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultDetectionModeAnomaly, WAFPackageListResponseObjectResultDetectionModeTraditional:
+		return true
+	}
+	return false
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageGetResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageGetResponseLegacyJhsAPIResponseSingle{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageGetResponseObject{}),
-		},
-	)
+// When set to `active`, indicates that the WAF package will be applied to the
+// zone.
+type WAFPackageListResponseObjectResultStatus string
+
+const (
+	WAFPackageListResponseObjectResultStatusActive WAFPackageListResponseObjectResultStatus = "active"
+)
+
+func (r WAFPackageListResponseObjectResultStatus) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultStatusActive:
+		return true
+	}
+	return false
 }
 
-type WAFPackageGetResponseLegacyJhsAPIResponseSingle struct {
-	Errors   []WAFPackageGetResponseLegacyJhsAPIResponseSingleError   `json:"errors,required"`
-	Messages []WAFPackageGetResponseLegacyJhsAPIResponseSingleMessage `json:"messages,required"`
-	Result   WAFPackageGetResponseLegacyJhsAPIResponseSingleResult    `json:"result,required,nullable"`
+// The default action performed by the rules in the WAF package.
+type WAFPackageListResponseObjectResultActionMode string
+
+const (
+	WAFPackageListResponseObjectResultActionModeSimulate  WAFPackageListResponseObjectResultActionMode = "simulate"
+	WAFPackageListResponseObjectResultActionModeBlock     WAFPackageListResponseObjectResultActionMode = "block"
+	WAFPackageListResponseObjectResultActionModeChallenge WAFPackageListResponseObjectResultActionMode = "challenge"
+)
+
+func (r WAFPackageListResponseObjectResultActionMode) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultActionModeSimulate, WAFPackageListResponseObjectResultActionModeBlock, WAFPackageListResponseObjectResultActionModeChallenge:
+		return true
+	}
+	return false
+}
+
+// The sensitivity of the WAF package.
+type WAFPackageListResponseObjectResultSensitivity string
+
+const (
+	WAFPackageListResponseObjectResultSensitivityHigh   WAFPackageListResponseObjectResultSensitivity = "high"
+	WAFPackageListResponseObjectResultSensitivityMedium WAFPackageListResponseObjectResultSensitivity = "medium"
+	WAFPackageListResponseObjectResultSensitivityLow    WAFPackageListResponseObjectResultSensitivity = "low"
+	WAFPackageListResponseObjectResultSensitivityOff    WAFPackageListResponseObjectResultSensitivity = "off"
+)
+
+func (r WAFPackageListResponseObjectResultSensitivity) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultSensitivityHigh, WAFPackageListResponseObjectResultSensitivityMedium, WAFPackageListResponseObjectResultSensitivityLow, WAFPackageListResponseObjectResultSensitivityOff:
+		return true
+	}
+	return false
+}
+
+// Whether the API call was successful
+type WAFPackageListResponseSuccess bool
+
+const (
+	WAFPackageListResponseSuccessTrue WAFPackageListResponseSuccess = true
+)
+
+func (r WAFPackageListResponseSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type WAFPackageGetResponse struct {
+	Errors   interface{} `json:"errors,required"`
+	Messages interface{} `json:"messages,required"`
+	Result   interface{} `json:"result,required"`
 	// Whether the API call was successful
-	Success WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccess `json:"success,required"`
-	JSON    wafPackageGetResponseLegacyJhsAPIResponseSingleJSON    `json:"-"`
+	Success WAFPackageGetResponseSuccess `json:"success"`
+	JSON    wafPackageGetResponseJSON    `json:"-"`
+	union   WAFPackageGetResponseUnion
 }
 
-// wafPackageGetResponseLegacyJhsAPIResponseSingleJSON contains the JSON metadata
-// for the struct [WAFPackageGetResponseLegacyJhsAPIResponseSingle]
-type wafPackageGetResponseLegacyJhsAPIResponseSingleJSON struct {
+// wafPackageGetResponseJSON contains the JSON metadata for the struct
+// [WAFPackageGetResponse]
+type wafPackageGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -553,72 +675,83 @@ type wafPackageGetResponseLegacyJhsAPIResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WAFPackageGetResponseLegacyJhsAPIResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGetResponseLegacyJhsAPIResponseSingleJSON) RawJSON() string {
+func (r wafPackageGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WAFPackageGetResponseLegacyJhsAPIResponseSingle) implementsFirewallWAFPackageGetResponse() {}
-
-type WAFPackageGetResponseLegacyJhsAPIResponseSingleError struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    wafPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON `json:"-"`
+func (r *WAFPackageGetResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
 }
 
-// wafPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON contains the JSON
-// metadata for the struct [WAFPackageGetResponseLegacyJhsAPIResponseSingleError]
-type wafPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r WAFPackageGetResponse) AsUnion() WAFPackageGetResponseUnion {
+	return r.union
 }
 
-func (r *WAFPackageGetResponseLegacyJhsAPIResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageGetResponseLegacyJhsAPIResponseSingleMessage struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    wafPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON `json:"-"`
-}
-
-// wafPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON contains the JSON
-// metadata for the struct [WAFPackageGetResponseLegacyJhsAPIResponseSingleMessage]
-type wafPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGetResponseLegacyJhsAPIResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON) RawJSON() string {
-	return r.raw
-}
-
-// Union satisfied by
-// [firewall.WAFPackageGetResponseLegacyJhsAPIResponseSingleResultUnknown] or
-// [shared.UnionString].
-type WAFPackageGetResponseLegacyJhsAPIResponseSingleResult interface {
-	ImplementsFirewallWAFPackageGetResponseLegacyJhsAPIResponseSingleResult()
+// Union satisfied by [firewall.WAFPackageGetResponseFirewallAPIResponseSingle] or
+// [firewall.WAFPackageGetResponseObject].
+type WAFPackageGetResponseUnion interface {
+	implementsFirewallWAFPackageGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageGetResponseLegacyJhsAPIResponseSingleResult)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WAFPackageGetResponseFirewallAPIResponseSingle{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WAFPackageGetResponseObject{}),
+		},
+	)
+}
+
+type WAFPackageGetResponseFirewallAPIResponseSingle struct {
+	Errors   []shared.ResponseInfo                                     `json:"errors,required"`
+	Messages []shared.ResponseInfo                                     `json:"messages,required"`
+	Result   WAFPackageGetResponseFirewallAPIResponseSingleResultUnion `json:"result,required"`
+	// Whether the API call was successful
+	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success,required"`
+	JSON    wafPackageGetResponseFirewallAPIResponseSingleJSON    `json:"-"`
+}
+
+// wafPackageGetResponseFirewallAPIResponseSingleJSON contains the JSON metadata
+// for the struct [WAFPackageGetResponseFirewallAPIResponseSingle]
+type wafPackageGetResponseFirewallAPIResponseSingleJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFPackageGetResponseFirewallAPIResponseSingle) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafPackageGetResponseFirewallAPIResponseSingleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsFirewallWAFPackageGetResponse() {}
+
+// Union satisfied by
+// [firewall.WAFPackageGetResponseFirewallAPIResponseSingleResultUnknown] or
+// [shared.UnionString].
+type WAFPackageGetResponseFirewallAPIResponseSingleResultUnion interface {
+	ImplementsFirewallWAFPackageGetResponseFirewallAPIResponseSingleResultUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WAFPackageGetResponseFirewallAPIResponseSingleResultUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -628,15 +761,15 @@ func init() {
 }
 
 // Whether the API call was successful
-type WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccess bool
+type WAFPackageGetResponseFirewallAPIResponseSingleSuccess bool
 
 const (
-	WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccessTrue WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccess = true
+	WAFPackageGetResponseFirewallAPIResponseSingleSuccessTrue WAFPackageGetResponseFirewallAPIResponseSingleSuccess = true
 )
 
-func (r WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccess) IsKnown() bool {
+func (r WAFPackageGetResponseFirewallAPIResponseSingleSuccess) IsKnown() bool {
 	switch r {
-	case WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccessTrue:
+	case WAFPackageGetResponseFirewallAPIResponseSingleSuccessTrue:
 		return true
 	}
 	return false
@@ -665,12 +798,29 @@ func (r wafPackageGetResponseObjectJSON) RawJSON() string {
 
 func (r WAFPackageGetResponseObject) implementsFirewallWAFPackageGetResponse() {}
 
+// Whether the API call was successful
+type WAFPackageGetResponseSuccess bool
+
+const (
+	WAFPackageGetResponseSuccessTrue WAFPackageGetResponseSuccess = true
+)
+
+func (r WAFPackageGetResponseSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageGetResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WAFPackageListParams struct {
 	// The direction used to sort returned packages.
 	Direction param.Field[WAFPackageListParamsDirection] `query:"direction"`
 	// When set to `all`, all the search requirements must match. When set to `any`,
 	// only one of the search requirements has to match.
 	Match param.Field[WAFPackageListParamsMatch] `query:"match"`
+	// The name of the WAF package.
+	Name param.Field[string] `query:"name"`
 	// The field used to sort returned packages.
 	Order param.Field[WAFPackageListParamsOrder] `query:"order"`
 	// The page number of paginated results.
@@ -682,7 +832,7 @@ type WAFPackageListParams struct {
 // URLQuery serializes [WAFPackageListParams]'s query parameters as `url.Values`.
 func (r WAFPackageListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

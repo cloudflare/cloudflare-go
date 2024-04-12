@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // PreviewService contains methods and other services that help with interacting
@@ -32,7 +32,7 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 }
 
 // Get the result of a previous preview operation using the provided preview_id.
-func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *user.LoadBalancingPreview, err error) {
+func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *PreviewGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%s", query.AccountID, previewID)
@@ -44,16 +44,18 @@ func (r *PreviewService) Get(ctx context.Context, previewID string, query Previe
 	return
 }
 
+type PreviewGetResponse map[string]PreviewGetResponse
+
 type PreviewGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PreviewGetResponseEnvelope struct {
-	Errors   []PreviewGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PreviewGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Resulting health data from a preview operation.
-	Result user.LoadBalancingPreview `json:"result,required"`
+	Result PreviewGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`
@@ -75,52 +77,6 @@ func (r *PreviewGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r previewGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PreviewGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    previewGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// previewGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PreviewGetResponseEnvelopeErrors]
-type previewGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PreviewGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r previewGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PreviewGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    previewGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// previewGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PreviewGetResponseEnvelopeMessages]
-type previewGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PreviewGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r previewGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

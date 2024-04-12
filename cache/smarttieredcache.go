@@ -35,10 +35,10 @@ func NewSmartTieredCacheService(opts ...option.RequestOption) (r *SmartTieredCac
 }
 
 // Remvoves enablement of Smart Tiered Cache
-func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCacheDeleteParams, opts ...option.RequestOption) (res *SmartTieredCacheDeleteResponse, err error) {
+func (r *SmartTieredCacheService) Delete(ctx context.Context, params SmartTieredCacheDeleteParams, opts ...option.RequestOption) (res *SmartTieredCacheDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -48,7 +48,7 @@ func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCa
 }
 
 // Updates enablement of Tiered Cache
-func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCacheEditParams, opts ...option.RequestOption) (res *SmartTieredCacheEditResponse, err error) {
+func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCacheEditParams, opts ...option.RequestOption) (res *SmartTieredCacheEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", params.ZoneID)
@@ -61,7 +61,7 @@ func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCa
 }
 
 // Get Smart Tiered Cache setting
-func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCacheGetParams, opts ...option.RequestOption) (res *SmartTieredCacheGetResponse, err error) {
+func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCacheGetParams, opts ...option.RequestOption) (res *SmartTieredCacheGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", query.ZoneID)
@@ -75,13 +75,13 @@ func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCach
 
 // Union satisfied by [cache.SmartTieredCacheDeleteResponseUnknown] or
 // [shared.UnionString].
-type SmartTieredCacheDeleteResponse interface {
-	ImplementsCacheSmartTieredCacheDeleteResponse()
+type SmartTieredCacheDeleteResponseUnion interface {
+	ImplementsCacheSmartTieredCacheDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SmartTieredCacheDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*SmartTieredCacheDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -92,13 +92,13 @@ func init() {
 
 // Union satisfied by [cache.SmartTieredCacheEditResponseUnknown] or
 // [shared.UnionString].
-type SmartTieredCacheEditResponse interface {
-	ImplementsCacheSmartTieredCacheEditResponse()
+type SmartTieredCacheEditResponseUnion interface {
+	ImplementsCacheSmartTieredCacheEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SmartTieredCacheEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*SmartTieredCacheEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -109,13 +109,13 @@ func init() {
 
 // Union satisfied by [cache.SmartTieredCacheGetResponseUnknown] or
 // [shared.UnionString].
-type SmartTieredCacheGetResponse interface {
-	ImplementsCacheSmartTieredCacheGetResponse()
+type SmartTieredCacheGetResponseUnion interface {
+	ImplementsCacheSmartTieredCacheGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SmartTieredCacheGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*SmartTieredCacheGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -127,12 +127,17 @@ func init() {
 type SmartTieredCacheDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r SmartTieredCacheDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type SmartTieredCacheDeleteResponseEnvelope struct {
-	Errors   []SmartTieredCacheDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SmartTieredCacheDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   SmartTieredCacheDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   SmartTieredCacheDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartTieredCacheDeleteResponseEnvelopeJSON    `json:"-"`
@@ -154,52 +159,6 @@ func (r *SmartTieredCacheDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r smartTieredCacheDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SmartTieredCacheDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    smartTieredCacheDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// smartTieredCacheDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SmartTieredCacheDeleteResponseEnvelopeErrors]
-type smartTieredCacheDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SmartTieredCacheDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smartTieredCacheDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SmartTieredCacheDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    smartTieredCacheDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// smartTieredCacheDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SmartTieredCacheDeleteResponseEnvelopeMessages]
-type smartTieredCacheDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SmartTieredCacheDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smartTieredCacheDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -246,9 +205,9 @@ func (r SmartTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type SmartTieredCacheEditResponseEnvelope struct {
-	Errors   []SmartTieredCacheEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SmartTieredCacheEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   SmartTieredCacheEditResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   SmartTieredCacheEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartTieredCacheEditResponseEnvelopeJSON    `json:"-"`
@@ -273,52 +232,6 @@ func (r smartTieredCacheEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SmartTieredCacheEditResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    smartTieredCacheEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// smartTieredCacheEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SmartTieredCacheEditResponseEnvelopeErrors]
-type smartTieredCacheEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SmartTieredCacheEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smartTieredCacheEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SmartTieredCacheEditResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    smartTieredCacheEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// smartTieredCacheEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SmartTieredCacheEditResponseEnvelopeMessages]
-type smartTieredCacheEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SmartTieredCacheEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smartTieredCacheEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SmartTieredCacheEditResponseEnvelopeSuccess bool
 
@@ -340,9 +253,9 @@ type SmartTieredCacheGetParams struct {
 }
 
 type SmartTieredCacheGetResponseEnvelope struct {
-	Errors   []SmartTieredCacheGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SmartTieredCacheGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SmartTieredCacheGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   SmartTieredCacheGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartTieredCacheGetResponseEnvelopeJSON    `json:"-"`
@@ -364,52 +277,6 @@ func (r *SmartTieredCacheGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r smartTieredCacheGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SmartTieredCacheGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    smartTieredCacheGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// smartTieredCacheGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SmartTieredCacheGetResponseEnvelopeErrors]
-type smartTieredCacheGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SmartTieredCacheGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smartTieredCacheGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SmartTieredCacheGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    smartTieredCacheGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// smartTieredCacheGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SmartTieredCacheGetResponseEnvelopeMessages]
-type smartTieredCacheGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SmartTieredCacheGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smartTieredCacheGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

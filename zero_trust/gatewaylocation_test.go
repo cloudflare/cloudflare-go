@@ -33,7 +33,7 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 		Name:          cloudflare.F("Austin Office Location"),
 		ClientDefault: cloudflare.F(false),
 		EcsSupport:    cloudflare.F(false),
-		Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsNetwork{{
+		Networks: cloudflare.F([]zero_trust.LocationNetworkParam{{
 			Network: cloudflare.F("192.0.2.1/32"),
 		}, {
 			Network: cloudflare.F("192.0.2.1/32"),
@@ -72,7 +72,7 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 			Name:          cloudflare.F("Austin Office Location"),
 			ClientDefault: cloudflare.F(false),
 			EcsSupport:    cloudflare.F(false),
-			Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsNetwork{{
+			Networks: cloudflare.F([]zero_trust.LocationNetworkParam{{
 				Network: cloudflare.F("192.0.2.1/32"),
 			}, {
 				Network: cloudflare.F("192.0.2.1/32"),
@@ -135,6 +135,7 @@ func TestGatewayLocationDelete(t *testing.T) {
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayLocationDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

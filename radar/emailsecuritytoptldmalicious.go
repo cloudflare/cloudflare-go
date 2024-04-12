@@ -48,9 +48,9 @@ func (r *EmailSecurityTopTldMaliciousService) Get(ctx context.Context, malicious
 }
 
 type EmailSecurityTopTldMaliciousGetResponse struct {
-	Meta EmailSecurityTopTldMaliciousGetResponseMeta   `json:"meta,required"`
-	Top0 []EmailSecurityTopTldMaliciousGetResponseTop0 `json:"top_0,required"`
-	JSON emailSecurityTopTldMaliciousGetResponseJSON   `json:"-"`
+	Meta EmailSecurityTopTldMaliciousGetResponseMeta `json:"meta,required"`
+	Top0 []Browser                                   `json:"top_0,required"`
+	JSON emailSecurityTopTldMaliciousGetResponseJSON `json:"-"`
 }
 
 // emailSecurityTopTldMaliciousGetResponseJSON contains the JSON metadata for the
@@ -178,29 +178,6 @@ func (r emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationJSON)
 	return r.raw
 }
 
-type EmailSecurityTopTldMaliciousGetResponseTop0 struct {
-	Name  string                                          `json:"name,required"`
-	Value string                                          `json:"value,required"`
-	JSON  emailSecurityTopTldMaliciousGetResponseTop0JSON `json:"-"`
-}
-
-// emailSecurityTopTldMaliciousGetResponseTop0JSON contains the JSON metadata for
-// the struct [EmailSecurityTopTldMaliciousGetResponseTop0]
-type emailSecurityTopTldMaliciousGetResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailSecurityTopTldMaliciousGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailSecurityTopTldMaliciousGetResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailSecurityTopTldMaliciousGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]EmailSecurityTopTldMaliciousGetParamsARC] `query:"arc"`
@@ -234,7 +211,7 @@ type EmailSecurityTopTldMaliciousGetParams struct {
 // as `url.Values`.
 func (r EmailSecurityTopTldMaliciousGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

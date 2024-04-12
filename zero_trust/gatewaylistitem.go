@@ -6,9 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -34,7 +32,7 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]GatewayListItemListResponse], err error) {
+func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]GatewayItem], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,32 +50,8 @@ func (r *GatewayListItemService) List(ctx context.Context, listID string, query 
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[[]GatewayListItemListResponse] {
+func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[[]GatewayItem] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, listID, query, opts...))
-}
-
-type GatewayListItemListResponse struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The value of the item in a list.
-	Value string                          `json:"value"`
-	JSON  gatewayListItemListResponseJSON `json:"-"`
-}
-
-// gatewayListItemListResponseJSON contains the JSON metadata for the struct
-// [GatewayListItemListResponse]
-type gatewayListItemListResponseJSON struct {
-	CreatedAt   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListItemListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayListItemListResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type GatewayListItemListParams struct {

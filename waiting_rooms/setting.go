@@ -31,11 +31,11 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 }
 
 // Update zone-level Waiting Room settings
-func (r *SettingService) Update(ctx context.Context, zoneIdentifier string, body SettingUpdateParams, opts ...option.RequestOption) (res *SettingUpdateResponse, err error) {
+func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams, opts ...option.RequestOption) (res *SettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -44,11 +44,11 @@ func (r *SettingService) Update(ctx context.Context, zoneIdentifier string, body
 }
 
 // Patch zone-level Waiting Room settings
-func (r *SettingService) Edit(ctx context.Context, zoneIdentifier string, body SettingEditParams, opts ...option.RequestOption) (res *SettingEditResponse, err error) {
+func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opts ...option.RequestOption) (res *SettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -57,16 +57,39 @@ func (r *SettingService) Edit(ctx context.Context, zoneIdentifier string, body S
 }
 
 // Get zone-level Waiting Room settings
-func (r *SettingService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
+func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
+}
+
+type Setting struct {
+	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
+	// this zone. Verified search engine crawlers will not be tracked or counted by the
+	// waiting room system, and will not appear in waiting room analytics.
+	SearchEngineCrawlerBypass bool        `json:"search_engine_crawler_bypass,required"`
+	JSON                      settingJSON `json:"-"`
+}
+
+// settingJSON contains the JSON metadata for the struct [Setting]
+type settingJSON struct {
+	SearchEngineCrawlerBypass apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
+}
+
+func (r *Setting) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingJSON) RawJSON() string {
+	return r.raw
 }
 
 type SettingUpdateResponse struct {
@@ -142,6 +165,8 @@ func (r settingGetResponseJSON) RawJSON() string {
 }
 
 type SettingUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
@@ -153,14 +178,20 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingUpdateResponseEnvelope struct {
-	Result SettingUpdateResponse             `json:"result,required"`
-	JSON   settingUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                       `json:"errors,required"`
+	Messages interface{}                       `json:"messages,required"`
+	Result   SettingUpdateResponse             `json:"result,required"`
+	Success  interface{}                       `json:"success,required"`
+	JSON     settingUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // settingUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingUpdateResponseEnvelope]
 type settingUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -174,6 +205,8 @@ func (r settingUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
@@ -185,14 +218,20 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingEditResponseEnvelope struct {
-	Result SettingEditResponse             `json:"result,required"`
-	JSON   settingEditResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                     `json:"errors,required"`
+	Messages interface{}                     `json:"messages,required"`
+	Result   SettingEditResponse             `json:"result,required"`
+	Success  interface{}                     `json:"success,required"`
+	JSON     settingEditResponseEnvelopeJSON `json:"-"`
 }
 
 // settingEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingEditResponseEnvelope]
 type settingEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -205,15 +244,26 @@ func (r settingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SettingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type SettingGetResponseEnvelope struct {
-	Result SettingGetResponse             `json:"result,required"`
-	JSON   settingGetResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                    `json:"errors,required"`
+	Messages interface{}                    `json:"messages,required"`
+	Result   SettingGetResponse             `json:"result,required"`
+	Success  interface{}                    `json:"success,required"`
+	JSON     settingGetResponseEnvelopeJSON `json:"-"`
 }
 
 // settingGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingGetResponseEnvelope]
 type settingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

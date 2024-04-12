@@ -32,13 +32,16 @@ func TestWAFPackageRuleListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		firewall.WAFPackageRuleListParams{
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Direction: cloudflare.F(firewall.WAFPackageRuleListParamsDirectionDesc),
-			Match:     cloudflare.F(firewall.WAFPackageRuleListParamsMatchAny),
-			Mode:      cloudflare.F(firewall.WAFPackageRuleListParamsModeChl),
-			Order:     cloudflare.F(firewall.WAFPackageRuleListParamsOrderPriority),
-			Page:      cloudflare.F(1.000000),
-			PerPage:   cloudflare.F(5.000000),
+			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Description: cloudflare.F("SQL injection prevention for SELECT statements"),
+			Direction:   cloudflare.F(firewall.WAFPackageRuleListParamsDirectionDesc),
+			GroupID:     cloudflare.F("de677e5818985db1285d0e80225f06e5"),
+			Match:       cloudflare.F(firewall.WAFPackageRuleListParamsMatchAny),
+			Mode:        cloudflare.F(firewall.WAFPackageRuleListParamsModeChl),
+			Order:       cloudflare.F(firewall.WAFPackageRuleListParamsOrderPriority),
+			Page:        cloudflare.F(1.000000),
+			PerPage:     cloudflare.F(5.000000),
+			Priority:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

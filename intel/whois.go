@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +35,7 @@ func NewWhoisService(opts ...option.RequestOption) (r *WhoisService) {
 }
 
 // Get WHOIS Record
-func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...option.RequestOption) (res *IntelWhois, err error) {
+func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...option.RequestOption) (res *Whois, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WhoisGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/whois", params.AccountID)
@@ -46,21 +47,21 @@ func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...o
 	return
 }
 
-type IntelWhois struct {
-	CreatedDate       time.Time      `json:"created_date" format:"date"`
-	Domain            string         `json:"domain"`
-	Nameservers       []string       `json:"nameservers"`
-	Registrant        string         `json:"registrant"`
-	RegistrantCountry string         `json:"registrant_country"`
-	RegistrantEmail   string         `json:"registrant_email"`
-	RegistrantOrg     string         `json:"registrant_org"`
-	Registrar         string         `json:"registrar"`
-	UpdatedDate       time.Time      `json:"updated_date" format:"date"`
-	JSON              intelWhoisJSON `json:"-"`
+type Whois struct {
+	CreatedDate       time.Time `json:"created_date" format:"date"`
+	Domain            string    `json:"domain"`
+	Nameservers       []string  `json:"nameservers"`
+	Registrant        string    `json:"registrant"`
+	RegistrantCountry string    `json:"registrant_country"`
+	RegistrantEmail   string    `json:"registrant_email"`
+	RegistrantOrg     string    `json:"registrant_org"`
+	Registrar         string    `json:"registrar"`
+	UpdatedDate       time.Time `json:"updated_date" format:"date"`
+	JSON              whoisJSON `json:"-"`
 }
 
-// intelWhoisJSON contains the JSON metadata for the struct [IntelWhois]
-type intelWhoisJSON struct {
+// whoisJSON contains the JSON metadata for the struct [Whois]
+type whoisJSON struct {
 	CreatedDate       apijson.Field
 	Domain            apijson.Field
 	Nameservers       apijson.Field
@@ -74,11 +75,11 @@ type intelWhoisJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *IntelWhois) UnmarshalJSON(data []byte) (err error) {
+func (r *Whois) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r intelWhoisJSON) RawJSON() string {
+func (r whoisJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -91,15 +92,15 @@ type WhoisGetParams struct {
 // URLQuery serializes [WhoisGetParams]'s query parameters as `url.Values`.
 func (r WhoisGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
 type WhoisGetResponseEnvelope struct {
-	Errors   []WhoisGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WhoisGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelWhois                         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Whois                 `json:"result,required"`
 	// Whether the API call was successful
 	Success WhoisGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    whoisGetResponseEnvelopeJSON    `json:"-"`
@@ -121,52 +122,6 @@ func (r *WhoisGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r whoisGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WhoisGetResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    whoisGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// whoisGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WhoisGetResponseEnvelopeErrors]
-type whoisGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WhoisGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r whoisGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WhoisGetResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    whoisGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// whoisGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [WhoisGetResponseEnvelopeMessages]
-type whoisGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WhoisGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r whoisGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

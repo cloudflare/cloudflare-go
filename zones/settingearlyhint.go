@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -36,7 +37,7 @@ func NewSettingEarlyHintService(opts ...option.RequestOption) (r *SettingEarlyHi
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-func (r *SettingEarlyHintService) Edit(ctx context.Context, params SettingEarlyHintEditParams, opts ...option.RequestOption) (res *ZoneSettingEarlyHints, err error) {
+func (r *SettingEarlyHintService) Edit(ctx context.Context, params SettingEarlyHintEditParams, opts ...option.RequestOption) (res *EarlyHints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingEarlyHintEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/early_hints", params.ZoneID)
@@ -52,7 +53,7 @@ func (r *SettingEarlyHintService) Edit(ctx context.Context, params SettingEarlyH
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-func (r *SettingEarlyHintService) Get(ctx context.Context, query SettingEarlyHintGetParams, opts ...option.RequestOption) (res *ZoneSettingEarlyHints, err error) {
+func (r *SettingEarlyHintService) Get(ctx context.Context, query SettingEarlyHintGetParams, opts ...option.RequestOption) (res *EarlyHints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingEarlyHintGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/early_hints", query.ZoneID)
@@ -68,22 +69,21 @@ func (r *SettingEarlyHintService) Get(ctx context.Context, query SettingEarlyHin
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-type ZoneSettingEarlyHints struct {
+type EarlyHints struct {
 	// ID of the zone setting.
-	ID ZoneSettingEarlyHintsID `json:"id,required"`
+	ID EarlyHintsID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingEarlyHintsValue `json:"value,required"`
+	Value EarlyHintsValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingEarlyHintsEditable `json:"editable"`
+	Editable EarlyHintsEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingEarlyHintsJSON `json:"-"`
+	ModifiedOn time.Time      `json:"modified_on,nullable" format:"date-time"`
+	JSON       earlyHintsJSON `json:"-"`
 }
 
-// zoneSettingEarlyHintsJSON contains the JSON metadata for the struct
-// [ZoneSettingEarlyHints]
-type zoneSettingEarlyHintsJSON struct {
+// earlyHintsJSON contains the JSON metadata for the struct [EarlyHints]
+type earlyHintsJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,44 +92,40 @@ type zoneSettingEarlyHintsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingEarlyHints) UnmarshalJSON(data []byte) (err error) {
+func (r *EarlyHints) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingEarlyHintsJSON) RawJSON() string {
+func (r earlyHintsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingEarlyHints) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingEarlyHints) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingEarlyHintsID string
+type EarlyHintsID string
 
 const (
-	ZoneSettingEarlyHintsIDEarlyHints ZoneSettingEarlyHintsID = "early_hints"
+	EarlyHintsIDEarlyHints EarlyHintsID = "early_hints"
 )
 
-func (r ZoneSettingEarlyHintsID) IsKnown() bool {
+func (r EarlyHintsID) IsKnown() bool {
 	switch r {
-	case ZoneSettingEarlyHintsIDEarlyHints:
+	case EarlyHintsIDEarlyHints:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingEarlyHintsValue string
+type EarlyHintsValue string
 
 const (
-	ZoneSettingEarlyHintsValueOn  ZoneSettingEarlyHintsValue = "on"
-	ZoneSettingEarlyHintsValueOff ZoneSettingEarlyHintsValue = "off"
+	EarlyHintsValueOn  EarlyHintsValue = "on"
+	EarlyHintsValueOff EarlyHintsValue = "off"
 )
 
-func (r ZoneSettingEarlyHintsValue) IsKnown() bool {
+func (r EarlyHintsValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingEarlyHintsValueOn, ZoneSettingEarlyHintsValueOff:
+	case EarlyHintsValueOn, EarlyHintsValueOff:
 		return true
 	}
 	return false
@@ -137,37 +133,20 @@ func (r ZoneSettingEarlyHintsValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingEarlyHintsEditable bool
+type EarlyHintsEditable bool
 
 const (
-	ZoneSettingEarlyHintsEditableTrue  ZoneSettingEarlyHintsEditable = true
-	ZoneSettingEarlyHintsEditableFalse ZoneSettingEarlyHintsEditable = false
+	EarlyHintsEditableTrue  EarlyHintsEditable = true
+	EarlyHintsEditableFalse EarlyHintsEditable = false
 )
 
-func (r ZoneSettingEarlyHintsEditable) IsKnown() bool {
+func (r EarlyHintsEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingEarlyHintsEditableTrue, ZoneSettingEarlyHintsEditableFalse:
+	case EarlyHintsEditableTrue, EarlyHintsEditableFalse:
 		return true
 	}
 	return false
 }
-
-// When enabled, Cloudflare will attempt to speed up overall page loads by serving
-// `103` responses with `Link` headers from the final response. Refer to
-// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
-// more information.
-type ZoneSettingEarlyHintsParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingEarlyHintsID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingEarlyHintsValue] `json:"value,required"`
-}
-
-func (r ZoneSettingEarlyHintsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingEarlyHintsParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingEarlyHintEditParams struct {
 	// Identifier
@@ -197,15 +176,15 @@ func (r SettingEarlyHintEditParamsValue) IsKnown() bool {
 }
 
 type SettingEarlyHintEditResponseEnvelope struct {
-	Errors   []SettingEarlyHintEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingEarlyHintEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, Cloudflare will attempt to speed up overall page loads by serving
 	// `103` responses with `Link` headers from the final response. Refer to
 	// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 	// more information.
-	Result ZoneSettingEarlyHints                    `json:"result"`
+	Result EarlyHints                               `json:"result"`
 	JSON   settingEarlyHintEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -228,67 +207,21 @@ func (r settingEarlyHintEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingEarlyHintEditResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    settingEarlyHintEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingEarlyHintEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingEarlyHintEditResponseEnvelopeErrors]
-type settingEarlyHintEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEarlyHintEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEarlyHintEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEarlyHintEditResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingEarlyHintEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingEarlyHintEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingEarlyHintEditResponseEnvelopeMessages]
-type settingEarlyHintEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEarlyHintEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEarlyHintEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingEarlyHintGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingEarlyHintGetResponseEnvelope struct {
-	Errors   []SettingEarlyHintGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingEarlyHintGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, Cloudflare will attempt to speed up overall page loads by serving
 	// `103` responses with `Link` headers from the final response. Refer to
 	// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 	// more information.
-	Result ZoneSettingEarlyHints                   `json:"result"`
+	Result EarlyHints                              `json:"result"`
 	JSON   settingEarlyHintGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -308,51 +241,5 @@ func (r *SettingEarlyHintGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r settingEarlyHintGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEarlyHintGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingEarlyHintGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingEarlyHintGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingEarlyHintGetResponseEnvelopeErrors]
-type settingEarlyHintGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEarlyHintGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEarlyHintGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEarlyHintGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingEarlyHintGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingEarlyHintGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingEarlyHintGetResponseEnvelopeMessages]
-type settingEarlyHintGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEarlyHintGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEarlyHintGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

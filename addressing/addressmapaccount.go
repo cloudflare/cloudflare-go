@@ -35,10 +35,10 @@ func NewAddressMapAccountService(opts ...option.RequestOption) (r *AddressMapAcc
 }
 
 // Add an account as a member of a particular address map.
-func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, body AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponse, err error) {
+func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, params AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapAccountUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, body.AccountID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", params.AccountID, addressMapID, params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -48,10 +48,10 @@ func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID stri
 }
 
 // Remove an account as a member of a particular address map.
-func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, body AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponse, err error) {
+func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, params AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapAccountDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, body.AccountID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", params.AccountID, addressMapID, params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -62,13 +62,13 @@ func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID stri
 
 // Union satisfied by [addressing.AddressMapAccountUpdateResponseUnknown],
 // [addressing.AddressMapAccountUpdateResponseArray] or [shared.UnionString].
-type AddressMapAccountUpdateResponse interface {
-	ImplementsAddressingAddressMapAccountUpdateResponse()
+type AddressMapAccountUpdateResponseUnion interface {
+	ImplementsAddressingAddressMapAccountUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapAccountUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*AddressMapAccountUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -83,17 +83,18 @@ func init() {
 
 type AddressMapAccountUpdateResponseArray []interface{}
 
-func (r AddressMapAccountUpdateResponseArray) ImplementsAddressingAddressMapAccountUpdateResponse() {}
+func (r AddressMapAccountUpdateResponseArray) ImplementsAddressingAddressMapAccountUpdateResponseUnion() {
+}
 
 // Union satisfied by [addressing.AddressMapAccountDeleteResponseUnknown],
 // [addressing.AddressMapAccountDeleteResponseArray] or [shared.UnionString].
-type AddressMapAccountDeleteResponse interface {
-	ImplementsAddressingAddressMapAccountDeleteResponse()
+type AddressMapAccountDeleteResponseUnion interface {
+	ImplementsAddressingAddressMapAccountDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapAccountDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*AddressMapAccountDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -108,17 +109,23 @@ func init() {
 
 type AddressMapAccountDeleteResponseArray []interface{}
 
-func (r AddressMapAccountDeleteResponseArray) ImplementsAddressingAddressMapAccountDeleteResponse() {}
+func (r AddressMapAccountDeleteResponseArray) ImplementsAddressingAddressMapAccountDeleteResponseUnion() {
+}
 
 type AddressMapAccountUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r AddressMapAccountUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapAccountUpdateResponseEnvelope struct {
-	Errors   []AddressMapAccountUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapAccountUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressMapAccountUpdateResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                `json:"errors,required"`
+	Messages []shared.ResponseInfo                `json:"messages,required"`
+	Result   AddressMapAccountUpdateResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapAccountUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapAccountUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -142,52 +149,6 @@ func (r *AddressMapAccountUpdateResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r addressMapAccountUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapAccountUpdateResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    addressMapAccountUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressMapAccountUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AddressMapAccountUpdateResponseEnvelopeErrors]
-type addressMapAccountUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapAccountUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapAccountUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapAccountUpdateResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    addressMapAccountUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressMapAccountUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AddressMapAccountUpdateResponseEnvelopeMessages]
-type addressMapAccountUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapAccountUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapAccountUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -240,12 +201,17 @@ func (r addressMapAccountUpdateResponseEnvelopeResultInfoJSON) RawJSON() string 
 type AddressMapAccountDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r AddressMapAccountDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapAccountDeleteResponseEnvelope struct {
-	Errors   []AddressMapAccountDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapAccountDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressMapAccountDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                `json:"errors,required"`
+	Messages []shared.ResponseInfo                `json:"messages,required"`
+	Result   AddressMapAccountDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapAccountDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapAccountDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -269,52 +235,6 @@ func (r *AddressMapAccountDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r addressMapAccountDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapAccountDeleteResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    addressMapAccountDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressMapAccountDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AddressMapAccountDeleteResponseEnvelopeErrors]
-type addressMapAccountDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapAccountDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapAccountDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapAccountDeleteResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    addressMapAccountDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressMapAccountDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AddressMapAccountDeleteResponseEnvelopeMessages]
-type addressMapAccountDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapAccountDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapAccountDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

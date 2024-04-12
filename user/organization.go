@@ -61,7 +61,7 @@ func (r *OrganizationService) ListAutoPaging(ctx context.Context, query Organiza
 }
 
 // Removes association to an organization.
-func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
+func (r *OrganizationService) Delete(ctx context.Context, organizationID string, body OrganizationDeleteParams, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -69,7 +69,7 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 }
 
 // Gets a specific organization the user is associated with.
-func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationGetResponse, err error) {
+func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationGetResponseEnvelope
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
@@ -87,7 +87,7 @@ type Organization struct {
 	// Organization name.
 	Name string `json:"name"`
 	// Access permissions for this User.
-	Permissions []string `json:"permissions"`
+	Permissions []shared.Permission `json:"permissions"`
 	// List of roles that a user has within an organization.
 	Roles []string `json:"roles"`
 	// Whether the user is a member of the organization or has an inivitation pending.
@@ -154,13 +154,13 @@ func (r organizationDeleteResponseJSON) RawJSON() string {
 
 // Union satisfied by [user.OrganizationGetResponseUnknown] or
 // [shared.UnionString].
-type OrganizationGetResponse interface {
-	ImplementsUserOrganizationGetResponse()
+type OrganizationGetResponseUnion interface {
+	ImplementsUserOrganizationGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*OrganizationGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*OrganizationGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -189,7 +189,7 @@ type OrganizationListParams struct {
 // URLQuery serializes [OrganizationListParams]'s query parameters as `url.Values`.
 func (r OrganizationListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -259,10 +259,18 @@ func (r OrganizationListParamsStatus) IsKnown() bool {
 	return false
 }
 
+type OrganizationDeleteParams struct {
+	Body interface{} `json:"body,required"`
+}
+
+func (r OrganizationDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
 type OrganizationGetResponseEnvelope struct {
-	Errors   []OrganizationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OrganizationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   OrganizationGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   OrganizationGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationGetResponseEnvelopeJSON    `json:"-"`
@@ -284,52 +292,6 @@ func (r *OrganizationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r organizationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationGetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    organizationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// organizationGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [OrganizationGetResponseEnvelopeErrors]
-type organizationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationGetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    organizationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// organizationGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [OrganizationGetResponseEnvelopeMessages]
-type organizationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +35,7 @@ func NewHostnameAssociationService(opts ...option.RequestOption) (r *HostnameAss
 }
 
 // Replace Hostname Associations
-func (r *HostnameAssociationService) Update(ctx context.Context, params HostnameAssociationUpdateParams, opts ...option.RequestOption) (res *TLSHostnameAssociation, err error) {
+func (r *HostnameAssociationService) Update(ctx context.Context, params HostnameAssociationUpdateParams, opts ...option.RequestOption) (res *HostnameAssociationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameAssociationUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
@@ -47,7 +48,7 @@ func (r *HostnameAssociationService) Update(ctx context.Context, params Hostname
 }
 
 // List Hostname Associations
-func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAssociationGetParams, opts ...option.RequestOption) (res *TLSHostnameAssociation, err error) {
+func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAssociationGetParams, opts ...option.RequestOption) (res *HostnameAssociationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameAssociationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
@@ -59,50 +60,78 @@ func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAss
 	return
 }
 
-type TLSHostnameAssociation struct {
-	Hostnames []string `json:"hostnames"`
-	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
-	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
-	// to your active Cloudflare Managed CA.
-	MTLSCertificateID string                     `json:"mtls_certificate_id"`
-	JSON              tlsHostnameAssociationJSON `json:"-"`
-}
+type HostnameAssociation = string
 
-// tlsHostnameAssociationJSON contains the JSON metadata for the struct
-// [TLSHostnameAssociation]
-type tlsHostnameAssociationJSON struct {
-	Hostnames         apijson.Field
-	MTLSCertificateID apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
+type HostnameAssociationParam = string
 
-func (r *TLSHostnameAssociation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tlsHostnameAssociationJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationUpdateParams struct {
-	// Identifier
-	ZoneID    param.Field[string]   `path:"zone_id,required"`
-	Hostnames param.Field[[]string] `json:"hostnames"`
+type TLSHostnameAssociationParam struct {
+	Hostnames param.Field[[]HostnameAssociationParam] `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
 	// to your active Cloudflare Managed CA.
 	MTLSCertificateID param.Field[string] `json:"mtls_certificate_id"`
 }
 
-func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r TLSHostnameAssociationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type HostnameAssociationUpdateResponse struct {
+	Hostnames []HostnameAssociation                 `json:"hostnames"`
+	JSON      hostnameAssociationUpdateResponseJSON `json:"-"`
+}
+
+// hostnameAssociationUpdateResponseJSON contains the JSON metadata for the struct
+// [HostnameAssociationUpdateResponse]
+type hostnameAssociationUpdateResponseJSON struct {
+	Hostnames   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameAssociationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameAssociationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type HostnameAssociationGetResponse struct {
+	Hostnames []HostnameAssociation              `json:"hostnames"`
+	JSON      hostnameAssociationGetResponseJSON `json:"-"`
+}
+
+// hostnameAssociationGetResponseJSON contains the JSON metadata for the struct
+// [HostnameAssociationGetResponse]
+type hostnameAssociationGetResponseJSON struct {
+	Hostnames   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameAssociationGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameAssociationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type HostnameAssociationUpdateParams struct {
+	// Identifier
+	ZoneID                 param.Field[string]         `path:"zone_id,required"`
+	TLSHostnameAssociation TLSHostnameAssociationParam `json:"tls_hostname_association,required"`
+}
+
+func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.TLSHostnameAssociation)
+}
+
 type HostnameAssociationUpdateResponseEnvelope struct {
-	Errors   []HostnameAssociationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameAssociationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSHostnameAssociation                              `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   HostnameAssociationUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameAssociationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -124,52 +153,6 @@ func (r *HostnameAssociationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r hostnameAssociationUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    hostnameAssociationUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameAssociationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [HostnameAssociationUpdateResponseEnvelopeErrors]
-type hostnameAssociationUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAssociationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameAssociationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    hostnameAssociationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameAssociationUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [HostnameAssociationUpdateResponseEnvelopeMessages]
-type hostnameAssociationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAssociationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameAssociationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -201,15 +184,15 @@ type HostnameAssociationGetParams struct {
 // `url.Values`.
 func (r HostnameAssociationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
 type HostnameAssociationGetResponseEnvelope struct {
-	Errors   []HostnameAssociationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameAssociationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSHostnameAssociation                           `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   HostnameAssociationGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameAssociationGetResponseEnvelopeJSON    `json:"-"`
@@ -231,52 +214,6 @@ func (r *HostnameAssociationGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r hostnameAssociationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    hostnameAssociationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameAssociationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [HostnameAssociationGetResponseEnvelopeErrors]
-type hostnameAssociationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAssociationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameAssociationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    hostnameAssociationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameAssociationGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [HostnameAssociationGetResponseEnvelopeMessages]
-type hostnameAssociationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAssociationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameAssociationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

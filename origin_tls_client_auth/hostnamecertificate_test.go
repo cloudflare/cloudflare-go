@@ -87,6 +87,7 @@ func TestHostnameCertificateDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		origin_tls_client_auth.HostnameCertificateDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {

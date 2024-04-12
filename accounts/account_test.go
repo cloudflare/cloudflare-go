@@ -30,12 +30,14 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.Update(context.TODO(), accounts.AccountUpdateParams{
 		AccountID: cloudflare.F[any](map[string]interface{}{}),
-		Name:      cloudflare.F("Demo Account"),
-		Settings: cloudflare.F(accounts.AccountUpdateParamsSettings{
-			DefaultNameservers:          cloudflare.F(accounts.AccountUpdateParamsSettingsDefaultNameserversCloudflareStandard),
-			EnforceTwofactor:            cloudflare.F(true),
-			UseAccountCustomNSByDefault: cloudflare.F(true),
-		}),
+		Account: accounts.AccountParam{
+			Name: cloudflare.F("Demo Account"),
+			Settings: cloudflare.F(accounts.AccountSettingsParam{
+				DefaultNameservers:          cloudflare.F(accounts.AccountSettingsDefaultNameserversCloudflareStandard),
+				EnforceTwofactor:            cloudflare.F(true),
+				UseAccountCustomNSByDefault: cloudflare.F(true),
+			}),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,6 +64,7 @@ func TestAccountListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.List(context.TODO(), accounts.AccountListParams{
 		Direction: cloudflare.F(accounts.AccountListParamsDirectionDesc),
+		Name:      cloudflare.F("example.com"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 	})

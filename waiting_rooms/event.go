@@ -6,9 +6,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -40,11 +42,11 @@ func NewEventService(opts ...option.RequestOption) (r *EventService) {
 // some of the properties in the event's configuration may either override or
 // inherit from the waiting room's configuration. Note that events cannot overlap
 // with each other, so only one event can be active at a time.
-func (r *EventService) New(ctx context.Context, zoneIdentifier string, waitingRoomID string, body EventNewParams, opts ...option.RequestOption) (res *WaitingroomEvent, err error) {
+func (r *EventService) New(ctx context.Context, waitingRoomID string, params EventNewParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", zoneIdentifier, waitingRoomID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", params.ZoneID, waitingRoomID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -53,11 +55,11 @@ func (r *EventService) New(ctx context.Context, zoneIdentifier string, waitingRo
 }
 
 // Updates a configured event for a waiting room.
-func (r *EventService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, body EventUpdateParams, opts ...option.RequestOption) (res *WaitingroomEvent, err error) {
+func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID string, params EventUpdateParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", zoneIdentifier, waitingRoomID, eventID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,12 +68,12 @@ func (r *EventService) Update(ctx context.Context, zoneIdentifier string, waitin
 }
 
 // Lists events for a waiting room.
-func (r *EventService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingroomEvent], err error) {
+func (r *EventService) List(ctx context.Context, waitingRoomID string, params EventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Event], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", zoneIdentifier, waitingRoomID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", params.ZoneID, waitingRoomID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,15 +86,15 @@ func (r *EventService) List(ctx context.Context, zoneIdentifier string, waitingR
 }
 
 // Lists events for a waiting room.
-func (r *EventService) ListAutoPaging(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingroomEvent] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, waitingRoomID, opts...))
+func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string, params EventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Event] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, waitingRoomID, params, opts...))
 }
 
 // Deletes an event for a waiting room.
-func (r *EventService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
+func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID string, params EventDeleteParams, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", zoneIdentifier, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -102,11 +104,11 @@ func (r *EventService) Delete(ctx context.Context, zoneIdentifier string, waitin
 }
 
 // Patches a configured event for a waiting room.
-func (r *EventService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, body EventEditParams, opts ...option.RequestOption) (res *WaitingroomEvent, err error) {
+func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID string, params EventEditParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", zoneIdentifier, waitingRoomID, eventID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -115,10 +117,10 @@ func (r *EventService) Edit(ctx context.Context, zoneIdentifier string, waitingR
 }
 
 // Fetches a single configured event for a waiting room.
-func (r *EventService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, opts ...option.RequestOption) (res *WaitingroomEvent, err error) {
+func (r *EventService) Get(ctx context.Context, waitingRoomID string, eventID string, query EventGetParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", zoneIdentifier, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", query.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -127,7 +129,7 @@ func (r *EventService) Get(ctx context.Context, zoneIdentifier string, waitingRo
 	return
 }
 
-type WaitingroomEvent struct {
+type Event struct {
 	ID        string    `json:"id"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// If set, the event will override the waiting room's `custom_page_html` property
@@ -175,13 +177,12 @@ type WaitingroomEvent struct {
 	// If set, the event will override the waiting room's `total_active_users` property
 	// while it is active. If null, the event will inherit it. This can only be set if
 	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64                `json:"total_active_users,nullable"`
-	JSON             waitingroomEventJSON `json:"-"`
+	TotalActiveUsers int64     `json:"total_active_users,nullable"`
+	JSON             eventJSON `json:"-"`
 }
 
-// waitingroomEventJSON contains the JSON metadata for the struct
-// [WaitingroomEvent]
-type waitingroomEventJSON struct {
+// eventJSON contains the JSON metadata for the struct [Event]
+type eventJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
 	CustomPageHTML        apijson.Field
@@ -202,11 +203,11 @@ type waitingroomEventJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *WaitingroomEvent) UnmarshalJSON(data []byte) (err error) {
+func (r *Event) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r waitingroomEventJSON) RawJSON() string {
+func (r eventJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -232,66 +233,30 @@ func (r eventDeleteResponseJSON) RawJSON() string {
 }
 
 type EventNewParams struct {
-	// An ISO 8601 timestamp that marks the end of the event.
-	EventEndTime param.Field[string] `json:"event_end_time,required"`
-	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
-	// users will be processed with the event's configuration. The start time must be
-	// at least one minute before `event_end_time`.
-	EventStartTime param.Field[string] `json:"event_start_time,required"`
-	// A unique name to identify the event. Only alphanumeric characters, hyphens and
-	// underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
-	// If set, the event will override the waiting room's `custom_page_html` property
-	// while it is active. If null, the event will inherit it.
-	CustomPageHTML param.Field[string] `json:"custom_page_html"`
-	// A note that you can use to add more details about the event.
-	Description param.Field[string] `json:"description"`
-	// If set, the event will override the waiting room's `disable_session_renewal`
-	// property while it is active. If null, the event will inherit it.
-	DisableSessionRenewal param.Field[bool] `json:"disable_session_renewal"`
-	// If set, the event will override the waiting room's `new_users_per_minute`
-	// property while it is active. If null, the event will inherit it. This can only
-	// be set if the event's `total_active_users` property is also set.
-	NewUsersPerMinute param.Field[int64] `json:"new_users_per_minute"`
-	// An ISO 8601 timestamp that marks when to begin queueing all users before the
-	// event starts. The prequeue must start at least five minutes before
-	// `event_start_time`.
-	PrequeueStartTime param.Field[string] `json:"prequeue_start_time"`
-	// If set, the event will override the waiting room's `queueing_method` property
-	// while it is active. If null, the event will inherit it.
-	QueueingMethod param.Field[string] `json:"queueing_method"`
-	// If set, the event will override the waiting room's `session_duration` property
-	// while it is active. If null, the event will inherit it.
-	SessionDuration param.Field[int64] `json:"session_duration"`
-	// If enabled, users in the prequeue will be shuffled randomly at the
-	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
-	// useful for situations when many users will join the event prequeue at the same
-	// time and you want to shuffle them to ensure fairness. Naturally, it makes the
-	// most sense to enable this feature when the `queueing_method` during the event
-	// respects ordering such as **fifo**, or else the shuffling may be unnecessary.
-	ShuffleAtEventStart param.Field[bool] `json:"shuffle_at_event_start"`
-	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
-	// will be handled based on the waiting room configuration.
-	Suspended param.Field[bool] `json:"suspended"`
-	// If set, the event will override the waiting room's `total_active_users` property
-	// while it is active. If null, the event will inherit it. This can only be set if
-	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers param.Field[int64] `json:"total_active_users"`
+	// Identifier
+	ZoneID     param.Field[string] `path:"zone_id,required"`
+	EventQuery EventQueryParam     `json:"event_query,required"`
 }
 
 func (r EventNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.EventQuery)
 }
 
 type EventNewResponseEnvelope struct {
-	Result WaitingroomEvent             `json:"result,required"`
-	JSON   eventNewResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                  `json:"errors,required"`
+	Messages interface{}                  `json:"messages,required"`
+	Result   Event                        `json:"result,required"`
+	Success  interface{}                  `json:"success,required"`
+	JSON     eventNewResponseEnvelopeJSON `json:"-"`
 }
 
 // eventNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventNewResponseEnvelope]
 type eventNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -305,66 +270,30 @@ func (r eventNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EventUpdateParams struct {
-	// An ISO 8601 timestamp that marks the end of the event.
-	EventEndTime param.Field[string] `json:"event_end_time,required"`
-	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
-	// users will be processed with the event's configuration. The start time must be
-	// at least one minute before `event_end_time`.
-	EventStartTime param.Field[string] `json:"event_start_time,required"`
-	// A unique name to identify the event. Only alphanumeric characters, hyphens and
-	// underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
-	// If set, the event will override the waiting room's `custom_page_html` property
-	// while it is active. If null, the event will inherit it.
-	CustomPageHTML param.Field[string] `json:"custom_page_html"`
-	// A note that you can use to add more details about the event.
-	Description param.Field[string] `json:"description"`
-	// If set, the event will override the waiting room's `disable_session_renewal`
-	// property while it is active. If null, the event will inherit it.
-	DisableSessionRenewal param.Field[bool] `json:"disable_session_renewal"`
-	// If set, the event will override the waiting room's `new_users_per_minute`
-	// property while it is active. If null, the event will inherit it. This can only
-	// be set if the event's `total_active_users` property is also set.
-	NewUsersPerMinute param.Field[int64] `json:"new_users_per_minute"`
-	// An ISO 8601 timestamp that marks when to begin queueing all users before the
-	// event starts. The prequeue must start at least five minutes before
-	// `event_start_time`.
-	PrequeueStartTime param.Field[string] `json:"prequeue_start_time"`
-	// If set, the event will override the waiting room's `queueing_method` property
-	// while it is active. If null, the event will inherit it.
-	QueueingMethod param.Field[string] `json:"queueing_method"`
-	// If set, the event will override the waiting room's `session_duration` property
-	// while it is active. If null, the event will inherit it.
-	SessionDuration param.Field[int64] `json:"session_duration"`
-	// If enabled, users in the prequeue will be shuffled randomly at the
-	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
-	// useful for situations when many users will join the event prequeue at the same
-	// time and you want to shuffle them to ensure fairness. Naturally, it makes the
-	// most sense to enable this feature when the `queueing_method` during the event
-	// respects ordering such as **fifo**, or else the shuffling may be unnecessary.
-	ShuffleAtEventStart param.Field[bool] `json:"shuffle_at_event_start"`
-	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
-	// will be handled based on the waiting room configuration.
-	Suspended param.Field[bool] `json:"suspended"`
-	// If set, the event will override the waiting room's `total_active_users` property
-	// while it is active. If null, the event will inherit it. This can only be set if
-	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers param.Field[int64] `json:"total_active_users"`
+	// Identifier
+	ZoneID     param.Field[string] `path:"zone_id,required"`
+	EventQuery EventQueryParam     `json:"event_query,required"`
 }
 
 func (r EventUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.EventQuery)
 }
 
 type EventUpdateResponseEnvelope struct {
-	Result WaitingroomEvent                `json:"result,required"`
-	JSON   eventUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                     `json:"errors,required"`
+	Messages interface{}                     `json:"messages,required"`
+	Result   Event                           `json:"result,required"`
+	Success  interface{}                     `json:"success,required"`
+	JSON     eventUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // eventUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventUpdateResponseEnvelope]
 type eventUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -377,15 +306,48 @@ func (r eventUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type EventListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Page number of paginated results.
+	Page param.Field[interface{}] `query:"page"`
+	// Maximum number of results per page. Must be a multiple of 5.
+	PerPage param.Field[interface{}] `query:"per_page"`
+}
+
+// URLQuery serializes [EventListParams]'s query parameters as `url.Values`.
+func (r EventListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type EventDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r EventDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
 type EventDeleteResponseEnvelope struct {
-	Result EventDeleteResponse             `json:"result,required"`
-	JSON   eventDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                     `json:"errors,required"`
+	Messages interface{}                     `json:"messages,required"`
+	Result   EventDeleteResponse             `json:"result,required"`
+	Success  interface{}                     `json:"success,required"`
+	JSON     eventDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // eventDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventDeleteResponseEnvelope]
 type eventDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -399,66 +361,30 @@ func (r eventDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EventEditParams struct {
-	// An ISO 8601 timestamp that marks the end of the event.
-	EventEndTime param.Field[string] `json:"event_end_time,required"`
-	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
-	// users will be processed with the event's configuration. The start time must be
-	// at least one minute before `event_end_time`.
-	EventStartTime param.Field[string] `json:"event_start_time,required"`
-	// A unique name to identify the event. Only alphanumeric characters, hyphens and
-	// underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
-	// If set, the event will override the waiting room's `custom_page_html` property
-	// while it is active. If null, the event will inherit it.
-	CustomPageHTML param.Field[string] `json:"custom_page_html"`
-	// A note that you can use to add more details about the event.
-	Description param.Field[string] `json:"description"`
-	// If set, the event will override the waiting room's `disable_session_renewal`
-	// property while it is active. If null, the event will inherit it.
-	DisableSessionRenewal param.Field[bool] `json:"disable_session_renewal"`
-	// If set, the event will override the waiting room's `new_users_per_minute`
-	// property while it is active. If null, the event will inherit it. This can only
-	// be set if the event's `total_active_users` property is also set.
-	NewUsersPerMinute param.Field[int64] `json:"new_users_per_minute"`
-	// An ISO 8601 timestamp that marks when to begin queueing all users before the
-	// event starts. The prequeue must start at least five minutes before
-	// `event_start_time`.
-	PrequeueStartTime param.Field[string] `json:"prequeue_start_time"`
-	// If set, the event will override the waiting room's `queueing_method` property
-	// while it is active. If null, the event will inherit it.
-	QueueingMethod param.Field[string] `json:"queueing_method"`
-	// If set, the event will override the waiting room's `session_duration` property
-	// while it is active. If null, the event will inherit it.
-	SessionDuration param.Field[int64] `json:"session_duration"`
-	// If enabled, users in the prequeue will be shuffled randomly at the
-	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
-	// useful for situations when many users will join the event prequeue at the same
-	// time and you want to shuffle them to ensure fairness. Naturally, it makes the
-	// most sense to enable this feature when the `queueing_method` during the event
-	// respects ordering such as **fifo**, or else the shuffling may be unnecessary.
-	ShuffleAtEventStart param.Field[bool] `json:"shuffle_at_event_start"`
-	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
-	// will be handled based on the waiting room configuration.
-	Suspended param.Field[bool] `json:"suspended"`
-	// If set, the event will override the waiting room's `total_active_users` property
-	// while it is active. If null, the event will inherit it. This can only be set if
-	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers param.Field[int64] `json:"total_active_users"`
+	// Identifier
+	ZoneID     param.Field[string] `path:"zone_id,required"`
+	EventQuery EventQueryParam     `json:"event_query,required"`
 }
 
 func (r EventEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.EventQuery)
 }
 
 type EventEditResponseEnvelope struct {
-	Result WaitingroomEvent              `json:"result,required"`
-	JSON   eventEditResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                   `json:"errors,required"`
+	Messages interface{}                   `json:"messages,required"`
+	Result   Event                         `json:"result,required"`
+	Success  interface{}                   `json:"success,required"`
+	JSON     eventEditResponseEnvelopeJSON `json:"-"`
 }
 
 // eventEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventEditResponseEnvelope]
 type eventEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -471,15 +397,26 @@ func (r eventEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type EventGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type EventGetResponseEnvelope struct {
-	Result WaitingroomEvent             `json:"result,required"`
-	JSON   eventGetResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                  `json:"errors,required"`
+	Messages interface{}                  `json:"messages,required"`
+	Result   Event                        `json:"result,required"`
+	Success  interface{}                  `json:"success,required"`
+	JSON     eventGetResponseEnvelopeJSON `json:"-"`
 }
 
 // eventGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventGetResponseEnvelope]
 type eventGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/subscriptions"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 func TestSubscriptionNewWithOptionalParams(t *testing.T) {
@@ -32,36 +33,38 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		subscriptions.SubscriptionNewParams{
-			App: cloudflare.F(subscriptions.SubscriptionNewParamsApp{
-				InstallID: cloudflare.F("string"),
-			}),
-			ComponentValues: cloudflare.F([]subscriptions.SubscriptionNewParamsComponentValue{{
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}}),
-			Frequency: cloudflare.F(subscriptions.SubscriptionNewParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(subscriptions.SubscriptionNewParamsRatePlan{
-				Currency:          cloudflare.F("USD"),
-				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F("free"),
-				IsContract:        cloudflare.F(false),
-				PublicName:        cloudflare.F("Business Plan"),
-				Scope:             cloudflare.F("zone"),
-				Sets:              cloudflare.F([]string{"string", "string", "string"}),
-			}),
-			Zone: cloudflare.F(subscriptions.SubscriptionNewParamsZone{}),
+			Subscription: user.SubscriptionParam{
+				App: cloudflare.F(user.SubscriptionAppParam{
+					InstallID: cloudflare.F("string"),
+				}),
+				ComponentValues: cloudflare.F([]user.SubscriptionComponentParam{{
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}, {
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}, {
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}}),
+				Frequency: cloudflare.F(user.SubscriptionFrequencyMonthly),
+				RatePlan: cloudflare.F(user.RatePlanParam{
+					Currency:          cloudflare.F("USD"),
+					ExternallyManaged: cloudflare.F(false),
+					ID:                cloudflare.F("free"),
+					IsContract:        cloudflare.F(false),
+					PublicName:        cloudflare.F("Business Plan"),
+					Scope:             cloudflare.F("zone"),
+					Sets:              cloudflare.F([]string{"string", "string", "string"}),
+				}),
+				Zone: cloudflare.F(user.SubscriptionZoneParam{}),
+			},
 		},
 	)
 	if err != nil {
@@ -92,36 +95,38 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		subscriptions.SubscriptionUpdateParams{
-			App: cloudflare.F(subscriptions.SubscriptionUpdateParamsApp{
-				InstallID: cloudflare.F("string"),
-			}),
-			ComponentValues: cloudflare.F([]subscriptions.SubscriptionUpdateParamsComponentValue{{
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}}),
-			Frequency: cloudflare.F(subscriptions.SubscriptionUpdateParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(subscriptions.SubscriptionUpdateParamsRatePlan{
-				Currency:          cloudflare.F("USD"),
-				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F("free"),
-				IsContract:        cloudflare.F(false),
-				PublicName:        cloudflare.F("Business Plan"),
-				Scope:             cloudflare.F("zone"),
-				Sets:              cloudflare.F([]string{"string", "string", "string"}),
-			}),
-			Zone: cloudflare.F(subscriptions.SubscriptionUpdateParamsZone{}),
+			Subscription: user.SubscriptionParam{
+				App: cloudflare.F(user.SubscriptionAppParam{
+					InstallID: cloudflare.F("string"),
+				}),
+				ComponentValues: cloudflare.F([]user.SubscriptionComponentParam{{
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}, {
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}, {
+					Default: cloudflare.F(5.000000),
+					Name:    cloudflare.F("page_rules"),
+					Price:   cloudflare.F(5.000000),
+					Value:   cloudflare.F(20.000000),
+				}}),
+				Frequency: cloudflare.F(user.SubscriptionFrequencyMonthly),
+				RatePlan: cloudflare.F(user.RatePlanParam{
+					Currency:          cloudflare.F("USD"),
+					ExternallyManaged: cloudflare.F(false),
+					ID:                cloudflare.F("free"),
+					IsContract:        cloudflare.F(false),
+					PublicName:        cloudflare.F("Business Plan"),
+					Scope:             cloudflare.F("zone"),
+					Sets:              cloudflare.F([]string{"string", "string", "string"}),
+				}),
+				Zone: cloudflare.F(user.SubscriptionZoneParam{}),
+			},
 		},
 	)
 	if err != nil {
@@ -175,6 +180,9 @@ func TestSubscriptionDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"506e3185e9c882d175a2d0cb0093d9f2",
+		subscriptions.SubscriptionDeleteParams{
+			Body: map[string]interface{}{},
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

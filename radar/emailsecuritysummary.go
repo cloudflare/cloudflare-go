@@ -151,9 +151,9 @@ func (r *EmailSecuritySummaryService) TLSVersion(ctx context.Context, query Emai
 }
 
 type EmailSecuritySummaryARCResponse struct {
-	Meta     EmailSecuritySummaryARCResponseMeta     `json:"meta,required"`
-	Summary0 EmailSecuritySummaryARCResponseSummary0 `json:"summary_0,required"`
-	JSON     emailSecuritySummaryARCResponseJSON     `json:"-"`
+	Meta     EmailSecuritySummaryARCResponseMeta `json:"meta,required"`
+	Summary0 RadarEmailSummary                   `json:"summary_0,required"`
+	JSON     emailSecuritySummaryARCResponseJSON `json:"-"`
 }
 
 // emailSecuritySummaryARCResponseJSON contains the JSON metadata for the struct
@@ -282,35 +282,10 @@ func (r emailSecuritySummaryARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON
 	return r.raw
 }
 
-type EmailSecuritySummaryARCResponseSummary0 struct {
-	Fail string                                      `json:"FAIL,required"`
-	None string                                      `json:"NONE,required"`
-	Pass string                                      `json:"PASS,required"`
-	JSON emailSecuritySummaryARCResponseSummary0JSON `json:"-"`
-}
-
-// emailSecuritySummaryARCResponseSummary0JSON contains the JSON metadata for the
-// struct [EmailSecuritySummaryARCResponseSummary0]
-type emailSecuritySummaryARCResponseSummary0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailSecuritySummaryARCResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailSecuritySummaryARCResponseSummary0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailSecuritySummaryDKIMResponse struct {
-	Meta     EmailSecuritySummaryDKIMResponseMeta     `json:"meta,required"`
-	Summary0 EmailSecuritySummaryDKIMResponseSummary0 `json:"summary_0,required"`
-	JSON     emailSecuritySummaryDKIMResponseJSON     `json:"-"`
+	Meta     EmailSecuritySummaryDKIMResponseMeta `json:"meta,required"`
+	Summary0 RadarEmailSummary                    `json:"summary_0,required"`
+	JSON     emailSecuritySummaryDKIMResponseJSON `json:"-"`
 }
 
 // emailSecuritySummaryDKIMResponseJSON contains the JSON metadata for the struct
@@ -439,35 +414,10 @@ func (r emailSecuritySummaryDKIMResponseMetaConfidenceInfoAnnotationJSON) RawJSO
 	return r.raw
 }
 
-type EmailSecuritySummaryDKIMResponseSummary0 struct {
-	Fail string                                       `json:"FAIL,required"`
-	None string                                       `json:"NONE,required"`
-	Pass string                                       `json:"PASS,required"`
-	JSON emailSecuritySummaryDKIMResponseSummary0JSON `json:"-"`
-}
-
-// emailSecuritySummaryDKIMResponseSummary0JSON contains the JSON metadata for the
-// struct [EmailSecuritySummaryDKIMResponseSummary0]
-type emailSecuritySummaryDKIMResponseSummary0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailSecuritySummaryDKIMResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailSecuritySummaryDKIMResponseSummary0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailSecuritySummaryDMARCResponse struct {
-	Meta     EmailSecuritySummaryDMARCResponseMeta     `json:"meta,required"`
-	Summary0 EmailSecuritySummaryDMARCResponseSummary0 `json:"summary_0,required"`
-	JSON     emailSecuritySummaryDMARCResponseJSON     `json:"-"`
+	Meta     EmailSecuritySummaryDMARCResponseMeta `json:"meta,required"`
+	Summary0 RadarEmailSummary                     `json:"summary_0,required"`
+	JSON     emailSecuritySummaryDMARCResponseJSON `json:"-"`
 }
 
 // emailSecuritySummaryDMARCResponseJSON contains the JSON metadata for the struct
@@ -593,31 +543,6 @@ func (r *EmailSecuritySummaryDMARCResponseMetaConfidenceInfoAnnotation) Unmarsha
 }
 
 func (r emailSecuritySummaryDMARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailSecuritySummaryDMARCResponseSummary0 struct {
-	Fail string                                        `json:"FAIL,required"`
-	None string                                        `json:"NONE,required"`
-	Pass string                                        `json:"PASS,required"`
-	JSON emailSecuritySummaryDMARCResponseSummary0JSON `json:"-"`
-}
-
-// emailSecuritySummaryDMARCResponseSummary0JSON contains the JSON metadata for the
-// struct [EmailSecuritySummaryDMARCResponseSummary0]
-type emailSecuritySummaryDMARCResponseSummary0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailSecuritySummaryDMARCResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailSecuritySummaryDMARCResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -933,9 +858,9 @@ func (r emailSecuritySummarySpamResponseSummary0JSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySPFResponse struct {
-	Meta     EmailSecuritySummarySPFResponseMeta     `json:"meta,required"`
-	Summary0 EmailSecuritySummarySPFResponseSummary0 `json:"summary_0,required"`
-	JSON     emailSecuritySummarySPFResponseJSON     `json:"-"`
+	Meta     EmailSecuritySummarySPFResponseMeta `json:"meta,required"`
+	Summary0 RadarEmailSummary                   `json:"summary_0,required"`
+	JSON     emailSecuritySummarySPFResponseJSON `json:"-"`
 }
 
 // emailSecuritySummarySPFResponseJSON contains the JSON metadata for the struct
@@ -1061,31 +986,6 @@ func (r *EmailSecuritySummarySPFResponseMetaConfidenceInfoAnnotation) UnmarshalJ
 }
 
 func (r emailSecuritySummarySPFResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailSecuritySummarySPFResponseSummary0 struct {
-	Fail string                                      `json:"FAIL,required"`
-	None string                                      `json:"NONE,required"`
-	Pass string                                      `json:"PASS,required"`
-	JSON emailSecuritySummarySPFResponseSummary0JSON `json:"-"`
-}
-
-// emailSecuritySummarySPFResponseSummary0JSON contains the JSON metadata for the
-// struct [EmailSecuritySummarySPFResponseSummary0]
-type emailSecuritySummarySPFResponseSummary0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailSecuritySummarySPFResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailSecuritySummarySPFResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1592,7 +1492,7 @@ type EmailSecuritySummaryARCParams struct {
 // `url.Values`.
 func (r EmailSecuritySummaryARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1756,7 +1656,7 @@ type EmailSecuritySummaryDKIMParams struct {
 // `url.Values`.
 func (r EmailSecuritySummaryDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1920,7 +1820,7 @@ type EmailSecuritySummaryDMARCParams struct {
 // `url.Values`.
 func (r EmailSecuritySummaryDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2086,7 +1986,7 @@ type EmailSecuritySummaryMaliciousParams struct {
 // `url.Values`.
 func (r EmailSecuritySummaryMaliciousParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2268,7 +2168,7 @@ type EmailSecuritySummarySpamParams struct {
 // `url.Values`.
 func (r EmailSecuritySummarySpamParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2448,7 +2348,7 @@ type EmailSecuritySummarySPFParams struct {
 // `url.Values`.
 func (r EmailSecuritySummarySPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2614,7 +2514,7 @@ type EmailSecuritySummarySpoofParams struct {
 // `url.Values`.
 func (r EmailSecuritySummarySpoofParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2796,7 +2696,7 @@ type EmailSecuritySummaryThreatCategoryParams struct {
 // parameters as `url.Values`.
 func (r EmailSecuritySummaryThreatCategoryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2976,7 +2876,7 @@ type EmailSecuritySummaryTLSVersionParams struct {
 // `url.Values`.
 func (r EmailSecuritySummaryTLSVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

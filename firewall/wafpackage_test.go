@@ -34,6 +34,7 @@ func TestWAFPackageListWithOptionalParams(t *testing.T) {
 		firewall.WAFPackageListParams{
 			Direction: cloudflare.F(firewall.WAFPackageListParamsDirectionDesc),
 			Match:     cloudflare.F(firewall.WAFPackageListParamsMatchAny),
+			Name:      cloudflare.F("USER"),
 			Order:     cloudflare.F(firewall.WAFPackageListParamsOrderName),
 			Page:      cloudflare.F(1.000000),
 			PerPage:   cloudflare.F(5.000000),
@@ -65,7 +66,7 @@ func TestWAFPackageGet(t *testing.T) {
 	_, err := client.Firewall.WAF.Packages.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"a25a9a7e9c00afc1fb2e0245519d725b",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

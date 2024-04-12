@@ -408,7 +408,7 @@ type AttackLayer3TopLocationOriginParams struct {
 // `url.Values`.
 func (r AttackLayer3TopLocationOriginParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -476,14 +476,14 @@ type AttackLayer3TopLocationOriginParamsProtocol string
 
 const (
 	AttackLayer3TopLocationOriginParamsProtocolUdp  AttackLayer3TopLocationOriginParamsProtocol = "UDP"
-	AttackLayer3TopLocationOriginParamsProtocolTcp  AttackLayer3TopLocationOriginParamsProtocol = "TCP"
+	AttackLayer3TopLocationOriginParamsProtocolTCP  AttackLayer3TopLocationOriginParamsProtocol = "TCP"
 	AttackLayer3TopLocationOriginParamsProtocolIcmp AttackLayer3TopLocationOriginParamsProtocol = "ICMP"
 	AttackLayer3TopLocationOriginParamsProtocolGRE  AttackLayer3TopLocationOriginParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TopLocationOriginParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopLocationOriginParamsProtocolUdp, AttackLayer3TopLocationOriginParamsProtocolTcp, AttackLayer3TopLocationOriginParamsProtocolIcmp, AttackLayer3TopLocationOriginParamsProtocolGRE:
+	case AttackLayer3TopLocationOriginParamsProtocolUdp, AttackLayer3TopLocationOriginParamsProtocolTCP, AttackLayer3TopLocationOriginParamsProtocolIcmp, AttackLayer3TopLocationOriginParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -545,7 +545,7 @@ type AttackLayer3TopLocationTargetParams struct {
 // `url.Values`.
 func (r AttackLayer3TopLocationTargetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -613,14 +613,14 @@ type AttackLayer3TopLocationTargetParamsProtocol string
 
 const (
 	AttackLayer3TopLocationTargetParamsProtocolUdp  AttackLayer3TopLocationTargetParamsProtocol = "UDP"
-	AttackLayer3TopLocationTargetParamsProtocolTcp  AttackLayer3TopLocationTargetParamsProtocol = "TCP"
+	AttackLayer3TopLocationTargetParamsProtocolTCP  AttackLayer3TopLocationTargetParamsProtocol = "TCP"
 	AttackLayer3TopLocationTargetParamsProtocolIcmp AttackLayer3TopLocationTargetParamsProtocol = "ICMP"
 	AttackLayer3TopLocationTargetParamsProtocolGRE  AttackLayer3TopLocationTargetParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TopLocationTargetParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopLocationTargetParamsProtocolUdp, AttackLayer3TopLocationTargetParamsProtocolTcp, AttackLayer3TopLocationTargetParamsProtocolIcmp, AttackLayer3TopLocationTargetParamsProtocolGRE:
+	case AttackLayer3TopLocationTargetParamsProtocolUdp, AttackLayer3TopLocationTargetParamsProtocolTCP, AttackLayer3TopLocationTargetParamsProtocolIcmp, AttackLayer3TopLocationTargetParamsProtocolGRE:
 		return true
 	}
 	return false

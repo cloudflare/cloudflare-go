@@ -32,7 +32,7 @@ func TestDirectUploadNewWithOptionalParams(t *testing.T) {
 	_, err := client.Stream.DirectUpload.New(context.TODO(), stream.DirectUploadNewParams{
 		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		MaxDurationSeconds: cloudflare.F(int64(1)),
-		AllowedOrigins:     cloudflare.F([]string{"example.com"}),
+		AllowedOrigins:     cloudflare.F([]stream.AllowedOriginsParam{"example.com"}),
 		Creator:            cloudflare.F("creator-id_abcde12345"),
 		Expiry:             cloudflare.F(time.Now()),
 		Meta: cloudflare.F[any](map[string]interface{}{
@@ -42,7 +42,7 @@ func TestDirectUploadNewWithOptionalParams(t *testing.T) {
 		ScheduledDeletion:     cloudflare.F(time.Now()),
 		ThumbnailTimestampPct: cloudflare.F(0.529241),
 		Watermark: cloudflare.F(stream.DirectUploadNewParamsWatermark{
-			Uid: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
+			UID: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 		}),
 		UploadCreator: cloudflare.F("creator-id_abcde12345"),
 	})

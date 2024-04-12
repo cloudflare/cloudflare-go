@@ -10,6 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/logpush"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +36,7 @@ func NewDLPPatternService(opts ...option.RequestOption) (r *DLPPatternService) {
 // regular expression is too complex or can match an unbounded-length string. Your
 // regex will be rejected if it uses the Kleene Star -- be sure to bound the
 // maximum number of characters that can be matched.
-func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *DLPPatternValidateResponse, err error) {
+func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *logpush.OwnershipValidation, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPPatternValidateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/patterns/validate", params.AccountID)
@@ -44,27 +46,6 @@ func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValid
 	}
 	res = &env.Result
 	return
-}
-
-type DLPPatternValidateResponse struct {
-	Valid bool                           `json:"valid"`
-	JSON  dlpPatternValidateResponseJSON `json:"-"`
-}
-
-// dlpPatternValidateResponseJSON contains the JSON metadata for the struct
-// [DLPPatternValidateResponse]
-type dlpPatternValidateResponseJSON struct {
-	Valid       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPPatternValidateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpPatternValidateResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type DLPPatternValidateParams struct {
@@ -79,9 +60,9 @@ func (r DLPPatternValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPatternValidateResponseEnvelope struct {
-	Errors   []DLPPatternValidateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPPatternValidateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DLPPatternValidateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   logpush.OwnershipValidation `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DLPPatternValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpPatternValidateResponseEnvelopeJSON    `json:"-"`
@@ -103,52 +84,6 @@ func (r *DLPPatternValidateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r dlpPatternValidateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPPatternValidateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    dlpPatternValidateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpPatternValidateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DLPPatternValidateResponseEnvelopeErrors]
-type dlpPatternValidateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPPatternValidateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpPatternValidateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPPatternValidateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    dlpPatternValidateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpPatternValidateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DLPPatternValidateResponseEnvelopeMessages]
-type dlpPatternValidateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPPatternValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpPatternValidateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

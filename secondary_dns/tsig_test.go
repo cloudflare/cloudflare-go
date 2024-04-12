@@ -30,9 +30,11 @@ func TestTSIGNew(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.TSIGs.New(context.TODO(), secondary_dns.TSIGNewParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		Algo:      cloudflare.F("hmac-sha512."),
-		Name:      cloudflare.F("tsig.customer.cf."),
-		Secret:    cloudflare.F("caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c"),
+		TSIG: secondary_dns.TSIGParam{
+			Algo:   cloudflare.F("hmac-sha512."),
+			Name:   cloudflare.F("tsig.customer.cf."),
+			Secret: cloudflare.F("caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c"),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,9 +64,11 @@ func TestTSIGUpdate(t *testing.T) {
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
 		secondary_dns.TSIGUpdateParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			Algo:      cloudflare.F("hmac-sha512."),
-			Name:      cloudflare.F("tsig.customer.cf."),
-			Secret:    cloudflare.F("caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c"),
+			TSIG: secondary_dns.TSIGParam{
+				Algo:   cloudflare.F("hmac-sha512."),
+				Name:   cloudflare.F("tsig.customer.cf."),
+				Secret: cloudflare.F("caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c"),
+			},
 		},
 	)
 	if err != nil {
@@ -121,6 +125,7 @@ func TestTSIGDelete(t *testing.T) {
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
 		secondary_dns.TSIGDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

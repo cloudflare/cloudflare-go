@@ -3,6 +3,7 @@
 package radar
 
 import (
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -25,4 +26,54 @@ func NewEmailService(opts ...option.RequestOption) (r *EmailService) {
 	r.Routing = NewEmailRoutingService(opts...)
 	r.Security = NewEmailSecurityService(opts...)
 	return
+}
+
+type RadarEmailSeries struct {
+	Fail []string             `json:"FAIL,required"`
+	None []string             `json:"NONE,required"`
+	Pass []string             `json:"PASS,required"`
+	JSON radarEmailSeriesJSON `json:"-"`
+}
+
+// radarEmailSeriesJSON contains the JSON metadata for the struct
+// [RadarEmailSeries]
+type radarEmailSeriesJSON struct {
+	Fail        apijson.Field
+	None        apijson.Field
+	Pass        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSeries) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSeriesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RadarEmailSummary struct {
+	Fail string                `json:"FAIL,required"`
+	None string                `json:"NONE,required"`
+	Pass string                `json:"PASS,required"`
+	JSON radarEmailSummaryJSON `json:"-"`
+}
+
+// radarEmailSummaryJSON contains the JSON metadata for the struct
+// [RadarEmailSummary]
+type radarEmailSummaryJSON struct {
+	Fail        apijson.Field
+	None        apijson.Field
+	Pass        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSummary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSummaryJSON) RawJSON() string {
+	return r.raw
 }

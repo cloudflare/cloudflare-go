@@ -27,3 +27,20 @@ func NewAnalyticsEventService(opts ...option.RequestOption) (r *AnalyticsEventSe
 	r.Summaries = NewAnalyticsEventSummaryService(opts...)
 	return
 }
+
+type Dimension string
+
+const (
+	DimensionEvent     Dimension = "event"
+	DimensionAppID     Dimension = "appID"
+	DimensionColoName  Dimension = "coloName"
+	DimensionIPVersion Dimension = "ipVersion"
+)
+
+func (r Dimension) IsKnown() bool {
+	switch r {
+	case DimensionEvent, DimensionAppID, DimensionColoName, DimensionIPVersion:
+		return true
+	}
+	return false
+}

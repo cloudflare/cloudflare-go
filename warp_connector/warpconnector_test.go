@@ -65,6 +65,7 @@ func TestWARPConnectorListWithOptionalParams(t *testing.T) {
 		Name:          cloudflare.F("blog"),
 		Page:          cloudflare.F(1.000000),
 		PerPage:       cloudflare.F(1.000000),
+		UUID:          cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		WasActiveAt:   cloudflare.F(time.Now()),
 		WasInactiveAt: cloudflare.F(time.Now()),
 	})
@@ -96,7 +97,7 @@ func TestWARPConnectorDelete(t *testing.T) {
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		warp_connector.WARPConnectorDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

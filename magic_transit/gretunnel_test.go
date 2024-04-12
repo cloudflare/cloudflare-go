@@ -30,7 +30,7 @@ func TestGRETunnelNew(t *testing.T) {
 	)
 	_, err := client.MagicTransit.GRETunnels.New(context.TODO(), magic_transit.GRETunnelNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      cloudflare.F[any](map[string]interface{}{}),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -65,12 +65,12 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 			InterfaceAddress:      cloudflare.F("192.0.2.0/31"),
 			Name:                  cloudflare.F("GRE_1"),
 			Description:           cloudflare.F("Tunnel for ISP X"),
-			HealthCheck: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheck{
-				Direction: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckDirectionBidirectional),
+			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
+				Direction: cloudflare.F(magic_transit.HealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
-				Rate:      cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckRateLow),
+				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckTypeRequest),
+				Type:      cloudflare.F(magic_transit.HealthCheckTypeRequest),
 			}),
 			Mtu: cloudflare.F(int64(0)),
 			TTL: cloudflare.F(int64(0)),
@@ -130,6 +130,7 @@ func TestGRETunnelDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.GRETunnelDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

@@ -30,9 +30,9 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.Rules.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.RuleNewParams{
+			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Action:      cloudflare.F(waiting_rooms.RuleNewParamsActionBypassWaitingRoom),
 			Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 			Description: cloudflare.F("allow all traffic from 10.20.30.40"),
@@ -64,10 +64,10 @@ func TestRuleUpdate(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.Rules.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.RuleUpdateParams{
-			Body: cloudflare.F([]waiting_rooms.RuleUpdateParamsBody{{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body: []waiting_rooms.RuleUpdateParamsBody{{
 				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
@@ -82,7 +82,7 @@ func TestRuleUpdate(t *testing.T) {
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-			}}),
+			}},
 		},
 	)
 	if err != nil {
@@ -110,8 +110,10 @@ func TestRuleList(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.Rules.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
+		waiting_rooms.RuleListParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -138,9 +140,12 @@ func TestRuleDelete(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.Rules.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
 		"25756b2dfe6e378a06b033b670413757",
+		waiting_rooms.RuleDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:   map[string]interface{}{},
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -167,17 +172,17 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.Rules.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
 		"25756b2dfe6e378a06b033b670413757",
 		waiting_rooms.RuleEditParams{
+			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Action:      cloudflare.F(waiting_rooms.RuleEditParamsActionBypassWaitingRoom),
 			Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 			Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 			Enabled:     cloudflare.F(true),
-			Position: cloudflare.F[waiting_rooms.RuleEditParamsPosition](waiting_rooms.RuleEditParamsPositionObject(waiting_rooms.RuleEditParamsPositionObject{
+			Position: cloudflare.F[waiting_rooms.RuleEditParamsPositionUnion](waiting_rooms.RuleEditParamsPositionObject{
 				Index: cloudflare.F(int64(0)),
-			})),
+			}),
 		},
 	)
 	if err != nil {

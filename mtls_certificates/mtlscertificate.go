@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -36,7 +37,7 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 }
 
 // Upload a certificate that you want to use with mTLS-enabled Cloudflare services.
-func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateUpdate, err error) {
+func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", params.AccountID)
@@ -73,10 +74,10 @@ func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSC
 
 // Deletes the mTLS certificate unless the certificate is in use by one or more
 // Cloudflare services.
-func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
+func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, params MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", body.AccountID, mtlsCertificateID)
+	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", params.AccountID, mtlsCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -143,7 +144,7 @@ func (r mtlsCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-type MTLSCertificateUpdate struct {
+type MTLSCertificateNewResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
@@ -163,13 +164,13 @@ type MTLSCertificateUpdate struct {
 	// This is the time the certificate was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This is the time the certificate was uploaded.
-	UploadedOn time.Time                 `json:"uploaded_on" format:"date-time"`
-	JSON       mtlsCertificateUpdateJSON `json:"-"`
+	UploadedOn time.Time                      `json:"uploaded_on" format:"date-time"`
+	JSON       mtlsCertificateNewResponseJSON `json:"-"`
 }
 
-// mtlsCertificateUpdateJSON contains the JSON metadata for the struct
-// [MTLSCertificateUpdate]
-type mtlsCertificateUpdateJSON struct {
+// mtlsCertificateNewResponseJSON contains the JSON metadata for the struct
+// [MTLSCertificateNewResponse]
+type mtlsCertificateNewResponseJSON struct {
 	ID           apijson.Field
 	CA           apijson.Field
 	Certificates apijson.Field
@@ -184,11 +185,11 @@ type mtlsCertificateUpdateJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *MTLSCertificateUpdate) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r mtlsCertificateUpdateJSON) RawJSON() string {
+func (r mtlsCertificateNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -210,9 +211,9 @@ func (r MTLSCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MTLSCertificateNewResponseEnvelope struct {
-	Errors   []MTLSCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MTLSCertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   MTLSCertificateUpdate                        `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   MTLSCertificateNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -234,52 +235,6 @@ func (r *MTLSCertificateNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r mtlsCertificateNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateNewResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    mtlsCertificateNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mtlsCertificateNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MTLSCertificateNewResponseEnvelopeErrors]
-type mtlsCertificateNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateNewResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    mtlsCertificateNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mtlsCertificateNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MTLSCertificateNewResponseEnvelopeMessages]
-type mtlsCertificateNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -306,12 +261,17 @@ type MTLSCertificateListParams struct {
 type MTLSCertificateDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r MTLSCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type MTLSCertificateDeleteResponseEnvelope struct {
-	Errors   []MTLSCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MTLSCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   MTLSCertificate                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   MTLSCertificate       `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -336,52 +296,6 @@ func (r mtlsCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type MTLSCertificateDeleteResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    mtlsCertificateDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mtlsCertificateDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [MTLSCertificateDeleteResponseEnvelopeErrors]
-type mtlsCertificateDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateDeleteResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    mtlsCertificateDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mtlsCertificateDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MTLSCertificateDeleteResponseEnvelopeMessages]
-type mtlsCertificateDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type MTLSCertificateDeleteResponseEnvelopeSuccess bool
 
@@ -403,9 +317,9 @@ type MTLSCertificateGetParams struct {
 }
 
 type MTLSCertificateGetResponseEnvelope struct {
-	Errors   []MTLSCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MTLSCertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   MTLSCertificate                              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   MTLSCertificate       `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateGetResponseEnvelopeJSON    `json:"-"`
@@ -427,52 +341,6 @@ func (r *MTLSCertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r mtlsCertificateGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    mtlsCertificateGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mtlsCertificateGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MTLSCertificateGetResponseEnvelopeErrors]
-type mtlsCertificateGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    mtlsCertificateGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mtlsCertificateGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MTLSCertificateGetResponseEnvelopeMessages]
-type mtlsCertificateGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

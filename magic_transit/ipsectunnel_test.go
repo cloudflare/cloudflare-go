@@ -35,12 +35,12 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		Name:               cloudflare.F("IPsec_1"),
 		CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 		Description:        cloudflare.F("Tunnel for ISP X"),
-		HealthCheck: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheck{
-			Direction: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckDirectionBidirectional),
+		HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
+			Direction: cloudflare.F(magic_transit.HealthCheckDirectionBidirectional),
 			Enabled:   cloudflare.F(true),
-			Rate:      cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckRateLow),
+			Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 			Target:    cloudflare.F("203.0.113.1"),
-			Type:      cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckTypeRequest),
+			Type:      cloudflare.F(magic_transit.HealthCheckTypeRequest),
 		}),
 		PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 		ReplayProtection: cloudflare.F(false),
@@ -78,12 +78,12 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			Name:               cloudflare.F("IPsec_1"),
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
-			HealthCheck: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheck{
-				Direction: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional),
+			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
+				Direction: cloudflare.F(magic_transit.HealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
-				Rate:      cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckRateLow),
+				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckTypeRequest),
+				Type:      cloudflare.F(magic_transit.HealthCheckTypeRequest),
 			}),
 			PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 			ReplayProtection: cloudflare.F(false),
@@ -143,6 +143,7 @@ func TestIPSECTunnelDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.IPSECTunnelDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -203,6 +204,7 @@ func TestIPSECTunnelPSKGenerate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.IPSECTunnelPSKGenerateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

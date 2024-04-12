@@ -35,7 +35,7 @@ func NewTunnelConfigurationService(opts ...option.RequestOption) (r *TunnelConfi
 }
 
 // Adds or updates the configuration for a remotely-managed tunnel.
-func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponse, err error) {
+func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, tunnelID)
@@ -48,7 +48,7 @@ func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string
 }
 
 // Gets the configuration for a remotely-managed tunnel
-func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *TunnelConfigurationGetResponse, err error) {
+func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *TunnelConfigurationGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", query.AccountID, tunnelID)
@@ -62,13 +62,13 @@ func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, q
 
 // Union satisfied by [zero_trust.TunnelConfigurationUpdateResponseUnknown],
 // [zero_trust.TunnelConfigurationUpdateResponseArray] or [shared.UnionString].
-type TunnelConfigurationUpdateResponse interface {
-	ImplementsZeroTrustTunnelConfigurationUpdateResponse()
+type TunnelConfigurationUpdateResponseUnion interface {
+	ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConfigurationUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*TunnelConfigurationUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -83,18 +83,18 @@ func init() {
 
 type TunnelConfigurationUpdateResponseArray []interface{}
 
-func (r TunnelConfigurationUpdateResponseArray) ImplementsZeroTrustTunnelConfigurationUpdateResponse() {
+func (r TunnelConfigurationUpdateResponseArray) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion() {
 }
 
 // Union satisfied by [zero_trust.TunnelConfigurationGetResponseUnknown],
 // [zero_trust.TunnelConfigurationGetResponseArray] or [shared.UnionString].
-type TunnelConfigurationGetResponse interface {
-	ImplementsZeroTrustTunnelConfigurationGetResponse()
+type TunnelConfigurationGetResponseUnion interface {
+	ImplementsZeroTrustTunnelConfigurationGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConfigurationGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*TunnelConfigurationGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -109,7 +109,8 @@ func init() {
 
 type TunnelConfigurationGetResponseArray []interface{}
 
-func (r TunnelConfigurationGetResponseArray) ImplementsZeroTrustTunnelConfigurationGetResponse() {}
+func (r TunnelConfigurationGetResponseArray) ImplementsZeroTrustTunnelConfigurationGetResponseUnion() {
+}
 
 type TunnelConfigurationUpdateParams struct {
 	// Identifier
@@ -191,7 +192,7 @@ type TunnelConfigurationUpdateParamsConfigIngressOriginRequest struct {
 	ProxyType param.Field[string] `json:"proxyType"`
 	// The timeout after which a TCP keepalive packet is sent on a connection between
 	// Tunnel and the origin server.
-	TcpKeepAlive param.Field[int64] `json:"tcpKeepAlive"`
+	TCPKeepAlive param.Field[int64] `json:"tcpKeepAlive"`
 	// Timeout for completing a TLS handshake to your origin server, if you have chosen
 	// to connect Tunnel to an HTTPS server.
 	TLSTimeout param.Field[int64] `json:"tlsTimeout"`
@@ -254,7 +255,7 @@ type TunnelConfigurationUpdateParamsConfigOriginRequest struct {
 	ProxyType param.Field[string] `json:"proxyType"`
 	// The timeout after which a TCP keepalive packet is sent on a connection between
 	// Tunnel and the origin server.
-	TcpKeepAlive param.Field[int64] `json:"tcpKeepAlive"`
+	TCPKeepAlive param.Field[int64] `json:"tcpKeepAlive"`
 	// Timeout for completing a TLS handshake to your origin server, if you have chosen
 	// to connect Tunnel to an HTTPS server.
 	TLSTimeout param.Field[int64] `json:"tlsTimeout"`
@@ -290,9 +291,9 @@ func (r TunnelConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []
 }
 
 type TunnelConfigurationUpdateResponseEnvelope struct {
-	Errors   []TunnelConfigurationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TunnelConfigurationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelConfigurationUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
+	Result   TunnelConfigurationUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConfigurationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -317,52 +318,6 @@ func (r tunnelConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type TunnelConfigurationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    tunnelConfigurationUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelConfigurationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [TunnelConfigurationUpdateResponseEnvelopeErrors]
-type tunnelConfigurationUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConfigurationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConfigurationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelConfigurationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    tunnelConfigurationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelConfigurationUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [TunnelConfigurationUpdateResponseEnvelopeMessages]
-type tunnelConfigurationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConfigurationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConfigurationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type TunnelConfigurationUpdateResponseEnvelopeSuccess bool
 
@@ -384,9 +339,9 @@ type TunnelConfigurationGetParams struct {
 }
 
 type TunnelConfigurationGetResponseEnvelope struct {
-	Errors   []TunnelConfigurationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TunnelConfigurationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelConfigurationGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   TunnelConfigurationGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConfigurationGetResponseEnvelopeJSON    `json:"-"`
@@ -408,52 +363,6 @@ func (r *TunnelConfigurationGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r tunnelConfigurationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelConfigurationGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    tunnelConfigurationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelConfigurationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [TunnelConfigurationGetResponseEnvelopeErrors]
-type tunnelConfigurationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConfigurationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConfigurationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelConfigurationGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    tunnelConfigurationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelConfigurationGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [TunnelConfigurationGetResponseEnvelopeMessages]
-type tunnelConfigurationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConfigurationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConfigurationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

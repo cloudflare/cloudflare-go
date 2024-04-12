@@ -36,7 +36,7 @@ func NewAccessApplicationCAService(opts ...option.RequestOption) (r *AccessAppli
 }
 
 // Generates a new short-lived certificate CA and public key.
-func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponse, err error) {
+func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCANewResponseEnvelope
 	var accountOrZone string
@@ -58,7 +58,7 @@ func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body 
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustCA], err error) {
+func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CA], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -85,7 +85,7 @@ func (r *AccessApplicationCAService) List(ctx context.Context, query AccessAppli
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustCA] {
+func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CA] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -112,7 +112,7 @@ func (r *AccessApplicationCAService) Delete(ctx context.Context, uuid string, bo
 }
 
 // Fetches a short-lived certificate CA and its public key.
-func (r *AccessApplicationCAService) Get(ctx context.Context, uuid string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponse, err error) {
+func (r *AccessApplicationCAService) Get(ctx context.Context, uuid string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCAGetResponseEnvelope
 	var accountOrZone string
@@ -133,19 +133,19 @@ func (r *AccessApplicationCAService) Get(ctx context.Context, uuid string, query
 	return
 }
 
-type ZeroTrustCA struct {
+type CA struct {
 	// The ID of the CA.
 	ID string `json:"id"`
 	// The Application Audience (AUD) tag. Identifies the application associated with
 	// the CA.
 	Aud string `json:"aud"`
 	// The public key to add to your SSH server configuration.
-	PublicKey string          `json:"public_key"`
-	JSON      zeroTrustCAJSON `json:"-"`
+	PublicKey string `json:"public_key"`
+	JSON      caJSON `json:"-"`
 }
 
-// zeroTrustCAJSON contains the JSON metadata for the struct [ZeroTrustCA]
-type zeroTrustCAJSON struct {
+// caJSON contains the JSON metadata for the struct [CA]
+type caJSON struct {
 	ID          apijson.Field
 	Aud         apijson.Field
 	PublicKey   apijson.Field
@@ -153,23 +153,23 @@ type zeroTrustCAJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustCA) UnmarshalJSON(data []byte) (err error) {
+func (r *CA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustCAJSON) RawJSON() string {
+func (r caJSON) RawJSON() string {
 	return r.raw
 }
 
 // Union satisfied by [zero_trust.AccessApplicationCANewResponseUnknown] or
 // [shared.UnionString].
-type AccessApplicationCANewResponse interface {
-	ImplementsZeroTrustAccessApplicationCANewResponse()
+type AccessApplicationCANewResponseUnion interface {
+	ImplementsZeroTrustAccessApplicationCANewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationCANewResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccessApplicationCANewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -202,13 +202,13 @@ func (r accessApplicationCADeleteResponseJSON) RawJSON() string {
 
 // Union satisfied by [zero_trust.AccessApplicationCAGetResponseUnknown] or
 // [shared.UnionString].
-type AccessApplicationCAGetResponse interface {
-	ImplementsZeroTrustAccessApplicationCAGetResponse()
+type AccessApplicationCAGetResponseUnion interface {
+	ImplementsZeroTrustAccessApplicationCAGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationCAGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccessApplicationCAGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -225,9 +225,9 @@ type AccessApplicationCANewParams struct {
 }
 
 type AccessApplicationCANewResponseEnvelope struct {
-	Errors   []AccessApplicationCANewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCANewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApplicationCANewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   AccessApplicationCANewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationCANewResponseEnvelopeJSON    `json:"-"`
@@ -249,52 +249,6 @@ func (r *AccessApplicationCANewResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r accessApplicationCANewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCANewResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessApplicationCANewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationCANewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationCANewResponseEnvelopeErrors]
-type accessApplicationCANewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCANewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCANewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCANewResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessApplicationCANewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationCANewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationCANewResponseEnvelopeMessages]
-type accessApplicationCANewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCANewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCANewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -328,9 +282,9 @@ type AccessApplicationCADeleteParams struct {
 }
 
 type AccessApplicationCADeleteResponseEnvelope struct {
-	Errors   []AccessApplicationCADeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCADeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApplicationCADeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   AccessApplicationCADeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCADeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationCADeleteResponseEnvelopeJSON    `json:"-"`
@@ -352,52 +306,6 @@ func (r *AccessApplicationCADeleteResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r accessApplicationCADeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCADeleteResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    accessApplicationCADeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationCADeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessApplicationCADeleteResponseEnvelopeErrors]
-type accessApplicationCADeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCADeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCADeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCADeleteResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    accessApplicationCADeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationCADeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationCADeleteResponseEnvelopeMessages]
-type accessApplicationCADeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCADeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCADeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -424,9 +332,9 @@ type AccessApplicationCAGetParams struct {
 }
 
 type AccessApplicationCAGetResponseEnvelope struct {
-	Errors   []AccessApplicationCAGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCAGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApplicationCAGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   AccessApplicationCAGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationCAGetResponseEnvelopeJSON    `json:"-"`
@@ -448,52 +356,6 @@ func (r *AccessApplicationCAGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r accessApplicationCAGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCAGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessApplicationCAGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationCAGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationCAGetResponseEnvelopeErrors]
-type accessApplicationCAGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCAGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessApplicationCAGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationCAGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationCAGetResponseEnvelopeMessages]
-type accessApplicationCAGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

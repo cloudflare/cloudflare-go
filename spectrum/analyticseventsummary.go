@@ -38,7 +38,7 @@ func NewAnalyticsEventSummaryService(opts ...option.RequestOption) (r *Analytics
 }
 
 // Retrieves a list of summarised aggregate metrics over a given time period.
-func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, query AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponse, err error) {
+func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, query AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventSummaryGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/summary", zone)
@@ -52,13 +52,13 @@ func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, que
 
 // Union satisfied by [spectrum.AnalyticsEventSummaryGetResponseUnknown] or
 // [shared.UnionString].
-type AnalyticsEventSummaryGetResponse interface {
-	ImplementsSpectrumAnalyticsEventSummaryGetResponse()
+type AnalyticsEventSummaryGetResponseUnion interface {
+	ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AnalyticsEventSummaryGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*AnalyticsEventSummaryGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -76,7 +76,7 @@ type AnalyticsEventSummaryGetParams struct {
 	// | appID     | Application ID                | 40d67c87c6cd4b889a4fd57805225e85                           |
 	// | coloName  | Colo Name                     | SFO                                                        |
 	// | ipVersion | IP version used by the client | 4, 6.                                                      |
-	Dimensions param.Field[[]AnalyticsEventSummaryGetParamsDimension] `query:"dimensions"`
+	Dimensions param.Field[[]Dimension] `query:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
 	// and AND boolean logic. AND takes precedence over OR in all the expressions. The
 	// OR operator is defined using a comma (,) or OR keyword surrounded by whitespace.
@@ -120,26 +120,9 @@ type AnalyticsEventSummaryGetParams struct {
 // `url.Values`.
 func (r AnalyticsEventSummaryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type AnalyticsEventSummaryGetParamsDimension string
-
-const (
-	AnalyticsEventSummaryGetParamsDimensionEvent     AnalyticsEventSummaryGetParamsDimension = "event"
-	AnalyticsEventSummaryGetParamsDimensionAppID     AnalyticsEventSummaryGetParamsDimension = "appID"
-	AnalyticsEventSummaryGetParamsDimensionColoName  AnalyticsEventSummaryGetParamsDimension = "coloName"
-	AnalyticsEventSummaryGetParamsDimensionIPVersion AnalyticsEventSummaryGetParamsDimension = "ipVersion"
-)
-
-func (r AnalyticsEventSummaryGetParamsDimension) IsKnown() bool {
-	switch r {
-	case AnalyticsEventSummaryGetParamsDimensionEvent, AnalyticsEventSummaryGetParamsDimensionAppID, AnalyticsEventSummaryGetParamsDimensionColoName, AnalyticsEventSummaryGetParamsDimensionIPVersion:
-		return true
-	}
-	return false
 }
 
 type AnalyticsEventSummaryGetParamsMetric string
@@ -163,9 +146,9 @@ func (r AnalyticsEventSummaryGetParamsMetric) IsKnown() bool {
 }
 
 type AnalyticsEventSummaryGetResponseEnvelope struct {
-	Errors   []AnalyticsEventSummaryGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsEventSummaryGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AnalyticsEventSummaryGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Result   AnalyticsEventSummaryGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AnalyticsEventSummaryGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsEventSummaryGetResponseEnvelopeJSON    `json:"-"`
@@ -187,52 +170,6 @@ func (r *AnalyticsEventSummaryGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r analyticsEventSummaryGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsEventSummaryGetResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    analyticsEventSummaryGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// analyticsEventSummaryGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AnalyticsEventSummaryGetResponseEnvelopeErrors]
-type analyticsEventSummaryGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsEventSummaryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsEventSummaryGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsEventSummaryGetResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    analyticsEventSummaryGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// analyticsEventSummaryGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AnalyticsEventSummaryGetResponseEnvelopeMessages]
-type analyticsEventSummaryGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsEventSummaryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsEventSummaryGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

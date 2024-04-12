@@ -29,39 +29,41 @@ func TestHealthcheckNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Healthchecks.New(context.TODO(), healthchecks.HealthcheckNewParams{
-		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Address:              cloudflare.F("www.example.com"),
-		Name:                 cloudflare.F("server-1"),
-		CheckRegions:         cloudflare.F([]healthchecks.HealthcheckNewParamsCheckRegion{healthchecks.HealthcheckNewParamsCheckRegionWeu, healthchecks.HealthcheckNewParamsCheckRegionEnam}),
-		ConsecutiveFails:     cloudflare.F(int64(0)),
-		ConsecutiveSuccesses: cloudflare.F(int64(0)),
-		Description:          cloudflare.F("Health check for www.example.com"),
-		HTTPConfig: cloudflare.F(healthchecks.HealthcheckNewParamsHTTPConfig{
-			AllowInsecure:   cloudflare.F(true),
-			ExpectedBody:    cloudflare.F("success"),
-			ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
-			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		QueryHealthcheck: healthchecks.QueryHealthcheckParam{
+			Address:              cloudflare.F("www.example.com"),
+			CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+			ConsecutiveFails:     cloudflare.F(int64(0)),
+			ConsecutiveSuccesses: cloudflare.F(int64(0)),
+			Description:          cloudflare.F("Health check for www.example.com"),
+			HTTPConfig: cloudflare.F(healthchecks.HTTPConfigurationParam{
+				AllowInsecure:   cloudflare.F(true),
+				ExpectedBody:    cloudflare.F("success"),
+				ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
+				FollowRedirects: cloudflare.F(true),
+				Header: cloudflare.F[any](map[string]interface{}{
+					"Host": map[string]interface{}{
+						"0": "example.com",
+					},
+					"X-App-ID": map[string]interface{}{
+						"0": "abc123",
+					},
+				}),
+				Method: cloudflare.F(healthchecks.HTTPConfigurationMethodGet),
+				Path:   cloudflare.F("/health"),
+				Port:   cloudflare.F(int64(0)),
 			}),
-			Method: cloudflare.F(healthchecks.HealthcheckNewParamsHTTPConfigMethodGet),
-			Path:   cloudflare.F("/health"),
-			Port:   cloudflare.F(int64(0)),
-		}),
-		Interval:  cloudflare.F(int64(0)),
-		Retries:   cloudflare.F(int64(0)),
-		Suspended: cloudflare.F(true),
-		TcpConfig: cloudflare.F(healthchecks.HealthcheckNewParamsTcpConfig{
-			Method: cloudflare.F(healthchecks.HealthcheckNewParamsTcpConfigMethodConnectionEstablished),
-			Port:   cloudflare.F(int64(0)),
-		}),
-		Timeout: cloudflare.F(int64(0)),
-		Type:    cloudflare.F("HTTPS"),
+			Interval:  cloudflare.F(int64(0)),
+			Name:      cloudflare.F("server-1"),
+			Retries:   cloudflare.F(int64(0)),
+			Suspended: cloudflare.F(true),
+			TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
+				Method: cloudflare.F(healthchecks.TCPConfigurationMethodConnectionEstablished),
+				Port:   cloudflare.F(int64(0)),
+			}),
+			Timeout: cloudflare.F(int64(0)),
+			Type:    cloudflare.F("HTTPS"),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -90,39 +92,41 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		healthchecks.HealthcheckUpdateParams{
-			ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Address:              cloudflare.F("www.example.com"),
-			Name:                 cloudflare.F("server-1"),
-			CheckRegions:         cloudflare.F([]healthchecks.HealthcheckUpdateParamsCheckRegion{healthchecks.HealthcheckUpdateParamsCheckRegionWeu, healthchecks.HealthcheckUpdateParamsCheckRegionEnam}),
-			ConsecutiveFails:     cloudflare.F(int64(0)),
-			ConsecutiveSuccesses: cloudflare.F(int64(0)),
-			Description:          cloudflare.F("Health check for www.example.com"),
-			HTTPConfig: cloudflare.F(healthchecks.HealthcheckUpdateParamsHTTPConfig{
-				AllowInsecure:   cloudflare.F(true),
-				ExpectedBody:    cloudflare.F("success"),
-				ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
-				FollowRedirects: cloudflare.F(true),
-				Header: cloudflare.F[any](map[string]interface{}{
-					"Host": map[string]interface{}{
-						"0": "example.com",
-					},
-					"X-App-ID": map[string]interface{}{
-						"0": "abc123",
-					},
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			QueryHealthcheck: healthchecks.QueryHealthcheckParam{
+				Address:              cloudflare.F("www.example.com"),
+				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+				ConsecutiveFails:     cloudflare.F(int64(0)),
+				ConsecutiveSuccesses: cloudflare.F(int64(0)),
+				Description:          cloudflare.F("Health check for www.example.com"),
+				HTTPConfig: cloudflare.F(healthchecks.HTTPConfigurationParam{
+					AllowInsecure:   cloudflare.F(true),
+					ExpectedBody:    cloudflare.F("success"),
+					ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
+					FollowRedirects: cloudflare.F(true),
+					Header: cloudflare.F[any](map[string]interface{}{
+						"Host": map[string]interface{}{
+							"0": "example.com",
+						},
+						"X-App-ID": map[string]interface{}{
+							"0": "abc123",
+						},
+					}),
+					Method: cloudflare.F(healthchecks.HTTPConfigurationMethodGet),
+					Path:   cloudflare.F("/health"),
+					Port:   cloudflare.F(int64(0)),
 				}),
-				Method: cloudflare.F(healthchecks.HealthcheckUpdateParamsHTTPConfigMethodGet),
-				Path:   cloudflare.F("/health"),
-				Port:   cloudflare.F(int64(0)),
-			}),
-			Interval:  cloudflare.F(int64(0)),
-			Retries:   cloudflare.F(int64(0)),
-			Suspended: cloudflare.F(true),
-			TcpConfig: cloudflare.F(healthchecks.HealthcheckUpdateParamsTcpConfig{
-				Method: cloudflare.F(healthchecks.HealthcheckUpdateParamsTcpConfigMethodConnectionEstablished),
-				Port:   cloudflare.F(int64(0)),
-			}),
-			Timeout: cloudflare.F(int64(0)),
-			Type:    cloudflare.F("HTTPS"),
+				Interval:  cloudflare.F(int64(0)),
+				Name:      cloudflare.F("server-1"),
+				Retries:   cloudflare.F(int64(0)),
+				Suspended: cloudflare.F(true),
+				TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
+					Method: cloudflare.F(healthchecks.TCPConfigurationMethodConnectionEstablished),
+					Port:   cloudflare.F(int64(0)),
+				}),
+				Timeout: cloudflare.F(int64(0)),
+				Type:    cloudflare.F("HTTPS"),
+			},
 		},
 	)
 	if err != nil {
@@ -179,6 +183,7 @@ func TestHealthcheckDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		healthchecks.HealthcheckDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -208,39 +213,41 @@ func TestHealthcheckEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		healthchecks.HealthcheckEditParams{
-			ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Address:              cloudflare.F("www.example.com"),
-			Name:                 cloudflare.F("server-1"),
-			CheckRegions:         cloudflare.F([]healthchecks.HealthcheckEditParamsCheckRegion{healthchecks.HealthcheckEditParamsCheckRegionWeu, healthchecks.HealthcheckEditParamsCheckRegionEnam}),
-			ConsecutiveFails:     cloudflare.F(int64(0)),
-			ConsecutiveSuccesses: cloudflare.F(int64(0)),
-			Description:          cloudflare.F("Health check for www.example.com"),
-			HTTPConfig: cloudflare.F(healthchecks.HealthcheckEditParamsHTTPConfig{
-				AllowInsecure:   cloudflare.F(true),
-				ExpectedBody:    cloudflare.F("success"),
-				ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
-				FollowRedirects: cloudflare.F(true),
-				Header: cloudflare.F[any](map[string]interface{}{
-					"Host": map[string]interface{}{
-						"0": "example.com",
-					},
-					"X-App-ID": map[string]interface{}{
-						"0": "abc123",
-					},
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			QueryHealthcheck: healthchecks.QueryHealthcheckParam{
+				Address:              cloudflare.F("www.example.com"),
+				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+				ConsecutiveFails:     cloudflare.F(int64(0)),
+				ConsecutiveSuccesses: cloudflare.F(int64(0)),
+				Description:          cloudflare.F("Health check for www.example.com"),
+				HTTPConfig: cloudflare.F(healthchecks.HTTPConfigurationParam{
+					AllowInsecure:   cloudflare.F(true),
+					ExpectedBody:    cloudflare.F("success"),
+					ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
+					FollowRedirects: cloudflare.F(true),
+					Header: cloudflare.F[any](map[string]interface{}{
+						"Host": map[string]interface{}{
+							"0": "example.com",
+						},
+						"X-App-ID": map[string]interface{}{
+							"0": "abc123",
+						},
+					}),
+					Method: cloudflare.F(healthchecks.HTTPConfigurationMethodGet),
+					Path:   cloudflare.F("/health"),
+					Port:   cloudflare.F(int64(0)),
 				}),
-				Method: cloudflare.F(healthchecks.HealthcheckEditParamsHTTPConfigMethodGet),
-				Path:   cloudflare.F("/health"),
-				Port:   cloudflare.F(int64(0)),
-			}),
-			Interval:  cloudflare.F(int64(0)),
-			Retries:   cloudflare.F(int64(0)),
-			Suspended: cloudflare.F(true),
-			TcpConfig: cloudflare.F(healthchecks.HealthcheckEditParamsTcpConfig{
-				Method: cloudflare.F(healthchecks.HealthcheckEditParamsTcpConfigMethodConnectionEstablished),
-				Port:   cloudflare.F(int64(0)),
-			}),
-			Timeout: cloudflare.F(int64(0)),
-			Type:    cloudflare.F("HTTPS"),
+				Interval:  cloudflare.F(int64(0)),
+				Name:      cloudflare.F("server-1"),
+				Retries:   cloudflare.F(int64(0)),
+				Suspended: cloudflare.F(true),
+				TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
+					Method: cloudflare.F(healthchecks.TCPConfigurationMethodConnectionEstablished),
+					Port:   cloudflare.F(int64(0)),
+				}),
+				Timeout: cloudflare.F(int64(0)),
+				Type:    cloudflare.F("HTTPS"),
+			},
 		},
 	)
 	if err != nil {

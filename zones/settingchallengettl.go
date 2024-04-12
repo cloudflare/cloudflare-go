@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -37,7 +38,7 @@ func NewSettingChallengeTTLService(opts ...option.RequestOption) (r *SettingChal
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-func (r *SettingChallengeTTLService) Edit(ctx context.Context, params SettingChallengeTTLEditParams, opts ...option.RequestOption) (res *ZoneSettingChallengeTTL, err error) {
+func (r *SettingChallengeTTLService) Edit(ctx context.Context, params SettingChallengeTTLEditParams, opts ...option.RequestOption) (res *ChallengeTTL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingChallengeTTLEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", params.ZoneID)
@@ -54,7 +55,7 @@ func (r *SettingChallengeTTLService) Edit(ctx context.Context, params SettingCha
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-func (r *SettingChallengeTTLService) Get(ctx context.Context, query SettingChallengeTTLGetParams, opts ...option.RequestOption) (res *ZoneSettingChallengeTTL, err error) {
+func (r *SettingChallengeTTLService) Get(ctx context.Context, query SettingChallengeTTLGetParams, opts ...option.RequestOption) (res *ChallengeTTL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingChallengeTTLGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", query.ZoneID)
@@ -71,22 +72,21 @@ func (r *SettingChallengeTTLService) Get(ctx context.Context, query SettingChall
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-type ZoneSettingChallengeTTL struct {
+type ChallengeTTL struct {
 	// ID of the zone setting.
-	ID ZoneSettingChallengeTTLID `json:"id,required"`
+	ID ChallengeTTLID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingChallengeTTLValue `json:"value,required"`
+	Value ChallengeTTLValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingChallengeTTLEditable `json:"editable"`
+	Editable ChallengeTTLEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingChallengeTTLJSON `json:"-"`
+	ModifiedOn time.Time        `json:"modified_on,nullable" format:"date-time"`
+	JSON       challengeTTLJSON `json:"-"`
 }
 
-// zoneSettingChallengeTTLJSON contains the JSON metadata for the struct
-// [ZoneSettingChallengeTTL]
-type zoneSettingChallengeTTLJSON struct {
+// challengeTTLJSON contains the JSON metadata for the struct [ChallengeTTL]
+type challengeTTLJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -95,56 +95,52 @@ type zoneSettingChallengeTTLJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingChallengeTTL) UnmarshalJSON(data []byte) (err error) {
+func (r *ChallengeTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingChallengeTTLJSON) RawJSON() string {
+func (r challengeTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingChallengeTTL) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingChallengeTTL) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingChallengeTTLID string
+type ChallengeTTLID string
 
 const (
-	ZoneSettingChallengeTTLIDChallengeTTL ZoneSettingChallengeTTLID = "challenge_ttl"
+	ChallengeTTLIDChallengeTTL ChallengeTTLID = "challenge_ttl"
 )
 
-func (r ZoneSettingChallengeTTLID) IsKnown() bool {
+func (r ChallengeTTLID) IsKnown() bool {
 	switch r {
-	case ZoneSettingChallengeTTLIDChallengeTTL:
+	case ChallengeTTLIDChallengeTTL:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingChallengeTTLValue float64
+type ChallengeTTLValue float64
 
 const (
-	ZoneSettingChallengeTTLValue300      ZoneSettingChallengeTTLValue = 300
-	ZoneSettingChallengeTTLValue900      ZoneSettingChallengeTTLValue = 900
-	ZoneSettingChallengeTTLValue1800     ZoneSettingChallengeTTLValue = 1800
-	ZoneSettingChallengeTTLValue2700     ZoneSettingChallengeTTLValue = 2700
-	ZoneSettingChallengeTTLValue3600     ZoneSettingChallengeTTLValue = 3600
-	ZoneSettingChallengeTTLValue7200     ZoneSettingChallengeTTLValue = 7200
-	ZoneSettingChallengeTTLValue10800    ZoneSettingChallengeTTLValue = 10800
-	ZoneSettingChallengeTTLValue14400    ZoneSettingChallengeTTLValue = 14400
-	ZoneSettingChallengeTTLValue28800    ZoneSettingChallengeTTLValue = 28800
-	ZoneSettingChallengeTTLValue57600    ZoneSettingChallengeTTLValue = 57600
-	ZoneSettingChallengeTTLValue86400    ZoneSettingChallengeTTLValue = 86400
-	ZoneSettingChallengeTTLValue604800   ZoneSettingChallengeTTLValue = 604800
-	ZoneSettingChallengeTTLValue2592000  ZoneSettingChallengeTTLValue = 2592000
-	ZoneSettingChallengeTTLValue31536000 ZoneSettingChallengeTTLValue = 31536000
+	ChallengeTTLValue300      ChallengeTTLValue = 300
+	ChallengeTTLValue900      ChallengeTTLValue = 900
+	ChallengeTTLValue1800     ChallengeTTLValue = 1800
+	ChallengeTTLValue2700     ChallengeTTLValue = 2700
+	ChallengeTTLValue3600     ChallengeTTLValue = 3600
+	ChallengeTTLValue7200     ChallengeTTLValue = 7200
+	ChallengeTTLValue10800    ChallengeTTLValue = 10800
+	ChallengeTTLValue14400    ChallengeTTLValue = 14400
+	ChallengeTTLValue28800    ChallengeTTLValue = 28800
+	ChallengeTTLValue57600    ChallengeTTLValue = 57600
+	ChallengeTTLValue86400    ChallengeTTLValue = 86400
+	ChallengeTTLValue604800   ChallengeTTLValue = 604800
+	ChallengeTTLValue2592000  ChallengeTTLValue = 2592000
+	ChallengeTTLValue31536000 ChallengeTTLValue = 31536000
 )
 
-func (r ZoneSettingChallengeTTLValue) IsKnown() bool {
+func (r ChallengeTTLValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingChallengeTTLValue300, ZoneSettingChallengeTTLValue900, ZoneSettingChallengeTTLValue1800, ZoneSettingChallengeTTLValue2700, ZoneSettingChallengeTTLValue3600, ZoneSettingChallengeTTLValue7200, ZoneSettingChallengeTTLValue10800, ZoneSettingChallengeTTLValue14400, ZoneSettingChallengeTTLValue28800, ZoneSettingChallengeTTLValue57600, ZoneSettingChallengeTTLValue86400, ZoneSettingChallengeTTLValue604800, ZoneSettingChallengeTTLValue2592000, ZoneSettingChallengeTTLValue31536000:
+	case ChallengeTTLValue300, ChallengeTTLValue900, ChallengeTTLValue1800, ChallengeTTLValue2700, ChallengeTTLValue3600, ChallengeTTLValue7200, ChallengeTTLValue10800, ChallengeTTLValue14400, ChallengeTTLValue28800, ChallengeTTLValue57600, ChallengeTTLValue86400, ChallengeTTLValue604800, ChallengeTTLValue2592000, ChallengeTTLValue31536000:
 		return true
 	}
 	return false
@@ -152,38 +148,20 @@ func (r ZoneSettingChallengeTTLValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingChallengeTTLEditable bool
+type ChallengeTTLEditable bool
 
 const (
-	ZoneSettingChallengeTTLEditableTrue  ZoneSettingChallengeTTLEditable = true
-	ZoneSettingChallengeTTLEditableFalse ZoneSettingChallengeTTLEditable = false
+	ChallengeTTLEditableTrue  ChallengeTTLEditable = true
+	ChallengeTTLEditableFalse ChallengeTTLEditable = false
 )
 
-func (r ZoneSettingChallengeTTLEditable) IsKnown() bool {
+func (r ChallengeTTLEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingChallengeTTLEditableTrue, ZoneSettingChallengeTTLEditableFalse:
+	case ChallengeTTLEditableTrue, ChallengeTTLEditableFalse:
 		return true
 	}
 	return false
 }
-
-// Specify how long a visitor is allowed access to your site after successfully
-// completing a challenge (such as a CAPTCHA). After the TTL has expired the
-// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
-// setting and will attempt to honor any setting above 45 minutes.
-// (https://support.cloudflare.com/hc/en-us/articles/200170136).
-type ZoneSettingChallengeTTLParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingChallengeTTLID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingChallengeTTLValue] `json:"value,required"`
-}
-
-func (r ZoneSettingChallengeTTLParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingChallengeTTLParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingChallengeTTLEditParams struct {
 	// Identifier
@@ -225,8 +203,8 @@ func (r SettingChallengeTTLEditParamsValue) IsKnown() bool {
 }
 
 type SettingChallengeTTLEditResponseEnvelope struct {
-	Errors   []SettingChallengeTTLEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingChallengeTTLEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Specify how long a visitor is allowed access to your site after successfully
@@ -234,7 +212,7 @@ type SettingChallengeTTLEditResponseEnvelope struct {
 	// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 	// setting and will attempt to honor any setting above 45 minutes.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170136).
-	Result ZoneSettingChallengeTTL                     `json:"result"`
+	Result ChallengeTTL                                `json:"result"`
 	JSON   settingChallengeTTLEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -257,60 +235,14 @@ func (r settingChallengeTTLEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingChallengeTTLEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingChallengeTTLEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingChallengeTTLEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingChallengeTTLEditResponseEnvelopeErrors]
-type settingChallengeTTLEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingChallengeTTLEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingChallengeTTLEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingChallengeTTLEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingChallengeTTLEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingChallengeTTLEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingChallengeTTLEditResponseEnvelopeMessages]
-type settingChallengeTTLEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingChallengeTTLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingChallengeTTLEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingChallengeTTLGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingChallengeTTLGetResponseEnvelope struct {
-	Errors   []SettingChallengeTTLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingChallengeTTLGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Specify how long a visitor is allowed access to your site after successfully
@@ -318,7 +250,7 @@ type SettingChallengeTTLGetResponseEnvelope struct {
 	// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 	// setting and will attempt to honor any setting above 45 minutes.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170136).
-	Result ZoneSettingChallengeTTL                    `json:"result"`
+	Result ChallengeTTL                               `json:"result"`
 	JSON   settingChallengeTTLGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -338,51 +270,5 @@ func (r *SettingChallengeTTLGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r settingChallengeTTLGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingChallengeTTLGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingChallengeTTLGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingChallengeTTLGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingChallengeTTLGetResponseEnvelopeErrors]
-type settingChallengeTTLGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingChallengeTTLGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingChallengeTTLGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingChallengeTTLGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingChallengeTTLGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingChallengeTTLGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingChallengeTTLGetResponseEnvelopeMessages]
-type settingChallengeTTLGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingChallengeTTLGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingChallengeTTLGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

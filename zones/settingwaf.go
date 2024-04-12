@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -41,7 +42,7 @@ func NewSettingWAFService(opts ...option.RequestOption) (r *SettingWAFService) {
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-func (r *SettingWAFService) Edit(ctx context.Context, params SettingWAFEditParams, opts ...option.RequestOption) (res *ZoneSettingWAF, err error) {
+func (r *SettingWAFService) Edit(ctx context.Context, params SettingWAFEditParams, opts ...option.RequestOption) (res *WAF, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWAFEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/waf", params.ZoneID)
@@ -63,7 +64,7 @@ func (r *SettingWAFService) Edit(ctx context.Context, params SettingWAFEditParam
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-func (r *SettingWAFService) Get(ctx context.Context, query SettingWAFGetParams, opts ...option.RequestOption) (res *ZoneSettingWAF, err error) {
+func (r *SettingWAFService) Get(ctx context.Context, query SettingWAFGetParams, opts ...option.RequestOption) (res *WAF, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWAFGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/waf", query.ZoneID)
@@ -85,21 +86,21 @@ func (r *SettingWAFService) Get(ctx context.Context, query SettingWAFGetParams, 
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-type ZoneSettingWAF struct {
+type WAF struct {
 	// ID of the zone setting.
-	ID ZoneSettingWAFID `json:"id,required"`
+	ID WAFID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingWAFValue `json:"value,required"`
+	Value WAFValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingWAFEditable `json:"editable"`
+	Editable WAFEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time          `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingWAFJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	JSON       wafJSON   `json:"-"`
 }
 
-// zoneSettingWAFJSON contains the JSON metadata for the struct [ZoneSettingWAF]
-type zoneSettingWAFJSON struct {
+// wafJSON contains the JSON metadata for the struct [WAF]
+type wafJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -108,44 +109,40 @@ type zoneSettingWAFJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWAF) UnmarshalJSON(data []byte) (err error) {
+func (r *WAF) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingWAFJSON) RawJSON() string {
+func (r wafJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingWAF) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingWAF) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingWAFID string
+type WAFID string
 
 const (
-	ZoneSettingWAFIDWAF ZoneSettingWAFID = "waf"
+	WAFIDWAF WAFID = "waf"
 )
 
-func (r ZoneSettingWAFID) IsKnown() bool {
+func (r WAFID) IsKnown() bool {
 	switch r {
-	case ZoneSettingWAFIDWAF:
+	case WAFIDWAF:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingWAFValue string
+type WAFValue string
 
 const (
-	ZoneSettingWAFValueOn  ZoneSettingWAFValue = "on"
-	ZoneSettingWAFValueOff ZoneSettingWAFValue = "off"
+	WAFValueOn  WAFValue = "on"
+	WAFValueOff WAFValue = "off"
 )
 
-func (r ZoneSettingWAFValue) IsKnown() bool {
+func (r WAFValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingWAFValueOn, ZoneSettingWAFValueOff:
+	case WAFValueOn, WAFValueOff:
 		return true
 	}
 	return false
@@ -153,43 +150,20 @@ func (r ZoneSettingWAFValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingWAFEditable bool
+type WAFEditable bool
 
 const (
-	ZoneSettingWAFEditableTrue  ZoneSettingWAFEditable = true
-	ZoneSettingWAFEditableFalse ZoneSettingWAFEditable = false
+	WAFEditableTrue  WAFEditable = true
+	WAFEditableFalse WAFEditable = false
 )
 
-func (r ZoneSettingWAFEditable) IsKnown() bool {
+func (r WAFEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingWAFEditableTrue, ZoneSettingWAFEditableFalse:
+	case WAFEditableTrue, WAFEditableFalse:
 		return true
 	}
 	return false
 }
-
-// The WAF examines HTTP requests to your website. It inspects both GET and POST
-// requests and applies rules to help filter out illegitimate traffic from
-// legitimate website visitors. The Cloudflare WAF inspects website addresses or
-// URLs to detect anything out of the ordinary. If the Cloudflare WAF determines
-// suspicious user behavior, then the WAF will 'challenge' the web visitor with a
-// page that asks them to submit a CAPTCHA successfully to continue their action.
-// If the challenge is failed, the action will be stopped. What this means is that
-// Cloudflare's WAF will block any traffic identified as illegitimate before it
-// reaches your origin web server.
-// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-type ZoneSettingWAFParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingWAFID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingWAFValue] `json:"value,required"`
-}
-
-func (r ZoneSettingWAFParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingWAFParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingWAFEditParams struct {
 	// Identifier
@@ -219,8 +193,8 @@ func (r SettingWAFEditParamsValue) IsKnown() bool {
 }
 
 type SettingWAFEditResponseEnvelope struct {
-	Errors   []SettingWAFEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWAFEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The WAF examines HTTP requests to your website. It inspects both GET and POST
@@ -233,7 +207,7 @@ type SettingWAFEditResponseEnvelope struct {
 	// Cloudflare's WAF will block any traffic identified as illegitimate before it
 	// reaches your origin web server.
 	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-	Result ZoneSettingWAF                     `json:"result"`
+	Result WAF                                `json:"result"`
 	JSON   settingWAFEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -256,60 +230,14 @@ func (r settingWAFEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingWAFEditResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    settingWAFEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingWAFEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingWAFEditResponseEnvelopeErrors]
-type settingWAFEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWAFEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWAFEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWAFEditResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingWAFEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingWAFEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingWAFEditResponseEnvelopeMessages]
-type settingWAFEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWAFEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWAFEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingWAFGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingWAFGetResponseEnvelope struct {
-	Errors   []SettingWAFGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWAFGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The WAF examines HTTP requests to your website. It inspects both GET and POST
@@ -322,7 +250,7 @@ type SettingWAFGetResponseEnvelope struct {
 	// Cloudflare's WAF will block any traffic identified as illegitimate before it
 	// reaches your origin web server.
 	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-	Result ZoneSettingWAF                    `json:"result"`
+	Result WAF                               `json:"result"`
 	JSON   settingWAFGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -342,51 +270,5 @@ func (r *SettingWAFGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r settingWAFGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWAFGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    settingWAFGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingWAFGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingWAFGetResponseEnvelopeErrors]
-type settingWAFGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWAFGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWAFGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWAFGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    settingWAFGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingWAFGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingWAFGetResponseEnvelopeMessages]
-type settingWAFGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWAFGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWAFGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

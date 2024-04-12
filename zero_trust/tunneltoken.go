@@ -35,7 +35,7 @@ func NewTunnelTokenService(opts ...option.RequestOption) (r *TunnelTokenService)
 }
 
 // Gets the token used to associate cloudflared with a specific tunnel.
-func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query TunnelTokenGetParams, opts ...option.RequestOption) (res *TunnelTokenGetResponse, err error) {
+func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query TunnelTokenGetParams, opts ...option.RequestOption) (res *TunnelTokenGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelTokenGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", query.AccountID, tunnelID)
@@ -49,13 +49,13 @@ func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query Tun
 
 // Union satisfied by [zero_trust.TunnelTokenGetResponseUnknown],
 // [zero_trust.TunnelTokenGetResponseArray] or [shared.UnionString].
-type TunnelTokenGetResponse interface {
-	ImplementsZeroTrustTunnelTokenGetResponse()
+type TunnelTokenGetResponseUnion interface {
+	ImplementsZeroTrustTunnelTokenGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelTokenGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*TunnelTokenGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -70,7 +70,7 @@ func init() {
 
 type TunnelTokenGetResponseArray []interface{}
 
-func (r TunnelTokenGetResponseArray) ImplementsZeroTrustTunnelTokenGetResponse() {}
+func (r TunnelTokenGetResponseArray) ImplementsZeroTrustTunnelTokenGetResponseUnion() {}
 
 type TunnelTokenGetParams struct {
 	// Cloudflare account ID
@@ -78,9 +78,9 @@ type TunnelTokenGetParams struct {
 }
 
 type TunnelTokenGetResponseEnvelope struct {
-	Errors   []TunnelTokenGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TunnelTokenGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelTokenGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   TunnelTokenGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelTokenGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelTokenGetResponseEnvelopeJSON    `json:"-"`
@@ -102,52 +102,6 @@ func (r *TunnelTokenGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r tunnelTokenGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelTokenGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    tunnelTokenGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelTokenGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [TunnelTokenGetResponseEnvelopeErrors]
-type tunnelTokenGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelTokenGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelTokenGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelTokenGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    tunnelTokenGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelTokenGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TunnelTokenGetResponseEnvelopeMessages]
-type tunnelTokenGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelTokenGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelTokenGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

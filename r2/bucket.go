@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +35,7 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 }
 
 // Creates a new R2 bucket.
-func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *R2Bucket, err error) {
+func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BucketNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets", params.AccountID)
@@ -47,7 +48,7 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 }
 
 // Lists all R2 buckets on your account
-func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[R2Bucket], err error) {
+func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[Bucket], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,7 +66,7 @@ func (r *BucketService) List(ctx context.Context, params BucketListParams, opts 
 }
 
 // Lists all R2 buckets on your account
-func (r *BucketService) ListAutoPaging(ctx context.Context, params BucketListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[R2Bucket] {
+func (r *BucketService) ListAutoPaging(ctx context.Context, params BucketListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[Bucket] {
 	return pagination.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -83,7 +84,7 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, body Buck
 }
 
 // Gets metadata for an existing R2 bucket.
-func (r *BucketService) Get(ctx context.Context, bucketName string, query BucketGetParams, opts ...option.RequestOption) (res *R2Bucket, err error) {
+func (r *BucketService) Get(ctx context.Context, bucketName string, query BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BucketGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", query.AccountID, bucketName)
@@ -96,18 +97,18 @@ func (r *BucketService) Get(ctx context.Context, bucketName string, query Bucket
 }
 
 // A single R2 bucket
-type R2Bucket struct {
+type Bucket struct {
 	// Creation timestamp
 	CreationDate string `json:"creation_date"`
 	// Location of the bucket
-	Location R2BucketLocation `json:"location"`
+	Location BucketLocation `json:"location"`
 	// Name of the bucket
-	Name string       `json:"name"`
-	JSON r2BucketJSON `json:"-"`
+	Name string     `json:"name"`
+	JSON bucketJSON `json:"-"`
 }
 
-// r2BucketJSON contains the JSON metadata for the struct [R2Bucket]
-type r2BucketJSON struct {
+// bucketJSON contains the JSON metadata for the struct [Bucket]
+type bucketJSON struct {
 	CreationDate apijson.Field
 	Location     apijson.Field
 	Name         apijson.Field
@@ -115,28 +116,28 @@ type r2BucketJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *R2Bucket) UnmarshalJSON(data []byte) (err error) {
+func (r *Bucket) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r r2BucketJSON) RawJSON() string {
+func (r bucketJSON) RawJSON() string {
 	return r.raw
 }
 
 // Location of the bucket
-type R2BucketLocation string
+type BucketLocation string
 
 const (
-	R2BucketLocationApac R2BucketLocation = "apac"
-	R2BucketLocationEeur R2BucketLocation = "eeur"
-	R2BucketLocationEnam R2BucketLocation = "enam"
-	R2BucketLocationWeur R2BucketLocation = "weur"
-	R2BucketLocationWnam R2BucketLocation = "wnam"
+	BucketLocationApac BucketLocation = "apac"
+	BucketLocationEeur BucketLocation = "eeur"
+	BucketLocationEnam BucketLocation = "enam"
+	BucketLocationWeur BucketLocation = "weur"
+	BucketLocationWnam BucketLocation = "wnam"
 )
 
-func (r R2BucketLocation) IsKnown() bool {
+func (r BucketLocation) IsKnown() bool {
 	switch r {
-	case R2BucketLocationApac, R2BucketLocationEeur, R2BucketLocationEnam, R2BucketLocationWeur, R2BucketLocationWnam:
+	case BucketLocationApac, BucketLocationEeur, BucketLocationEnam, BucketLocationWeur, BucketLocationWnam:
 		return true
 	}
 	return false
@@ -177,10 +178,10 @@ func (r BucketNewParamsLocationHint) IsKnown() bool {
 }
 
 type BucketNewResponseEnvelope struct {
-	Errors   []BucketNewResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                          `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
 	// A single R2 bucket
-	Result R2Bucket `json:"result,required"`
+	Result Bucket `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketNewResponseEnvelopeJSON    `json:"-"`
@@ -202,29 +203,6 @@ func (r *BucketNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bucketNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketNewResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    bucketNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [BucketNewResponseEnvelopeErrors]
-type bucketNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -265,7 +243,7 @@ type BucketListParams struct {
 // URLQuery serializes [BucketListParams]'s query parameters as `url.Values`.
 func (r BucketListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -307,9 +285,9 @@ type BucketDeleteParams struct {
 }
 
 type BucketDeleteResponseEnvelope struct {
-	Errors   []BucketDeleteResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                             `json:"messages,required"`
-	Result   BucketDeleteResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   BucketDeleteResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDeleteResponseEnvelopeJSON    `json:"-"`
@@ -334,29 +312,6 @@ func (r bucketDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type BucketDeleteResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    bucketDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [BucketDeleteResponseEnvelopeErrors]
-type bucketDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type BucketDeleteResponseEnvelopeSuccess bool
 
@@ -378,10 +333,10 @@ type BucketGetParams struct {
 }
 
 type BucketGetResponseEnvelope struct {
-	Errors   []BucketGetResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                          `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
 	// A single R2 bucket
-	Result R2Bucket `json:"result,required"`
+	Result Bucket `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketGetResponseEnvelopeJSON    `json:"-"`
@@ -403,29 +358,6 @@ func (r *BucketGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bucketGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    bucketGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [BucketGetResponseEnvelopeErrors]
-type bucketGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

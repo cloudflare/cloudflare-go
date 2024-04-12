@@ -35,7 +35,7 @@ func NewDEXFleetStatusDeviceService(opts ...option.RequestOption) (r *DEXFleetSt
 }
 
 // List details for devices using WARP
-func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DigitalExperienceMonitoringDevice], err error) {
+func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DEXFleetStatusDeviceListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,35 +53,39 @@ func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetS
 }
 
 // List details for devices using WARP
-func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DigitalExperienceMonitoringDevice] {
+func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DEXFleetStatusDeviceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-type DigitalExperienceMonitoringDevice struct {
+type DEXFleetStatusDeviceListResponse struct {
 	// Cloudflare colo
 	Colo string `json:"colo,required"`
 	// Device identifier (UUID v4)
-	DeviceID string `json:"deviceId,required"`
+	DeviceID string      `json:"deviceId,required"`
+	Mode     interface{} `json:"mode,required"`
 	// Operating system
 	Platform string `json:"platform,required"`
 	// Network status
-	Status string `json:"status,required"`
+	Status    string      `json:"status,required"`
+	Timestamp interface{} `json:"timestamp,required"`
 	// WARP client version
 	Version string `json:"version,required"`
 	// Device identifier (human readable)
 	DeviceName string `json:"deviceName"`
 	// User contact email address
-	PersonEmail string                                `json:"personEmail"`
-	JSON        digitalExperienceMonitoringDeviceJSON `json:"-"`
+	PersonEmail string                               `json:"personEmail"`
+	JSON        dexFleetStatusDeviceListResponseJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringDeviceJSON contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringDevice]
-type digitalExperienceMonitoringDeviceJSON struct {
+// dexFleetStatusDeviceListResponseJSON contains the JSON metadata for the struct
+// [DEXFleetStatusDeviceListResponse]
+type dexFleetStatusDeviceListResponseJSON struct {
 	Colo        apijson.Field
 	DeviceID    apijson.Field
+	Mode        apijson.Field
 	Platform    apijson.Field
 	Status      apijson.Field
+	Timestamp   apijson.Field
 	Version     apijson.Field
 	DeviceName  apijson.Field
 	PersonEmail apijson.Field
@@ -89,11 +93,11 @@ type digitalExperienceMonitoringDeviceJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringDevice) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringDeviceJSON) RawJSON() string {
+func (r dexFleetStatusDeviceListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -127,7 +131,7 @@ type DEXFleetStatusDeviceListParams struct {
 // `url.Values`.
 func (r DEXFleetStatusDeviceListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

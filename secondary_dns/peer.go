@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +33,7 @@ func NewPeerService(opts ...option.RequestOption) (r *PeerService) {
 }
 
 // Create Peer.
-func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
+func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", params.AccountID)
@@ -45,7 +46,7 @@ func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...opt
 }
 
 // Modify Peer.
-func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
+func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpdateParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", params.AccountID, peerID)
@@ -58,7 +59,7 @@ func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpda
 }
 
 // List Peers.
-func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSPeer], err error) {
+func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Peer], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,15 +77,15 @@ func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...op
 }
 
 // List Peers.
-func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSPeer] {
+func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Peer] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Peer.
-func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
+func (r *PeerService) Delete(ctx context.Context, peerID string, params PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", body.AccountID, peerID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", params.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -94,7 +95,7 @@ func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDelete
 }
 
 // Get Peer.
-func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
+func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", query.AccountID, peerID)
@@ -106,7 +107,7 @@ func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParam
 	return
 }
 
-type SecondaryDNSPeer struct {
+type Peer struct {
 	ID string `json:"id,required"`
 	// The name of the peer.
 	Name string `json:"name,required"`
@@ -123,13 +124,12 @@ type SecondaryDNSPeer struct {
 	// linked to.
 	Port float64 `json:"port"`
 	// TSIG authentication will be used for zone transfer if configured.
-	TSIGID string               `json:"tsig_id"`
-	JSON   secondaryDNSPeerJSON `json:"-"`
+	TSIGID string   `json:"tsig_id"`
+	JSON   peerJSON `json:"-"`
 }
 
-// secondaryDNSPeerJSON contains the JSON metadata for the struct
-// [SecondaryDNSPeer]
-type secondaryDNSPeerJSON struct {
+// peerJSON contains the JSON metadata for the struct [Peer]
+type peerJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	IP          apijson.Field
@@ -140,12 +140,35 @@ type secondaryDNSPeerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSPeer) UnmarshalJSON(data []byte) (err error) {
+func (r *Peer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r secondaryDNSPeerJSON) RawJSON() string {
+func (r peerJSON) RawJSON() string {
 	return r.raw
+}
+
+type PeerParam struct {
+	// The name of the peer.
+	Name param.Field[string] `json:"name,required"`
+	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
+	// this peer is linked to. For primary zones this IP defines the IP of the
+	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
+	// zones this IP defines the IP of the primary nameserver Cloudflare will send
+	// AXFR/IXFR requests to.
+	IP param.Field[string] `json:"ip"`
+	// Enable IXFR transfer protocol, default is AXFR. Only applicable to secondary
+	// zones.
+	IxfrEnable param.Field[bool] `json:"ixfr_enable"`
+	// DNS port of primary or secondary nameserver, depending on what zone this peer is
+	// linked to.
+	Port param.Field[float64] `json:"port"`
+	// TSIG authentication will be used for zone transfer if configured.
+	TSIGID param.Field[string] `json:"tsig_id"`
+}
+
+func (r PeerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type PeerDeleteResponse struct {
@@ -170,8 +193,8 @@ func (r peerDeleteResponseJSON) RawJSON() string {
 }
 
 type PeerNewParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
@@ -179,9 +202,9 @@ func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PeerNewResponseEnvelope struct {
-	Errors   []PeerNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PeerNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSPeer                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Peer                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerNewResponseEnvelopeJSON    `json:"-"`
@@ -206,52 +229,6 @@ func (r peerNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PeerNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    peerNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// peerNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PeerNewResponseEnvelopeErrors]
-type peerNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    peerNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// peerNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PeerNewResponseEnvelopeMessages]
-type peerNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PeerNewResponseEnvelopeSuccess bool
 
@@ -269,32 +246,17 @@ func (r PeerNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PeerUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The name of the peer.
-	Name param.Field[string] `json:"name,required"`
-	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
-	// this peer is linked to. For primary zones this IP defines the IP of the
-	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
-	// zones this IP defines the IP of the primary nameserver Cloudflare will send
-	// AXFR/IXFR requests to.
-	IP param.Field[string] `json:"ip"`
-	// Enable IXFR transfer protocol, default is AXFR. Only applicable to secondary
-	// zones.
-	IxfrEnable param.Field[bool] `json:"ixfr_enable"`
-	// DNS port of primary or secondary nameserver, depending on what zone this peer is
-	// linked to.
-	Port param.Field[float64] `json:"port"`
-	// TSIG authentication will be used for zone transfer if configured.
-	TSIGID param.Field[string] `json:"tsig_id"`
+	Peer      PeerParam           `json:"peer,required"`
 }
 
 func (r PeerUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Peer)
 }
 
 type PeerUpdateResponseEnvelope struct {
-	Errors   []PeerUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PeerUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSPeer                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Peer                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -319,52 +281,6 @@ func (r peerUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PeerUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    peerUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// peerUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PeerUpdateResponseEnvelopeErrors]
-type peerUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    peerUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// peerUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PeerUpdateResponseEnvelopeMessages]
-type peerUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PeerUpdateResponseEnvelopeSuccess bool
 
@@ -386,12 +302,17 @@ type PeerListParams struct {
 
 type PeerDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r PeerDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type PeerDeleteResponseEnvelope struct {
-	Errors   []PeerDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PeerDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   PeerDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PeerDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerDeleteResponseEnvelopeJSON    `json:"-"`
@@ -416,52 +337,6 @@ func (r peerDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PeerDeleteResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    peerDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// peerDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PeerDeleteResponseEnvelopeErrors]
-type peerDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerDeleteResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    peerDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// peerDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PeerDeleteResponseEnvelopeMessages]
-type peerDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PeerDeleteResponseEnvelopeSuccess bool
 
@@ -482,9 +357,9 @@ type PeerGetParams struct {
 }
 
 type PeerGetResponseEnvelope struct {
-	Errors   []PeerGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PeerGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSPeer                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Peer                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerGetResponseEnvelopeJSON    `json:"-"`
@@ -506,52 +381,6 @@ func (r *PeerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r peerGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    peerGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// peerGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PeerGetResponseEnvelopeErrors]
-type peerGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    peerGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// peerGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PeerGetResponseEnvelopeMessages]
-type peerGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

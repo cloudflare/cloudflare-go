@@ -88,6 +88,7 @@ func TestIncomingDelete(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.Incoming.Delete(context.TODO(), secondary_dns.IncomingDeleteParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
+		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

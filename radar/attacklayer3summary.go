@@ -567,7 +567,7 @@ func (r attackLayer3SummaryGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON(
 type AttackLayer3SummaryGetResponseSummary0 struct {
 	GRE  string                                     `json:"gre,required"`
 	Icmp string                                     `json:"icmp,required"`
-	Tcp  string                                     `json:"tcp,required"`
+	TCP  string                                     `json:"tcp,required"`
 	Udp  string                                     `json:"udp,required"`
 	JSON attackLayer3SummaryGetResponseSummary0JSON `json:"-"`
 }
@@ -577,7 +577,7 @@ type AttackLayer3SummaryGetResponseSummary0 struct {
 type attackLayer3SummaryGetResponseSummary0JSON struct {
 	GRE         apijson.Field
 	Icmp        apijson.Field
-	Tcp         apijson.Field
+	TCP         apijson.Field
 	Udp         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -881,7 +881,7 @@ func (r attackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON) Raw
 type AttackLayer3SummaryProtocolResponseSummary0 struct {
 	GRE  string                                          `json:"GRE,required"`
 	Icmp string                                          `json:"ICMP,required"`
-	Tcp  string                                          `json:"TCP,required"`
+	TCP  string                                          `json:"TCP,required"`
 	Udp  string                                          `json:"UDP,required"`
 	JSON attackLayer3SummaryProtocolResponseSummary0JSON `json:"-"`
 }
@@ -891,7 +891,7 @@ type AttackLayer3SummaryProtocolResponseSummary0 struct {
 type attackLayer3SummaryProtocolResponseSummary0JSON struct {
 	GRE         apijson.Field
 	Icmp        apijson.Field
-	Tcp         apijson.Field
+	TCP         apijson.Field
 	Udp         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1071,7 +1071,7 @@ type AttackLayer3SummaryBitrateParams struct {
 // `url.Values`.
 func (r AttackLayer3SummaryBitrateParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1156,14 +1156,14 @@ type AttackLayer3SummaryBitrateParamsProtocol string
 
 const (
 	AttackLayer3SummaryBitrateParamsProtocolUdp  AttackLayer3SummaryBitrateParamsProtocol = "UDP"
-	AttackLayer3SummaryBitrateParamsProtocolTcp  AttackLayer3SummaryBitrateParamsProtocol = "TCP"
+	AttackLayer3SummaryBitrateParamsProtocolTCP  AttackLayer3SummaryBitrateParamsProtocol = "TCP"
 	AttackLayer3SummaryBitrateParamsProtocolIcmp AttackLayer3SummaryBitrateParamsProtocol = "ICMP"
 	AttackLayer3SummaryBitrateParamsProtocolGRE  AttackLayer3SummaryBitrateParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3SummaryBitrateParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryBitrateParamsProtocolUdp, AttackLayer3SummaryBitrateParamsProtocolTcp, AttackLayer3SummaryBitrateParamsProtocolIcmp, AttackLayer3SummaryBitrateParamsProtocolGRE:
+	case AttackLayer3SummaryBitrateParamsProtocolUdp, AttackLayer3SummaryBitrateParamsProtocolTCP, AttackLayer3SummaryBitrateParamsProtocolIcmp, AttackLayer3SummaryBitrateParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -1226,7 +1226,7 @@ type AttackLayer3SummaryDurationParams struct {
 // `url.Values`.
 func (r AttackLayer3SummaryDurationParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1311,14 +1311,14 @@ type AttackLayer3SummaryDurationParamsProtocol string
 
 const (
 	AttackLayer3SummaryDurationParamsProtocolUdp  AttackLayer3SummaryDurationParamsProtocol = "UDP"
-	AttackLayer3SummaryDurationParamsProtocolTcp  AttackLayer3SummaryDurationParamsProtocol = "TCP"
+	AttackLayer3SummaryDurationParamsProtocolTCP  AttackLayer3SummaryDurationParamsProtocol = "TCP"
 	AttackLayer3SummaryDurationParamsProtocolIcmp AttackLayer3SummaryDurationParamsProtocol = "ICMP"
 	AttackLayer3SummaryDurationParamsProtocolGRE  AttackLayer3SummaryDurationParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3SummaryDurationParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryDurationParamsProtocolUdp, AttackLayer3SummaryDurationParamsProtocolTcp, AttackLayer3SummaryDurationParamsProtocolIcmp, AttackLayer3SummaryDurationParamsProtocolGRE:
+	case AttackLayer3SummaryDurationParamsProtocolUdp, AttackLayer3SummaryDurationParamsProtocolTCP, AttackLayer3SummaryDurationParamsProtocolIcmp, AttackLayer3SummaryDurationParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -1378,7 +1378,7 @@ type AttackLayer3SummaryGetParams struct {
 // `url.Values`.
 func (r AttackLayer3SummaryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1482,7 +1482,7 @@ type AttackLayer3SummaryIPVersionParams struct {
 // `url.Values`.
 func (r AttackLayer3SummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1552,14 +1552,14 @@ type AttackLayer3SummaryIPVersionParamsProtocol string
 
 const (
 	AttackLayer3SummaryIPVersionParamsProtocolUdp  AttackLayer3SummaryIPVersionParamsProtocol = "UDP"
-	AttackLayer3SummaryIPVersionParamsProtocolTcp  AttackLayer3SummaryIPVersionParamsProtocol = "TCP"
+	AttackLayer3SummaryIPVersionParamsProtocolTCP  AttackLayer3SummaryIPVersionParamsProtocol = "TCP"
 	AttackLayer3SummaryIPVersionParamsProtocolIcmp AttackLayer3SummaryIPVersionParamsProtocol = "ICMP"
 	AttackLayer3SummaryIPVersionParamsProtocolGRE  AttackLayer3SummaryIPVersionParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3SummaryIPVersionParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryIPVersionParamsProtocolUdp, AttackLayer3SummaryIPVersionParamsProtocolTcp, AttackLayer3SummaryIPVersionParamsProtocolIcmp, AttackLayer3SummaryIPVersionParamsProtocolGRE:
+	case AttackLayer3SummaryIPVersionParamsProtocolUdp, AttackLayer3SummaryIPVersionParamsProtocolTCP, AttackLayer3SummaryIPVersionParamsProtocolIcmp, AttackLayer3SummaryIPVersionParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -1620,7 +1620,7 @@ type AttackLayer3SummaryProtocolParams struct {
 // `url.Values`.
 func (r AttackLayer3SummaryProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1758,7 +1758,7 @@ type AttackLayer3SummaryVectorParams struct {
 // `url.Values`.
 func (r AttackLayer3SummaryVectorParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1843,14 +1843,14 @@ type AttackLayer3SummaryVectorParamsProtocol string
 
 const (
 	AttackLayer3SummaryVectorParamsProtocolUdp  AttackLayer3SummaryVectorParamsProtocol = "UDP"
-	AttackLayer3SummaryVectorParamsProtocolTcp  AttackLayer3SummaryVectorParamsProtocol = "TCP"
+	AttackLayer3SummaryVectorParamsProtocolTCP  AttackLayer3SummaryVectorParamsProtocol = "TCP"
 	AttackLayer3SummaryVectorParamsProtocolIcmp AttackLayer3SummaryVectorParamsProtocol = "ICMP"
 	AttackLayer3SummaryVectorParamsProtocolGRE  AttackLayer3SummaryVectorParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3SummaryVectorParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryVectorParamsProtocolUdp, AttackLayer3SummaryVectorParamsProtocolTcp, AttackLayer3SummaryVectorParamsProtocolIcmp, AttackLayer3SummaryVectorParamsProtocolGRE:
+	case AttackLayer3SummaryVectorParamsProtocolUdp, AttackLayer3SummaryVectorParamsProtocolTCP, AttackLayer3SummaryVectorParamsProtocolIcmp, AttackLayer3SummaryVectorParamsProtocolGRE:
 		return true
 	}
 	return false

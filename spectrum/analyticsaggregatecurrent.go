@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -64,15 +65,15 @@ type AnalyticsAggregateCurrentGetParams struct {
 // `url.Values`.
 func (r AnalyticsAggregateCurrentGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
 type AnalyticsAggregateCurrentGetResponseEnvelope struct {
-	Errors   []AnalyticsAggregateCurrentGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsAggregateCurrentGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AnalyticsAggregateCurrentGetResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
+	Result   []AnalyticsAggregateCurrentGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsAggregateCurrentGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsAggregateCurrentGetResponseEnvelopeJSON    `json:"-"`
@@ -94,52 +95,6 @@ func (r *AnalyticsAggregateCurrentGetResponseEnvelope) UnmarshalJSON(data []byte
 }
 
 func (r analyticsAggregateCurrentGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsAggregateCurrentGetResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    analyticsAggregateCurrentGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// analyticsAggregateCurrentGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AnalyticsAggregateCurrentGetResponseEnvelopeErrors]
-type analyticsAggregateCurrentGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsAggregateCurrentGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsAggregateCurrentGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsAggregateCurrentGetResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    analyticsAggregateCurrentGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// analyticsAggregateCurrentGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AnalyticsAggregateCurrentGetResponseEnvelopeMessages]
-type analyticsAggregateCurrentGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsAggregateCurrentGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsAggregateCurrentGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

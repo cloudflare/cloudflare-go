@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package user_test
+package radar_test
 
 import (
 	"context"
@@ -12,10 +12,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
+	"github.com/cloudflare/cloudflare-go/v2/radar"
 )
 
-func TestLoadBalancerAnalyticsEventListWithOptionalParams(t *testing.T) {
+func TestBGPLeakEventListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,14 +29,19 @@ func TestLoadBalancerAnalyticsEventListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Analytics.Events.List(context.TODO(), user.LoadBalancerAnalyticsEventListParams{
-		OriginHealthy: cloudflare.F(true),
-		OriginName:    cloudflare.F("primary-dc-1"),
-		PoolHealthy:   cloudflare.F(true),
-		PoolID:        cloudflare.F("17b5962d775c646f3f9725cbc7a53df4"),
-		PoolName:      cloudflare.F("primary-dc"),
-		Since:         cloudflare.F(time.Now()),
-		Until:         cloudflare.F(time.Now()),
+	_, err := client.Radar.BGP.Leaks.Events.List(context.TODO(), radar.BGPLeakEventListParams{
+		DateEnd:         cloudflare.F(time.Now()),
+		DateRange:       cloudflare.F(radar.BGPLeakEventListParamsDateRange7d),
+		DateStart:       cloudflare.F(time.Now()),
+		EventID:         cloudflare.F(int64(0)),
+		Format:          cloudflare.F(radar.BGPLeakEventListParamsFormatJson),
+		InvolvedASN:     cloudflare.F(int64(0)),
+		InvolvedCountry: cloudflare.F("string"),
+		LeakASN:         cloudflare.F(int64(0)),
+		Page:            cloudflare.F(int64(0)),
+		PerPage:         cloudflare.F(int64(0)),
+		SortBy:          cloudflare.F(radar.BGPLeakEventListParamsSortByTime),
+		SortOrder:       cloudflare.F(radar.BGPLeakEventListParamsSortOrderDesc),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

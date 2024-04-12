@@ -32,11 +32,10 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		rulesets.PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseUpdateParams{
-			ID: cloudflare.F("2f2feab2026849078ba485f918791bdc"),
-			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRule{rulesets.PhaseUpdateParamsRulesRulesetsBlockRule(rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
-				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
-					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
+			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRuleUnion{rulesets.BlockRuleParam{
+				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
+					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
@@ -46,14 +45,14 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-				Logging: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleLogging{
+				Logging: cloudflare.F(rulesets.LoggingParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), rulesets.PhaseUpdateParamsRulesRulesetsBlockRule(rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
-				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
-					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
+			}, rulesets.BlockRuleParam{
+				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
+					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
@@ -63,14 +62,14 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-				Logging: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleLogging{
+				Logging: cloudflare.F(rulesets.LoggingParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), rulesets.PhaseUpdateParamsRulesRulesetsBlockRule(rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
-				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
-					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
+			}, rulesets.BlockRuleParam{
+				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
+					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
@@ -80,11 +79,11 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-				Logging: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleLogging{
+				Logging: cloudflare.F(rulesets.LoggingParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			})}),
+			}}),
 			AccountID:   cloudflare.F("string"),
 			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),

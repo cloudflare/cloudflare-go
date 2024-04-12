@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -72,9 +73,9 @@ type UUIDGetParams struct {
 }
 
 type UUIDGetResponseEnvelope struct {
-	Errors   []UUIDGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UUIDGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DCVDelegationUUID                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DCVDelegationUUID     `json:"result,required"`
 	// Whether the API call was successful
 	Success UUIDGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uuidGetResponseEnvelopeJSON    `json:"-"`
@@ -96,52 +97,6 @@ func (r *UUIDGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r uuidGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type UUIDGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    uuidGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// uuidGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UUIDGetResponseEnvelopeErrors]
-type uuidGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UUIDGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uuidGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UUIDGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    uuidGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// uuidGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [UUIDGetResponseEnvelopeMessages]
-type uuidGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UUIDGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uuidGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

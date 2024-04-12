@@ -33,7 +33,7 @@ func NewSinkholeService(opts ...option.RequestOption) (r *SinkholeService) {
 }
 
 // List sinkholes owned by this account
-func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IntelSinkholeItem], err error) {
+func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Sinkhole], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -51,11 +51,11 @@ func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, op
 }
 
 // List sinkholes owned by this account
-func (r *SinkholeService) ListAutoPaging(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IntelSinkholeItem] {
+func (r *SinkholeService) ListAutoPaging(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Sinkhole] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-type IntelSinkholeItem struct {
+type Sinkhole struct {
 	// The unique identifier for the sinkhole
 	ID int64 `json:"id"`
 	// The account tag that owns this sinkhole
@@ -69,13 +69,12 @@ type IntelSinkholeItem struct {
 	// The name of the R2 bucket to store results
 	R2Bucket string `json:"r2_bucket"`
 	// The id of the R2 instance
-	R2ID string                `json:"r2_id"`
-	JSON intelSinkholeItemJSON `json:"-"`
+	R2ID string       `json:"r2_id"`
+	JSON sinkholeJSON `json:"-"`
 }
 
-// intelSinkholeItemJSON contains the JSON metadata for the struct
-// [IntelSinkholeItem]
-type intelSinkholeItemJSON struct {
+// sinkholeJSON contains the JSON metadata for the struct [Sinkhole]
+type sinkholeJSON struct {
 	ID          apijson.Field
 	AccountTag  apijson.Field
 	CreatedOn   apijson.Field
@@ -87,11 +86,11 @@ type intelSinkholeItemJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelSinkholeItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Sinkhole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r intelSinkholeItemJSON) RawJSON() string {
+func (r sinkholeJSON) RawJSON() string {
 	return r.raw
 }
 

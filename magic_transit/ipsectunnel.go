@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -78,10 +79,10 @@ func (r *IPSECTunnelService) List(ctx context.Context, query IPSECTunnelListPara
 // Disables and removes a specific static IPsec Tunnel associated with an account.
 // Use `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, body IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
+func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, params IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", body.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -108,16 +109,38 @@ func (r *IPSECTunnelService) Get(ctx context.Context, tunnelIdentifier string, q
 // without persisting changes. After a PSK is generated, the PSK is immediately
 // persisted to Cloudflare's edge and cannot be retrieved later. Note the PSK in a
 // safe place.
-func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, tunnelIdentifier string, body IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
+func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, tunnelIdentifier string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelPSKGenerateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", body.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
+}
+
+// The PSK metadata that includes when the PSK was generated.
+type PSKMetadata struct {
+	// The date and time the tunnel was last modified.
+	LastGeneratedOn time.Time       `json:"last_generated_on" format:"date-time"`
+	JSON            pskMetadataJSON `json:"-"`
+}
+
+// pskMetadataJSON contains the JSON metadata for the struct [PSKMetadata]
+type pskMetadataJSON struct {
+	LastGeneratedOn apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *PSKMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pskMetadataJSON) RawJSON() string {
+	return r.raw
 }
 
 type IPSECTunnelNewResponse struct {
@@ -157,14 +180,15 @@ type IPSECTunnelNewResponseIPSECTunnel struct {
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
 	Description string `json:"description"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
-	PSKMetadata IPSECTunnelNewResponseIPSECTunnelsPSKMetadata `json:"psk_metadata"`
+	PSKMetadata PSKMetadata `json:"psk_metadata"`
 	// If `true`, then IPsec replay protection will be supported in the
 	// Cloudflare-to-customer direction.
 	ReplayProtection  bool                                                `json:"replay_protection"`
@@ -199,40 +223,17 @@ func (r ipsecTunnelNewResponseIPSECTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-// The PSK metadata that includes when the PSK was generated.
-type IPSECTunnelNewResponseIPSECTunnelsPSKMetadata struct {
-	// The date and time the tunnel was last modified.
-	LastGeneratedOn time.Time                                         `json:"last_generated_on" format:"date-time"`
-	JSON            ipsecTunnelNewResponseIPSECTunnelsPSKMetadataJSON `json:"-"`
-}
-
-// ipsecTunnelNewResponseIPSECTunnelsPSKMetadataJSON contains the JSON metadata for
-// the struct [IPSECTunnelNewResponseIPSECTunnelsPSKMetadata]
-type ipsecTunnelNewResponseIPSECTunnelsPSKMetadataJSON struct {
-	LastGeneratedOn apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *IPSECTunnelNewResponseIPSECTunnelsPSKMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelNewResponseIPSECTunnelsPSKMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
 type IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate `json:"rate"`
+	Rate HealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType `json:"type"`
+	Type HealthCheckType                                         `json:"type"`
 	JSON ipsecTunnelNewResponseIPSECTunnelsTunnelHealthCheckJSON `json:"-"`
 }
 
@@ -253,39 +254,6 @@ func (r *IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheck) UnmarshalJSON(data
 
 func (r ipsecTunnelNewResponseIPSECTunnelsTunnelHealthCheckJSON) RawJSON() string {
 	return r.raw
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate string
-
-const (
-	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateLow  IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate = "low"
-	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateMid  IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate = "mid"
-	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateHigh IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate = "high"
-)
-
-func (r IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate) IsKnown() bool {
-	switch r {
-	case IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateLow, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateMid, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType string
-
-const (
-	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeReply   IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType = "reply"
-	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeRequest IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType = "request"
-)
-
-func (r IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType) IsKnown() bool {
-	switch r {
-	case IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeReply, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeRequest:
-		return true
-	}
-	return false
 }
 
 type IPSECTunnelUpdateResponse struct {
@@ -348,14 +316,15 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
 	Description string `json:"description"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
-	PSKMetadata IPSECTunnelListResponseIPSECTunnelsPSKMetadata `json:"psk_metadata"`
+	PSKMetadata PSKMetadata `json:"psk_metadata"`
 	// If `true`, then IPsec replay protection will be supported in the
 	// Cloudflare-to-customer direction.
 	ReplayProtection  bool                                                 `json:"replay_protection"`
@@ -390,40 +359,17 @@ func (r ipsecTunnelListResponseIPSECTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-// The PSK metadata that includes when the PSK was generated.
-type IPSECTunnelListResponseIPSECTunnelsPSKMetadata struct {
-	// The date and time the tunnel was last modified.
-	LastGeneratedOn time.Time                                          `json:"last_generated_on" format:"date-time"`
-	JSON            ipsecTunnelListResponseIPSECTunnelsPSKMetadataJSON `json:"-"`
-}
-
-// ipsecTunnelListResponseIPSECTunnelsPSKMetadataJSON contains the JSON metadata
-// for the struct [IPSECTunnelListResponseIPSECTunnelsPSKMetadata]
-type ipsecTunnelListResponseIPSECTunnelsPSKMetadataJSON struct {
-	LastGeneratedOn apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *IPSECTunnelListResponseIPSECTunnelsPSKMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelListResponseIPSECTunnelsPSKMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
 type IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate `json:"rate"`
+	Rate HealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType `json:"type"`
+	Type HealthCheckType                                          `json:"type"`
 	JSON ipsecTunnelListResponseIPSECTunnelsTunnelHealthCheckJSON `json:"-"`
 }
 
@@ -444,39 +390,6 @@ func (r *IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheck) UnmarshalJSON(dat
 
 func (r ipsecTunnelListResponseIPSECTunnelsTunnelHealthCheckJSON) RawJSON() string {
 	return r.raw
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate string
-
-const (
-	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateLow  IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate = "low"
-	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateMid  IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate = "mid"
-	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateHigh IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate = "high"
-)
-
-func (r IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate) IsKnown() bool {
-	switch r {
-	case IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateLow, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateMid, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType string
-
-const (
-	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeReply   IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType = "reply"
-	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeRequest IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType = "request"
-)
-
-func (r IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType) IsKnown() bool {
-	switch r {
-	case IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeReply, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeRequest:
-		return true
-	}
-	return false
 }
 
 type IPSECTunnelDeleteResponse struct {
@@ -529,8 +442,8 @@ type IPSECTunnelPSKGenerateResponse struct {
 	// A randomly generated or provided string for use in the IPsec tunnel.
 	PSK string `json:"psk"`
 	// The PSK metadata that includes when the PSK was generated.
-	PSKMetadata IPSECTunnelPSKGenerateResponsePSKMetadata `json:"psk_metadata"`
-	JSON        ipsecTunnelPSKGenerateResponseJSON        `json:"-"`
+	PSKMetadata PSKMetadata                        `json:"psk_metadata"`
+	JSON        ipsecTunnelPSKGenerateResponseJSON `json:"-"`
 }
 
 // ipsecTunnelPSKGenerateResponseJSON contains the JSON metadata for the struct
@@ -551,29 +464,6 @@ func (r ipsecTunnelPSKGenerateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The PSK metadata that includes when the PSK was generated.
-type IPSECTunnelPSKGenerateResponsePSKMetadata struct {
-	// The date and time the tunnel was last modified.
-	LastGeneratedOn time.Time                                     `json:"last_generated_on" format:"date-time"`
-	JSON            ipsecTunnelPSKGenerateResponsePSKMetadataJSON `json:"-"`
-}
-
-// ipsecTunnelPSKGenerateResponsePSKMetadataJSON contains the JSON metadata for the
-// struct [IPSECTunnelPSKGenerateResponsePSKMetadata]
-type ipsecTunnelPSKGenerateResponsePSKMetadataJSON struct {
-	LastGeneratedOn apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *IPSECTunnelPSKGenerateResponsePSKMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelPSKGenerateResponsePSKMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
 type IPSECTunnelNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -585,11 +475,12 @@ type IPSECTunnelNewParams struct {
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name param.Field[string] `json:"name,required"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
-	Description param.Field[string]                          `json:"description"`
-	HealthCheck param.Field[IPSECTunnelNewParamsHealthCheck] `json:"health_check"`
+	Description param.Field[string]           `json:"description"`
+	HealthCheck param.Field[HealthCheckParam] `json:"health_check"`
 	// A randomly generated or provided string for use in the IPsec tunnel.
 	PSK param.Field[string] `json:"psk"`
 	// If `true`, then IPsec replay protection will be supported in the
@@ -601,90 +492,10 @@ func (r IPSECTunnelNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IPSECTunnelNewParamsHealthCheck struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction param.Field[IPSECTunnelNewParamsHealthCheckDirection] `json:"direction"`
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[IPSECTunnelNewParamsHealthCheckRate] `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target param.Field[string] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[IPSECTunnelNewParamsHealthCheckType] `json:"type"`
-}
-
-func (r IPSECTunnelNewParamsHealthCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The direction of the flow of the healthcheck. Either unidirectional, where the
-// probe comes to you via the tunnel and the result comes back to Cloudflare via
-// the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
-type IPSECTunnelNewParamsHealthCheckDirection string
-
-const (
-	IPSECTunnelNewParamsHealthCheckDirectionUnidirectional IPSECTunnelNewParamsHealthCheckDirection = "unidirectional"
-	IPSECTunnelNewParamsHealthCheckDirectionBidirectional  IPSECTunnelNewParamsHealthCheckDirection = "bidirectional"
-)
-
-func (r IPSECTunnelNewParamsHealthCheckDirection) IsKnown() bool {
-	switch r {
-	case IPSECTunnelNewParamsHealthCheckDirectionUnidirectional, IPSECTunnelNewParamsHealthCheckDirectionBidirectional:
-		return true
-	}
-	return false
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type IPSECTunnelNewParamsHealthCheckRate string
-
-const (
-	IPSECTunnelNewParamsHealthCheckRateLow  IPSECTunnelNewParamsHealthCheckRate = "low"
-	IPSECTunnelNewParamsHealthCheckRateMid  IPSECTunnelNewParamsHealthCheckRate = "mid"
-	IPSECTunnelNewParamsHealthCheckRateHigh IPSECTunnelNewParamsHealthCheckRate = "high"
-)
-
-func (r IPSECTunnelNewParamsHealthCheckRate) IsKnown() bool {
-	switch r {
-	case IPSECTunnelNewParamsHealthCheckRateLow, IPSECTunnelNewParamsHealthCheckRateMid, IPSECTunnelNewParamsHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type IPSECTunnelNewParamsHealthCheckType string
-
-const (
-	IPSECTunnelNewParamsHealthCheckTypeReply   IPSECTunnelNewParamsHealthCheckType = "reply"
-	IPSECTunnelNewParamsHealthCheckTypeRequest IPSECTunnelNewParamsHealthCheckType = "request"
-)
-
-func (r IPSECTunnelNewParamsHealthCheckType) IsKnown() bool {
-	switch r {
-	case IPSECTunnelNewParamsHealthCheckTypeReply, IPSECTunnelNewParamsHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type IPSECTunnelNewResponseEnvelope struct {
-	Errors   []IPSECTunnelNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPSECTunnelNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPSECTunnelNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   IPSECTunnelNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -706,52 +517,6 @@ func (r *IPSECTunnelNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r ipsecTunnelNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelNewResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    ipsecTunnelNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ipsecTunnelNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IPSECTunnelNewResponseEnvelopeErrors]
-type ipsecTunnelNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelNewResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    ipsecTunnelNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ipsecTunnelNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IPSECTunnelNewResponseEnvelopeMessages]
-type ipsecTunnelNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -781,11 +546,12 @@ type IPSECTunnelUpdateParams struct {
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name param.Field[string] `json:"name,required"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
-	Description param.Field[string]                             `json:"description"`
-	HealthCheck param.Field[IPSECTunnelUpdateParamsHealthCheck] `json:"health_check"`
+	Description param.Field[string]           `json:"description"`
+	HealthCheck param.Field[HealthCheckParam] `json:"health_check"`
 	// A randomly generated or provided string for use in the IPsec tunnel.
 	PSK param.Field[string] `json:"psk"`
 	// If `true`, then IPsec replay protection will be supported in the
@@ -797,90 +563,10 @@ func (r IPSECTunnelUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IPSECTunnelUpdateParamsHealthCheck struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction param.Field[IPSECTunnelUpdateParamsHealthCheckDirection] `json:"direction"`
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[IPSECTunnelUpdateParamsHealthCheckRate] `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target param.Field[string] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[IPSECTunnelUpdateParamsHealthCheckType] `json:"type"`
-}
-
-func (r IPSECTunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The direction of the flow of the healthcheck. Either unidirectional, where the
-// probe comes to you via the tunnel and the result comes back to Cloudflare via
-// the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
-type IPSECTunnelUpdateParamsHealthCheckDirection string
-
-const (
-	IPSECTunnelUpdateParamsHealthCheckDirectionUnidirectional IPSECTunnelUpdateParamsHealthCheckDirection = "unidirectional"
-	IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional  IPSECTunnelUpdateParamsHealthCheckDirection = "bidirectional"
-)
-
-func (r IPSECTunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
-	switch r {
-	case IPSECTunnelUpdateParamsHealthCheckDirectionUnidirectional, IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional:
-		return true
-	}
-	return false
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type IPSECTunnelUpdateParamsHealthCheckRate string
-
-const (
-	IPSECTunnelUpdateParamsHealthCheckRateLow  IPSECTunnelUpdateParamsHealthCheckRate = "low"
-	IPSECTunnelUpdateParamsHealthCheckRateMid  IPSECTunnelUpdateParamsHealthCheckRate = "mid"
-	IPSECTunnelUpdateParamsHealthCheckRateHigh IPSECTunnelUpdateParamsHealthCheckRate = "high"
-)
-
-func (r IPSECTunnelUpdateParamsHealthCheckRate) IsKnown() bool {
-	switch r {
-	case IPSECTunnelUpdateParamsHealthCheckRateLow, IPSECTunnelUpdateParamsHealthCheckRateMid, IPSECTunnelUpdateParamsHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type IPSECTunnelUpdateParamsHealthCheckType string
-
-const (
-	IPSECTunnelUpdateParamsHealthCheckTypeReply   IPSECTunnelUpdateParamsHealthCheckType = "reply"
-	IPSECTunnelUpdateParamsHealthCheckTypeRequest IPSECTunnelUpdateParamsHealthCheckType = "request"
-)
-
-func (r IPSECTunnelUpdateParamsHealthCheckType) IsKnown() bool {
-	switch r {
-	case IPSECTunnelUpdateParamsHealthCheckTypeReply, IPSECTunnelUpdateParamsHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type IPSECTunnelUpdateResponseEnvelope struct {
-	Errors   []IPSECTunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPSECTunnelUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPSECTunnelUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   IPSECTunnelUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelUpdateResponseEnvelopeJSON    `json:"-"`
@@ -905,52 +591,6 @@ func (r ipsecTunnelUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type IPSECTunnelUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    ipsecTunnelUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ipsecTunnelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IPSECTunnelUpdateResponseEnvelopeErrors]
-type ipsecTunnelUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    ipsecTunnelUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ipsecTunnelUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IPSECTunnelUpdateResponseEnvelopeMessages]
-type ipsecTunnelUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type IPSECTunnelUpdateResponseEnvelopeSuccess bool
 
@@ -972,9 +612,9 @@ type IPSECTunnelListParams struct {
 }
 
 type IPSECTunnelListResponseEnvelope struct {
-	Errors   []IPSECTunnelListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPSECTunnelListResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPSECTunnelListResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   IPSECTunnelListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelListResponseEnvelopeJSON    `json:"-"`
@@ -999,52 +639,6 @@ func (r ipsecTunnelListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type IPSECTunnelListResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    ipsecTunnelListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ipsecTunnelListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IPSECTunnelListResponseEnvelopeErrors]
-type ipsecTunnelListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelListResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    ipsecTunnelListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ipsecTunnelListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IPSECTunnelListResponseEnvelopeMessages]
-type ipsecTunnelListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type IPSECTunnelListResponseEnvelopeSuccess bool
 
@@ -1063,12 +657,17 @@ func (r IPSECTunnelListResponseEnvelopeSuccess) IsKnown() bool {
 type IPSECTunnelDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r IPSECTunnelDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type IPSECTunnelDeleteResponseEnvelope struct {
-	Errors   []IPSECTunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPSECTunnelDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPSECTunnelDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   IPSECTunnelDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1093,52 +692,6 @@ func (r ipsecTunnelDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type IPSECTunnelDeleteResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    ipsecTunnelDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ipsecTunnelDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IPSECTunnelDeleteResponseEnvelopeErrors]
-type ipsecTunnelDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelDeleteResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    ipsecTunnelDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ipsecTunnelDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IPSECTunnelDeleteResponseEnvelopeMessages]
-type ipsecTunnelDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type IPSECTunnelDeleteResponseEnvelopeSuccess bool
 
@@ -1160,9 +713,9 @@ type IPSECTunnelGetParams struct {
 }
 
 type IPSECTunnelGetResponseEnvelope struct {
-	Errors   []IPSECTunnelGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPSECTunnelGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPSECTunnelGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   IPSECTunnelGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelGetResponseEnvelopeJSON    `json:"-"`
@@ -1187,52 +740,6 @@ func (r ipsecTunnelGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type IPSECTunnelGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    ipsecTunnelGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ipsecTunnelGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IPSECTunnelGetResponseEnvelopeErrors]
-type ipsecTunnelGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    ipsecTunnelGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ipsecTunnelGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IPSECTunnelGetResponseEnvelopeMessages]
-type ipsecTunnelGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type IPSECTunnelGetResponseEnvelopeSuccess bool
 
@@ -1251,12 +758,17 @@ func (r IPSECTunnelGetResponseEnvelopeSuccess) IsKnown() bool {
 type IPSECTunnelPSKGenerateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type IPSECTunnelPSKGenerateResponseEnvelope struct {
-	Errors   []IPSECTunnelPSKGenerateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPSECTunnelPSKGenerateResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPSECTunnelPSKGenerateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   IPSECTunnelPSKGenerateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelPSKGenerateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelPSKGenerateResponseEnvelopeJSON    `json:"-"`
@@ -1278,52 +790,6 @@ func (r *IPSECTunnelPSKGenerateResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r ipsecTunnelPSKGenerateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelPSKGenerateResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    ipsecTunnelPSKGenerateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ipsecTunnelPSKGenerateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [IPSECTunnelPSKGenerateResponseEnvelopeErrors]
-type ipsecTunnelPSKGenerateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelPSKGenerateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelPSKGenerateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelPSKGenerateResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    ipsecTunnelPSKGenerateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ipsecTunnelPSKGenerateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [IPSECTunnelPSKGenerateResponseEnvelopeMessages]
-type ipsecTunnelPSKGenerateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelPSKGenerateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelPSKGenerateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

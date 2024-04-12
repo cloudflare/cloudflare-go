@@ -48,7 +48,7 @@ func (r *DestinationPagerdutyService) New(ctx context.Context, body DestinationP
 }
 
 // Deletes all the PagerDuty Services connected to the account.
-func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *DestinationPagerdutyDeleteResponse, err error) {
+func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *DestinationPagerdutyDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationPagerdutyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", body.AccountID)
@@ -61,7 +61,7 @@ func (r *DestinationPagerdutyService) Delete(ctx context.Context, body Destinati
 }
 
 // Get a list of all configured PagerDuty services.
-func (r *DestinationPagerdutyService) Get(ctx context.Context, query DestinationPagerdutyGetParams, opts ...option.RequestOption) (res *[]AlertingPagerduty, err error) {
+func (r *DestinationPagerdutyService) Get(ctx context.Context, query DestinationPagerdutyGetParams, opts ...option.RequestOption) (res *[]Pagerduty, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationPagerdutyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", query.AccountID)
@@ -86,28 +86,27 @@ func (r *DestinationPagerdutyService) Link(ctx context.Context, tokenID string, 
 	return
 }
 
-type AlertingPagerduty struct {
+type Pagerduty struct {
 	// UUID
 	ID string `json:"id"`
 	// The name of the pagerduty service.
-	Name string                `json:"name"`
-	JSON alertingPagerdutyJSON `json:"-"`
+	Name string        `json:"name"`
+	JSON pagerdutyJSON `json:"-"`
 }
 
-// alertingPagerdutyJSON contains the JSON metadata for the struct
-// [AlertingPagerduty]
-type alertingPagerdutyJSON struct {
+// pagerdutyJSON contains the JSON metadata for the struct [Pagerduty]
+type pagerdutyJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AlertingPagerduty) UnmarshalJSON(data []byte) (err error) {
+func (r *Pagerduty) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r alertingPagerdutyJSON) RawJSON() string {
+func (r pagerdutyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -135,13 +134,13 @@ func (r destinationPagerdutyNewResponseJSON) RawJSON() string {
 
 // Union satisfied by [alerting.DestinationPagerdutyDeleteResponseUnknown],
 // [alerting.DestinationPagerdutyDeleteResponseArray] or [shared.UnionString].
-type DestinationPagerdutyDeleteResponse interface {
-	ImplementsAlertingDestinationPagerdutyDeleteResponse()
+type DestinationPagerdutyDeleteResponseUnion interface {
+	ImplementsAlertingDestinationPagerdutyDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DestinationPagerdutyDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*DestinationPagerdutyDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -156,7 +155,7 @@ func init() {
 
 type DestinationPagerdutyDeleteResponseArray []interface{}
 
-func (r DestinationPagerdutyDeleteResponseArray) ImplementsAlertingDestinationPagerdutyDeleteResponse() {
+func (r DestinationPagerdutyDeleteResponseArray) ImplementsAlertingDestinationPagerdutyDeleteResponseUnion() {
 }
 
 type DestinationPagerdutyLinkResponse struct {
@@ -187,9 +186,9 @@ type DestinationPagerdutyNewParams struct {
 }
 
 type DestinationPagerdutyNewResponseEnvelope struct {
-	Errors   []DestinationPagerdutyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationPagerdutyNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DestinationPagerdutyNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   DestinationPagerdutyNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationPagerdutyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationPagerdutyNewResponseEnvelopeJSON    `json:"-"`
@@ -214,52 +213,6 @@ func (r destinationPagerdutyNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DestinationPagerdutyNewResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    destinationPagerdutyNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// destinationPagerdutyNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DestinationPagerdutyNewResponseEnvelopeErrors]
-type destinationPagerdutyNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationPagerdutyNewResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    destinationPagerdutyNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// destinationPagerdutyNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DestinationPagerdutyNewResponseEnvelopeMessages]
-type destinationPagerdutyNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type DestinationPagerdutyNewResponseEnvelopeSuccess bool
 
@@ -281,9 +234,9 @@ type DestinationPagerdutyDeleteParams struct {
 }
 
 type DestinationPagerdutyDeleteResponseEnvelope struct {
-	Errors   []DestinationPagerdutyDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationPagerdutyDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   DestinationPagerdutyDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                   `json:"messages,required"`
+	Result   DestinationPagerdutyDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationPagerdutyDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -307,52 +260,6 @@ func (r *DestinationPagerdutyDeleteResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r destinationPagerdutyDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationPagerdutyDeleteResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    destinationPagerdutyDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// destinationPagerdutyDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [DestinationPagerdutyDeleteResponseEnvelopeErrors]
-type destinationPagerdutyDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationPagerdutyDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    destinationPagerdutyDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// destinationPagerdutyDeleteResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [DestinationPagerdutyDeleteResponseEnvelopeMessages]
-type destinationPagerdutyDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -408,9 +315,9 @@ type DestinationPagerdutyGetParams struct {
 }
 
 type DestinationPagerdutyGetResponseEnvelope struct {
-	Errors   []DestinationPagerdutyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationPagerdutyGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AlertingPagerduty                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []Pagerduty           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationPagerdutyGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -434,52 +341,6 @@ func (r *DestinationPagerdutyGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r destinationPagerdutyGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationPagerdutyGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    destinationPagerdutyGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// destinationPagerdutyGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DestinationPagerdutyGetResponseEnvelopeErrors]
-type destinationPagerdutyGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationPagerdutyGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    destinationPagerdutyGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// destinationPagerdutyGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DestinationPagerdutyGetResponseEnvelopeMessages]
-type destinationPagerdutyGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -535,9 +396,9 @@ type DestinationPagerdutyLinkParams struct {
 }
 
 type DestinationPagerdutyLinkResponseEnvelope struct {
-	Errors   []DestinationPagerdutyLinkResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationPagerdutyLinkResponseEnvelopeMessages `json:"messages,required"`
-	Result   DestinationPagerdutyLinkResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   DestinationPagerdutyLinkResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationPagerdutyLinkResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationPagerdutyLinkResponseEnvelopeJSON    `json:"-"`
@@ -559,52 +420,6 @@ func (r *DestinationPagerdutyLinkResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r destinationPagerdutyLinkResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationPagerdutyLinkResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    destinationPagerdutyLinkResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// destinationPagerdutyLinkResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [DestinationPagerdutyLinkResponseEnvelopeErrors]
-type destinationPagerdutyLinkResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyLinkResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyLinkResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationPagerdutyLinkResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    destinationPagerdutyLinkResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// destinationPagerdutyLinkResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DestinationPagerdutyLinkResponseEnvelopeMessages]
-type destinationPagerdutyLinkResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyLinkResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyLinkResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

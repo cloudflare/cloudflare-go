@@ -34,10 +34,10 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 }
 
 // Creates a download for a video when a video is ready to view.
-func (r *DownloadService) New(ctx context.Context, identifier string, body DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
+func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -47,7 +47,7 @@ func (r *DownloadService) New(ctx context.Context, identifier string, body Downl
 }
 
 // Delete the downloads for a video.
-func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *DownloadDeleteResponse, err error) {
+func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *DownloadDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
@@ -60,7 +60,7 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 }
 
 // Lists the downloads created for a video.
-func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponse, err error) {
+func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", query.AccountID, identifier)
@@ -73,13 +73,13 @@ func (r *DownloadService) Get(ctx context.Context, identifier string, query Down
 }
 
 // Union satisfied by [stream.DownloadNewResponseUnknown] or [shared.UnionString].
-type DownloadNewResponse interface {
-	ImplementsStreamDownloadNewResponse()
+type DownloadNewResponseUnion interface {
+	ImplementsStreamDownloadNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DownloadNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*DownloadNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -90,13 +90,13 @@ func init() {
 
 // Union satisfied by [stream.DownloadDeleteResponseUnknown] or
 // [shared.UnionString].
-type DownloadDeleteResponse interface {
-	ImplementsStreamDownloadDeleteResponse()
+type DownloadDeleteResponseUnion interface {
+	ImplementsStreamDownloadDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DownloadDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*DownloadDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -106,13 +106,13 @@ func init() {
 }
 
 // Union satisfied by [stream.DownloadGetResponseUnknown] or [shared.UnionString].
-type DownloadGetResponse interface {
-	ImplementsStreamDownloadGetResponse()
+type DownloadGetResponseUnion interface {
+	ImplementsStreamDownloadGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DownloadGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*DownloadGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -124,12 +124,17 @@ func init() {
 type DownloadNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type DownloadNewResponseEnvelope struct {
-	Errors   []DownloadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DownloadNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DownloadNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   DownloadNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DownloadNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    downloadNewResponseEnvelopeJSON    `json:"-"`
@@ -154,52 +159,6 @@ func (r downloadNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DownloadNewResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    downloadNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// downloadNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DownloadNewResponseEnvelopeErrors]
-type downloadNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DownloadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r downloadNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DownloadNewResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    downloadNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// downloadNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DownloadNewResponseEnvelopeMessages]
-type downloadNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DownloadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r downloadNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type DownloadNewResponseEnvelopeSuccess bool
 
@@ -221,9 +180,9 @@ type DownloadDeleteParams struct {
 }
 
 type DownloadDeleteResponseEnvelope struct {
-	Errors   []DownloadDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DownloadDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   DownloadDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   DownloadDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DownloadDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    downloadDeleteResponseEnvelopeJSON    `json:"-"`
@@ -248,52 +207,6 @@ func (r downloadDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DownloadDeleteResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    downloadDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// downloadDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DownloadDeleteResponseEnvelopeErrors]
-type downloadDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DownloadDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r downloadDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DownloadDeleteResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    downloadDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// downloadDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DownloadDeleteResponseEnvelopeMessages]
-type downloadDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DownloadDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r downloadDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type DownloadDeleteResponseEnvelopeSuccess bool
 
@@ -315,9 +228,9 @@ type DownloadGetParams struct {
 }
 
 type DownloadGetResponseEnvelope struct {
-	Errors   []DownloadGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DownloadGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DownloadGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   DownloadGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DownloadGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    downloadGetResponseEnvelopeJSON    `json:"-"`
@@ -339,52 +252,6 @@ func (r *DownloadGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r downloadGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DownloadGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    downloadGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// downloadGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DownloadGetResponseEnvelopeErrors]
-type downloadGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DownloadGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r downloadGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DownloadGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    downloadGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// downloadGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DownloadGetResponseEnvelopeMessages]
-type downloadGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DownloadGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r downloadGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

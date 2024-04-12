@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +33,7 @@ func NewCopyService(opts ...option.RequestOption) (r *CopyService) {
 }
 
 // Uploads a video to Stream from a provided URL.
-func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...option.RequestOption) (res *StreamVideos, err error) {
+func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...option.RequestOption) (res *Video, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CopyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/copy", params.AccountID)
@@ -54,7 +55,7 @@ type CopyNewParams struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
-	AllowedOrigins param.Field[[]string] `json:"allowedOrigins"`
+	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowedOrigins"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `json:"creator"`
 	// A user modifiable key-value store used to reference other systems of record for
@@ -87,7 +88,7 @@ func (r CopyNewParams) MarshalJSON() (data []byte, err error) {
 
 type CopyNewParamsWatermark struct {
 	// The unique identifier for the watermark profile.
-	Uid param.Field[string] `json:"uid"`
+	UID param.Field[string] `json:"uid"`
 }
 
 func (r CopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {
@@ -95,9 +96,9 @@ func (r CopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type CopyNewResponseEnvelope struct {
-	Errors   []CopyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CopyNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamVideos                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Video                 `json:"result,required"`
 	// Whether the API call was successful
 	Success CopyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    copyNewResponseEnvelopeJSON    `json:"-"`
@@ -119,52 +120,6 @@ func (r *CopyNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r copyNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CopyNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    copyNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// copyNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [CopyNewResponseEnvelopeErrors]
-type copyNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CopyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r copyNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CopyNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    copyNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// copyNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [CopyNewResponseEnvelopeMessages]
-type copyNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CopyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r copyNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

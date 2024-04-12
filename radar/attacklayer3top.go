@@ -233,9 +233,9 @@ func (r attackLayer3TopAttacksResponseTop0JSON) RawJSON() string {
 }
 
 type AttackLayer3TopIndustryResponse struct {
-	Meta AttackLayer3TopIndustryResponseMeta   `json:"meta,required"`
-	Top0 []AttackLayer3TopIndustryResponseTop0 `json:"top_0,required"`
-	JSON attackLayer3TopIndustryResponseJSON   `json:"-"`
+	Meta AttackLayer3TopIndustryResponseMeta `json:"meta,required"`
+	Top0 []Browser                           `json:"top_0,required"`
+	JSON attackLayer3TopIndustryResponseJSON `json:"-"`
 }
 
 // attackLayer3TopIndustryResponseJSON contains the JSON metadata for the struct
@@ -362,33 +362,10 @@ func (r attackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationJSON) RawJSON
 	return r.raw
 }
 
-type AttackLayer3TopIndustryResponseTop0 struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
-	JSON  attackLayer3TopIndustryResponseTop0JSON `json:"-"`
-}
-
-// attackLayer3TopIndustryResponseTop0JSON contains the JSON metadata for the
-// struct [AttackLayer3TopIndustryResponseTop0]
-type attackLayer3TopIndustryResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3TopIndustryResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3TopIndustryResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3TopVerticalResponse struct {
-	Meta AttackLayer3TopVerticalResponseMeta   `json:"meta,required"`
-	Top0 []AttackLayer3TopVerticalResponseTop0 `json:"top_0,required"`
-	JSON attackLayer3TopVerticalResponseJSON   `json:"-"`
+	Meta AttackLayer3TopVerticalResponseMeta `json:"meta,required"`
+	Top0 []Browser                           `json:"top_0,required"`
+	JSON attackLayer3TopVerticalResponseJSON `json:"-"`
 }
 
 // attackLayer3TopVerticalResponseJSON contains the JSON metadata for the struct
@@ -515,29 +492,6 @@ func (r attackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationJSON) RawJSON
 	return r.raw
 }
 
-type AttackLayer3TopVerticalResponseTop0 struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
-	JSON  attackLayer3TopVerticalResponseTop0JSON `json:"-"`
-}
-
-// attackLayer3TopVerticalResponseTop0JSON contains the JSON metadata for the
-// struct [AttackLayer3TopVerticalResponseTop0]
-type attackLayer3TopVerticalResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3TopVerticalResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3TopVerticalResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3TopAttacksParams struct {
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
@@ -578,7 +532,7 @@ type AttackLayer3TopAttacksParams struct {
 // `url.Values`.
 func (r AttackLayer3TopAttacksParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -664,14 +618,14 @@ type AttackLayer3TopAttacksParamsProtocol string
 
 const (
 	AttackLayer3TopAttacksParamsProtocolUdp  AttackLayer3TopAttacksParamsProtocol = "UDP"
-	AttackLayer3TopAttacksParamsProtocolTcp  AttackLayer3TopAttacksParamsProtocol = "TCP"
+	AttackLayer3TopAttacksParamsProtocolTCP  AttackLayer3TopAttacksParamsProtocol = "TCP"
 	AttackLayer3TopAttacksParamsProtocolIcmp AttackLayer3TopAttacksParamsProtocol = "ICMP"
 	AttackLayer3TopAttacksParamsProtocolGRE  AttackLayer3TopAttacksParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TopAttacksParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopAttacksParamsProtocolUdp, AttackLayer3TopAttacksParamsProtocolTcp, AttackLayer3TopAttacksParamsProtocolIcmp, AttackLayer3TopAttacksParamsProtocolGRE:
+	case AttackLayer3TopAttacksParamsProtocolUdp, AttackLayer3TopAttacksParamsProtocolTCP, AttackLayer3TopAttacksParamsProtocolIcmp, AttackLayer3TopAttacksParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -733,7 +687,7 @@ type AttackLayer3TopIndustryParams struct {
 // `url.Values`.
 func (r AttackLayer3TopIndustryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -801,14 +755,14 @@ type AttackLayer3TopIndustryParamsProtocol string
 
 const (
 	AttackLayer3TopIndustryParamsProtocolUdp  AttackLayer3TopIndustryParamsProtocol = "UDP"
-	AttackLayer3TopIndustryParamsProtocolTcp  AttackLayer3TopIndustryParamsProtocol = "TCP"
+	AttackLayer3TopIndustryParamsProtocolTCP  AttackLayer3TopIndustryParamsProtocol = "TCP"
 	AttackLayer3TopIndustryParamsProtocolIcmp AttackLayer3TopIndustryParamsProtocol = "ICMP"
 	AttackLayer3TopIndustryParamsProtocolGRE  AttackLayer3TopIndustryParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TopIndustryParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopIndustryParamsProtocolUdp, AttackLayer3TopIndustryParamsProtocolTcp, AttackLayer3TopIndustryParamsProtocolIcmp, AttackLayer3TopIndustryParamsProtocolGRE:
+	case AttackLayer3TopIndustryParamsProtocolUdp, AttackLayer3TopIndustryParamsProtocolTCP, AttackLayer3TopIndustryParamsProtocolIcmp, AttackLayer3TopIndustryParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -870,7 +824,7 @@ type AttackLayer3TopVerticalParams struct {
 // `url.Values`.
 func (r AttackLayer3TopVerticalParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -938,14 +892,14 @@ type AttackLayer3TopVerticalParamsProtocol string
 
 const (
 	AttackLayer3TopVerticalParamsProtocolUdp  AttackLayer3TopVerticalParamsProtocol = "UDP"
-	AttackLayer3TopVerticalParamsProtocolTcp  AttackLayer3TopVerticalParamsProtocol = "TCP"
+	AttackLayer3TopVerticalParamsProtocolTCP  AttackLayer3TopVerticalParamsProtocol = "TCP"
 	AttackLayer3TopVerticalParamsProtocolIcmp AttackLayer3TopVerticalParamsProtocol = "ICMP"
 	AttackLayer3TopVerticalParamsProtocolGRE  AttackLayer3TopVerticalParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TopVerticalParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopVerticalParamsProtocolUdp, AttackLayer3TopVerticalParamsProtocolTcp, AttackLayer3TopVerticalParamsProtocolIcmp, AttackLayer3TopVerticalParamsProtocolGRE:
+	case AttackLayer3TopVerticalParamsProtocolUdp, AttackLayer3TopVerticalParamsProtocolTCP, AttackLayer3TopVerticalParamsProtocolIcmp, AttackLayer3TopVerticalParamsProtocolGRE:
 		return true
 	}
 	return false

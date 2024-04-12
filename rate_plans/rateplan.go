@@ -8,7 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -30,7 +32,7 @@ func NewRatePlanService(opts ...option.RequestOption) (r *RatePlanService) {
 }
 
 // Lists all rate plans the zone can subscribe to.
-func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]RatePlanGetResponse, err error) {
+func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]RatePlan, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RatePlanGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/available_rate_plans", zoneIdentifier)
@@ -42,25 +44,24 @@ func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts .
 	return
 }
 
-type RatePlanGetResponse struct {
+type RatePlan struct {
 	// Plan identifier tag.
 	ID string `json:"id"`
 	// Array of available components values for the plan.
-	Components []RatePlanGetResponseComponent `json:"components"`
+	Components []RatePlanComponent `json:"components"`
 	// The monetary unit in which pricing information is displayed.
 	Currency string `json:"currency"`
 	// The duration of the plan subscription.
 	Duration float64 `json:"duration"`
 	// The frequency at which you will be billed for this plan.
-	Frequency RatePlanGetResponseFrequency `json:"frequency"`
+	Frequency RatePlanFrequency `json:"frequency"`
 	// The plan name.
-	Name string                  `json:"name"`
-	JSON ratePlanGetResponseJSON `json:"-"`
+	Name string       `json:"name"`
+	JSON ratePlanJSON `json:"-"`
 }
 
-// ratePlanGetResponseJSON contains the JSON metadata for the struct
-// [RatePlanGetResponse]
-type ratePlanGetResponseJSON struct {
+// ratePlanJSON contains the JSON metadata for the struct [RatePlan]
+type ratePlanJSON struct {
 	ID          apijson.Field
 	Components  apijson.Field
 	Currency    apijson.Field
@@ -71,27 +72,27 @@ type ratePlanGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RatePlanGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RatePlan) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ratePlanGetResponseJSON) RawJSON() string {
+func (r ratePlanJSON) RawJSON() string {
 	return r.raw
 }
 
-type RatePlanGetResponseComponent struct {
+type RatePlanComponent struct {
 	// The default amount allocated.
 	Default float64 `json:"default"`
 	// The unique component.
-	Name RatePlanGetResponseComponentsName `json:"name"`
+	Name RatePlanComponentsName `json:"name"`
 	// The unit price of the addon.
-	UnitPrice float64                          `json:"unit_price"`
-	JSON      ratePlanGetResponseComponentJSON `json:"-"`
+	UnitPrice float64               `json:"unit_price"`
+	JSON      ratePlanComponentJSON `json:"-"`
 }
 
-// ratePlanGetResponseComponentJSON contains the JSON metadata for the struct
-// [RatePlanGetResponseComponent]
-type ratePlanGetResponseComponentJSON struct {
+// ratePlanComponentJSON contains the JSON metadata for the struct
+// [RatePlanComponent]
+type ratePlanComponentJSON struct {
 	Default     apijson.Field
 	Name        apijson.Field
 	UnitPrice   apijson.Field
@@ -99,54 +100,76 @@ type ratePlanGetResponseComponentJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RatePlanGetResponseComponent) UnmarshalJSON(data []byte) (err error) {
+func (r *RatePlanComponent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ratePlanGetResponseComponentJSON) RawJSON() string {
+func (r ratePlanComponentJSON) RawJSON() string {
 	return r.raw
 }
 
 // The unique component.
-type RatePlanGetResponseComponentsName string
+type RatePlanComponentsName string
 
 const (
-	RatePlanGetResponseComponentsNameZones                       RatePlanGetResponseComponentsName = "zones"
-	RatePlanGetResponseComponentsNamePageRules                   RatePlanGetResponseComponentsName = "page_rules"
-	RatePlanGetResponseComponentsNameDedicatedCertificates       RatePlanGetResponseComponentsName = "dedicated_certificates"
-	RatePlanGetResponseComponentsNameDedicatedCertificatesCustom RatePlanGetResponseComponentsName = "dedicated_certificates_custom"
+	RatePlanComponentsNameZones                       RatePlanComponentsName = "zones"
+	RatePlanComponentsNamePageRules                   RatePlanComponentsName = "page_rules"
+	RatePlanComponentsNameDedicatedCertificates       RatePlanComponentsName = "dedicated_certificates"
+	RatePlanComponentsNameDedicatedCertificatesCustom RatePlanComponentsName = "dedicated_certificates_custom"
 )
 
-func (r RatePlanGetResponseComponentsName) IsKnown() bool {
+func (r RatePlanComponentsName) IsKnown() bool {
 	switch r {
-	case RatePlanGetResponseComponentsNameZones, RatePlanGetResponseComponentsNamePageRules, RatePlanGetResponseComponentsNameDedicatedCertificates, RatePlanGetResponseComponentsNameDedicatedCertificatesCustom:
+	case RatePlanComponentsNameZones, RatePlanComponentsNamePageRules, RatePlanComponentsNameDedicatedCertificates, RatePlanComponentsNameDedicatedCertificatesCustom:
 		return true
 	}
 	return false
 }
 
 // The frequency at which you will be billed for this plan.
-type RatePlanGetResponseFrequency string
+type RatePlanFrequency string
 
 const (
-	RatePlanGetResponseFrequencyWeekly    RatePlanGetResponseFrequency = "weekly"
-	RatePlanGetResponseFrequencyMonthly   RatePlanGetResponseFrequency = "monthly"
-	RatePlanGetResponseFrequencyQuarterly RatePlanGetResponseFrequency = "quarterly"
-	RatePlanGetResponseFrequencyYearly    RatePlanGetResponseFrequency = "yearly"
+	RatePlanFrequencyWeekly    RatePlanFrequency = "weekly"
+	RatePlanFrequencyMonthly   RatePlanFrequency = "monthly"
+	RatePlanFrequencyQuarterly RatePlanFrequency = "quarterly"
+	RatePlanFrequencyYearly    RatePlanFrequency = "yearly"
 )
 
-func (r RatePlanGetResponseFrequency) IsKnown() bool {
+func (r RatePlanFrequency) IsKnown() bool {
 	switch r {
-	case RatePlanGetResponseFrequencyWeekly, RatePlanGetResponseFrequencyMonthly, RatePlanGetResponseFrequencyQuarterly, RatePlanGetResponseFrequencyYearly:
+	case RatePlanFrequencyWeekly, RatePlanFrequencyMonthly, RatePlanFrequencyQuarterly, RatePlanFrequencyYearly:
 		return true
 	}
 	return false
 }
 
+type RatePlanParam struct {
+	// Array of available components values for the plan.
+	Components param.Field[[]RatePlanComponentParam] `json:"components"`
+	// The duration of the plan subscription.
+	Duration param.Field[float64] `json:"duration"`
+}
+
+func (r RatePlanParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RatePlanComponentParam struct {
+	// The default amount allocated.
+	Default param.Field[float64] `json:"default"`
+	// The unique component.
+	Name param.Field[RatePlanComponentsName] `json:"name"`
+}
+
+func (r RatePlanComponentParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type RatePlanGetResponseEnvelope struct {
-	Errors   []RatePlanGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RatePlanGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RatePlanGetResponse                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []RatePlan            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RatePlanGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RatePlanGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -170,52 +193,6 @@ func (r *RatePlanGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ratePlanGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RatePlanGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    ratePlanGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ratePlanGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RatePlanGetResponseEnvelopeErrors]
-type ratePlanGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RatePlanGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ratePlanGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RatePlanGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    ratePlanGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ratePlanGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RatePlanGetResponseEnvelopeMessages]
-type ratePlanGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RatePlanGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ratePlanGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

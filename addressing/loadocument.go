@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -80,9 +81,9 @@ func (r LOADocumentNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LOADocumentNewResponseEnvelope struct {
-	Errors   []LOADocumentNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LOADocumentNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LOADocumentNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   LOADocumentNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success LOADocumentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loaDocumentNewResponseEnvelopeJSON    `json:"-"`
@@ -104,52 +105,6 @@ func (r *LOADocumentNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r loaDocumentNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LOADocumentNewResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    loaDocumentNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loaDocumentNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [LOADocumentNewResponseEnvelopeErrors]
-type loaDocumentNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LOADocumentNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loaDocumentNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LOADocumentNewResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    loaDocumentNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loaDocumentNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [LOADocumentNewResponseEnvelopeMessages]
-type loaDocumentNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LOADocumentNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loaDocumentNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

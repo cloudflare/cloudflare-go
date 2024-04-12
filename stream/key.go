@@ -37,10 +37,10 @@ func NewKeyService(opts ...option.RequestOption) (r *KeyService) {
 // Creates an RSA private key in PEM and JWK formats. Key files are only displayed
 // once after creation. Keys are created, used, and deleted independently of
 // videos, and every key can sign any video.
-func (r *KeyService) New(ctx context.Context, body KeyNewParams, opts ...option.RequestOption) (res *StreamKeys, err error) {
+func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...option.RequestOption) (res *Keys, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -50,10 +50,10 @@ func (r *KeyService) New(ctx context.Context, body KeyNewParams, opts ...option.
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponse, err error) {
+func (r *KeyService) Delete(ctx context.Context, identifier string, params KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/keys/%s", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -75,7 +75,7 @@ func (r *KeyService) Get(ctx context.Context, query KeyGetParams, opts ...option
 	return
 }
 
-type StreamKeys struct {
+type Keys struct {
 	// Identifier
 	ID string `json:"id"`
 	// The date and time a signing key was created.
@@ -83,12 +83,12 @@ type StreamKeys struct {
 	// The signing key in JWK format.
 	Jwk string `json:"jwk"`
 	// The signing key in PEM format.
-	Pem  string         `json:"pem"`
-	JSON streamKeysJSON `json:"-"`
+	Pem  string   `json:"pem"`
+	JSON keysJSON `json:"-"`
 }
 
-// streamKeysJSON contains the JSON metadata for the struct [StreamKeys]
-type streamKeysJSON struct {
+// keysJSON contains the JSON metadata for the struct [Keys]
+type keysJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Jwk         apijson.Field
@@ -97,22 +97,22 @@ type streamKeysJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamKeys) UnmarshalJSON(data []byte) (err error) {
+func (r *Keys) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamKeysJSON) RawJSON() string {
+func (r keysJSON) RawJSON() string {
 	return r.raw
 }
 
 // Union satisfied by [stream.KeyDeleteResponseUnknown] or [shared.UnionString].
-type KeyDeleteResponse interface {
-	ImplementsStreamKeyDeleteResponse()
+type KeyDeleteResponseUnion interface {
+	ImplementsStreamKeyDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*KeyDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*KeyDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -148,12 +148,17 @@ func (r keyGetResponseJSON) RawJSON() string {
 type KeyNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type KeyNewResponseEnvelope struct {
-	Errors   []KeyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeyNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamKeys                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Keys                  `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyNewResponseEnvelopeJSON    `json:"-"`
@@ -178,52 +183,6 @@ func (r keyNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type KeyNewResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    keyNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// keyNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [KeyNewResponseEnvelopeErrors]
-type keyNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keyNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type KeyNewResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    keyNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// keyNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [KeyNewResponseEnvelopeMessages]
-type keyNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keyNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type KeyNewResponseEnvelopeSuccess bool
 
@@ -242,12 +201,17 @@ func (r KeyNewResponseEnvelopeSuccess) IsKnown() bool {
 type KeyDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type KeyDeleteResponseEnvelope struct {
-	Errors   []KeyDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeyDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   KeyDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   KeyDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -272,52 +236,6 @@ func (r keyDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type KeyDeleteResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    keyDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// keyDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [KeyDeleteResponseEnvelopeErrors]
-type keyDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type KeyDeleteResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    keyDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// keyDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [KeyDeleteResponseEnvelopeMessages]
-type keyDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keyDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type KeyDeleteResponseEnvelopeSuccess bool
 
@@ -339,9 +257,9 @@ type KeyGetParams struct {
 }
 
 type KeyGetResponseEnvelope struct {
-	Errors   []KeyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeyGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []KeyGetResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []KeyGetResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyGetResponseEnvelopeJSON    `json:"-"`
@@ -363,52 +281,6 @@ func (r *KeyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r keyGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type KeyGetResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    keyGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// keyGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [KeyGetResponseEnvelopeErrors]
-type keyGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keyGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type KeyGetResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    keyGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// keyGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [KeyGetResponseEnvelopeMessages]
-type keyGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keyGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

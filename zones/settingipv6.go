@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +35,7 @@ func NewSettingIPV6Service(opts ...option.RequestOption) (r *SettingIPV6Service)
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-func (r *SettingIPV6Service) Edit(ctx context.Context, params SettingIPV6EditParams, opts ...option.RequestOption) (res *ZoneSettingIPV6, err error) {
+func (r *SettingIPV6Service) Edit(ctx context.Context, params SettingIPV6EditParams, opts ...option.RequestOption) (res *IPV6, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingIPV6EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ipv6", params.ZoneID)
@@ -48,7 +49,7 @@ func (r *SettingIPV6Service) Edit(ctx context.Context, params SettingIPV6EditPar
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-func (r *SettingIPV6Service) Get(ctx context.Context, query SettingIPV6GetParams, opts ...option.RequestOption) (res *ZoneSettingIPV6, err error) {
+func (r *SettingIPV6Service) Get(ctx context.Context, query SettingIPV6GetParams, opts ...option.RequestOption) (res *IPV6, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingIPV6GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ipv6", query.ZoneID)
@@ -62,21 +63,21 @@ func (r *SettingIPV6Service) Get(ctx context.Context, query SettingIPV6GetParams
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-type ZoneSettingIPV6 struct {
+type IPV6 struct {
 	// ID of the zone setting.
-	ID ZoneSettingIPV6ID `json:"id,required"`
+	ID IPV6ID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingIPV6Value `json:"value,required"`
+	Value IPV6Value `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingIPV6Editable `json:"editable"`
+	Editable IPV6Editable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingIPV6JSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	JSON       ipv6JSON  `json:"-"`
 }
 
-// zoneSettingIPV6JSON contains the JSON metadata for the struct [ZoneSettingIPV6]
-type zoneSettingIPV6JSON struct {
+// ipv6JSON contains the JSON metadata for the struct [IPV6]
+type ipv6JSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -85,44 +86,40 @@ type zoneSettingIPV6JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingIPV6) UnmarshalJSON(data []byte) (err error) {
+func (r *IPV6) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingIPV6JSON) RawJSON() string {
+func (r ipv6JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingIPV6) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingIPV6) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZoneSettingIPV6ID string
+type IPV6ID string
 
 const (
-	ZoneSettingIPV6IDIPV6 ZoneSettingIPV6ID = "ipv6"
+	IPV6IDIPV6 IPV6ID = "ipv6"
 )
 
-func (r ZoneSettingIPV6ID) IsKnown() bool {
+func (r IPV6ID) IsKnown() bool {
 	switch r {
-	case ZoneSettingIPV6IDIPV6:
+	case IPV6IDIPV6:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingIPV6Value string
+type IPV6Value string
 
 const (
-	ZoneSettingIPV6ValueOff ZoneSettingIPV6Value = "off"
-	ZoneSettingIPV6ValueOn  ZoneSettingIPV6Value = "on"
+	IPV6ValueOff IPV6Value = "off"
+	IPV6ValueOn  IPV6Value = "on"
 )
 
-func (r ZoneSettingIPV6Value) IsKnown() bool {
+func (r IPV6Value) IsKnown() bool {
 	switch r {
-	case ZoneSettingIPV6ValueOff, ZoneSettingIPV6ValueOn:
+	case IPV6ValueOff, IPV6ValueOn:
 		return true
 	}
 	return false
@@ -130,35 +127,20 @@ func (r ZoneSettingIPV6Value) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingIPV6Editable bool
+type IPV6Editable bool
 
 const (
-	ZoneSettingIPV6EditableTrue  ZoneSettingIPV6Editable = true
-	ZoneSettingIPV6EditableFalse ZoneSettingIPV6Editable = false
+	IPV6EditableTrue  IPV6Editable = true
+	IPV6EditableFalse IPV6Editable = false
 )
 
-func (r ZoneSettingIPV6Editable) IsKnown() bool {
+func (r IPV6Editable) IsKnown() bool {
 	switch r {
-	case ZoneSettingIPV6EditableTrue, ZoneSettingIPV6EditableFalse:
+	case IPV6EditableTrue, IPV6EditableFalse:
 		return true
 	}
 	return false
 }
-
-// Enable IPv6 on all subdomains that are Cloudflare enabled.
-// (https://support.cloudflare.com/hc/en-us/articles/200168586).
-type ZoneSettingIPV6Param struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingIPV6ID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingIPV6Value] `json:"value,required"`
-}
-
-func (r ZoneSettingIPV6Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingIPV6Param) implementsZonesSettingEditParamsItem() {}
 
 type SettingIPV6EditParams struct {
 	// Identifier
@@ -188,13 +170,13 @@ func (r SettingIPV6EditParamsValue) IsKnown() bool {
 }
 
 type SettingIPV6EditResponseEnvelope struct {
-	Errors   []SettingIPV6EditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingIPV6EditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable IPv6 on all subdomains that are Cloudflare enabled.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
-	Result ZoneSettingIPV6                     `json:"result"`
+	Result IPV6                                `json:"result"`
 	JSON   settingIPV6EditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -217,65 +199,19 @@ func (r settingIPV6EditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingIPV6EditResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    settingIPV6EditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingIPV6EditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingIPV6EditResponseEnvelopeErrors]
-type settingIPV6EditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPV6EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingIPV6EditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingIPV6EditResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingIPV6EditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingIPV6EditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingIPV6EditResponseEnvelopeMessages]
-type settingIPV6EditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPV6EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingIPV6EditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingIPV6GetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingIPV6GetResponseEnvelope struct {
-	Errors   []SettingIPV6GetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingIPV6GetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable IPv6 on all subdomains that are Cloudflare enabled.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
-	Result ZoneSettingIPV6                    `json:"result"`
+	Result IPV6                               `json:"result"`
 	JSON   settingIPV6GetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -295,51 +231,5 @@ func (r *SettingIPV6GetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r settingIPV6GetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingIPV6GetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    settingIPV6GetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingIPV6GetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingIPV6GetResponseEnvelopeErrors]
-type settingIPV6GetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPV6GetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingIPV6GetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingIPV6GetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingIPV6GetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingIPV6GetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingIPV6GetResponseEnvelopeMessages]
-type settingIPV6GetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPV6GetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingIPV6GetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

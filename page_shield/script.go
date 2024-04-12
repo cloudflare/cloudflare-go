@@ -34,7 +34,7 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 }
 
 // Lists all scripts detected by Page Shield.
-func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageShieldScript], err error) {
+func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Script], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,7 +52,7 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 }
 
 // Lists all scripts detected by Page Shield.
-func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageShieldScript] {
+func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Script] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -64,28 +64,27 @@ func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGe
 	return
 }
 
-type PageShieldScript struct {
-	ID                      string               `json:"id"`
-	AddedAt                 string               `json:"added_at"`
-	DataflowScore           float64              `json:"dataflow_score"`
-	DomainReportedMalicious bool                 `json:"domain_reported_malicious"`
-	FetchedAt               string               `json:"fetched_at"`
-	FirstPageURL            string               `json:"first_page_url"`
-	FirstSeenAt             string               `json:"first_seen_at"`
-	Hash                    string               `json:"hash"`
-	Host                    string               `json:"host"`
-	JsIntegrityScore        float64              `json:"js_integrity_score"`
-	LastSeenAt              string               `json:"last_seen_at"`
-	ObfuscationScore        float64              `json:"obfuscation_score"`
-	PageURLs                []string             `json:"page_urls"`
-	URL                     string               `json:"url"`
-	URLContainsCdnCgiPath   bool                 `json:"url_contains_cdn_cgi_path"`
-	JSON                    pageShieldScriptJSON `json:"-"`
+type Script struct {
+	ID                      string     `json:"id"`
+	AddedAt                 string     `json:"added_at"`
+	DataflowScore           float64    `json:"dataflow_score"`
+	DomainReportedMalicious bool       `json:"domain_reported_malicious"`
+	FetchedAt               string     `json:"fetched_at"`
+	FirstPageURL            string     `json:"first_page_url"`
+	FirstSeenAt             string     `json:"first_seen_at"`
+	Hash                    string     `json:"hash"`
+	Host                    string     `json:"host"`
+	JSIntegrityScore        float64    `json:"js_integrity_score"`
+	LastSeenAt              string     `json:"last_seen_at"`
+	ObfuscationScore        float64    `json:"obfuscation_score"`
+	PageURLs                []string   `json:"page_urls"`
+	URL                     string     `json:"url"`
+	URLContainsCdnCgiPath   bool       `json:"url_contains_cdn_cgi_path"`
+	JSON                    scriptJSON `json:"-"`
 }
 
-// pageShieldScriptJSON contains the JSON metadata for the struct
-// [PageShieldScript]
-type pageShieldScriptJSON struct {
+// scriptJSON contains the JSON metadata for the struct [Script]
+type scriptJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
 	DataflowScore           apijson.Field
@@ -95,7 +94,7 @@ type pageShieldScriptJSON struct {
 	FirstSeenAt             apijson.Field
 	Hash                    apijson.Field
 	Host                    apijson.Field
-	JsIntegrityScore        apijson.Field
+	JSIntegrityScore        apijson.Field
 	LastSeenAt              apijson.Field
 	ObfuscationScore        apijson.Field
 	PageURLs                apijson.Field
@@ -105,11 +104,11 @@ type pageShieldScriptJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *PageShieldScript) UnmarshalJSON(data []byte) (err error) {
+func (r *Script) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageShieldScriptJSON) RawJSON() string {
+func (r scriptJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -123,7 +122,7 @@ type ScriptGetResponse struct {
 	FirstSeenAt             string                     `json:"first_seen_at"`
 	Hash                    string                     `json:"hash"`
 	Host                    string                     `json:"host"`
-	JsIntegrityScore        float64                    `json:"js_integrity_score"`
+	JSIntegrityScore        float64                    `json:"js_integrity_score"`
 	LastSeenAt              string                     `json:"last_seen_at"`
 	ObfuscationScore        float64                    `json:"obfuscation_score"`
 	PageURLs                []string                   `json:"page_urls"`
@@ -145,7 +144,7 @@ type scriptGetResponseJSON struct {
 	FirstSeenAt             apijson.Field
 	Hash                    apijson.Field
 	Host                    apijson.Field
-	JsIntegrityScore        apijson.Field
+	JSIntegrityScore        apijson.Field
 	LastSeenAt              apijson.Field
 	ObfuscationScore        apijson.Field
 	PageURLs                apijson.Field
@@ -173,7 +172,7 @@ type ScriptGetResponseVersion struct {
 	// The computed hash of the analyzed script.
 	Hash string `json:"hash,nullable"`
 	// The integrity score of the JavaScript content.
-	JsIntegrityScore int64 `json:"js_integrity_score,nullable"`
+	JSIntegrityScore int64 `json:"js_integrity_score,nullable"`
 	// The obfuscation score of the JavaScript content.
 	ObfuscationScore int64                        `json:"obfuscation_score,nullable"`
 	JSON             scriptGetResponseVersionJSON `json:"-"`
@@ -185,7 +184,7 @@ type scriptGetResponseVersionJSON struct {
 	DataflowScore    apijson.Field
 	FetchedAt        apijson.Field
 	Hash             apijson.Field
-	JsIntegrityScore apijson.Field
+	JSIntegrityScore apijson.Field
 	ObfuscationScore apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -258,7 +257,7 @@ type ScriptListParams struct {
 // URLQuery serializes [ScriptListParams]'s query parameters as `url.Values`.
 func (r ScriptListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

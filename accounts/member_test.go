@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/accounts"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -62,13 +63,15 @@ func TestMemberUpdate(t *testing.T) {
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberUpdateParams{
 			AccountID: cloudflare.F[any](map[string]interface{}{}),
-			Roles: cloudflare.F([]accounts.MemberUpdateParamsRole{{
-				ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
-			}, {
-				ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
-			}, {
-				ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
-			}}),
+			User: shared.UserParam{
+				Roles: cloudflare.F([]shared.UserRoleParam{{
+					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
+				}, {
+					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
+				}, {
+					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
+				}}),
+			},
 		},
 	)
 	if err != nil {
@@ -130,6 +133,7 @@ func TestMemberDelete(t *testing.T) {
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberDeleteParams{
 			AccountID: cloudflare.F[any](map[string]interface{}{}),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

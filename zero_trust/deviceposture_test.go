@@ -34,19 +34,19 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 		Type:        cloudflare.F(zero_trust.DevicePostureNewParamsTypeFile),
 		Description: cloudflare.F("The rule for admin serial numbers"),
 		Expiration:  cloudflare.F("1h"),
-		Input: cloudflare.F[zero_trust.DevicePostureNewParamsInput](zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequest(zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequest{
+		Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.FileInputParam{
 			Exists:          cloudflare.F(true),
-			OperatingSystem: cloudflare.F(zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux),
+			OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemLinux),
 			Path:            cloudflare.F("/bin/cat"),
 			Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 			Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
-		})),
-		Match: cloudflare.F([]zero_trust.DevicePostureNewParamsMatch{{
-			Platform: cloudflare.F(zero_trust.DevicePostureNewParamsMatchPlatformWindows),
+		}),
+		Match: cloudflare.F([]zero_trust.DeviceMatchParam{{
+			Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
 		}, {
-			Platform: cloudflare.F(zero_trust.DevicePostureNewParamsMatchPlatformWindows),
+			Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
 		}, {
-			Platform: cloudflare.F(zero_trust.DevicePostureNewParamsMatchPlatformWindows),
+			Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
 		}}),
 		Schedule: cloudflare.F("1h"),
 	})
@@ -82,19 +82,19 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 			Type:        cloudflare.F(zero_trust.DevicePostureUpdateParamsTypeFile),
 			Description: cloudflare.F("The rule for admin serial numbers"),
 			Expiration:  cloudflare.F("1h"),
-			Input: cloudflare.F[zero_trust.DevicePostureUpdateParamsInput](zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest(zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest{
+			Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.FileInputParam{
 				Exists:          cloudflare.F(true),
-				OperatingSystem: cloudflare.F(zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux),
+				OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemLinux),
 				Path:            cloudflare.F("/bin/cat"),
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
-			})),
-			Match: cloudflare.F([]zero_trust.DevicePostureUpdateParamsMatch{{
-				Platform: cloudflare.F(zero_trust.DevicePostureUpdateParamsMatchPlatformWindows),
+			}),
+			Match: cloudflare.F([]zero_trust.DeviceMatchParam{{
+				Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
 			}, {
-				Platform: cloudflare.F(zero_trust.DevicePostureUpdateParamsMatchPlatformWindows),
+				Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
 			}, {
-				Platform: cloudflare.F(zero_trust.DevicePostureUpdateParamsMatchPlatformWindows),
+				Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
 			}}),
 			Schedule: cloudflare.F("1h"),
 		},
@@ -153,6 +153,7 @@ func TestDevicePostureDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

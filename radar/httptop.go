@@ -60,10 +60,32 @@ func (r *HTTPTopService) Browsers(ctx context.Context, query HTTPTopBrowsersPara
 	return
 }
 
+type Browser struct {
+	Name  string      `json:"name,required"`
+	Value string      `json:"value,required"`
+	JSON  browserJSON `json:"-"`
+}
+
+// browserJSON contains the JSON metadata for the struct [Browser]
+type browserJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Browser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r browserJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTopBrowserFamiliesResponse struct {
-	Meta HTTPTopBrowserFamiliesResponseMeta   `json:"meta,required"`
-	Top0 []HTTPTopBrowserFamiliesResponseTop0 `json:"top_0,required"`
-	JSON httpTopBrowserFamiliesResponseJSON   `json:"-"`
+	Meta HTTPTopBrowserFamiliesResponseMeta `json:"meta,required"`
+	Top0 []Browser                          `json:"top_0,required"`
+	JSON httpTopBrowserFamiliesResponseJSON `json:"-"`
 }
 
 // httpTopBrowserFamiliesResponseJSON contains the JSON metadata for the struct
@@ -190,33 +212,10 @@ func (r httpTopBrowserFamiliesResponseMetaConfidenceInfoAnnotationJSON) RawJSON(
 	return r.raw
 }
 
-type HTTPTopBrowserFamiliesResponseTop0 struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
-	JSON  httpTopBrowserFamiliesResponseTop0JSON `json:"-"`
-}
-
-// httpTopBrowserFamiliesResponseTop0JSON contains the JSON metadata for the struct
-// [HTTPTopBrowserFamiliesResponseTop0]
-type httpTopBrowserFamiliesResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPTopBrowserFamiliesResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpTopBrowserFamiliesResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type HTTPTopBrowsersResponse struct {
-	Meta HTTPTopBrowsersResponseMeta   `json:"meta,required"`
-	Top0 []HTTPTopBrowsersResponseTop0 `json:"top_0,required"`
-	JSON httpTopBrowsersResponseJSON   `json:"-"`
+	Meta HTTPTopBrowsersResponseMeta `json:"meta,required"`
+	Top0 []Browser                   `json:"top_0,required"`
+	JSON httpTopBrowsersResponseJSON `json:"-"`
 }
 
 // httpTopBrowsersResponseJSON contains the JSON metadata for the struct
@@ -342,29 +341,6 @@ func (r httpTopBrowsersResponseMetaConfidenceInfoAnnotationJSON) RawJSON() strin
 	return r.raw
 }
 
-type HTTPTopBrowsersResponseTop0 struct {
-	Name  string                          `json:"name,required"`
-	Value string                          `json:"value,required"`
-	JSON  httpTopBrowsersResponseTop0JSON `json:"-"`
-}
-
-// httpTopBrowsersResponseTop0JSON contains the JSON metadata for the struct
-// [HTTPTopBrowsersResponseTop0]
-type httpTopBrowsersResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPTopBrowsersResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpTopBrowsersResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type HTTPTopBrowserFamiliesParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
@@ -413,7 +389,7 @@ type HTTPTopBrowserFamiliesParams struct {
 // `url.Values`.
 func (r HTTPTopBrowserFamiliesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -647,7 +623,7 @@ type HTTPTopBrowsersParams struct {
 // URLQuery serializes [HTTPTopBrowsersParams]'s query parameters as `url.Values`.
 func (r HTTPTopBrowsersParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

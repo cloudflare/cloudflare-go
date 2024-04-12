@@ -66,11 +66,11 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 // For example, you can make a request to
 // `http://waitingrooms.dev/preview/<uuid>?waitTime=50` to configure the estimated
 // wait time as 50 minutes.
-func (r *PageService) Preview(ctx context.Context, zoneIdentifier string, body PagePreviewParams, opts ...option.RequestOption) (res *PagePreviewResponse, err error) {
+func (r *PageService) Preview(ctx context.Context, params PagePreviewParams, opts ...option.RequestOption) (res *PagePreviewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PagePreviewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/preview", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/preview", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,6 +101,8 @@ func (r pagePreviewResponseJSON) RawJSON() string {
 }
 
 type PagePreviewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Only available for the Waiting Room Advanced subscription. This is a template
 	// html file that will be rendered at the edge. If no custom_page_html is provided,
 	// the default waiting room will be used. The template is based on mustache (
@@ -130,14 +132,20 @@ func (r PagePreviewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PagePreviewResponseEnvelope struct {
-	Result PagePreviewResponse             `json:"result,required"`
-	JSON   pagePreviewResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                     `json:"errors,required"`
+	Messages interface{}                     `json:"messages,required"`
+	Result   PagePreviewResponse             `json:"result,required"`
+	Success  interface{}                     `json:"success,required"`
+	JSON     pagePreviewResponseEnvelopeJSON `json:"-"`
 }
 
 // pagePreviewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PagePreviewResponseEnvelope]
 type pagePreviewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

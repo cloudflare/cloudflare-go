@@ -30,9 +30,9 @@ func TestQueueNew(t *testing.T) {
 	)
 	_, err := client.Queues.New(context.TODO(), queues.QueueNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: cloudflare.F[any](map[string]interface{}{
+		Body: map[string]interface{}{
 			"queue_name": "example-queue",
-		}),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,9 +62,9 @@ func TestQueueUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.QueueUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F[any](map[string]interface{}{
+			Body: map[string]interface{}{
 				"queue_name": "renamed-example-queue",
-			}),
+			},
 		},
 	)
 	if err != nil {
@@ -121,6 +121,7 @@ func TestQueueDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.QueueDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
