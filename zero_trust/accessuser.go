@@ -78,9 +78,9 @@ type User struct {
 	// The name of the user.
 	Name string `json:"name"`
 	// The unique API identifier for the Zero Trust seat.
-	SeatUid string `json:"seat_uid"`
+	SeatUID string `json:"seat_uid"`
 	// The unique API identifier for the user.
-	Uid       string    `json:"uid"`
+	UID       string    `json:"uid"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	JSON      userJSON  `json:"-"`
 }
@@ -95,8 +95,8 @@ type userJSON struct {
 	GatewaySeat         apijson.Field
 	LastSuccessfulLogin apijson.Field
 	Name                apijson.Field
-	SeatUid             apijson.Field
-	Uid                 apijson.Field
+	SeatUID             apijson.Field
+	UID                 apijson.Field
 	UpdatedAt           apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -124,9 +124,9 @@ type UserParam struct {
 	// The name of the user.
 	Name param.Field[string] `json:"name"`
 	// The unique API identifier for the Zero Trust seat.
-	SeatUid param.Field[string] `json:"seat_uid"`
+	SeatUID param.Field[string] `json:"seat_uid"`
 	// The unique API identifier for the user.
-	Uid param.Field[string] `json:"uid"`
+	UID param.Field[string] `json:"uid"`
 }
 
 func (r UserParam) MarshalJSON() (data []byte, err error) {

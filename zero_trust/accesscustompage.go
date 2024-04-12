@@ -120,7 +120,7 @@ type CustomPage struct {
 	AppCount  int64     `json:"app_count"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
-	Uid       string         `json:"uid"`
+	UID       string         `json:"uid"`
 	UpdatedAt time.Time      `json:"updated_at" format:"date-time"`
 	JSON      customPageJSON `json:"-"`
 }
@@ -132,7 +132,7 @@ type customPageJSON struct {
 	Type        apijson.Field
 	AppCount    apijson.Field
 	CreatedAt   apijson.Field
-	Uid         apijson.Field
+	UID         apijson.Field
 	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -186,7 +186,7 @@ type CustomPageWithoutHTML struct {
 	AppCount  int64     `json:"app_count"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
-	Uid       string                    `json:"uid"`
+	UID       string                    `json:"uid"`
 	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
 	JSON      customPageWithoutHTMLJSON `json:"-"`
 }
@@ -198,7 +198,7 @@ type customPageWithoutHTMLJSON struct {
 	Type        apijson.Field
 	AppCount    apijson.Field
 	CreatedAt   apijson.Field
-	Uid         apijson.Field
+	UID         apijson.Field
 	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

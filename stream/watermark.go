@@ -128,7 +128,7 @@ type Watermaks struct {
 	// The size of the image in bytes.
 	Size float64 `json:"size"`
 	// The unique identifier for a watermark profile.
-	Uid string `json:"uid"`
+	UID string `json:"uid"`
 	// The width of the image in pixels.
 	Width int64         `json:"width"`
 	JSON  watermaksJSON `json:"-"`
@@ -145,7 +145,7 @@ type watermaksJSON struct {
 	Position       apijson.Field
 	Scale          apijson.Field
 	Size           apijson.Field
-	Uid            apijson.Field
+	UID            apijson.Field
 	Width          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field

@@ -183,7 +183,7 @@ type Video struct {
 	// is not set, the default thumbnail image is taken from 0s of the video.
 	ThumbnailTimestampPct float64 `json:"thumbnailTimestampPct"`
 	// A Cloudflare-generated unique identifier for a media item.
-	Uid string `json:"uid"`
+	UID string `json:"uid"`
 	// The date and time the media item was uploaded.
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// The date and time when the video upload URL is no longer valid for direct user
@@ -214,7 +214,7 @@ type videoJSON struct {
 	Status                apijson.Field
 	Thumbnail             apijson.Field
 	ThumbnailTimestampPct apijson.Field
-	Uid                   apijson.Field
+	UID                   apijson.Field
 	Uploaded              apijson.Field
 	UploadExpiry          apijson.Field
 	Watermark             apijson.Field

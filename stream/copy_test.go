@@ -41,7 +41,7 @@ func TestCopyNewWithOptionalParams(t *testing.T) {
 		ScheduledDeletion:     cloudflare.F(time.Now()),
 		ThumbnailTimestampPct: cloudflare.F(0.529241),
 		Watermark: cloudflare.F(stream.CopyNewParamsWatermark{
-			Uid: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
+			UID: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 		}),
 		UploadCreator:  cloudflare.F("creator-id_abcde12345"),
 		UploadMetadata: cloudflare.F("name aGVsbG8gd29ybGQ=, requiresignedurls, allowedorigins ZXhhbXBsZS5jb20sdGVzdC5jb20="),

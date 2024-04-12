@@ -53,7 +53,7 @@ type Seat struct {
 	// True if the seat is part of Gateway.
 	GatewaySeat bool `json:"gateway_seat"`
 	// Identifier
-	SeatUid   string    `json:"seat_uid"`
+	SeatUID   string    `json:"seat_uid"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	JSON      seatJSON  `json:"-"`
 }
@@ -63,7 +63,7 @@ type seatJSON struct {
 	AccessSeat  apijson.Field
 	CreatedAt   apijson.Field
 	GatewaySeat apijson.Field
-	SeatUid     apijson.Field
+	SeatUID     apijson.Field
 	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

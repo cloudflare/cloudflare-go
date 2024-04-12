@@ -52,7 +52,7 @@ type DirectUploadNewResponse struct {
 	// scheduled deletion. If specified, must be at least 30 days from upload time.
 	ScheduledDeletion time.Time `json:"scheduledDeletion" format:"date-time"`
 	// A Cloudflare-generated unique identifier for a media item.
-	Uid string `json:"uid"`
+	UID string `json:"uid"`
 	// The URL an unauthenticated upload can use for a single
 	// `HTTP POST multipart/form-data` request.
 	UploadURL string                      `json:"uploadURL"`
@@ -64,7 +64,7 @@ type DirectUploadNewResponse struct {
 // [DirectUploadNewResponse]
 type directUploadNewResponseJSON struct {
 	ScheduledDeletion apijson.Field
-	Uid               apijson.Field
+	UID               apijson.Field
 	UploadURL         apijson.Field
 	Watermark         apijson.Field
 	raw               string
@@ -121,7 +121,7 @@ func (r DirectUploadNewParams) MarshalJSON() (data []byte, err error) {
 
 type DirectUploadNewParamsWatermark struct {
 	// The unique identifier for the watermark profile.
-	Uid param.Field[string] `json:"uid"`
+	UID param.Field[string] `json:"uid"`
 }
 
 func (r DirectUploadNewParamsWatermark) MarshalJSON() (data []byte, err error) {
