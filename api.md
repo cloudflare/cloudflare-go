@@ -4297,6 +4297,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/warp_connector">warp_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/warp_connector#WARPConnector">WARPConnector</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/warp_connector">warp_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/warp_connector#WARPConnectorNewResponse">WARPConnectorNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/warp_connector">warp_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/warp_connector#WARPConnectorListResponse">WARPConnectorListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/warp_connector">warp_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/warp_connector#WARPConnectorDeleteResponse">WARPConnectorDeleteResponse</a>
