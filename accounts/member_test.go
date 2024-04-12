@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/accounts"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -62,7 +63,7 @@ func TestMemberUpdate(t *testing.T) {
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberUpdateParams{
 			AccountID: cloudflare.F[any](map[string]interface{}{}),
-			Member: accounts.MemberParam{
+			User: shared.UserParam{
 				Roles: cloudflare.F([]accounts.MemberRoleParam{{
 					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				}, {

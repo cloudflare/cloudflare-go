@@ -5,7 +5,9 @@ package shared
 import (
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 )
 
 type AuditLog struct {
@@ -355,4 +357,88 @@ func (r *ResponseInfo) UnmarshalJSON(data []byte) (err error) {
 
 func (r responseInfoJSON) RawJSON() string {
 	return r.raw
+}
+
+type User struct {
+	// Membership identifier tag.
+	ID string `json:"id,required"`
+	// Roles assigned to this member.
+	Roles  []accounts.MemberRole `json:"roles,required"`
+	Status interface{}           `json:"status,required"`
+	User   UserUser              `json:"user,required"`
+	JSON   userJSON              `json:"-"`
+}
+
+// userJSON contains the JSON metadata for the struct [User]
+type userJSON struct {
+	ID          apijson.Field
+	Roles       apijson.Field
+	Status      apijson.Field
+	User        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *User) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userJSON) RawJSON() string {
+	return r.raw
+}
+
+type UserUser struct {
+	// The contact email address of the user.
+	Email string `json:"email,required"`
+	// Identifier
+	ID string `json:"id"`
+	// User's first name
+	FirstName string `json:"first_name,nullable"`
+	// User's last name
+	LastName string `json:"last_name,nullable"`
+	// Indicates whether two-factor authentication is enabled for the user account.
+	// Does not apply to API authentication.
+	TwoFactorAuthenticationEnabled bool         `json:"two_factor_authentication_enabled"`
+	JSON                           userUserJSON `json:"-"`
+}
+
+// userUserJSON contains the JSON metadata for the struct [UserUser]
+type userUserJSON struct {
+	Email                          apijson.Field
+	ID                             apijson.Field
+	FirstName                      apijson.Field
+	LastName                       apijson.Field
+	TwoFactorAuthenticationEnabled apijson.Field
+	raw                            string
+	ExtraFields                    map[string]apijson.Field
+}
+
+func (r *UserUser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userUserJSON) RawJSON() string {
+	return r.raw
+}
+
+type UserParam struct {
+	// Roles assigned to this member.
+	Roles param.Field[[]accounts.MemberRoleParam] `json:"roles,required"`
+}
+
+func (r UserParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type UserUserParam struct {
+	// The contact email address of the user.
+	Email param.Field[string] `json:"email,required"`
+	// User's first name
+	FirstName param.Field[string] `json:"first_name"`
+	// User's last name
+	LastName param.Field[string] `json:"last_name"`
+}
+
+func (r UserUserParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
