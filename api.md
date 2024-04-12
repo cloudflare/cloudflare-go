@@ -1,13 +1,9 @@
-# Shared Params Types
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#TunnelParam">TunnelParam</a>
-
 # Shared Response Types
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#AuditLog">AuditLog</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#CloudflareTunnel">CloudflareTunnel</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ErrorData">ErrorData</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ResponseInfo">ResponseInfo</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#Tunnel">Tunnel</a>
 
 # Accounts
 
