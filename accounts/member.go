@@ -49,7 +49,7 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 }
 
 // Modify an account member.
-func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *Member, err error) {
+func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *shared.User, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", params.AccountID, memberID)
@@ -98,7 +98,7 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, params Memb
 }
 
 // Get information about a specific member of an account.
-func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *Member, err error) {
+func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *shared.User, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", query.AccountID, memberID)
@@ -108,90 +108,6 @@ func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGe
 	}
 	res = &env.Result
 	return
-}
-
-type Member struct {
-	// Membership identifier tag.
-	ID string `json:"id,required"`
-	// Roles assigned to this member.
-	Roles  []MemberRole `json:"roles,required"`
-	Status interface{}  `json:"status,required"`
-	User   MemberUser   `json:"user,required"`
-	JSON   memberJSON   `json:"-"`
-}
-
-// memberJSON contains the JSON metadata for the struct [Member]
-type memberJSON struct {
-	ID          apijson.Field
-	Roles       apijson.Field
-	Status      apijson.Field
-	User        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Member) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberUser struct {
-	// The contact email address of the user.
-	Email string `json:"email,required"`
-	// Identifier
-	ID string `json:"id"`
-	// User's first name
-	FirstName string `json:"first_name,nullable"`
-	// User's last name
-	LastName string `json:"last_name,nullable"`
-	// Indicates whether two-factor authentication is enabled for the user account.
-	// Does not apply to API authentication.
-	TwoFactorAuthenticationEnabled bool           `json:"two_factor_authentication_enabled"`
-	JSON                           memberUserJSON `json:"-"`
-}
-
-// memberUserJSON contains the JSON metadata for the struct [MemberUser]
-type memberUserJSON struct {
-	Email                          apijson.Field
-	ID                             apijson.Field
-	FirstName                      apijson.Field
-	LastName                       apijson.Field
-	TwoFactorAuthenticationEnabled apijson.Field
-	raw                            string
-	ExtraFields                    map[string]apijson.Field
-}
-
-func (r *MemberUser) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberUserJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberParam struct {
-	// Roles assigned to this member.
-	Roles param.Field[[]MemberRoleParam] `json:"roles,required"`
-}
-
-func (r MemberParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MemberUserParam struct {
-	// The contact email address of the user.
-	Email param.Field[string] `json:"email,required"`
-	// User's first name
-	FirstName param.Field[string] `json:"first_name"`
-	// User's last name
-	LastName param.Field[string] `json:"last_name"`
-}
-
-func (r MemberUserParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type MemberRole struct {
@@ -537,17 +453,17 @@ func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
-	Member    MemberParam              `json:"member,required"`
+	User      shared.UserParam         `json:"user,required"`
 }
 
 func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Member)
+	return apijson.MarshalRoot(r.User)
 }
 
 type MemberUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Member                `json:"result,required"`
+	Result   shared.User           `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberUpdateResponseEnvelopeJSON    `json:"-"`
@@ -719,7 +635,7 @@ type MemberGetParams struct {
 type MemberGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Member                `json:"result,required"`
+	Result   shared.User           `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberGetResponseEnvelopeJSON    `json:"-"`

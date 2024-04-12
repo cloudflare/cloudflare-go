@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -107,4 +108,27 @@ func (r *User) UnmarshalJSON(data []byte) (err error) {
 
 func (r userJSON) RawJSON() string {
 	return r.raw
+}
+
+type UserParam struct {
+	// True if the user has authenticated with Cloudflare Access.
+	AccessSeat param.Field[bool] `json:"access_seat"`
+	// The number of active devices registered to the user.
+	ActiveDeviceCount param.Field[float64] `json:"active_device_count"`
+	// The email of the user.
+	Email param.Field[string] `json:"email" format:"email"`
+	// True if the user has logged into the WARP client.
+	GatewaySeat param.Field[bool] `json:"gateway_seat"`
+	// The time at which the user last successfully logged in.
+	LastSuccessfulLogin param.Field[time.Time] `json:"last_successful_login" format:"date-time"`
+	// The name of the user.
+	Name param.Field[string] `json:"name"`
+	// The unique API identifier for the Zero Trust seat.
+	SeatUid param.Field[string] `json:"seat_uid"`
+	// The unique API identifier for the user.
+	Uid param.Field[string] `json:"uid"`
+}
+
+func (r UserParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
