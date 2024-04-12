@@ -43,3 +43,39 @@ type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
 type ResponseInfo = shared.ResponseInfo
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+//
+// This is an alias to an internal type.
+type Tunnel = shared.Tunnel
+
+// This is an alias to an internal type.
+type TunnelConnection = shared.TunnelConnection
+
+// The type of tunnel.
+//
+// This is an alias to an internal type.
+type TunnelTunType = shared.TunnelTunType
+
+// This is an alias to an internal value.
+const TunnelTunTypeCfdTunnel = shared.TunnelTunTypeCfdTunnel
+
+// This is an alias to an internal value.
+const TunnelTunTypeWARPConnector = shared.TunnelTunTypeWARPConnector
+
+// This is an alias to an internal value.
+const TunnelTunTypeIPSec = shared.TunnelTunTypeIPSec
+
+// This is an alias to an internal value.
+const TunnelTunTypeGRE = shared.TunnelTunTypeGRE
+
+// This is an alias to an internal value.
+const TunnelTunTypeCni = shared.TunnelTunTypeCni
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+//
+// This is an alias to an internal type.
+type TunnelParam = shared.TunnelParam
+
+// This is an alias to an internal type.
+type TunnelConnectionParam = shared.TunnelConnectionParam

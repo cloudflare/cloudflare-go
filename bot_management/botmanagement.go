@@ -72,7 +72,7 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 type BotFightModeConfiguration struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs bool `json:"enable_js"`
+	EnableJS bool `json:"enable_js"`
 	// Whether to enable Bot Fight Mode.
 	FightMode bool `json:"fight_mode"`
 	// A read-only field that indicates whether the zone currently is running the
@@ -84,7 +84,7 @@ type BotFightModeConfiguration struct {
 // botFightModeConfigurationJSON contains the JSON metadata for the struct
 // [BotFightModeConfiguration]
 type botFightModeConfigurationJSON struct {
-	EnableJs         apijson.Field
+	EnableJS         apijson.Field
 	FightMode        apijson.Field
 	UsingLatestModel apijson.Field
 	raw              string
@@ -106,7 +106,7 @@ func (r BotFightModeConfiguration) implementsBotManagementBotManagementGetRespon
 type BotFightModeConfigurationParam struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs param.Field[bool] `json:"enable_js"`
+	EnableJS param.Field[bool] `json:"enable_js"`
 	// Whether to enable Bot Fight Mode.
 	FightMode param.Field[bool] `json:"fight_mode"`
 }
@@ -124,7 +124,7 @@ type SubscriptionConfiguration struct {
 	AutoUpdateModel bool `json:"auto_update_model"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs bool `json:"enable_js"`
+	EnableJS bool `json:"enable_js"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore bool `json:"suppress_session_score"`
@@ -138,7 +138,7 @@ type SubscriptionConfiguration struct {
 // [SubscriptionConfiguration]
 type subscriptionConfigurationJSON struct {
 	AutoUpdateModel      apijson.Field
-	EnableJs             apijson.Field
+	EnableJS             apijson.Field
 	SuppressSessionScore apijson.Field
 	UsingLatestModel     apijson.Field
 	raw                  string
@@ -164,7 +164,7 @@ type SubscriptionConfigurationParam struct {
 	AutoUpdateModel param.Field[bool] `json:"auto_update_model"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs param.Field[bool] `json:"enable_js"`
+	EnableJS param.Field[bool] `json:"enable_js"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore param.Field[bool] `json:"suppress_session_score"`
@@ -179,7 +179,7 @@ func (r SubscriptionConfigurationParam) implementsBotManagementBotManagementUpda
 type SuperBotFightModeDefinitelyConfiguration struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs bool `json:"enable_js"`
+	EnableJS bool `json:"enable_js"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -199,7 +199,7 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 // superBotFightModeDefinitelyConfigurationJSON contains the JSON metadata for the
 // struct [SuperBotFightModeDefinitelyConfiguration]
 type superBotFightModeDefinitelyConfigurationJSON struct {
-	EnableJs                     apijson.Field
+	EnableJS                     apijson.Field
 	OptimizeWordpress            apijson.Field
 	SbfmDefinitelyAutomated      apijson.Field
 	SbfmStaticResourceProtection apijson.Field
@@ -258,7 +258,7 @@ func (r SuperBotFightModeDefinitelyConfigurationSbfmVerifiedBots) IsKnown() bool
 type SuperBotFightModeDefinitelyConfigurationParam struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs param.Field[bool] `json:"enable_js"`
+	EnableJS param.Field[bool] `json:"enable_js"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -281,7 +281,7 @@ func (r SuperBotFightModeDefinitelyConfigurationParam) implementsBotManagementBo
 type SuperBotFightModeLikelyConfiguration struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs bool `json:"enable_js"`
+	EnableJS bool `json:"enable_js"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -303,7 +303,7 @@ type SuperBotFightModeLikelyConfiguration struct {
 // superBotFightModeLikelyConfigurationJSON contains the JSON metadata for the
 // struct [SuperBotFightModeLikelyConfiguration]
 type superBotFightModeLikelyConfigurationJSON struct {
-	EnableJs                     apijson.Field
+	EnableJS                     apijson.Field
 	OptimizeWordpress            apijson.Field
 	SbfmDefinitelyAutomated      apijson.Field
 	SbfmLikelyAutomated          apijson.Field
@@ -379,7 +379,7 @@ func (r SuperBotFightModeLikelyConfigurationSbfmVerifiedBots) IsKnown() bool {
 type SuperBotFightModeLikelyConfigurationParam struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs param.Field[bool] `json:"enable_js"`
+	EnableJS param.Field[bool] `json:"enable_js"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -404,7 +404,7 @@ func (r SuperBotFightModeLikelyConfigurationParam) implementsBotManagementBotMan
 type BotManagementUpdateResponse struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs bool `json:"enable_js"`
+	EnableJS bool `json:"enable_js"`
 	// A read-only field that indicates whether the zone currently is running the
 	// latest ML model.
 	UsingLatestModel bool `json:"using_latest_model"`
@@ -436,7 +436,7 @@ type BotManagementUpdateResponse struct {
 // botManagementUpdateResponseJSON contains the JSON metadata for the struct
 // [BotManagementUpdateResponse]
 type botManagementUpdateResponseJSON struct {
-	EnableJs                     apijson.Field
+	EnableJS                     apijson.Field
 	UsingLatestModel             apijson.Field
 	FightMode                    apijson.Field
 	OptimizeWordpress            apijson.Field
@@ -550,7 +550,7 @@ func (r BotManagementUpdateResponseSbfmLikelyAutomated) IsKnown() bool {
 type BotManagementGetResponse struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs bool `json:"enable_js"`
+	EnableJS bool `json:"enable_js"`
 	// A read-only field that indicates whether the zone currently is running the
 	// latest ML model.
 	UsingLatestModel bool `json:"using_latest_model"`
@@ -582,7 +582,7 @@ type BotManagementGetResponse struct {
 // botManagementGetResponseJSON contains the JSON metadata for the struct
 // [BotManagementGetResponse]
 type botManagementGetResponseJSON struct {
-	EnableJs                     apijson.Field
+	EnableJS                     apijson.Field
 	UsingLatestModel             apijson.Field
 	FightMode                    apijson.Field
 	OptimizeWordpress            apijson.Field
@@ -706,7 +706,7 @@ func (r BotManagementUpdateParams) MarshalJSON() (data []byte, err error) {
 type BotManagementUpdateParamsBody struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs param.Field[bool] `json:"enable_js"`
+	EnableJS param.Field[bool] `json:"enable_js"`
 	// Whether to enable Bot Fight Mode.
 	FightMode param.Field[bool] `json:"fight_mode"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.

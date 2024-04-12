@@ -240,7 +240,7 @@ func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -274,7 +274,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -338,7 +338,7 @@ const (
 	PhaseUpdateResponseRulesActionChallenge        PhaseUpdateResponseRulesAction = "challenge"
 	PhaseUpdateResponseRulesActionCompressResponse PhaseUpdateResponseRulesAction = "compress_response"
 	PhaseUpdateResponseRulesActionExecute          PhaseUpdateResponseRulesAction = "execute"
-	PhaseUpdateResponseRulesActionJsChallenge      PhaseUpdateResponseRulesAction = "js_challenge"
+	PhaseUpdateResponseRulesActionJSChallenge      PhaseUpdateResponseRulesAction = "js_challenge"
 	PhaseUpdateResponseRulesActionLog              PhaseUpdateResponseRulesAction = "log"
 	PhaseUpdateResponseRulesActionManagedChallenge PhaseUpdateResponseRulesAction = "managed_challenge"
 	PhaseUpdateResponseRulesActionRedirect         PhaseUpdateResponseRulesAction = "redirect"
@@ -353,7 +353,7 @@ const (
 
 func (r PhaseUpdateResponseRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseUpdateResponseRulesActionBlock, PhaseUpdateResponseRulesActionChallenge, PhaseUpdateResponseRulesActionCompressResponse, PhaseUpdateResponseRulesActionExecute, PhaseUpdateResponseRulesActionJsChallenge, PhaseUpdateResponseRulesActionLog, PhaseUpdateResponseRulesActionManagedChallenge, PhaseUpdateResponseRulesActionRedirect, PhaseUpdateResponseRulesActionRewrite, PhaseUpdateResponseRulesActionRoute, PhaseUpdateResponseRulesActionScore, PhaseUpdateResponseRulesActionServeError, PhaseUpdateResponseRulesActionSetConfig, PhaseUpdateResponseRulesActionSkip, PhaseUpdateResponseRulesActionSetCacheSettings:
+	case PhaseUpdateResponseRulesActionBlock, PhaseUpdateResponseRulesActionChallenge, PhaseUpdateResponseRulesActionCompressResponse, PhaseUpdateResponseRulesActionExecute, PhaseUpdateResponseRulesActionJSChallenge, PhaseUpdateResponseRulesActionLog, PhaseUpdateResponseRulesActionManagedChallenge, PhaseUpdateResponseRulesActionRedirect, PhaseUpdateResponseRulesActionRewrite, PhaseUpdateResponseRulesActionRoute, PhaseUpdateResponseRulesActionScore, PhaseUpdateResponseRulesActionServeError, PhaseUpdateResponseRulesActionSetConfig, PhaseUpdateResponseRulesActionSkip, PhaseUpdateResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -519,7 +519,7 @@ func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -553,7 +553,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -617,7 +617,7 @@ const (
 	PhaseGetResponseRulesActionChallenge        PhaseGetResponseRulesAction = "challenge"
 	PhaseGetResponseRulesActionCompressResponse PhaseGetResponseRulesAction = "compress_response"
 	PhaseGetResponseRulesActionExecute          PhaseGetResponseRulesAction = "execute"
-	PhaseGetResponseRulesActionJsChallenge      PhaseGetResponseRulesAction = "js_challenge"
+	PhaseGetResponseRulesActionJSChallenge      PhaseGetResponseRulesAction = "js_challenge"
 	PhaseGetResponseRulesActionLog              PhaseGetResponseRulesAction = "log"
 	PhaseGetResponseRulesActionManagedChallenge PhaseGetResponseRulesAction = "managed_challenge"
 	PhaseGetResponseRulesActionRedirect         PhaseGetResponseRulesAction = "redirect"
@@ -632,7 +632,7 @@ const (
 
 func (r PhaseGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseGetResponseRulesActionBlock, PhaseGetResponseRulesActionChallenge, PhaseGetResponseRulesActionCompressResponse, PhaseGetResponseRulesActionExecute, PhaseGetResponseRulesActionJsChallenge, PhaseGetResponseRulesActionLog, PhaseGetResponseRulesActionManagedChallenge, PhaseGetResponseRulesActionRedirect, PhaseGetResponseRulesActionRewrite, PhaseGetResponseRulesActionRoute, PhaseGetResponseRulesActionScore, PhaseGetResponseRulesActionServeError, PhaseGetResponseRulesActionSetConfig, PhaseGetResponseRulesActionSkip, PhaseGetResponseRulesActionSetCacheSettings:
+	case PhaseGetResponseRulesActionBlock, PhaseGetResponseRulesActionChallenge, PhaseGetResponseRulesActionCompressResponse, PhaseGetResponseRulesActionExecute, PhaseGetResponseRulesActionJSChallenge, PhaseGetResponseRulesActionLog, PhaseGetResponseRulesActionManagedChallenge, PhaseGetResponseRulesActionRedirect, PhaseGetResponseRulesActionRewrite, PhaseGetResponseRulesActionRoute, PhaseGetResponseRulesActionScore, PhaseGetResponseRulesActionServeError, PhaseGetResponseRulesActionSetConfig, PhaseGetResponseRulesActionSkip, PhaseGetResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -723,7 +723,7 @@ func (r PhaseUpdateParamsRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam], [rulesets.ChallengeRuleParam],
 // [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
-// [rulesets.JsChallengeRuleParam], [rulesets.LogRuleParam],
+// [rulesets.JSChallengeRuleParam], [rulesets.LogRuleParam],
 // [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
 // [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
 // [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
@@ -741,7 +741,7 @@ const (
 	PhaseUpdateParamsRulesActionChallenge        PhaseUpdateParamsRulesAction = "challenge"
 	PhaseUpdateParamsRulesActionCompressResponse PhaseUpdateParamsRulesAction = "compress_response"
 	PhaseUpdateParamsRulesActionExecute          PhaseUpdateParamsRulesAction = "execute"
-	PhaseUpdateParamsRulesActionJsChallenge      PhaseUpdateParamsRulesAction = "js_challenge"
+	PhaseUpdateParamsRulesActionJSChallenge      PhaseUpdateParamsRulesAction = "js_challenge"
 	PhaseUpdateParamsRulesActionLog              PhaseUpdateParamsRulesAction = "log"
 	PhaseUpdateParamsRulesActionManagedChallenge PhaseUpdateParamsRulesAction = "managed_challenge"
 	PhaseUpdateParamsRulesActionRedirect         PhaseUpdateParamsRulesAction = "redirect"
@@ -756,7 +756,7 @@ const (
 
 func (r PhaseUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseUpdateParamsRulesActionBlock, PhaseUpdateParamsRulesActionChallenge, PhaseUpdateParamsRulesActionCompressResponse, PhaseUpdateParamsRulesActionExecute, PhaseUpdateParamsRulesActionJsChallenge, PhaseUpdateParamsRulesActionLog, PhaseUpdateParamsRulesActionManagedChallenge, PhaseUpdateParamsRulesActionRedirect, PhaseUpdateParamsRulesActionRewrite, PhaseUpdateParamsRulesActionRoute, PhaseUpdateParamsRulesActionScore, PhaseUpdateParamsRulesActionServeError, PhaseUpdateParamsRulesActionSetConfig, PhaseUpdateParamsRulesActionSkip, PhaseUpdateParamsRulesActionSetCacheSettings:
+	case PhaseUpdateParamsRulesActionBlock, PhaseUpdateParamsRulesActionChallenge, PhaseUpdateParamsRulesActionCompressResponse, PhaseUpdateParamsRulesActionExecute, PhaseUpdateParamsRulesActionJSChallenge, PhaseUpdateParamsRulesActionLog, PhaseUpdateParamsRulesActionManagedChallenge, PhaseUpdateParamsRulesActionRedirect, PhaseUpdateParamsRulesActionRewrite, PhaseUpdateParamsRulesActionRoute, PhaseUpdateParamsRulesActionScore, PhaseUpdateParamsRulesActionServeError, PhaseUpdateParamsRulesActionSetConfig, PhaseUpdateParamsRulesActionSkip, PhaseUpdateParamsRulesActionSetCacheSettings:
 		return true
 	}
 	return false

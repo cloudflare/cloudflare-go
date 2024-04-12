@@ -207,7 +207,7 @@ func (r VersionByTagGetResponseRule) AsUnion() VersionByTagGetResponseRulesUnion
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -241,7 +241,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -305,7 +305,7 @@ const (
 	VersionByTagGetResponseRulesActionChallenge        VersionByTagGetResponseRulesAction = "challenge"
 	VersionByTagGetResponseRulesActionCompressResponse VersionByTagGetResponseRulesAction = "compress_response"
 	VersionByTagGetResponseRulesActionExecute          VersionByTagGetResponseRulesAction = "execute"
-	VersionByTagGetResponseRulesActionJsChallenge      VersionByTagGetResponseRulesAction = "js_challenge"
+	VersionByTagGetResponseRulesActionJSChallenge      VersionByTagGetResponseRulesAction = "js_challenge"
 	VersionByTagGetResponseRulesActionLog              VersionByTagGetResponseRulesAction = "log"
 	VersionByTagGetResponseRulesActionManagedChallenge VersionByTagGetResponseRulesAction = "managed_challenge"
 	VersionByTagGetResponseRulesActionRedirect         VersionByTagGetResponseRulesAction = "redirect"
@@ -320,7 +320,7 @@ const (
 
 func (r VersionByTagGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case VersionByTagGetResponseRulesActionBlock, VersionByTagGetResponseRulesActionChallenge, VersionByTagGetResponseRulesActionCompressResponse, VersionByTagGetResponseRulesActionExecute, VersionByTagGetResponseRulesActionJsChallenge, VersionByTagGetResponseRulesActionLog, VersionByTagGetResponseRulesActionManagedChallenge, VersionByTagGetResponseRulesActionRedirect, VersionByTagGetResponseRulesActionRewrite, VersionByTagGetResponseRulesActionRoute, VersionByTagGetResponseRulesActionScore, VersionByTagGetResponseRulesActionServeError, VersionByTagGetResponseRulesActionSetConfig, VersionByTagGetResponseRulesActionSkip, VersionByTagGetResponseRulesActionSetCacheSettings:
+	case VersionByTagGetResponseRulesActionBlock, VersionByTagGetResponseRulesActionChallenge, VersionByTagGetResponseRulesActionCompressResponse, VersionByTagGetResponseRulesActionExecute, VersionByTagGetResponseRulesActionJSChallenge, VersionByTagGetResponseRulesActionLog, VersionByTagGetResponseRulesActionManagedChallenge, VersionByTagGetResponseRulesActionRedirect, VersionByTagGetResponseRulesActionRewrite, VersionByTagGetResponseRulesActionRoute, VersionByTagGetResponseRulesActionScore, VersionByTagGetResponseRulesActionServeError, VersionByTagGetResponseRulesActionSetConfig, VersionByTagGetResponseRulesActionSkip, VersionByTagGetResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false

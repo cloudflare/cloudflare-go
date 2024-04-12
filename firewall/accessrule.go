@@ -477,13 +477,13 @@ const (
 	AccessRuleNewParamsModeBlock            AccessRuleNewParamsMode = "block"
 	AccessRuleNewParamsModeChallenge        AccessRuleNewParamsMode = "challenge"
 	AccessRuleNewParamsModeWhitelist        AccessRuleNewParamsMode = "whitelist"
-	AccessRuleNewParamsModeJsChallenge      AccessRuleNewParamsMode = "js_challenge"
+	AccessRuleNewParamsModeJSChallenge      AccessRuleNewParamsMode = "js_challenge"
 	AccessRuleNewParamsModeManagedChallenge AccessRuleNewParamsMode = "managed_challenge"
 )
 
 func (r AccessRuleNewParamsMode) IsKnown() bool {
 	switch r {
-	case AccessRuleNewParamsModeBlock, AccessRuleNewParamsModeChallenge, AccessRuleNewParamsModeWhitelist, AccessRuleNewParamsModeJsChallenge, AccessRuleNewParamsModeManagedChallenge:
+	case AccessRuleNewParamsModeBlock, AccessRuleNewParamsModeChallenge, AccessRuleNewParamsModeWhitelist, AccessRuleNewParamsModeJSChallenge, AccessRuleNewParamsModeManagedChallenge:
 		return true
 	}
 	return false
@@ -673,13 +673,13 @@ const (
 	AccessRuleListParamsFiltersModeBlock            AccessRuleListParamsFiltersMode = "block"
 	AccessRuleListParamsFiltersModeChallenge        AccessRuleListParamsFiltersMode = "challenge"
 	AccessRuleListParamsFiltersModeWhitelist        AccessRuleListParamsFiltersMode = "whitelist"
-	AccessRuleListParamsFiltersModeJsChallenge      AccessRuleListParamsFiltersMode = "js_challenge"
+	AccessRuleListParamsFiltersModeJSChallenge      AccessRuleListParamsFiltersMode = "js_challenge"
 	AccessRuleListParamsFiltersModeManagedChallenge AccessRuleListParamsFiltersMode = "managed_challenge"
 )
 
 func (r AccessRuleListParamsFiltersMode) IsKnown() bool {
 	switch r {
-	case AccessRuleListParamsFiltersModeBlock, AccessRuleListParamsFiltersModeChallenge, AccessRuleListParamsFiltersModeWhitelist, AccessRuleListParamsFiltersModeJsChallenge, AccessRuleListParamsFiltersModeManagedChallenge:
+	case AccessRuleListParamsFiltersModeBlock, AccessRuleListParamsFiltersModeChallenge, AccessRuleListParamsFiltersModeWhitelist, AccessRuleListParamsFiltersModeJSChallenge, AccessRuleListParamsFiltersModeManagedChallenge:
 		return true
 	}
 	return false
@@ -828,13 +828,13 @@ const (
 	AccessRuleEditParamsModeBlock            AccessRuleEditParamsMode = "block"
 	AccessRuleEditParamsModeChallenge        AccessRuleEditParamsMode = "challenge"
 	AccessRuleEditParamsModeWhitelist        AccessRuleEditParamsMode = "whitelist"
-	AccessRuleEditParamsModeJsChallenge      AccessRuleEditParamsMode = "js_challenge"
+	AccessRuleEditParamsModeJSChallenge      AccessRuleEditParamsMode = "js_challenge"
 	AccessRuleEditParamsModeManagedChallenge AccessRuleEditParamsMode = "managed_challenge"
 )
 
 func (r AccessRuleEditParamsMode) IsKnown() bool {
 	switch r {
-	case AccessRuleEditParamsModeBlock, AccessRuleEditParamsModeChallenge, AccessRuleEditParamsModeWhitelist, AccessRuleEditParamsModeJsChallenge, AccessRuleEditParamsModeManagedChallenge:
+	case AccessRuleEditParamsModeBlock, AccessRuleEditParamsModeChallenge, AccessRuleEditParamsModeWhitelist, AccessRuleEditParamsModeJSChallenge, AccessRuleEditParamsModeManagedChallenge:
 		return true
 	}
 	return false

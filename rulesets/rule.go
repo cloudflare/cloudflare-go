@@ -1023,7 +1023,7 @@ func (r ExecuteRuleActionParametersOverridesRuleParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-type JsChallengeRule struct {
+type JSChallengeRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The version of the rule.
@@ -1031,7 +1031,7 @@ type JsChallengeRule struct {
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
-	Action JsChallengeRuleAction `json:"action"`
+	Action JSChallengeRuleAction `json:"action"`
 	// The parameters configuring the rule's action.
 	ActionParameters interface{} `json:"action_parameters"`
 	// The categories of the rule.
@@ -1049,7 +1049,7 @@ type JsChallengeRule struct {
 	JSON jsChallengeRuleJSON `json:"-"`
 }
 
-// jsChallengeRuleJSON contains the JSON metadata for the struct [JsChallengeRule]
+// jsChallengeRuleJSON contains the JSON metadata for the struct [JSChallengeRule]
 type jsChallengeRuleJSON struct {
 	LastUpdated      apijson.Field
 	Version          apijson.Field
@@ -1066,7 +1066,7 @@ type jsChallengeRuleJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *JsChallengeRule) UnmarshalJSON(data []byte) (err error) {
+func (r *JSChallengeRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1074,48 +1074,48 @@ func (r jsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r JsChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsPhaseUpdateResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsPhaseGetResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsPhaseVersionGetResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsRuleNewResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsRuleNewResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsRuleEditResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsRuleEditResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsVersionGetResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r JsChallengeRule) implementsRulesetsVersionByTagGetResponseRule() {}
+func (r JSChallengeRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
-type JsChallengeRuleAction string
+type JSChallengeRuleAction string
 
 const (
-	JsChallengeRuleActionJsChallenge JsChallengeRuleAction = "js_challenge"
+	JSChallengeRuleActionJSChallenge JSChallengeRuleAction = "js_challenge"
 )
 
-func (r JsChallengeRuleAction) IsKnown() bool {
+func (r JSChallengeRuleAction) IsKnown() bool {
 	switch r {
-	case JsChallengeRuleActionJsChallenge:
+	case JSChallengeRuleActionJSChallenge:
 		return true
 	}
 	return false
 }
 
-type JsChallengeRuleParam struct {
+type JSChallengeRuleParam struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[JsChallengeRuleAction] `json:"action"`
+	Action param.Field[JSChallengeRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[interface{}] `json:"action_parameters"`
 	// An informative description of the rule.
@@ -1130,15 +1130,15 @@ type JsChallengeRuleParam struct {
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r JsChallengeRuleParam) MarshalJSON() (data []byte, err error) {
+func (r JSChallengeRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r JsChallengeRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r JSChallengeRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 
-func (r JsChallengeRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r JSChallengeRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
-func (r JsChallengeRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r JSChallengeRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 type LogRule struct {
 	// The timestamp of when the rule was last modified.
@@ -4085,7 +4085,7 @@ type SetConfigRuleActionParametersAutominify struct {
 	// Minify HTML files.
 	HTML bool `json:"html"`
 	// Minify JS files.
-	Js   bool                                        `json:"js"`
+	JS   bool                                        `json:"js"`
 	JSON setConfigRuleActionParametersAutominifyJSON `json:"-"`
 }
 
@@ -4094,7 +4094,7 @@ type SetConfigRuleActionParametersAutominify struct {
 type setConfigRuleActionParametersAutominifyJSON struct {
 	Css         apijson.Field
 	HTML        apijson.Field
-	Js          apijson.Field
+	JS          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4237,7 +4237,7 @@ type SetConfigRuleActionParametersAutominifyParam struct {
 	// Minify HTML files.
 	HTML param.Field[bool] `json:"html"`
 	// Minify JS files.
-	Js param.Field[bool] `json:"js"`
+	JS param.Field[bool] `json:"js"`
 }
 
 func (r SetConfigRuleActionParametersAutominifyParam) MarshalJSON() (data []byte, err error) {
@@ -4655,7 +4655,7 @@ func (r RuleNewResponseRule) AsUnion() RuleNewResponseRulesUnion {
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -4689,7 +4689,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -4753,7 +4753,7 @@ const (
 	RuleNewResponseRulesActionChallenge        RuleNewResponseRulesAction = "challenge"
 	RuleNewResponseRulesActionCompressResponse RuleNewResponseRulesAction = "compress_response"
 	RuleNewResponseRulesActionExecute          RuleNewResponseRulesAction = "execute"
-	RuleNewResponseRulesActionJsChallenge      RuleNewResponseRulesAction = "js_challenge"
+	RuleNewResponseRulesActionJSChallenge      RuleNewResponseRulesAction = "js_challenge"
 	RuleNewResponseRulesActionLog              RuleNewResponseRulesAction = "log"
 	RuleNewResponseRulesActionManagedChallenge RuleNewResponseRulesAction = "managed_challenge"
 	RuleNewResponseRulesActionRedirect         RuleNewResponseRulesAction = "redirect"
@@ -4768,7 +4768,7 @@ const (
 
 func (r RuleNewResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RuleNewResponseRulesActionBlock, RuleNewResponseRulesActionChallenge, RuleNewResponseRulesActionCompressResponse, RuleNewResponseRulesActionExecute, RuleNewResponseRulesActionJsChallenge, RuleNewResponseRulesActionLog, RuleNewResponseRulesActionManagedChallenge, RuleNewResponseRulesActionRedirect, RuleNewResponseRulesActionRewrite, RuleNewResponseRulesActionRoute, RuleNewResponseRulesActionScore, RuleNewResponseRulesActionServeError, RuleNewResponseRulesActionSetConfig, RuleNewResponseRulesActionSkip, RuleNewResponseRulesActionSetCacheSettings:
+	case RuleNewResponseRulesActionBlock, RuleNewResponseRulesActionChallenge, RuleNewResponseRulesActionCompressResponse, RuleNewResponseRulesActionExecute, RuleNewResponseRulesActionJSChallenge, RuleNewResponseRulesActionLog, RuleNewResponseRulesActionManagedChallenge, RuleNewResponseRulesActionRedirect, RuleNewResponseRulesActionRewrite, RuleNewResponseRulesActionRoute, RuleNewResponseRulesActionScore, RuleNewResponseRulesActionServeError, RuleNewResponseRulesActionSetConfig, RuleNewResponseRulesActionSkip, RuleNewResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -4934,7 +4934,7 @@ func (r RuleDeleteResponseRule) AsUnion() RuleDeleteResponseRulesUnion {
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -4968,7 +4968,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -5032,7 +5032,7 @@ const (
 	RuleDeleteResponseRulesActionChallenge        RuleDeleteResponseRulesAction = "challenge"
 	RuleDeleteResponseRulesActionCompressResponse RuleDeleteResponseRulesAction = "compress_response"
 	RuleDeleteResponseRulesActionExecute          RuleDeleteResponseRulesAction = "execute"
-	RuleDeleteResponseRulesActionJsChallenge      RuleDeleteResponseRulesAction = "js_challenge"
+	RuleDeleteResponseRulesActionJSChallenge      RuleDeleteResponseRulesAction = "js_challenge"
 	RuleDeleteResponseRulesActionLog              RuleDeleteResponseRulesAction = "log"
 	RuleDeleteResponseRulesActionManagedChallenge RuleDeleteResponseRulesAction = "managed_challenge"
 	RuleDeleteResponseRulesActionRedirect         RuleDeleteResponseRulesAction = "redirect"
@@ -5047,7 +5047,7 @@ const (
 
 func (r RuleDeleteResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RuleDeleteResponseRulesActionBlock, RuleDeleteResponseRulesActionChallenge, RuleDeleteResponseRulesActionCompressResponse, RuleDeleteResponseRulesActionExecute, RuleDeleteResponseRulesActionJsChallenge, RuleDeleteResponseRulesActionLog, RuleDeleteResponseRulesActionManagedChallenge, RuleDeleteResponseRulesActionRedirect, RuleDeleteResponseRulesActionRewrite, RuleDeleteResponseRulesActionRoute, RuleDeleteResponseRulesActionScore, RuleDeleteResponseRulesActionServeError, RuleDeleteResponseRulesActionSetConfig, RuleDeleteResponseRulesActionSkip, RuleDeleteResponseRulesActionSetCacheSettings:
+	case RuleDeleteResponseRulesActionBlock, RuleDeleteResponseRulesActionChallenge, RuleDeleteResponseRulesActionCompressResponse, RuleDeleteResponseRulesActionExecute, RuleDeleteResponseRulesActionJSChallenge, RuleDeleteResponseRulesActionLog, RuleDeleteResponseRulesActionManagedChallenge, RuleDeleteResponseRulesActionRedirect, RuleDeleteResponseRulesActionRewrite, RuleDeleteResponseRulesActionRoute, RuleDeleteResponseRulesActionScore, RuleDeleteResponseRulesActionServeError, RuleDeleteResponseRulesActionSetConfig, RuleDeleteResponseRulesActionSkip, RuleDeleteResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
@@ -5213,7 +5213,7 @@ func (r RuleEditResponseRule) AsUnion() RuleEditResponseRulesUnion {
 
 // Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JsChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
+// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
@@ -5247,7 +5247,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JsChallengeRule{}),
+			Type:               reflect.TypeOf(JSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -5311,7 +5311,7 @@ const (
 	RuleEditResponseRulesActionChallenge        RuleEditResponseRulesAction = "challenge"
 	RuleEditResponseRulesActionCompressResponse RuleEditResponseRulesAction = "compress_response"
 	RuleEditResponseRulesActionExecute          RuleEditResponseRulesAction = "execute"
-	RuleEditResponseRulesActionJsChallenge      RuleEditResponseRulesAction = "js_challenge"
+	RuleEditResponseRulesActionJSChallenge      RuleEditResponseRulesAction = "js_challenge"
 	RuleEditResponseRulesActionLog              RuleEditResponseRulesAction = "log"
 	RuleEditResponseRulesActionManagedChallenge RuleEditResponseRulesAction = "managed_challenge"
 	RuleEditResponseRulesActionRedirect         RuleEditResponseRulesAction = "redirect"
@@ -5326,7 +5326,7 @@ const (
 
 func (r RuleEditResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RuleEditResponseRulesActionBlock, RuleEditResponseRulesActionChallenge, RuleEditResponseRulesActionCompressResponse, RuleEditResponseRulesActionExecute, RuleEditResponseRulesActionJsChallenge, RuleEditResponseRulesActionLog, RuleEditResponseRulesActionManagedChallenge, RuleEditResponseRulesActionRedirect, RuleEditResponseRulesActionRewrite, RuleEditResponseRulesActionRoute, RuleEditResponseRulesActionScore, RuleEditResponseRulesActionServeError, RuleEditResponseRulesActionSetConfig, RuleEditResponseRulesActionSkip, RuleEditResponseRulesActionSetCacheSettings:
+	case RuleEditResponseRulesActionBlock, RuleEditResponseRulesActionChallenge, RuleEditResponseRulesActionCompressResponse, RuleEditResponseRulesActionExecute, RuleEditResponseRulesActionJSChallenge, RuleEditResponseRulesActionLog, RuleEditResponseRulesActionManagedChallenge, RuleEditResponseRulesActionRedirect, RuleEditResponseRulesActionRewrite, RuleEditResponseRulesActionRoute, RuleEditResponseRulesActionScore, RuleEditResponseRulesActionServeError, RuleEditResponseRulesActionSetConfig, RuleEditResponseRulesActionSkip, RuleEditResponseRulesActionSetCacheSettings:
 		return true
 	}
 	return false
