@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 	"github.com/tidwall/gjson"
 )
 
@@ -36,7 +35,7 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.Role], err error) {
+func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[shared.Role], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -54,7 +53,7 @@ func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...op
 }
 
 // Get all available roles for an account.
-func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Role] {
+func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[shared.Role] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -69,37 +68,6 @@ func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGet
 	}
 	res = &env.Result
 	return
-}
-
-type PermissionGrant struct {
-	Read  bool                `json:"read"`
-	Write bool                `json:"write"`
-	JSON  permissionGrantJSON `json:"-"`
-}
-
-// permissionGrantJSON contains the JSON metadata for the struct [PermissionGrant]
-type permissionGrantJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PermissionGrant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r permissionGrantJSON) RawJSON() string {
-	return r.raw
-}
-
-type PermissionGrantParam struct {
-	Read  param.Field[bool] `json:"read"`
-	Write param.Field[bool] `json:"write"`
-}
-
-func (r PermissionGrantParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Union satisfied by [accounts.RoleGetResponseUnknown] or [shared.UnionString].

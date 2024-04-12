@@ -102,7 +102,7 @@ type Invite struct {
 	// Organization name.
 	OrganizationName string `json:"organization_name"`
 	// Roles to be assigned to this user.
-	Roles []Role `json:"roles"`
+	Roles []shared.Role `json:"roles"`
 	// Current status of the invitation.
 	Status InviteStatus `json:"status"`
 	JSON   inviteJSON   `json:"-"`
