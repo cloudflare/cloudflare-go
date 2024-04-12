@@ -10,7 +10,6 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -39,7 +38,7 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[User], err error) {
+func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUser], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -57,11 +56,11 @@ func (r *AccessUserService) List(ctx context.Context, identifier string, opts ..
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[User] {
+func (r *AccessUserService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUser] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
-type User struct {
+type AccessUser struct {
 	// UUID
 	ID string `json:"id"`
 	// True if the user has authenticated with Cloudflare Access.
@@ -80,13 +79,13 @@ type User struct {
 	// The unique API identifier for the Zero Trust seat.
 	SeatUID string `json:"seat_uid"`
 	// The unique API identifier for the user.
-	UID       string    `json:"uid"`
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	JSON      userJSON  `json:"-"`
+	UID       string         `json:"uid"`
+	UpdatedAt time.Time      `json:"updated_at" format:"date-time"`
+	JSON      accessUserJSON `json:"-"`
 }
 
-// userJSON contains the JSON metadata for the struct [User]
-type userJSON struct {
+// accessUserJSON contains the JSON metadata for the struct [AccessUser]
+type accessUserJSON struct {
 	ID                  apijson.Field
 	AccessSeat          apijson.Field
 	ActiveDeviceCount   apijson.Field
@@ -102,33 +101,10 @@ type userJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *User) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r userJSON) RawJSON() string {
+func (r accessUserJSON) RawJSON() string {
 	return r.raw
-}
-
-type UserParam struct {
-	// True if the user has authenticated with Cloudflare Access.
-	AccessSeat param.Field[bool] `json:"access_seat"`
-	// The number of active devices registered to the user.
-	ActiveDeviceCount param.Field[float64] `json:"active_device_count"`
-	// The email of the user.
-	Email param.Field[string] `json:"email" format:"email"`
-	// True if the user has logged into the WARP client.
-	GatewaySeat param.Field[bool] `json:"gateway_seat"`
-	// The time at which the user last successfully logged in.
-	LastSuccessfulLogin param.Field[time.Time] `json:"last_successful_login" format:"date-time"`
-	// The name of the user.
-	Name param.Field[string] `json:"name"`
-	// The unique API identifier for the Zero Trust seat.
-	SeatUID param.Field[string] `json:"seat_uid"`
-	// The unique API identifier for the user.
-	UID param.Field[string] `json:"uid"`
-}
-
-func (r UserParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
