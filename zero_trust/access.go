@@ -74,14 +74,14 @@ func (r AccessDevicePostureRule) implementsZeroTrustAccessRule() {}
 
 type AccessDevicePostureRuleDevicePosture struct {
 	// The ID of a device posture integration.
-	IntegrationUid string                                   `json:"integration_uid,required"`
+	IntegrationUID string                                   `json:"integration_uid,required"`
 	JSON           accessDevicePostureRuleDevicePostureJSON `json:"-"`
 }
 
 // accessDevicePostureRuleDevicePostureJSON contains the JSON metadata for the
 // struct [AccessDevicePostureRuleDevicePosture]
 type accessDevicePostureRuleDevicePostureJSON struct {
-	IntegrationUid apijson.Field
+	IntegrationUID apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -107,7 +107,7 @@ func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() 
 
 type AccessDevicePostureRuleDevicePostureParam struct {
 	// The ID of a device posture integration.
-	IntegrationUid param.Field[string] `json:"integration_uid,required"`
+	IntegrationUID param.Field[string] `json:"integration_uid,required"`
 }
 
 func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {

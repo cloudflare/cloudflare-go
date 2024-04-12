@@ -100,7 +100,7 @@ func (r accessApplicationUserPolicyCheckListResponseJSON) RawJSON() string {
 
 type AccessApplicationUserPolicyCheckListResponseAppState struct {
 	// UUID
-	AppUid   string                                                   `json:"app_uid"`
+	AppUID   string                                                   `json:"app_uid"`
 	Aud      string                                                   `json:"aud"`
 	Hostname string                                                   `json:"hostname"`
 	Name     string                                                   `json:"name"`
@@ -112,7 +112,7 @@ type AccessApplicationUserPolicyCheckListResponseAppState struct {
 // accessApplicationUserPolicyCheckListResponseAppStateJSON contains the JSON
 // metadata for the struct [AccessApplicationUserPolicyCheckListResponseAppState]
 type accessApplicationUserPolicyCheckListResponseAppStateJSON struct {
-	AppUid      apijson.Field
+	AppUID      apijson.Field
 	Aud         apijson.Field
 	Hostname    apijson.Field
 	Name        apijson.Field

@@ -126,7 +126,7 @@ type AccessUserActiveSessionListResponseMetadataApp struct {
 	Hostname string                                             `json:"hostname"`
 	Name     string                                             `json:"name"`
 	Type     string                                             `json:"type"`
-	Uid      string                                             `json:"uid"`
+	UID      string                                             `json:"uid"`
 	JSON     accessUserActiveSessionListResponseMetadataAppJSON `json:"-"`
 }
 
@@ -136,7 +136,7 @@ type accessUserActiveSessionListResponseMetadataAppJSON struct {
 	Hostname    apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	Uid         apijson.Field
+	UID         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

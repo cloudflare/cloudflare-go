@@ -53,7 +53,7 @@ type AccessRequests struct {
 	// The URL of the Access application.
 	AppDomain string `json:"app_domain"`
 	// The unique identifier for the Access application.
-	AppUid string `json:"app_uid"`
+	AppUID string `json:"app_uid"`
 	// The IdP used to authenticate.
 	Connection string    `json:"connection"`
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`
@@ -71,7 +71,7 @@ type accessRequestsJSON struct {
 	Action      apijson.Field
 	Allowed     apijson.Field
 	AppDomain   apijson.Field
-	AppUid      apijson.Field
+	AppUID      apijson.Field
 	Connection  apijson.Field
 	CreatedAt   apijson.Field
 	IPAddress   apijson.Field

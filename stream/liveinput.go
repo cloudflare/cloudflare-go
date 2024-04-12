@@ -130,7 +130,7 @@ type LiveInput struct {
 	// The connection status of a live input.
 	Status LiveInputStatus `json:"status,nullable"`
 	// A unique identifier for a live input.
-	Uid string `json:"uid"`
+	UID string `json:"uid"`
 	// Details for streaming to a live input using WebRTC.
 	WebRtc LiveInputWebRtc `json:"webRTC"`
 	// Details for playback from a live input using WebRTC.
@@ -150,7 +150,7 @@ type liveInputJSON struct {
 	Srt                      apijson.Field
 	SrtPlayback              apijson.Field
 	Status                   apijson.Field
-	Uid                      apijson.Field
+	UID                      apijson.Field
 	WebRtc                   apijson.Field
 	WebRtcPlayback           apijson.Field
 	raw                      string
@@ -442,7 +442,7 @@ type LiveInputListResponseLiveInput struct {
 	// The date and time the live input was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// A unique identifier for a live input.
-	Uid  string                             `json:"uid"`
+	UID  string                             `json:"uid"`
 	JSON liveInputListResponseLiveInputJSON `json:"-"`
 }
 
@@ -453,7 +453,7 @@ type liveInputListResponseLiveInputJSON struct {
 	DeleteRecordingAfterDays apijson.Field
 	Meta                     apijson.Field
 	Modified                 apijson.Field
-	Uid                      apijson.Field
+	UID                      apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }

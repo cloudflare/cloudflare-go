@@ -117,7 +117,7 @@ type CallsApp struct {
 	// A short description of Calls app, not shown to end users.
 	Name string `json:"name"`
 	// A Cloudflare-generated unique identifier for a item.
-	Uid  string       `json:"uid"`
+	UID  string       `json:"uid"`
 	JSON callsAppJSON `json:"-"`
 }
 
@@ -126,7 +126,7 @@ type callsAppJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
 	Name        apijson.Field
-	Uid         apijson.Field
+	UID         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -149,7 +149,7 @@ type CallsAppWithSecret struct {
 	// Bearer token to use the Calls API.
 	Secret string `json:"secret"`
 	// A Cloudflare-generated unique identifier for a item.
-	Uid  string                 `json:"uid"`
+	UID  string                 `json:"uid"`
 	JSON callsAppWithSecretJSON `json:"-"`
 }
 
@@ -160,7 +160,7 @@ type callsAppWithSecretJSON struct {
 	Modified    apijson.Field
 	Name        apijson.Field
 	Secret      apijson.Field
-	Uid         apijson.Field
+	UID         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
