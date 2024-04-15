@@ -507,7 +507,7 @@ type ScanGetResponseScanPage struct {
 	ASNLocationAlpha2     string                                     `json:"asnLocationAlpha2,required"`
 	Asnname               string                                     `json:"asnname,required"`
 	Console               []ScanGetResponseScanPageConsole           `json:"console,required"`
-	Cookies               []ScanGetResponseScanPageCooky             `json:"cookies,required"`
+	Cookies               []ScanGetResponseScanPageCookie            `json:"cookies,required"`
 	Country               string                                     `json:"country,required"`
 	CountryLocationAlpha2 string                                     `json:"countryLocationAlpha2,required"`
 	Domain                string                                     `json:"domain,required"`
@@ -580,26 +580,26 @@ func (r scanGetResponseScanPageConsoleJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScanGetResponseScanPageCooky struct {
-	Domain       string                           `json:"domain,required"`
-	Expires      float64                          `json:"expires,required"`
-	HTTPOnly     bool                             `json:"httpOnly,required"`
-	Name         string                           `json:"name,required"`
-	Path         string                           `json:"path,required"`
-	SameParty    bool                             `json:"sameParty,required"`
-	Secure       bool                             `json:"secure,required"`
-	Session      bool                             `json:"session,required"`
-	Size         float64                          `json:"size,required"`
-	SourcePort   float64                          `json:"sourcePort,required"`
-	SourceScheme string                           `json:"sourceScheme,required"`
-	Value        string                           `json:"value,required"`
-	Priority     string                           `json:"priority"`
-	JSON         scanGetResponseScanPageCookyJSON `json:"-"`
+type ScanGetResponseScanPageCookie struct {
+	Domain       string                            `json:"domain,required"`
+	Expires      float64                           `json:"expires,required"`
+	HTTPOnly     bool                              `json:"httpOnly,required"`
+	Name         string                            `json:"name,required"`
+	Path         string                            `json:"path,required"`
+	SameParty    bool                              `json:"sameParty,required"`
+	Secure       bool                              `json:"secure,required"`
+	Session      bool                              `json:"session,required"`
+	Size         float64                           `json:"size,required"`
+	SourcePort   float64                           `json:"sourcePort,required"`
+	SourceScheme string                            `json:"sourceScheme,required"`
+	Value        string                            `json:"value,required"`
+	Priority     string                            `json:"priority"`
+	JSON         scanGetResponseScanPageCookieJSON `json:"-"`
 }
 
-// scanGetResponseScanPageCookyJSON contains the JSON metadata for the struct
-// [ScanGetResponseScanPageCooky]
-type scanGetResponseScanPageCookyJSON struct {
+// scanGetResponseScanPageCookieJSON contains the JSON metadata for the struct
+// [ScanGetResponseScanPageCookie]
+type scanGetResponseScanPageCookieJSON struct {
 	Domain       apijson.Field
 	Expires      apijson.Field
 	HTTPOnly     apijson.Field
@@ -617,11 +617,11 @@ type scanGetResponseScanPageCookyJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *ScanGetResponseScanPageCooky) UnmarshalJSON(data []byte) (err error) {
+func (r *ScanGetResponseScanPageCookie) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scanGetResponseScanPageCookyJSON) RawJSON() string {
+func (r scanGetResponseScanPageCookieJSON) RawJSON() string {
 	return r.raw
 }
 
