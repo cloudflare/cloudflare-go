@@ -52,11 +52,11 @@ type OutgoingStatusGetParams struct {
 type OutgoingStatusGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// The zone transfer status of a primary zone
-	Result EnableTransfer `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingStatusGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    outgoingStatusGetResponseEnvelopeJSON    `json:"-"`
+	// The zone transfer status of a primary zone
+	Result EnableTransfer                        `json:"result"`
+	JSON   outgoingStatusGetResponseEnvelopeJSON `json:"-"`
 }
 
 // outgoingStatusGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -64,8 +64,8 @@ type OutgoingStatusGetResponseEnvelope struct {
 type outgoingStatusGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

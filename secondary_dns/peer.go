@@ -204,9 +204,9 @@ func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
 type PeerNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Peer                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Peer                           `json:"result"`
 	JSON    peerNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -215,8 +215,8 @@ type PeerNewResponseEnvelope struct {
 type peerNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -256,9 +256,9 @@ func (r PeerUpdateParams) MarshalJSON() (data []byte, err error) {
 type PeerUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Peer                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Peer                              `json:"result"`
 	JSON    peerUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -267,8 +267,8 @@ type PeerUpdateResponseEnvelope struct {
 type peerUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -312,9 +312,9 @@ func (r PeerDeleteParams) MarshalJSON() (data []byte, err error) {
 type PeerDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PeerDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  PeerDeleteResponse                `json:"result"`
 	JSON    peerDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -323,8 +323,8 @@ type PeerDeleteResponseEnvelope struct {
 type peerDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -359,9 +359,9 @@ type PeerGetParams struct {
 type PeerGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Peer                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Peer                           `json:"result"`
 	JSON    peerGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -370,8 +370,8 @@ type PeerGetResponseEnvelope struct {
 type peerGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
