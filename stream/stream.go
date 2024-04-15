@@ -445,9 +445,9 @@ type StreamGetParams struct {
 type StreamGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Video                 `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Video                            `json:"result"`
 	JSON    streamGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -456,8 +456,8 @@ type StreamGetResponseEnvelope struct {
 type streamGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

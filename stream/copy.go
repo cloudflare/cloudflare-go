@@ -98,9 +98,9 @@ func (r CopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 type CopyNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Video                 `json:"result,required"`
 	// Whether the API call was successful
 	Success CopyNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Video                          `json:"result"`
 	JSON    copyNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -109,8 +109,8 @@ type CopyNewResponseEnvelope struct {
 type copyNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

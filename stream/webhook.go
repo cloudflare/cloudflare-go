@@ -134,11 +134,11 @@ func (r WebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   WebhookUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  WebhookUpdateResponseUnion           `json:"result"`
 	JSON    webhookUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -147,8 +147,8 @@ type WebhookUpdateResponseEnvelope struct {
 type webhookUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -187,11 +187,11 @@ func (r WebhookDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   WebhookDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WebhookDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  WebhookDeleteResponseUnion           `json:"result"`
 	JSON    webhookDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -200,8 +200,8 @@ type WebhookDeleteResponseEnvelope struct {
 type webhookDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -235,11 +235,11 @@ type WebhookGetParams struct {
 }
 
 type WebhookGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   WebhookGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WebhookGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  WebhookGetResponseUnion           `json:"result"`
 	JSON    webhookGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -248,8 +248,8 @@ type WebhookGetResponseEnvelope struct {
 type webhookGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

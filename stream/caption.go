@@ -48,7 +48,7 @@ func (r *CaptionService) Update(ctx context.Context, identifier string, language
 }
 
 // Removes the captions or subtitles from a video.
-func (r *CaptionService) Delete(ctx context.Context, identifier string, language string, params CaptionDeleteParams, opts ...option.RequestOption) (res *CaptionDeleteResponseUnion, err error) {
+func (r *CaptionService) Delete(ctx context.Context, identifier string, language string, params CaptionDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
@@ -114,31 +114,6 @@ func init() {
 	)
 }
 
-// Union satisfied by [stream.CaptionDeleteResponseUnknown],
-// [stream.CaptionDeleteResponseArray] or [shared.UnionString].
-type CaptionDeleteResponseUnion interface {
-	ImplementsStreamCaptionDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CaptionDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CaptionDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type CaptionDeleteResponseArray []interface{}
-
-func (r CaptionDeleteResponseArray) ImplementsStreamCaptionDeleteResponseUnion() {}
-
 type CaptionUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -151,11 +126,11 @@ func (r CaptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CaptionUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CaptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  CaptionUpdateResponseUnion           `json:"result"`
 	JSON    captionUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -164,8 +139,8 @@ type CaptionUpdateResponseEnvelope struct {
 type captionUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -204,11 +179,11 @@ func (r CaptionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CaptionDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CaptionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  string                               `json:"result"`
 	JSON    captionDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -217,8 +192,8 @@ type CaptionDeleteResponseEnvelope struct {
 type captionDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -254,9 +229,9 @@ type CaptionGetParams struct {
 type CaptionGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Caption             `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  []Caption                         `json:"result"`
 	JSON    captionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -265,8 +240,8 @@ type CaptionGetResponseEnvelope struct {
 type captionGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

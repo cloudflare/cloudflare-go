@@ -149,9 +149,9 @@ func (r LiveInputOutputNewParams) MarshalJSON() (data []byte, err error) {
 type LiveInputOutputNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Output                `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputOutputNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Output                                    `json:"result"`
 	JSON    liveInputOutputNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -160,8 +160,8 @@ type LiveInputOutputNewResponseEnvelope struct {
 type liveInputOutputNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -207,9 +207,9 @@ func (r LiveInputOutputUpdateParams) MarshalJSON() (data []byte, err error) {
 type LiveInputOutputUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Output                `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputOutputUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Output                                       `json:"result"`
 	JSON    liveInputOutputUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -218,8 +218,8 @@ type LiveInputOutputUpdateResponseEnvelope struct {
 type liveInputOutputUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
