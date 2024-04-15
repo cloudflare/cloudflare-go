@@ -182,9 +182,9 @@ func (r AnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
 type AnalyticsReportBytimeGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ByTime                `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ByTime                                          `json:"result"`
 	JSON    analyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -193,8 +193,8 @@ type AnalyticsReportBytimeGetResponseEnvelope struct {
 type analyticsReportBytimeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
