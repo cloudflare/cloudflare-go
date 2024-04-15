@@ -132,11 +132,11 @@ func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DownloadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DownloadNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DownloadNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  DownloadNewResponseUnion           `json:"result"`
 	JSON    downloadNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -145,8 +145,8 @@ type DownloadNewResponseEnvelope struct {
 type downloadNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -180,11 +180,11 @@ type DownloadDeleteParams struct {
 }
 
 type DownloadDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DownloadDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DownloadDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  DownloadDeleteResponseUnion           `json:"result"`
 	JSON    downloadDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -193,8 +193,8 @@ type DownloadDeleteResponseEnvelope struct {
 type downloadDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -228,11 +228,11 @@ type DownloadGetParams struct {
 }
 
 type DownloadGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DownloadGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DownloadGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DownloadGetResponseUnion           `json:"result"`
 	JSON    downloadGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -241,8 +241,8 @@ type DownloadGetResponseEnvelope struct {
 type downloadGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

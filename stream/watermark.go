@@ -239,11 +239,11 @@ func (r WatermarkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   WatermarkNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  WatermarkNewResponseUnion           `json:"result"`
 	JSON    watermarkNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -252,8 +252,8 @@ type WatermarkNewResponseEnvelope struct {
 type watermarkNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -297,11 +297,11 @@ func (r WatermarkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   WatermarkDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  WatermarkDeleteResponseUnion           `json:"result"`
 	JSON    watermarkDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -310,8 +310,8 @@ type WatermarkDeleteResponseEnvelope struct {
 type watermarkDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -345,11 +345,11 @@ type WatermarkGetParams struct {
 }
 
 type WatermarkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   WatermarkGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  WatermarkGetResponseUnion           `json:"result"`
 	JSON    watermarkGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -358,8 +358,8 @@ type WatermarkGetResponseEnvelope struct {
 type watermarkGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -537,11 +537,11 @@ func (r LiveInputNewParamsRecordingMode) IsKnown() bool {
 type LiveInputNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Details about a live input.
-	Result LiveInput `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    liveInputNewResponseEnvelopeJSON    `json:"-"`
+	// Details about a live input.
+	Result LiveInput                        `json:"result"`
+	JSON   liveInputNewResponseEnvelopeJSON `json:"-"`
 }
 
 // liveInputNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -549,8 +549,8 @@ type LiveInputNewResponseEnvelope struct {
 type liveInputNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -649,11 +649,11 @@ func (r LiveInputUpdateParamsRecordingMode) IsKnown() bool {
 type LiveInputUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Details about a live input.
-	Result LiveInput `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    liveInputUpdateResponseEnvelopeJSON    `json:"-"`
+	// Details about a live input.
+	Result LiveInput                           `json:"result"`
+	JSON   liveInputUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // liveInputUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -661,8 +661,8 @@ type LiveInputUpdateResponseEnvelope struct {
 type liveInputUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -709,9 +709,9 @@ func (r LiveInputListParams) URLQuery() (v url.Values) {
 type LiveInputListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LiveInputListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputListResponseEnvelopeSuccess `json:"success,required"`
+	Result  LiveInputListResponse                `json:"result"`
 	JSON    liveInputListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -720,8 +720,8 @@ type LiveInputListResponseEnvelope struct {
 type liveInputListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -767,11 +767,11 @@ type LiveInputGetParams struct {
 type LiveInputGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Details about a live input.
-	Result LiveInput `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    liveInputGetResponseEnvelopeJSON    `json:"-"`
+	// Details about a live input.
+	Result LiveInput                        `json:"result"`
+	JSON   liveInputGetResponseEnvelopeJSON `json:"-"`
 }
 
 // liveInputGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -779,8 +779,8 @@ type LiveInputGetResponseEnvelope struct {
 type liveInputGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
