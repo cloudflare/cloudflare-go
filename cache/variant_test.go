@@ -58,17 +58,17 @@ func TestVariantEditWithOptionalParams(t *testing.T) {
 	_, err := client.Cache.Variants.Edit(context.TODO(), cache.VariantEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Value: cloudflare.F(cache.VariantEditParamsValue{
-			Avif: cloudflare.F([]interface{}{"image/webp", "image/jpeg"}),
-			Bmp:  cloudflare.F([]interface{}{"image/webp", "image/jpeg"}),
-			Gif:  cloudflare.F([]interface{}{"image/webp", "image/jpeg"}),
-			Jp2:  cloudflare.F([]interface{}{"image/webp", "image/avif"}),
-			Jpeg: cloudflare.F([]interface{}{"image/webp", "image/avif"}),
-			Jpg:  cloudflare.F([]interface{}{"image/webp", "image/avif"}),
-			Jpg2: cloudflare.F([]interface{}{"image/webp", "image/avif"}),
-			Png:  cloudflare.F([]interface{}{"image/webp", "image/avif"}),
-			Tif:  cloudflare.F([]interface{}{"image/webp", "image/avif"}),
-			Tiff: cloudflare.F([]interface{}{"image/webp", "image/avif"}),
-			WebP: cloudflare.F([]interface{}{"image/jpeg", "image/avif"}),
+			Avif: cloudflare.F([]string{"image/webp", "image/jpeg"}),
+			Bmp:  cloudflare.F([]string{"image/webp", "image/jpeg"}),
+			Gif:  cloudflare.F([]string{"image/webp", "image/jpeg"}),
+			Jp2:  cloudflare.F([]string{"image/webp", "image/avif"}),
+			Jpeg: cloudflare.F([]string{"image/webp", "image/avif"}),
+			Jpg:  cloudflare.F([]string{"image/webp", "image/avif"}),
+			Jpg2: cloudflare.F([]string{"image/webp", "image/avif"}),
+			Png:  cloudflare.F([]string{"image/webp", "image/avif"}),
+			Tif:  cloudflare.F([]string{"image/webp", "image/avif"}),
+			Tiff: cloudflare.F([]string{"image/webp", "image/avif"}),
+			WebP: cloudflare.F([]string{"image/jpeg", "image/avif"}),
 		}),
 	})
 	if err != nil {
