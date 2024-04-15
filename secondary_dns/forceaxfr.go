@@ -58,11 +58,11 @@ func (r ForceAXFRNewParams) MarshalJSON() (data []byte, err error) {
 type ForceAXFRNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// When force_axfr query parameter is set to true, the response is a simple string
-	Result ForceAXFR `json:"result,required"`
 	// Whether the API call was successful
 	Success ForceAXFRNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    forceAXFRNewResponseEnvelopeJSON    `json:"-"`
+	// When force_axfr query parameter is set to true, the response is a simple string
+	Result ForceAXFR                        `json:"result"`
+	JSON   forceAXFRNewResponseEnvelopeJSON `json:"-"`
 }
 
 // forceAXFRNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -70,8 +70,8 @@ type ForceAXFRNewResponseEnvelope struct {
 type forceAXFRNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

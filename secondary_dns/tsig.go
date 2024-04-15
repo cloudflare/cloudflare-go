@@ -182,9 +182,9 @@ func (r TSIGNewParams) MarshalJSON() (data []byte, err error) {
 type TSIGNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TSIG                  `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  TSIG                           `json:"result"`
 	JSON    tsigNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -193,8 +193,8 @@ type TSIGNewResponseEnvelope struct {
 type tsigNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -234,9 +234,9 @@ func (r TSIGUpdateParams) MarshalJSON() (data []byte, err error) {
 type TSIGUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TSIG                  `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  TSIG                              `json:"result"`
 	JSON    tsigUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -245,8 +245,8 @@ type TSIGUpdateResponseEnvelope struct {
 type tsigUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -290,9 +290,9 @@ func (r TSIGDeleteParams) MarshalJSON() (data []byte, err error) {
 type TSIGDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TSIGDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  TSIGDeleteResponse                `json:"result"`
 	JSON    tsigDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -301,8 +301,8 @@ type TSIGDeleteResponseEnvelope struct {
 type tsigDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -337,9 +337,9 @@ type TSIGGetParams struct {
 type TSIGGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TSIG                  `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  TSIG                           `json:"result"`
 	JSON    tsigGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -348,8 +348,8 @@ type TSIGGetResponseEnvelope struct {
 type tsigGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
