@@ -53,6 +53,7 @@ type AccessApplication struct {
 	ServiceAuth401Redirect   *bool                          `json:"service_auth_401_redirect,omitempty"`
 	PathCookieAttribute      *bool                          `json:"path_cookie_attribute,omitempty"`
 	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
+	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
 	AccessAppLauncherCustomization
@@ -181,6 +182,7 @@ type CreateAccessApplicationParams struct {
 	ServiceAuth401Redirect   *bool                          `json:"service_auth_401_redirect,omitempty"`
 	SessionDuration          string                         `json:"session_duration,omitempty"`
 	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
+	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	Type                     AccessApplicationType          `json:"type,omitempty"`
 	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
@@ -214,6 +216,7 @@ type UpdateAccessApplicationParams struct {
 	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
 	Type                     AccessApplicationType          `json:"type,omitempty"`
 	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
+	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
 	AccessAppLauncherCustomization
