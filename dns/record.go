@@ -3539,9 +3539,9 @@ func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 type RecordNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Record                `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Record                           `json:"result"`
 	JSON    recordNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3550,8 +3550,8 @@ type RecordNewResponseEnvelope struct {
 type recordNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3592,9 +3592,9 @@ func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 type RecordUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Record                `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Record                              `json:"result"`
 	JSON    recordUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3603,8 +3603,8 @@ type RecordUpdateResponseEnvelope struct {
 type recordUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3888,9 +3888,9 @@ func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 type RecordEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Record                `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Record                            `json:"result"`
 	JSON    recordEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3899,8 +3899,8 @@ type RecordEditResponseEnvelope struct {
 type recordEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3941,9 +3941,9 @@ type RecordGetParams struct {
 type RecordGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Record                `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Record                           `json:"result"`
 	JSON    recordGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3952,8 +3952,8 @@ type RecordGetResponseEnvelope struct {
 type recordGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4003,9 +4003,9 @@ func (r RecordImportParams) MarshalJSON() (data []byte, err error) {
 type RecordImportResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RecordImportResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordImportResponseEnvelopeSuccess `json:"success,required"`
+	Result  RecordImportResponse                `json:"result"`
 	Timing  RecordProcessTiming                 `json:"timing"`
 	JSON    recordImportResponseEnvelopeJSON    `json:"-"`
 }
@@ -4015,8 +4015,8 @@ type RecordImportResponseEnvelope struct {
 type recordImportResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	Timing      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -4058,9 +4058,9 @@ func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
 type RecordScanResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RecordScanResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordScanResponseEnvelopeSuccess `json:"success,required"`
+	Result  RecordScanResponse                `json:"result"`
 	Timing  RecordProcessTiming               `json:"timing"`
 	JSON    recordScanResponseEnvelopeJSON    `json:"-"`
 }
@@ -4070,8 +4070,8 @@ type RecordScanResponseEnvelope struct {
 type recordScanResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	Timing      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
