@@ -178,12 +178,13 @@ func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncrypt
 }
 func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionGetResponseUnion() {
 }
-func (UnionString) ImplementsHostnamesSettingValueUnionParam()                 {}
-func (UnionString) ImplementsHostnamesSettingValueUnion()                      {}
-func (UnionString) ImplementsSnippetsSnippetDeleteResponseUnion()              {}
-func (UnionString) ImplementsCloudforceOneRequestDeleteResponseUnion()         {}
-func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponseUnion()  {}
-func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion() {}
+func (UnionString) ImplementsHostnamesSettingValueUnionParam()                           {}
+func (UnionString) ImplementsHostnamesSettingValueUnion()                                {}
+func (UnionString) ImplementsSnippetsSnippetDeleteResponseUnion()                        {}
+func (UnionString) ImplementsCloudforceOneRequestDeleteResponseUnion()                   {}
+func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponseUnion()            {}
+func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion()           {}
+func (UnionString) ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion() {}
 
 type UnionInt int64
 

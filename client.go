@@ -32,6 +32,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/dnssec"
 	"github.com/cloudflare/cloudflare-go/v2/durable_objects"
 	"github.com/cloudflare/cloudflare-go/v2/email_routing"
+	"github.com/cloudflare/cloudflare-go/v2/event_notifications"
 	"github.com/cloudflare/cloudflare-go/v2/filters"
 	"github.com/cloudflare/cloudflare-go/v2/firewall"
 	"github.com/cloudflare/cloudflare-go/v2/healthchecks"
@@ -176,6 +177,7 @@ type Client struct {
 	Snippets                    *snippets.SnippetService
 	Calls                       *calls.CallService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
+	EventNotifications          *event_notifications.EventNotificationService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -281,6 +283,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Snippets = snippets.NewSnippetService(opts...)
 	r.Calls = calls.NewCallService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
+	r.EventNotifications = event_notifications.NewEventNotificationService(opts...)
 
 	return
 }
