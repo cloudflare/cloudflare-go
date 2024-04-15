@@ -164,37 +164,37 @@ func (r variantEditResponseJSON) RawJSON() string {
 type VariantEditResponseValue struct {
 	// List of strings with the MIME types of all the variants that should be served
 	// for avif.
-	Avif []interface{} `json:"avif"`
+	Avif []string `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
-	Bmp []interface{} `json:"bmp"`
+	Bmp []string `json:"bmp"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for gif.
-	Gif []interface{} `json:"gif"`
+	Gif []string `json:"gif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jp2.
-	Jp2 []interface{} `json:"jp2"`
+	Jp2 []string `json:"jp2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpeg.
-	Jpeg []interface{} `json:"jpeg"`
+	Jpeg []string `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
-	Jpg []interface{} `json:"jpg"`
+	Jpg []string `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
-	Jpg2 []interface{} `json:"jpg2"`
+	Jpg2 []string `json:"jpg2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for png.
-	Png []interface{} `json:"png"`
+	Png []string `json:"png"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tif.
-	Tif []interface{} `json:"tif"`
+	Tif []string `json:"tif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tiff.
-	Tiff []interface{} `json:"tiff"`
+	Tiff []string `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
-	WebP []interface{}                `json:"webp"`
+	WebP []string                     `json:"webp"`
 	JSON variantEditResponseValueJSON `json:"-"`
 }
 
@@ -261,37 +261,37 @@ func (r variantGetResponseJSON) RawJSON() string {
 type VariantGetResponseValue struct {
 	// List of strings with the MIME types of all the variants that should be served
 	// for avif.
-	Avif []interface{} `json:"avif"`
+	Avif []string `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
-	Bmp []interface{} `json:"bmp"`
+	Bmp []string `json:"bmp"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for gif.
-	Gif []interface{} `json:"gif"`
+	Gif []string `json:"gif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jp2.
-	Jp2 []interface{} `json:"jp2"`
+	Jp2 []string `json:"jp2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpeg.
-	Jpeg []interface{} `json:"jpeg"`
+	Jpeg []string `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
-	Jpg []interface{} `json:"jpg"`
+	Jpg []string `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
-	Jpg2 []interface{} `json:"jpg2"`
+	Jpg2 []string `json:"jpg2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for png.
-	Png []interface{} `json:"png"`
+	Png []string `json:"png"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tif.
-	Tif []interface{} `json:"tif"`
+	Tif []string `json:"tif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tiff.
-	Tiff []interface{} `json:"tiff"`
+	Tiff []string `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
-	WebP []interface{}               `json:"webp"`
+	WebP []string                    `json:"webp"`
 	JSON variantGetResponseValueJSON `json:"-"`
 }
 
@@ -394,37 +394,37 @@ func (r VariantEditParams) MarshalJSON() (data []byte, err error) {
 type VariantEditParamsValue struct {
 	// List of strings with the MIME types of all the variants that should be served
 	// for avif.
-	Avif param.Field[[]interface{}] `json:"avif"`
+	Avif param.Field[[]string] `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
-	Bmp param.Field[[]interface{}] `json:"bmp"`
+	Bmp param.Field[[]string] `json:"bmp"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for gif.
-	Gif param.Field[[]interface{}] `json:"gif"`
+	Gif param.Field[[]string] `json:"gif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jp2.
-	Jp2 param.Field[[]interface{}] `json:"jp2"`
+	Jp2 param.Field[[]string] `json:"jp2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpeg.
-	Jpeg param.Field[[]interface{}] `json:"jpeg"`
+	Jpeg param.Field[[]string] `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
-	Jpg param.Field[[]interface{}] `json:"jpg"`
+	Jpg param.Field[[]string] `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
-	Jpg2 param.Field[[]interface{}] `json:"jpg2"`
+	Jpg2 param.Field[[]string] `json:"jpg2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for png.
-	Png param.Field[[]interface{}] `json:"png"`
+	Png param.Field[[]string] `json:"png"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tif.
-	Tif param.Field[[]interface{}] `json:"tif"`
+	Tif param.Field[[]string] `json:"tif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tiff.
-	Tiff param.Field[[]interface{}] `json:"tiff"`
+	Tiff param.Field[[]string] `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
-	WebP param.Field[[]interface{}] `json:"webp"`
+	WebP param.Field[[]string] `json:"webp"`
 }
 
 func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
