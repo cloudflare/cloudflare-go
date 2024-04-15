@@ -110,9 +110,9 @@ func (r FirewallAnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
 type FirewallAnalyticsReportBytimeGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ByTime                `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ByTime                                                  `json:"result"`
 	JSON    firewallAnalyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -121,8 +121,8 @@ type FirewallAnalyticsReportBytimeGetResponseEnvelope struct {
 type firewallAnalyticsReportBytimeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
