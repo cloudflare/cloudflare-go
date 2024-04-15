@@ -251,9 +251,9 @@ func (r IncomingNewParams) MarshalJSON() (data []byte, err error) {
 type IncomingNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IncomingNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success IncomingNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  IncomingNewResponse                `json:"result"`
 	JSON    incomingNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -262,8 +262,8 @@ type IncomingNewResponseEnvelope struct {
 type incomingNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -307,11 +307,11 @@ func (r IncomingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IncomingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IncomingUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IncomingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  IncomingUpdateResponse                `json:"result"`
 	JSON    incomingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -320,8 +320,8 @@ type IncomingUpdateResponseEnvelope struct {
 type incomingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -359,11 +359,11 @@ func (r IncomingDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IncomingDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IncomingDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IncomingDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  IncomingDeleteResponse                `json:"result"`
 	JSON    incomingDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -372,8 +372,8 @@ type IncomingDeleteResponseEnvelope struct {
 type incomingDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -408,9 +408,9 @@ type IncomingGetParams struct {
 type IncomingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IncomingGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success IncomingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  IncomingGetResponse                `json:"result"`
 	JSON    incomingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -419,8 +419,8 @@ type IncomingGetResponseEnvelope struct {
 type incomingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -282,9 +282,9 @@ func (r OutgoingNewParams) MarshalJSON() (data []byte, err error) {
 type OutgoingNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   OutgoingNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  OutgoingNewResponse                `json:"result"`
 	JSON    outgoingNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -293,8 +293,8 @@ type OutgoingNewResponseEnvelope struct {
 type outgoingNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -335,11 +335,11 @@ func (r OutgoingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OutgoingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   OutgoingUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OutgoingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  OutgoingUpdateResponse                `json:"result"`
 	JSON    outgoingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -348,8 +348,8 @@ type OutgoingUpdateResponseEnvelope struct {
 type outgoingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -387,11 +387,11 @@ func (r OutgoingDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OutgoingDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   OutgoingDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OutgoingDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  OutgoingDeleteResponse                `json:"result"`
 	JSON    outgoingDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -400,8 +400,8 @@ type OutgoingDeleteResponseEnvelope struct {
 type outgoingDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -441,11 +441,11 @@ func (r OutgoingDisableParams) MarshalJSON() (data []byte, err error) {
 type OutgoingDisableResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// The zone transfer status of a primary zone
-	Result DisableTransfer `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingDisableResponseEnvelopeSuccess `json:"success,required"`
-	JSON    outgoingDisableResponseEnvelopeJSON    `json:"-"`
+	// The zone transfer status of a primary zone
+	Result DisableTransfer                     `json:"result"`
+	JSON   outgoingDisableResponseEnvelopeJSON `json:"-"`
 }
 
 // outgoingDisableResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -453,8 +453,8 @@ type OutgoingDisableResponseEnvelope struct {
 type outgoingDisableResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -494,11 +494,11 @@ func (r OutgoingEnableParams) MarshalJSON() (data []byte, err error) {
 type OutgoingEnableResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// The zone transfer status of a primary zone
-	Result EnableTransfer `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingEnableResponseEnvelopeSuccess `json:"success,required"`
-	JSON    outgoingEnableResponseEnvelopeJSON    `json:"-"`
+	// The zone transfer status of a primary zone
+	Result EnableTransfer                     `json:"result"`
+	JSON   outgoingEnableResponseEnvelopeJSON `json:"-"`
 }
 
 // outgoingEnableResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -506,8 +506,8 @@ type OutgoingEnableResponseEnvelope struct {
 type outgoingEnableResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -547,12 +547,12 @@ func (r OutgoingForceNotifyParams) MarshalJSON() (data []byte, err error) {
 type OutgoingForceNotifyResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// When force_notify query parameter is set to true, the response is a simple
-	// string
-	Result string `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingForceNotifyResponseEnvelopeSuccess `json:"success,required"`
-	JSON    outgoingForceNotifyResponseEnvelopeJSON    `json:"-"`
+	// When force_notify query parameter is set to true, the response is a simple
+	// string
+	Result string                                  `json:"result"`
+	JSON   outgoingForceNotifyResponseEnvelopeJSON `json:"-"`
 }
 
 // outgoingForceNotifyResponseEnvelopeJSON contains the JSON metadata for the
@@ -560,8 +560,8 @@ type OutgoingForceNotifyResponseEnvelope struct {
 type outgoingForceNotifyResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -596,9 +596,9 @@ type OutgoingGetParams struct {
 type OutgoingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   OutgoingGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  OutgoingGetResponse                `json:"result"`
 	JSON    outgoingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -607,8 +607,8 @@ type OutgoingGetResponseEnvelope struct {
 type outgoingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
