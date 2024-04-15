@@ -193,11 +193,11 @@ func (r TraceNewParamsContextGeoloc) MarshalJSON() (data []byte, err error) {
 type TraceNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Trace result with an origin status code
-	Result TraceNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TraceNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    traceNewResponseEnvelopeJSON    `json:"-"`
+	// Trace result with an origin status code
+	Result TraceNewResponse             `json:"result"`
+	JSON   traceNewResponseEnvelopeJSON `json:"-"`
 }
 
 // traceNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -205,8 +205,8 @@ type TraceNewResponseEnvelope struct {
 type traceNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
