@@ -94,11 +94,11 @@ func (r VideoStorageUsageParams) URLQuery() (v url.Values) {
 }
 
 type VideoStorageUsageResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   VideoStorageUsageResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success VideoStorageUsageResponseEnvelopeSuccess `json:"success,required"`
+	Result  VideoStorageUsageResponse                `json:"result"`
 	JSON    videoStorageUsageResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -107,8 +107,8 @@ type VideoStorageUsageResponseEnvelope struct {
 type videoStorageUsageResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
