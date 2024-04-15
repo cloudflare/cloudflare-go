@@ -228,9 +228,9 @@ func (r ClipNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 type ClipNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Clip                  `json:"result,required"`
 	// Whether the API call was successful
 	Success ClipNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Clip                           `json:"result"`
 	JSON    clipNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -239,8 +239,8 @@ type ClipNewResponseEnvelope struct {
 type clipNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

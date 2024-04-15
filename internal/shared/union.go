@@ -135,7 +135,6 @@ func (UnionString) ImplementsStreamWebhookUpdateResponseUnion()                 
 func (UnionString) ImplementsStreamWebhookDeleteResponseUnion()                                  {}
 func (UnionString) ImplementsStreamWebhookGetResponseUnion()                                     {}
 func (UnionString) ImplementsStreamCaptionUpdateResponseUnion()                                  {}
-func (UnionString) ImplementsStreamCaptionDeleteResponseUnion()                                  {}
 func (UnionString) ImplementsStreamDownloadNewResponseUnion()                                    {}
 func (UnionString) ImplementsStreamDownloadDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsStreamDownloadGetResponseUnion()                                    {}

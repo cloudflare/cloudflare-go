@@ -160,11 +160,11 @@ type AudioTrackDeleteParams struct {
 }
 
 type AudioTrackDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   AudioTrackDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AudioTrackDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  AudioTrackDeleteResponseUnion           `json:"result"`
 	JSON    audioTrackDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -173,8 +173,8 @@ type AudioTrackDeleteResponseEnvelope struct {
 type audioTrackDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -221,9 +221,9 @@ func (r AudioTrackCopyParams) MarshalJSON() (data []byte, err error) {
 type AudioTrackCopyResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Audio                 `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackCopyResponseEnvelopeSuccess `json:"success,required"`
+	Result  Audio                                 `json:"result"`
 	JSON    audioTrackCopyResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -232,8 +232,8 @@ type AudioTrackCopyResponseEnvelope struct {
 type audioTrackCopyResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -278,9 +278,9 @@ func (r AudioTrackEditParams) MarshalJSON() (data []byte, err error) {
 type AudioTrackEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Audio                 `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Audio                                 `json:"result"`
 	JSON    audioTrackEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -289,8 +289,8 @@ type AudioTrackEditResponseEnvelope struct {
 type audioTrackEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -326,9 +326,9 @@ type AudioTrackGetParams struct {
 type AudioTrackGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Audio               `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  []Audio                              `json:"result"`
 	JSON    audioTrackGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -337,8 +337,8 @@ type AudioTrackGetResponseEnvelope struct {
 type audioTrackGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

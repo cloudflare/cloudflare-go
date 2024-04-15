@@ -158,9 +158,9 @@ func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
 type KeyNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Keys                  `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Keys                          `json:"result"`
 	JSON    keyNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -169,8 +169,8 @@ type KeyNewResponseEnvelope struct {
 type keyNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -209,11 +209,11 @@ func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   KeyDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeyDeleteResponseUnion           `json:"result"`
 	JSON    keyDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -222,8 +222,8 @@ type KeyDeleteResponseEnvelope struct {
 type keyDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -259,9 +259,9 @@ type KeyGetParams struct {
 type KeyGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []KeyGetResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  []KeyGetResponse              `json:"result"`
 	JSON    keyGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -270,8 +270,8 @@ type KeyGetResponseEnvelope struct {
 type keyGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
