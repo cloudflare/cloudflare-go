@@ -185,9 +185,9 @@ func (r ACLNewParams) MarshalJSON() (data []byte, err error) {
 type ACLNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ACL                           `json:"result"`
 	JSON    aclNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -196,8 +196,8 @@ type ACLNewResponseEnvelope struct {
 type aclNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -237,9 +237,9 @@ func (r ACLUpdateParams) MarshalJSON() (data []byte, err error) {
 type ACLUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  ACL                              `json:"result"`
 	JSON    aclUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -248,8 +248,8 @@ type ACLUpdateResponseEnvelope struct {
 type aclUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -293,9 +293,9 @@ func (r ACLDeleteParams) MarshalJSON() (data []byte, err error) {
 type ACLDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ACLDeleteResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ACLDeleteResponse                `json:"result"`
 	JSON    aclDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -304,8 +304,8 @@ type ACLDeleteResponseEnvelope struct {
 type aclDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -340,9 +340,9 @@ type ACLGetParams struct {
 type ACLGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ACL                           `json:"result"`
 	JSON    aclGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -351,8 +351,8 @@ type ACLGetResponseEnvelope struct {
 type aclGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
