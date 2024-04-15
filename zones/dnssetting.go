@@ -134,13 +134,12 @@ func (r nameserverJSON) RawJSON() string {
 type NameserverType string
 
 const (
-	NameserverTypeCloudflareStandard      NameserverType = "cloudflare.standard"
-	NameserverTypeCloudflareFoundationDNS NameserverType = "cloudflare.foundation_dns"
+	NameserverTypeCloudflareStandard NameserverType = "cloudflare.standard"
 )
 
 func (r NameserverType) IsKnown() bool {
 	switch r {
-	case NameserverTypeCloudflareStandard, NameserverTypeCloudflareFoundationDNS:
+	case NameserverTypeCloudflareStandard:
 		return true
 	}
 	return false
@@ -172,10 +171,10 @@ type DNSSettingEditResponseEnvelope struct {
 	Messages           []shared.ResponseInfo `json:"messages,required"`
 	MultiProvider      interface{}           `json:"multi_provider,required"`
 	Nameservers        interface{}           `json:"nameservers,required"`
-	Result             DNSSetting            `json:"result,required"`
 	SecondaryOverrides interface{}           `json:"secondary_overrides,required"`
 	// Whether the API call was successful
 	Success DNSSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSSetting                            `json:"result"`
 	JSON    dnsSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -187,9 +186,9 @@ type dnsSettingEditResponseEnvelopeJSON struct {
 	Messages           apijson.Field
 	MultiProvider      apijson.Field
 	Nameservers        apijson.Field
-	Result             apijson.Field
 	SecondaryOverrides apijson.Field
 	Success            apijson.Field
+	Result             apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -228,10 +227,10 @@ type DNSSettingGetResponseEnvelope struct {
 	Messages           []shared.ResponseInfo `json:"messages,required"`
 	MultiProvider      interface{}           `json:"multi_provider,required"`
 	Nameservers        interface{}           `json:"nameservers,required"`
-	Result             DNSSetting            `json:"result,required"`
 	SecondaryOverrides interface{}           `json:"secondary_overrides,required"`
 	// Whether the API call was successful
 	Success DNSSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSSetting                           `json:"result"`
 	JSON    dnsSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -243,9 +242,9 @@ type dnsSettingGetResponseEnvelopeJSON struct {
 	Messages           apijson.Field
 	MultiProvider      apijson.Field
 	Nameservers        apijson.Field
-	Result             apijson.Field
 	SecondaryOverrides apijson.Field
 	Success            apijson.Field
+	Result             apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
