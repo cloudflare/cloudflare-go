@@ -31,6 +31,7 @@ func TestV2DirectUploadNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Images.V2.DirectUploads.New(context.TODO(), images.V2DirectUploadNewParams{
 		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ID:                cloudflare.F("this/is/my-customid"),
 		Expiry:            cloudflare.F(time.Now()),
 		Metadata:          cloudflare.F[any](map[string]interface{}{}),
 		RequireSignedURLs: cloudflare.F(true),
