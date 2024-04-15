@@ -81,6 +81,10 @@ func (r v2DirectUploadNewResponseJSON) RawJSON() string {
 type V2DirectUploadNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Optional Image Custom ID. Up to 1024 chars. Can include any number of subpaths,
+	// and utf8 characters. Cannot start nor end with a / (forward slash). Cannot be a
+	// UUID.
+	ID param.Field[string] `json:"id"`
 	// The date after which the upload will not be accepted. Minimum: Now + 2 minutes.
 	// Maximum: Now + 6 hours.
 	Expiry param.Field[time.Time] `json:"expiry" format:"date-time"`
