@@ -187,9 +187,9 @@ func (r CallNewParams) MarshalJSON() (data []byte, err error) {
 type CallNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CallsAppWithSecret    `json:"result,required"`
 	// Whether the API call was successful
 	Success CallNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  CallsAppWithSecret             `json:"result"`
 	JSON    callNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -198,8 +198,8 @@ type CallNewResponseEnvelope struct {
 type callNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -241,9 +241,9 @@ func (r CallUpdateParams) MarshalJSON() (data []byte, err error) {
 type CallUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CallsApp              `json:"result,required"`
 	// Whether the API call was successful
 	Success CallUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  CallsApp                          `json:"result"`
 	JSON    callUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -252,8 +252,8 @@ type CallUpdateResponseEnvelope struct {
 type callUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -294,9 +294,9 @@ type CallDeleteParams struct {
 type CallDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CallsApp              `json:"result,required"`
 	// Whether the API call was successful
 	Success CallDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  CallsApp                          `json:"result"`
 	JSON    callDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -305,8 +305,8 @@ type CallDeleteResponseEnvelope struct {
 type callDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -342,9 +342,9 @@ type CallGetParams struct {
 type CallGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CallsApp              `json:"result,required"`
 	// Whether the API call was successful
 	Success CallGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  CallsApp                       `json:"result"`
 	JSON    callGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -353,8 +353,8 @@ type CallGetResponseEnvelope struct {
 type callGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
