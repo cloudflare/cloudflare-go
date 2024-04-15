@@ -86,9 +86,9 @@ func (r FirewallAnalyticsReportGetParams) URLQuery() (v url.Values) {
 type FirewallAnalyticsReportGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Report                `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallAnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Report                                            `json:"result"`
 	JSON    firewallAnalyticsReportGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -97,8 +97,8 @@ type FirewallAnalyticsReportGetResponseEnvelope struct {
 type firewallAnalyticsReportGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

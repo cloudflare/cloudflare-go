@@ -193,9 +193,9 @@ func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 type AnalyticsReportGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Report                `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Report                                    `json:"result"`
 	JSON    analyticsReportGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -204,8 +204,8 @@ type AnalyticsReportGetResponseEnvelope struct {
 type analyticsReportGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
