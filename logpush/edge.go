@@ -111,9 +111,9 @@ func (r EdgeNewParams) MarshalJSON() (data []byte, err error) {
 type EdgeNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   InstantLogpushJob     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success EdgeNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  InstantLogpushJob              `json:"result,nullable"`
 	JSON    edgeNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -122,8 +122,8 @@ type EdgeNewResponseEnvelope struct {
 type edgeNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -159,9 +159,9 @@ type EdgeGetParams struct {
 type EdgeGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []InstantLogpushJob   `json:"result,required"`
 	// Whether the API call was successful
 	Success EdgeGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  []InstantLogpushJob            `json:"result"`
 	JSON    edgeGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -170,8 +170,8 @@ type EdgeGetResponseEnvelope struct {
 type edgeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
