@@ -171,11 +171,11 @@ func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
 type AccessTagNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// A tag
-	Result Tag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessTagNewResponseEnvelopeJSON    `json:"-"`
+	// A tag
+	Result Tag                              `json:"result"`
+	JSON   accessTagNewResponseEnvelopeJSON `json:"-"`
 }
 
 // accessTagNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -183,8 +183,8 @@ type AccessTagNewResponseEnvelope struct {
 type accessTagNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -224,11 +224,11 @@ func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessTagUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// A tag
-	Result Tag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessTagUpdateResponseEnvelopeJSON    `json:"-"`
+	// A tag
+	Result Tag                                 `json:"result"`
+	JSON   accessTagUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // accessTagUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -236,8 +236,8 @@ type AccessTagUpdateResponseEnvelope struct {
 type accessTagUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -266,11 +266,11 @@ func (r AccessTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessTagDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   AccessTagDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessTagDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessTagDeleteResponse                `json:"result"`
 	JSON    accessTagDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -279,8 +279,8 @@ type AccessTagDeleteResponseEnvelope struct {
 type accessTagDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -311,11 +311,11 @@ func (r AccessTagDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AccessTagGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// A tag
-	Result Tag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessTagGetResponseEnvelopeJSON    `json:"-"`
+	// A tag
+	Result Tag                              `json:"result"`
+	JSON   accessTagGetResponseEnvelopeJSON `json:"-"`
 }
 
 // accessTagGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -323,8 +323,8 @@ type AccessTagGetResponseEnvelope struct {
 type accessTagGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

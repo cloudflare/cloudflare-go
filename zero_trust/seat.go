@@ -99,9 +99,9 @@ func (r SeatEditParamsBody) MarshalJSON() (data []byte, err error) {
 type SeatEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Seat                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SeatEditResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []Seat                             `json:"result,nullable"`
 	ResultInfo SeatEditResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       seatEditResponseEnvelopeJSON       `json:"-"`
 }
@@ -111,8 +111,8 @@ type SeatEditResponseEnvelope struct {
 type seatEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

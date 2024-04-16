@@ -299,11 +299,11 @@ func (r AccessServiceTokenNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   AccessServiceTokenNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessServiceTokenNewResponse                `json:"result"`
 	JSON    accessServiceTokenNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -312,8 +312,8 @@ type AccessServiceTokenNewResponseEnvelope struct {
 type accessServiceTokenNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -361,9 +361,9 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessServiceTokenUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ServiceToken          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceToken                                    `json:"result"`
 	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -372,8 +372,8 @@ type AccessServiceTokenUpdateResponseEnvelope struct {
 type accessServiceTokenUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -418,9 +418,9 @@ type AccessServiceTokenDeleteParams struct {
 type AccessServiceTokenDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ServiceToken          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceToken                                    `json:"result"`
 	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -429,8 +429,8 @@ type AccessServiceTokenDeleteResponseEnvelope struct {
 type accessServiceTokenDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -461,9 +461,9 @@ func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AccessServiceTokenRefreshResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ServiceToken          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceToken                                     `json:"result"`
 	JSON    accessServiceTokenRefreshResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -472,8 +472,8 @@ type AccessServiceTokenRefreshResponseEnvelope struct {
 type accessServiceTokenRefreshResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -502,11 +502,11 @@ func (r AccessServiceTokenRefreshResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessServiceTokenRotateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   AccessServiceTokenRotateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRotateResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessServiceTokenRotateResponse                `json:"result"`
 	JSON    accessServiceTokenRotateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -515,8 +515,8 @@ type AccessServiceTokenRotateResponseEnvelope struct {
 type accessServiceTokenRotateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

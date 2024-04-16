@@ -247,9 +247,9 @@ func (r AccessGroupNewParams) MarshalJSON() (data []byte, err error) {
 type AccessGroupNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustGroup        `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessGroupNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZeroTrustGroup                        `json:"result"`
 	JSON    accessGroupNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -258,8 +258,8 @@ type AccessGroupNewResponseEnvelope struct {
 type accessGroupNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -314,9 +314,9 @@ func (r AccessGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessGroupUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustGroup        `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZeroTrustGroup                           `json:"result"`
 	JSON    accessGroupUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -325,8 +325,8 @@ type AccessGroupUpdateResponseEnvelope struct {
 type accessGroupUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -369,11 +369,11 @@ type AccessGroupDeleteParams struct {
 }
 
 type AccessGroupDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   AccessGroupDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessGroupDeleteResponse                `json:"result"`
 	JSON    accessGroupDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -382,8 +382,8 @@ type AccessGroupDeleteResponseEnvelope struct {
 type accessGroupDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -421,9 +421,9 @@ type AccessGroupGetParams struct {
 type AccessGroupGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustGroup        `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZeroTrustGroup                        `json:"result"`
 	JSON    accessGroupGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -432,8 +432,8 @@ type AccessGroupGetResponseEnvelope struct {
 type accessGroupGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

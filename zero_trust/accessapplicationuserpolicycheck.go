@@ -181,11 +181,11 @@ type AccessApplicationUserPolicyCheckListParams struct {
 }
 
 type AccessApplicationUserPolicyCheckListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                        `json:"messages,required"`
-	Result   AccessApplicationUserPolicyCheckListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessApplicationUserPolicyCheckListResponse                `json:"result"`
 	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -194,8 +194,8 @@ type AccessApplicationUserPolicyCheckListResponseEnvelope struct {
 type accessApplicationUserPolicyCheckListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

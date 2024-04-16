@@ -92,9 +92,9 @@ func (r accessRequestsJSON) RawJSON() string {
 type AccessLogAccessRequestListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []AccessRequests      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessLogAccessRequestListResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []AccessRequests                                     `json:"result,nullable"`
 	ResultInfo AccessLogAccessRequestListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       accessLogAccessRequestListResponseEnvelopeJSON       `json:"-"`
 }
@@ -104,8 +104,8 @@ type AccessLogAccessRequestListResponseEnvelope struct {
 type accessLogAccessRequestListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
