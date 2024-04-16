@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // JobService contains methods and other services that help with interacting with
@@ -112,7 +110,7 @@ func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, op
 }
 
 // Deletes a Logpush job.
-func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeleteParams, opts ...option.RequestOption) (res *JobDeleteResponseUnion, err error) {
+func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeleteParams, opts ...option.RequestOption) (res *JobDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobDeleteResponseEnvelope
 	var accountOrZone string
@@ -388,30 +386,7 @@ func (r OutputOptionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [logpush.JobDeleteResponseUnknown],
-// [logpush.JobDeleteResponseArray] or [shared.UnionString].
-type JobDeleteResponseUnion interface {
-	ImplementsLogpushJobDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*JobDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(JobDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type JobDeleteResponseArray []interface{}
-
-func (r JobDeleteResponseArray) ImplementsLogpushJobDeleteResponseUnion() {}
+type JobDeleteResponse = interface{}
 
 type JobNewParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
@@ -472,9 +447,9 @@ func (r JobNewParamsFrequency) IsKnown() bool {
 type JobNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  LogpushJob                    `json:"result,nullable"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -483,8 +458,8 @@ type JobNewResponseEnvelope struct {
 type jobNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -565,9 +540,9 @@ func (r JobUpdateParamsFrequency) IsKnown() bool {
 type JobUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  LogpushJob                       `json:"result,nullable"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -576,8 +551,8 @@ type JobUpdateResponseEnvelope struct {
 type jobUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -625,11 +600,11 @@ func (r JobDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type JobDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   JobDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success JobDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  JobDeleteResponse                `json:"result,nullable"`
 	JSON    jobDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -638,8 +613,8 @@ type JobDeleteResponseEnvelope struct {
 type jobDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -677,9 +652,9 @@ type JobGetParams struct {
 type JobGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  LogpushJob                    `json:"result,nullable"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -688,8 +663,8 @@ type JobGetResponseEnvelope struct {
 type jobGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
