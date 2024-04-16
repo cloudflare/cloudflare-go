@@ -377,9 +377,9 @@ func (r DexhttpTestGetParamsInterval) IsKnown() bool {
 type DexhttpTestGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   HTTPDetails           `json:"result,required"`
 	// Whether the API call was successful
 	Success DexhttpTestGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  HTTPDetails                           `json:"result"`
 	JSON    dexhttpTestGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -388,8 +388,8 @@ type DexhttpTestGetResponseEnvelope struct {
 type dexhttpTestGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
