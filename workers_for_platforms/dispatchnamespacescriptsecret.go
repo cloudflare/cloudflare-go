@@ -180,11 +180,11 @@ func (r DispatchNamespaceScriptSecretUpdateParamsType) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   DispatchNamespaceScriptSecretUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceScriptSecretUpdateResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -193,8 +193,8 @@ type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
 type dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

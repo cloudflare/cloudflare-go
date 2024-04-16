@@ -84,7 +84,6 @@ func (UnionString) ImplementsRateLimitsRateLimitEditResponseUnion()             
 func (UnionString) ImplementsRateLimitsRateLimitGetResponseUnion()                               {}
 func (UnionString) ImplementsWorkersAIRunResponseUnion()                                         {}
 func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                     {}
-func (UnionString) ImplementsWorkersScriptTailDeleteResponseUnion()                              {}
 func (UnionString) ImplementsKVNamespaceUpdateResponseUnion()                                    {}
 func (UnionString) ImplementsKVNamespaceDeleteResponseUnion()                                    {}
 func (UnionString) ImplementsKVNamespaceBulkUpdateResponseUnion()                                {}

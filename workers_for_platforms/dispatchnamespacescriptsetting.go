@@ -416,11 +416,11 @@ type DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion interface {
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                      `json:"errors,required"`
-	Messages []shared.ResponseInfo                      `json:"messages,required"`
-	Result   DispatchNamespaceScriptSettingEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceScriptSettingEditResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -429,8 +429,8 @@ type DispatchNamespaceScriptSettingEditResponseEnvelope struct {
 type dispatchNamespaceScriptSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -464,11 +464,11 @@ type DispatchNamespaceScriptSettingGetParams struct {
 }
 
 type DispatchNamespaceScriptSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   DispatchNamespaceScriptSettingGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceScriptSettingGetResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -477,8 +477,8 @@ type DispatchNamespaceScriptSettingGetResponseEnvelope struct {
 type dispatchNamespaceScriptSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

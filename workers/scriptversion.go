@@ -253,11 +253,11 @@ func (r ScriptVersionNewParamsMetadataUsageModel) IsKnown() bool {
 }
 
 type ScriptVersionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   ScriptVersionNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptVersionNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptVersionNewResponse                `json:"result"`
 	JSON    scriptVersionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -266,8 +266,8 @@ type ScriptVersionNewResponseEnvelope struct {
 type scriptVersionNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -301,11 +301,11 @@ type ScriptVersionListParams struct {
 }
 
 type ScriptVersionListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ScriptVersionListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptVersionListResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptVersionListResponse                `json:"result"`
 	JSON    scriptVersionListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -314,8 +314,8 @@ type ScriptVersionListResponseEnvelope struct {
 type scriptVersionListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -349,11 +349,11 @@ type ScriptVersionGetParams struct {
 }
 
 type ScriptVersionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   ScriptVersionGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptVersionGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptVersionGetResponse                `json:"result"`
 	JSON    scriptVersionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -362,8 +362,8 @@ type ScriptVersionGetResponseEnvelope struct {
 type scriptVersionGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

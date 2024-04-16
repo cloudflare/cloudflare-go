@@ -115,11 +115,11 @@ func (r AccountSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountSettingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   AccountSettingUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccountSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccountSettingUpdateResponse                `json:"result"`
 	JSON    accountSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -128,8 +128,8 @@ type AccountSettingUpdateResponseEnvelope struct {
 type accountSettingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -163,11 +163,11 @@ type AccountSettingGetParams struct {
 }
 
 type AccountSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   AccountSettingGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccountSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccountSettingGetResponse                `json:"result"`
 	JSON    accountSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -176,8 +176,8 @@ type AccountSettingGetResponseEnvelope struct {
 type accountSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

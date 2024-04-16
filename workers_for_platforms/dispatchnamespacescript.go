@@ -268,9 +268,9 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModel) IsKnown
 type DispatchNamespaceScriptUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   workers.Script        `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  workers.Script                                       `json:"result"`
 	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -279,8 +279,8 @@ type DispatchNamespaceScriptUpdateResponseEnvelope struct {
 type dispatchNamespaceScriptUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -339,11 +339,11 @@ type DispatchNamespaceScriptGetParams struct {
 type DispatchNamespaceScriptGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Details about a worker uploaded to a Workers for Platforms namespace.
-	Result Script `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dispatchNamespaceScriptGetResponseEnvelopeJSON    `json:"-"`
+	// Details about a worker uploaded to a Workers for Platforms namespace.
+	Result Script                                         `json:"result"`
+	JSON   dispatchNamespaceScriptGetResponseEnvelopeJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptGetResponseEnvelopeJSON contains the JSON metadata for
@@ -351,8 +351,8 @@ type DispatchNamespaceScriptGetResponseEnvelope struct {
 type dispatchNamespaceScriptGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
