@@ -316,9 +316,9 @@ func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
 type OrganizationNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Organization          `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Organization                           `json:"result"`
 	JSON    organizationNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -327,8 +327,8 @@ type OrganizationNewResponseEnvelope struct {
 type organizationNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -411,9 +411,9 @@ func (r OrganizationUpdateParamsCustomPages) MarshalJSON() (data []byte, err err
 type OrganizationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Organization          `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Organization                              `json:"result"`
 	JSON    organizationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -422,8 +422,8 @@ type OrganizationUpdateResponseEnvelope struct {
 type organizationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -461,9 +461,9 @@ type OrganizationListParams struct {
 type OrganizationListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Organization          `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationListResponseEnvelopeSuccess `json:"success,required"`
+	Result  Organization                            `json:"result"`
 	JSON    organizationListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -472,8 +472,8 @@ type OrganizationListResponseEnvelope struct {
 type organizationListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
