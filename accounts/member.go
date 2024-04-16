@@ -48,7 +48,7 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 }
 
 // Modify an account member.
-func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *shared.User, err error) {
+func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *shared.IamMember, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", params.AccountID, memberID)
@@ -97,7 +97,7 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, params Memb
 }
 
 // Get information about a specific member of an account.
-func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *shared.User, err error) {
+func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *shared.IamMember, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", query.AccountID, memberID)
@@ -394,17 +394,17 @@ func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
-	User      shared.UserParam         `json:"user,required"`
+	IamMember shared.IamMemberParam    `json:"iam_member,required"`
 }
 
 func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.User)
+	return apijson.MarshalRoot(r.IamMember)
 }
 
 type MemberUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   shared.User           `json:"result,required"`
+	Result   shared.IamMember      `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberUpdateResponseEnvelopeJSON    `json:"-"`
@@ -576,7 +576,7 @@ type MemberGetParams struct {
 type MemberGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   shared.User           `json:"result,required"`
+	Result   shared.IamMember      `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberGetResponseEnvelopeJSON    `json:"-"`

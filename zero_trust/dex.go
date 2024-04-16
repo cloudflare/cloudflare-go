@@ -63,28 +63,18 @@ func (r deviceExperienceMonitorJSON) RawJSON() string {
 }
 
 type NetworkPath struct {
-	// API Resource UUID tag.
-	ID         string `json:"id,required"`
-	DeviceName string `json:"deviceName"`
-	// The interval at which the Traceroute synthetic application test is set to run.
-	Interval    string                 `json:"interval"`
-	Kind        NetworkPathKind        `json:"kind"`
-	Name        string                 `json:"name"`
-	NetworkPath NetworkPathNetworkPath `json:"networkPath,nullable"`
-	// The host of the Traceroute synthetic application test
-	URL  string          `json:"url"`
-	JSON networkPathJSON `json:"-"`
+	Slots []NetworkPathSlot `json:"slots,required"`
+	// Specifies the sampling applied, if any, to the slots response. When sampled,
+	// results shown represent the first test run to the start of each sampling
+	// interval.
+	Sampling NetworkPathSampling `json:"sampling,nullable"`
+	JSON     networkPathJSON     `json:"-"`
 }
 
 // networkPathJSON contains the JSON metadata for the struct [NetworkPath]
 type networkPathJSON struct {
-	ID          apijson.Field
-	DeviceName  apijson.Field
-	Interval    apijson.Field
-	Kind        apijson.Field
-	Name        apijson.Field
-	NetworkPath apijson.Field
-	URL         apijson.Field
+	Slots       apijson.Field
+	Sampling    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -97,47 +87,7 @@ func (r networkPathJSON) RawJSON() string {
 	return r.raw
 }
 
-type NetworkPathKind string
-
-const (
-	NetworkPathKindTraceroute NetworkPathKind = "traceroute"
-)
-
-func (r NetworkPathKind) IsKnown() bool {
-	switch r {
-	case NetworkPathKindTraceroute:
-		return true
-	}
-	return false
-}
-
-type NetworkPathNetworkPath struct {
-	Slots []NetworkPathNetworkPathSlot `json:"slots,required"`
-	// Specifies the sampling applied, if any, to the slots response. When sampled,
-	// results shown represent the first test run to the start of each sampling
-	// interval.
-	Sampling NetworkPathNetworkPathSampling `json:"sampling,nullable"`
-	JSON     networkPathNetworkPathJSON     `json:"-"`
-}
-
-// networkPathNetworkPathJSON contains the JSON metadata for the struct
-// [NetworkPathNetworkPath]
-type networkPathNetworkPathJSON struct {
-	Slots       apijson.Field
-	Sampling    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkPathNetworkPath) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkPathNetworkPathJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkPathNetworkPathSlot struct {
+type NetworkPathSlot struct {
 	// API Resource UUID tag.
 	ID string `json:"id,required"`
 	// Round trip time in ms of the client to app mile
@@ -148,13 +98,12 @@ type NetworkPathNetworkPathSlot struct {
 	ClientToCfIngressRTTMs int64  `json:"clientToCfIngressRttMs,required,nullable"`
 	Timestamp              string `json:"timestamp,required"`
 	// Round trip time in ms of the client to ISP mile
-	ClientToIspRTTMs int64                          `json:"clientToIspRttMs,nullable"`
-	JSON             networkPathNetworkPathSlotJSON `json:"-"`
+	ClientToIspRTTMs int64               `json:"clientToIspRttMs,nullable"`
+	JSON             networkPathSlotJSON `json:"-"`
 }
 
-// networkPathNetworkPathSlotJSON contains the JSON metadata for the struct
-// [NetworkPathNetworkPathSlot]
-type networkPathNetworkPathSlotJSON struct {
+// networkPathSlotJSON contains the JSON metadata for the struct [NetworkPathSlot]
+type networkPathSlotJSON struct {
 	ID                     apijson.Field
 	ClientToAppRTTMs       apijson.Field
 	ClientToCfEgressRTTMs  apijson.Field
@@ -165,49 +114,99 @@ type networkPathNetworkPathSlotJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *NetworkPathNetworkPathSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *NetworkPathSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r networkPathNetworkPathSlotJSON) RawJSON() string {
+func (r networkPathSlotJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies the sampling applied, if any, to the slots response. When sampled,
 // results shown represent the first test run to the start of each sampling
 // interval.
-type NetworkPathNetworkPathSampling struct {
-	Unit  NetworkPathNetworkPathSamplingUnit `json:"unit,required"`
-	Value int64                              `json:"value,required"`
-	JSON  networkPathNetworkPathSamplingJSON `json:"-"`
+type NetworkPathSampling struct {
+	Unit  NetworkPathSamplingUnit `json:"unit,required"`
+	Value int64                   `json:"value,required"`
+	JSON  networkPathSamplingJSON `json:"-"`
 }
 
-// networkPathNetworkPathSamplingJSON contains the JSON metadata for the struct
-// [NetworkPathNetworkPathSampling]
-type networkPathNetworkPathSamplingJSON struct {
+// networkPathSamplingJSON contains the JSON metadata for the struct
+// [NetworkPathSampling]
+type networkPathSamplingJSON struct {
 	Unit        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NetworkPathNetworkPathSampling) UnmarshalJSON(data []byte) (err error) {
+func (r *NetworkPathSampling) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r networkPathNetworkPathSamplingJSON) RawJSON() string {
+func (r networkPathSamplingJSON) RawJSON() string {
 	return r.raw
 }
 
-type NetworkPathNetworkPathSamplingUnit string
+type NetworkPathSamplingUnit string
 
 const (
-	NetworkPathNetworkPathSamplingUnitHours NetworkPathNetworkPathSamplingUnit = "hours"
+	NetworkPathSamplingUnitHours NetworkPathSamplingUnit = "hours"
 )
 
-func (r NetworkPathNetworkPathSamplingUnit) IsKnown() bool {
+func (r NetworkPathSamplingUnit) IsKnown() bool {
 	switch r {
-	case NetworkPathNetworkPathSamplingUnitHours:
+	case NetworkPathSamplingUnitHours:
+		return true
+	}
+	return false
+}
+
+type NetworkPathResponse struct {
+	// API Resource UUID tag.
+	ID         string `json:"id,required"`
+	DeviceName string `json:"deviceName"`
+	// The interval at which the Traceroute synthetic application test is set to run.
+	Interval    string                  `json:"interval"`
+	Kind        NetworkPathResponseKind `json:"kind"`
+	Name        string                  `json:"name"`
+	NetworkPath NetworkPath             `json:"networkPath,nullable"`
+	// The host of the Traceroute synthetic application test
+	URL  string                  `json:"url"`
+	JSON networkPathResponseJSON `json:"-"`
+}
+
+// networkPathResponseJSON contains the JSON metadata for the struct
+// [NetworkPathResponse]
+type networkPathResponseJSON struct {
+	ID          apijson.Field
+	DeviceName  apijson.Field
+	Interval    apijson.Field
+	Kind        apijson.Field
+	Name        apijson.Field
+	NetworkPath apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkPathResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkPathResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkPathResponseKind string
+
+const (
+	NetworkPathResponseKindTraceroute NetworkPathResponseKind = "traceroute"
+)
+
+func (r NetworkPathResponseKind) IsKnown() bool {
+	switch r {
+	case NetworkPathResponseKindTraceroute:
 		return true
 	}
 	return false
