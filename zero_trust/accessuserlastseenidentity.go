@@ -233,9 +233,9 @@ func (r identityMTLSAuthJSON) RawJSON() string {
 type AccessUserLastSeenIdentityGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Identity              `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessUserLastSeenIdentityGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Identity                                             `json:"result"`
 	JSON    accessUserLastSeenIdentityGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -244,8 +244,8 @@ type AccessUserLastSeenIdentityGetResponseEnvelope struct {
 type accessUserLastSeenIdentityGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

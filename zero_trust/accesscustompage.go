@@ -261,9 +261,9 @@ func (r AccessCustomPageNewParams) MarshalJSON() (data []byte, err error) {
 type AccessCustomPageNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CustomPageWithoutHTML `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomPageWithoutHTML                      `json:"result"`
 	JSON    accessCustomPageNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -272,8 +272,8 @@ type AccessCustomPageNewResponseEnvelope struct {
 type accessCustomPageNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -312,9 +312,9 @@ func (r AccessCustomPageUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessCustomPageUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CustomPageWithoutHTML `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomPageWithoutHTML                         `json:"result"`
 	JSON    accessCustomPageUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -323,8 +323,8 @@ type AccessCustomPageUpdateResponseEnvelope struct {
 type accessCustomPageUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -353,11 +353,11 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   AccessCustomPageDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessCustomPageDeleteResponse                `json:"result"`
 	JSON    accessCustomPageDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -366,8 +366,8 @@ type AccessCustomPageDeleteResponseEnvelope struct {
 type accessCustomPageDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -398,9 +398,9 @@ func (r AccessCustomPageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AccessCustomPageGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CustomPage            `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomPage                                 `json:"result"`
 	JSON    accessCustomPageGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -409,8 +409,8 @@ type AccessCustomPageGetResponseEnvelope struct {
 type accessCustomPageGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
