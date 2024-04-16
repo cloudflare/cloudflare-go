@@ -169,11 +169,11 @@ type DEXTracerouteTestResultNetworkPathGetParams struct {
 }
 
 type DEXTracerouteTestResultNetworkPathGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                         `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
-	Result   DEXTracerouteTestResultNetworkPathGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DEXTracerouteTestResultNetworkPathGetResponse                `json:"result"`
 	JSON    dexTracerouteTestResultNetworkPathGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -182,8 +182,8 @@ type DEXTracerouteTestResultNetworkPathGetResponseEnvelope struct {
 type dexTracerouteTestResultNetworkPathGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
