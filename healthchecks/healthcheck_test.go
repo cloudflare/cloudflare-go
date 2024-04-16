@@ -138,7 +138,7 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestHealthcheckList(t *testing.T) {
+func TestHealthcheckListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -153,7 +153,9 @@ func TestHealthcheckList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Healthchecks.List(context.TODO(), healthchecks.HealthcheckListParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:    cloudflare.F[any](map[string]interface{}{}),
+		PerPage: cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
