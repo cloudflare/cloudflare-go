@@ -703,9 +703,9 @@ func (r testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON) RawJSON
 type DEXTestListResponse struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Tests                 `json:"result,required"`
 	// Whether the API call was successful
 	Success    DEXTestListResponseSuccess    `json:"success,required"`
-	Result     Tests                         `json:"result"`
 	ResultInfo DEXTestListResponseResultInfo `json:"result_info"`
 	JSON       dexTestListResponseJSON       `json:"-"`
 }
@@ -715,8 +715,8 @@ type DEXTestListResponse struct {
 type dexTestListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
