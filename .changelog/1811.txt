@@ -1,0 +1,3 @@
+```release-note:bug
+adds custom certificate setting to teams account configuration
+```
