@@ -147,9 +147,9 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 type DomainUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Domain                `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Domain                              `json:"result"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -158,8 +158,8 @@ type DomainUpdateResponseEnvelope struct {
 type domainUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -225,9 +225,9 @@ type DomainGetParams struct {
 type DomainGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Domain                `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Domain                           `json:"result"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -236,8 +236,8 @@ type DomainGetResponseEnvelope struct {
 type domainGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

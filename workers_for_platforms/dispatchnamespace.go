@@ -232,11 +232,11 @@ func (r DispatchNamespaceNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DispatchNamespaceNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   DispatchNamespaceNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceNewResponse                `json:"result"`
 	JSON    dispatchNamespaceNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -245,8 +245,8 @@ type DispatchNamespaceNewResponseEnvelope struct {
 type dispatchNamespaceNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -285,11 +285,11 @@ type DispatchNamespaceDeleteParams struct {
 }
 
 type DispatchNamespaceDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   DispatchNamespaceDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceDeleteResponse                `json:"result,nullable"`
 	JSON    dispatchNamespaceDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -298,8 +298,8 @@ type DispatchNamespaceDeleteResponseEnvelope struct {
 type dispatchNamespaceDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -333,11 +333,11 @@ type DispatchNamespaceGetParams struct {
 }
 
 type DispatchNamespaceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   DispatchNamespaceGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceGetResponse                `json:"result"`
 	JSON    dispatchNamespaceGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -346,8 +346,8 @@ type DispatchNamespaceGetResponseEnvelope struct {
 type dispatchNamespaceGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

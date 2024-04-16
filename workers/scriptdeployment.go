@@ -187,11 +187,11 @@ func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptDeploymentNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ScriptDeploymentNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptDeploymentNewResponse                `json:"result"`
 	JSON    scriptDeploymentNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -200,8 +200,8 @@ type ScriptDeploymentNewResponseEnvelope struct {
 type scriptDeploymentNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -235,11 +235,11 @@ type ScriptDeploymentGetParams struct {
 }
 
 type ScriptDeploymentGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ScriptDeploymentGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptDeploymentGetResponse                `json:"result"`
 	JSON    scriptDeploymentGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -248,8 +248,8 @@ type ScriptDeploymentGetResponseEnvelope struct {
 type scriptDeploymentGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
