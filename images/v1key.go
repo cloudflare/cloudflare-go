@@ -32,7 +32,7 @@ func NewV1KeyService(opts ...option.RequestOption) (r *V1KeyService) {
 }
 
 // Create a new signing key with specified name. Returns all keys available.
-func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V1KeyUpdateParams, opts ...option.RequestOption) (res *Key, err error) {
+func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V1KeyUpdateParams, opts ...option.RequestOption) (res *V1KeyUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/keys/%s", body.AccountID, signingKeyName)
@@ -45,7 +45,7 @@ func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V
 }
 
 // Lists your signing keys. These can be found on your Cloudflare Images dashboard.
-func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...option.RequestOption) (res *Key, err error) {
+func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...option.RequestOption) (res *V1KeyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/keys", query.AccountID)
@@ -59,7 +59,7 @@ func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...
 
 // Delete signing key with specified name. Returns all keys available. When last
 // key is removed, a new default signing key will be generated.
-func (r *V1KeyService) Delete(ctx context.Context, signingKeyName string, body V1KeyDeleteParams, opts ...option.RequestOption) (res *Key, err error) {
+func (r *V1KeyService) Delete(ctx context.Context, signingKeyName string, body V1KeyDeleteParams, opts ...option.RequestOption) (res *V1KeyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/keys/%s", body.AccountID, signingKeyName)
@@ -72,13 +72,17 @@ func (r *V1KeyService) Delete(ctx context.Context, signingKeyName string, body V
 }
 
 type Key struct {
-	Keys []KeyKey `json:"keys"`
-	JSON keyJSON  `json:"-"`
+	// Key name.
+	Name string `json:"name"`
+	// Key value.
+	Value string  `json:"value"`
+	JSON  keyJSON `json:"-"`
 }
 
 // keyJSON contains the JSON metadata for the struct [Key]
 type keyJSON struct {
-	Keys        apijson.Field
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -91,27 +95,66 @@ func (r keyJSON) RawJSON() string {
 	return r.raw
 }
 
-type KeyKey struct {
-	// Key name.
-	Name string `json:"name"`
-	// Key value.
-	Value string     `json:"value"`
-	JSON  keyKeyJSON `json:"-"`
+type V1KeyUpdateResponse struct {
+	Keys []Key                   `json:"keys"`
+	JSON v1KeyUpdateResponseJSON `json:"-"`
 }
 
-// keyKeyJSON contains the JSON metadata for the struct [KeyKey]
-type keyKeyJSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
+// v1KeyUpdateResponseJSON contains the JSON metadata for the struct
+// [V1KeyUpdateResponse]
+type v1KeyUpdateResponseJSON struct {
+	Keys        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyKey) UnmarshalJSON(data []byte) (err error) {
+func (r *V1KeyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r keyKeyJSON) RawJSON() string {
+func (r v1KeyUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type V1KeyListResponse struct {
+	Keys []Key                 `json:"keys"`
+	JSON v1KeyListResponseJSON `json:"-"`
+}
+
+// v1KeyListResponseJSON contains the JSON metadata for the struct
+// [V1KeyListResponse]
+type v1KeyListResponseJSON struct {
+	Keys        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *V1KeyListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r v1KeyListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type V1KeyDeleteResponse struct {
+	Keys []Key                   `json:"keys"`
+	JSON v1KeyDeleteResponseJSON `json:"-"`
+}
+
+// v1KeyDeleteResponseJSON contains the JSON metadata for the struct
+// [V1KeyDeleteResponse]
+type v1KeyDeleteResponseJSON struct {
+	Keys        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *V1KeyDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r v1KeyDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -123,7 +166,7 @@ type V1KeyUpdateParams struct {
 type V1KeyUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Key                   `json:"result,required"`
+	Result   V1KeyUpdateResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -171,7 +214,7 @@ type V1KeyListParams struct {
 type V1KeyListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Key                   `json:"result,required"`
+	Result   V1KeyListResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyListResponseEnvelopeJSON    `json:"-"`
@@ -219,7 +262,7 @@ type V1KeyDeleteParams struct {
 type V1KeyDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Key                   `json:"result,required"`
+	Result   V1KeyDeleteResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyDeleteResponseEnvelopeJSON    `json:"-"`

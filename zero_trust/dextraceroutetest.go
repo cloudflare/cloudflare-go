@@ -49,7 +49,7 @@ func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, param
 }
 
 // Get a breakdown of metrics by hop for individual traceroute test runs
-func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *NetworkPath, err error) {
+func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *NetworkPathResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestNetworkPathResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/network-path", params.AccountID, testID)
@@ -551,7 +551,7 @@ type DEXTracerouteTestNetworkPathResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success,required"`
-	Result  NetworkPath                                         `json:"result"`
+	Result  NetworkPathResponse                                 `json:"result"`
 	JSON    dexTracerouteTestNetworkPathResponseEnvelopeJSON    `json:"-"`
 }
 
