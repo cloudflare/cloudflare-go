@@ -150,11 +150,11 @@ func (r DEXHTTPTestPercentileGetParams) URLQuery() (v url.Values) {
 }
 
 type DexhttpTestPercentileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   HTTPDetailsPercentiles `json:"result,required"`
 	// Whether the API call was successful
 	Success DexhttpTestPercentileGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  HTTPDetailsPercentiles                          `json:"result"`
 	JSON    dexhttpTestPercentileGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -163,8 +163,8 @@ type DexhttpTestPercentileGetResponseEnvelope struct {
 type dexhttpTestPercentileGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
