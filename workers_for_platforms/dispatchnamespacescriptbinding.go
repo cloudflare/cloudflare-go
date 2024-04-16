@@ -55,11 +55,11 @@ type DispatchNamespaceScriptBindingGetParams struct {
 type DispatchNamespaceScriptBindingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// List of bindings attached to this Worker
-	Result []workers.Binding `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dispatchNamespaceScriptBindingGetResponseEnvelopeJSON    `json:"-"`
+	// List of bindings attached to this Worker
+	Result []workers.Binding                                     `json:"result"`
+	JSON   dispatchNamespaceScriptBindingGetResponseEnvelopeJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptBindingGetResponseEnvelopeJSON contains the JSON metadata
@@ -67,8 +67,8 @@ type DispatchNamespaceScriptBindingGetResponseEnvelope struct {
 type dispatchNamespaceScriptBindingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -75,9 +75,9 @@ func (r ScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
 type ScriptSettingEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ScriptSetting         `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptSetting                            `json:"result"`
 	JSON    scriptSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -86,8 +86,8 @@ type ScriptSettingEditResponseEnvelope struct {
 type scriptSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -123,9 +123,9 @@ type ScriptSettingGetParams struct {
 type ScriptSettingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ScriptSetting         `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptSetting                           `json:"result"`
 	JSON    scriptSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -134,8 +134,8 @@ type ScriptSettingGetResponseEnvelope struct {
 type scriptSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
