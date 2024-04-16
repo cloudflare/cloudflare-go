@@ -150,11 +150,11 @@ func (r DEXFleetStatusLiveParams) URLQuery() (v url.Values) {
 }
 
 type DEXFleetStatusLiveResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   DEXFleetStatusLiveResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXFleetStatusLiveResponseEnvelopeSuccess `json:"success,required"`
-	Result  DEXFleetStatusLiveResponse                `json:"result"`
 	JSON    dexFleetStatusLiveResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -163,8 +163,8 @@ type DEXFleetStatusLiveResponseEnvelope struct {
 type dexFleetStatusLiveResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

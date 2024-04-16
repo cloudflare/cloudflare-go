@@ -90,9 +90,9 @@ func (r DEXTestUniqueDeviceListParams) URLQuery() (v url.Values) {
 type DEXTestUniqueDeviceListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   UniqueDevices         `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTestUniqueDeviceListResponseEnvelopeSuccess `json:"success,required"`
-	Result  UniqueDevices                                  `json:"result"`
 	JSON    dexTestUniqueDeviceListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -101,8 +101,8 @@ type DEXTestUniqueDeviceListResponseEnvelope struct {
 type dexTestUniqueDeviceListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
