@@ -176,18 +176,48 @@ type CustomHostnameNewResponse struct {
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname,required"`
 	// SSL properties for the custom hostname.
-	SSL  CustomHostnameNewResponseSSL  `json:"ssl,required"`
-	JSON customHostnameNewResponseJSON `json:"-"`
+	SSL CustomHostnameNewResponseSSL `json:"ssl,required"`
+	// This is the time the hostname was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are per-hostname (customer) settings.
+	CustomMetadata CustomHostnameNewResponseCustomMetadata `json:"custom_metadata"`
+	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
+	// record.
+	CustomOriginServer string `json:"custom_origin_server"`
+	// A hostname that will be sent to your custom origin server as SNI for TLS
+	// handshake. This can be a valid subdomain of the zone or custom origin server
+	// name or the string ':request_host_header:' which will cause the host header in
+	// the request to be used as SNI. Not configurable with default/fallback origin
+	// server.
+	CustomOriginSni string `json:"custom_origin_sni"`
+	// This is a record which can be placed to activate a hostname.
+	OwnershipVerification CustomHostnameNewResponseOwnershipVerification `json:"ownership_verification"`
+	// This presents the token to be served by the given http url to activate a
+	// hostname.
+	OwnershipVerificationHTTP CustomHostnameNewResponseOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	// Status of the hostname's activation.
+	Status CustomHostnameNewResponseStatus `json:"status"`
+	// These are errors that were encountered while trying to activate a hostname.
+	VerificationErrors []interface{}                 `json:"verification_errors"`
+	JSON               customHostnameNewResponseJSON `json:"-"`
 }
 
 // customHostnameNewResponseJSON contains the JSON metadata for the struct
 // [CustomHostnameNewResponse]
 type customHostnameNewResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                        apijson.Field
+	Hostname                  apijson.Field
+	SSL                       apijson.Field
+	CreatedAt                 apijson.Field
+	CustomMetadata            apijson.Field
+	CustomOriginServer        apijson.Field
+	CustomOriginSni           apijson.Field
+	OwnershipVerification     apijson.Field
+	OwnershipVerificationHTTP apijson.Field
+	Status                    apijson.Field
+	VerificationErrors        apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *CustomHostnameNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -494,24 +524,179 @@ func (r customHostnameNewResponseSSLValidationRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+// These are per-hostname (customer) settings.
+type CustomHostnameNewResponseCustomMetadata struct {
+	// Unique metadata for this hostname.
+	Key  string                                      `json:"key"`
+	JSON customHostnameNewResponseCustomMetadataJSON `json:"-"`
+}
+
+// customHostnameNewResponseCustomMetadataJSON contains the JSON metadata for the
+// struct [CustomHostnameNewResponseCustomMetadata]
+type customHostnameNewResponseCustomMetadataJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameNewResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameNewResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+// This is a record which can be placed to activate a hostname.
+type CustomHostnameNewResponseOwnershipVerification struct {
+	// DNS Name for record.
+	Name string `json:"name"`
+	// DNS Record type.
+	Type CustomHostnameNewResponseOwnershipVerificationType `json:"type"`
+	// Content for the record.
+	Value string                                             `json:"value"`
+	JSON  customHostnameNewResponseOwnershipVerificationJSON `json:"-"`
+}
+
+// customHostnameNewResponseOwnershipVerificationJSON contains the JSON metadata
+// for the struct [CustomHostnameNewResponseOwnershipVerification]
+type customHostnameNewResponseOwnershipVerificationJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameNewResponseOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameNewResponseOwnershipVerificationJSON) RawJSON() string {
+	return r.raw
+}
+
+// DNS Record type.
+type CustomHostnameNewResponseOwnershipVerificationType string
+
+const (
+	CustomHostnameNewResponseOwnershipVerificationTypeTXT CustomHostnameNewResponseOwnershipVerificationType = "txt"
+)
+
+func (r CustomHostnameNewResponseOwnershipVerificationType) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseOwnershipVerificationTypeTXT:
+		return true
+	}
+	return false
+}
+
+// This presents the token to be served by the given http url to activate a
+// hostname.
+type CustomHostnameNewResponseOwnershipVerificationHTTP struct {
+	// Token to be served.
+	HTTPBody string `json:"http_body"`
+	// The HTTP URL that will be checked during custom hostname verification and where
+	// the customer should host the token.
+	HTTPURL string                                                 `json:"http_url"`
+	JSON    customHostnameNewResponseOwnershipVerificationHTTPJSON `json:"-"`
+}
+
+// customHostnameNewResponseOwnershipVerificationHTTPJSON contains the JSON
+// metadata for the struct [CustomHostnameNewResponseOwnershipVerificationHTTP]
+type customHostnameNewResponseOwnershipVerificationHTTPJSON struct {
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameNewResponseOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameNewResponseOwnershipVerificationHTTPJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the hostname's activation.
+type CustomHostnameNewResponseStatus string
+
+const (
+	CustomHostnameNewResponseStatusActive             CustomHostnameNewResponseStatus = "active"
+	CustomHostnameNewResponseStatusPending            CustomHostnameNewResponseStatus = "pending"
+	CustomHostnameNewResponseStatusActiveRedeploying  CustomHostnameNewResponseStatus = "active_redeploying"
+	CustomHostnameNewResponseStatusMoved              CustomHostnameNewResponseStatus = "moved"
+	CustomHostnameNewResponseStatusPendingDeletion    CustomHostnameNewResponseStatus = "pending_deletion"
+	CustomHostnameNewResponseStatusDeleted            CustomHostnameNewResponseStatus = "deleted"
+	CustomHostnameNewResponseStatusPendingBlocked     CustomHostnameNewResponseStatus = "pending_blocked"
+	CustomHostnameNewResponseStatusPendingMigration   CustomHostnameNewResponseStatus = "pending_migration"
+	CustomHostnameNewResponseStatusPendingProvisioned CustomHostnameNewResponseStatus = "pending_provisioned"
+	CustomHostnameNewResponseStatusTestPending        CustomHostnameNewResponseStatus = "test_pending"
+	CustomHostnameNewResponseStatusTestActive         CustomHostnameNewResponseStatus = "test_active"
+	CustomHostnameNewResponseStatusTestActiveApex     CustomHostnameNewResponseStatus = "test_active_apex"
+	CustomHostnameNewResponseStatusTestBlocked        CustomHostnameNewResponseStatus = "test_blocked"
+	CustomHostnameNewResponseStatusTestFailed         CustomHostnameNewResponseStatus = "test_failed"
+	CustomHostnameNewResponseStatusProvisioned        CustomHostnameNewResponseStatus = "provisioned"
+	CustomHostnameNewResponseStatusBlocked            CustomHostnameNewResponseStatus = "blocked"
+)
+
+func (r CustomHostnameNewResponseStatus) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseStatusActive, CustomHostnameNewResponseStatusPending, CustomHostnameNewResponseStatusActiveRedeploying, CustomHostnameNewResponseStatusMoved, CustomHostnameNewResponseStatusPendingDeletion, CustomHostnameNewResponseStatusDeleted, CustomHostnameNewResponseStatusPendingBlocked, CustomHostnameNewResponseStatusPendingMigration, CustomHostnameNewResponseStatusPendingProvisioned, CustomHostnameNewResponseStatusTestPending, CustomHostnameNewResponseStatusTestActive, CustomHostnameNewResponseStatusTestActiveApex, CustomHostnameNewResponseStatusTestBlocked, CustomHostnameNewResponseStatusTestFailed, CustomHostnameNewResponseStatusProvisioned, CustomHostnameNewResponseStatusBlocked:
+		return true
+	}
+	return false
+}
+
 type CustomHostnameListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname,required"`
 	// SSL properties for the custom hostname.
-	SSL  CustomHostnameListResponseSSL  `json:"ssl,required"`
-	JSON customHostnameListResponseJSON `json:"-"`
+	SSL CustomHostnameListResponseSSL `json:"ssl,required"`
+	// This is the time the hostname was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are per-hostname (customer) settings.
+	CustomMetadata CustomHostnameListResponseCustomMetadata `json:"custom_metadata"`
+	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
+	// record.
+	CustomOriginServer string `json:"custom_origin_server"`
+	// A hostname that will be sent to your custom origin server as SNI for TLS
+	// handshake. This can be a valid subdomain of the zone or custom origin server
+	// name or the string ':request_host_header:' which will cause the host header in
+	// the request to be used as SNI. Not configurable with default/fallback origin
+	// server.
+	CustomOriginSni string `json:"custom_origin_sni"`
+	// This is a record which can be placed to activate a hostname.
+	OwnershipVerification CustomHostnameListResponseOwnershipVerification `json:"ownership_verification"`
+	// This presents the token to be served by the given http url to activate a
+	// hostname.
+	OwnershipVerificationHTTP CustomHostnameListResponseOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	// Status of the hostname's activation.
+	Status CustomHostnameListResponseStatus `json:"status"`
+	// These are errors that were encountered while trying to activate a hostname.
+	VerificationErrors []interface{}                  `json:"verification_errors"`
+	JSON               customHostnameListResponseJSON `json:"-"`
 }
 
 // customHostnameListResponseJSON contains the JSON metadata for the struct
 // [CustomHostnameListResponse]
 type customHostnameListResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                        apijson.Field
+	Hostname                  apijson.Field
+	SSL                       apijson.Field
+	CreatedAt                 apijson.Field
+	CustomMetadata            apijson.Field
+	CustomOriginServer        apijson.Field
+	CustomOriginSni           apijson.Field
+	OwnershipVerification     apijson.Field
+	OwnershipVerificationHTTP apijson.Field
+	Status                    apijson.Field
+	VerificationErrors        apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *CustomHostnameListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -818,6 +1003,131 @@ func (r customHostnameListResponseSSLValidationRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+// These are per-hostname (customer) settings.
+type CustomHostnameListResponseCustomMetadata struct {
+	// Unique metadata for this hostname.
+	Key  string                                       `json:"key"`
+	JSON customHostnameListResponseCustomMetadataJSON `json:"-"`
+}
+
+// customHostnameListResponseCustomMetadataJSON contains the JSON metadata for the
+// struct [CustomHostnameListResponseCustomMetadata]
+type customHostnameListResponseCustomMetadataJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameListResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameListResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+// This is a record which can be placed to activate a hostname.
+type CustomHostnameListResponseOwnershipVerification struct {
+	// DNS Name for record.
+	Name string `json:"name"`
+	// DNS Record type.
+	Type CustomHostnameListResponseOwnershipVerificationType `json:"type"`
+	// Content for the record.
+	Value string                                              `json:"value"`
+	JSON  customHostnameListResponseOwnershipVerificationJSON `json:"-"`
+}
+
+// customHostnameListResponseOwnershipVerificationJSON contains the JSON metadata
+// for the struct [CustomHostnameListResponseOwnershipVerification]
+type customHostnameListResponseOwnershipVerificationJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameListResponseOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameListResponseOwnershipVerificationJSON) RawJSON() string {
+	return r.raw
+}
+
+// DNS Record type.
+type CustomHostnameListResponseOwnershipVerificationType string
+
+const (
+	CustomHostnameListResponseOwnershipVerificationTypeTXT CustomHostnameListResponseOwnershipVerificationType = "txt"
+)
+
+func (r CustomHostnameListResponseOwnershipVerificationType) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseOwnershipVerificationTypeTXT:
+		return true
+	}
+	return false
+}
+
+// This presents the token to be served by the given http url to activate a
+// hostname.
+type CustomHostnameListResponseOwnershipVerificationHTTP struct {
+	// Token to be served.
+	HTTPBody string `json:"http_body"`
+	// The HTTP URL that will be checked during custom hostname verification and where
+	// the customer should host the token.
+	HTTPURL string                                                  `json:"http_url"`
+	JSON    customHostnameListResponseOwnershipVerificationHTTPJSON `json:"-"`
+}
+
+// customHostnameListResponseOwnershipVerificationHTTPJSON contains the JSON
+// metadata for the struct [CustomHostnameListResponseOwnershipVerificationHTTP]
+type customHostnameListResponseOwnershipVerificationHTTPJSON struct {
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameListResponseOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameListResponseOwnershipVerificationHTTPJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the hostname's activation.
+type CustomHostnameListResponseStatus string
+
+const (
+	CustomHostnameListResponseStatusActive             CustomHostnameListResponseStatus = "active"
+	CustomHostnameListResponseStatusPending            CustomHostnameListResponseStatus = "pending"
+	CustomHostnameListResponseStatusActiveRedeploying  CustomHostnameListResponseStatus = "active_redeploying"
+	CustomHostnameListResponseStatusMoved              CustomHostnameListResponseStatus = "moved"
+	CustomHostnameListResponseStatusPendingDeletion    CustomHostnameListResponseStatus = "pending_deletion"
+	CustomHostnameListResponseStatusDeleted            CustomHostnameListResponseStatus = "deleted"
+	CustomHostnameListResponseStatusPendingBlocked     CustomHostnameListResponseStatus = "pending_blocked"
+	CustomHostnameListResponseStatusPendingMigration   CustomHostnameListResponseStatus = "pending_migration"
+	CustomHostnameListResponseStatusPendingProvisioned CustomHostnameListResponseStatus = "pending_provisioned"
+	CustomHostnameListResponseStatusTestPending        CustomHostnameListResponseStatus = "test_pending"
+	CustomHostnameListResponseStatusTestActive         CustomHostnameListResponseStatus = "test_active"
+	CustomHostnameListResponseStatusTestActiveApex     CustomHostnameListResponseStatus = "test_active_apex"
+	CustomHostnameListResponseStatusTestBlocked        CustomHostnameListResponseStatus = "test_blocked"
+	CustomHostnameListResponseStatusTestFailed         CustomHostnameListResponseStatus = "test_failed"
+	CustomHostnameListResponseStatusProvisioned        CustomHostnameListResponseStatus = "provisioned"
+	CustomHostnameListResponseStatusBlocked            CustomHostnameListResponseStatus = "blocked"
+)
+
+func (r CustomHostnameListResponseStatus) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseStatusActive, CustomHostnameListResponseStatusPending, CustomHostnameListResponseStatusActiveRedeploying, CustomHostnameListResponseStatusMoved, CustomHostnameListResponseStatusPendingDeletion, CustomHostnameListResponseStatusDeleted, CustomHostnameListResponseStatusPendingBlocked, CustomHostnameListResponseStatusPendingMigration, CustomHostnameListResponseStatusPendingProvisioned, CustomHostnameListResponseStatusTestPending, CustomHostnameListResponseStatusTestActive, CustomHostnameListResponseStatusTestActiveApex, CustomHostnameListResponseStatusTestBlocked, CustomHostnameListResponseStatusTestFailed, CustomHostnameListResponseStatusProvisioned, CustomHostnameListResponseStatusBlocked:
+		return true
+	}
+	return false
+}
+
 type CustomHostnameDeleteResponse struct {
 	// Identifier
 	ID   string                           `json:"id"`
@@ -846,18 +1156,48 @@ type CustomHostnameEditResponse struct {
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname,required"`
 	// SSL properties for the custom hostname.
-	SSL  CustomHostnameEditResponseSSL  `json:"ssl,required"`
-	JSON customHostnameEditResponseJSON `json:"-"`
+	SSL CustomHostnameEditResponseSSL `json:"ssl,required"`
+	// This is the time the hostname was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are per-hostname (customer) settings.
+	CustomMetadata CustomHostnameEditResponseCustomMetadata `json:"custom_metadata"`
+	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
+	// record.
+	CustomOriginServer string `json:"custom_origin_server"`
+	// A hostname that will be sent to your custom origin server as SNI for TLS
+	// handshake. This can be a valid subdomain of the zone or custom origin server
+	// name or the string ':request_host_header:' which will cause the host header in
+	// the request to be used as SNI. Not configurable with default/fallback origin
+	// server.
+	CustomOriginSni string `json:"custom_origin_sni"`
+	// This is a record which can be placed to activate a hostname.
+	OwnershipVerification CustomHostnameEditResponseOwnershipVerification `json:"ownership_verification"`
+	// This presents the token to be served by the given http url to activate a
+	// hostname.
+	OwnershipVerificationHTTP CustomHostnameEditResponseOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	// Status of the hostname's activation.
+	Status CustomHostnameEditResponseStatus `json:"status"`
+	// These are errors that were encountered while trying to activate a hostname.
+	VerificationErrors []interface{}                  `json:"verification_errors"`
+	JSON               customHostnameEditResponseJSON `json:"-"`
 }
 
 // customHostnameEditResponseJSON contains the JSON metadata for the struct
 // [CustomHostnameEditResponse]
 type customHostnameEditResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                        apijson.Field
+	Hostname                  apijson.Field
+	SSL                       apijson.Field
+	CreatedAt                 apijson.Field
+	CustomMetadata            apijson.Field
+	CustomOriginServer        apijson.Field
+	CustomOriginSni           apijson.Field
+	OwnershipVerification     apijson.Field
+	OwnershipVerificationHTTP apijson.Field
+	Status                    apijson.Field
+	VerificationErrors        apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *CustomHostnameEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -1164,24 +1504,179 @@ func (r customHostnameEditResponseSSLValidationRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+// These are per-hostname (customer) settings.
+type CustomHostnameEditResponseCustomMetadata struct {
+	// Unique metadata for this hostname.
+	Key  string                                       `json:"key"`
+	JSON customHostnameEditResponseCustomMetadataJSON `json:"-"`
+}
+
+// customHostnameEditResponseCustomMetadataJSON contains the JSON metadata for the
+// struct [CustomHostnameEditResponseCustomMetadata]
+type customHostnameEditResponseCustomMetadataJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameEditResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+// This is a record which can be placed to activate a hostname.
+type CustomHostnameEditResponseOwnershipVerification struct {
+	// DNS Name for record.
+	Name string `json:"name"`
+	// DNS Record type.
+	Type CustomHostnameEditResponseOwnershipVerificationType `json:"type"`
+	// Content for the record.
+	Value string                                              `json:"value"`
+	JSON  customHostnameEditResponseOwnershipVerificationJSON `json:"-"`
+}
+
+// customHostnameEditResponseOwnershipVerificationJSON contains the JSON metadata
+// for the struct [CustomHostnameEditResponseOwnershipVerification]
+type customHostnameEditResponseOwnershipVerificationJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameEditResponseOwnershipVerificationJSON) RawJSON() string {
+	return r.raw
+}
+
+// DNS Record type.
+type CustomHostnameEditResponseOwnershipVerificationType string
+
+const (
+	CustomHostnameEditResponseOwnershipVerificationTypeTXT CustomHostnameEditResponseOwnershipVerificationType = "txt"
+)
+
+func (r CustomHostnameEditResponseOwnershipVerificationType) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseOwnershipVerificationTypeTXT:
+		return true
+	}
+	return false
+}
+
+// This presents the token to be served by the given http url to activate a
+// hostname.
+type CustomHostnameEditResponseOwnershipVerificationHTTP struct {
+	// Token to be served.
+	HTTPBody string `json:"http_body"`
+	// The HTTP URL that will be checked during custom hostname verification and where
+	// the customer should host the token.
+	HTTPURL string                                                  `json:"http_url"`
+	JSON    customHostnameEditResponseOwnershipVerificationHTTPJSON `json:"-"`
+}
+
+// customHostnameEditResponseOwnershipVerificationHTTPJSON contains the JSON
+// metadata for the struct [CustomHostnameEditResponseOwnershipVerificationHTTP]
+type customHostnameEditResponseOwnershipVerificationHTTPJSON struct {
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameEditResponseOwnershipVerificationHTTPJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the hostname's activation.
+type CustomHostnameEditResponseStatus string
+
+const (
+	CustomHostnameEditResponseStatusActive             CustomHostnameEditResponseStatus = "active"
+	CustomHostnameEditResponseStatusPending            CustomHostnameEditResponseStatus = "pending"
+	CustomHostnameEditResponseStatusActiveRedeploying  CustomHostnameEditResponseStatus = "active_redeploying"
+	CustomHostnameEditResponseStatusMoved              CustomHostnameEditResponseStatus = "moved"
+	CustomHostnameEditResponseStatusPendingDeletion    CustomHostnameEditResponseStatus = "pending_deletion"
+	CustomHostnameEditResponseStatusDeleted            CustomHostnameEditResponseStatus = "deleted"
+	CustomHostnameEditResponseStatusPendingBlocked     CustomHostnameEditResponseStatus = "pending_blocked"
+	CustomHostnameEditResponseStatusPendingMigration   CustomHostnameEditResponseStatus = "pending_migration"
+	CustomHostnameEditResponseStatusPendingProvisioned CustomHostnameEditResponseStatus = "pending_provisioned"
+	CustomHostnameEditResponseStatusTestPending        CustomHostnameEditResponseStatus = "test_pending"
+	CustomHostnameEditResponseStatusTestActive         CustomHostnameEditResponseStatus = "test_active"
+	CustomHostnameEditResponseStatusTestActiveApex     CustomHostnameEditResponseStatus = "test_active_apex"
+	CustomHostnameEditResponseStatusTestBlocked        CustomHostnameEditResponseStatus = "test_blocked"
+	CustomHostnameEditResponseStatusTestFailed         CustomHostnameEditResponseStatus = "test_failed"
+	CustomHostnameEditResponseStatusProvisioned        CustomHostnameEditResponseStatus = "provisioned"
+	CustomHostnameEditResponseStatusBlocked            CustomHostnameEditResponseStatus = "blocked"
+)
+
+func (r CustomHostnameEditResponseStatus) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseStatusActive, CustomHostnameEditResponseStatusPending, CustomHostnameEditResponseStatusActiveRedeploying, CustomHostnameEditResponseStatusMoved, CustomHostnameEditResponseStatusPendingDeletion, CustomHostnameEditResponseStatusDeleted, CustomHostnameEditResponseStatusPendingBlocked, CustomHostnameEditResponseStatusPendingMigration, CustomHostnameEditResponseStatusPendingProvisioned, CustomHostnameEditResponseStatusTestPending, CustomHostnameEditResponseStatusTestActive, CustomHostnameEditResponseStatusTestActiveApex, CustomHostnameEditResponseStatusTestBlocked, CustomHostnameEditResponseStatusTestFailed, CustomHostnameEditResponseStatusProvisioned, CustomHostnameEditResponseStatusBlocked:
+		return true
+	}
+	return false
+}
+
 type CustomHostnameGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname,required"`
 	// SSL properties for the custom hostname.
-	SSL  CustomHostnameGetResponseSSL  `json:"ssl,required"`
-	JSON customHostnameGetResponseJSON `json:"-"`
+	SSL CustomHostnameGetResponseSSL `json:"ssl,required"`
+	// This is the time the hostname was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are per-hostname (customer) settings.
+	CustomMetadata CustomHostnameGetResponseCustomMetadata `json:"custom_metadata"`
+	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
+	// record.
+	CustomOriginServer string `json:"custom_origin_server"`
+	// A hostname that will be sent to your custom origin server as SNI for TLS
+	// handshake. This can be a valid subdomain of the zone or custom origin server
+	// name or the string ':request_host_header:' which will cause the host header in
+	// the request to be used as SNI. Not configurable with default/fallback origin
+	// server.
+	CustomOriginSni string `json:"custom_origin_sni"`
+	// This is a record which can be placed to activate a hostname.
+	OwnershipVerification CustomHostnameGetResponseOwnershipVerification `json:"ownership_verification"`
+	// This presents the token to be served by the given http url to activate a
+	// hostname.
+	OwnershipVerificationHTTP CustomHostnameGetResponseOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	// Status of the hostname's activation.
+	Status CustomHostnameGetResponseStatus `json:"status"`
+	// These are errors that were encountered while trying to activate a hostname.
+	VerificationErrors []interface{}                 `json:"verification_errors"`
+	JSON               customHostnameGetResponseJSON `json:"-"`
 }
 
 // customHostnameGetResponseJSON contains the JSON metadata for the struct
 // [CustomHostnameGetResponse]
 type customHostnameGetResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                        apijson.Field
+	Hostname                  apijson.Field
+	SSL                       apijson.Field
+	CreatedAt                 apijson.Field
+	CustomMetadata            apijson.Field
+	CustomOriginServer        apijson.Field
+	CustomOriginSni           apijson.Field
+	OwnershipVerification     apijson.Field
+	OwnershipVerificationHTTP apijson.Field
+	Status                    apijson.Field
+	VerificationErrors        apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *CustomHostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -1486,6 +1981,131 @@ func (r *CustomHostnameGetResponseSSLValidationRecord) UnmarshalJSON(data []byte
 
 func (r customHostnameGetResponseSSLValidationRecordJSON) RawJSON() string {
 	return r.raw
+}
+
+// These are per-hostname (customer) settings.
+type CustomHostnameGetResponseCustomMetadata struct {
+	// Unique metadata for this hostname.
+	Key  string                                      `json:"key"`
+	JSON customHostnameGetResponseCustomMetadataJSON `json:"-"`
+}
+
+// customHostnameGetResponseCustomMetadataJSON contains the JSON metadata for the
+// struct [CustomHostnameGetResponseCustomMetadata]
+type customHostnameGetResponseCustomMetadataJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameGetResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameGetResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+// This is a record which can be placed to activate a hostname.
+type CustomHostnameGetResponseOwnershipVerification struct {
+	// DNS Name for record.
+	Name string `json:"name"`
+	// DNS Record type.
+	Type CustomHostnameGetResponseOwnershipVerificationType `json:"type"`
+	// Content for the record.
+	Value string                                             `json:"value"`
+	JSON  customHostnameGetResponseOwnershipVerificationJSON `json:"-"`
+}
+
+// customHostnameGetResponseOwnershipVerificationJSON contains the JSON metadata
+// for the struct [CustomHostnameGetResponseOwnershipVerification]
+type customHostnameGetResponseOwnershipVerificationJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameGetResponseOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameGetResponseOwnershipVerificationJSON) RawJSON() string {
+	return r.raw
+}
+
+// DNS Record type.
+type CustomHostnameGetResponseOwnershipVerificationType string
+
+const (
+	CustomHostnameGetResponseOwnershipVerificationTypeTXT CustomHostnameGetResponseOwnershipVerificationType = "txt"
+)
+
+func (r CustomHostnameGetResponseOwnershipVerificationType) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseOwnershipVerificationTypeTXT:
+		return true
+	}
+	return false
+}
+
+// This presents the token to be served by the given http url to activate a
+// hostname.
+type CustomHostnameGetResponseOwnershipVerificationHTTP struct {
+	// Token to be served.
+	HTTPBody string `json:"http_body"`
+	// The HTTP URL that will be checked during custom hostname verification and where
+	// the customer should host the token.
+	HTTPURL string                                                 `json:"http_url"`
+	JSON    customHostnameGetResponseOwnershipVerificationHTTPJSON `json:"-"`
+}
+
+// customHostnameGetResponseOwnershipVerificationHTTPJSON contains the JSON
+// metadata for the struct [CustomHostnameGetResponseOwnershipVerificationHTTP]
+type customHostnameGetResponseOwnershipVerificationHTTPJSON struct {
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameGetResponseOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameGetResponseOwnershipVerificationHTTPJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the hostname's activation.
+type CustomHostnameGetResponseStatus string
+
+const (
+	CustomHostnameGetResponseStatusActive             CustomHostnameGetResponseStatus = "active"
+	CustomHostnameGetResponseStatusPending            CustomHostnameGetResponseStatus = "pending"
+	CustomHostnameGetResponseStatusActiveRedeploying  CustomHostnameGetResponseStatus = "active_redeploying"
+	CustomHostnameGetResponseStatusMoved              CustomHostnameGetResponseStatus = "moved"
+	CustomHostnameGetResponseStatusPendingDeletion    CustomHostnameGetResponseStatus = "pending_deletion"
+	CustomHostnameGetResponseStatusDeleted            CustomHostnameGetResponseStatus = "deleted"
+	CustomHostnameGetResponseStatusPendingBlocked     CustomHostnameGetResponseStatus = "pending_blocked"
+	CustomHostnameGetResponseStatusPendingMigration   CustomHostnameGetResponseStatus = "pending_migration"
+	CustomHostnameGetResponseStatusPendingProvisioned CustomHostnameGetResponseStatus = "pending_provisioned"
+	CustomHostnameGetResponseStatusTestPending        CustomHostnameGetResponseStatus = "test_pending"
+	CustomHostnameGetResponseStatusTestActive         CustomHostnameGetResponseStatus = "test_active"
+	CustomHostnameGetResponseStatusTestActiveApex     CustomHostnameGetResponseStatus = "test_active_apex"
+	CustomHostnameGetResponseStatusTestBlocked        CustomHostnameGetResponseStatus = "test_blocked"
+	CustomHostnameGetResponseStatusTestFailed         CustomHostnameGetResponseStatus = "test_failed"
+	CustomHostnameGetResponseStatusProvisioned        CustomHostnameGetResponseStatus = "provisioned"
+	CustomHostnameGetResponseStatusBlocked            CustomHostnameGetResponseStatus = "blocked"
+)
+
+func (r CustomHostnameGetResponseStatus) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseStatusActive, CustomHostnameGetResponseStatusPending, CustomHostnameGetResponseStatusActiveRedeploying, CustomHostnameGetResponseStatusMoved, CustomHostnameGetResponseStatusPendingDeletion, CustomHostnameGetResponseStatusDeleted, CustomHostnameGetResponseStatusPendingBlocked, CustomHostnameGetResponseStatusPendingMigration, CustomHostnameGetResponseStatusPendingProvisioned, CustomHostnameGetResponseStatusTestPending, CustomHostnameGetResponseStatusTestActive, CustomHostnameGetResponseStatusTestActiveApex, CustomHostnameGetResponseStatusTestBlocked, CustomHostnameGetResponseStatusTestFailed, CustomHostnameGetResponseStatusProvisioned, CustomHostnameGetResponseStatusBlocked:
+		return true
+	}
+	return false
 }
 
 type CustomHostnameNewParams struct {

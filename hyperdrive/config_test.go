@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestConfigNew(t *testing.T) {
+func TestConfigNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -31,10 +31,19 @@ func TestConfigNew(t *testing.T) {
 	_, err := client.Hyperdrive.Configs.New(context.TODO(), hyperdrive.ConfigNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Hyperdrive: hyperdrive.HyperdriveParam{
-			Origin: cloudflare.F(hyperdrive.ConfigurationParam{
-				Password: cloudflare.F("password1234!"),
+			Caching: cloudflare.F(hyperdrive.HyperdriveCachingParam{
+				Disabled:             cloudflare.F(false),
+				MaxAge:               cloudflare.F(int64(60)),
+				StaleWhileRevalidate: cloudflare.F(int64(15)),
 			}),
-			Name: cloudflare.F[any](map[string]interface{}{}),
+			Name: cloudflare.F("example-hyperdrive"),
+			Origin: cloudflare.F(hyperdrive.ConfigurationParam{
+				Database: cloudflare.F("postgres"),
+				Host:     cloudflare.F("database.example.com"),
+				Port:     cloudflare.F(int64(0)),
+				Scheme:   cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
+				User:     cloudflare.F("postgres"),
+			}),
 		},
 	})
 	if err != nil {
@@ -46,7 +55,7 @@ func TestConfigNew(t *testing.T) {
 	}
 }
 
-func TestConfigUpdate(t *testing.T) {
+func TestConfigUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -66,10 +75,19 @@ func TestConfigUpdate(t *testing.T) {
 		hyperdrive.ConfigUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Hyperdrive: hyperdrive.HyperdriveParam{
-				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
-					Password: cloudflare.F("password1234!"),
+				Caching: cloudflare.F(hyperdrive.HyperdriveCachingParam{
+					Disabled:             cloudflare.F(false),
+					MaxAge:               cloudflare.F(int64(60)),
+					StaleWhileRevalidate: cloudflare.F(int64(15)),
 				}),
-				Name: cloudflare.F[any](map[string]interface{}{}),
+				Name: cloudflare.F("example-hyperdrive"),
+				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
+					Database: cloudflare.F("postgres"),
+					Host:     cloudflare.F("database.example.com"),
+					Port:     cloudflare.F(int64(0)),
+					Scheme:   cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
+					User:     cloudflare.F("postgres"),
+				}),
 			},
 		},
 	)
@@ -158,8 +176,18 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 		hyperdrive.ConfigEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Hyperdrive: hyperdrive.HyperdriveParam{
+				Caching: cloudflare.F(hyperdrive.HyperdriveCachingParam{
+					Disabled:             cloudflare.F(false),
+					MaxAge:               cloudflare.F(int64(60)),
+					StaleWhileRevalidate: cloudflare.F(int64(15)),
+				}),
+				Name: cloudflare.F("example-hyperdrive"),
 				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
-					Password: cloudflare.F("password1234!"),
+					Database: cloudflare.F("postgres"),
+					Host:     cloudflare.F("database.example.com"),
+					Port:     cloudflare.F(int64(0)),
+					Scheme:   cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
+					User:     cloudflare.F("postgres"),
 				}),
 			},
 		},
