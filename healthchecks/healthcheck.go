@@ -6,9 +6,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -63,12 +65,12 @@ func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, p
 }
 
 // List configured health checks.
-func (r *HealthcheckService) List(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Healthcheck], err error) {
+func (r *HealthcheckService) List(ctx context.Context, params HealthcheckListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Healthcheck], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/healthchecks", query.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/healthchecks", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -81,8 +83,8 @@ func (r *HealthcheckService) List(ctx context.Context, query HealthcheckListPara
 }
 
 // List configured health checks.
-func (r *HealthcheckService) ListAutoPaging(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Healthcheck] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *HealthcheckService) ListAutoPaging(ctx context.Context, params HealthcheckListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Healthcheck] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a health check.
@@ -569,6 +571,18 @@ func (r HealthcheckUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type HealthcheckListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Page number of paginated results.
+	Page param.Field[interface{}] `query:"page"`
+	// Maximum number of results per page. Must be a multiple of 5.
+	PerPage param.Field[interface{}] `query:"per_page"`
+}
+
+// URLQuery serializes [HealthcheckListParams]'s query parameters as `url.Values`.
+func (r HealthcheckListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type HealthcheckDeleteParams struct {
