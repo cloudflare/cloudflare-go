@@ -139,9 +139,9 @@ func (r OwnershipNewParams) MarshalJSON() (data []byte, err error) {
 type OwnershipNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   OwnershipNewResponse  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success OwnershipNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  OwnershipNewResponse                `json:"result,nullable"`
 	JSON    ownershipNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -150,8 +150,8 @@ type OwnershipNewResponseEnvelope struct {
 type ownershipNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -199,9 +199,9 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 type OwnershipValidateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   OwnershipValidation   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
-	Result  OwnershipValidation                      `json:"result,nullable"`
 	JSON    ownershipValidateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -210,8 +210,8 @@ type OwnershipValidateResponseEnvelope struct {
 type ownershipValidateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
