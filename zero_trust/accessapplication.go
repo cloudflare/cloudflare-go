@@ -267,6 +267,9 @@ type Application struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name string `json:"name"`
+	// Allows options preflight requests to bypass Access authentication and go
+	// directly to the origin. Cannot turn on if cors_headers is set.
+	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
@@ -310,6 +313,7 @@ type applicationJSON struct {
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
 	Name                     apijson.Field
+	OptionsPreflightBypass   apijson.Field
 	PathCookieAttribute      apijson.Field
 	SameSiteCookieAttribute  apijson.Field
 	SelfHostedDomains        apijson.Field
@@ -436,6 +440,9 @@ type ApplicationSelfHostedApplication struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name string `json:"name"`
+	// Allows options preflight requests to bypass Access authentication and go
+	// directly to the origin. Cannot turn on if cors_headers is set.
+	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
@@ -480,6 +487,7 @@ type applicationSelfHostedApplicationJSON struct {
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
 	Name                     apijson.Field
+	OptionsPreflightBypass   apijson.Field
 	PathCookieAttribute      apijson.Field
 	SameSiteCookieAttribute  apijson.Field
 	SelfHostedDomains        apijson.Field
@@ -842,6 +850,9 @@ type ApplicationBrowserSSHApplication struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name string `json:"name"`
+	// Allows options preflight requests to bypass Access authentication and go
+	// directly to the origin. Cannot turn on if cors_headers is set.
+	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
@@ -886,6 +897,7 @@ type applicationBrowserSSHApplicationJSON struct {
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
 	Name                     apijson.Field
+	OptionsPreflightBypass   apijson.Field
 	PathCookieAttribute      apijson.Field
 	SameSiteCookieAttribute  apijson.Field
 	SelfHostedDomains        apijson.Field
@@ -954,6 +966,9 @@ type ApplicationBrowserVncApplication struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name string `json:"name"`
+	// Allows options preflight requests to bypass Access authentication and go
+	// directly to the origin. Cannot turn on if cors_headers is set.
+	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
@@ -998,6 +1013,7 @@ type applicationBrowserVncApplicationJSON struct {
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
 	Name                     apijson.Field
+	OptionsPreflightBypass   apijson.Field
 	PathCookieAttribute      apijson.Field
 	SameSiteCookieAttribute  apijson.Field
 	SelfHostedDomains        apijson.Field
@@ -1337,6 +1353,9 @@ type ApplicationParam struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
+	// Allows options preflight requests to bypass Access authentication and go
+	// directly to the origin. Cannot turn on if cors_headers is set.
+	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
@@ -1417,6 +1436,9 @@ type ApplicationSelfHostedApplicationParam struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
+	// Allows options preflight requests to bypass Access authentication and go
+	// directly to the origin. Cannot turn on if cors_headers is set.
+	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
@@ -1603,6 +1625,9 @@ type ApplicationBrowserSSHApplicationParam struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
+	// Allows options preflight requests to bypass Access authentication and go
+	// directly to the origin. Cannot turn on if cors_headers is set.
+	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
@@ -1671,6 +1696,9 @@ type ApplicationBrowserVncApplicationParam struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
+	// Allows options preflight requests to bypass Access authentication and go
+	// directly to the origin. Cannot turn on if cors_headers is set.
+	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
@@ -2124,9 +2152,9 @@ func (r AccessApplicationNewParams) MarshalJSON() (data []byte, err error) {
 type AccessApplicationNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Application           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Application                                 `json:"result"`
 	JSON    accessApplicationNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2135,8 +2163,8 @@ type AccessApplicationNewResponseEnvelope struct {
 type accessApplicationNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2179,9 +2207,9 @@ func (r AccessApplicationUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessApplicationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Application           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Application                                    `json:"result"`
 	JSON    accessApplicationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2190,8 +2218,8 @@ type AccessApplicationUpdateResponseEnvelope struct {
 type accessApplicationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2234,11 +2262,11 @@ type AccessApplicationDeleteParams struct {
 }
 
 type AccessApplicationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   AccessApplicationDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessApplicationDeleteResponse                `json:"result"`
 	JSON    accessApplicationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2247,8 +2275,8 @@ type AccessApplicationDeleteResponseEnvelope struct {
 type accessApplicationDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2286,9 +2314,9 @@ type AccessApplicationGetParams struct {
 type AccessApplicationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Application           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Application                                 `json:"result"`
 	JSON    accessApplicationGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2297,8 +2325,8 @@ type AccessApplicationGetResponseEnvelope struct {
 type accessApplicationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

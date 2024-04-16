@@ -340,11 +340,11 @@ func (r accessUserActiveSessionGetResponseMTLSAuthJSON) RawJSON() string {
 }
 
 type AccessUserActiveSessionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   AccessUserActiveSessionGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessUserActiveSessionGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessUserActiveSessionGetResponse                `json:"result"`
 	JSON    accessUserActiveSessionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -353,8 +353,8 @@ type AccessUserActiveSessionGetResponseEnvelope struct {
 type accessUserActiveSessionGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

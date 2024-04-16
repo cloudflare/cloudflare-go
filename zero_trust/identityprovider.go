@@ -2971,9 +2971,9 @@ func (r IdentityProviderNewParams) MarshalJSON() (data []byte, err error) {
 type IdentityProviderNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IdentityProvider      `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  IdentityProvider                           `json:"result"`
 	JSON    identityProviderNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2982,8 +2982,8 @@ type IdentityProviderNewResponseEnvelope struct {
 type identityProviderNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3026,9 +3026,9 @@ func (r IdentityProviderUpdateParams) MarshalJSON() (data []byte, err error) {
 type IdentityProviderUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IdentityProvider      `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  IdentityProvider                              `json:"result"`
 	JSON    identityProviderUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3037,8 +3037,8 @@ type IdentityProviderUpdateResponseEnvelope struct {
 type identityProviderUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3081,11 +3081,11 @@ type IdentityProviderDeleteParams struct {
 }
 
 type IdentityProviderDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   IdentityProviderDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  IdentityProviderDeleteResponse                `json:"result"`
 	JSON    identityProviderDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3094,8 +3094,8 @@ type IdentityProviderDeleteResponseEnvelope struct {
 type identityProviderDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3133,9 +3133,9 @@ type IdentityProviderGetParams struct {
 type IdentityProviderGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IdentityProvider      `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  IdentityProvider                           `json:"result"`
 	JSON    identityProviderGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3144,8 +3144,8 @@ type IdentityProviderGetResponseEnvelope struct {
 type identityProviderGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

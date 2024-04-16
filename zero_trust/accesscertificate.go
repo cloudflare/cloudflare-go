@@ -238,9 +238,9 @@ func (r AccessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type AccessCertificateNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Certificate                                 `json:"result"`
 	JSON    accessCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -249,8 +249,8 @@ type AccessCertificateNewResponseEnvelope struct {
 type accessCertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -296,9 +296,9 @@ func (r AccessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessCertificateUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Certificate                                    `json:"result"`
 	JSON    accessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -307,8 +307,8 @@ type AccessCertificateUpdateResponseEnvelope struct {
 type accessCertificateUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -351,11 +351,11 @@ type AccessCertificateDeleteParams struct {
 }
 
 type AccessCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   AccessCertificateDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessCertificateDeleteResponse                `json:"result"`
 	JSON    accessCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -364,8 +364,8 @@ type AccessCertificateDeleteResponseEnvelope struct {
 type accessCertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -403,9 +403,9 @@ type AccessCertificateGetParams struct {
 type AccessCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Certificate                                 `json:"result"`
 	JSON    accessCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -414,8 +414,8 @@ type AccessCertificateGetResponseEnvelope struct {
 type accessCertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

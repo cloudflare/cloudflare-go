@@ -138,9 +138,9 @@ func (r AccessCertificateSettingUpdateParams) MarshalJSON() (data []byte, err er
 type AccessCertificateSettingUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []CertificateSettings `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []CertificateSettings                                    `json:"result,nullable"`
 	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       accessCertificateSettingUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -150,8 +150,8 @@ type AccessCertificateSettingUpdateResponseEnvelope struct {
 type accessCertificateSettingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -222,9 +222,9 @@ type AccessCertificateSettingGetParams struct {
 type AccessCertificateSettingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []CertificateSettings `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []CertificateSettings                                 `json:"result,nullable"`
 	ResultInfo AccessCertificateSettingGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       accessCertificateSettingGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -234,8 +234,8 @@ type AccessCertificateSettingGetResponseEnvelope struct {
 type accessCertificateSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

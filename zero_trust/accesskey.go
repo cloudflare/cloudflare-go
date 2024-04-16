@@ -134,9 +134,8 @@ func (r AccessKeyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessKeyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   AccessKeyUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -145,6 +144,7 @@ type AccessKeyUpdateResponseEnvelope struct {
 	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
 	// The timestamp of the previous key rotation.
 	LastKeyRotationAt time.Time                           `json:"last_key_rotation_at" format:"date-time"`
+	Result            AccessKeyUpdateResponseUnion        `json:"result"`
 	JSON              accessKeyUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -153,11 +153,11 @@ type AccessKeyUpdateResponseEnvelope struct {
 type accessKeyUpdateResponseEnvelopeJSON struct {
 	Errors                  apijson.Field
 	Messages                apijson.Field
-	Result                  apijson.Field
 	Success                 apijson.Field
 	DaysUntilNextRotation   apijson.Field
 	KeyRotationIntervalDays apijson.Field
 	LastKeyRotationAt       apijson.Field
+	Result                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -186,9 +186,8 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   AccessKeyGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessKeyGetResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -197,6 +196,7 @@ type AccessKeyGetResponseEnvelope struct {
 	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
 	// The timestamp of the previous key rotation.
 	LastKeyRotationAt time.Time                        `json:"last_key_rotation_at" format:"date-time"`
+	Result            AccessKeyGetResponseUnion        `json:"result"`
 	JSON              accessKeyGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -205,11 +205,11 @@ type AccessKeyGetResponseEnvelope struct {
 type accessKeyGetResponseEnvelopeJSON struct {
 	Errors                  apijson.Field
 	Messages                apijson.Field
-	Result                  apijson.Field
 	Success                 apijson.Field
 	DaysUntilNextRotation   apijson.Field
 	KeyRotationIntervalDays apijson.Field
 	LastKeyRotationAt       apijson.Field
+	Result                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -238,9 +238,8 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyRotateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   AccessKeyRotateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -249,6 +248,7 @@ type AccessKeyRotateResponseEnvelope struct {
 	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
 	// The timestamp of the previous key rotation.
 	LastKeyRotationAt time.Time                           `json:"last_key_rotation_at" format:"date-time"`
+	Result            AccessKeyRotateResponseUnion        `json:"result"`
 	JSON              accessKeyRotateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -257,11 +257,11 @@ type AccessKeyRotateResponseEnvelope struct {
 type accessKeyRotateResponseEnvelopeJSON struct {
 	Errors                  apijson.Field
 	Messages                apijson.Field
-	Result                  apijson.Field
 	Success                 apijson.Field
 	DaysUntilNextRotation   apijson.Field
 	KeyRotationIntervalDays apijson.Field
 	LastKeyRotationAt       apijson.Field
+	Result                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }

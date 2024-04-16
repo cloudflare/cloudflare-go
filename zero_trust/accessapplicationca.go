@@ -225,11 +225,11 @@ type AccessApplicationCANewParams struct {
 }
 
 type AccessApplicationCANewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   AccessApplicationCANewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessApplicationCANewResponseUnion           `json:"result"`
 	JSON    accessApplicationCANewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -238,8 +238,8 @@ type AccessApplicationCANewResponseEnvelope struct {
 type accessApplicationCANewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -282,11 +282,11 @@ type AccessApplicationCADeleteParams struct {
 }
 
 type AccessApplicationCADeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   AccessApplicationCADeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCADeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessApplicationCADeleteResponse                `json:"result"`
 	JSON    accessApplicationCADeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -295,8 +295,8 @@ type AccessApplicationCADeleteResponseEnvelope struct {
 type accessApplicationCADeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -332,11 +332,11 @@ type AccessApplicationCAGetParams struct {
 }
 
 type AccessApplicationCAGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   AccessApplicationCAGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccessApplicationCAGetResponseUnion           `json:"result"`
 	JSON    accessApplicationCAGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -345,8 +345,8 @@ type AccessApplicationCAGetResponseEnvelope struct {
 type accessApplicationCAGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
