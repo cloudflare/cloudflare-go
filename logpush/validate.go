@@ -135,11 +135,11 @@ func (r ValidateDestinationParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateDestinationResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ValidateDestinationResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ValidateDestinationResponseEnvelopeSuccess `json:"success,required"`
+	Result  ValidateDestinationResponse                `json:"result,nullable"`
 	JSON    validateDestinationResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -148,8 +148,8 @@ type ValidateDestinationResponseEnvelope struct {
 type validateDestinationResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -195,11 +195,11 @@ func (r ValidateOriginParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateOriginResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ValidateOriginResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ValidateOriginResponseEnvelopeSuccess `json:"success,required"`
+	Result  ValidateOriginResponse                `json:"result,nullable"`
 	JSON    validateOriginResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -208,8 +208,8 @@ type ValidateOriginResponseEnvelope struct {
 type validateOriginResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

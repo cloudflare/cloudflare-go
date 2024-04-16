@@ -63,9 +63,9 @@ type DatasetJobGetParams struct {
 type DatasetJobGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []LogpushJob          `json:"result,required"`
 	// Whether the API call was successful
 	Success DatasetJobGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  []LogpushJob                         `json:"result"`
 	JSON    datasetJobGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -74,8 +74,8 @@ type DatasetJobGetResponseEnvelope struct {
 type datasetJobGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
