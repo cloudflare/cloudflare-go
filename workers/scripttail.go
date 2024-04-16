@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // ScriptTailService contains methods and other services that help with interacting
@@ -47,15 +45,10 @@ func (r *ScriptTailService) New(ctx context.Context, scriptName string, params S
 }
 
 // Deletes a tail from a Worker.
-func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, params ScriptTailDeleteParams, opts ...option.RequestOption) (res *ScriptTailDeleteResponseUnion, err error) {
+func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, params ScriptTailDeleteParams, opts ...option.RequestOption) (res *ScriptTailDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ScriptTailDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", params.AccountID, scriptName, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -139,30 +132,46 @@ func (r scriptTailNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [workers.ScriptTailDeleteResponseUnknown],
-// [workers.ScriptTailDeleteResponseArray] or [shared.UnionString].
-type ScriptTailDeleteResponseUnion interface {
-	ImplementsWorkersScriptTailDeleteResponseUnion()
+type ScriptTailDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success ScriptTailDeleteResponseSuccess `json:"success,required"`
+	JSON    scriptTailDeleteResponseJSON    `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ScriptTailDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ScriptTailDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// scriptTailDeleteResponseJSON contains the JSON metadata for the struct
+// [ScriptTailDeleteResponse]
+type scriptTailDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-type ScriptTailDeleteResponseArray []interface{}
+func (r *ScriptTailDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r ScriptTailDeleteResponseArray) ImplementsWorkersScriptTailDeleteResponseUnion() {}
+func (r scriptTailDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type ScriptTailDeleteResponseSuccess bool
+
+const (
+	ScriptTailDeleteResponseSuccessTrue ScriptTailDeleteResponseSuccess = true
+)
+
+func (r ScriptTailDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case ScriptTailDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ScriptTailGetResponse struct {
 	ID        interface{}               `json:"id"`
@@ -202,9 +211,9 @@ func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
 type ScriptTailNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ScriptTailNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptTailNewResponse                `json:"result"`
 	JSON    scriptTailNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -213,8 +222,8 @@ type ScriptTailNewResponseEnvelope struct {
 type scriptTailNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -252,49 +261,6 @@ func (r ScriptTailDeleteParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type ScriptTailDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   ScriptTailDeleteResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success ScriptTailDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    scriptTailDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// scriptTailDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ScriptTailDeleteResponseEnvelope]
-type scriptTailDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptTailDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptTailDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ScriptTailDeleteResponseEnvelopeSuccess bool
-
-const (
-	ScriptTailDeleteResponseEnvelopeSuccessTrue ScriptTailDeleteResponseEnvelopeSuccess = true
-)
-
-func (r ScriptTailDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ScriptTailDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type ScriptTailGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -303,9 +269,9 @@ type ScriptTailGetParams struct {
 type ScriptTailGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ScriptTailGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptTailGetResponse                `json:"result"`
 	JSON    scriptTailGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -314,8 +280,8 @@ type ScriptTailGetResponseEnvelope struct {
 type scriptTailGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

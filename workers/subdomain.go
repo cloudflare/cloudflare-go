@@ -110,11 +110,11 @@ func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubdomainUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   SubdomainUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SubdomainUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  SubdomainUpdateResponse                `json:"result"`
 	JSON    subdomainUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -123,8 +123,8 @@ type SubdomainUpdateResponseEnvelope struct {
 type subdomainUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -160,9 +160,9 @@ type SubdomainGetParams struct {
 type SubdomainGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SubdomainGetResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success SubdomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  SubdomainGetResponse                `json:"result"`
 	JSON    subdomainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -171,8 +171,8 @@ type SubdomainGetResponseEnvelope struct {
 type subdomainGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

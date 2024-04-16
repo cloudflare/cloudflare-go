@@ -341,9 +341,9 @@ func (r ScriptUpdateParamsBodyObjectMetadataUsageModel) IsKnown() bool {
 type ScriptUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Script                `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Script                              `json:"result"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -352,8 +352,8 @@ type ScriptUpdateResponseEnvelope struct {
 type scriptUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -94,9 +94,9 @@ func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []b
 type DispatchNamespaceScriptContentUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   workers.Script        `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  workers.Script                                              `json:"result"`
 	JSON    dispatchNamespaceScriptContentUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -105,8 +105,8 @@ type DispatchNamespaceScriptContentUpdateResponseEnvelope struct {
 type dispatchNamespaceScriptContentUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
