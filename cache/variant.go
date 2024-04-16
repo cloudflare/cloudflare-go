@@ -167,31 +167,31 @@ type VariantEditResponseValue struct {
 	Avif []string `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
-	Bmp []string `json:"bmp"`
+	BMP []string `json:"bmp"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for gif.
-	Gif []string `json:"gif"`
+	GIF []string `json:"gif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jp2.
-	Jp2 []string `json:"jp2"`
+	JP2 []string `json:"jp2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpeg.
-	Jpeg []string `json:"jpeg"`
+	JPEG []string `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
 	Jpg []string `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
-	Jpg2 []string `json:"jpg2"`
+	JPG2 []string `json:"jpg2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for png.
-	Png []string `json:"png"`
+	PNG []string `json:"png"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tif.
-	Tif []string `json:"tif"`
+	TIF []string `json:"tif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tiff.
-	Tiff []string `json:"tiff"`
+	TIFF []string `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
 	WebP []string                     `json:"webp"`
@@ -202,15 +202,15 @@ type VariantEditResponseValue struct {
 // [VariantEditResponseValue]
 type variantEditResponseValueJSON struct {
 	Avif        apijson.Field
-	Bmp         apijson.Field
-	Gif         apijson.Field
-	Jp2         apijson.Field
-	Jpeg        apijson.Field
+	BMP         apijson.Field
+	GIF         apijson.Field
+	JP2         apijson.Field
+	JPEG        apijson.Field
 	Jpg         apijson.Field
-	Jpg2        apijson.Field
-	Png         apijson.Field
-	Tif         apijson.Field
-	Tiff        apijson.Field
+	JPG2        apijson.Field
+	PNG         apijson.Field
+	TIF         apijson.Field
+	TIFF        apijson.Field
 	WebP        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -264,31 +264,31 @@ type VariantGetResponseValue struct {
 	Avif []string `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
-	Bmp []string `json:"bmp"`
+	BMP []string `json:"bmp"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for gif.
-	Gif []string `json:"gif"`
+	GIF []string `json:"gif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jp2.
-	Jp2 []string `json:"jp2"`
+	JP2 []string `json:"jp2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpeg.
-	Jpeg []string `json:"jpeg"`
+	JPEG []string `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
 	Jpg []string `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
-	Jpg2 []string `json:"jpg2"`
+	JPG2 []string `json:"jpg2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for png.
-	Png []string `json:"png"`
+	PNG []string `json:"png"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tif.
-	Tif []string `json:"tif"`
+	TIF []string `json:"tif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tiff.
-	Tiff []string `json:"tiff"`
+	TIFF []string `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
 	WebP []string                    `json:"webp"`
@@ -299,15 +299,15 @@ type VariantGetResponseValue struct {
 // [VariantGetResponseValue]
 type variantGetResponseValueJSON struct {
 	Avif        apijson.Field
-	Bmp         apijson.Field
-	Gif         apijson.Field
-	Jp2         apijson.Field
-	Jpeg        apijson.Field
+	BMP         apijson.Field
+	GIF         apijson.Field
+	JP2         apijson.Field
+	JPEG        apijson.Field
 	Jpg         apijson.Field
-	Jpg2        apijson.Field
-	Png         apijson.Field
-	Tif         apijson.Field
-	Tiff        apijson.Field
+	JPG2        apijson.Field
+	PNG         apijson.Field
+	TIF         apijson.Field
+	TIFF        apijson.Field
 	WebP        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -397,31 +397,31 @@ type VariantEditParamsValue struct {
 	Avif param.Field[[]string] `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
-	Bmp param.Field[[]string] `json:"bmp"`
+	BMP param.Field[[]string] `json:"bmp"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for gif.
-	Gif param.Field[[]string] `json:"gif"`
+	GIF param.Field[[]string] `json:"gif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jp2.
-	Jp2 param.Field[[]string] `json:"jp2"`
+	JP2 param.Field[[]string] `json:"jp2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpeg.
-	Jpeg param.Field[[]string] `json:"jpeg"`
+	JPEG param.Field[[]string] `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
 	Jpg param.Field[[]string] `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
-	Jpg2 param.Field[[]string] `json:"jpg2"`
+	JPG2 param.Field[[]string] `json:"jpg2"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for png.
-	Png param.Field[[]string] `json:"png"`
+	PNG param.Field[[]string] `json:"png"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tif.
-	Tif param.Field[[]string] `json:"tif"`
+	TIF param.Field[[]string] `json:"tif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for tiff.
-	Tiff param.Field[[]string] `json:"tiff"`
+	TIFF param.Field[[]string] `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
 	WebP param.Field[[]string] `json:"webp"`
