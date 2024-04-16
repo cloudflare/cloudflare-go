@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // ControlCmbConfigService contains methods and other services that help with
@@ -48,7 +46,7 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 }
 
 // Deletes CMB config.
-func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponseUnion, err error) {
+func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
@@ -103,30 +101,7 @@ func (r CmbConfigParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [logs.ControlCmbConfigDeleteResponseUnknown],
-// [logs.ControlCmbConfigDeleteResponseArray] or [shared.UnionString].
-type ControlCmbConfigDeleteResponseUnion interface {
-	ImplementsLogsControlCmbConfigDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ControlCmbConfigDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ControlCmbConfigDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type ControlCmbConfigDeleteResponseArray []interface{}
-
-func (r ControlCmbConfigDeleteResponseArray) ImplementsLogsControlCmbConfigDeleteResponseUnion() {}
+type ControlCmbConfigDeleteResponse = interface{}
 
 type ControlCmbConfigNewParams struct {
 	// Identifier
@@ -141,9 +116,9 @@ func (r ControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
 type ControlCmbConfigNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CmbConfig             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  CmbConfig                                  `json:"result,nullable"`
 	JSON    controlCmbConfigNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -152,8 +127,8 @@ type ControlCmbConfigNewResponseEnvelope struct {
 type controlCmbConfigNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -192,11 +167,11 @@ func (r ControlCmbConfigDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlCmbConfigDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   ControlCmbConfigDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ControlCmbConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ControlCmbConfigDeleteResponse                `json:"result,nullable"`
 	JSON    controlCmbConfigDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -205,8 +180,8 @@ type ControlCmbConfigDeleteResponseEnvelope struct {
 type controlCmbConfigDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -242,9 +217,9 @@ type ControlCmbConfigGetParams struct {
 type ControlCmbConfigGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CmbConfig             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  CmbConfig                                  `json:"result,nullable"`
 	JSON    controlCmbConfigGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -253,8 +228,8 @@ type ControlCmbConfigGetResponseEnvelope struct {
 type controlCmbConfigGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
