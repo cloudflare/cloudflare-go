@@ -219,9 +219,9 @@ func (r CachePurgeParamsBodyCachePurgeFilesFilesCachePurgeURLAndHeaders) Impleme
 type CachePurgeResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CachePurgeResponse    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CachePurgeResponseEnvelopeSuccess `json:"success,required"`
+	Result  CachePurgeResponse                `json:"result,nullable"`
 	JSON    cachePurgeResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -230,8 +230,8 @@ type CachePurgeResponseEnvelope struct {
 type cachePurgeResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
