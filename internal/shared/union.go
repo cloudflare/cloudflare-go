@@ -67,7 +67,6 @@ func (UnionString) ImplementsFirewallWAFPackageGroupEditResponseUnion()         
 func (UnionString) ImplementsFirewallWAFPackageGroupGetResponseUnion()                           {}
 func (UnionString) ImplementsFirewallWAFPackageRuleGetResponseUnion()                            {}
 func (UnionString) ImplementsLogpushJobDeleteResponseUnion()                                     {}
-func (UnionString) ImplementsLogsControlCmbConfigDeleteResponseUnion()                           {}
 func (UnionString) ImplementsLogsRayIDGetResponseUnion()                                         {}
 func (UnionString) ImplementsLogsReceivedGetResponseUnion()                                      {}
 func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                                     {}
