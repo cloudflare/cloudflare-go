@@ -469,9 +469,9 @@ func (r DEXTracerouteTestGetParamsInterval) IsKnown() bool {
 type DEXTracerouteTestGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Traceroute            `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Traceroute                                  `json:"result"`
 	JSON    dexTracerouteTestGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -480,8 +480,8 @@ type DEXTracerouteTestGetResponseEnvelope struct {
 type dexTracerouteTestGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -549,9 +549,9 @@ func (r DEXTracerouteTestNetworkPathParamsInterval) IsKnown() bool {
 type DEXTracerouteTestNetworkPathResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   NetworkPath           `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success,required"`
+	Result  NetworkPath                                         `json:"result"`
 	JSON    dexTracerouteTestNetworkPathResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -560,8 +560,8 @@ type DEXTracerouteTestNetworkPathResponseEnvelope struct {
 type dexTracerouteTestNetworkPathResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -613,11 +613,11 @@ func (r DEXTracerouteTestPercentilesParams) URLQuery() (v url.Values) {
 }
 
 type DEXTracerouteTestPercentilesResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                `json:"errors,required"`
-	Messages []shared.ResponseInfo                `json:"messages,required"`
-	Result   DEXTracerouteTestPercentilesResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success,required"`
+	Result  DEXTracerouteTestPercentilesResponse                `json:"result"`
 	JSON    dexTracerouteTestPercentilesResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -626,8 +626,8 @@ type DEXTracerouteTestPercentilesResponseEnvelope struct {
 type dexTracerouteTestPercentilesResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
