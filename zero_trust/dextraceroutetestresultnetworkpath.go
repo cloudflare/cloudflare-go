@@ -153,12 +153,12 @@ const (
 	DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToApp       DEXTracerouteTestResultNetworkPathGetResponseHopsMile = "client-to-app"
 	DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToCfEgress  DEXTracerouteTestResultNetworkPathGetResponseHopsMile = "client-to-cf-egress"
 	DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToCfIngress DEXTracerouteTestResultNetworkPathGetResponseHopsMile = "client-to-cf-ingress"
-	DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToIsp       DEXTracerouteTestResultNetworkPathGetResponseHopsMile = "client-to-isp"
+	DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToISP       DEXTracerouteTestResultNetworkPathGetResponseHopsMile = "client-to-isp"
 )
 
 func (r DEXTracerouteTestResultNetworkPathGetResponseHopsMile) IsKnown() bool {
 	switch r {
-	case DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToApp, DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToCfEgress, DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToCfIngress, DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToIsp:
+	case DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToApp, DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToCfEgress, DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToCfIngress, DEXTracerouteTestResultNetworkPathGetResponseHopsMileClientToISP:
 		return true
 	}
 	return false
