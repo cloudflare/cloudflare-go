@@ -180,9 +180,9 @@ func (r GatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err error) {
 type GatewayProxyEndpointNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProxyEndpoint         `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ProxyEndpoint                                  `json:"result"`
 	JSON    gatewayProxyEndpointNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -191,8 +191,8 @@ type GatewayProxyEndpointNewResponseEnvelope struct {
 type gatewayProxyEndpointNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -234,11 +234,11 @@ func (r GatewayProxyEndpointDeleteParams) MarshalJSON() (data []byte, err error)
 }
 
 type GatewayProxyEndpointDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   GatewayProxyEndpointDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayProxyEndpointDeleteResponseUnion           `json:"result"`
 	JSON    gatewayProxyEndpointDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -247,8 +247,8 @@ type GatewayProxyEndpointDeleteResponseEnvelope struct {
 type gatewayProxyEndpointDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -291,9 +291,9 @@ func (r GatewayProxyEndpointEditParams) MarshalJSON() (data []byte, err error) {
 type GatewayProxyEndpointEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProxyEndpoint         `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  ProxyEndpoint                                   `json:"result"`
 	JSON    gatewayProxyEndpointEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -302,8 +302,8 @@ type GatewayProxyEndpointEditResponseEnvelope struct {
 type gatewayProxyEndpointEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -338,9 +338,9 @@ type GatewayProxyEndpointGetParams struct {
 type GatewayProxyEndpointGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProxyEndpoint         `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ProxyEndpoint                                  `json:"result"`
 	JSON    gatewayProxyEndpointGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -349,8 +349,8 @@ type GatewayProxyEndpointGetResponseEnvelope struct {
 type gatewayProxyEndpointGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

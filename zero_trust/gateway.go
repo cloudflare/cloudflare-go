@@ -138,9 +138,9 @@ type GatewayNewParams struct {
 type GatewayNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayNewResponse                `json:"result"`
 	JSON    gatewayNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -149,8 +149,8 @@ type GatewayNewResponseEnvelope struct {
 type gatewayNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -185,9 +185,9 @@ type GatewayListParams struct {
 type GatewayListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayListResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayListResponse                `json:"result"`
 	JSON    gatewayListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -196,8 +196,8 @@ type GatewayListResponseEnvelope struct {
 type gatewayListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
