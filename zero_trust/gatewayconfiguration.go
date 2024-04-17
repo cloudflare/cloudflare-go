@@ -697,11 +697,11 @@ func (r GatewayConfigurationUpdateParams) MarshalJSON() (data []byte, err error)
 type GatewayConfigurationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// account settings.
-	Result GatewayConfigurationUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayConfigurationUpdateResponseEnvelopeJSON    `json:"-"`
+	// account settings.
+	Result GatewayConfigurationUpdateResponse             `json:"result"`
+	JSON   gatewayConfigurationUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // gatewayConfigurationUpdateResponseEnvelopeJSON contains the JSON metadata for
@@ -709,8 +709,8 @@ type GatewayConfigurationUpdateResponseEnvelope struct {
 type gatewayConfigurationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -751,11 +751,11 @@ func (r GatewayConfigurationEditParams) MarshalJSON() (data []byte, err error) {
 type GatewayConfigurationEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// account settings.
-	Result GatewayConfigurationEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayConfigurationEditResponseEnvelopeJSON    `json:"-"`
+	// account settings.
+	Result GatewayConfigurationEditResponse             `json:"result"`
+	JSON   gatewayConfigurationEditResponseEnvelopeJSON `json:"-"`
 }
 
 // gatewayConfigurationEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -763,8 +763,8 @@ type GatewayConfigurationEditResponseEnvelope struct {
 type gatewayConfigurationEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -799,11 +799,11 @@ type GatewayConfigurationGetParams struct {
 type GatewayConfigurationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// account settings.
-	Result GatewayConfigurationGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayConfigurationGetResponseEnvelopeJSON    `json:"-"`
+	// account settings.
+	Result GatewayConfigurationGetResponse             `json:"result"`
+	JSON   gatewayConfigurationGetResponseEnvelopeJSON `json:"-"`
 }
 
 // gatewayConfigurationGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -811,8 +811,8 @@ type GatewayConfigurationGetResponseEnvelope struct {
 type gatewayConfigurationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
