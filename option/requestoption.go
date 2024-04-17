@@ -228,6 +228,14 @@ func WithEnvironmentProduction() RequestOption {
 	return WithBaseURL("https://api.cloudflare.com/client/v4/")
 }
 
+// WithAPIToken returns a RequestOption that sets the client setting "api_token".
+func WithAPIToken(value string) RequestOption {
+	return func(r *requestconfig.RequestConfig) error {
+		r.APIToken = value
+		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIToken)))
+	}
+}
+
 // WithAPIKey returns a RequestOption that sets the client setting "api_key".
 func WithAPIKey(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
@@ -241,14 +249,6 @@ func WithAPIEmail(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
 		r.APIEmail = value
 		return r.Apply(WithHeader("X-Auth-Email", r.APIEmail))
-	}
-}
-
-// WithAPIToken returns a RequestOption that sets the client setting "api_token".
-func WithAPIToken(value string) RequestOption {
-	return func(r *requestconfig.RequestConfig) error {
-		r.APIToken = value
-		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIToken)))
 	}
 }
 
