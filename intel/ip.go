@@ -110,13 +110,13 @@ type IPBelongsToRefType string
 
 const (
 	IPBelongsToRefTypeHostingProvider IPBelongsToRefType = "hosting_provider"
-	IPBelongsToRefTypeIsp             IPBelongsToRefType = "isp"
+	IPBelongsToRefTypeISP             IPBelongsToRefType = "isp"
 	IPBelongsToRefTypeOrganization    IPBelongsToRefType = "organization"
 )
 
 func (r IPBelongsToRefType) IsKnown() bool {
 	switch r {
-	case IPBelongsToRefTypeHostingProvider, IPBelongsToRefTypeIsp, IPBelongsToRefTypeOrganization:
+	case IPBelongsToRefTypeHostingProvider, IPBelongsToRefTypeISP, IPBelongsToRefTypeOrganization:
 		return true
 	}
 	return false
