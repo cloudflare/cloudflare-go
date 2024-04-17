@@ -98,7 +98,7 @@ type NetworkPathSlot struct {
 	ClientToCfIngressRTTMs int64  `json:"clientToCfIngressRttMs,required,nullable"`
 	Timestamp              string `json:"timestamp,required"`
 	// Round trip time in ms of the client to ISP mile
-	ClientToIspRTTMs int64               `json:"clientToIspRttMs,nullable"`
+	ClientToISPRTTMs int64               `json:"clientToIspRttMs,nullable"`
 	JSON             networkPathSlotJSON `json:"-"`
 }
 
@@ -109,7 +109,7 @@ type networkPathSlotJSON struct {
 	ClientToCfEgressRTTMs  apijson.Field
 	ClientToCfIngressRTTMs apijson.Field
 	Timestamp              apijson.Field
-	ClientToIspRTTMs       apijson.Field
+	ClientToISPRTTMs       apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
