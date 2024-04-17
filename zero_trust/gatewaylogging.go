@@ -150,9 +150,9 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 type GatewayLoggingUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoggingSetting        `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  LoggingSetting                              `json:"result"`
 	JSON    gatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -161,8 +161,8 @@ type GatewayLoggingUpdateResponseEnvelope struct {
 type gatewayLoggingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -197,9 +197,9 @@ type GatewayLoggingGetParams struct {
 type GatewayLoggingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoggingSetting        `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  LoggingSetting                           `json:"result"`
 	JSON    gatewayLoggingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -208,8 +208,8 @@ type GatewayLoggingGetResponseEnvelope struct {
 type gatewayLoggingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

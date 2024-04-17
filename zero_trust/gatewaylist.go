@@ -324,11 +324,11 @@ func (r GatewayListNewParamsType) IsKnown() bool {
 }
 
 type GatewayListNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   GatewayListNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayListNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayListNewResponse                `json:"result"`
 	JSON    gatewayListNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -337,8 +337,8 @@ type GatewayListNewResponseEnvelope struct {
 type gatewayListNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -381,9 +381,9 @@ func (r GatewayListUpdateParams) MarshalJSON() (data []byte, err error) {
 type GatewayListUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayList           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayList                              `json:"result"`
 	JSON    gatewayListUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -392,8 +392,8 @@ type GatewayListUpdateResponseEnvelope struct {
 type gatewayListUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -435,11 +435,11 @@ func (r GatewayListDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayListDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   GatewayListDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayListDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayListDeleteResponseUnion           `json:"result"`
 	JSON    gatewayListDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -448,8 +448,8 @@ type GatewayListDeleteResponseEnvelope struct {
 type gatewayListDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -492,9 +492,9 @@ func (r GatewayListEditParams) MarshalJSON() (data []byte, err error) {
 type GatewayListEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayList           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayList                            `json:"result"`
 	JSON    gatewayListEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -503,8 +503,8 @@ type GatewayListEditResponseEnvelope struct {
 type gatewayListEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -539,9 +539,9 @@ type GatewayListGetParams struct {
 type GatewayListGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayList           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayList                           `json:"result"`
 	JSON    gatewayListGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -550,8 +550,8 @@ type GatewayListGetResponseEnvelope struct {
 type gatewayListGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

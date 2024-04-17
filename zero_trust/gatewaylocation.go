@@ -222,9 +222,9 @@ func (r GatewayLocationNewParams) MarshalJSON() (data []byte, err error) {
 type GatewayLocationNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Location              `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Location                                  `json:"result"`
 	JSON    gatewayLocationNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -233,8 +233,8 @@ type GatewayLocationNewResponseEnvelope struct {
 type gatewayLocationNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -281,9 +281,9 @@ func (r GatewayLocationUpdateParams) MarshalJSON() (data []byte, err error) {
 type GatewayLocationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Location              `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Location                                     `json:"result"`
 	JSON    gatewayLocationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -292,8 +292,8 @@ type GatewayLocationUpdateResponseEnvelope struct {
 type gatewayLocationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -335,11 +335,11 @@ func (r GatewayLocationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLocationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   GatewayLocationDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayLocationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayLocationDeleteResponseUnion           `json:"result"`
 	JSON    gatewayLocationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -348,8 +348,8 @@ type GatewayLocationDeleteResponseEnvelope struct {
 type gatewayLocationDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -384,9 +384,9 @@ type GatewayLocationGetParams struct {
 type GatewayLocationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Location              `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Location                                  `json:"result"`
 	JSON    gatewayLocationGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -395,8 +395,8 @@ type GatewayLocationGetResponseEnvelope struct {
 type gatewayLocationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

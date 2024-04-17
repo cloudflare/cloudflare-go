@@ -1056,9 +1056,9 @@ func (r GatewayRuleNewParamsAction) IsKnown() bool {
 type GatewayRuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayRule           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayRule                           `json:"result"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1067,8 +1067,8 @@ type GatewayRuleNewResponseEnvelope struct {
 type gatewayRuleNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1164,9 +1164,9 @@ func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 type GatewayRuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayRule           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayRule                              `json:"result"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1175,8 +1175,8 @@ type GatewayRuleUpdateResponseEnvelope struct {
 type gatewayRuleUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1218,11 +1218,11 @@ func (r GatewayRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   GatewayRuleDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayRuleDeleteResponseUnion           `json:"result"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1231,8 +1231,8 @@ type GatewayRuleDeleteResponseEnvelope struct {
 type gatewayRuleDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1267,9 +1267,9 @@ type GatewayRuleGetParams struct {
 type GatewayRuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayRule           `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayRule                           `json:"result"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1278,8 +1278,8 @@ type GatewayRuleGetResponseEnvelope struct {
 type gatewayRuleGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
