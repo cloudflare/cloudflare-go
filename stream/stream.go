@@ -189,7 +189,7 @@ type Video struct {
 	// The date and time when the video upload URL is no longer valid for direct user
 	// uploads.
 	UploadExpiry time.Time `json:"uploadExpiry" format:"date-time"`
-	Watermark    Watermaks `json:"watermark"`
+	Watermark    Watermark `json:"watermark"`
 	JSON         videoJSON `json:"-"`
 }
 
