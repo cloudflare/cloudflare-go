@@ -70,28 +70,28 @@ const CloudflareTunnelTunTypeCNI = shared.CloudflareTunnelTunTypeCNI
 type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
-type IamMember = shared.IamMember
+type Member = shared.Member
 
 // This is an alias to an internal type.
-type IamMemberRole = shared.IamMemberRole
+type MemberRole = shared.MemberRole
 
 // This is an alias to an internal type.
-type IamMemberRolesPermissions = shared.IamMemberRolesPermissions
+type MemberRolesPermissions = shared.MemberRolesPermissions
 
 // This is an alias to an internal type.
-type IamMemberUser = shared.IamMemberUser
+type MemberUser = shared.MemberUser
 
 // This is an alias to an internal type.
-type IamMemberParam = shared.IamMemberParam
+type MemberParam = shared.MemberParam
 
 // This is an alias to an internal type.
-type IamMemberRoleParam = shared.IamMemberRoleParam
+type MemberRoleParam = shared.MemberRoleParam
 
 // This is an alias to an internal type.
-type IamMemberRolesPermissionsParam = shared.IamMemberRolesPermissionsParam
+type MemberRolesPermissionsParam = shared.MemberRolesPermissionsParam
 
 // This is an alias to an internal type.
-type IamMemberUserParam = shared.IamMemberUserParam
+type MemberUserParam = shared.MemberUserParam
 
 // This is an alias to an internal type.
 type Permission = shared.Permission
