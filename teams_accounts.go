@@ -46,6 +46,7 @@ type TeamsAccountSettings struct {
 	ProtocolDetection     *TeamsProtocolDetection     `json:"protocol_detection,omitempty"`
 	BodyScanning          *TeamsBodyScanning          `json:"body_scanning,omitempty"`
 	ExtendedEmailMatching *TeamsExtendedEmailMatching `json:"extended_email_matching,omitempty"`
+	CustomCertificate     *TeamsCustomCertificate     `json:"custom_certificate,omitempty"`
 }
 
 type BrowserIsolation struct {
@@ -101,6 +102,14 @@ type TeamsBodyScanning struct {
 
 type TeamsExtendedEmailMatching struct {
 	Enabled *bool `json:"enabled,omitempty"`
+}
+
+type TeamsCustomCertificate struct {
+	Enabled       *bool      `json:"enabled,omitempty"`
+	ID            string     `json:"id,omitempty"`
+	BindingStatus string     `json:"binding_status,omitempty"`
+	QsPackId      string     `json:"qs_pack_id,omitempty"`
+	UpdatedAt     *time.Time `json:"updated_at,omitempty"`
 }
 
 type TeamsRuleType = string
