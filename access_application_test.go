@@ -50,7 +50,8 @@ func TestAccessApplications(t *testing.T) {
 					"path_cookie_attribute": true,
 					"custom_pages": ["480f4f69-1a28-4fdd-9240-1ed29f0ac1dc"],
 					"tags": ["engineers"],
-					"allow_authenticate_via_warp": true
+					"allow_authenticate_via_warp": true,
+					"options_preflight_bypass": false
 				}
 			],
 			"result_info": {
@@ -91,6 +92,7 @@ func TestAccessApplications(t *testing.T) {
 		Tags:                     []string{"engineers"},
 		CustomNonIdentityDenyURL: "https://blocked.com",
 		AllowAuthenticateViaWarp: BoolPtr(true),
+		OptionsPreflightBypass:   BoolPtr(false),
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
@@ -143,7 +145,8 @@ func TestAccessApplication(t *testing.T) {
 				"service_auth_401_redirect": true,
 				"http_only_cookie_attribute": false,
 				"path_cookie_attribute": false,
-				"allow_authenticate_via_warp": false
+				"allow_authenticate_via_warp": false,
+				"options_preflight_bypass": false
 			}
 		}
 		`)
@@ -175,6 +178,7 @@ func TestAccessApplication(t *testing.T) {
 		PathCookieAttribute:      BoolPtr(false),
 		CustomNonIdentityDenyURL: "https://blocked.com",
 		AllowAuthenticateViaWarp: BoolPtr(false),
+		OptionsPreflightBypass:   BoolPtr(false),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
@@ -226,7 +230,8 @@ func TestCreateAccessApplications(t *testing.T) {
 				"app_launcher_visible": true,
 				"service_auth_401_redirect": true,
 				"tags": ["engineers"],
-				"allow_authenticate_via_warp": false
+				"allow_authenticate_via_warp": false,
+				"options_preflight_bypass": true
 			}
 		}
 		`)
@@ -256,6 +261,7 @@ func TestCreateAccessApplications(t *testing.T) {
 		CustomNonIdentityDenyURL: "https://blocked.com",
 		Tags:                     []string{"engineers"},
 		AllowAuthenticateViaWarp: BoolPtr(false),
+		OptionsPreflightBypass:   BoolPtr(true),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
@@ -315,7 +321,8 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"app_launcher_visible": true,
 				"service_auth_401_redirect": true,
 				"tags": ["engineers"],
-				"allow_authenticate_via_warp": true
+				"allow_authenticate_via_warp": true,
+				"options_preflight_bypass": true
 			}
 		}
 		`)
@@ -341,6 +348,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		Tags:                     []string{"engineers"},
 		SkipInterstitial:         BoolPtr(true),
 		AllowAuthenticateViaWarp: BoolPtr(true),
+		OptionsPreflightBypass:   BoolPtr(true),
 		CreatedAt:                &createdAt,
 		UpdatedAt:                &updatedAt,
 	}
@@ -365,6 +373,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		CustomNonIdentityDenyURL: "https://blocked.com",
 		Tags:                     []string{"engineers"},
 		AllowAuthenticateViaWarp: BoolPtr(true),
+		OptionsPreflightBypass:   BoolPtr(true),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
@@ -395,6 +404,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		LogoURL:                  "https://www.example.com/example.png",
 		SkipInterstitial:         BoolPtr(true),
 		CustomNonIdentityDenyURL: "https://blocked.com",
+		OptionsPreflightBypass:   BoolPtr(true),
 	})
 
 	if assert.NoError(t, err) {
