@@ -37,7 +37,7 @@ func NewWatermarkService(opts ...option.RequestOption) (r *WatermarkService) {
 
 // Creates watermark profiles using a single `HTTP POST multipart/form-data`
 // request.
-func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *Watermaks, err error) {
+func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *Watermark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", params.AccountID)
@@ -50,7 +50,7 @@ func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, o
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Watermaks], err error) {
+func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Watermark], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,7 +68,7 @@ func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, 
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Watermaks] {
+func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Watermark] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -86,7 +86,7 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, params
 }
 
 // Retrieves details for a single watermark profile.
-func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *Watermaks, err error) {
+func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *Watermark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
@@ -98,7 +98,7 @@ func (r *WatermarkService) Get(ctx context.Context, identifier string, query Wat
 	return
 }
 
-type Watermaks struct {
+type Watermark struct {
 	// The date and a time a watermark profile was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The source URL for a downloaded image. If the watermark profile was created via
@@ -131,11 +131,11 @@ type Watermaks struct {
 	UID string `json:"uid"`
 	// The width of the image in pixels.
 	Width int64         `json:"width"`
-	JSON  watermaksJSON `json:"-"`
+	JSON  watermarkJSON `json:"-"`
 }
 
-// watermaksJSON contains the JSON metadata for the struct [Watermaks]
-type watermaksJSON struct {
+// watermarkJSON contains the JSON metadata for the struct [Watermark]
+type watermarkJSON struct {
 	Created        apijson.Field
 	DownloadedFrom apijson.Field
 	Height         apijson.Field
@@ -151,11 +151,11 @@ type watermaksJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *Watermaks) UnmarshalJSON(data []byte) (err error) {
+func (r *Watermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r watermaksJSON) RawJSON() string {
+func (r watermarkJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -211,7 +211,7 @@ type WatermarkNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  Watermaks                           `json:"result"`
+	Result  Watermark                           `json:"result"`
 	JSON    watermarkNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -317,7 +317,7 @@ type WatermarkGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  Watermaks                           `json:"result"`
+	Result  Watermark                           `json:"result"`
 	JSON    watermarkGetResponseEnvelopeJSON    `json:"-"`
 }
 
