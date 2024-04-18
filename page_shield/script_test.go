@@ -31,7 +31,7 @@ func TestScriptListWithOptionalParams(t *testing.T) {
 	_, err := client.PageShield.Scripts.List(context.TODO(), page_shield.ScriptListParams{
 		ZoneID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction:           cloudflare.F(page_shield.ScriptListParamsDirectionAsc),
-		ExcludeCdnCgi:       cloudflare.F(true),
+		ExcludeCDNCgi:       cloudflare.F(true),
 		ExcludeDuplicates:   cloudflare.F(true),
 		ExcludeURLs:         cloudflare.F("blog.cloudflare.com,www.example"),
 		Export:              cloudflare.F(page_shield.ScriptListParamsExportCsv),
