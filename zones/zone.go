@@ -211,7 +211,7 @@ func (r zoneAccountJSON) RawJSON() string {
 // Metadata about the zone
 type ZoneMeta struct {
 	// The zone is only configured for CDN
-	CdnOnly bool `json:"cdn_only"`
+	CDNOnly bool `json:"cdn_only"`
 	// Number of Custom Certificates the zone can have
 	CustomCertificateQuota int64 `json:"custom_certificate_quota"`
 	// The zone is only configured for DNS
@@ -228,7 +228,7 @@ type ZoneMeta struct {
 
 // zoneMetaJSON contains the JSON metadata for the struct [ZoneMeta]
 type zoneMetaJSON struct {
-	CdnOnly                apijson.Field
+	CDNOnly                apijson.Field
 	CustomCertificateQuota apijson.Field
 	DNSOnly                apijson.Field
 	FoundationDNS          apijson.Field
