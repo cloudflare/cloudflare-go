@@ -31,7 +31,7 @@ func TestConnectionListWithOptionalParams(t *testing.T) {
 	_, err := client.PageShield.Connections.List(context.TODO(), page_shield.ConnectionListParams{
 		ZoneID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction:           cloudflare.F(page_shield.ConnectionListParamsDirectionAsc),
-		ExcludeCDNCgi:       cloudflare.F(true),
+		ExcludeCDNCGI:       cloudflare.F(true),
 		ExcludeURLs:         cloudflare.F("blog.cloudflare.com,www.example"),
 		Export:              cloudflare.F(page_shield.ConnectionListParamsExportCsv),
 		Hosts:               cloudflare.F("blog.cloudflare.com,www.example*,*cloudflare.com"),

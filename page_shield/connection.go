@@ -74,7 +74,7 @@ type Connection struct {
 	LastSeenAt              string         `json:"last_seen_at"`
 	PageURLs                []string       `json:"page_urls"`
 	URL                     string         `json:"url"`
-	URLContainsCDNCgiPath   bool           `json:"url_contains_cdn_cgi_path"`
+	URLContainsCDNCGIPath   bool           `json:"url_contains_cdn_cgi_path"`
 	JSON                    connectionJSON `json:"-"`
 }
 
@@ -89,7 +89,7 @@ type connectionJSON struct {
 	LastSeenAt              apijson.Field
 	PageURLs                apijson.Field
 	URL                     apijson.Field
-	URLContainsCDNCgiPath   apijson.Field
+	URLContainsCDNCGIPath   apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -109,7 +109,7 @@ type ConnectionListParams struct {
 	Direction param.Field[ConnectionListParamsDirection] `query:"direction"`
 	// When true, excludes connections seen in a `/cdn-cgi` path from the returned
 	// connections. The default value is true.
-	ExcludeCDNCgi param.Field[bool] `query:"exclude_cdn_cgi"`
+	ExcludeCDNCGI param.Field[bool] `query:"exclude_cdn_cgi"`
 	// Excludes connections whose URL contains one of the URL-encoded URLs separated by
 	// commas.
 	ExcludeURLs param.Field[string] `query:"exclude_urls"`
