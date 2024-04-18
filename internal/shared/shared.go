@@ -336,18 +336,18 @@ func (r errorDataJSON) RawJSON() string {
 	return r.raw
 }
 
-type IamMember struct {
+type Member struct {
 	// Membership identifier tag.
 	ID string `json:"id,required"`
 	// Roles assigned to this member.
-	Roles  []IamMemberRole `json:"roles,required"`
-	Status interface{}     `json:"status,required"`
-	User   IamMemberUser   `json:"user,required"`
-	JSON   iamMemberJSON   `json:"-"`
+	Roles  []MemberRole `json:"roles,required"`
+	Status interface{}  `json:"status,required"`
+	User   MemberUser   `json:"user,required"`
+	JSON   memberJSON   `json:"-"`
 }
 
-// iamMemberJSON contains the JSON metadata for the struct [IamMember]
-type iamMemberJSON struct {
+// memberJSON contains the JSON metadata for the struct [Member]
+type memberJSON struct {
 	ID          apijson.Field
 	Roles       apijson.Field
 	Status      apijson.Field
@@ -356,27 +356,27 @@ type iamMemberJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IamMember) UnmarshalJSON(data []byte) (err error) {
+func (r *Member) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamMemberJSON) RawJSON() string {
+func (r memberJSON) RawJSON() string {
 	return r.raw
 }
 
-type IamMemberRole struct {
+type MemberRole struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
 	// Description of role's permissions.
 	Description string `json:"description,required"`
 	// Role name.
-	Name        string                    `json:"name,required"`
-	Permissions IamMemberRolesPermissions `json:"permissions,required"`
-	JSON        iamMemberRoleJSON         `json:"-"`
+	Name        string                 `json:"name,required"`
+	Permissions MemberRolesPermissions `json:"permissions,required"`
+	JSON        memberRoleJSON         `json:"-"`
 }
 
-// iamMemberRoleJSON contains the JSON metadata for the struct [IamMemberRole]
-type iamMemberRoleJSON struct {
+// memberRoleJSON contains the JSON metadata for the struct [MemberRole]
+type memberRoleJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Name        apijson.Field
@@ -385,33 +385,33 @@ type iamMemberRoleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IamMemberRole) UnmarshalJSON(data []byte) (err error) {
+func (r *MemberRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamMemberRoleJSON) RawJSON() string {
+func (r memberRoleJSON) RawJSON() string {
 	return r.raw
 }
 
-type IamMemberRolesPermissions struct {
-	Analytics    PermissionGrant               `json:"analytics"`
-	Billing      PermissionGrant               `json:"billing"`
-	CachePurge   PermissionGrant               `json:"cache_purge"`
-	DNS          PermissionGrant               `json:"dns"`
-	DNSRecords   PermissionGrant               `json:"dns_records"`
-	LB           PermissionGrant               `json:"lb"`
-	Logs         PermissionGrant               `json:"logs"`
-	Organization PermissionGrant               `json:"organization"`
-	SSL          PermissionGrant               `json:"ssl"`
-	WAF          PermissionGrant               `json:"waf"`
-	ZoneSettings PermissionGrant               `json:"zone_settings"`
-	Zones        PermissionGrant               `json:"zones"`
-	JSON         iamMemberRolesPermissionsJSON `json:"-"`
+type MemberRolesPermissions struct {
+	Analytics    PermissionGrant            `json:"analytics"`
+	Billing      PermissionGrant            `json:"billing"`
+	CachePurge   PermissionGrant            `json:"cache_purge"`
+	DNS          PermissionGrant            `json:"dns"`
+	DNSRecords   PermissionGrant            `json:"dns_records"`
+	LB           PermissionGrant            `json:"lb"`
+	Logs         PermissionGrant            `json:"logs"`
+	Organization PermissionGrant            `json:"organization"`
+	SSL          PermissionGrant            `json:"ssl"`
+	WAF          PermissionGrant            `json:"waf"`
+	ZoneSettings PermissionGrant            `json:"zone_settings"`
+	Zones        PermissionGrant            `json:"zones"`
+	JSON         memberRolesPermissionsJSON `json:"-"`
 }
 
-// iamMemberRolesPermissionsJSON contains the JSON metadata for the struct
-// [IamMemberRolesPermissions]
-type iamMemberRolesPermissionsJSON struct {
+// memberRolesPermissionsJSON contains the JSON metadata for the struct
+// [MemberRolesPermissions]
+type memberRolesPermissionsJSON struct {
 	Analytics    apijson.Field
 	Billing      apijson.Field
 	CachePurge   apijson.Field
@@ -428,15 +428,15 @@ type iamMemberRolesPermissionsJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *IamMemberRolesPermissions) UnmarshalJSON(data []byte) (err error) {
+func (r *MemberRolesPermissions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamMemberRolesPermissionsJSON) RawJSON() string {
+func (r memberRolesPermissionsJSON) RawJSON() string {
 	return r.raw
 }
 
-type IamMemberUser struct {
+type MemberUser struct {
 	// The contact email address of the user.
 	Email string `json:"email,required"`
 	// Identifier
@@ -447,12 +447,12 @@ type IamMemberUser struct {
 	LastName string `json:"last_name,nullable"`
 	// Indicates whether two-factor authentication is enabled for the user account.
 	// Does not apply to API authentication.
-	TwoFactorAuthenticationEnabled bool              `json:"two_factor_authentication_enabled"`
-	JSON                           iamMemberUserJSON `json:"-"`
+	TwoFactorAuthenticationEnabled bool           `json:"two_factor_authentication_enabled"`
+	JSON                           memberUserJSON `json:"-"`
 }
 
-// iamMemberUserJSON contains the JSON metadata for the struct [IamMemberUser]
-type iamMemberUserJSON struct {
+// memberUserJSON contains the JSON metadata for the struct [MemberUser]
+type memberUserJSON struct {
 	Email                          apijson.Field
 	ID                             apijson.Field
 	FirstName                      apijson.Field
@@ -462,33 +462,33 @@ type iamMemberUserJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *IamMemberUser) UnmarshalJSON(data []byte) (err error) {
+func (r *MemberUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamMemberUserJSON) RawJSON() string {
+func (r memberUserJSON) RawJSON() string {
 	return r.raw
 }
 
-type IamMemberParam struct {
+type MemberParam struct {
 	// Roles assigned to this member.
-	Roles param.Field[[]IamMemberRoleParam] `json:"roles,required"`
+	Roles param.Field[[]MemberRoleParam] `json:"roles,required"`
 }
 
-func (r IamMemberParam) MarshalJSON() (data []byte, err error) {
+func (r MemberParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IamMemberRoleParam struct {
+type MemberRoleParam struct {
 	// Role identifier tag.
 	ID param.Field[string] `json:"id,required"`
 }
 
-func (r IamMemberRoleParam) MarshalJSON() (data []byte, err error) {
+func (r MemberRoleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IamMemberRolesPermissionsParam struct {
+type MemberRolesPermissionsParam struct {
 	Analytics    param.Field[PermissionGrantParam] `json:"analytics"`
 	Billing      param.Field[PermissionGrantParam] `json:"billing"`
 	CachePurge   param.Field[PermissionGrantParam] `json:"cache_purge"`
@@ -503,11 +503,11 @@ type IamMemberRolesPermissionsParam struct {
 	Zones        param.Field[PermissionGrantParam] `json:"zones"`
 }
 
-func (r IamMemberRolesPermissionsParam) MarshalJSON() (data []byte, err error) {
+func (r MemberRolesPermissionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IamMemberUserParam struct {
+type MemberUserParam struct {
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
 	// User's first name
@@ -516,7 +516,7 @@ type IamMemberUserParam struct {
 	LastName param.Field[string] `json:"last_name"`
 }
 
-func (r IamMemberUserParam) MarshalJSON() (data []byte, err error) {
+func (r MemberUserParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
