@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // CaptionService contains methods and other services that help with interacting
@@ -35,7 +33,7 @@ func NewCaptionService(opts ...option.RequestOption) (r *CaptionService) {
 
 // Uploads the caption or subtitle file to the endpoint for a specific BCP47
 // language. One caption or subtitle file per language is allowed.
-func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *CaptionUpdateResponseUnion, err error) {
+func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *Caption, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
@@ -97,23 +95,6 @@ func (r captionJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [stream.CaptionUpdateResponseUnknown] or
-// [shared.UnionString].
-type CaptionUpdateResponseUnion interface {
-	ImplementsStreamCaptionUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CaptionUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type CaptionUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -130,7 +111,7 @@ type CaptionUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CaptionUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  CaptionUpdateResponseUnion           `json:"result"`
+	Result  Caption                              `json:"result"`
 	JSON    captionUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

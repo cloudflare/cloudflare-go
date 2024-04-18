@@ -125,13 +125,10 @@ func (UnionString) ImplementsRegistrarDomainGetResponseUnion()                  
 func (UnionString) ImplementsRulesListItemGetResponseUnion()                                     {}
 func (UnionString) ImplementsStreamAudioTrackDeleteResponseUnion()                               {}
 func (UnionString) ImplementsStreamKeyDeleteResponseUnion()                                      {}
-func (UnionString) ImplementsStreamWatermarkNewResponseUnion()                                   {}
 func (UnionString) ImplementsStreamWatermarkDeleteResponseUnion()                                {}
-func (UnionString) ImplementsStreamWatermarkGetResponseUnion()                                   {}
 func (UnionString) ImplementsStreamWebhookUpdateResponseUnion()                                  {}
 func (UnionString) ImplementsStreamWebhookDeleteResponseUnion()                                  {}
 func (UnionString) ImplementsStreamWebhookGetResponseUnion()                                     {}
-func (UnionString) ImplementsStreamCaptionUpdateResponseUnion()                                  {}
 func (UnionString) ImplementsStreamDownloadNewResponseUnion()                                    {}
 func (UnionString) ImplementsStreamDownloadDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsStreamDownloadGetResponseUnion()                                    {}
