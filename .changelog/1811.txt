@@ -1,3 +1,3 @@
 ```release-note:enhancement
-gateway: adds custom certificate setting to teams account configuration
+teams_account: adds custom certificate setting to teams account configuration
 ```
