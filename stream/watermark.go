@@ -37,7 +37,7 @@ func NewWatermarkService(opts ...option.RequestOption) (r *WatermarkService) {
 
 // Creates watermark profiles using a single `HTTP POST multipart/form-data`
 // request.
-func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *WatermarkNewResponseUnion, err error) {
+func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *Watermaks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", params.AccountID)
@@ -86,7 +86,7 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, params
 }
 
 // Retrieves details for a single watermark profile.
-func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *WatermarkGetResponseUnion, err error) {
+func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *Watermaks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
@@ -159,22 +159,6 @@ func (r watermaksJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [stream.WatermarkNewResponseUnknown] or [shared.UnionString].
-type WatermarkNewResponseUnion interface {
-	ImplementsStreamWatermarkNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WatermarkNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 // Union satisfied by [stream.WatermarkDeleteResponseUnknown] or
 // [shared.UnionString].
 type WatermarkDeleteResponseUnion interface {
@@ -184,22 +168,6 @@ type WatermarkDeleteResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*WatermarkDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [stream.WatermarkGetResponseUnknown] or [shared.UnionString].
-type WatermarkGetResponseUnion interface {
-	ImplementsStreamWatermarkGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WatermarkGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -243,7 +211,7 @@ type WatermarkNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  WatermarkNewResponseUnion           `json:"result"`
+	Result  Watermaks                           `json:"result"`
 	JSON    watermarkNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -349,7 +317,7 @@ type WatermarkGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  WatermarkGetResponseUnion           `json:"result"`
+	Result  Watermaks                           `json:"result"`
 	JSON    watermarkGetResponseEnvelopeJSON    `json:"-"`
 }
 
