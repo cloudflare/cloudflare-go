@@ -169,6 +169,9 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 					},
 					"extended_email_matching": {
 						"enabled": true
+					},
+					"custom_certificate": {
+						"enabled": true
 					}
 				}
 			}
@@ -182,6 +185,9 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 		TLSDecrypt:        &TeamsTLSDecrypt{Enabled: true},
 		ProtocolDetection: &TeamsProtocolDetection{Enabled: true},
 		ExtendedEmailMatching: &TeamsExtendedEmailMatching{
+			Enabled: BoolPtr(true),
+		},
+		CustomCertificate: &TeamsCustomCertificate{
 			Enabled: BoolPtr(true),
 		},
 	}
