@@ -79,7 +79,7 @@ type Script struct {
 	ObfuscationScore        float64    `json:"obfuscation_score"`
 	PageURLs                []string   `json:"page_urls"`
 	URL                     string     `json:"url"`
-	URLContainsCdnCgiPath   bool       `json:"url_contains_cdn_cgi_path"`
+	URLContainsCDNCgiPath   bool       `json:"url_contains_cdn_cgi_path"`
 	JSON                    scriptJSON `json:"-"`
 }
 
@@ -99,7 +99,7 @@ type scriptJSON struct {
 	ObfuscationScore        apijson.Field
 	PageURLs                apijson.Field
 	URL                     apijson.Field
-	URLContainsCdnCgiPath   apijson.Field
+	URLContainsCDNCgiPath   apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -127,7 +127,7 @@ type ScriptGetResponse struct {
 	ObfuscationScore        float64                    `json:"obfuscation_score"`
 	PageURLs                []string                   `json:"page_urls"`
 	URL                     string                     `json:"url"`
-	URLContainsCdnCgiPath   bool                       `json:"url_contains_cdn_cgi_path"`
+	URLContainsCDNCgiPath   bool                       `json:"url_contains_cdn_cgi_path"`
 	Versions                []ScriptGetResponseVersion `json:"versions,nullable"`
 	JSON                    scriptGetResponseJSON      `json:"-"`
 }
@@ -149,7 +149,7 @@ type scriptGetResponseJSON struct {
 	ObfuscationScore        apijson.Field
 	PageURLs                apijson.Field
 	URL                     apijson.Field
-	URLContainsCdnCgiPath   apijson.Field
+	URLContainsCDNCgiPath   apijson.Field
 	Versions                apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
@@ -205,7 +205,7 @@ type ScriptListParams struct {
 	Direction param.Field[ScriptListParamsDirection] `query:"direction"`
 	// When true, excludes scripts seen in a `/cdn-cgi` path from the returned scripts.
 	// The default value is true.
-	ExcludeCdnCgi param.Field[bool] `query:"exclude_cdn_cgi"`
+	ExcludeCDNCgi param.Field[bool] `query:"exclude_cdn_cgi"`
 	// When true, excludes duplicate scripts. We consider a script duplicate of another
 	// if their javascript content matches and they share the same url host and zone
 	// hostname. In such case, we return the most recent script for the URL host and
