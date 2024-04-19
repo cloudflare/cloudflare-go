@@ -18,7 +18,6 @@ import (
 )
 
 func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -113,7 +112,6 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -146,7 +144,6 @@ func TestDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestDispatchNamespaceScriptGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
