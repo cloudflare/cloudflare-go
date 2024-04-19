@@ -15,7 +15,6 @@ import (
 )
 
 func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -45,7 +44,6 @@ func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -78,7 +76,6 @@ func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessCertificateListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -105,7 +102,6 @@ func TestAccessCertificateListWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessCertificateDeleteWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -136,7 +132,6 @@ func TestAccessCertificateDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessCertificateGetWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

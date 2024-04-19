@@ -16,7 +16,6 @@ import (
 )
 
 func TestEmailSecuritySummaryARCWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -50,7 +49,6 @@ func TestEmailSecuritySummaryARCWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailSecuritySummaryDKIMWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -84,7 +82,6 @@ func TestEmailSecuritySummaryDKIMWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailSecuritySummaryDMARCWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,7 +115,6 @@ func TestEmailSecuritySummaryDMARCWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailSecuritySummaryMaliciousWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -153,7 +149,6 @@ func TestEmailSecuritySummaryMaliciousWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailSecuritySummarySpamWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -188,7 +183,6 @@ func TestEmailSecuritySummarySpamWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailSecuritySummarySPFWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -222,7 +216,6 @@ func TestEmailSecuritySummarySPFWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailSecuritySummarySpoofWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -257,7 +250,6 @@ func TestEmailSecuritySummarySpoofWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailSecuritySummaryThreatCategoryWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -292,7 +284,6 @@ func TestEmailSecuritySummaryThreatCategoryWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailSecuritySummaryTLSVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

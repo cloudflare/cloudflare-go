@@ -15,7 +15,6 @@ import (
 )
 
 func TestAccessGroupNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,7 +82,6 @@ func TestAccessGroupNewWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessGroupUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -155,7 +153,6 @@ func TestAccessGroupUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessGroupListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -182,7 +179,6 @@ func TestAccessGroupListWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessGroupDeleteWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -213,7 +209,6 @@ func TestAccessGroupDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessGroupGetWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

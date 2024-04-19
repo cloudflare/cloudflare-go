@@ -16,7 +16,6 @@ import (
 )
 
 func TestEmailRoutingTimeseriesGroupARCWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -52,7 +51,6 @@ func TestEmailRoutingTimeseriesGroupARCWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingTimeseriesGroupDKIMWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -88,7 +86,6 @@ func TestEmailRoutingTimeseriesGroupDKIMWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingTimeseriesGroupDMARCWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -124,7 +121,6 @@ func TestEmailRoutingTimeseriesGroupDMARCWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingTimeseriesGroupEncryptedWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -160,7 +156,6 @@ func TestEmailRoutingTimeseriesGroupEncryptedWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -196,7 +191,6 @@ func TestEmailRoutingTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingTimeseriesGroupSPFWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
