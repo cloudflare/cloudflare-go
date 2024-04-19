@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/stream"
 )
 
-func TestCaptionGet(t *testing.T) {
+func TestCaptionLanguageVttGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,11 +28,13 @@ func TestCaptionGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Stream.Captions.Get(
+	_, err := client.Stream.Captions.Language.Vtt.Get(
 		context.TODO(),
 		"ea95132c15732412d22c1476fa83f27a",
-		stream.CaptionGetParams{
+		"tr",
+		stream.CaptionLanguageVttGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
