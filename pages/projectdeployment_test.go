@@ -15,7 +15,6 @@ import (
 )
 
 func TestProjectDeploymentNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -46,7 +45,6 @@ func TestProjectDeploymentNewWithOptionalParams(t *testing.T) {
 }
 
 func TestProjectDeploymentListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -77,7 +75,6 @@ func TestProjectDeploymentListWithOptionalParams(t *testing.T) {
 }
 
 func TestProjectDeploymentDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -109,7 +106,6 @@ func TestProjectDeploymentDelete(t *testing.T) {
 }
 
 func TestProjectDeploymentGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -140,7 +136,6 @@ func TestProjectDeploymentGet(t *testing.T) {
 }
 
 func TestProjectDeploymentRetry(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -172,7 +167,6 @@ func TestProjectDeploymentRetry(t *testing.T) {
 }
 
 func TestProjectDeploymentRollback(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

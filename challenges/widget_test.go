@@ -15,7 +15,6 @@ import (
 )
 
 func TestWidgetNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -52,7 +51,6 @@ func TestWidgetNewWithOptionalParams(t *testing.T) {
 }
 
 func TestWidgetUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -88,7 +86,6 @@ func TestWidgetUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestWidgetListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,7 +115,6 @@ func TestWidgetListWithOptionalParams(t *testing.T) {
 }
 
 func TestWidgetDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -148,7 +144,6 @@ func TestWidgetDelete(t *testing.T) {
 }
 
 func TestWidgetGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -178,7 +173,6 @@ func TestWidgetGet(t *testing.T) {
 }
 
 func TestWidgetRotateSecretWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

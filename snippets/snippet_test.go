@@ -15,7 +15,6 @@ import (
 )
 
 func TestSnippetUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -49,7 +48,6 @@ func TestSnippetUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestSnippetList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -73,7 +71,6 @@ func TestSnippetList(t *testing.T) {
 }
 
 func TestSnippetDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -101,7 +98,6 @@ func TestSnippetDelete(t *testing.T) {
 }
 
 func TestSnippetGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

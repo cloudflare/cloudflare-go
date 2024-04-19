@@ -16,7 +16,6 @@ import (
 )
 
 func TestStreamNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -47,7 +46,6 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 }
 
 func TestStreamListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,7 +79,6 @@ func TestStreamListWithOptionalParams(t *testing.T) {
 }
 
 func TestStreamDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -112,7 +109,6 @@ func TestStreamDelete(t *testing.T) {
 }
 
 func TestStreamGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

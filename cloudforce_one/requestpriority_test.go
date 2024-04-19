@@ -15,7 +15,6 @@ import (
 )
 
 func TestRequestPriorityNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -50,7 +49,6 @@ func TestRequestPriorityNew(t *testing.T) {
 }
 
 func TestRequestPriorityUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -86,7 +84,6 @@ func TestRequestPriorityUpdate(t *testing.T) {
 }
 
 func TestRequestPriorityDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -114,7 +111,6 @@ func TestRequestPriorityDelete(t *testing.T) {
 }
 
 func TestRequestPriorityGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -142,7 +138,6 @@ func TestRequestPriorityGet(t *testing.T) {
 }
 
 func TestRequestPriorityQuota(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
