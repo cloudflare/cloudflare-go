@@ -164,6 +164,7 @@ func (UnionString) ImplementsZeroTrustGatewayRuleDeleteResponseUnion()          
 func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion()                    {}
 func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion()                 {}
 func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion()                   {}
+func (UnionString) ImplementsZeroTrustRiskScoringResetResponseUnion()                            {}
 func (UnionString) ImplementsHyperdriveConfigDeleteResponseUnion()                               {}
 func (UnionString) ImplementsVectorizeIndexDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()                   {}
