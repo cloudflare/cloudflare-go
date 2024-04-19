@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stream_test
+package zero_trust_test
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/stream"
+	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestCaptionGet(t *testing.T) {
+func TestRiskScoringSummaryGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,11 +28,14 @@ func TestCaptionGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Stream.Captions.Get(
+	_, err := client.ZeroTrust.RiskScoring.Summary.Get(
 		context.TODO(),
-		"ea95132c15732412d22c1476fa83f27a",
-		stream.CaptionGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		zero_trust.RiskScoringSummaryGetParams{
+			Direction: cloudflare.F(zero_trust.RiskScoringSummaryGetParamsDirectionDesc),
+			OrderBy:   cloudflare.F(zero_trust.RiskScoringSummaryGetParamsOrderByTimestamp),
+			Page:      cloudflare.F(int64(0)),
+			PerPage:   cloudflare.F(int64(0)),
 		},
 	)
 	if err != nil {
