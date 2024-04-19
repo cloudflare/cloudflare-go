@@ -19,7 +19,8 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewCaptionService] method instead.
 type CaptionService struct {
-	Options []option.RequestOption
+	Options  []option.RequestOption
+	Language *CaptionLanguageService
 }
 
 // NewCaptionService generates a new service that applies the given options to each
@@ -28,33 +29,7 @@ type CaptionService struct {
 func NewCaptionService(opts ...option.RequestOption) (r *CaptionService) {
 	r = &CaptionService{}
 	r.Options = opts
-	return
-}
-
-// Uploads the caption or subtitle file to the endpoint for a specific BCP47
-// language. One caption or subtitle file per language is allowed.
-func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *Caption, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CaptionUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Removes the captions or subtitles from a video.
-func (r *CaptionService) Delete(ctx context.Context, identifier string, language string, params CaptionDeleteParams, opts ...option.RequestOption) (res *string, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CaptionDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	r.Language = NewCaptionLanguageService(opts...)
 	return
 }
 
@@ -93,113 +68,6 @@ func (r *Caption) UnmarshalJSON(data []byte) (err error) {
 
 func (r captionJSON) RawJSON() string {
 	return r.raw
-}
-
-type CaptionUpdateParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The WebVTT file containing the caption or subtitle content.
-	File param.Field[string] `json:"file,required"`
-}
-
-func (r CaptionUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CaptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success CaptionUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Caption                              `json:"result"`
-	JSON    captionUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// captionUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CaptionUpdateResponseEnvelope]
-type captionUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type CaptionUpdateResponseEnvelopeSuccess bool
-
-const (
-	CaptionUpdateResponseEnvelopeSuccessTrue CaptionUpdateResponseEnvelopeSuccess = true
-)
-
-func (r CaptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case CaptionUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type CaptionDeleteParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r CaptionDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type CaptionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success CaptionDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  string                               `json:"result"`
-	JSON    captionDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// captionDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CaptionDeleteResponseEnvelope]
-type captionDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type CaptionDeleteResponseEnvelopeSuccess bool
-
-const (
-	CaptionDeleteResponseEnvelopeSuccessTrue CaptionDeleteResponseEnvelopeSuccess = true
-)
-
-func (r CaptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case CaptionDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type CaptionGetParams struct {

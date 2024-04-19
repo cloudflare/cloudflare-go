@@ -23,6 +23,7 @@ type ZeroTrustService struct {
 	DLP                  *DLPService
 	Gateway              *GatewayService
 	Networks             *NetworkService
+	RiskScoring          *RiskScoringService
 }
 
 // NewZeroTrustService generates a new service that applies the given options to
@@ -42,5 +43,6 @@ func NewZeroTrustService(opts ...option.RequestOption) (r *ZeroTrustService) {
 	r.DLP = NewDLPService(opts...)
 	r.Gateway = NewGatewayService(opts...)
 	r.Networks = NewNetworkService(opts...)
+	r.RiskScoring = NewRiskScoringService(opts...)
 	return
 }
