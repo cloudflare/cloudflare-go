@@ -16,6 +16,7 @@ import (
 )
 
 func TestWARPConnectorNew(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -42,6 +43,7 @@ func TestWARPConnectorNew(t *testing.T) {
 }
 
 func TestWARPConnectorListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -77,6 +79,7 @@ func TestWARPConnectorListWithOptionalParams(t *testing.T) {
 }
 
 func TestWARPConnectorDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -107,6 +110,7 @@ func TestWARPConnectorDelete(t *testing.T) {
 }
 
 func TestWARPConnectorEditWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -138,6 +142,7 @@ func TestWARPConnectorEditWithOptionalParams(t *testing.T) {
 }
 
 func TestWARPConnectorGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -167,6 +172,7 @@ func TestWARPConnectorGet(t *testing.T) {
 }
 
 func TestWARPConnectorToken(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

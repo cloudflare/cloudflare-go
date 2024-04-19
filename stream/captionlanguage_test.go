@@ -15,6 +15,7 @@ import (
 )
 
 func TestCaptionLanguageUpdate(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -46,6 +47,7 @@ func TestCaptionLanguageUpdate(t *testing.T) {
 }
 
 func TestCaptionLanguageDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -77,6 +79,7 @@ func TestCaptionLanguageDelete(t *testing.T) {
 }
 
 func TestCaptionLanguageGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

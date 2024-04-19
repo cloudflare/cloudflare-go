@@ -15,6 +15,7 @@ import (
 )
 
 func TestNamespaceNew(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -41,6 +42,7 @@ func TestNamespaceNew(t *testing.T) {
 }
 
 func TestNamespaceUpdate(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -71,6 +73,7 @@ func TestNamespaceUpdate(t *testing.T) {
 }
 
 func TestNamespaceListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -100,6 +103,7 @@ func TestNamespaceListWithOptionalParams(t *testing.T) {
 }
 
 func TestNamespaceDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

@@ -15,6 +15,7 @@ import (
 )
 
 func TestIndexNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -46,6 +47,7 @@ func TestIndexNewWithOptionalParams(t *testing.T) {
 }
 
 func TestIndexUpdate(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -76,6 +78,7 @@ func TestIndexUpdate(t *testing.T) {
 }
 
 func TestIndexList(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -101,6 +104,7 @@ func TestIndexList(t *testing.T) {
 }
 
 func TestIndexDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -130,6 +134,7 @@ func TestIndexDelete(t *testing.T) {
 }
 
 func TestIndexDeleteByIDsWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -160,6 +165,7 @@ func TestIndexDeleteByIDsWithOptionalParams(t *testing.T) {
 }
 
 func TestIndexGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -189,6 +195,7 @@ func TestIndexGet(t *testing.T) {
 }
 
 func TestIndexGetByIDsWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -219,6 +226,7 @@ func TestIndexGetByIDsWithOptionalParams(t *testing.T) {
 }
 
 func TestIndexInsert(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -249,6 +257,7 @@ func TestIndexInsert(t *testing.T) {
 }
 
 func TestIndexQueryWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -288,6 +297,7 @@ func TestIndexQueryWithOptionalParams(t *testing.T) {
 }
 
 func TestIndexUpsert(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

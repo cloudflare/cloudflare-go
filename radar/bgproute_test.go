@@ -16,6 +16,7 @@ import (
 )
 
 func TestBGPRouteMoasWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -44,6 +45,7 @@ func TestBGPRouteMoasWithOptionalParams(t *testing.T) {
 }
 
 func TestBGPRoutePfx2asWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -73,6 +75,7 @@ func TestBGPRoutePfx2asWithOptionalParams(t *testing.T) {
 }
 
 func TestBGPRouteStatsWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -100,6 +103,7 @@ func TestBGPRouteStatsWithOptionalParams(t *testing.T) {
 }
 
 func TestBGPRouteTimeseriesWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

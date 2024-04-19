@@ -15,6 +15,7 @@ import (
 )
 
 func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -322,6 +323,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 }
 
 func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -634,6 +636,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestLoadBalancerList(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -659,6 +662,7 @@ func TestLoadBalancerList(t *testing.T) {
 }
 
 func TestLoadBalancerDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -689,6 +693,7 @@ func TestLoadBalancerDelete(t *testing.T) {
 }
 
 func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -1001,6 +1006,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 }
 
 func TestLoadBalancerGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

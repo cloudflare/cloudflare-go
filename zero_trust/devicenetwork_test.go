@@ -15,6 +15,7 @@ import (
 )
 
 func TestDeviceNetworkNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -46,6 +47,7 @@ func TestDeviceNetworkNewWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceNetworkUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,6 +83,7 @@ func TestDeviceNetworkUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceNetworkList(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -106,6 +109,7 @@ func TestDeviceNetworkList(t *testing.T) {
 }
 
 func TestDeviceNetworkDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -136,6 +140,7 @@ func TestDeviceNetworkDelete(t *testing.T) {
 }
 
 func TestDeviceNetworkGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

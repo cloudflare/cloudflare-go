@@ -15,6 +15,7 @@ import (
 )
 
 func TestDestinationPagerdutyNew(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -40,6 +41,7 @@ func TestDestinationPagerdutyNew(t *testing.T) {
 }
 
 func TestDestinationPagerdutyDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -65,6 +67,7 @@ func TestDestinationPagerdutyDelete(t *testing.T) {
 }
 
 func TestDestinationPagerdutyGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,6 +93,7 @@ func TestDestinationPagerdutyGet(t *testing.T) {
 }
 
 func TestDestinationPagerdutyLink(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

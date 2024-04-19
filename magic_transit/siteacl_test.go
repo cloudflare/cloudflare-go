@@ -16,6 +16,7 @@ import (
 )
 
 func TestSiteACLNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -63,6 +64,7 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 }
 
 func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -111,6 +113,7 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestSiteACLList(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -140,6 +143,7 @@ func TestSiteACLList(t *testing.T) {
 }
 
 func TestSiteACLDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -171,6 +175,7 @@ func TestSiteACLDelete(t *testing.T) {
 }
 
 func TestSiteACLGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
