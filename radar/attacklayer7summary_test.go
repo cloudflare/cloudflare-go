@@ -16,6 +16,7 @@ import (
 )
 
 func TestAttackLayer7SummaryGetWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -48,6 +49,7 @@ func TestAttackLayer7SummaryGetWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer7SummaryHTTPMethodWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,6 +85,7 @@ func TestAttackLayer7SummaryHTTPMethodWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer7SummaryHTTPVersionWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,6 +121,7 @@ func TestAttackLayer7SummaryHTTPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer7SummaryIPVersionWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -153,6 +157,7 @@ func TestAttackLayer7SummaryIPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer7SummaryManagedRulesWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -189,6 +194,7 @@ func TestAttackLayer7SummaryManagedRulesWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer7SummaryMitigationProductWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

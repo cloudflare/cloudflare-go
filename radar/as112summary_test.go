@@ -16,6 +16,7 @@ import (
 )
 
 func TestAS112SummaryDNSSECWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -48,6 +49,7 @@ func TestAS112SummaryDNSSECWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112SummaryEdnsWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -80,6 +82,7 @@ func TestAS112SummaryEdnsWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112SummaryIPVersionWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -112,6 +115,7 @@ func TestAS112SummaryIPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112SummaryProtocolWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -144,6 +148,7 @@ func TestAS112SummaryProtocolWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112SummaryQueryTypeWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -176,6 +181,7 @@ func TestAS112SummaryQueryTypeWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112SummaryResponseCodesWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

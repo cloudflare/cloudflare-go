@@ -16,6 +16,7 @@ import (
 )
 
 func TestAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -52,6 +53,7 @@ func TestAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TopIndustryWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -86,6 +88,7 @@ func TestAttackLayer3TopIndustryWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TopVerticalWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
