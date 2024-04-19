@@ -16,7 +16,6 @@ import (
 )
 
 func TestHTTPTimeseriesGroupBotClassWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -56,7 +55,6 @@ func TestHTTPTimeseriesGroupBotClassWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPTimeseriesGroupBrowserWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -98,7 +96,6 @@ func TestHTTPTimeseriesGroupBrowserWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPTimeseriesGroupBrowserFamilyWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -139,7 +136,6 @@ func TestHTTPTimeseriesGroupBrowserFamilyWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPTimeseriesGroupDeviceTypeWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -179,7 +175,6 @@ func TestHTTPTimeseriesGroupDeviceTypeWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPTimeseriesGroupHTTPProtocolWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -219,7 +214,6 @@ func TestHTTPTimeseriesGroupHTTPProtocolWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPTimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -259,7 +253,6 @@ func TestHTTPTimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -299,7 +292,6 @@ func TestHTTPTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPTimeseriesGroupOSWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -339,7 +331,6 @@ func TestHTTPTimeseriesGroupOSWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPTimeseriesGroupTLSVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
