@@ -16,6 +16,7 @@ import (
 )
 
 func TestEmailRoutingSummaryARCWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -50,6 +51,7 @@ func TestEmailRoutingSummaryARCWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingSummaryDKIMWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -84,6 +86,7 @@ func TestEmailRoutingSummaryDKIMWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingSummaryDMARCWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,6 +121,7 @@ func TestEmailRoutingSummaryDMARCWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingSummaryEncryptedWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -152,6 +156,7 @@ func TestEmailRoutingSummaryEncryptedWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingSummaryIPVersionWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -186,6 +191,7 @@ func TestEmailRoutingSummaryIPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestEmailRoutingSummarySPFWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

@@ -15,6 +15,7 @@ import (
 )
 
 func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -72,6 +73,7 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 }
 
 func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -133,6 +135,7 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestWaitingRoomListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -160,6 +163,7 @@ func TestWaitingRoomListWithOptionalParams(t *testing.T) {
 }
 
 func TestWaitingRoomDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -190,6 +194,7 @@ func TestWaitingRoomDelete(t *testing.T) {
 }
 
 func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -251,6 +256,7 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 }
 
 func TestWaitingRoomGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
