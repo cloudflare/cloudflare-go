@@ -38,6 +38,7 @@ func TestTeamsLocations(t *testing.T) {
 					"anonymized_logs_enabled": false,
 					"ipv4_destination": null,
 					"client_default": false,
+					"ecs_support": false,
 					"created_at": "2020-05-18T22:07:03Z",
 					"updated_at": "2020-05-18T22:07:05Z"
 				}
@@ -60,6 +61,7 @@ func TestTeamsLocations(t *testing.T) {
 		AnonymizedLogsEnabled: false,
 		IPv4Destination:       "",
 		ClientDefault:         false,
+		ECSSupport:            BoolPtr(false),
 		CreatedAt:             &createdAt,
 		UpdatedAt:             &updatedAt,
 	}}
@@ -98,6 +100,7 @@ func TestTeamsLocation(t *testing.T) {
 				"anonymized_logs_enabled": false,
 				"ipv4_destination": null,
 				"client_default": false,
+				"ecs_support": false,
 				"created_at": "2020-05-18T22:07:03Z",
 				"updated_at": "2020-05-18T22:07:05Z"
 			}
@@ -118,6 +121,7 @@ func TestTeamsLocation(t *testing.T) {
 		AnonymizedLogsEnabled: false,
 		IPv4Destination:       "",
 		ClientDefault:         false,
+		ECSSupport:            BoolPtr(false),
 		CreatedAt:             &createdAt,
 		UpdatedAt:             &updatedAt,
 	}
@@ -156,6 +160,7 @@ func TestCreateTeamsLocation(t *testing.T) {
 				"anonymized_logs_enabled": false,
 				"ipv4_destination": null,
 				"client_default": false,
+				"ecs_support": false,
 				"created_at": "2020-05-18T22:07:03Z",
 				"updated_at": "2020-05-18T22:07:05Z"
 			}
@@ -176,6 +181,7 @@ func TestCreateTeamsLocation(t *testing.T) {
 		AnonymizedLogsEnabled: false,
 		IPv4Destination:       "",
 		ClientDefault:         false,
+		ECSSupport:            BoolPtr(false),
 		CreatedAt:             &createdAt,
 		UpdatedAt:             &updatedAt,
 	}
@@ -218,6 +224,7 @@ func TestUpdateTeamsLocation(t *testing.T) {
 				"anonymized_logs_enabled": false,
 				"ipv4_destination": null,
 				"client_default": false,
+				"ecs_support": false,
 				"created_at": "2020-05-18T22:07:03Z",
 				"updated_at": "2020-05-18T22:07:05Z"
 			}
@@ -238,6 +245,7 @@ func TestUpdateTeamsLocation(t *testing.T) {
 		AnonymizedLogsEnabled: false,
 		IPv4Destination:       "",
 		ClientDefault:         false,
+		ECSSupport:            BoolPtr(false),
 		CreatedAt:             &createdAt,
 		UpdatedAt:             &updatedAt,
 	}
