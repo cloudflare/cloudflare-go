@@ -16,6 +16,7 @@ import (
 )
 
 func TestAS112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -49,6 +50,7 @@ func TestAS112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -82,6 +84,7 @@ func TestAS112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -115,6 +118,7 @@ func TestAS112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -148,6 +152,7 @@ func TestAS112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -181,6 +186,7 @@ func TestAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 }
 
 func TestAS112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

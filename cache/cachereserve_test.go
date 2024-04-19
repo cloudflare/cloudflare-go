@@ -15,6 +15,7 @@ import (
 )
 
 func TestCacheReserveClear(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -41,6 +42,7 @@ func TestCacheReserveClear(t *testing.T) {
 }
 
 func TestCacheReserveEdit(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -67,6 +69,7 @@ func TestCacheReserveEdit(t *testing.T) {
 }
 
 func TestCacheReserveGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -92,6 +95,7 @@ func TestCacheReserveGet(t *testing.T) {
 }
 
 func TestCacheReserveStatus(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

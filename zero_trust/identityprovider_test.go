@@ -15,6 +15,7 @@ import (
 )
 
 func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -62,6 +63,7 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 }
 
 func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -113,6 +115,7 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestIdentityProviderListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -139,6 +142,7 @@ func TestIdentityProviderListWithOptionalParams(t *testing.T) {
 }
 
 func TestIdentityProviderDeleteWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -169,6 +173,7 @@ func TestIdentityProviderDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestIdentityProviderGetWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

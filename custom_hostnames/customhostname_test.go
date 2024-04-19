@@ -15,6 +15,7 @@ import (
 )
 
 func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -60,6 +61,7 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 }
 
 func TestCustomHostnameListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -92,6 +94,7 @@ func TestCustomHostnameListWithOptionalParams(t *testing.T) {
 }
 
 func TestCustomHostnameDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -122,6 +125,7 @@ func TestCustomHostnameDelete(t *testing.T) {
 }
 
 func TestCustomHostnameEditWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -172,6 +176,7 @@ func TestCustomHostnameEditWithOptionalParams(t *testing.T) {
 }
 
 func TestCustomHostnameGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

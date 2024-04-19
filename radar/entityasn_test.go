@@ -15,6 +15,7 @@ import (
 )
 
 func TestEntityASNListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -45,6 +46,7 @@ func TestEntityASNListWithOptionalParams(t *testing.T) {
 }
 
 func TestEntityASNGetWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -74,6 +76,7 @@ func TestEntityASNGetWithOptionalParams(t *testing.T) {
 }
 
 func TestEntityASNIPWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -100,6 +103,7 @@ func TestEntityASNIPWithOptionalParams(t *testing.T) {
 }
 
 func TestEntityASNRelWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

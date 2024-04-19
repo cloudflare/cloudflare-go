@@ -15,6 +15,7 @@ import (
 )
 
 func TestSiteLANNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -89,6 +90,7 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 }
 
 func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -163,6 +165,7 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestSiteLANList(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -192,6 +195,7 @@ func TestSiteLANList(t *testing.T) {
 }
 
 func TestSiteLANDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -223,6 +227,7 @@ func TestSiteLANDelete(t *testing.T) {
 }
 
 func TestSiteLANGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

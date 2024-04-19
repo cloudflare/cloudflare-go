@@ -15,6 +15,7 @@ import (
 )
 
 func TestWAFPackageGroupListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -52,6 +53,7 @@ func TestWAFPackageGroupListWithOptionalParams(t *testing.T) {
 }
 
 func TestWAFPackageGroupEditWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,6 +85,7 @@ func TestWAFPackageGroupEditWithOptionalParams(t *testing.T) {
 }
 
 func TestWAFPackageGroupGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

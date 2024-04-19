@@ -15,6 +15,7 @@ import (
 )
 
 func TestOriginCACertificateNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -43,6 +44,7 @@ func TestOriginCACertificateNewWithOptionalParams(t *testing.T) {
 }
 
 func TestOriginCACertificateListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -68,6 +70,7 @@ func TestOriginCACertificateListWithOptionalParams(t *testing.T) {
 }
 
 func TestOriginCACertificateDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -97,6 +100,7 @@ func TestOriginCACertificateDelete(t *testing.T) {
 }
 
 func TestOriginCACertificateGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

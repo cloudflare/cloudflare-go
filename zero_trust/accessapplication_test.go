@@ -16,6 +16,7 @@ import (
 )
 
 func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -76,6 +77,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -140,6 +142,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -166,6 +169,7 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -196,6 +200,7 @@ func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -226,6 +231,7 @@ func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

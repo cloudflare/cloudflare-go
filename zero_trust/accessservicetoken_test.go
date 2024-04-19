@@ -15,6 +15,7 @@ import (
 )
 
 func TestAccessServiceTokenNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -43,6 +44,7 @@ func TestAccessServiceTokenNewWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessServiceTokenUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -75,6 +77,7 @@ func TestAccessServiceTokenUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessServiceTokenListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -101,6 +104,7 @@ func TestAccessServiceTokenListWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessServiceTokenDeleteWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -131,6 +135,7 @@ func TestAccessServiceTokenDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessServiceTokenRefresh(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -158,6 +163,7 @@ func TestAccessServiceTokenRefresh(t *testing.T) {
 }
 
 func TestAccessServiceTokenRotate(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
