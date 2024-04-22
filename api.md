@@ -1,10 +1,12 @@
 # Shared Params Types
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ASNParam">ASNParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#MemberParam">MemberParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#PermissionGrantParam">PermissionGrantParam</a>
 
 # Shared Response Types
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ASN">ASN</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#AuditLog">AuditLog</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#CloudflareTunnel">CloudflareTunnel</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ErrorData">ErrorData</a>
@@ -3283,17 +3285,9 @@ Methods:
 
 ## ASN
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASNParam">IntelASNParam</a>
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASN">IntelASN</a>
-
 Methods:
 
-- <code title="get /accounts/{account_id}/intel/asn/{asn}">client.Intel.ASN.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASNParam">IntelASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNGetParams">ASNGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASN">IntelASN</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/intel/asn/{asn}">client.Intel.ASN.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ASNParam">ASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNGetParams">ASNGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ASN">ASN</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Subnets
 
@@ -3303,7 +3297,7 @@ Response Types:
 
 Methods:
 
-- <code title="get /accounts/{account_id}/intel/asn/{asn}/subnets">client.Intel.ASN.Subnets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASNParam">IntelASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetParams">ASNSubnetGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetResponse">ASNSubnetGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/intel/asn/{asn}/subnets">client.Intel.ASN.Subnets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ASNParam">ASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetParams">ASNSubnetGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetResponse">ASNSubnetGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## DNS
 
