@@ -42,6 +42,7 @@ func TestConsumerNew(t *testing.T) {
 					"max_retries":      int64(3),
 					"max_wait_time_ms": int64(5000),
 				},
+				"type": "worker",
 			},
 		},
 	)
