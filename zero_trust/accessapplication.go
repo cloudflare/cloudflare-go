@@ -610,6 +610,7 @@ type ApplicationSaaSApplicationSaasApp struct {
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret string      `json:"client_secret"`
+	CustomClaims interface{} `json:"custom_claims,required"`
 	GrantTypes   interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
 	GroupFilterRegex string                                `json:"group_filter_regex"`
@@ -638,6 +639,7 @@ type applicationSaaSApplicationSaasAppJSON struct {
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
+	CustomClaims                  apijson.Field
 	GrantTypes                    apijson.Field
 	GroupFilterRegex              apijson.Field
 	RedirectURIs                  apijson.Field
@@ -692,8 +694,9 @@ type ApplicationSaaSApplicationSaasAppAccessOIDCSaasApp struct {
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret string    `json:"client_secret"`
-	CreatedAt    time.Time `json:"created_at" format:"date-time"`
+	ClientSecret string                                                         `json:"client_secret"`
+	CreatedAt    time.Time                                                      `json:"created_at" format:"date-time"`
+	CustomClaims ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes []ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
@@ -717,6 +720,7 @@ type applicationSaaSApplicationSaasAppAccessOIDCSaasAppJSON struct {
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
 	CreatedAt        apijson.Field
+	CustomClaims     apijson.Field
 	GrantTypes       apijson.Field
 	GroupFilterRegex apijson.Field
 	PublicKey        apijson.Field
@@ -753,6 +757,81 @@ func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthType) IsKnown() bo
 		return true
 	}
 	return false
+}
+
+type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims struct {
+	// The name of the claim.
+	Name string `json:"name"`
+	// A mapping from IdP ID to claim name.
+	NameByIDP map[string]string `json:"name_by_idp"`
+	// If the claim is required when building an OIDC token.
+	Required bool `json:"required"`
+	// The scope of the claim.
+	Scope  ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope  `json:"scope"`
+	Source ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSource `json:"source"`
+	JSON   applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON   `json:"-"`
+}
+
+// applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON contains the
+// JSON metadata for the struct
+// [ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims]
+type applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON struct {
+	Name        apijson.Field
+	NameByIDP   apijson.Field
+	Required    apijson.Field
+	Scope       apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON) RawJSON() string {
+	return r.raw
+}
+
+// The scope of the claim.
+type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope string
+
+const (
+	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeGroups  ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope = "groups"
+	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeProfile ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope = "profile"
+	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeEmail   ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope = "email"
+	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeOpenid  ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope = "openid"
+)
+
+func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope) IsKnown() bool {
+	switch r {
+	case ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeGroups, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeProfile, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeEmail, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeOpenid:
+		return true
+	}
+	return false
+}
+
+type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSource struct {
+	// The name of the IdP claim.
+	Name string                                                                   `json:"name"`
+	JSON applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceJSON `json:"-"`
+}
+
+// applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceJSON
+// contains the JSON metadata for the struct
+// [ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSource]
+type applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType string
@@ -1533,6 +1612,7 @@ type ApplicationSaaSApplicationSaasAppParam struct {
 	ClientID param.Field[string] `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret param.Field[string]      `json:"client_secret"`
+	CustomClaims param.Field[interface{}] `json:"custom_claims,required"`
 	GrantTypes   param.Field[interface{}] `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
 	GroupFilterRegex param.Field[string]      `json:"group_filter_regex"`
@@ -1563,7 +1643,8 @@ type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppParam struct {
 	// The application client id
 	ClientID param.Field[string] `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret param.Field[string] `json:"client_secret"`
+	ClientSecret param.Field[string]                                                              `json:"client_secret"`
+	CustomClaims param.Field[ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsParam] `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes param.Field[[]ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType] `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
@@ -1582,6 +1663,31 @@ func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppParam) MarshalJSON() (
 }
 
 func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppParam) implementsZeroTrustApplicationSaaSApplicationSaasAppUnionParam() {
+}
+
+type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsParam struct {
+	// The name of the claim.
+	Name param.Field[string] `json:"name"`
+	// A mapping from IdP ID to claim name.
+	NameByIDP param.Field[map[string]string] `json:"name_by_idp"`
+	// If the claim is required when building an OIDC token.
+	Required param.Field[bool] `json:"required"`
+	// The scope of the claim.
+	Scope  param.Field[ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope]       `json:"scope"`
+	Source param.Field[ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceParam] `json:"source"`
+}
+
+func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceParam struct {
+	// The name of the IdP claim.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ApplicationBrowserSSHApplicationParam struct {
@@ -1919,13 +2025,16 @@ func (r SaasAppNameIDFormat) IsKnown() bool {
 
 type SaasAppSource struct {
 	// The name of the IdP attribute.
-	Name string            `json:"name"`
-	JSON saasAppSourceJSON `json:"-"`
+	Name string `json:"name"`
+	// A mapping from IdP ID to attribute name.
+	NameByIDP map[string]string `json:"name_by_idp"`
+	JSON      saasAppSourceJSON `json:"-"`
 }
 
 // saasAppSourceJSON contains the JSON metadata for the struct [SaasAppSource]
 type saasAppSourceJSON struct {
 	Name        apijson.Field
+	NameByIDP   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1941,6 +2050,8 @@ func (r saasAppSourceJSON) RawJSON() string {
 type SaasAppSourceParam struct {
 	// The name of the IdP attribute.
 	Name param.Field[string] `json:"name"`
+	// A mapping from IdP ID to attribute name.
+	NameByIDP param.Field[map[string]string] `json:"name_by_idp"`
 }
 
 func (r SaasAppSourceParam) MarshalJSON() (data []byte, err error) {
@@ -2031,22 +2142,28 @@ func (r SAMLSaasAppAuthType) IsKnown() bool {
 }
 
 type SAMLSaasAppCustomAttributes struct {
+	// The SAML FriendlyName of the attribute.
+	FriendlyName string `json:"friendly_name"`
 	// The name of the attribute.
 	Name string `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat SaasAppNameFormat               `json:"name_format"`
-	Source     SaasAppSource                   `json:"source"`
-	JSON       samlSaasAppCustomAttributesJSON `json:"-"`
+	NameFormat SaasAppNameFormat `json:"name_format"`
+	// If the attribute is required when building a SAML assertion.
+	Required bool                            `json:"required"`
+	Source   SaasAppSource                   `json:"source"`
+	JSON     samlSaasAppCustomAttributesJSON `json:"-"`
 }
 
 // samlSaasAppCustomAttributesJSON contains the JSON metadata for the struct
 // [SAMLSaasAppCustomAttributes]
 type samlSaasAppCustomAttributesJSON struct {
-	Name        apijson.Field
-	NameFormat  apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	FriendlyName apijson.Field
+	Name         apijson.Field
+	NameFormat   apijson.Field
+	Required     apijson.Field
+	Source       apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *SAMLSaasAppCustomAttributes) UnmarshalJSON(data []byte) (err error) {
@@ -2098,11 +2215,15 @@ func (r SAMLSaasAppParam) MarshalJSON() (data []byte, err error) {
 func (r SAMLSaasAppParam) implementsZeroTrustApplicationSaaSApplicationSaasAppUnionParam() {}
 
 type SAMLSaasAppCustomAttributesParam struct {
+	// The SAML FriendlyName of the attribute.
+	FriendlyName param.Field[string] `json:"friendly_name"`
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[SaasAppNameFormat]  `json:"name_format"`
-	Source     param.Field[SaasAppSourceParam] `json:"source"`
+	NameFormat param.Field[SaasAppNameFormat] `json:"name_format"`
+	// If the attribute is required when building a SAML assertion.
+	Required param.Field[bool]               `json:"required"`
+	Source   param.Field[SaasAppSourceParam] `json:"source"`
 }
 
 func (r SAMLSaasAppCustomAttributesParam) MarshalJSON() (data []byte, err error) {
