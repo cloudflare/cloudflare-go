@@ -3285,15 +3285,15 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNParam">ASNParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASNParam">IntelASNParam</a>
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASN">ASN</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASN">IntelASN</a>
 
 Methods:
 
-- <code title="get /accounts/{account_id}/intel/asn/{asn}">client.Intel.ASN.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNParam">ASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNGetParams">ASNGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASN">ASN</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/intel/asn/{asn}">client.Intel.ASN.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASNParam">IntelASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNGetParams">ASNGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASN">IntelASN</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Subnets
 
@@ -3303,7 +3303,7 @@ Response Types:
 
 Methods:
 
-- <code title="get /accounts/{account_id}/intel/asn/{asn}/subnets">client.Intel.ASN.Subnets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNParam">ASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetParams">ASNSubnetGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetResponse">ASNSubnetGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/intel/asn/{asn}/subnets">client.Intel.ASN.Subnets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IntelASNParam">IntelASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetParams">ASNSubnetGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetResponse">ASNSubnetGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## DNS
 
@@ -4119,7 +4119,7 @@ Methods:
 
 Methods:
 
-- <code title="get /accounts/{account_id}/stream/{identifier}/captions/{language}/vtt">client.Stream.Captions.Language.Vtt.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream#CaptionLanguageVttService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, language <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream">stream</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream#CaptionLanguageVttGetParams">CaptionLanguageVttGetParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/stream/{identifier}/captions/{language}/vtt">client.Stream.Captions.Language.Vtt.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream#CaptionLanguageVttService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, language <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream">stream</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream#CaptionLanguageVttGetParams">CaptionLanguageVttGetParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Downloads
 
