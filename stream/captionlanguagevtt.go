@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -32,10 +31,10 @@ func NewCaptionLanguageVttService(opts ...option.RequestOption) (r *CaptionLangu
 }
 
 // Return WebVTT captions for a provided language.
-func (r *CaptionLanguageVttService) Get(ctx context.Context, identifier string, language string, params CaptionLanguageVttGetParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *CaptionLanguageVttService) Get(ctx context.Context, identifier string, language string, query CaptionLanguageVttGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/vtt")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s/vtt", params.AccountID, identifier, language)
+	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s/vtt", query.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -43,9 +42,4 @@ func (r *CaptionLanguageVttService) Get(ctx context.Context, identifier string, 
 type CaptionLanguageVttGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r CaptionLanguageVttGetParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
