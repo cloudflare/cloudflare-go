@@ -10,6 +10,12 @@ import (
 type Error = apierror.Error
 
 // This is an alias to an internal type.
+type ASN = shared.ASN
+
+// This is an alias to an internal type.
+type ASNParam = shared.ASNParam
+
+// This is an alias to an internal type.
 type AuditLog = shared.AuditLog
 
 // This is an alias to an internal type.

@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -31,7 +32,7 @@ func NewASNSubnetService(opts ...option.RequestOption) (r *ASNSubnetService) {
 }
 
 // Get ASN Subnets
-func (r *ASNSubnetService) Get(ctx context.Context, asn IntelASNParam, query ASNSubnetGetParams, opts ...option.RequestOption) (res *ASNSubnetGetResponse, err error) {
+func (r *ASNSubnetService) Get(ctx context.Context, asn shared.ASNParam, query ASNSubnetGetParams, opts ...option.RequestOption) (res *ASNSubnetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v/subnets", query.AccountID, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -39,7 +40,7 @@ func (r *ASNSubnetService) Get(ctx context.Context, asn IntelASNParam, query ASN
 }
 
 type ASNSubnetGetResponse struct {
-	ASN IntelASN `json:"asn"`
+	ASN shared.ASN `json:"asn"`
 	// Total results returned based on your search parameters.
 	Count        float64 `json:"count"`
 	IPCountTotal int64   `json:"ip_count_total"`
