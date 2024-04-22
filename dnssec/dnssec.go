@@ -189,11 +189,11 @@ func (r DNSSECDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSSECDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   DNSSECDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSSECDeleteResponseUnion           `json:"result"`
 	JSON    dnssecDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -202,8 +202,8 @@ type DNSSECDeleteResponseEnvelope struct {
 type dnssecDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -278,9 +278,9 @@ func (r DNSSECEditParamsStatus) IsKnown() bool {
 type DNSSECEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSSEC                `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSSEC                            `json:"result"`
 	JSON    dnssecEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -289,8 +289,8 @@ type DNSSECEditResponseEnvelope struct {
 type dnssecEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -326,9 +326,9 @@ type DNSSECGetParams struct {
 type DNSSECGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSSEC                `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSSEC                           `json:"result"`
 	JSON    dnssecGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -337,8 +337,8 @@ type DNSSECGetResponseEnvelope struct {
 type dnssecGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
