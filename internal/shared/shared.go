@@ -9,6 +9,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 )
 
+type ASN = int64
+
+type ASNParam = int64
+
 type AuditLog struct {
 	// A string that uniquely identifies the audit log.
 	ID     string         `json:"id"`
