@@ -227,7 +227,7 @@ type AppIDUnionParam interface {
 
 type Application struct {
 	// Audience tag.
-	Aud       string    `json:"aud"`
+	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
 	ID        string    `json:"id"`
@@ -243,7 +243,7 @@ type Application struct {
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
-	CorsHeaders            CorsHeaders `json:"cors_headers"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -288,14 +288,14 @@ type Application struct {
 	Tags             interface{} `json:"tags,required"`
 	// The application type.
 	Type    string          `json:"type"`
-	SaasApp interface{}     `json:"saas_app,required"`
+	SaaSApp interface{}     `json:"saas_app,required"`
 	JSON    applicationJSON `json:"-"`
 	union   ApplicationUnion
 }
 
 // applicationJSON contains the JSON metadata for the struct [Application]
 type applicationJSON struct {
-	Aud                      apijson.Field
+	AUD                      apijson.Field
 	CreatedAt                apijson.Field
 	ID                       apijson.Field
 	UpdatedAt                apijson.Field
@@ -303,7 +303,7 @@ type applicationJSON struct {
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	CorsHeaders              apijson.Field
+	CORSHeaders              apijson.Field
 	CustomDenyMessage        apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
@@ -322,7 +322,7 @@ type applicationJSON struct {
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
 	Type                     apijson.Field
-	SaasApp                  apijson.Field
+	SaaSApp                  apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -413,11 +413,11 @@ type ApplicationSelfHostedApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	Aud string `json:"aud"`
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
-	CorsHeaders            CorsHeaders `json:"cors_headers"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
 	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
@@ -475,9 +475,9 @@ type applicationSelfHostedApplicationJSON struct {
 	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
-	Aud                      apijson.Field
+	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	CorsHeaders              apijson.Field
+	CORSHeaders              apijson.Field
 	CreatedAt                apijson.Field
 	CustomDenyMessage        apijson.Field
 	CustomDenyURL            apijson.Field
@@ -519,7 +519,7 @@ type ApplicationSaaSApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	Aud string `json:"aud"`
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
@@ -530,7 +530,7 @@ type ApplicationSaaSApplication struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name    string                            `json:"name"`
-	SaasApp ApplicationSaaSApplicationSaasApp `json:"saas_app"`
+	SaaSApp ApplicationSaaSApplicationSaaSApp `json:"saas_app"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -546,13 +546,13 @@ type applicationSaaSApplicationJSON struct {
 	ID                     apijson.Field
 	AllowedIdps            apijson.Field
 	AppLauncherVisible     apijson.Field
-	Aud                    apijson.Field
+	AUD                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
 	CreatedAt              apijson.Field
 	CustomPages            apijson.Field
 	LogoURL                apijson.Field
 	Name                   apijson.Field
-	SaasApp                apijson.Field
+	SaaSApp                apijson.Field
 	Tags                   apijson.Field
 	Type                   apijson.Field
 	UpdatedAt              apijson.Field
@@ -570,10 +570,10 @@ func (r applicationSaaSApplicationJSON) RawJSON() string {
 
 func (r ApplicationSaaSApplication) implementsZeroTrustApplication() {}
 
-type ApplicationSaaSApplicationSaasApp struct {
+type ApplicationSaaSApplicationSaaSApp struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
-	AuthType ApplicationSaaSApplicationSaasAppAuthType `json:"auth_type"`
+	AuthType ApplicationSaaSApplicationSaaSAppAuthType `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL string      `json:"consumer_service_url"`
@@ -585,7 +585,7 @@ type ApplicationSaaSApplicationSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat SaasAppNameIDFormat `json:"name_id_format"`
+	NameIDFormat SaaSAppNameIDFormat `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -600,7 +600,7 @@ type ApplicationSaaSApplicationSaasApp struct {
 	// authenticate. The output of this expression must be a JSON object.
 	SAMLAttributeTransformJsonata string `json:"saml_attribute_transform_jsonata"`
 	// A globally unique name for an identity or service provider.
-	SpEntityID string `json:"sp_entity_id"`
+	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string    `json:"sso_endpoint"`
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
@@ -616,13 +616,13 @@ type ApplicationSaaSApplicationSaasApp struct {
 	GroupFilterRegex string                                `json:"group_filter_regex"`
 	RedirectURIs     interface{}                           `json:"redirect_uris,required"`
 	Scopes           interface{}                           `json:"scopes,required"`
-	JSON             applicationSaaSApplicationSaasAppJSON `json:"-"`
-	union            ApplicationSaaSApplicationSaasAppUnion
+	JSON             applicationSaaSApplicationSaaSAppJSON `json:"-"`
+	union            ApplicationSaaSApplicationSaaSAppUnion
 }
 
-// applicationSaaSApplicationSaasAppJSON contains the JSON metadata for the struct
-// [ApplicationSaaSApplicationSaasApp]
-type applicationSaaSApplicationSaasAppJSON struct {
+// applicationSaaSApplicationSaaSAppJSON contains the JSON metadata for the struct
+// [ApplicationSaaSApplicationSaaSApp]
+type applicationSaaSApplicationSaaSAppJSON struct {
 	AuthType                      apijson.Field
 	ConsumerServiceURL            apijson.Field
 	CreatedAt                     apijson.Field
@@ -633,7 +633,7 @@ type applicationSaaSApplicationSaasAppJSON struct {
 	NameIDTransformJsonata        apijson.Field
 	PublicKey                     apijson.Field
 	SAMLAttributeTransformJsonata apijson.Field
-	SpEntityID                    apijson.Field
+	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
 	AppLauncherURL                apijson.Field
@@ -648,11 +648,11 @@ type applicationSaaSApplicationSaasAppJSON struct {
 	ExtraFields                   map[string]apijson.Field
 }
 
-func (r applicationSaaSApplicationSaasAppJSON) RawJSON() string {
+func (r applicationSaaSApplicationSaaSAppJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *ApplicationSaaSApplicationSaasApp) UnmarshalJSON(data []byte) (err error) {
+func (r *ApplicationSaaSApplicationSaaSApp) UnmarshalJSON(data []byte) (err error) {
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -660,45 +660,45 @@ func (r *ApplicationSaaSApplicationSaasApp) UnmarshalJSON(data []byte) (err erro
 	return apijson.Port(r.union, &r)
 }
 
-func (r ApplicationSaaSApplicationSaasApp) AsUnion() ApplicationSaaSApplicationSaasAppUnion {
+func (r ApplicationSaaSApplicationSaaSApp) AsUnion() ApplicationSaaSApplicationSaaSAppUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.SAMLSaasApp] or
-// [zero_trust.ApplicationSaaSApplicationSaasAppAccessOIDCSaasApp].
-type ApplicationSaaSApplicationSaasAppUnion interface {
-	implementsZeroTrustApplicationSaaSApplicationSaasApp()
+// Union satisfied by [zero_trust.SAMLSaaSApp] or
+// [zero_trust.ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSApp].
+type ApplicationSaaSApplicationSaaSAppUnion interface {
+	implementsZeroTrustApplicationSaaSApplicationSaaSApp()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ApplicationSaaSApplicationSaasAppUnion)(nil)).Elem(),
+		reflect.TypeOf((*ApplicationSaaSApplicationSaaSAppUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SAMLSaasApp{}),
+			Type:       reflect.TypeOf(SAMLSaaSApp{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ApplicationSaaSApplicationSaasAppAccessOIDCSaasApp{}),
+			Type:       reflect.TypeOf(ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSApp{}),
 		},
 	)
 }
 
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasApp struct {
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
 	// OIDC.
-	AuthType ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthType `json:"auth_type"`
+	AuthType ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthType `json:"auth_type"`
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret string                                                         `json:"client_secret"`
 	CreatedAt    time.Time                                                      `json:"created_at" format:"date-time"`
-	CustomClaims ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims `json:"custom_claims"`
+	CustomClaims ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims `json:"custom_claims"`
 	// The OIDC flows supported by this application
-	GrantTypes []ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType `json:"grant_types"`
+	GrantTypes []ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
 	GroupFilterRegex string `json:"group_filter_regex"`
 	// The Access public certificate that will be used to verify your identity.
@@ -707,14 +707,14 @@ type ApplicationSaaSApplicationSaasAppAccessOIDCSaasApp struct {
 	// tokens
 	RedirectURIs []string `json:"redirect_uris"`
 	// Define the user information shared with access
-	Scopes    []ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope `json:"scopes"`
+	Scopes    []ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScope `json:"scopes"`
 	UpdatedAt time.Time                                                 `json:"updated_at" format:"date-time"`
-	JSON      applicationSaaSApplicationSaasAppAccessOIDCSaasAppJSON    `json:"-"`
+	JSON      applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON    `json:"-"`
 }
 
-// applicationSaaSApplicationSaasAppAccessOIDCSaasAppJSON contains the JSON
-// metadata for the struct [ApplicationSaaSApplicationSaasAppAccessOIDCSaasApp]
-type applicationSaaSApplicationSaasAppAccessOIDCSaasAppJSON struct {
+// applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON contains the JSON
+// metadata for the struct [ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSApp]
+type applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
 	AppLauncherURL   apijson.Field
 	AuthType         apijson.Field
 	ClientID         apijson.Field
@@ -731,35 +731,35 @@ type applicationSaaSApplicationSaasAppAccessOIDCSaasAppJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ApplicationSaaSApplicationSaasAppAccessOIDCSaasApp) UnmarshalJSON(data []byte) (err error) {
+func (r *ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r applicationSaaSApplicationSaasAppAccessOIDCSaasAppJSON) RawJSON() string {
+func (r applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasApp) implementsZeroTrustApplicationSaaSApplicationSaasApp() {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSApp) implementsZeroTrustApplicationSaaSApplicationSaaSApp() {
 }
 
 // Identifier of the authentication protocol used for the saas app. Required for
 // OIDC.
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthType string
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthType string
 
 const (
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthTypeSAML ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthType = "saml"
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthTypeOIDC ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthType = "oidc"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthTypeSAML ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthType = "saml"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthTypeOIDC ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthType = "oidc"
 )
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthType) IsKnown() bool {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthType) IsKnown() bool {
 	switch r {
-	case ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthTypeSAML, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthTypeOIDC:
+	case ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthTypeSAML, ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthTypeOIDC:
 		return true
 	}
 	return false
 }
 
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims struct {
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims struct {
 	// The name of the claim.
 	Name string `json:"name"`
 	// A mapping from IdP ID to claim name.
@@ -767,15 +767,15 @@ type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims struct {
 	// If the claim is required when building an OIDC token.
 	Required bool `json:"required"`
 	// The scope of the claim.
-	Scope  ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope  `json:"scope"`
-	Source ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSource `json:"source"`
-	JSON   applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON   `json:"-"`
+	Scope  ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScope  `json:"scope"`
+	Source ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource `json:"source"`
+	JSON   applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsJSON   `json:"-"`
 }
 
-// applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON contains the
+// applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsJSON contains the
 // JSON metadata for the struct
-// [ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims]
-type applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON struct {
+// [ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims]
+type applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsJSON struct {
 	Name        apijson.Field
 	NameByIdP   apijson.Field
 	Required    apijson.Field
@@ -785,82 +785,82 @@ type applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaims) UnmarshalJSON(data []byte) (err error) {
+func (r *ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsJSON) RawJSON() string {
+func (r applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsJSON) RawJSON() string {
 	return r.raw
 }
 
 // The scope of the claim.
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope string
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScope string
 
 const (
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeGroups  ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope = "groups"
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeProfile ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope = "profile"
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeEmail   ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope = "email"
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeOpenid  ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope = "openid"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScopeGroups  ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScope = "groups"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScopeProfile ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScope = "profile"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScopeEmail   ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScope = "email"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScopeOpenid  ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScope = "openid"
 )
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope) IsKnown() bool {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScope) IsKnown() bool {
 	switch r {
-	case ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeGroups, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeProfile, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeEmail, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScopeOpenid:
+	case ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScopeGroups, ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScopeProfile, ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScopeEmail, ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScopeOpenid:
 		return true
 	}
 	return false
 }
 
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSource struct {
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource struct {
 	// The name of the IdP claim.
 	Name string                                                                   `json:"name"`
-	JSON applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceJSON `json:"-"`
+	JSON applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
 }
 
-// applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceJSON
+// applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON
 // contains the JSON metadata for the struct
-// [ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSource]
-type applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceJSON struct {
+// [ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource]
+type applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSource) UnmarshalJSON(data []byte) (err error) {
+func (r *ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r applicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceJSON) RawJSON() string {
+func (r applicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType string
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType string
 
 const (
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantTypeAuthorizationCode         ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType = "authorization_code"
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantTypeAuthorizationCodeWithPkce ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType = "authorization_code_with_pkce"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 )
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType) IsKnown() bool {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantTypeAuthorizationCode, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantTypeAuthorizationCodeWithPkce:
+	case ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce:
 		return true
 	}
 	return false
 }
 
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope string
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScope string
 
 const (
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScopeOpenid  ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope = "openid"
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScopeGroups  ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope = "groups"
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScopeEmail   ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope = "email"
-	ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScopeProfile ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope = "profile"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScopeOpenid  ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScope = "openid"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScopeGroups  ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScope = "groups"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScopeEmail   ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScope = "email"
+	ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScopeProfile ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScope = "profile"
 )
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope) IsKnown() bool {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScope) IsKnown() bool {
 	switch r {
-	case ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScopeOpenid, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScopeGroups, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScopeEmail, ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScopeProfile:
+	case ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScopeOpenid, ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScopeGroups, ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScopeEmail, ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScopeProfile:
 		return true
 	}
 	return false
@@ -868,16 +868,16 @@ func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope) IsKnown() bool 
 
 // Optional identifier indicating the authentication protocol used for the saas
 // app. Required for OIDC. Default if unset is "saml"
-type ApplicationSaaSApplicationSaasAppAuthType string
+type ApplicationSaaSApplicationSaaSAppAuthType string
 
 const (
-	ApplicationSaaSApplicationSaasAppAuthTypeSAML ApplicationSaaSApplicationSaasAppAuthType = "saml"
-	ApplicationSaaSApplicationSaasAppAuthTypeOIDC ApplicationSaaSApplicationSaasAppAuthType = "oidc"
+	ApplicationSaaSApplicationSaaSAppAuthTypeSAML ApplicationSaaSApplicationSaaSAppAuthType = "saml"
+	ApplicationSaaSApplicationSaaSAppAuthTypeOIDC ApplicationSaaSApplicationSaaSAppAuthType = "oidc"
 )
 
-func (r ApplicationSaaSApplicationSaasAppAuthType) IsKnown() bool {
+func (r ApplicationSaaSApplicationSaaSAppAuthType) IsKnown() bool {
 	switch r {
-	case ApplicationSaaSApplicationSaasAppAuthTypeSAML, ApplicationSaaSApplicationSaasAppAuthTypeOIDC:
+	case ApplicationSaaSApplicationSaaSAppAuthTypeSAML, ApplicationSaaSApplicationSaaSAppAuthTypeOIDC:
 		return true
 	}
 	return false
@@ -902,11 +902,11 @@ type ApplicationBrowserSSHApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	Aud string `json:"aud"`
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
-	CorsHeaders            CorsHeaders `json:"cors_headers"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
 	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
@@ -964,9 +964,9 @@ type applicationBrowserSSHApplicationJSON struct {
 	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
-	Aud                      apijson.Field
+	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	CorsHeaders              apijson.Field
+	CORSHeaders              apijson.Field
 	CreatedAt                apijson.Field
 	CustomDenyMessage        apijson.Field
 	CustomDenyURL            apijson.Field
@@ -1018,11 +1018,11 @@ type ApplicationBrowserVncApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	Aud string `json:"aud"`
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
-	CorsHeaders            CorsHeaders `json:"cors_headers"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
 	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
@@ -1080,9 +1080,9 @@ type applicationBrowserVncApplicationJSON struct {
 	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
-	Aud                      apijson.Field
+	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	CorsHeaders              apijson.Field
+	CORSHeaders              apijson.Field
 	CreatedAt                apijson.Field
 	CustomDenyMessage        apijson.Field
 	CustomDenyURL            apijson.Field
@@ -1124,7 +1124,7 @@ type ApplicationAppLauncherApplication struct {
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []AllowedIdpsh `json:"allowed_idps"`
 	// Audience tag.
-	Aud string `json:"aud"`
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
@@ -1148,7 +1148,7 @@ type applicationAppLauncherApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
 	AllowedIdps            apijson.Field
-	Aud                    apijson.Field
+	AUD                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
 	CreatedAt              apijson.Field
 	Domain                 apijson.Field
@@ -1174,7 +1174,7 @@ type ApplicationAppLauncherApplicationType string
 
 const (
 	ApplicationAppLauncherApplicationTypeSelfHosted  ApplicationAppLauncherApplicationType = "self_hosted"
-	ApplicationAppLauncherApplicationTypeSaas        ApplicationAppLauncherApplicationType = "saas"
+	ApplicationAppLauncherApplicationTypeSaaS        ApplicationAppLauncherApplicationType = "saas"
 	ApplicationAppLauncherApplicationTypeSSH         ApplicationAppLauncherApplicationType = "ssh"
 	ApplicationAppLauncherApplicationTypeVnc         ApplicationAppLauncherApplicationType = "vnc"
 	ApplicationAppLauncherApplicationTypeAppLauncher ApplicationAppLauncherApplicationType = "app_launcher"
@@ -1186,7 +1186,7 @@ const (
 
 func (r ApplicationAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationAppLauncherApplicationTypeSelfHosted, ApplicationAppLauncherApplicationTypeSaas, ApplicationAppLauncherApplicationTypeSSH, ApplicationAppLauncherApplicationTypeVnc, ApplicationAppLauncherApplicationTypeAppLauncher, ApplicationAppLauncherApplicationTypeWARP, ApplicationAppLauncherApplicationTypeBiso, ApplicationAppLauncherApplicationTypeBookmark, ApplicationAppLauncherApplicationTypeDashSSO:
+	case ApplicationAppLauncherApplicationTypeSelfHosted, ApplicationAppLauncherApplicationTypeSaaS, ApplicationAppLauncherApplicationTypeSSH, ApplicationAppLauncherApplicationTypeVnc, ApplicationAppLauncherApplicationTypeAppLauncher, ApplicationAppLauncherApplicationTypeWARP, ApplicationAppLauncherApplicationTypeBiso, ApplicationAppLauncherApplicationTypeBookmark, ApplicationAppLauncherApplicationTypeDashSSO:
 		return true
 	}
 	return false
@@ -1201,7 +1201,7 @@ type ApplicationDeviceEnrollmentPermissionsApplication struct {
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []AllowedIdpsh `json:"allowed_idps"`
 	// Audience tag.
-	Aud string `json:"aud"`
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
@@ -1225,7 +1225,7 @@ type applicationDeviceEnrollmentPermissionsApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
 	AllowedIdps            apijson.Field
-	Aud                    apijson.Field
+	AUD                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
 	CreatedAt              apijson.Field
 	Domain                 apijson.Field
@@ -1251,7 +1251,7 @@ type ApplicationDeviceEnrollmentPermissionsApplicationType string
 
 const (
 	ApplicationDeviceEnrollmentPermissionsApplicationTypeSelfHosted  ApplicationDeviceEnrollmentPermissionsApplicationType = "self_hosted"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeSaas        ApplicationDeviceEnrollmentPermissionsApplicationType = "saas"
+	ApplicationDeviceEnrollmentPermissionsApplicationTypeSaaS        ApplicationDeviceEnrollmentPermissionsApplicationType = "saas"
 	ApplicationDeviceEnrollmentPermissionsApplicationTypeSSH         ApplicationDeviceEnrollmentPermissionsApplicationType = "ssh"
 	ApplicationDeviceEnrollmentPermissionsApplicationTypeVnc         ApplicationDeviceEnrollmentPermissionsApplicationType = "vnc"
 	ApplicationDeviceEnrollmentPermissionsApplicationTypeAppLauncher ApplicationDeviceEnrollmentPermissionsApplicationType = "app_launcher"
@@ -1263,7 +1263,7 @@ const (
 
 func (r ApplicationDeviceEnrollmentPermissionsApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationDeviceEnrollmentPermissionsApplicationTypeSelfHosted, ApplicationDeviceEnrollmentPermissionsApplicationTypeSaas, ApplicationDeviceEnrollmentPermissionsApplicationTypeSSH, ApplicationDeviceEnrollmentPermissionsApplicationTypeVnc, ApplicationDeviceEnrollmentPermissionsApplicationTypeAppLauncher, ApplicationDeviceEnrollmentPermissionsApplicationTypeWARP, ApplicationDeviceEnrollmentPermissionsApplicationTypeBiso, ApplicationDeviceEnrollmentPermissionsApplicationTypeBookmark, ApplicationDeviceEnrollmentPermissionsApplicationTypeDashSSO:
+	case ApplicationDeviceEnrollmentPermissionsApplicationTypeSelfHosted, ApplicationDeviceEnrollmentPermissionsApplicationTypeSaaS, ApplicationDeviceEnrollmentPermissionsApplicationTypeSSH, ApplicationDeviceEnrollmentPermissionsApplicationTypeVnc, ApplicationDeviceEnrollmentPermissionsApplicationTypeAppLauncher, ApplicationDeviceEnrollmentPermissionsApplicationTypeWARP, ApplicationDeviceEnrollmentPermissionsApplicationTypeBiso, ApplicationDeviceEnrollmentPermissionsApplicationTypeBookmark, ApplicationDeviceEnrollmentPermissionsApplicationTypeDashSSO:
 		return true
 	}
 	return false
@@ -1278,7 +1278,7 @@ type ApplicationBrowserIsolationPermissionsApplication struct {
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []AllowedIdpsh `json:"allowed_idps"`
 	// Audience tag.
-	Aud string `json:"aud"`
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
@@ -1302,7 +1302,7 @@ type applicationBrowserIsolationPermissionsApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
 	AllowedIdps            apijson.Field
-	Aud                    apijson.Field
+	AUD                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
 	CreatedAt              apijson.Field
 	Domain                 apijson.Field
@@ -1328,7 +1328,7 @@ type ApplicationBrowserIsolationPermissionsApplicationType string
 
 const (
 	ApplicationBrowserIsolationPermissionsApplicationTypeSelfHosted  ApplicationBrowserIsolationPermissionsApplicationType = "self_hosted"
-	ApplicationBrowserIsolationPermissionsApplicationTypeSaas        ApplicationBrowserIsolationPermissionsApplicationType = "saas"
+	ApplicationBrowserIsolationPermissionsApplicationTypeSaaS        ApplicationBrowserIsolationPermissionsApplicationType = "saas"
 	ApplicationBrowserIsolationPermissionsApplicationTypeSSH         ApplicationBrowserIsolationPermissionsApplicationType = "ssh"
 	ApplicationBrowserIsolationPermissionsApplicationTypeVnc         ApplicationBrowserIsolationPermissionsApplicationType = "vnc"
 	ApplicationBrowserIsolationPermissionsApplicationTypeAppLauncher ApplicationBrowserIsolationPermissionsApplicationType = "app_launcher"
@@ -1340,7 +1340,7 @@ const (
 
 func (r ApplicationBrowserIsolationPermissionsApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationBrowserIsolationPermissionsApplicationTypeSelfHosted, ApplicationBrowserIsolationPermissionsApplicationTypeSaas, ApplicationBrowserIsolationPermissionsApplicationTypeSSH, ApplicationBrowserIsolationPermissionsApplicationTypeVnc, ApplicationBrowserIsolationPermissionsApplicationTypeAppLauncher, ApplicationBrowserIsolationPermissionsApplicationTypeWARP, ApplicationBrowserIsolationPermissionsApplicationTypeBiso, ApplicationBrowserIsolationPermissionsApplicationTypeBookmark, ApplicationBrowserIsolationPermissionsApplicationTypeDashSSO:
+	case ApplicationBrowserIsolationPermissionsApplicationTypeSelfHosted, ApplicationBrowserIsolationPermissionsApplicationTypeSaaS, ApplicationBrowserIsolationPermissionsApplicationTypeSSH, ApplicationBrowserIsolationPermissionsApplicationTypeVnc, ApplicationBrowserIsolationPermissionsApplicationTypeAppLauncher, ApplicationBrowserIsolationPermissionsApplicationTypeWARP, ApplicationBrowserIsolationPermissionsApplicationTypeBiso, ApplicationBrowserIsolationPermissionsApplicationTypeBookmark, ApplicationBrowserIsolationPermissionsApplicationTypeDashSSO:
 		return true
 	}
 	return false
@@ -1352,7 +1352,7 @@ type ApplicationBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	Aud       string    `json:"aud"`
+	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The URL or domain of the bookmark.
 	Domain string `json:"domain"`
@@ -1374,7 +1374,7 @@ type ApplicationBookmarkApplication struct {
 type applicationBookmarkApplicationJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
-	Aud                apijson.Field
+	AUD                apijson.Field
 	CreatedAt          apijson.Field
 	Domain             apijson.Field
 	LogoURL            apijson.Field
@@ -1408,7 +1408,7 @@ type ApplicationParam struct {
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
-	CorsHeaders            param.Field[CorsHeadersParam] `json:"cors_headers"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -1453,7 +1453,7 @@ type ApplicationParam struct {
 	Tags             param.Field[interface{}] `json:"tags,required"`
 	// The application type.
 	Type    param.Field[string]      `json:"type"`
-	SaasApp param.Field[interface{}] `json:"saas_app,required"`
+	SaaSApp param.Field[interface{}] `json:"saas_app,required"`
 }
 
 func (r ApplicationParam) MarshalJSON() (data []byte, err error) {
@@ -1493,7 +1493,7 @@ type ApplicationSelfHostedApplicationParam struct {
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
-	CorsHeaders            param.Field[CorsHeadersParam] `json:"cors_headers"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -1560,7 +1560,7 @@ type ApplicationSaaSApplicationParam struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name    param.Field[string]                                      `json:"name"`
-	SaasApp param.Field[ApplicationSaaSApplicationSaasAppUnionParam] `json:"saas_app"`
+	SaaSApp param.Field[ApplicationSaaSApplicationSaaSAppUnionParam] `json:"saas_app"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -1574,10 +1574,10 @@ func (r ApplicationSaaSApplicationParam) MarshalJSON() (data []byte, err error) 
 
 func (r ApplicationSaaSApplicationParam) implementsZeroTrustApplicationUnionParam() {}
 
-type ApplicationSaaSApplicationSaasAppParam struct {
+type ApplicationSaaSApplicationSaaSAppParam struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
-	AuthType param.Field[ApplicationSaaSApplicationSaasAppAuthType] `json:"auth_type"`
+	AuthType param.Field[ApplicationSaaSApplicationSaaSAppAuthType] `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
@@ -1588,7 +1588,7 @@ type ApplicationSaaSApplicationSaasAppParam struct {
 	// The unique identifier for your SaaS application.
 	IdPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[SaasAppNameIDFormat] `json:"name_id_format"`
+	NameIDFormat param.Field[SaaSAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1603,7 +1603,7 @@ type ApplicationSaaSApplicationSaasAppParam struct {
 	// authenticate. The output of this expression must be a JSON object.
 	SAMLAttributeTransformJsonata param.Field[string] `json:"saml_attribute_transform_jsonata"`
 	// A globally unique name for an identity or service provider.
-	SpEntityID param.Field[string] `json:"sp_entity_id"`
+	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 	// The URL where this applications tile redirects users
@@ -1620,33 +1620,33 @@ type ApplicationSaaSApplicationSaasAppParam struct {
 	Scopes           param.Field[interface{}] `json:"scopes,required"`
 }
 
-func (r ApplicationSaaSApplicationSaasAppParam) MarshalJSON() (data []byte, err error) {
+func (r ApplicationSaaSApplicationSaaSAppParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ApplicationSaaSApplicationSaasAppParam) implementsZeroTrustApplicationSaaSApplicationSaasAppUnionParam() {
+func (r ApplicationSaaSApplicationSaaSAppParam) implementsZeroTrustApplicationSaaSApplicationSaaSAppUnionParam() {
 }
 
-// Satisfied by [zero_trust.SAMLSaasAppParam],
-// [zero_trust.ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppParam],
-// [ApplicationSaaSApplicationSaasAppParam].
-type ApplicationSaaSApplicationSaasAppUnionParam interface {
-	implementsZeroTrustApplicationSaaSApplicationSaasAppUnionParam()
+// Satisfied by [zero_trust.SAMLSaaSAppParam],
+// [zero_trust.ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppParam],
+// [ApplicationSaaSApplicationSaaSAppParam].
+type ApplicationSaaSApplicationSaaSAppUnionParam interface {
+	implementsZeroTrustApplicationSaaSApplicationSaaSAppUnionParam()
 }
 
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppParam struct {
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppParam struct {
 	// The URL where this applications tile redirects users
 	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
 	// OIDC.
-	AuthType param.Field[ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppAuthType] `json:"auth_type"`
+	AuthType param.Field[ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthType] `json:"auth_type"`
 	// The application client id
 	ClientID param.Field[string] `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret param.Field[string]                                                              `json:"client_secret"`
-	CustomClaims param.Field[ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsParam] `json:"custom_claims"`
+	CustomClaims param.Field[ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsParam] `json:"custom_claims"`
 	// The OIDC flows supported by this application
-	GrantTypes param.Field[[]ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppGrantType] `json:"grant_types"`
+	GrantTypes param.Field[[]ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType] `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
 	GroupFilterRegex param.Field[string] `json:"group_filter_regex"`
 	// The Access public certificate that will be used to verify your identity.
@@ -1655,17 +1655,17 @@ type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppParam struct {
 	// tokens
 	RedirectURIs param.Field[[]string] `json:"redirect_uris"`
 	// Define the user information shared with access
-	Scopes param.Field[[]ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppScope] `json:"scopes"`
+	Scopes param.Field[[]ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppScope] `json:"scopes"`
 }
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppParam) MarshalJSON() (data []byte, err error) {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppParam) implementsZeroTrustApplicationSaaSApplicationSaasAppUnionParam() {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppParam) implementsZeroTrustApplicationSaaSApplicationSaaSAppUnionParam() {
 }
 
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsParam struct {
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsParam struct {
 	// The name of the claim.
 	Name param.Field[string] `json:"name"`
 	// A mapping from IdP ID to claim name.
@@ -1673,20 +1673,20 @@ type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsParam struct 
 	// If the claim is required when building an OIDC token.
 	Required param.Field[bool] `json:"required"`
 	// The scope of the claim.
-	Scope  param.Field[ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsScope]       `json:"scope"`
-	Source param.Field[ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceParam] `json:"source"`
+	Scope  param.Field[ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsScope]       `json:"scope"`
+	Source param.Field[ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceParam] `json:"source"`
 }
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsParam) MarshalJSON() (data []byte, err error) {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceParam struct {
+type ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceParam struct {
 	// The name of the IdP claim.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r ApplicationSaaSApplicationSaasAppAccessOIDCSaasAppCustomClaimsSourceParam) MarshalJSON() (data []byte, err error) {
+func (r ApplicationSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1709,7 +1709,7 @@ type ApplicationBrowserSSHApplicationParam struct {
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
-	CorsHeaders            param.Field[CorsHeadersParam] `json:"cors_headers"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -1780,7 +1780,7 @@ type ApplicationBrowserVncApplicationParam struct {
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
-	CorsHeaders            param.Field[CorsHeadersParam] `json:"cors_headers"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -1919,7 +1919,7 @@ func (r ApplicationBookmarkApplicationParam) MarshalJSON() (data []byte, err err
 
 func (r ApplicationBookmarkApplicationParam) implementsZeroTrustApplicationUnionParam() {}
 
-type CorsHeaders struct {
+type CORSHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -1940,7 +1940,7 @@ type CorsHeaders struct {
 	JSON   corsHeadersJSON `json:"-"`
 }
 
-// corsHeadersJSON contains the JSON metadata for the struct [CorsHeaders]
+// corsHeadersJSON contains the JSON metadata for the struct [CORSHeaders]
 type corsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
@@ -1954,7 +1954,7 @@ type corsHeadersJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *CorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *CORSHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1962,7 +1962,7 @@ func (r corsHeadersJSON) RawJSON() string {
 	return r.raw
 }
 
-type CorsHeadersParam struct {
+type CORSHeadersParam struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -1982,7 +1982,7 @@ type CorsHeadersParam struct {
 	MaxAge param.Field[float64] `json:"max_age"`
 }
 
-func (r CorsHeadersParam) MarshalJSON() (data []byte, err error) {
+func (r CORSHeadersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1991,89 +1991,89 @@ type CustomPagesh = string
 type CustomPageshParam = string
 
 // A globally unique name for an identity or service provider.
-type SaasAppNameFormat string
+type SaaSAppNameFormat string
 
 const (
-	SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified SaasAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic       SaasAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI         SaasAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified SaaSAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic       SaaSAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI         SaaSAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
 )
 
-func (r SaasAppNameFormat) IsKnown() bool {
+func (r SaaSAppNameFormat) IsKnown() bool {
 	switch r {
-	case SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified, SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic, SaasAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI:
+	case SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified, SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic, SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI:
 		return true
 	}
 	return false
 }
 
 // The format of the name identifier sent to the SaaS application.
-type SaasAppNameIDFormat string
+type SaaSAppNameIDFormat string
 
 const (
-	SaasAppNameIDFormatID    SaasAppNameIDFormat = "id"
-	SaasAppNameIDFormatEmail SaasAppNameIDFormat = "email"
+	SaaSAppNameIDFormatID    SaaSAppNameIDFormat = "id"
+	SaaSAppNameIDFormatEmail SaaSAppNameIDFormat = "email"
 )
 
-func (r SaasAppNameIDFormat) IsKnown() bool {
+func (r SaaSAppNameIDFormat) IsKnown() bool {
 	switch r {
-	case SaasAppNameIDFormatID, SaasAppNameIDFormatEmail:
+	case SaaSAppNameIDFormatID, SaaSAppNameIDFormatEmail:
 		return true
 	}
 	return false
 }
 
-type SaasAppSource struct {
+type SaaSAppSource struct {
 	// The name of the IdP attribute.
 	Name string `json:"name"`
 	// A mapping from IdP ID to attribute name.
 	NameByIdP map[string]string `json:"name_by_idp"`
-	JSON      saasAppSourceJSON `json:"-"`
+	JSON      SaaSAppSourceJSON `json:"-"`
 }
 
-// saasAppSourceJSON contains the JSON metadata for the struct [SaasAppSource]
-type saasAppSourceJSON struct {
+// SaaSAppSourceJSON contains the JSON metadata for the struct [SaaSAppSource]
+type SaaSAppSourceJSON struct {
 	Name        apijson.Field
 	NameByIdP   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SaasAppSource) UnmarshalJSON(data []byte) (err error) {
+func (r *SaaSAppSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r saasAppSourceJSON) RawJSON() string {
+func (r SaaSAppSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-type SaasAppSourceParam struct {
+type SaaSAppSourceParam struct {
 	// The name of the IdP attribute.
 	Name param.Field[string] `json:"name"`
 	// A mapping from IdP ID to attribute name.
 	NameByIdP param.Field[map[string]string] `json:"name_by_idp"`
 }
 
-func (r SaasAppSourceParam) MarshalJSON() (data []byte, err error) {
+func (r SaaSAppSourceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SAMLSaasApp struct {
+type SAMLSaaSApp struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
-	AuthType SAMLSaasAppAuthType `json:"auth_type"`
+	AuthType SAMLSaaSAppAuthType `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL string                      `json:"consumer_service_url"`
 	CreatedAt          time.Time                   `json:"created_at" format:"date-time"`
-	CustomAttributes   SAMLSaasAppCustomAttributes `json:"custom_attributes"`
+	CustomAttributes   SAMLSaaSAppCustomAttributes `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat SaasAppNameIDFormat `json:"name_id_format"`
+	NameIDFormat SaaSAppNameIDFormat `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -2088,15 +2088,15 @@ type SAMLSaasApp struct {
 	// authenticate. The output of this expression must be a JSON object.
 	SAMLAttributeTransformJsonata string `json:"saml_attribute_transform_jsonata"`
 	// A globally unique name for an identity or service provider.
-	SpEntityID string `json:"sp_entity_id"`
+	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string          `json:"sso_endpoint"`
 	UpdatedAt   time.Time       `json:"updated_at" format:"date-time"`
-	JSON        samlSaasAppJSON `json:"-"`
+	JSON        samlSaaSAppJSON `json:"-"`
 }
 
-// samlSaasAppJSON contains the JSON metadata for the struct [SAMLSaasApp]
-type samlSaasAppJSON struct {
+// samlSaaSAppJSON contains the JSON metadata for the struct [SAMLSaaSApp]
+type samlSaaSAppJSON struct {
 	AuthType                      apijson.Field
 	ConsumerServiceURL            apijson.Field
 	CreatedAt                     apijson.Field
@@ -2107,56 +2107,56 @@ type samlSaasAppJSON struct {
 	NameIDTransformJsonata        apijson.Field
 	PublicKey                     apijson.Field
 	SAMLAttributeTransformJsonata apijson.Field
-	SpEntityID                    apijson.Field
+	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
 
-func (r *SAMLSaasApp) UnmarshalJSON(data []byte) (err error) {
+func (r *SAMLSaaSApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r samlSaasAppJSON) RawJSON() string {
+func (r samlSaaSAppJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SAMLSaasApp) implementsZeroTrustApplicationSaaSApplicationSaasApp() {}
+func (r SAMLSaaSApp) implementsZeroTrustApplicationSaaSApplicationSaaSApp() {}
 
 // Optional identifier indicating the authentication protocol used for the saas
 // app. Required for OIDC. Default if unset is "saml"
-type SAMLSaasAppAuthType string
+type SAMLSaaSAppAuthType string
 
 const (
-	SAMLSaasAppAuthTypeSAML SAMLSaasAppAuthType = "saml"
-	SAMLSaasAppAuthTypeOIDC SAMLSaasAppAuthType = "oidc"
+	SAMLSaaSAppAuthTypeSAML SAMLSaaSAppAuthType = "saml"
+	SAMLSaaSAppAuthTypeOIDC SAMLSaaSAppAuthType = "oidc"
 )
 
-func (r SAMLSaasAppAuthType) IsKnown() bool {
+func (r SAMLSaaSAppAuthType) IsKnown() bool {
 	switch r {
-	case SAMLSaasAppAuthTypeSAML, SAMLSaasAppAuthTypeOIDC:
+	case SAMLSaaSAppAuthTypeSAML, SAMLSaaSAppAuthTypeOIDC:
 		return true
 	}
 	return false
 }
 
-type SAMLSaasAppCustomAttributes struct {
+type SAMLSaaSAppCustomAttributes struct {
 	// The SAML FriendlyName of the attribute.
 	FriendlyName string `json:"friendly_name"`
 	// The name of the attribute.
 	Name string `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat SaasAppNameFormat `json:"name_format"`
+	NameFormat SaaSAppNameFormat `json:"name_format"`
 	// If the attribute is required when building a SAML assertion.
 	Required bool                            `json:"required"`
-	Source   SaasAppSource                   `json:"source"`
-	JSON     samlSaasAppCustomAttributesJSON `json:"-"`
+	Source   SaaSAppSource                   `json:"source"`
+	JSON     samlSaaSAppCustomAttributesJSON `json:"-"`
 }
 
-// samlSaasAppCustomAttributesJSON contains the JSON metadata for the struct
-// [SAMLSaasAppCustomAttributes]
-type samlSaasAppCustomAttributesJSON struct {
+// samlSaaSAppCustomAttributesJSON contains the JSON metadata for the struct
+// [SAMLSaaSAppCustomAttributes]
+type samlSaaSAppCustomAttributesJSON struct {
 	FriendlyName apijson.Field
 	Name         apijson.Field
 	NameFormat   apijson.Field
@@ -2166,29 +2166,29 @@ type samlSaasAppCustomAttributesJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SAMLSaasAppCustomAttributes) UnmarshalJSON(data []byte) (err error) {
+func (r *SAMLSaaSAppCustomAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r samlSaasAppCustomAttributesJSON) RawJSON() string {
+func (r samlSaaSAppCustomAttributesJSON) RawJSON() string {
 	return r.raw
 }
 
-type SAMLSaasAppParam struct {
+type SAMLSaaSAppParam struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
-	AuthType param.Field[SAMLSaasAppAuthType] `json:"auth_type"`
+	AuthType param.Field[SAMLSaaSAppAuthType] `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]                           `json:"consumer_service_url"`
-	CustomAttributes   param.Field[SAMLSaasAppCustomAttributesParam] `json:"custom_attributes"`
+	CustomAttributes   param.Field[SAMLSaaSAppCustomAttributesParam] `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState param.Field[string] `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[SaasAppNameIDFormat] `json:"name_id_format"`
+	NameIDFormat param.Field[SaaSAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -2203,30 +2203,30 @@ type SAMLSaasAppParam struct {
 	// authenticate. The output of this expression must be a JSON object.
 	SAMLAttributeTransformJsonata param.Field[string] `json:"saml_attribute_transform_jsonata"`
 	// A globally unique name for an identity or service provider.
-	SpEntityID param.Field[string] `json:"sp_entity_id"`
+	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 }
 
-func (r SAMLSaasAppParam) MarshalJSON() (data []byte, err error) {
+func (r SAMLSaaSAppParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SAMLSaasAppParam) implementsZeroTrustApplicationSaaSApplicationSaasAppUnionParam() {}
+func (r SAMLSaaSAppParam) implementsZeroTrustApplicationSaaSApplicationSaaSAppUnionParam() {}
 
-type SAMLSaasAppCustomAttributesParam struct {
+type SAMLSaaSAppCustomAttributesParam struct {
 	// The SAML FriendlyName of the attribute.
 	FriendlyName param.Field[string] `json:"friendly_name"`
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[SaasAppNameFormat] `json:"name_format"`
+	NameFormat param.Field[SaaSAppNameFormat] `json:"name_format"`
 	// If the attribute is required when building a SAML assertion.
 	Required param.Field[bool]               `json:"required"`
-	Source   param.Field[SaasAppSourceParam] `json:"source"`
+	Source   param.Field[SaaSAppSourceParam] `json:"source"`
 }
 
-func (r SAMLSaasAppCustomAttributesParam) MarshalJSON() (data []byte, err error) {
+func (r SAMLSaaSAppCustomAttributesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

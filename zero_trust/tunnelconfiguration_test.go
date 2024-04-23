@@ -38,7 +38,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 					Hostname: cloudflare.F("tunnel.example.com"),
 					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
 						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
-							AudTag:   cloudflare.F([]string{"string", "string", "string"}),
+							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
 							Required: cloudflare.F(true),
 							TeamName: cloudflare.F("string"),
 						}),
@@ -62,7 +62,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 					Hostname: cloudflare.F("tunnel.example.com"),
 					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
 						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
-							AudTag:   cloudflare.F([]string{"string", "string", "string"}),
+							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
 							Required: cloudflare.F(true),
 							TeamName: cloudflare.F("string"),
 						}),
@@ -86,7 +86,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 					Hostname: cloudflare.F("tunnel.example.com"),
 					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
 						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
-							AudTag:   cloudflare.F([]string{"string", "string", "string"}),
+							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
 							Required: cloudflare.F(true),
 							TeamName: cloudflare.F("string"),
 						}),
@@ -109,7 +109,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigOriginRequest{
 					Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigOriginRequestAccess{
-						AudTag:   cloudflare.F([]string{"string", "string", "string"}),
+						AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
 						Required: cloudflare.F(true),
 						TeamName: cloudflare.F("string"),
 					}),
