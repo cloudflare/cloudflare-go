@@ -33,50 +33,48 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteLANNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			LAN: cloudflare.F(magic_transit.SiteLANNewParamsLAN{
-				Description: cloudflare.F("string"),
-				HaLink:      cloudflare.F(true),
+			Physport:  cloudflare.F(int64(1)),
+			VlanTag:   cloudflare.F(int64(0)),
+			HaLink:    cloudflare.F(true),
+			Name:      cloudflare.F("string"),
+			Nat: cloudflare.F(magic_transit.NatParam{
+				StaticPrefix: cloudflare.F("192.0.2.0/24"),
+			}),
+			RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				Physport: cloudflare.F(int64(1)),
-				RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
-					Nat: cloudflare.F(magic_transit.NatParam{
-						StaticPrefix: cloudflare.F("192.0.2.0/24"),
-					}),
-					NextHop: cloudflare.F("192.0.2.1"),
-					Prefix:  cloudflare.F("192.0.2.0/24"),
-				}, {
-					Nat: cloudflare.F(magic_transit.NatParam{
-						StaticPrefix: cloudflare.F("192.0.2.0/24"),
-					}),
-					NextHop: cloudflare.F("192.0.2.1"),
-					Prefix:  cloudflare.F("192.0.2.0/24"),
-				}, {
-					Nat: cloudflare.F(magic_transit.NatParam{
-						StaticPrefix: cloudflare.F("192.0.2.0/24"),
-					}),
-					NextHop: cloudflare.F("192.0.2.1"),
-					Prefix:  cloudflare.F("192.0.2.0/24"),
-				}}),
-				StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
-					Address: cloudflare.F("192.0.2.0/24"),
-					DHCPRelay: cloudflare.F(magic_transit.DHCPRelayParam{
-						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
-					}),
-					DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
-						DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
-						DHCPPoolStart: cloudflare.F("192.0.2.1"),
-						DNSServer:     cloudflare.F("192.0.2.1"),
-						Reservations: cloudflare.F(map[string]string{
-							"00:11:22:33:44:55": "192.0.2.100",
-							"AA:BB:CC:DD:EE:FF": "192.168.1.101",
-						}),
-					}),
-					SecondaryAddress: cloudflare.F("192.0.2.0/24"),
-					VirtualAddress:   cloudflare.F("192.0.2.0/24"),
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
+			}, {
+				Nat: cloudflare.F(magic_transit.NatParam{
+					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				VlanTag: cloudflare.F(int64(0)),
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
+			}, {
+				Nat: cloudflare.F(magic_transit.NatParam{
+					StaticPrefix: cloudflare.F("192.0.2.0/24"),
+				}),
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
+			}}),
+			StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
+				Address: cloudflare.F("192.0.2.0/24"),
+				DHCPRelay: cloudflare.F(magic_transit.DHCPRelayParam{
+					ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+				}),
+				DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
+					DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
+					DHCPPoolStart: cloudflare.F("192.0.2.1"),
+					DNSServer:     cloudflare.F("192.0.2.1"),
+					Reservations: cloudflare.F(map[string]string{
+						"00:11:22:33:44:55": "192.0.2.100",
+						"AA:BB:CC:DD:EE:FF": "192.168.1.101",
+					}),
+				}),
+				SecondaryAddress: cloudflare.F("192.0.2.0/24"),
+				VirtualAddress:   cloudflare.F("192.0.2.0/24"),
 			}),
 		},
 	)
@@ -109,50 +107,48 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteLANUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			LAN: cloudflare.F(magic_transit.SiteLANUpdateParamsLAN{
-				Description: cloudflare.F("string"),
+			Name:      cloudflare.F("string"),
+			Nat: cloudflare.F(magic_transit.NatParam{
+				StaticPrefix: cloudflare.F("192.0.2.0/24"),
+			}),
+			Physport: cloudflare.F(int64(1)),
+			RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				Physport: cloudflare.F(int64(1)),
-				RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
-					Nat: cloudflare.F(magic_transit.NatParam{
-						StaticPrefix: cloudflare.F("192.0.2.0/24"),
-					}),
-					NextHop: cloudflare.F("192.0.2.1"),
-					Prefix:  cloudflare.F("192.0.2.0/24"),
-				}, {
-					Nat: cloudflare.F(magic_transit.NatParam{
-						StaticPrefix: cloudflare.F("192.0.2.0/24"),
-					}),
-					NextHop: cloudflare.F("192.0.2.1"),
-					Prefix:  cloudflare.F("192.0.2.0/24"),
-				}, {
-					Nat: cloudflare.F(magic_transit.NatParam{
-						StaticPrefix: cloudflare.F("192.0.2.0/24"),
-					}),
-					NextHop: cloudflare.F("192.0.2.1"),
-					Prefix:  cloudflare.F("192.0.2.0/24"),
-				}}),
-				StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
-					Address: cloudflare.F("192.0.2.0/24"),
-					DHCPRelay: cloudflare.F(magic_transit.DHCPRelayParam{
-						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
-					}),
-					DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
-						DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
-						DHCPPoolStart: cloudflare.F("192.0.2.1"),
-						DNSServer:     cloudflare.F("192.0.2.1"),
-						Reservations: cloudflare.F(map[string]string{
-							"00:11:22:33:44:55": "192.0.2.100",
-							"AA:BB:CC:DD:EE:FF": "192.168.1.101",
-						}),
-					}),
-					SecondaryAddress: cloudflare.F("192.0.2.0/24"),
-					VirtualAddress:   cloudflare.F("192.0.2.0/24"),
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
+			}, {
+				Nat: cloudflare.F(magic_transit.NatParam{
+					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				VlanTag: cloudflare.F(int64(0)),
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
+			}, {
+				Nat: cloudflare.F(magic_transit.NatParam{
+					StaticPrefix: cloudflare.F("192.0.2.0/24"),
+				}),
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
+			}}),
+			StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
+				Address: cloudflare.F("192.0.2.0/24"),
+				DHCPRelay: cloudflare.F(magic_transit.DHCPRelayParam{
+					ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+				}),
+				DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
+					DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
+					DHCPPoolStart: cloudflare.F("192.0.2.1"),
+					DNSServer:     cloudflare.F("192.0.2.1"),
+					Reservations: cloudflare.F(map[string]string{
+						"00:11:22:33:44:55": "192.0.2.100",
+						"AA:BB:CC:DD:EE:FF": "192.168.1.101",
+					}),
+				}),
+				SecondaryAddress: cloudflare.F("192.0.2.0/24"),
+				VirtualAddress:   cloudflare.F("192.0.2.0/24"),
 			}),
+			VlanTag: cloudflare.F(int64(0)),
 		},
 	)
 	if err != nil {

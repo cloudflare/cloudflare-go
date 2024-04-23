@@ -34,24 +34,22 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteACLNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ACL: cloudflare.F(magic_transit.SiteACLNewParamsACL{
-				Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
-				ForwardLocally: cloudflare.F(true),
-				LAN1: cloudflare.F(magic_transit.ACLConfigurationParam{
-					LANID:   cloudflare.F("string"),
-					LANName: cloudflare.F("string"),
-					Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-					Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
-				}),
-				LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
-					LANID:   cloudflare.F("string"),
-					LANName: cloudflare.F("string"),
-					Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-					Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
-				}),
-				Name:      cloudflare.F("PIN Pad - Cash Register"),
-				Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
+			LAN1: cloudflare.F(magic_transit.ACLConfigurationParam{
+				LANID:   cloudflare.F("string"),
+				LANName: cloudflare.F("string"),
+				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
 			}),
+			LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
+				LANID:   cloudflare.F("string"),
+				LANName: cloudflare.F("string"),
+				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
+			}),
+			Name:           cloudflare.F("PIN Pad - Cash Register"),
+			Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
+			ForwardLocally: cloudflare.F(true),
+			Protocols:      cloudflare.F([]magic_transit.SiteACLNewParamsProtocol{magic_transit.SiteACLNewParamsProtocolTCP, magic_transit.SiteACLNewParamsProtocolUdp, magic_transit.SiteACLNewParamsProtocolIcmp}),
 		},
 	)
 	if err != nil {
@@ -82,25 +80,23 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteACLUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ACL: cloudflare.F(magic_transit.SiteACLUpdateParamsACL{
-				Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
-				ForwardLocally: cloudflare.F(true),
-				LAN1: cloudflare.F(magic_transit.ACLConfigurationParam{
-					LANID:   cloudflare.F("string"),
-					LANName: cloudflare.F("string"),
-					Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-					Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
-				}),
-				LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
-					LANID:   cloudflare.F("string"),
-					LANName: cloudflare.F("string"),
-					Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-					Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
-				}),
-				Name:      cloudflare.F("PIN Pad - Cash Register"),
-				Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
+			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
+			ForwardLocally: cloudflare.F(true),
+			LAN1: cloudflare.F(magic_transit.ACLConfigurationParam{
+				LANID:   cloudflare.F("string"),
+				LANName: cloudflare.F("string"),
+				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
 			}),
+			LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
+				LANID:   cloudflare.F("string"),
+				LANName: cloudflare.F("string"),
+				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
+			}),
+			Name:      cloudflare.F("PIN Pad - Cash Register"),
+			Protocols: cloudflare.F([]magic_transit.SiteACLUpdateParamsProtocol{magic_transit.SiteACLUpdateParamsProtocolTCP, magic_transit.SiteACLUpdateParamsProtocolUdp, magic_transit.SiteACLUpdateParamsProtocolIcmp}),
 		},
 	)
 	if err != nil {

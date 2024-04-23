@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AddressMapService contains methods and other services that help with interacting
@@ -79,7 +77,7 @@ func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMap
 
 // Delete a particular address map owned by the account. An Address Map must be
 // disabled before it can be deleted.
-func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, params AddressMapDeleteParams, opts ...option.RequestOption) (res *AddressMapDeleteResponseUnion, err error) {
+func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, params AddressMapDeleteParams, opts ...option.RequestOption) (res *[]AddressMapDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
@@ -291,30 +289,7 @@ func (r AddressMapNewResponseMembershipsKind) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [addressing.AddressMapDeleteResponseUnknown],
-// [addressing.AddressMapDeleteResponseArray] or [shared.UnionString].
-type AddressMapDeleteResponseUnion interface {
-	ImplementsAddressingAddressMapDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapDeleteResponseArray []interface{}
-
-func (r AddressMapDeleteResponseArray) ImplementsAddressingAddressMapDeleteResponseUnion() {}
+type AddressMapDeleteResponse = interface{}
 
 type AddressMapGetResponse struct {
 	// Identifier
@@ -460,9 +435,9 @@ func (r AddressMapNewParams) MarshalJSON() (data []byte, err error) {
 type AddressMapNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AddressMapNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressMapNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  AddressMapNewResponse                `json:"result"`
 	JSON    addressMapNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -471,8 +446,8 @@ type AddressMapNewResponseEnvelope struct {
 type addressMapNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -516,11 +491,11 @@ func (r AddressMapDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   AddressMapDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []AddressMapDeleteResponse                 `json:"result,nullable"`
 	ResultInfo AddressMapDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       addressMapDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -530,8 +505,8 @@ type AddressMapDeleteResponseEnvelope struct {
 type addressMapDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -615,9 +590,9 @@ func (r AddressMapEditParams) MarshalJSON() (data []byte, err error) {
 type AddressMapEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AddressMap            `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressMapEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  AddressMap                            `json:"result"`
 	JSON    addressMapEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -626,8 +601,8 @@ type AddressMapEditResponseEnvelope struct {
 type addressMapEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -663,9 +638,9 @@ type AddressMapGetParams struct {
 type AddressMapGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AddressMapGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressMapGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  AddressMapGetResponse                `json:"result"`
 	JSON    addressMapGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -674,8 +649,8 @@ type AddressMapGetResponseEnvelope struct {
 type addressMapGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

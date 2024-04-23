@@ -59,11 +59,10 @@ func TestNetworkVirtualNetworkListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Networks.VirtualNetworks.List(context.TODO(), zero_trust.NetworkVirtualNetworkListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		IsDefault: cloudflare.F[any](map[string]interface{}{}),
-		IsDeleted: cloudflare.F[any](map[string]interface{}{}),
+		ID:        cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
+		IsDefault: cloudflare.F(true),
+		IsDeleted: cloudflare.F(true),
 		Name:      cloudflare.F("us-east-1-vpc"),
-		VnetID:    cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
-		VnetName:  cloudflare.F("us-east-1-vpc"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
