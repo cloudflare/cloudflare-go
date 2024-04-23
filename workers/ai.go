@@ -317,25 +317,26 @@ func (r AIRunParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AIRunParamsBody struct {
-	Text       param.Field[interface{}] `json:"text,required"`
-	Guidance   param.Field[float64]     `json:"guidance"`
-	Image      param.Field[interface{}] `json:"image,required"`
-	Mask       param.Field[interface{}] `json:"mask,required"`
-	NumSteps   param.Field[int64]       `json:"num_steps"`
-	Prompt     param.Field[string]      `json:"prompt"`
-	Strength   param.Field[float64]     `json:"strength"`
-	Sentences  param.Field[interface{}] `json:"sentences,required"`
-	Source     param.Field[string]      `json:"source"`
-	Audio      param.Field[interface{}] `json:"audio,required"`
-	Lora       param.Field[string]      `json:"lora"`
-	MaxTokens  param.Field[int64]       `json:"max_tokens"`
-	Raw        param.Field[bool]        `json:"raw"`
-	Stream     param.Field[bool]        `json:"stream"`
-	Messages   param.Field[interface{}] `json:"messages,required"`
-	SourceLang param.Field[string]      `json:"source_lang"`
-	TargetLang param.Field[string]      `json:"target_lang"`
-	InputText  param.Field[string]      `json:"input_text"`
-	MaxLength  param.Field[int64]       `json:"max_length"`
+	Text        param.Field[interface{}] `json:"text,required"`
+	Guidance    param.Field[float64]     `json:"guidance"`
+	Image       param.Field[interface{}] `json:"image,required"`
+	Mask        param.Field[interface{}] `json:"mask,required"`
+	NumSteps    param.Field[int64]       `json:"num_steps"`
+	Prompt      param.Field[string]      `json:"prompt"`
+	Strength    param.Field[float64]     `json:"strength"`
+	Sentences   param.Field[interface{}] `json:"sentences,required"`
+	Source      param.Field[string]      `json:"source"`
+	Audio       param.Field[interface{}] `json:"audio,required"`
+	Lora        param.Field[string]      `json:"lora"`
+	MaxTokens   param.Field[int64]       `json:"max_tokens"`
+	Raw         param.Field[bool]        `json:"raw"`
+	Stream      param.Field[bool]        `json:"stream"`
+	Messages    param.Field[interface{}] `json:"messages,required"`
+	SourceLang  param.Field[string]      `json:"source_lang"`
+	TargetLang  param.Field[string]      `json:"target_lang"`
+	InputText   param.Field[string]      `json:"input_text"`
+	MaxLength   param.Field[int64]       `json:"max_length"`
+	Temperature param.Field[float64]     `json:"temperature"`
 }
 
 func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
@@ -493,9 +494,12 @@ func (r AIRunParamsBodySummarization) MarshalJSON() (data []byte, err error) {
 func (r AIRunParamsBodySummarization) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyImageToText struct {
-	Image     param.Field[[]float64] `json:"image"`
-	MaxTokens param.Field[int64]     `json:"max_tokens"`
-	Prompt    param.Field[string]    `json:"prompt"`
+	Image       param.Field[[]float64]                           `json:"image,required"`
+	MaxTokens   param.Field[int64]                               `json:"max_tokens"`
+	Messages    param.Field[[]AIRunParamsBodyImageToTextMessage] `json:"messages"`
+	Prompt      param.Field[string]                              `json:"prompt"`
+	Raw         param.Field[bool]                                `json:"raw"`
+	Temperature param.Field[float64]                             `json:"temperature"`
 }
 
 func (r AIRunParamsBodyImageToText) MarshalJSON() (data []byte, err error) {
@@ -503,6 +507,15 @@ func (r AIRunParamsBodyImageToText) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AIRunParamsBodyImageToText) implementsWorkersAIRunParamsBodyUnion() {}
+
+type AIRunParamsBodyImageToTextMessage struct {
+	Content param.Field[string] `json:"content,required"`
+	Role    param.Field[string] `json:"role,required"`
+}
+
+func (r AIRunParamsBodyImageToTextMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 type AIRunResponseEnvelope struct {
 	Result AIRunResponseUnion        `json:"result" format:"binary"`
