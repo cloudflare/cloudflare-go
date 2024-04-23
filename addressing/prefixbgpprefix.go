@@ -213,9 +213,9 @@ func (r PrefixBGPPrefixEditParamsOnDemand) MarshalJSON() (data []byte, err error
 type PrefixBGPPrefixEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   BGPPrefix             `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPPrefixEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  BGPPrefix                                  `json:"result"`
 	JSON    prefixBGPPrefixEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -224,8 +224,8 @@ type PrefixBGPPrefixEditResponseEnvelope struct {
 type prefixBGPPrefixEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -261,9 +261,9 @@ type PrefixBGPPrefixGetParams struct {
 type PrefixBGPPrefixGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   BGPPrefix             `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPPrefixGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  BGPPrefix                                 `json:"result"`
 	JSON    prefixBGPPrefixGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -272,8 +272,8 @@ type PrefixBGPPrefixGetResponseEnvelope struct {
 type prefixBGPPrefixGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

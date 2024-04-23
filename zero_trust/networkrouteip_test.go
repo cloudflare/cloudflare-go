@@ -33,7 +33,7 @@ func TestNetworkRouteIPGetWithOptionalParams(t *testing.T) {
 		"10.1.0.137",
 		zero_trust.NetworkRouteIPGetParams{
 			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
+			VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		},
 	)
 	if err != nil {

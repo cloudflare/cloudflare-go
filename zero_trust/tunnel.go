@@ -131,7 +131,7 @@ type Connection struct {
 	// tracked. If `false`, the connection is actively serving traffic.
 	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// UUID of the Cloudflare Tunnel connection.
-	UUID string         `json:"uuid"`
+	UUID string         `json:"uuid" format:"uuid"`
 	JSON connectionJSON `json:"-"`
 }
 
@@ -154,16 +154,16 @@ func (r connectionJSON) RawJSON() string {
 
 type TunnelNewResponse struct {
 	// UUID of the tunnel.
-	ID string `json:"id,required"`
+	ID string `json:"id,required" format:"uuid"`
 	// The tunnel connections between your origin and Cloudflare's edge.
 	Connections []Connection `json:"connections,required"`
-	// Timestamp of when the tunnel was created.
+	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name string `json:"name,required"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time             `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time             `json:"deleted_at" format:"date-time"`
 	JSON      tunnelNewResponseJSON `json:"-"`
 }
 
@@ -194,19 +194,19 @@ type TunnelListResponse struct {
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
 	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
 	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at" format:"date-time"`
+	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id"`
+	ID       string      `json:"id" format:"uuid"`
 	Metadata interface{} `json:"metadata,required"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
@@ -283,25 +283,25 @@ func init() {
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelListResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
-	ID string `json:"id"`
+	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
 	Connections []TunnelListResponseTunnelWARPConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
 	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
 	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at" format:"date-time"`
+	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// Metadata associated with the tunnel.
 	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -343,9 +343,9 @@ func (r TunnelListResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelLi
 
 type TunnelListResponseTunnelWARPConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
+	ID string `json:"id" format:"uuid"`
+	// UUID of the Cloudflare Tunnel connector.
+	ClientID string `json:"client_id" format:"uuid"`
 	// The cloudflared version used to establish this connection.
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
@@ -360,7 +360,7 @@ type TunnelListResponseTunnelWARPConnectorTunnelConnection struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	UUID string                                                    `json:"uuid"`
+	UUID string                                                    `json:"uuid" format:"uuid"`
 	JSON tunnelListResponseTunnelWARPConnectorTunnelConnectionJSON `json:"-"`
 }
 
@@ -427,16 +427,16 @@ func (r TunnelListResponseTunType) IsKnown() bool {
 
 type TunnelDeleteResponse struct {
 	// UUID of the tunnel.
-	ID string `json:"id,required"`
+	ID string `json:"id,required" format:"uuid"`
 	// The tunnel connections between your origin and Cloudflare's edge.
 	Connections []Connection `json:"connections,required"`
-	// Timestamp of when the tunnel was created.
+	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name string `json:"name,required"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time                `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time                `json:"deleted_at" format:"date-time"`
 	JSON      tunnelDeleteResponseJSON `json:"-"`
 }
 
@@ -467,19 +467,19 @@ type TunnelEditResponse struct {
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
 	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
 	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at" format:"date-time"`
+	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id"`
+	ID       string      `json:"id" format:"uuid"`
 	Metadata interface{} `json:"metadata,required"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
@@ -556,25 +556,25 @@ func init() {
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelEditResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
-	ID string `json:"id"`
+	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
 	Connections []TunnelEditResponseTunnelWARPConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
 	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
 	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at" format:"date-time"`
+	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// Metadata associated with the tunnel.
 	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -616,9 +616,9 @@ func (r TunnelEditResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelEd
 
 type TunnelEditResponseTunnelWARPConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
+	ID string `json:"id" format:"uuid"`
+	// UUID of the Cloudflare Tunnel connector.
+	ClientID string `json:"client_id" format:"uuid"`
 	// The cloudflared version used to establish this connection.
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
@@ -633,7 +633,7 @@ type TunnelEditResponseTunnelWARPConnectorTunnelConnection struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	UUID string                                                    `json:"uuid"`
+	UUID string                                                    `json:"uuid" format:"uuid"`
 	JSON tunnelEditResponseTunnelWARPConnectorTunnelConnectionJSON `json:"-"`
 }
 
@@ -700,16 +700,16 @@ func (r TunnelEditResponseTunType) IsKnown() bool {
 
 type TunnelGetResponse struct {
 	// UUID of the tunnel.
-	ID string `json:"id,required"`
+	ID string `json:"id,required" format:"uuid"`
 	// The tunnel connections between your origin and Cloudflare's edge.
 	Connections []Connection `json:"connections,required"`
-	// Timestamp of when the tunnel was created.
+	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name string `json:"name,required"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time             `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time             `json:"deleted_at" format:"date-time"`
 	JSON      tunnelGetResponseJSON `json:"-"`
 }
 
@@ -736,11 +736,11 @@ func (r tunnelGetResponseJSON) RawJSON() string {
 type TunnelNewParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name,required"`
-	// Sets the password required to run the tunnel. Must be at least 32 bytes and
-	// encoded as a base64 string.
-	TunnelSecret param.Field[interface{}] `json:"tunnel_secret,required"`
+	// Sets the password required to run a locally-managed tunnel. Must be at least 32
+	// bytes and encoded as a base64 string.
+	TunnelSecret param.Field[string] `json:"tunnel_secret,required"`
 }
 
 func (r TunnelNewParams) MarshalJSON() (data []byte, err error) {
@@ -810,7 +810,7 @@ type TunnelListParams struct {
 	// The types of tunnels to filter separated by a comma.
 	TunTypes param.Field[string] `query:"tun_types"`
 	// UUID of the tunnel.
-	UUID          param.Field[string]    `query:"uuid"`
+	UUID          param.Field[string]    `query:"uuid" format:"uuid"`
 	WasActiveAt   param.Field[time.Time] `query:"was_active_at" format:"date-time"`
 	WasInactiveAt param.Field[time.Time] `query:"was_inactive_at" format:"date-time"`
 }
@@ -879,7 +879,7 @@ func (r TunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type TunnelEditParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A user-friendly name for the tunnel.
+	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name"`
 	// Sets the password required to run a locally-managed tunnel. Must be at least 32
 	// bytes and encoded as a base64 string.

@@ -113,7 +113,7 @@ func (r TunnelConfigurationGetResponseArray) ImplementsZeroTrustTunnelConfigurat
 }
 
 type TunnelConfigurationUpdateParams struct {
-	// Identifier
+	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The tunnel configuration and ingress rules.
 	Config param.Field[TunnelConfigurationUpdateParamsConfig] `json:"config"`
@@ -127,7 +127,8 @@ func (r TunnelConfigurationUpdateParams) MarshalJSON() (data []byte, err error) 
 type TunnelConfigurationUpdateParamsConfig struct {
 	// List of public hostname definitions
 	Ingress param.Field[[]TunnelConfigurationUpdateParamsConfigIngress] `json:"ingress"`
-	// Configuration parameters of connection between cloudflared and origin server.
+	// Configuration parameters for the public hostname specific connection settings
+	// between cloudflared and origin server.
 	OriginRequest param.Field[TunnelConfigurationUpdateParamsConfigOriginRequest] `json:"originRequest"`
 	// Enable private network access from WARP users to private network routes
 	WARPRouting param.Field[TunnelConfigurationUpdateParamsConfigWARPRouting] `json:"warp-routing"`
@@ -145,7 +146,8 @@ type TunnelConfigurationUpdateParamsConfigIngress struct {
 	// https://, unix://, tcp://, ssh://, rdp://, unix+tls://, smb://. Alternatively
 	// can return a HTTP status code http_status:[code] e.g. 'http_status:404'.
 	Service param.Field[string] `json:"service,required"`
-	// Configuration parameters of connection between cloudflared and origin server.
+	// Configuration parameters for the public hostname specific connection settings
+	// between cloudflared and origin server.
 	OriginRequest param.Field[TunnelConfigurationUpdateParamsConfigIngressOriginRequest] `json:"originRequest"`
 	// Requests with this path route to this public hostname.
 	Path param.Field[string] `json:"path"`
@@ -155,7 +157,8 @@ func (r TunnelConfigurationUpdateParamsConfigIngress) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-// Configuration parameters of connection between cloudflared and origin server.
+// Configuration parameters for the public hostname specific connection settings
+// between cloudflared and origin server.
 type TunnelConfigurationUpdateParamsConfigIngressOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
 	// Cf-Access-Jwt-Assertion request header.
@@ -218,7 +221,8 @@ func (r TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-// Configuration parameters of connection between cloudflared and origin server.
+// Configuration parameters for the public hostname specific connection settings
+// between cloudflared and origin server.
 type TunnelConfigurationUpdateParamsConfigOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
 	// Cf-Access-Jwt-Assertion request header.
@@ -334,7 +338,7 @@ func (r TunnelConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TunnelConfigurationGetParams struct {
-	// Identifier
+	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

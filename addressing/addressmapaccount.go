@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AddressMapAccountService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewAddressMapAccountService(opts ...option.RequestOption) (r *AddressMapAcc
 }
 
 // Add an account as a member of a particular address map.
-func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, params AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponseUnion, err error) {
+func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, params AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *[]AddressMapAccountUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapAccountUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", params.AccountID, addressMapID, params.AccountID)
@@ -48,7 +46,7 @@ func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID stri
 }
 
 // Remove an account as a member of a particular address map.
-func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, params AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponseUnion, err error) {
+func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, params AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *[]AddressMapAccountDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapAccountDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", params.AccountID, addressMapID, params.AccountID)
@@ -60,57 +58,9 @@ func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID stri
 	return
 }
 
-// Union satisfied by [addressing.AddressMapAccountUpdateResponseUnknown],
-// [addressing.AddressMapAccountUpdateResponseArray] or [shared.UnionString].
-type AddressMapAccountUpdateResponseUnion interface {
-	ImplementsAddressingAddressMapAccountUpdateResponseUnion()
-}
+type AddressMapAccountUpdateResponse = interface{}
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapAccountUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapAccountUpdateResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapAccountUpdateResponseArray []interface{}
-
-func (r AddressMapAccountUpdateResponseArray) ImplementsAddressingAddressMapAccountUpdateResponseUnion() {
-}
-
-// Union satisfied by [addressing.AddressMapAccountDeleteResponseUnknown],
-// [addressing.AddressMapAccountDeleteResponseArray] or [shared.UnionString].
-type AddressMapAccountDeleteResponseUnion interface {
-	ImplementsAddressingAddressMapAccountDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapAccountDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapAccountDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapAccountDeleteResponseArray []interface{}
-
-func (r AddressMapAccountDeleteResponseArray) ImplementsAddressingAddressMapAccountDeleteResponseUnion() {
-}
+type AddressMapAccountDeleteResponse = interface{}
 
 type AddressMapAccountUpdateParams struct {
 	// Identifier
@@ -123,11 +73,11 @@ func (r AddressMapAccountUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapAccountUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                `json:"errors,required"`
-	Messages []shared.ResponseInfo                `json:"messages,required"`
-	Result   AddressMapAccountUpdateResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapAccountUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []AddressMapAccountUpdateResponse                 `json:"result,nullable"`
 	ResultInfo AddressMapAccountUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       addressMapAccountUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -137,8 +87,8 @@ type AddressMapAccountUpdateResponseEnvelope struct {
 type addressMapAccountUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -209,11 +159,11 @@ func (r AddressMapAccountDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapAccountDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                `json:"errors,required"`
-	Messages []shared.ResponseInfo                `json:"messages,required"`
-	Result   AddressMapAccountDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapAccountDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []AddressMapAccountDeleteResponse                 `json:"result,nullable"`
 	ResultInfo AddressMapAccountDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       addressMapAccountDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -223,8 +173,8 @@ type AddressMapAccountDeleteResponseEnvelope struct {
 type addressMapAccountDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

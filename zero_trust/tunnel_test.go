@@ -32,7 +32,7 @@ func TestTunnelNew(t *testing.T) {
 	_, err := client.ZeroTrust.Tunnels.New(context.TODO(), zero_trust.TunnelNewParams{
 		AccountID:    cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Name:         cloudflare.F("blog"),
-		TunnelSecret: cloudflare.F[any](map[string]interface{}{}),
+		TunnelSecret: cloudflare.F("AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

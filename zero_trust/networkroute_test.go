@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
@@ -30,9 +31,9 @@ func TestNetworkRouteNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Networks.Routes.New(context.TODO(), zero_trust.NetworkRouteNewParams{
 		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		IPNetwork:        cloudflare.F("172.16.0.0/16"),
+		Network:          cloudflare.F("172.16.0.0/16"),
 		Comment:          cloudflare.F("Example comment for this route."),
-		VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
+		VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -60,16 +61,16 @@ func TestNetworkRouteListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Networks.Routes.List(context.TODO(), zero_trust.NetworkRouteListParams{
 		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Comment:          cloudflare.F("Example comment for this route."),
-		ExistedAt:        cloudflare.F[any](map[string]interface{}{}),
-		IsDeleted:        cloudflare.F[any](map[string]interface{}{}),
-		NetworkSubset:    cloudflare.F[any](map[string]interface{}{}),
-		NetworkSuperset:  cloudflare.F[any](map[string]interface{}{}),
+		ExistedAt:        cloudflare.F(time.Now()),
+		IsDeleted:        cloudflare.F(true),
+		NetworkSubset:    cloudflare.F("172.16.0.0/16"),
+		NetworkSuperset:  cloudflare.F("172.16.0.0/16"),
 		Page:             cloudflare.F(1.000000),
 		PerPage:          cloudflare.F(1.000000),
 		RouteID:          cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		TunTypes:         cloudflare.F("cfd_tunnel,warp_connector"),
-		TunnelID:         cloudflare.F[any](map[string]interface{}{}),
-		VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
+		TunnelID:         cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
+		VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -131,9 +132,7 @@ func TestNetworkRouteEditWithOptionalParams(t *testing.T) {
 			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Comment:          cloudflare.F("Example comment for this route."),
 			Network:          cloudflare.F("172.16.0.0/16"),
-			TunType:          cloudflare.F(zero_trust.NetworkRouteEditParamsTunTypeCfdTunnel),
-			TunnelID:         cloudflare.F[any](map[string]interface{}{}),
-			VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
+			VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		},
 	)
 	if err != nil {

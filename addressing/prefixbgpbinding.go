@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // PrefixBGPBindingService contains methods and other services that help with
@@ -85,15 +83,10 @@ func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID s
 }
 
 // Delete a Service Binding
-func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *PrefixBGPBindingDeleteResponseUnion, err error) {
+func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *PrefixBGPBindingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env PrefixBGPBindingDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", body.AccountID, prefixID, bindingID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -214,30 +207,45 @@ func (r ServiceBindingProvisioningParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [addressing.PrefixBGPBindingDeleteResponseUnknown],
-// [addressing.PrefixBGPBindingDeleteResponseArray] or [shared.UnionString].
-type PrefixBGPBindingDeleteResponseUnion interface {
-	ImplementsAddressingPrefixBGPBindingDeleteResponseUnion()
+type PrefixBGPBindingDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success PrefixBGPBindingDeleteResponseSuccess `json:"success,required"`
+	JSON    prefixBGPBindingDeleteResponseJSON    `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PrefixBGPBindingDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PrefixBGPBindingDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// prefixBGPBindingDeleteResponseJSON contains the JSON metadata for the struct
+// [PrefixBGPBindingDeleteResponse]
+type prefixBGPBindingDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-type PrefixBGPBindingDeleteResponseArray []interface{}
+func (r *PrefixBGPBindingDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r PrefixBGPBindingDeleteResponseArray) ImplementsAddressingPrefixBGPBindingDeleteResponseUnion() {
+func (r prefixBGPBindingDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PrefixBGPBindingDeleteResponseSuccess bool
+
+const (
+	PrefixBGPBindingDeleteResponseSuccessTrue PrefixBGPBindingDeleteResponseSuccess = true
+)
+
+func (r PrefixBGPBindingDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPBindingDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type PrefixBGPBindingNewParams struct {
@@ -256,9 +264,9 @@ func (r PrefixBGPBindingNewParams) MarshalJSON() (data []byte, err error) {
 type PrefixBGPBindingNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ServiceBinding        `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceBinding                             `json:"result"`
 	JSON    prefixBGPBindingNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -267,8 +275,8 @@ type PrefixBGPBindingNewResponseEnvelope struct {
 type prefixBGPBindingNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -306,49 +314,6 @@ type PrefixBGPBindingDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type PrefixBGPBindingDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   PrefixBGPBindingDeleteResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success PrefixBGPBindingDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    prefixBGPBindingDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// prefixBGPBindingDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [PrefixBGPBindingDeleteResponseEnvelope]
-type prefixBGPBindingDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPBindingDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPBindingDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PrefixBGPBindingDeleteResponseEnvelopeSuccess bool
-
-const (
-	PrefixBGPBindingDeleteResponseEnvelopeSuccessTrue PrefixBGPBindingDeleteResponseEnvelopeSuccess = true
-)
-
-func (r PrefixBGPBindingDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PrefixBGPBindingDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type PrefixBGPBindingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -357,9 +322,9 @@ type PrefixBGPBindingGetParams struct {
 type PrefixBGPBindingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ServiceBinding        `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceBinding                             `json:"result"`
 	JSON    prefixBGPBindingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -368,8 +333,8 @@ type PrefixBGPBindingGetResponseEnvelope struct {
 type prefixBGPBindingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
