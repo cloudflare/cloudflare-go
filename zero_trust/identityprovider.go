@@ -1225,7 +1225,7 @@ type IdentityProviderAccessSAMLConfig struct {
 	// the Access callback.
 	HeaderAttributes []IdentityProviderAccessSAMLConfigHeaderAttribute `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IDPPublicCERTs []string `json:"idp_public_certs"`
+	IdPPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -1242,7 +1242,7 @@ type identityProviderAccessSAMLConfigJSON struct {
 	Attributes         apijson.Field
 	EmailAttributeName apijson.Field
 	HeaderAttributes   apijson.Field
-	IDPPublicCERTs     apijson.Field
+	IdPPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
@@ -1805,7 +1805,7 @@ type IdentityProviderAccessSAMLConfigParam struct {
 	// the Access callback.
 	HeaderAttributes param.Field[[]IdentityProviderAccessSAMLConfigHeaderAttributeParam] `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IDPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
+	IdPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL param.Field[string] `json:"issuer_url"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -2834,7 +2834,7 @@ type IdentityProviderListResponseAccessSAMLConfig struct {
 	// the Access callback.
 	HeaderAttributes []IdentityProviderListResponseAccessSAMLConfigHeaderAttribute `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IDPPublicCERTs []string `json:"idp_public_certs"`
+	IdPPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -2851,7 +2851,7 @@ type identityProviderListResponseAccessSAMLConfigJSON struct {
 	Attributes         apijson.Field
 	EmailAttributeName apijson.Field
 	HeaderAttributes   apijson.Field
-	IDPPublicCERTs     apijson.Field
+	IdPPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
