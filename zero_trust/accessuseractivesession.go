@@ -159,7 +159,7 @@ type AccessUserActiveSessionGetResponse struct {
 	Email              string                                                     `json:"email"`
 	Geo                UserPolicyCheckGeo                                         `json:"geo"`
 	Iat                float64                                                    `json:"iat"`
-	IDP                AccessUserActiveSessionGetResponseIDP                      `json:"idp"`
+	IdP                AccessUserActiveSessionGetResponseIdP                      `json:"idp"`
 	IP                 string                                                     `json:"ip"`
 	IsGateway          bool                                                       `json:"is_gateway"`
 	IsWARP             bool                                                       `json:"is_warp"`
@@ -184,7 +184,7 @@ type accessUserActiveSessionGetResponseJSON struct {
 	Email              apijson.Field
 	Geo                apijson.Field
 	Iat                apijson.Field
-	IDP                apijson.Field
+	IdP                apijson.Field
 	IP                 apijson.Field
 	IsGateway          apijson.Field
 	IsWARP             apijson.Field
@@ -287,26 +287,26 @@ func (r accessUserActiveSessionGetResponseDevicePostureCheckJSON) RawJSON() stri
 	return r.raw
 }
 
-type AccessUserActiveSessionGetResponseIDP struct {
+type AccessUserActiveSessionGetResponseIdP struct {
 	ID   string                                    `json:"id"`
 	Type string                                    `json:"type"`
-	JSON accessUserActiveSessionGetResponseIDPJSON `json:"-"`
+	JSON accessUserActiveSessionGetResponseIdPJSON `json:"-"`
 }
 
-// accessUserActiveSessionGetResponseIDPJSON contains the JSON metadata for the
-// struct [AccessUserActiveSessionGetResponseIDP]
-type accessUserActiveSessionGetResponseIDPJSON struct {
+// accessUserActiveSessionGetResponseIdPJSON contains the JSON metadata for the
+// struct [AccessUserActiveSessionGetResponseIdP]
+type accessUserActiveSessionGetResponseIdPJSON struct {
 	ID          apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionGetResponseIDP) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionGetResponseIdP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessUserActiveSessionGetResponseIDPJSON) RawJSON() string {
+func (r accessUserActiveSessionGetResponseIdPJSON) RawJSON() string {
 	return r.raw
 }
 
