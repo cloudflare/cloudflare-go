@@ -3580,12 +3580,14 @@ Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#ACLParam">ACLParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#ACLConfigurationParam">ACLConfigurationParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#AllowedProtocol">AllowedProtocol</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#SubnetUnionParam">SubnetUnionParam</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#ACL">ACL</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#ACLConfiguration">ACLConfiguration</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#AllowedProtocol">AllowedProtocol</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#SubnetUnion">SubnetUnion</a>
 
 Methods:
