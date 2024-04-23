@@ -138,7 +138,7 @@ type CA struct {
 	ID string `json:"id"`
 	// The Application Audience (AUD) tag. Identifies the application associated with
 	// the CA.
-	Aud string `json:"aud"`
+	AUD string `json:"aud"`
 	// The public key to add to your SSH server configuration.
 	PublicKey string `json:"public_key"`
 	JSON      caJSON `json:"-"`
@@ -147,7 +147,7 @@ type CA struct {
 // caJSON contains the JSON metadata for the struct [CA]
 type caJSON struct {
 	ID          apijson.Field
-	Aud         apijson.Field
+	AUD         apijson.Field
 	PublicKey   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

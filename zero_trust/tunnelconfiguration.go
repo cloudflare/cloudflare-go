@@ -208,7 +208,7 @@ type TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
-	AudTag   param.Field[[]string] `json:"audTag,required"`
+	AUDTag   param.Field[[]string] `json:"audTag,required"`
 	TeamName param.Field[string]   `json:"teamName,required"`
 	// Deny traffic that has not fulfilled Access authorization.
 	Required param.Field[bool] `json:"required"`
@@ -271,7 +271,7 @@ type TunnelConfigurationUpdateParamsConfigOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
-	AudTag   param.Field[[]string] `json:"audTag,required"`
+	AUDTag   param.Field[[]string] `json:"audTag,required"`
 	TeamName param.Field[string]   `json:"teamName,required"`
 	// Deny traffic that has not fulfilled Access authorization.
 	Required param.Field[bool] `json:"required"`

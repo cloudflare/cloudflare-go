@@ -4745,12 +4745,12 @@ Params Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AllowedOriginshParam">AllowedOriginshParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AppIDUnionParam">AppIDUnionParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#ApplicationUnionParam">ApplicationUnionParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#CorsHeadersParam">CorsHeadersParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#CORSHeadersParam">CORSHeadersParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#CustomPageshParam">CustomPageshParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaasAppNameFormat">SaasAppNameFormat</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaasAppNameIDFormat">SaasAppNameIDFormat</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaasAppSourceParam">SaasAppSourceParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SAMLSaasAppParam">SAMLSaasAppParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaaSAppNameFormat">SaaSAppNameFormat</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaaSAppNameIDFormat">SaaSAppNameIDFormat</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaaSAppSourceParam">SaaSAppSourceParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SAMLSaaSAppParam">SAMLSaaSAppParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SelfHostedDomainshParam">SelfHostedDomainshParam</a>
 
 Response Types:
@@ -4760,12 +4760,12 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AllowedMethodsh">AllowedMethodsh</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AllowedOriginsh">AllowedOriginsh</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#Application">Application</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#CorsHeaders">CorsHeaders</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#CORSHeaders">CORSHeaders</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#CustomPagesh">CustomPagesh</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaasAppNameFormat">SaasAppNameFormat</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaasAppNameIDFormat">SaasAppNameIDFormat</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaasAppSource">SaasAppSource</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SAMLSaasApp">SAMLSaasApp</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaaSAppNameFormat">SaaSAppNameFormat</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaaSAppNameIDFormat">SaaSAppNameIDFormat</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SaaSAppSource">SaaSAppSource</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SAMLSaaSApp">SAMLSaaSApp</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#SelfHostedDomainsh">SelfHostedDomainsh</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AccessApplicationDeleteResponse">AccessApplicationDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#AccessApplicationRevokeTokensResponse">AccessApplicationRevokeTokensResponse</a>
