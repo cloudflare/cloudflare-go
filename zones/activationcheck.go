@@ -74,11 +74,11 @@ type ActivationCheckTriggerParams struct {
 }
 
 type ActivationCheckTriggerResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ActivationCheckTriggerResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ActivationCheckTriggerResponseEnvelopeSuccess `json:"success,required"`
+	Result  ActivationCheckTriggerResponse                `json:"result"`
 	JSON    activationCheckTriggerResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -87,8 +87,8 @@ type ActivationCheckTriggerResponseEnvelope struct {
 type activationCheckTriggerResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
