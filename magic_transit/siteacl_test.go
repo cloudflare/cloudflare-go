@@ -49,7 +49,7 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 			Name:           cloudflare.F("PIN Pad - Cash Register"),
 			Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
 			ForwardLocally: cloudflare.F(true),
-			Protocols:      cloudflare.F([]magic_transit.SiteACLNewParamsProtocol{magic_transit.SiteACLNewParamsProtocolTCP, magic_transit.SiteACLNewParamsProtocolUdp, magic_transit.SiteACLNewParamsProtocolIcmp}),
+			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
 		},
 	)
 	if err != nil {
@@ -96,7 +96,7 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
 			}),
 			Name:      cloudflare.F("PIN Pad - Cash Register"),
-			Protocols: cloudflare.F([]magic_transit.SiteACLUpdateParamsProtocol{magic_transit.SiteACLUpdateParamsProtocolTCP, magic_transit.SiteACLUpdateParamsProtocolUdp, magic_transit.SiteACLUpdateParamsProtocolIcmp}),
+			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
 		},
 	)
 	if err != nil {
