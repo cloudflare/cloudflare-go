@@ -35,7 +35,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			AllowedIdps:              cloudflare.F([]zero_trust.AllowedIdpshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F(true),
 			AutoRedirectToIdentity:   cloudflare.F(true),
-			CorsHeaders: cloudflare.F(zero_trust.CorsHeadersParam{
+			CORSHeaders: cloudflare.F(zero_trust.CORSHeadersParam{
 				AllowAllHeaders:  cloudflare.F(true),
 				AllowAllMethods:  cloudflare.F(true),
 				AllowAllOrigins:  cloudflare.F(true),
@@ -99,7 +99,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				AllowedIdps:              cloudflare.F([]zero_trust.AllowedIdpshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 				AppLauncherVisible:       cloudflare.F(true),
 				AutoRedirectToIdentity:   cloudflare.F(true),
-				CorsHeaders: cloudflare.F(zero_trust.CorsHeadersParam{
+				CORSHeaders: cloudflare.F(zero_trust.CORSHeadersParam{
 					AllowAllHeaders:  cloudflare.F(true),
 					AllowAllMethods:  cloudflare.F(true),
 					AllowAllOrigins:  cloudflare.F(true),
