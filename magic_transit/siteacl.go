@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -34,7 +35,7 @@ func NewSiteACLService(opts ...option.RequestOption) (r *SiteACLService) {
 }
 
 // Creates a new Site ACL.
-func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLNewParams, opts ...option.RequestOption) (res *SiteACLNewResponse, err error) {
+func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", params.AccountID, siteID)
@@ -47,7 +48,7 @@ func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLN
 }
 
 // Update a specific Site ACL.
-func (r *SiteACLService) Update(ctx context.Context, siteID string, aclIdentifier string, params SiteACLUpdateParams, opts ...option.RequestOption) (res *SiteACLUpdateResponse, err error) {
+func (r *SiteACLService) Update(ctx context.Context, siteID string, aclIdentifier string, params SiteACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
@@ -60,20 +61,30 @@ func (r *SiteACLService) Update(ctx context.Context, siteID string, aclIdentifie
 }
 
 // Lists Site ACLs associated with an account.
-func (r *SiteACLService) List(ctx context.Context, siteID string, query SiteACLListParams, opts ...option.RequestOption) (res *SiteACLListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SiteACLListResponseEnvelope
+func (r *SiteACLService) List(ctx context.Context, siteID string, query SiteACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ACL], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", query.AccountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists Site ACLs associated with an account.
+func (r *SiteACLService) ListAutoPaging(ctx context.Context, siteID string, query SiteACLListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ACL] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, siteID, query, opts...))
 }
 
 // Remove a specific Site ACL.
-func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, params SiteACLDeleteParams, opts ...option.RequestOption) (res *SiteACLDeleteResponse, err error) {
+func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, params SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
@@ -86,7 +97,7 @@ func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifie
 }
 
 // Get a specific Site ACL.
-func (r *SiteACLService) Get(ctx context.Context, siteID string, aclIdentifier string, query SiteACLGetParams, opts ...option.RequestOption) (res *SiteACLGetResponse, err error) {
+func (r *SiteACLService) Get(ctx context.Context, siteID string, aclIdentifier string, query SiteACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", query.AccountID, siteID, aclIdentifier)
@@ -112,9 +123,9 @@ type ACL struct {
 	LAN1           ACLConfiguration `json:"lan_1"`
 	LAN2           ACLConfiguration `json:"lan_2"`
 	// The name of the ACL.
-	Name      string            `json:"name"`
-	Protocols []AllowedProtocol `json:"protocols"`
-	JSON      aclJSON           `json:"-"`
+	Name      string        `json:"name"`
+	Protocols []ACLProtocol `json:"protocols"`
+	JSON      aclJSON       `json:"-"`
 }
 
 // aclJSON contains the JSON metadata for the struct [ACL]
@@ -138,6 +149,24 @@ func (r aclJSON) RawJSON() string {
 	return r.raw
 }
 
+// Array of allowed communication protocols between configured LANs. If no
+// protocols are provided, all protocols are allowed.
+type ACLProtocol string
+
+const (
+	ACLProtocolTCP  ACLProtocol = "tcp"
+	ACLProtocolUdp  ACLProtocol = "udp"
+	ACLProtocolIcmp ACLProtocol = "icmp"
+)
+
+func (r ACLProtocol) IsKnown() bool {
+	switch r {
+	case ACLProtocolTCP, ACLProtocolUdp, ACLProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 // Bidirectional ACL policy for network traffic within a site.
 type ACLParam struct {
 	// Description for the ACL.
@@ -150,8 +179,8 @@ type ACLParam struct {
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]            `json:"name"`
-	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
+	Name      param.Field[string]        `json:"name"`
+	Protocols param.Field[[]ACLProtocol] `json:"protocols"`
 }
 
 func (r ACLParam) MarshalJSON() (data []byte, err error) {
@@ -208,24 +237,6 @@ func (r ACLConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type AllowedProtocol string
-
-const (
-	AllowedProtocolTCP  AllowedProtocol = "tcp"
-	AllowedProtocolUdp  AllowedProtocol = "udp"
-	AllowedProtocolIcmp AllowedProtocol = "icmp"
-)
-
-func (r AllowedProtocol) IsKnown() bool {
-	switch r {
-	case AllowedProtocolTCP, AllowedProtocolUdp, AllowedProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
@@ -255,129 +266,11 @@ type SubnetUnionParam interface {
 	ImplementsMagicTransitSubnetUnionParam()
 }
 
-type SiteACLNewResponse struct {
-	ACLs []ACL                  `json:"acls"`
-	JSON siteACLNewResponseJSON `json:"-"`
-}
-
-// siteACLNewResponseJSON contains the JSON metadata for the struct
-// [SiteACLNewResponse]
-type siteACLNewResponseJSON struct {
-	ACLs        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLUpdateResponse struct {
-	// Bidirectional ACL policy for network traffic within a site.
-	ACL  ACL                       `json:"acl"`
-	JSON siteACLUpdateResponseJSON `json:"-"`
-}
-
-// siteACLUpdateResponseJSON contains the JSON metadata for the struct
-// [SiteACLUpdateResponse]
-type siteACLUpdateResponseJSON struct {
-	ACL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLListResponse struct {
-	ACLs []ACL                   `json:"acls"`
-	JSON siteACLListResponseJSON `json:"-"`
-}
-
-// siteACLListResponseJSON contains the JSON metadata for the struct
-// [SiteACLListResponse]
-type siteACLListResponseJSON struct {
-	ACLs        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLDeleteResponse struct {
-	Deleted bool `json:"deleted"`
-	// Bidirectional ACL policy for network traffic within a site.
-	DeletedACL ACL                       `json:"deleted_acl"`
-	JSON       siteACLDeleteResponseJSON `json:"-"`
-}
-
-// siteACLDeleteResponseJSON contains the JSON metadata for the struct
-// [SiteACLDeleteResponse]
-type siteACLDeleteResponseJSON struct {
-	Deleted     apijson.Field
-	DeletedACL  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLGetResponse struct {
-	// Bidirectional ACL policy for network traffic within a site.
-	ACL  ACL                    `json:"acl"`
-	JSON siteACLGetResponseJSON `json:"-"`
-}
-
-// siteACLGetResponseJSON contains the JSON metadata for the struct
-// [SiteACLGetResponse]
-type siteACLGetResponseJSON struct {
-	ACL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteACLNewParams struct {
 	// Identifier
-	AccountID param.Field[string]              `path:"account_id,required"`
-	ACL       param.Field[SiteACLNewParamsACL] `json:"acl"`
-}
-
-func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SiteACLNewParamsACL struct {
-	LAN1 param.Field[ACLConfigurationParam] `json:"lan_1,required"`
-	LAN2 param.Field[ACLConfigurationParam] `json:"lan_2,required"`
+	AccountID param.Field[string]                `path:"account_id,required"`
+	LAN1      param.Field[ACLConfigurationParam] `json:"lan_1,required"`
+	LAN2      param.Field[ACLConfigurationParam] `json:"lan_2,required"`
 	// The name of the ACL.
 	Name param.Field[string] `json:"name,required"`
 	// Description for the ACL.
@@ -386,18 +279,37 @@ type SiteACLNewParamsACL struct {
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
 	// traffic locally on the Magic WAN Connector. If not included in request, will
 	// default to false.
-	ForwardLocally param.Field[bool]              `json:"forward_locally"`
-	Protocols      param.Field[[]AllowedProtocol] `json:"protocols"`
+	ForwardLocally param.Field[bool]                       `json:"forward_locally"`
+	Protocols      param.Field[[]SiteACLNewParamsProtocol] `json:"protocols"`
 }
 
-func (r SiteACLNewParamsACL) MarshalJSON() (data []byte, err error) {
+func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Array of allowed communication protocols between configured LANs. If no
+// protocols are provided, all protocols are allowed.
+type SiteACLNewParamsProtocol string
+
+const (
+	SiteACLNewParamsProtocolTCP  SiteACLNewParamsProtocol = "tcp"
+	SiteACLNewParamsProtocolUdp  SiteACLNewParamsProtocol = "udp"
+	SiteACLNewParamsProtocolIcmp SiteACLNewParamsProtocol = "icmp"
+)
+
+func (r SiteACLNewParamsProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLNewParamsProtocolTCP, SiteACLNewParamsProtocolUdp, SiteACLNewParamsProtocolIcmp:
+		return true
+	}
+	return false
 }
 
 type SiteACLNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLNewResponse    `json:"result,required"`
+	// Bidirectional ACL policy for network traffic within a site.
+	Result ACL `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLNewResponseEnvelopeJSON    `json:"-"`
@@ -439,15 +351,7 @@ func (r SiteACLNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]                 `path:"account_id,required"`
-	ACL       param.Field[SiteACLUpdateParamsACL] `json:"acl"`
-}
-
-func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SiteACLUpdateParamsACL struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Description for the ACL.
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
@@ -458,18 +362,37 @@ type SiteACLUpdateParamsACL struct {
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]            `json:"name"`
-	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
+	Name      param.Field[string]                        `json:"name"`
+	Protocols param.Field[[]SiteACLUpdateParamsProtocol] `json:"protocols"`
 }
 
-func (r SiteACLUpdateParamsACL) MarshalJSON() (data []byte, err error) {
+func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Array of allowed communication protocols between configured LANs. If no
+// protocols are provided, all protocols are allowed.
+type SiteACLUpdateParamsProtocol string
+
+const (
+	SiteACLUpdateParamsProtocolTCP  SiteACLUpdateParamsProtocol = "tcp"
+	SiteACLUpdateParamsProtocolUdp  SiteACLUpdateParamsProtocol = "udp"
+	SiteACLUpdateParamsProtocolIcmp SiteACLUpdateParamsProtocol = "icmp"
+)
+
+func (r SiteACLUpdateParamsProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLUpdateParamsProtocolTCP, SiteACLUpdateParamsProtocolUdp, SiteACLUpdateParamsProtocolIcmp:
+		return true
+	}
+	return false
 }
 
 type SiteACLUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLUpdateResponse `json:"result,required"`
+	// Bidirectional ACL policy for network traffic within a site.
+	Result ACL `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLUpdateResponseEnvelopeJSON    `json:"-"`
@@ -514,49 +437,6 @@ type SiteACLListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SiteACLListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLListResponse   `json:"result,required"`
-	// Whether the API call was successful
-	Success SiteACLListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteACLListResponseEnvelopeJSON    `json:"-"`
-}
-
-// siteACLListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteACLListResponseEnvelope]
-type siteACLListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SiteACLListResponseEnvelopeSuccess bool
-
-const (
-	SiteACLListResponseEnvelopeSuccessTrue SiteACLListResponseEnvelopeSuccess = true
-)
-
-func (r SiteACLListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SiteACLListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type SiteACLDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -570,7 +450,8 @@ func (r SiteACLDeleteParams) MarshalJSON() (data []byte, err error) {
 type SiteACLDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLDeleteResponse `json:"result,required"`
+	// Bidirectional ACL policy for network traffic within a site.
+	Result ACL `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLDeleteResponseEnvelopeJSON    `json:"-"`
@@ -618,7 +499,8 @@ type SiteACLGetParams struct {
 type SiteACLGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLGetResponse    `json:"result,required"`
+	// Bidirectional ACL policy for network traffic within a site.
+	Result ACL `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLGetResponseEnvelopeJSON    `json:"-"`

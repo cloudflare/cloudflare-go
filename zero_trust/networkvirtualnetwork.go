@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -101,18 +102,18 @@ func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkI
 
 type VirtualNetwork struct {
 	// UUID of the virtual network.
-	ID string `json:"id,required"`
+	ID string `json:"id,required" format:"uuid"`
 	// Optional remark describing the virtual network.
 	Comment string `json:"comment,required"`
-	// Timestamp of when the virtual network was created.
-	CreatedAt interface{} `json:"created_at,required"`
+	// Timestamp of when the resource was created.
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// If `true`, this virtual network is the default for the account.
 	IsDefaultNetwork bool `json:"is_default_network,required"`
 	// A user-friendly name for the virtual network.
 	Name string `json:"name,required"`
-	// Timestamp of when the virtual network was deleted. If `null`, the virtual
-	// network has not been deleted.
-	DeletedAt interface{}        `json:"deleted_at"`
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
+	// deleted.
+	DeletedAt time.Time          `json:"deleted_at" format:"date-time"`
 	JSON      virtualNetworkJSON `json:"-"`
 }
 
@@ -275,18 +276,16 @@ func (r NetworkVirtualNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
 type NetworkVirtualNetworkListParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// UUID of the virtual network.
+	ID param.Field[string] `query:"id" format:"uuid"`
 	// If `true`, only include the default virtual network. If `false`, exclude the
 	// default virtual network. If empty, all virtual networks will be included.
-	IsDefault param.Field[interface{}] `query:"is_default"`
+	IsDefault param.Field[bool] `query:"is_default"`
 	// If `true`, only include deleted virtual networks. If `false`, exclude deleted
 	// virtual networks. If empty, all virtual networks will be included.
-	IsDeleted param.Field[interface{}] `query:"is_deleted"`
+	IsDeleted param.Field[bool] `query:"is_deleted"`
 	// A user-friendly name for the virtual network.
 	Name param.Field[string] `query:"name"`
-	// UUID of the virtual network.
-	VnetID param.Field[string] `query:"vnet_id"`
-	// A user-friendly name for the virtual network.
-	VnetName param.Field[string] `query:"vnet_name"`
 }
 
 // URLQuery serializes [NetworkVirtualNetworkListParams]'s query parameters as

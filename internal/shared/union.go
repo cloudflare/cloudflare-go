@@ -95,15 +95,6 @@ func (UnionString) ImplementsSpectrumOriginPortUnion()                          
 func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()                      {}
 func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()                     {}
 func (UnionString) ImplementsSpectrumAppGetResponseUnion()                                       {}
-func (UnionString) ImplementsAddressingAddressMapDeleteResponseUnion()                           {}
-func (UnionString) ImplementsAddressingAddressMapAccountUpdateResponseUnion()                    {}
-func (UnionString) ImplementsAddressingAddressMapAccountDeleteResponseUnion()                    {}
-func (UnionString) ImplementsAddressingAddressMapIPUpdateResponseUnion()                         {}
-func (UnionString) ImplementsAddressingAddressMapIPDeleteResponseUnion()                         {}
-func (UnionString) ImplementsAddressingAddressMapZoneUpdateResponseUnion()                       {}
-func (UnionString) ImplementsAddressingAddressMapZoneDeleteResponseUnion()                       {}
-func (UnionString) ImplementsAddressingPrefixDeleteResponseUnion()                               {}
-func (UnionString) ImplementsAddressingPrefixBGPBindingDeleteResponseUnion()                     {}
 func (UnionString) ImplementsAuditLogsAuditLogListResponse()                                     {}
 func (UnionString) ImplementsBillingProfileGetResponseUnion()                                    {}
 func (UnionString) ImplementsImagesImageVariantsUnion()                                          {}

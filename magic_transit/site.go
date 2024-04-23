@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -40,7 +41,7 @@ func NewSiteService(opts ...option.RequestOption) (r *SiteService) {
 }
 
 // Creates a new Site
-func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...option.RequestOption) (res *SiteNewResponse, err error) {
+func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites", params.AccountID)
@@ -53,7 +54,7 @@ func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...opt
 }
 
 // Update a specific Site.
-func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpdateParams, opts ...option.RequestOption) (res *SiteUpdateResponse, err error) {
+func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpdateParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
@@ -68,20 +69,32 @@ func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpda
 // Lists Sites associated with an account. Use connector_identifier query param to
 // return sites where connector_identifier matches either site.ConnectorID or
 // site.SecondaryConnectorID.
-func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...option.RequestOption) (res *SiteListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SiteListResponseEnvelope
+func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Site], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/magic/sites", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists Sites associated with an account. Use connector_identifier query param to
+// return sites where connector_identifier matches either site.ConnectorID or
+// site.SecondaryConnectorID.
+func (r *SiteService) ListAutoPaging(ctx context.Context, params SiteListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Site] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Remove a specific Site.
-func (r *SiteService) Delete(ctx context.Context, siteID string, params SiteDeleteParams, opts ...option.RequestOption) (res *SiteDeleteResponse, err error) {
+func (r *SiteService) Delete(ctx context.Context, siteID string, params SiteDeleteParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
@@ -94,7 +107,7 @@ func (r *SiteService) Delete(ctx context.Context, siteID string, params SiteDele
 }
 
 // Get a specific Site.
-func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParams, opts ...option.RequestOption) (res *SiteGetResponse, err error) {
+func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", query.AccountID, siteID)
@@ -182,122 +195,9 @@ func (r SiteLocationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteNewResponse struct {
-	Site Site                `json:"site"`
-	JSON siteNewResponseJSON `json:"-"`
-}
-
-// siteNewResponseJSON contains the JSON metadata for the struct [SiteNewResponse]
-type siteNewResponseJSON struct {
-	Site        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteUpdateResponse struct {
-	Site Site                   `json:"site"`
-	JSON siteUpdateResponseJSON `json:"-"`
-}
-
-// siteUpdateResponseJSON contains the JSON metadata for the struct
-// [SiteUpdateResponse]
-type siteUpdateResponseJSON struct {
-	Site        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteListResponse struct {
-	Sites []Site               `json:"sites"`
-	JSON  siteListResponseJSON `json:"-"`
-}
-
-// siteListResponseJSON contains the JSON metadata for the struct
-// [SiteListResponse]
-type siteListResponseJSON struct {
-	Sites       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteDeleteResponse struct {
-	Deleted     bool                   `json:"deleted"`
-	DeletedSite Site                   `json:"deleted_site"`
-	JSON        siteDeleteResponseJSON `json:"-"`
-}
-
-// siteDeleteResponseJSON contains the JSON metadata for the struct
-// [SiteDeleteResponse]
-type siteDeleteResponseJSON struct {
-	Deleted     apijson.Field
-	DeletedSite apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteGetResponse struct {
-	Site Site                `json:"site"`
-	JSON siteGetResponseJSON `json:"-"`
-}
-
-// siteGetResponseJSON contains the JSON metadata for the struct [SiteGetResponse]
-type siteGetResponseJSON struct {
-	Site        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteNewParams struct {
 	// Identifier
-	AccountID param.Field[string]            `path:"account_id,required"`
-	Site      param.Field[SiteNewParamsSite] `json:"site"`
-}
-
-func (r SiteNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SiteNewParamsSite struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the site.
 	Name param.Field[string] `json:"name,required"`
 	// Magic WAN Connector identifier tag.
@@ -312,14 +212,14 @@ type SiteNewParamsSite struct {
 	SecondaryConnectorID param.Field[string] `json:"secondary_connector_id"`
 }
 
-func (r SiteNewParamsSite) MarshalJSON() (data []byte, err error) {
+func (r SiteNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type SiteNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteNewResponse       `json:"result,required"`
+	Result   Site                  `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteNewResponseEnvelopeJSON    `json:"-"`
@@ -361,15 +261,7 @@ func (r SiteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]               `path:"account_id,required"`
-	Site      param.Field[SiteUpdateParamsSite] `json:"site"`
-}
-
-func (r SiteUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SiteUpdateParamsSite struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Magic WAN Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
@@ -381,14 +273,14 @@ type SiteUpdateParamsSite struct {
 	SecondaryConnectorID param.Field[string] `json:"secondary_connector_id"`
 }
 
-func (r SiteUpdateParamsSite) MarshalJSON() (data []byte, err error) {
+func (r SiteUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type SiteUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteUpdateResponse    `json:"result,required"`
+	Result   Site                  `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteUpdateResponseEnvelopeJSON    `json:"-"`
@@ -443,49 +335,6 @@ func (r SiteListParams) URLQuery() (v url.Values) {
 	})
 }
 
-type SiteListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteListResponse      `json:"result,required"`
-	// Whether the API call was successful
-	Success SiteListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteListResponseEnvelopeJSON    `json:"-"`
-}
-
-// siteListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteListResponseEnvelope]
-type siteListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SiteListResponseEnvelopeSuccess bool
-
-const (
-	SiteListResponseEnvelopeSuccessTrue SiteListResponseEnvelopeSuccess = true
-)
-
-func (r SiteListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SiteListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type SiteDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -499,7 +348,7 @@ func (r SiteDeleteParams) MarshalJSON() (data []byte, err error) {
 type SiteDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteDeleteResponse    `json:"result,required"`
+	Result   Site                  `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -547,7 +396,7 @@ type SiteGetParams struct {
 type SiteGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteGetResponse       `json:"result,required"`
+	Result   Site                  `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteGetResponseEnvelopeJSON    `json:"-"`

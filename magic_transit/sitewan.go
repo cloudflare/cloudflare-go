@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -32,7 +33,7 @@ func NewSiteWANService(opts ...option.RequestOption) (r *SiteWANService) {
 }
 
 // Creates a new WAN.
-func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANNewParams, opts ...option.RequestOption) (res *SiteWANNewResponse, err error) {
+func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANNewParams, opts ...option.RequestOption) (res *[]WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", params.AccountID, siteID)
@@ -45,7 +46,7 @@ func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANN
 }
 
 // Update a specific WAN.
-func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string, params SiteWANUpdateParams, opts ...option.RequestOption) (res *SiteWANUpdateResponse, err error) {
+func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string, params SiteWANUpdateParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
@@ -58,20 +59,30 @@ func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string
 }
 
 // Lists WANs associated with an account and site.
-func (r *SiteWANService) List(ctx context.Context, siteID string, query SiteWANListParams, opts ...option.RequestOption) (res *SiteWANListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SiteWANListResponseEnvelope
+func (r *SiteWANService) List(ctx context.Context, siteID string, query SiteWANListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WAN], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", query.AccountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists WANs associated with an account and site.
+func (r *SiteWANService) ListAutoPaging(ctx context.Context, siteID string, query SiteWANListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WAN] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, siteID, query, opts...))
 }
 
 // Remove a specific WAN.
-func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string, params SiteWANDeleteParams, opts ...option.RequestOption) (res *SiteWANDeleteResponse, err error) {
+func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string, params SiteWANDeleteParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
@@ -84,7 +95,7 @@ func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string
 }
 
 // Get a specific WAN.
-func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, query SiteWANGetParams, opts ...option.RequestOption) (res *SiteWANGetResponse, err error) {
+func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, query SiteWANGetParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", query.AccountID, siteID, wanID)
@@ -98,9 +109,9 @@ func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, q
 
 type WAN struct {
 	// Identifier
-	ID          string `json:"id"`
-	Description string `json:"description"`
-	Physport    int64  `json:"physport"`
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Physport int64  `json:"physport"`
 	// Priority of WAN for traffic loadbalancing.
 	Priority int64 `json:"priority"`
 	// Identifier
@@ -116,7 +127,7 @@ type WAN struct {
 // wanJSON contains the JSON metadata for the struct [WAN]
 type wanJSON struct {
 	ID               apijson.Field
-	Description      apijson.Field
+	Name             apijson.Field
 	Physport         apijson.Field
 	Priority         apijson.Field
 	SiteID           apijson.Field
@@ -179,142 +190,27 @@ func (r WANStaticAddressingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteWANNewResponse struct {
-	WANs []WAN                  `json:"wans"`
-	JSON siteWANNewResponseJSON `json:"-"`
-}
-
-// siteWANNewResponseJSON contains the JSON metadata for the struct
-// [SiteWANNewResponse]
-type siteWANNewResponseJSON struct {
-	WANs        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteWANNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteWANNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteWANUpdateResponse struct {
-	WAN  WAN                       `json:"wan"`
-	JSON siteWANUpdateResponseJSON `json:"-"`
-}
-
-// siteWANUpdateResponseJSON contains the JSON metadata for the struct
-// [SiteWANUpdateResponse]
-type siteWANUpdateResponseJSON struct {
-	WAN         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteWANUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteWANUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteWANListResponse struct {
-	WANs []WAN                   `json:"wans"`
-	JSON siteWANListResponseJSON `json:"-"`
-}
-
-// siteWANListResponseJSON contains the JSON metadata for the struct
-// [SiteWANListResponse]
-type siteWANListResponseJSON struct {
-	WANs        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteWANListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteWANListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteWANDeleteResponse struct {
-	Deleted    bool                      `json:"deleted"`
-	DeletedWAN WAN                       `json:"deleted_wan"`
-	JSON       siteWANDeleteResponseJSON `json:"-"`
-}
-
-// siteWANDeleteResponseJSON contains the JSON metadata for the struct
-// [SiteWANDeleteResponse]
-type siteWANDeleteResponseJSON struct {
-	Deleted     apijson.Field
-	DeletedWAN  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteWANDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteWANDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteWANGetResponse struct {
-	WAN  WAN                    `json:"wan"`
-	JSON siteWANGetResponseJSON `json:"-"`
-}
-
-// siteWANGetResponseJSON contains the JSON metadata for the struct
-// [SiteWANGetResponse]
-type siteWANGetResponseJSON struct {
-	WAN         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteWANGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteWANGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteWANNewParams struct {
 	// Identifier
-	AccountID param.Field[string]              `path:"account_id,required"`
-	WAN       param.Field[SiteWANNewParamsWAN] `json:"wan"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Physport  param.Field[int64]  `json:"physport,required"`
+	// VLAN port number.
+	VlanTag  param.Field[int64]  `json:"vlan_tag,required"`
+	Name     param.Field[string] `json:"name"`
+	Priority param.Field[int64]  `json:"priority"`
+	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
+	// availability mode.
+	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
 }
 
 func (r SiteWANNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteWANNewParamsWAN struct {
-	Physport param.Field[int64] `json:"physport,required"`
-	// VLAN port number.
-	VlanTag     param.Field[int64]  `json:"vlan_tag,required"`
-	Description param.Field[string] `json:"description"`
-	Priority    param.Field[int64]  `json:"priority"`
-	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
-	// availability mode.
-	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
-}
-
-func (r SiteWANNewParamsWAN) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type SiteWANNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteWANNewResponse    `json:"result,required"`
+	Result   []WAN                 `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANNewResponseEnvelopeJSON    `json:"-"`
@@ -356,18 +252,10 @@ func (r SiteWANNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteWANUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]                 `path:"account_id,required"`
-	WAN       param.Field[SiteWANUpdateParamsWAN] `json:"wan"`
-}
-
-func (r SiteWANUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SiteWANUpdateParamsWAN struct {
-	Description param.Field[string] `json:"description"`
-	Physport    param.Field[int64]  `json:"physport"`
-	Priority    param.Field[int64]  `json:"priority"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Name      param.Field[string] `json:"name"`
+	Physport  param.Field[int64]  `json:"physport"`
+	Priority  param.Field[int64]  `json:"priority"`
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
 	// availability mode.
 	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
@@ -375,14 +263,14 @@ type SiteWANUpdateParamsWAN struct {
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
 
-func (r SiteWANUpdateParamsWAN) MarshalJSON() (data []byte, err error) {
+func (r SiteWANUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type SiteWANUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteWANUpdateResponse `json:"result,required"`
+	Result   WAN                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANUpdateResponseEnvelopeJSON    `json:"-"`
@@ -427,49 +315,6 @@ type SiteWANListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SiteWANListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteWANListResponse   `json:"result,required"`
-	// Whether the API call was successful
-	Success SiteWANListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteWANListResponseEnvelopeJSON    `json:"-"`
-}
-
-// siteWANListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteWANListResponseEnvelope]
-type siteWANListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteWANListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteWANListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SiteWANListResponseEnvelopeSuccess bool
-
-const (
-	SiteWANListResponseEnvelopeSuccessTrue SiteWANListResponseEnvelopeSuccess = true
-)
-
-func (r SiteWANListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SiteWANListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type SiteWANDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -483,7 +328,7 @@ func (r SiteWANDeleteParams) MarshalJSON() (data []byte, err error) {
 type SiteWANDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteWANDeleteResponse `json:"result,required"`
+	Result   WAN                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANDeleteResponseEnvelopeJSON    `json:"-"`
@@ -531,7 +376,7 @@ type SiteWANGetParams struct {
 type SiteWANGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteWANGetResponse    `json:"result,required"`
+	Result   WAN                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANGetResponseEnvelopeJSON    `json:"-"`

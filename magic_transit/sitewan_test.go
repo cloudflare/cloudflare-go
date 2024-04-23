@@ -33,16 +33,14 @@ func TestSiteWANNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteWANNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			WAN: cloudflare.F(magic_transit.SiteWANNewParamsWAN{
-				Description: cloudflare.F("string"),
-				Physport:    cloudflare.F(int64(1)),
-				Priority:    cloudflare.F(int64(0)),
-				StaticAddressing: cloudflare.F(magic_transit.WANStaticAddressingParam{
-					Address:          cloudflare.F("192.0.2.0/24"),
-					GatewayAddress:   cloudflare.F("192.0.2.1"),
-					SecondaryAddress: cloudflare.F("192.0.2.0/24"),
-				}),
-				VlanTag: cloudflare.F(int64(0)),
+			Physport:  cloudflare.F(int64(1)),
+			VlanTag:   cloudflare.F(int64(0)),
+			Name:      cloudflare.F("string"),
+			Priority:  cloudflare.F(int64(0)),
+			StaticAddressing: cloudflare.F(magic_transit.WANStaticAddressingParam{
+				Address:          cloudflare.F("192.0.2.0/24"),
+				GatewayAddress:   cloudflare.F("192.0.2.1"),
+				SecondaryAddress: cloudflare.F("192.0.2.0/24"),
 			}),
 		},
 	)
@@ -75,17 +73,15 @@ func TestSiteWANUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteWANUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			WAN: cloudflare.F(magic_transit.SiteWANUpdateParamsWAN{
-				Description: cloudflare.F("string"),
-				Physport:    cloudflare.F(int64(1)),
-				Priority:    cloudflare.F(int64(0)),
-				StaticAddressing: cloudflare.F(magic_transit.WANStaticAddressingParam{
-					Address:          cloudflare.F("192.0.2.0/24"),
-					GatewayAddress:   cloudflare.F("192.0.2.1"),
-					SecondaryAddress: cloudflare.F("192.0.2.0/24"),
-				}),
-				VlanTag: cloudflare.F(int64(0)),
+			Name:      cloudflare.F("string"),
+			Physport:  cloudflare.F(int64(1)),
+			Priority:  cloudflare.F(int64(0)),
+			StaticAddressing: cloudflare.F(magic_transit.WANStaticAddressingParam{
+				Address:          cloudflare.F("192.0.2.0/24"),
+				GatewayAddress:   cloudflare.F("192.0.2.1"),
+				SecondaryAddress: cloudflare.F("192.0.2.0/24"),
 			}),
+			VlanTag: cloudflare.F(int64(0)),
 		},
 	)
 	if err != nil {

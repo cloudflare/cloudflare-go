@@ -183,9 +183,9 @@ func (r IPListParams) URLQuery() (v url.Values) {
 type IPListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IPListResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success IPListResponseEnvelopeSuccess `json:"success,required"`
+	Result  IPListResponse                `json:"result"`
 	JSON    ipListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -194,8 +194,8 @@ type IPListResponseEnvelope struct {
 type ipListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

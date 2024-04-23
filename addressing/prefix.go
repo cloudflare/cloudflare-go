@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // PrefixService contains methods and other services that help with interacting
@@ -76,7 +74,7 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 }
 
 // Delete an unapproved prefix owned by the account.
-func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponseUnion, err error) {
+func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *[]PrefixDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
@@ -173,30 +171,7 @@ func (r prefixJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [addressing.PrefixDeleteResponseUnknown],
-// [addressing.PrefixDeleteResponseArray] or [shared.UnionString].
-type PrefixDeleteResponseUnion interface {
-	ImplementsAddressingPrefixDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PrefixDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PrefixDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type PrefixDeleteResponseArray []interface{}
-
-func (r PrefixDeleteResponseArray) ImplementsAddressingPrefixDeleteResponseUnion() {}
+type PrefixDeleteResponse = interface{}
 
 type PrefixNewParams struct {
 	// Identifier
@@ -216,9 +191,9 @@ func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {
 type PrefixNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Prefix                `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Prefix                           `json:"result"`
 	JSON    prefixNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -227,8 +202,8 @@ type PrefixNewResponseEnvelope struct {
 type prefixNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -272,11 +247,11 @@ func (r PrefixDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   PrefixDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    PrefixDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []PrefixDeleteResponse                 `json:"result,nullable"`
 	ResultInfo PrefixDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       prefixDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -286,8 +261,8 @@ type PrefixDeleteResponseEnvelope struct {
 type prefixDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -361,9 +336,9 @@ func (r PrefixEditParams) MarshalJSON() (data []byte, err error) {
 type PrefixEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Prefix                `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Prefix                            `json:"result"`
 	JSON    prefixEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -372,8 +347,8 @@ type PrefixEditResponseEnvelope struct {
 type prefixEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -409,9 +384,9 @@ type PrefixGetParams struct {
 type PrefixGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Prefix                `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Prefix                           `json:"result"`
 	JSON    prefixGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -420,8 +395,8 @@ type PrefixGetResponseEnvelope struct {
 type prefixGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
