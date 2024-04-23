@@ -34,7 +34,7 @@ func TestNetworkRouteNetworkNewWithOptionalParams(t *testing.T) {
 		zero_trust.NetworkRouteNetworkNewParams{
 			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Comment:          cloudflare.F("Example comment for this route."),
-			VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
+			VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		},
 	)
 	if err != nil {

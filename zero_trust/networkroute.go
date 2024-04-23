@@ -108,20 +108,18 @@ type Route struct {
 	ID string `json:"id"`
 	// Optional remark describing the route.
 	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// Timestamp of when the resource was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network string `json:"network"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{} `json:"virtual_network_id"`
-	JSON             routeJSON   `json:"-"`
+	// UUID of the tunnel.
+	TunnelID string `json:"tunnel_id" format:"uuid"`
+	// UUID of the virtual network.
+	VirtualNetworkID string    `json:"virtual_network_id" format:"uuid"`
+	JSON             routeJSON `json:"-"`
 }
 
 // routeJSON contains the JSON metadata for the struct [Route]
@@ -148,16 +146,15 @@ func (r routeJSON) RawJSON() string {
 type RouteParam struct {
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt param.Field[interface{}] `json:"created_at"`
+	// Timestamp of when the resource was created.
+	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
+	// deleted.
+	DeletedAt param.Field[time.Time] `json:"deleted_at" format:"date-time"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network param.Field[string] `json:"network"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID param.Field[interface{}] `json:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
+	// UUID of the virtual network.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
 func (r RouteParam) MarshalJSON() (data []byte, err error) {
@@ -169,23 +166,21 @@ type Teamnet struct {
 	ID string `json:"id"`
 	// Optional remark describing the route.
 	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// Timestamp of when the resource was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network string `json:"network"`
 	// The type of tunnel.
 	TunType TeamnetTunType `json:"tun_type"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// The user-friendly name of the Cloudflare Tunnel serving the route.
-	TunnelName interface{} `json:"tunnel_name"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{} `json:"virtual_network_id"`
+	// UUID of the tunnel.
+	TunnelID string `json:"tunnel_id" format:"uuid"`
+	// A user-friendly name for a tunnel.
+	TunnelName string `json:"tunnel_name"`
+	// UUID of the virtual network.
+	VirtualNetworkID string `json:"virtual_network_id" format:"uuid"`
 	// A user-friendly name for the virtual network.
 	VirtualNetworkName string      `json:"virtual_network_name"`
 	JSON               teamnetJSON `json:"-"`
@@ -238,13 +233,11 @@ type NetworkRouteNewParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	IPNetwork param.Field[string] `json:"ip_network,required"`
+	Network param.Field[string] `json:"network,required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
+	// UUID of the virtual network.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
 func (r NetworkRouteNewParams) MarshalJSON() (data []byte, err error) {
@@ -299,16 +292,16 @@ type NetworkRouteListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `query:"comment"`
-	// If provided, include only routes that were created (and not deleted) before this
-	// time.
-	ExistedAt param.Field[interface{}] `query:"existed_at"`
+	// If provided, include only tunnels that were created (and not deleted) before
+	// this time.
+	ExistedAt param.Field[time.Time] `query:"existed_at" format:"date-time"`
 	// If `true`, only include deleted routes. If `false`, exclude deleted routes. If
 	// empty, all routes will be included.
-	IsDeleted param.Field[interface{}] `query:"is_deleted"`
+	IsDeleted param.Field[bool] `query:"is_deleted"`
 	// If set, only list routes that are contained within this IP range.
-	NetworkSubset param.Field[interface{}] `query:"network_subset"`
+	NetworkSubset param.Field[string] `query:"network_subset"`
 	// If set, only list routes that contain this IP range.
-	NetworkSuperset param.Field[interface{}] `query:"network_superset"`
+	NetworkSuperset param.Field[string] `query:"network_superset"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of results to display.
@@ -317,12 +310,10 @@ type NetworkRouteListParams struct {
 	RouteID param.Field[string] `query:"route_id"`
 	// The types of tunnels to filter separated by a comma.
 	TunTypes param.Field[string] `query:"tun_types"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID param.Field[interface{}] `query:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID param.Field[interface{}] `query:"virtual_network_id"`
+	// UUID of the tunnel.
+	TunnelID param.Field[string] `query:"tunnel_id" format:"uuid"`
+	// UUID of the virtual network.
+	VirtualNetworkID param.Field[string] `query:"virtual_network_id" format:"uuid"`
 }
 
 // URLQuery serializes [NetworkRouteListParams]'s query parameters as `url.Values`.
@@ -388,37 +379,12 @@ type NetworkRouteEditParams struct {
 	Comment param.Field[string] `json:"comment"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network param.Field[string] `json:"network"`
-	// The type of tunnel.
-	TunType param.Field[NetworkRouteEditParamsTunType] `json:"tun_type"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID param.Field[interface{}] `json:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
+	// UUID of the virtual network.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
 func (r NetworkRouteEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The type of tunnel.
-type NetworkRouteEditParamsTunType string
-
-const (
-	NetworkRouteEditParamsTunTypeCfdTunnel     NetworkRouteEditParamsTunType = "cfd_tunnel"
-	NetworkRouteEditParamsTunTypeWARPConnector NetworkRouteEditParamsTunType = "warp_connector"
-	NetworkRouteEditParamsTunTypeIPSec         NetworkRouteEditParamsTunType = "ip_sec"
-	NetworkRouteEditParamsTunTypeGRE           NetworkRouteEditParamsTunType = "gre"
-	NetworkRouteEditParamsTunTypeCNI           NetworkRouteEditParamsTunType = "cni"
-)
-
-func (r NetworkRouteEditParamsTunType) IsKnown() bool {
-	switch r {
-	case NetworkRouteEditParamsTunTypeCfdTunnel, NetworkRouteEditParamsTunTypeWARPConnector, NetworkRouteEditParamsTunTypeIPSec, NetworkRouteEditParamsTunTypeGRE, NetworkRouteEditParamsTunTypeCNI:
-		return true
-	}
-	return false
 }
 
 type NetworkRouteEditResponseEnvelope struct {

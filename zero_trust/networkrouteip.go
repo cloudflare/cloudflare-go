@@ -50,10 +50,8 @@ func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params Netwo
 type NetworkRouteIPGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID param.Field[interface{}] `query:"virtual_network_id"`
+	// UUID of the virtual network.
+	VirtualNetworkID param.Field[string] `query:"virtual_network_id" format:"uuid"`
 }
 
 // URLQuery serializes [NetworkRouteIPGetParams]'s query parameters as

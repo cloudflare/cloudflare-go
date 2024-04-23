@@ -81,11 +81,11 @@ func (r LOADocumentNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LOADocumentNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   LOADocumentNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success LOADocumentNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  LOADocumentNewResponse                `json:"result"`
 	JSON    loaDocumentNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -94,8 +94,8 @@ type LOADocumentNewResponseEnvelope struct {
 type loaDocumentNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

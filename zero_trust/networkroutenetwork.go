@@ -86,10 +86,8 @@ type NetworkRouteNetworkNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
+	// UUID of the virtual network.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
 func (r NetworkRouteNetworkNewParams) MarshalJSON() (data []byte, err error) {
@@ -145,9 +143,9 @@ type NetworkRouteNetworkDeleteParams struct {
 	// The type of tunnel.
 	TunType param.Field[NetworkRouteNetworkDeleteParamsTunType] `query:"tun_type"`
 	// UUID of the tunnel.
-	TunnelID param.Field[string] `query:"tunnel_id"`
+	TunnelID param.Field[string] `query:"tunnel_id" format:"uuid"`
 	// UUID of the virtual network.
-	VirtualNetworkID param.Field[string] `query:"virtual_network_id"`
+	VirtualNetworkID param.Field[string] `query:"virtual_network_id" format:"uuid"`
 }
 
 // URLQuery serializes [NetworkRouteNetworkDeleteParams]'s query parameters as

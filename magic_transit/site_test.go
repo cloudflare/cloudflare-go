@@ -29,18 +29,16 @@ func TestSiteNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.Sites.New(context.TODO(), magic_transit.SiteNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Site: cloudflare.F(magic_transit.SiteNewParamsSite{
-			ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
-			Description: cloudflare.F("string"),
-			HaMode:      cloudflare.F(true),
-			Location: cloudflare.F(magic_transit.SiteLocationParam{
-				Lat: cloudflare.F("string"),
-				Lon: cloudflare.F("string"),
-			}),
-			Name:                 cloudflare.F("site_1"),
-			SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:        cloudflare.F("site_1"),
+		ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
+		Description: cloudflare.F("string"),
+		HaMode:      cloudflare.F(true),
+		Location: cloudflare.F(magic_transit.SiteLocationParam{
+			Lat: cloudflare.F("string"),
+			Lon: cloudflare.F("string"),
 		}),
+		SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -69,17 +67,15 @@ func TestSiteUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Site: cloudflare.F(magic_transit.SiteUpdateParamsSite{
-				ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
-				Description: cloudflare.F("string"),
-				Location: cloudflare.F(magic_transit.SiteLocationParam{
-					Lat: cloudflare.F("string"),
-					Lon: cloudflare.F("string"),
-				}),
-				Name:                 cloudflare.F("site_1"),
-				SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
+			Description: cloudflare.F("string"),
+			Location: cloudflare.F(magic_transit.SiteLocationParam{
+				Lat: cloudflare.F("string"),
+				Lon: cloudflare.F("string"),
 			}),
+			Name:                 cloudflare.F("site_1"),
+			SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
 		},
 	)
 	if err != nil {

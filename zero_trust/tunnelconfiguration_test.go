@@ -32,7 +32,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		zero_trust.TunnelConfigurationUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Config: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfig{
 				Ingress: cloudflare.F([]zero_trust.TunnelConfigurationUpdateParamsConfigIngress{{
 					Hostname: cloudflare.F("tunnel.example.com"),
@@ -160,7 +160,7 @@ func TestTunnelConfigurationGet(t *testing.T) {
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		zero_trust.TunnelConfigurationGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

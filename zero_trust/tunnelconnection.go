@@ -66,7 +66,7 @@ func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, quer
 // center.
 type Client struct {
 	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
+	ID string `json:"id" format:"uuid"`
 	// The cloudflared OS architecture used to establish this connection.
 	Arch string `json:"arch"`
 	// The version of the remote tunnel configuration. Used internally to sync
@@ -106,9 +106,9 @@ func (r clientJSON) RawJSON() string {
 
 type ClientConn struct {
 	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
+	ID string `json:"id" format:"uuid"`
+	// UUID of the Cloudflare Tunnel connector.
+	ClientID string `json:"client_id" format:"uuid"`
 	// The cloudflared version used to establish this connection.
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
@@ -123,7 +123,7 @@ type ClientConn struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	UUID string         `json:"uuid"`
+	UUID string         `json:"uuid" format:"uuid"`
 	JSON clientConnJSON `json:"-"`
 }
 
