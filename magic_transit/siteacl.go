@@ -123,9 +123,9 @@ type ACL struct {
 	LAN1           ACLConfiguration `json:"lan_1"`
 	LAN2           ACLConfiguration `json:"lan_2"`
 	// The name of the ACL.
-	Name      string        `json:"name"`
-	Protocols []ACLProtocol `json:"protocols"`
-	JSON      aclJSON       `json:"-"`
+	Name      string            `json:"name"`
+	Protocols []AllowedProtocol `json:"protocols"`
+	JSON      aclJSON           `json:"-"`
 }
 
 // aclJSON contains the JSON metadata for the struct [ACL]
@@ -149,24 +149,6 @@ func (r aclJSON) RawJSON() string {
 	return r.raw
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type ACLProtocol string
-
-const (
-	ACLProtocolTCP  ACLProtocol = "tcp"
-	ACLProtocolUdp  ACLProtocol = "udp"
-	ACLProtocolIcmp ACLProtocol = "icmp"
-)
-
-func (r ACLProtocol) IsKnown() bool {
-	switch r {
-	case ACLProtocolTCP, ACLProtocolUdp, ACLProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 // Bidirectional ACL policy for network traffic within a site.
 type ACLParam struct {
 	// Description for the ACL.
@@ -179,8 +161,8 @@ type ACLParam struct {
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]        `json:"name"`
-	Protocols param.Field[[]ACLProtocol] `json:"protocols"`
+	Name      param.Field[string]            `json:"name"`
+	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
 }
 
 func (r ACLParam) MarshalJSON() (data []byte, err error) {
@@ -237,6 +219,24 @@ func (r ACLConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Array of allowed communication protocols between configured LANs. If no
+// protocols are provided, all protocols are allowed.
+type AllowedProtocol string
+
+const (
+	AllowedProtocolTCP  AllowedProtocol = "tcp"
+	AllowedProtocolUdp  AllowedProtocol = "udp"
+	AllowedProtocolIcmp AllowedProtocol = "icmp"
+)
+
+func (r AllowedProtocol) IsKnown() bool {
+	switch r {
+	case AllowedProtocolTCP, AllowedProtocolUdp, AllowedProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
@@ -279,30 +279,12 @@ type SiteACLNewParams struct {
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
 	// traffic locally on the Magic WAN Connector. If not included in request, will
 	// default to false.
-	ForwardLocally param.Field[bool]                       `json:"forward_locally"`
-	Protocols      param.Field[[]SiteACLNewParamsProtocol] `json:"protocols"`
+	ForwardLocally param.Field[bool]              `json:"forward_locally"`
+	Protocols      param.Field[[]AllowedProtocol] `json:"protocols"`
 }
 
 func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLNewParamsProtocol string
-
-const (
-	SiteACLNewParamsProtocolTCP  SiteACLNewParamsProtocol = "tcp"
-	SiteACLNewParamsProtocolUdp  SiteACLNewParamsProtocol = "udp"
-	SiteACLNewParamsProtocolIcmp SiteACLNewParamsProtocol = "icmp"
-)
-
-func (r SiteACLNewParamsProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLNewParamsProtocolTCP, SiteACLNewParamsProtocolUdp, SiteACLNewParamsProtocolIcmp:
-		return true
-	}
-	return false
 }
 
 type SiteACLNewResponseEnvelope struct {
@@ -362,30 +344,12 @@ type SiteACLUpdateParams struct {
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]                        `json:"name"`
-	Protocols param.Field[[]SiteACLUpdateParamsProtocol] `json:"protocols"`
+	Name      param.Field[string]            `json:"name"`
+	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
 }
 
 func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLUpdateParamsProtocol string
-
-const (
-	SiteACLUpdateParamsProtocolTCP  SiteACLUpdateParamsProtocol = "tcp"
-	SiteACLUpdateParamsProtocolUdp  SiteACLUpdateParamsProtocol = "udp"
-	SiteACLUpdateParamsProtocolIcmp SiteACLUpdateParamsProtocol = "icmp"
-)
-
-func (r SiteACLUpdateParamsProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLUpdateParamsProtocolTCP, SiteACLUpdateParamsProtocolUdp, SiteACLUpdateParamsProtocolIcmp:
-		return true
-	}
-	return false
 }
 
 type SiteACLUpdateResponseEnvelope struct {
