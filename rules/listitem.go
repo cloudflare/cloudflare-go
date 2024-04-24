@@ -146,27 +146,6 @@ func (r listCursorJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItem struct {
-	// The unique operation ID of the asynchronous action.
-	OperationID string       `json:"operation_id"`
-	JSON        listItemJSON `json:"-"`
-}
-
-// listItemJSON contains the JSON metadata for the struct [ListItem]
-type listItemJSON struct {
-	OperationID apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemJSON) RawJSON() string {
-	return r.raw
-}
-
 type ListItemNewResponse struct {
 	// The unique operation ID of the asynchronous action.
 	OperationID string                  `json:"operation_id"`

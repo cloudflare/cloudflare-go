@@ -996,10 +996,10 @@ func (r singleStepMigrationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SingleStepMigration) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
+func (r SingleStepMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
 }
 
-func (r SingleStepMigration) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
+func (r SingleStepMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
 }
 
 type SingleStepMigrationRenamedClass struct {
@@ -1075,10 +1075,10 @@ func (r SingleStepMigrationParam) MarshalJSON() (data []byte, err error) {
 func (r SingleStepMigrationParam) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SingleStepMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SingleStepMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
+func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 type SingleStepMigrationRenamedClassParam struct {
@@ -1129,10 +1129,10 @@ func (r steppedMigrationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SteppedMigration) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
+func (r SteppedMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
 }
 
-func (r SteppedMigration) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
+func (r SteppedMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
 }
 
 type SteppedMigrationParam struct {
@@ -1152,10 +1152,10 @@ func (r SteppedMigrationParam) MarshalJSON() (data []byte, err error) {
 func (r SteppedMigrationParam) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SteppedMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r SteppedMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SteppedMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
+func (r SteppedMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.

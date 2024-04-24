@@ -97,69 +97,6 @@ func (r *HostnameCertificateService) Get(ctx context.Context, certificateID stri
 	return
 }
 
-type Certificate struct {
-	// Identifier
-	ID string `json:"id"`
-	// The hostname certificate.
-	Certificate string `json:"certificate"`
-	// The date when the certificate expires.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer"`
-	// The serial number on the uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature"`
-	// Status of the certificate or the association.
-	Status CertificateStatus `json:"status"`
-	// The time when the certificate was uploaded.
-	UploadedOn time.Time       `json:"uploaded_on" format:"date-time"`
-	JSON       certificateJSON `json:"-"`
-}
-
-// certificateJSON contains the JSON metadata for the struct [Certificate]
-type certificateJSON struct {
-	ID           apijson.Field
-	Certificate  apijson.Field
-	ExpiresOn    apijson.Field
-	Issuer       apijson.Field
-	SerialNumber apijson.Field
-	Signature    apijson.Field
-	Status       apijson.Field
-	UploadedOn   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *Certificate) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificateJSON) RawJSON() string {
-	return r.raw
-}
-
-// Status of the certificate or the association.
-type CertificateStatus string
-
-const (
-	CertificateStatusInitializing       CertificateStatus = "initializing"
-	CertificateStatusPendingDeployment  CertificateStatus = "pending_deployment"
-	CertificateStatusPendingDeletion    CertificateStatus = "pending_deletion"
-	CertificateStatusActive             CertificateStatus = "active"
-	CertificateStatusDeleted            CertificateStatus = "deleted"
-	CertificateStatusDeploymentTimedOut CertificateStatus = "deployment_timed_out"
-	CertificateStatusDeletionTimedOut   CertificateStatus = "deletion_timed_out"
-)
-
-func (r CertificateStatus) IsKnown() bool {
-	switch r {
-	case CertificateStatusInitializing, CertificateStatusPendingDeployment, CertificateStatusPendingDeletion, CertificateStatusActive, CertificateStatusDeleted, CertificateStatusDeploymentTimedOut, CertificateStatusDeletionTimedOut:
-		return true
-	}
-	return false
-}
-
 type HostnameCertificateNewResponse struct {
 	// Identifier
 	ID string `json:"id"`

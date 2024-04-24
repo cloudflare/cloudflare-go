@@ -237,7 +237,7 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
@@ -246,7 +246,7 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) impleme
 // [workers.SteppedMigrationParam],
 // [DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations].
 type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
+	ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
 }
 
 // Usage model to apply to invocations.

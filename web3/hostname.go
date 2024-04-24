@@ -187,19 +187,6 @@ func (r HostnameTarget) IsKnown() bool {
 	return false
 }
 
-type HostnameParam struct {
-	// An optional description of the hostname.
-	Description param.Field[string] `json:"description"`
-	// DNSLink value used if the target is ipfs.
-	Dnslink param.Field[string] `json:"dnslink"`
-	// Target gateway of the hostname.
-	Target param.Field[HostnameTarget] `json:"target"`
-}
-
-func (r HostnameParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type HostnameDeleteResponse struct {
 	// Identifier
 	ID   string                     `json:"id,required"`

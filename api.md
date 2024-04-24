@@ -210,7 +210,6 @@ Params Types:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#Policy">Policy</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#TokenNewResponse">TokenNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#TokenUpdateResponseUnion">TokenUpdateResponseUnion</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#TokenListResponse">TokenListResponse</a>
@@ -1311,10 +1310,6 @@ Methods:
 
 # RatePlans
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans">rate_plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlanParam">RatePlanParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans">rate_plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlan">RatePlan</a>
@@ -1688,10 +1683,6 @@ Methods:
 
 ## Lockdowns
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#ConfigurationUnionParam">ConfigurationUnionParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/firewall#Configuration">Configuration</a>
@@ -2063,7 +2054,6 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth">origin_tls_client_auth</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth#Certificate">Certificate</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth">origin_tls_client_auth</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth#HostnameCertificateNewResponse">HostnameCertificateNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth">origin_tls_client_auth</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth#HostnameCertificateDeleteResponse">HostnameCertificateDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth">origin_tls_client_auth</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth#HostnameCertificateGetResponse">HostnameCertificateGetResponse</a>
@@ -2125,10 +2115,6 @@ Methods:
 - <code title="get /zones/{zone_id}/pagerules/settings">client.Pagerules.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pagerules#SettingService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pagerules#SettingListParams">SettingListParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pagerules#SettingListResponse">SettingListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # RateLimits
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_limits">rate_limits</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_limits#Action">Action</a>
 
 Response Types:
 
@@ -2352,7 +2338,6 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/waiting_rooms">waiting_rooms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/waiting_rooms#Setting">Setting</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/waiting_rooms">waiting_rooms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/waiting_rooms#SettingUpdateResponse">SettingUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/waiting_rooms">waiting_rooms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/waiting_rooms#SettingEditResponse">SettingEditResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/waiting_rooms">waiting_rooms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/waiting_rooms#SettingGetResponse">SettingGetResponse</a>
@@ -2366,10 +2351,6 @@ Methods:
 # Web3
 
 ## Hostnames
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/web3">web3</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/web3#HostnameParam">HostnameParam</a>
 
 Response Types:
 
@@ -2477,10 +2458,6 @@ Methods:
 - <code title="get /accounts/{account_id}/workers/scripts/{script_name}">client.Workers.Scripts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#ScriptService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#ScriptGetParams">ScriptGetParams</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Schedules
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#ScheduleParam">ScheduleParam</a>
 
 Response Types:
 
@@ -2753,10 +2730,6 @@ Methods:
 - <code title="get /zones/{zone_id}/page_shield">client.PageShield.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldGetParams">PageShieldGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#Setting">Setting</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Policies
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PolicyParam">PolicyParam</a>
 
 Response Types:
 
@@ -3096,10 +3069,6 @@ Methods:
 
 #### Bindings
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#ServiceBindingParam">ServiceBindingParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#ServiceBinding">ServiceBinding</a>
@@ -3300,10 +3269,6 @@ Methods:
 - <code title="get /accounts/{account_id}/intel/asn/{asn}/subnets">client.Intel.ASN.Subnets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#ASNParam">ASNParam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetParams">ASNSubnetGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#ASNSubnetGetResponse">ASNSubnetGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## DNS
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#DNSParam">DNSParam</a>
 
 Response Types:
 
@@ -3578,7 +3543,6 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#ACLParam">ACLParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#ACLConfigurationParam">ACLConfigurationParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#AllowedProtocol">AllowedProtocol</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_transit#SubnetUnionParam">SubnetUnionParam</a>
@@ -3647,10 +3611,6 @@ Methods:
 # MagicNetworkMonitoring
 
 ## Configs
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_network_monitoring">magic_network_monitoring</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/magic_network_monitoring#ConfigurationParam">ConfigurationParam</a>
 
 Response Types:
 
@@ -3904,7 +3864,6 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules#ListCursor">ListCursor</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules#ListItem">ListItem</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules#ListItemNewResponse">ListItemNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules#ListItemUpdateResponse">ListItemUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rules#ListItemListResponse">ListItemListResponse</a>
@@ -4197,7 +4156,6 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#MechanismParam">MechanismParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#PolicyParam">PolicyParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#PolicyFilterParam">PolicyFilterParam</a>
 
 Response Types:
@@ -4791,7 +4749,6 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#ApprovalGroupParam">ApprovalGroupParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#PolicyParam">PolicyParam</a>
 
 Response Types:
 
@@ -5476,10 +5433,6 @@ Methods:
 ## Networks
 
 ### Routes
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#RouteParam">RouteParam</a>
 
 Response Types:
 
@@ -6660,10 +6613,6 @@ Methods:
 - <code title="get /zones/{zone_id}/speed_api/pages/{url}/tests/{test_id}">client.Speed.Tests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#TestService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, url <a href="https://pkg.go.dev/builtin#string">string</a>, testID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#TestGetParams">TestGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#Test">Test</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Schedule
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#ScheduleParam">ScheduleParam</a>
 
 Response Types:
 

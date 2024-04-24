@@ -69,29 +69,6 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	return
 }
 
-type Setting struct {
-	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
-	// this zone. Verified search engine crawlers will not be tracked or counted by the
-	// waiting room system, and will not appear in waiting room analytics.
-	SearchEngineCrawlerBypass bool        `json:"search_engine_crawler_bypass,required"`
-	JSON                      settingJSON `json:"-"`
-}
-
-// settingJSON contains the JSON metadata for the struct [Setting]
-type settingJSON struct {
-	SearchEngineCrawlerBypass apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *Setting) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingUpdateResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the

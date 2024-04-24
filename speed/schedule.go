@@ -124,20 +124,6 @@ func (r ScheduleRegion) IsKnown() bool {
 	return false
 }
 
-// The test schedule.
-type ScheduleParam struct {
-	// The frequency of the test.
-	Frequency param.Field[ScheduleFrequency] `json:"frequency"`
-	// A test region.
-	Region param.Field[ScheduleRegion] `json:"region"`
-	// A URL.
-	URL param.Field[string] `json:"url"`
-}
-
-func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ScheduleNewResponse struct {
 	// The test schedule.
 	Schedule Schedule                `json:"schedule"`

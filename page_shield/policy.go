@@ -140,26 +140,6 @@ func (r PolicyAction) IsKnown() bool {
 	return false
 }
 
-type PolicyParam struct {
-	// The ID of the policy
-	ID param.Field[string] `json:"id"`
-	// The action to take if the expression matches
-	Action param.Field[PolicyAction] `json:"action"`
-	// A description for the policy
-	Description param.Field[string] `json:"description"`
-	// Whether the policy is enabled
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression which must match for the policy to be applied, using the
-	// Cloudflare Firewall rule expression syntax
-	Expression param.Field[string] `json:"expression"`
-	// The policy which will be applied
-	Value param.Field[string] `json:"value"`
-}
-
-func (r PolicyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type PolicyNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`

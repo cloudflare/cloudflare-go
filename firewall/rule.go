@@ -220,7 +220,7 @@ func (r FirewallRuleFilter) AsUnion() FirewallRuleFilterUnion {
 
 // Union satisfied by [filters.FirewallFilter] or [firewall.DeletedFilter].
 type FirewallRuleFilterUnion interface {
-	implementsFirewallFirewallRuleFilter()
+	ImplementsFirewallFirewallRuleFilter()
 }
 
 func init() {
@@ -283,7 +283,7 @@ func (r deletedFilterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DeletedFilter) implementsFirewallFirewallRuleFilter() {}
+func (r DeletedFilter) ImplementsFirewallFirewallRuleFilter() {}
 
 type RuleNewParams struct {
 	Body interface{} `json:"body,required"`

@@ -143,24 +143,6 @@ func (r routeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RouteParam struct {
-	// Optional remark describing the route.
-	Comment param.Field[string] `json:"comment"`
-	// Timestamp of when the resource was created.
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
-	// Timestamp of when the resource was deleted. If `null`, the resource has not been
-	// deleted.
-	DeletedAt param.Field[time.Time] `json:"deleted_at" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network param.Field[string] `json:"network"`
-	// UUID of the virtual network.
-	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
-}
-
-func (r RouteParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type Teamnet struct {
 	// UUID of the route.
 	ID string `json:"id"`

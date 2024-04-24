@@ -149,26 +149,6 @@ func (r aclJSON) RawJSON() string {
 	return r.raw
 }
 
-// Bidirectional ACL policy for network traffic within a site.
-type ACLParam struct {
-	// Description for the ACL.
-	Description param.Field[string] `json:"description"`
-	// The desired forwarding action for this ACL policy. If set to "false", the policy
-	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
-	ForwardLocally param.Field[bool]                  `json:"forward_locally"`
-	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
-	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
-	// The name of the ACL.
-	Name      param.Field[string]            `json:"name"`
-	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
-}
-
-func (r ACLParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ACLConfiguration struct {
 	// The identifier for the LAN you want to create an ACL policy with.
 	LANID string `json:"lan_id,required"`
