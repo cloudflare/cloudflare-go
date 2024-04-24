@@ -125,7 +125,6 @@ func TestRouteDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.RouteDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -153,7 +152,6 @@ func TestRouteEmpty(t *testing.T) {
 	)
 	_, err := client.MagicTransit.Routes.Empty(context.TODO(), magic_transit.RouteEmptyParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Routes:    cloudflare.F([]magic_transit.RouteEmptyParamsRoute{{}, {}, {}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

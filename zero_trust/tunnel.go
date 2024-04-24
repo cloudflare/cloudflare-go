@@ -84,11 +84,11 @@ func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListPar
 }
 
 // Deletes an Argo Tunnel from an account.
-func (r *TunnelService) Delete(ctx context.Context, tunnelID string, params TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelDeleteResponse, err error) {
+func (r *TunnelService) Delete(ctx context.Context, tunnelID string, body TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/tunnels/%s", params.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/tunnels/%s", body.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -826,11 +826,6 @@ func (r TunnelListParams) URLQuery() (v url.Values) {
 type TunnelDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r TunnelDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type TunnelDeleteResponseEnvelope struct {

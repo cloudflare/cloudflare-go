@@ -91,7 +91,6 @@ func TestNamespaceBulkDelete(t *testing.T) {
 		"0f2ac74b498b48028cb68387c421e279",
 		kv.NamespaceBulkDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      []string{"My-Key", "My-Key", "My-Key"},
 		},
 	)
 	if err != nil {

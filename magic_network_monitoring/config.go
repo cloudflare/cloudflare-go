@@ -61,10 +61,10 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 }
 
 // Delete an existing network monitoring configuration.
-func (r *ConfigService) Delete(ctx context.Context, params ConfigDeleteParams, opts ...option.RequestOption) (res *Configuration, err error) {
+func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -232,11 +232,6 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ConfigDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigDeleteResponseEnvelope struct {

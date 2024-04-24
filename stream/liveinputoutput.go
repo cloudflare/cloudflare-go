@@ -85,10 +85,10 @@ func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputId
 }
 
 // Deletes an output and removes it from the associated live input.
-func (r *LiveInputOutputService) Delete(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params LiveInputOutputDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *LiveInputOutputService) Delete(ctx context.Context, liveInputIdentifier string, outputIdentifier string, body LiveInputOutputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", params.AccountID, liveInputIdentifier, outputIdentifier)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", body.AccountID, liveInputIdentifier, outputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
@@ -255,9 +255,4 @@ type LiveInputOutputListParams struct {
 type LiveInputOutputDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r LiveInputOutputDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }

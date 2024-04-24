@@ -86,10 +86,10 @@ func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRu
 }
 
 // Deletes a Zero Trust Gateway rule.
-func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, params GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponseUnion, err error) {
+func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", params.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1210,11 +1210,6 @@ type GatewayRuleListParams struct {
 
 type GatewayRuleDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r GatewayRuleDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {

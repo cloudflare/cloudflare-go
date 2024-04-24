@@ -311,15 +311,10 @@ func (r DispatchNamespaceScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DispatchNamespaceScriptDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
 	// objects will be deleted along with the script.
 	Force param.Field[bool] `query:"force"`
-}
-
-func (r DispatchNamespaceScriptDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [DispatchNamespaceScriptDeleteParams]'s query parameters as

@@ -72,9 +72,9 @@ func (r *ProjectDomainService) ListAutoPaging(ctx context.Context, projectName s
 }
 
 // Delete a Pages project's domain.
-func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, domainName string, params ProjectDomainDeleteParams, opts ...option.RequestOption) (res *ProjectDomainDeleteResponse, err error) {
+func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, domainName string, body ProjectDomainDeleteParams, opts ...option.RequestOption) (res *ProjectDomainDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", params.AccountID, projectName, domainName)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -245,11 +245,6 @@ type ProjectDomainListParams struct {
 type ProjectDomainDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ProjectDomainDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectDomainEditParams struct {

@@ -65,10 +65,10 @@ func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params Cert
 }
 
 // For a given zone, delete an advanced certificate pack.
-func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, params CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
+func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, body CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -334,11 +334,6 @@ func (r CertificatePackListParamsStatus) IsKnown() bool {
 type CertificatePackDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r CertificatePackDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type CertificatePackDeleteResponseEnvelope struct {

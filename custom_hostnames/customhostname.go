@@ -81,9 +81,9 @@ func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params Custo
 }
 
 // Delete Custom Hostname (and any issued SSL certificates)
-func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, params CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
+func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, body CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", params.ZoneID, customHostnameID)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", body.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -2388,11 +2388,6 @@ func (r CustomHostnameListParamsSSL) IsKnown() bool {
 type CustomHostnameDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r CustomHostnameDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomHostnameEditParams struct {

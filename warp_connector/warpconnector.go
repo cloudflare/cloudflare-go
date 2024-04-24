@@ -75,11 +75,11 @@ func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPCo
 }
 
 // Deletes a Warp Connector Tunnel from an account.
-func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, params WARPConnectorDeleteParams, opts ...option.RequestOption) (res *WARPConnectorDeleteResponse, err error) {
+func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, body WARPConnectorDeleteParams, opts ...option.RequestOption) (res *WARPConnectorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/warp_connector/%s", params.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/warp_connector/%s", body.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1442,11 +1442,6 @@ func (r WARPConnectorListParams) URLQuery() (v url.Values) {
 type WARPConnectorDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r WARPConnectorDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type WARPConnectorDeleteResponseEnvelope struct {

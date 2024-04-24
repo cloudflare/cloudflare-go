@@ -72,10 +72,10 @@ func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, qu
 }
 
 // Delete a configured device posture integration.
-func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, params DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponseUnion, err error) {
+func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, body DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", params.AccountID, integrationID)
+	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", body.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -460,11 +460,6 @@ type DevicePostureIntegrationListParams struct {
 
 type DevicePostureIntegrationDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r DevicePostureIntegrationDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type DevicePostureIntegrationDeleteResponseEnvelope struct {

@@ -119,7 +119,6 @@ func TestListDelete(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		rules.ListDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

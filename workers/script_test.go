@@ -158,7 +158,6 @@ func TestScriptDeleteWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 			Force:     cloudflare.F(true),
 		},
 	)

@@ -109,7 +109,6 @@ func TestAccessRuleDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		firewall.AccessRuleDeleteParams{
-			Body:      map[string]interface{}{},
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
 		},

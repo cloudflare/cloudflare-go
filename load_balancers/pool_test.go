@@ -227,7 +227,6 @@ func TestPoolDelete(t *testing.T) {
 		"17b5962d775c646f3f9725cbc7a53df4",
 		load_balancers.PoolDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

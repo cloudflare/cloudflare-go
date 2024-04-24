@@ -88,7 +88,7 @@ func (r *UARuleService) ListAutoPaging(ctx context.Context, zoneIdentifier strin
 }
 
 // Deletes an existing User Agent Blocking rule.
-func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id string, body UARuleDeleteParams, opts ...option.RequestOption) (res *UARuleDeleteResponse, err error) {
+func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
@@ -386,14 +386,6 @@ func (r UARuleListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type UARuleDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r UARuleDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type UARuleDeleteResponseEnvelope struct {

@@ -48,10 +48,10 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 }
 
 // Delete Account Custom Nameserver
-func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, params CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponseUnion, err error) {
+func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/%s", params.AccountID, customNSID)
+	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNSID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -279,11 +279,6 @@ func (r CustomNameserverNewResponseEnvelopeSuccess) IsKnown() bool {
 type CustomNameserverDeleteParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r CustomNameserverDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomNameserverDeleteResponseEnvelope struct {

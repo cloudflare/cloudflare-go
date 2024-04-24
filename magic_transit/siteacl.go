@@ -84,10 +84,10 @@ func (r *SiteACLService) ListAutoPaging(ctx context.Context, siteID string, quer
 }
 
 // Remove a specific Site ACL.
-func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, params SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
+func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, body SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", body.AccountID, siteID, aclIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -384,11 +384,6 @@ type SiteACLListParams struct {
 type SiteACLDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r SiteACLDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type SiteACLDeleteResponseEnvelope struct {

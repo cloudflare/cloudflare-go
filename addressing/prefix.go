@@ -74,10 +74,10 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 }
 
 // Delete an unapproved prefix owned by the account.
-func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *[]PrefixDeleteResponse, err error) {
+func (r *PrefixService) Delete(ctx context.Context, prefixID string, body PrefixDeleteParams, opts ...option.RequestOption) (res *[]PrefixDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", body.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -239,11 +239,6 @@ type PrefixListParams struct {
 type PrefixDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r PrefixDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type PrefixDeleteResponseEnvelope struct {

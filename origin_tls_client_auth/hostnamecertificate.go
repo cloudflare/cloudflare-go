@@ -72,10 +72,10 @@ func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query H
 }
 
 // Delete Hostname Client Certificate
-func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, params HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *HostnameCertificateDeleteResponse, err error) {
+func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, body HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *HostnameCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", params.ZoneID, certificateID)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", body.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -353,11 +353,6 @@ type HostnameCertificateListParams struct {
 type HostnameCertificateDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r HostnameCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type HostnameCertificateDeleteResponseEnvelope struct {

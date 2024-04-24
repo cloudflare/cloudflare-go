@@ -74,10 +74,10 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 }
 
 // Disable and remove a specific Magic static route.
-func (r *RouteService) Delete(ctx context.Context, routeIdentifier string, params RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
+func (r *RouteService) Delete(ctx context.Context, routeIdentifier string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes/%s", params.AccountID, routeIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/routes/%s", body.AccountID, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -87,11 +87,11 @@ func (r *RouteService) Delete(ctx context.Context, routeIdentifier string, param
 }
 
 // Delete multiple Magic static routes.
-func (r *RouteService) Empty(ctx context.Context, params RouteEmptyParams, opts ...option.RequestOption) (res *RouteEmptyResponse, err error) {
+func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ...option.RequestOption) (res *RouteEmptyResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteEmptyResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/routes", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -112,21 +112,13 @@ func (r *RouteService) Get(ctx context.Context, routeIdentifier string, query Ro
 	return
 }
 
-type ColoName []string
-
-type ColoNameParam []string
-
-type ColoRegion []string
-
-type ColoRegionParam []string
-
 // Used only for ECMP routes.
 type Scope struct {
 	// List of colo names for the ECMP scope.
-	ColoNames ColoName `json:"colo_names"`
+	ColoNames []string `json:"colo_names"`
 	// List of colo regions for the ECMP scope.
-	ColoRegions ColoRegion `json:"colo_regions"`
-	JSON        scopeJSON  `json:"-"`
+	ColoRegions []string  `json:"colo_regions"`
+	JSON        scopeJSON `json:"-"`
 }
 
 // scopeJSON contains the JSON metadata for the struct [Scope]
@@ -148,9 +140,9 @@ func (r scopeJSON) RawJSON() string {
 // Used only for ECMP routes.
 type ScopeParam struct {
 	// List of colo names for the ECMP scope.
-	ColoNames param.Field[ColoNameParam] `json:"colo_names"`
+	ColoNames param.Field[[]string] `json:"colo_names"`
 	// List of colo regions for the ECMP scope.
-	ColoRegions param.Field[ColoRegionParam] `json:"colo_regions"`
+	ColoRegions param.Field[[]string] `json:"colo_regions"`
 }
 
 func (r ScopeParam) MarshalJSON() (data []byte, err error) {
@@ -549,11 +541,6 @@ func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
 type RouteDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r RouteDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type RouteDeleteResponseEnvelope struct {
@@ -601,19 +588,7 @@ func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteEmptyParams struct {
 	// Identifier
-	AccountID param.Field[string]                  `path:"account_id,required"`
-	Routes    param.Field[[]RouteEmptyParamsRoute] `json:"routes,required"`
-}
-
-func (r RouteEmptyParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RouteEmptyParamsRoute struct {
-}
-
-func (r RouteEmptyParamsRoute) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RouteEmptyResponseEnvelope struct {

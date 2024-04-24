@@ -99,10 +99,10 @@ func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListPar
 }
 
 // Delete DNS Record
-func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, params RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
+func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
+	path := fmt.Sprintf("zones/%s/dns_records/%s", body.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -3847,11 +3847,6 @@ func (r RecordListParamsType) IsKnown() bool {
 type RecordDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r RecordDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type RecordDeleteResponseEnvelope struct {

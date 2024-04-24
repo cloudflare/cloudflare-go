@@ -99,11 +99,11 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 // This operation is asynchronous. To get current the operation status, invoke the
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
-func (r *ListItemService) Delete(ctx context.Context, listID string, params ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
+func (r *ListItemService) Delete(ctx context.Context, listID string, body ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListItemDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", body.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -417,21 +417,7 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 
 type ListItemDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]                     `path:"account_id,required"`
-	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
-}
-
-func (r ListItemDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ListItemDeleteParamsItem struct {
-	// The unique ID of the item in the List.
-	ID param.Field[string] `json:"id"`
-}
-
-func (r ListItemDeleteParamsItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ListItemDeleteResponseEnvelope struct {
