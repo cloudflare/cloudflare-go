@@ -1,5 +1,16 @@
 ## 0.94.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_application: support options_preflight_bypass for access_application ([#1790](https://github.com/cloudflare/cloudflare-go/issues/1790))
+* gateway: added ecs_support field to teams_location resource ([#1826](https://github.com/cloudflare/cloudflare-go/issues/1826))
+* teams_account: adds custom certificate setting to teams account configuration ([#1811](https://github.com/cloudflare/cloudflare-go/issues/1811))
+* workers: support deleting namespaced Workers ([#1737](https://github.com/cloudflare/cloudflare-go/issues/1737))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.19.0 to 0.23.0 ([#1825](https://github.com/cloudflare/cloudflare-go/issues/1825))
+
 ## 0.93.0 (April 10th, 2024)
 
 BREAKING CHANGES:
