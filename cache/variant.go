@@ -37,10 +37,10 @@ func NewVariantService(opts ...option.RequestOption) (r *VariantService) {
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 // does not serve the variant requested, the response will not be cached. This will
 // be indicated with BYPASS cache status in the response headers.
-func (r *VariantService) Delete(ctx context.Context, params VariantDeleteParams, opts ...option.RequestOption) (res *CacheVariant, err error) {
+func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, opts ...option.RequestOption) (res *CacheVariant, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VariantDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/variants", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/cache/variants", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -324,11 +324,6 @@ func (r variantGetResponseValueJSON) RawJSON() string {
 type VariantDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r VariantDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type VariantDeleteResponseEnvelope struct {

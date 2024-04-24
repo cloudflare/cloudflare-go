@@ -46,10 +46,10 @@ func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, i
 }
 
 // Remove an IP from a particular address map.
-func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPDeleteParams, opts ...option.RequestOption) (res *[]AddressMapIPDeleteResponse, err error) {
+func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, body AddressMapIPDeleteParams, opts ...option.RequestOption) (res *[]AddressMapIPDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -151,11 +151,6 @@ func (r addressMapIPUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 type AddressMapIPDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r AddressMapIPDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapIPDeleteResponseEnvelope struct {

@@ -176,13 +176,7 @@ func TestTokenDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Tokens.Delete(
-		context.TODO(),
-		map[string]interface{}{},
-		user.TokenDeleteParams{
-			Body: map[string]interface{}{},
-		},
-	)
+	_, err := client.User.Tokens.Delete(context.TODO(), map[string]interface{}{})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -91,7 +91,6 @@ func TestV1Delete(t *testing.T) {
 		"string",
 		images.V1DeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

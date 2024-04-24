@@ -60,10 +60,10 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 }
 
 // Deletes the consumer for a queue.
-func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, params ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponseUnion, err error) {
+func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", params.AccountID, queueID, consumerID)
+	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", body.AccountID, queueID, consumerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -472,11 +472,6 @@ func (r consumerUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 type ConsumerDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ConsumerDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ConsumerDeleteResponseEnvelope struct {

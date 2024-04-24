@@ -205,7 +205,7 @@ func TestListItemListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestListItemDeleteWithOptionalParams(t *testing.T) {
+func TestListItemDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -224,9 +224,6 @@ func TestListItemDeleteWithOptionalParams(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		rules.ListItemDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Items: cloudflare.F([]rules.ListItemDeleteParamsItem{{
-				ID: cloudflare.F("34b12448945f11eaa1b71c4d701ab86e"),
-			}}),
 		},
 	)
 	if err != nil {

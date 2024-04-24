@@ -84,10 +84,10 @@ func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceN
 
 // Deletes a device managed network and fetches a list of the remaining device
 // managed networks for an account.
-func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, params DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]DeviceNetwork, err error) {
+func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/devices/networks/%s", params.AccountID, networkID)
+	path := fmt.Sprintf("accounts/%s/devices/networks/%s", body.AccountID, networkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -369,11 +369,6 @@ type DeviceNetworkListParams struct {
 
 type DeviceNetworkDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r DeviceNetworkDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type DeviceNetworkDeleteResponseEnvelope struct {

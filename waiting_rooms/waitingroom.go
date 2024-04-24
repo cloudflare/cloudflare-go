@@ -95,10 +95,10 @@ func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingR
 }
 
 // Deletes a waiting room.
-func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, params WaitingRoomDeleteParams, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
+func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, body WaitingRoomDeleteParams, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", params.ZoneID, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", body.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1140,11 +1140,6 @@ func (r WaitingRoomListParams) URLQuery() (v url.Values) {
 type WaitingRoomDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r WaitingRoomDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type WaitingRoomDeleteResponseEnvelope struct {

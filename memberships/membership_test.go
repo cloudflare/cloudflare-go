@@ -92,13 +92,7 @@ func TestMembershipDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Memberships.Delete(
-		context.TODO(),
-		"4536bcfad5faccb111b47003c79917fa",
-		memberships.MembershipDeleteParams{
-			Body: map[string]interface{}{},
-		},
-	)
+	_, err := client.Memberships.Delete(context.TODO(), "4536bcfad5faccb111b47003c79917fa")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

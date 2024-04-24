@@ -33,7 +33,6 @@ func TestTunnelConnectionDelete(t *testing.T) {
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		zero_trust.TunnelConnectionDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

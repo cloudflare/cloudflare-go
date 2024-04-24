@@ -81,10 +81,10 @@ func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query O
 }
 
 // Delete Certificate
-func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, params OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponseUnion, err error) {
+func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, body OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", params.ZoneID, certificateID)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", body.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -285,11 +285,6 @@ type OriginTLSClientAuthListParams struct {
 type OriginTLSClientAuthDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r OriginTLSClientAuthDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelope struct {

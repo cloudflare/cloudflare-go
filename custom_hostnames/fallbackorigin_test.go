@@ -57,7 +57,6 @@ func TestFallbackOriginDelete(t *testing.T) {
 	)
 	_, err := client.CustomHostnames.FallbackOrigin.Delete(context.TODO(), custom_hostnames.FallbackOriginDeleteParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

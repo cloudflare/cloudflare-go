@@ -389,15 +389,10 @@ type ScriptListParams struct {
 type ScriptDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
 	// objects will be deleted along with the script.
 	Force param.Field[bool] `query:"force"`
-}
-
-func (r ScriptDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [ScriptDeleteParams]'s query parameters as `url.Values`.

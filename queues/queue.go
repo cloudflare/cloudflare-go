@@ -88,10 +88,10 @@ func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams
 }
 
 // Deletes a queue.
-func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponseUnion, err error) {
+func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
+	path := fmt.Sprintf("accounts/%s/queues/%s", body.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -420,11 +420,6 @@ type QueueListParams struct {
 type QueueDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r QueueDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type QueueDeleteResponseEnvelope struct {

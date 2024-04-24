@@ -79,10 +79,10 @@ func (r *IPSECTunnelService) List(ctx context.Context, query IPSECTunnelListPara
 // Disables and removes a specific static IPsec Tunnel associated with an account.
 // Use `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, params IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
+func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, body IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", body.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -657,11 +657,6 @@ func (r IPSECTunnelListResponseEnvelopeSuccess) IsKnown() bool {
 type IPSECTunnelDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r IPSECTunnelDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type IPSECTunnelDeleteResponseEnvelope struct {

@@ -96,7 +96,6 @@ func TestPrefixDelegationDelete(t *testing.T) {
 		"d933b1530bc56c9953cf8ce166da8004",
 		addressing.PrefixDelegationDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

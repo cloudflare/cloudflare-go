@@ -125,7 +125,6 @@ func TestTSIGDelete(t *testing.T) {
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
 		secondary_dns.TSIGDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

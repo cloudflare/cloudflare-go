@@ -54,11 +54,11 @@ func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, p
 
 // Remove multiple KV pairs from the namespace. Body should be an array of up to
 // 10,000 keys to be removed.
-func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, params NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponseUnion, err error) {
+func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, body NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", body.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -180,11 +180,6 @@ func (r NamespaceBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type NamespaceBulkDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      []string            `json:"body,required"`
-}
-
-func (r NamespaceBulkDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type NamespaceBulkDeleteResponseEnvelope struct {

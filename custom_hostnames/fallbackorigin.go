@@ -48,10 +48,10 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 }
 
 // Delete Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Delete(ctx context.Context, params FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
+func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -181,11 +181,6 @@ func (r FallbackOriginUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type FallbackOriginDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r FallbackOriginDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type FallbackOriginDeleteResponseEnvelope struct {

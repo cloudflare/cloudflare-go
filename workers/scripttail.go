@@ -45,9 +45,9 @@ func (r *ScriptTailService) New(ctx context.Context, scriptName string, params S
 }
 
 // Deletes a tail from a Worker.
-func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, params ScriptTailDeleteParams, opts ...option.RequestOption) (res *ScriptTailDeleteResponse, err error) {
+func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, body ScriptTailDeleteParams, opts ...option.RequestOption) (res *ScriptTailDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", params.AccountID, scriptName, id)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", body.AccountID, scriptName, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -254,11 +254,6 @@ func (r ScriptTailNewResponseEnvelopeSuccess) IsKnown() bool {
 type ScriptTailDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ScriptTailDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ScriptTailGetParams struct {

@@ -82,7 +82,7 @@ func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query O
 // Revoke an existing Origin CA certificate by its serial number. Use your Origin
 // CA Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, body OriginCACertificateDeleteParams, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
+func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("certificates/%s", certificateID)
@@ -359,14 +359,6 @@ func (r OriginCACertificateListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type OriginCACertificateDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r OriginCACertificateDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {

@@ -91,7 +91,7 @@ func (r *TokenService) ListAutoPaging(ctx context.Context, query TokenListParams
 }
 
 // Destroy a token.
-func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, body TokenDeleteParams, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
+func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenDeleteResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
@@ -516,14 +516,6 @@ func (r TokenListParamsDirection) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type TokenDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r TokenDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type TokenDeleteResponseEnvelope struct {

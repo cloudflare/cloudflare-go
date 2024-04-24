@@ -210,7 +210,6 @@ func TestSiteLANDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteLANDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

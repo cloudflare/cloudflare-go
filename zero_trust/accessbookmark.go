@@ -83,7 +83,7 @@ func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, identifier s
 }
 
 // Deletes a Bookmark application.
-func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, uuid string, body AccessBookmarkDeleteParams, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
+func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -267,14 +267,6 @@ func (r AccessBookmarkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type AccessBookmarkDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r AccessBookmarkDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AccessBookmarkDeleteResponseEnvelope struct {

@@ -89,7 +89,7 @@ func (r *LockdownService) ListAutoPaging(ctx context.Context, zoneIdentifier str
 }
 
 // Deletes an existing Zone Lockdown rule.
-func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, body LockdownDeleteParams, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
+func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LockdownDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
@@ -486,14 +486,6 @@ func (r LockdownListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type LockdownDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r LockdownDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type LockdownDeleteResponseEnvelope struct {

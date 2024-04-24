@@ -99,10 +99,10 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 }
 
 // Deletes a video and its copies from Cloudflare Stream.
-func (r *StreamService) Delete(ctx context.Context, identifier string, params StreamDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *StreamService) Delete(ctx context.Context, identifier string, body StreamDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/%s", params.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
@@ -430,11 +430,6 @@ func (r StreamListParamsStatus) IsKnown() bool {
 type StreamDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r StreamDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type StreamGetParams struct {

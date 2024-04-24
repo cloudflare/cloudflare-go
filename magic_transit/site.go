@@ -94,10 +94,10 @@ func (r *SiteService) ListAutoPaging(ctx context.Context, params SiteListParams,
 }
 
 // Remove a specific Site.
-func (r *SiteService) Delete(ctx context.Context, siteID string, params SiteDeleteParams, opts ...option.RequestOption) (res *Site, err error) {
+func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDeleteParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s", body.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -338,11 +338,6 @@ func (r SiteListParams) URLQuery() (v url.Values) {
 type SiteDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r SiteDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type SiteDeleteResponseEnvelope struct {

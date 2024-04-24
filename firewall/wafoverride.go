@@ -100,7 +100,7 @@ func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier 
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) Delete(ctx context.Context, zoneIdentifier string, id string, body WAFOverrideDeleteParams, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
+func (r *WAFOverrideService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
@@ -413,14 +413,6 @@ func (r WAFOverrideListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type WAFOverrideDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r WAFOverrideDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type WAFOverrideDeleteResponseEnvelope struct {

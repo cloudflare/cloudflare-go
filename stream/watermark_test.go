@@ -91,7 +91,6 @@ func TestWatermarkDelete(t *testing.T) {
 		"ea95132c15732412d22c1476fa83f27a",
 		stream.WatermarkDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

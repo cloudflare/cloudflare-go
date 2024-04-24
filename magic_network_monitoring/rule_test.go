@@ -113,7 +113,6 @@ func TestRuleDelete(t *testing.T) {
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
 		magic_network_monitoring.RuleDeleteParams{
 			AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
