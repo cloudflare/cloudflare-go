@@ -110,9 +110,68 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
-type Mechanism map[string][]Mechanism
+type Mechanism map[string][]MechanismItem
 
-type MechanismParam map[string][]MechanismParam
+type MechanismItem struct {
+	// UUID
+	ID   MechanismItemIDUnion `json:"id"`
+	JSON mechanismItemJSON    `json:"-"`
+}
+
+// mechanismItemJSON contains the JSON metadata for the struct [MechanismItem]
+type mechanismItemJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MechanismItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mechanismItemJSON) RawJSON() string {
+	return r.raw
+}
+
+// UUID
+//
+// Union satisfied by [shared.UnionString] or [shared.UnionString].
+type MechanismItemIDUnion interface {
+	ImplementsAlertingMechanismItemIDUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MechanismItemIDUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type MechanismParam map[string][]MechanismItemParam
+
+type MechanismItemParam struct {
+	// UUID
+	ID param.Field[MechanismItemIDUnionParam] `json:"id"`
+}
+
+func (r MechanismItemParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// UUID
+//
+// Satisfied by [shared.UnionString], [shared.UnionString].
+type MechanismItemIDUnionParam interface {
+	ImplementsAlertingMechanismItemIDUnionParam()
+}
 
 type Policy struct {
 	// The unique identifier of a notification policy
@@ -231,30 +290,6 @@ func (r PolicyAlertType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type PolicyParam struct {
-	// Refers to which event will trigger a Notification dispatch. You can use the
-	// endpoint to get available alert types which then will give you a list of
-	// possible values.
-	AlertType param.Field[PolicyAlertType] `json:"alert_type"`
-	// Optional description for the Notification policy.
-	Description param.Field[string] `json:"description"`
-	// Whether or not the Notification policy is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Optional filters that allow you to be alerted only on a subset of events for
-	// that alert type based on some criteria. This is only available for select alert
-	// types. See alert type documentation for more details.
-	Filters param.Field[PolicyFilterParam] `json:"filters"`
-	// List of IDs that will be used when dispatching a notification. IDs for email
-	// type will be the email address.
-	Mechanisms param.Field[MechanismParam] `json:"mechanisms"`
-	// Name of the policy.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r PolicyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Optional filters that allow you to be alerted only on a subset of events for

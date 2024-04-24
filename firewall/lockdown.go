@@ -194,34 +194,6 @@ func (r ConfigurationTarget) IsKnown() bool {
 	return false
 }
 
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-type ConfigurationParam struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the Zone Lockdown rule.
-	Target param.Field[ConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-//
-// Satisfied by [firewall.LockdownIPConfigurationParam],
-// [firewall.LockdownCIDRConfigurationParam], [ConfigurationParam].
-type ConfigurationUnionParam interface {
-	implementsFirewallConfigurationUnionParam()
-}
-
 type Lockdown struct {
 	// The unique identifier of the Zone Lockdown rule.
 	ID string `json:"id,required"`

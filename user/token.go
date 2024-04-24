@@ -131,34 +131,17 @@ func (r *TokenService) Verify(ctx context.Context, opts ...option.RequestOption)
 
 type CIDRListParam = string
 
-type Policy struct {
-	// Policy identifier.
-	ID string `json:"id,required"`
+type PolicyParam struct {
 	// Allow or deny operations against the resources.
-	Effect PolicyEffect `json:"effect,required"`
+	Effect param.Field[PolicyEffect] `json:"effect,required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups []PolicyPermissionGroup `json:"permission_groups,required"`
+	PermissionGroups param.Field[[]PolicyPermissionGroupParam] `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources interface{} `json:"resources,required"`
-	JSON      policyJSON  `json:"-"`
+	Resources param.Field[interface{}] `json:"resources,required"`
 }
 
-// policyJSON contains the JSON metadata for the struct [Policy]
-type policyJSON struct {
-	ID               apijson.Field
-	Effect           apijson.Field
-	PermissionGroups apijson.Field
-	Resources        apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *Policy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyJSON) RawJSON() string {
-	return r.raw
+func (r PolicyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Allow or deny operations against the resources.
@@ -175,46 +158,6 @@ func (r PolicyEffect) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// A named group of permissions that map to a group of operations against
-// resources.
-type PolicyPermissionGroup struct {
-	// Identifier of the group.
-	ID string `json:"id,required"`
-	// Name of the group.
-	Name string                    `json:"name"`
-	JSON policyPermissionGroupJSON `json:"-"`
-}
-
-// policyPermissionGroupJSON contains the JSON metadata for the struct
-// [PolicyPermissionGroup]
-type policyPermissionGroupJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyPermissionGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyPermissionGroupJSON) RawJSON() string {
-	return r.raw
-}
-
-type PolicyParam struct {
-	// Allow or deny operations against the resources.
-	Effect param.Field[PolicyEffect] `json:"effect,required"`
-	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]PolicyPermissionGroupParam] `json:"permission_groups,required"`
-	// A list of resource names that the policy applies to.
-	Resources param.Field[interface{}] `json:"resources,required"`
-}
-
-func (r PolicyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A named group of permissions that map to a group of operations against
