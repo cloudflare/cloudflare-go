@@ -73,10 +73,10 @@ func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query 
 }
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponseUnion, err error) {
+func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, body GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", params.AccountID, proxyEndpointID)
+	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", body.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -226,11 +226,6 @@ type GatewayProxyEndpointListParams struct {
 
 type GatewayProxyEndpointDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r GatewayProxyEndpointDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayProxyEndpointDeleteResponseEnvelope struct {

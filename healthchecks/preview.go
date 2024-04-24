@@ -45,10 +45,10 @@ func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts 
 }
 
 // Delete a health check.
-func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, params PreviewDeleteParams, opts ...option.RequestOption) (res *PreviewDeleteResponse, err error) {
+func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body PreviewDeleteParams, opts ...option.RequestOption) (res *PreviewDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", params.ZoneID, healthcheckID)
+	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", body.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -148,11 +148,6 @@ func (r PreviewNewResponseEnvelopeSuccess) IsKnown() bool {
 type PreviewDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r PreviewDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type PreviewDeleteResponseEnvelope struct {

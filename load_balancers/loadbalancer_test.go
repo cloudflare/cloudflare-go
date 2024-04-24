@@ -680,7 +680,6 @@ func TestLoadBalancerDelete(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		load_balancers.LoadBalancerDeleteParams{
 			ZoneID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {

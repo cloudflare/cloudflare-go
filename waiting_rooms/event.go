@@ -91,10 +91,10 @@ func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string,
 }
 
 // Deletes an event for a waiting room.
-func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID string, params EventDeleteParams, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
+func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID string, body EventDeleteParams, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", body.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -326,11 +326,6 @@ func (r EventListParams) URLQuery() (v url.Values) {
 type EventDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r EventDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type EventDeleteResponseEnvelope struct {

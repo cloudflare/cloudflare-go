@@ -76,10 +76,10 @@ func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallLis
 }
 
 // Delete a configured DNS Firewall Cluster.
-func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, params FirewallDeleteParams, opts ...option.RequestOption) (res *FirewallDeleteResponse, err error) {
+func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body FirewallDeleteParams, opts ...option.RequestOption) (res *FirewallDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", params.AccountID, dnsFirewallID)
+	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", body.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -413,11 +413,6 @@ func (r FirewallListParams) URLQuery() (v url.Values) {
 type FirewallDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r FirewallDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type FirewallDeleteResponseEnvelope struct {

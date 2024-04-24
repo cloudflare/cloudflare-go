@@ -90,11 +90,11 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string,
 }
 
 // Deletes an existing firewall rule.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, body RuleDeleteParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -441,16 +441,6 @@ func (r RuleListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type RuleDeleteParams struct {
-	// When true, indicates that Cloudflare should also delete the associated filter if
-	// there are no other firewall rules referencing the filter.
-	DeleteFilterIfUnused param.Field[bool] `json:"delete_filter_if_unused"`
-}
-
-func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type RuleDeleteResponseEnvelope struct {

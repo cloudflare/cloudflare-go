@@ -74,7 +74,7 @@ func (r *MembershipService) ListAutoPaging(ctx context.Context, query Membership
 }
 
 // Remove the associated member from an account.
-func (r *MembershipService) Delete(ctx context.Context, membershipID string, body MembershipDeleteParams, opts ...option.RequestOption) (res *MembershipDeleteResponse, err error) {
+func (r *MembershipService) Delete(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *MembershipDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MembershipDeleteResponseEnvelope
 	path := fmt.Sprintf("memberships/%s", membershipID)
@@ -409,14 +409,6 @@ func (r MembershipListParamsStatus) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type MembershipDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r MembershipDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type MembershipDeleteResponseEnvelope struct {

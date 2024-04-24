@@ -61,7 +61,7 @@ func (r *OrganizationService) ListAutoPaging(ctx context.Context, query Organiza
 }
 
 // Removes association to an organization.
-func (r *OrganizationService) Delete(ctx context.Context, organizationID string, body OrganizationDeleteParams, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
+func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -257,14 +257,6 @@ func (r OrganizationListParamsStatus) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type OrganizationDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r OrganizationDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type OrganizationGetResponseEnvelope struct {

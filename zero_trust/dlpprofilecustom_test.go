@@ -231,7 +231,6 @@ func TestDLPProfileCustomDelete(t *testing.T) {
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
 		zero_trust.DLPProfileCustomDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

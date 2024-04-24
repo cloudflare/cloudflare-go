@@ -60,10 +60,10 @@ func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParam
 }
 
 // Delete primary zone configuration for outgoing zone transfers.
-func (r *OutgoingService) Delete(ctx context.Context, params OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
+func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -379,11 +379,6 @@ func (r OutgoingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type OutgoingDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r OutgoingDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type OutgoingDeleteResponseEnvelope struct {

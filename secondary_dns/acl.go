@@ -82,10 +82,10 @@ func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, op
 }
 
 // Delete ACL.
-func (r *ACLService) Delete(ctx context.Context, aclID string, params ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
+func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", params.AccountID, aclID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", body.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -283,11 +283,6 @@ type ACLListParams struct {
 
 type ACLDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ACLDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ACLDeleteResponseEnvelope struct {

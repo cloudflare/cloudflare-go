@@ -82,10 +82,10 @@ func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, 
 }
 
 // Delete TSIG.
-func (r *TSIGService) Delete(ctx context.Context, tsigID string, params TSIGDeleteParams, opts ...option.RequestOption) (res *TSIGDeleteResponse, err error) {
+func (r *TSIGService) Delete(ctx context.Context, tsigID string, body TSIGDeleteParams, opts ...option.RequestOption) (res *TSIGDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", params.AccountID, tsigID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", body.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -280,11 +280,6 @@ type TSIGListParams struct {
 
 type TSIGDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r TSIGDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type TSIGDeleteResponseEnvelope struct {

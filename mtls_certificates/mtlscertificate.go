@@ -74,10 +74,10 @@ func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSC
 
 // Deletes the mTLS certificate unless the certificate is in use by one or more
 // Cloudflare services.
-func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, params MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
+func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", params.AccountID, mtlsCertificateID)
+	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", body.AccountID, mtlsCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -261,11 +261,6 @@ type MTLSCertificateListParams struct {
 type MTLSCertificateDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r MTLSCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type MTLSCertificateDeleteResponseEnvelope struct {

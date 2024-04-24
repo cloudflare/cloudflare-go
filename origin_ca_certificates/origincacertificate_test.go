@@ -83,13 +83,7 @@ func TestOriginCACertificateDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.OriginCACertificates.Delete(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		origin_ca_certificates.OriginCACertificateDeleteParams{
-			Body: map[string]interface{}{},
-		},
-	)
+	_, err := client.OriginCACertificates.Delete(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

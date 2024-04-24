@@ -85,10 +85,10 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, 
 }
 
 // Delete a network monitoring rule for account.
-func (r *RuleService) Delete(ctx context.Context, ruleID string, params RuleDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", params.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -282,11 +282,6 @@ type RuleListParams struct {
 
 type RuleDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type RuleDeleteResponseEnvelope struct {

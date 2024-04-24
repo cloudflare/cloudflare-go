@@ -124,9 +124,6 @@ func TestWAFOverrideDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"de677e5818985db1285d0e80225f06e5",
-		firewall.WAFOverrideDeleteParams{
-			Body: map[string]interface{}{},
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

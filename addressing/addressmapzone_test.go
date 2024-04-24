@@ -66,7 +66,6 @@ func TestAddressMapZoneDelete(t *testing.T) {
 		addressing.AddressMapZoneDeleteParams{
 			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

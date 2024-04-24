@@ -75,9 +75,9 @@ func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectNa
 }
 
 // Delete a deployment.
-func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
+func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", params.AccountID, projectName, deploymentID)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", body.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -214,11 +214,6 @@ func (r ProjectDeploymentListParamsEnv) IsKnown() bool {
 type ProjectDeploymentDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ProjectDeploymentDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectDeploymentGetParams struct {

@@ -101,17 +101,17 @@ func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRul
 // Deletes an existing IP Access rule defined.
 //
 // Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, params AccessRuleDeleteParams, opts ...option.RequestOption) (res *AccessRuleDeleteResponse, err error) {
+func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, body AccessRuleDeleteParams, opts ...option.RequestOption) (res *AccessRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleDeleteResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if body.AccountID.Present {
 		accountOrZone = "accounts"
-		accountOrZoneID = params.AccountID
+		accountOrZoneID = body.AccountID
 	} else {
 		accountOrZone = "zones"
-		accountOrZoneID = params.ZoneID
+		accountOrZoneID = body.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
@@ -703,15 +703,10 @@ func (r AccessRuleListParamsOrder) IsKnown() bool {
 }
 
 type AccessRuleDeleteParams struct {
-	Body interface{} `json:"body,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-func (r AccessRuleDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AccessRuleDeleteResponseEnvelope struct {

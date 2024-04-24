@@ -57,10 +57,10 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 }
 
 // Deletes a DLP custom profile.
-func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponseUnion, err error) {
+func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, body DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", body.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -474,11 +474,6 @@ func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration
 type DLPProfileCustomDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r DLPProfileCustomDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {

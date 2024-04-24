@@ -123,7 +123,6 @@ func TestPeerDelete(t *testing.T) {
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.PeerDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

@@ -72,10 +72,10 @@ func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query Ke
 }
 
 // Delete Keyless SSL Configuration
-func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertificateID string, params KeylessCertificateDeleteParams, opts ...option.RequestOption) (res *KeylessCertificateDeleteResponse, err error) {
+func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertificateID string, body KeylessCertificateDeleteParams, opts ...option.RequestOption) (res *KeylessCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", params.ZoneID, keylessCertificateID)
+	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", body.ZoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -313,11 +313,6 @@ type KeylessCertificateListParams struct {
 type KeylessCertificateDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r KeylessCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type KeylessCertificateDeleteResponseEnvelope struct {
