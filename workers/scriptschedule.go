@@ -82,13 +82,6 @@ func (r scheduleJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScheduleParam struct {
-}
-
-func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ScriptScheduleUpdateResponse struct {
 	Schedules []Schedule                       `json:"schedules"`
 	JSON      scriptScheduleUpdateResponseJSON `json:"-"`

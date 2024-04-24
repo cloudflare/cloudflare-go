@@ -127,8 +127,8 @@ func (UnionString) ImplementsAlertingAvailableAlertListResponseUnion()          
 func (UnionString) ImplementsAlertingDestinationEligibleGetResponseUnion()                       {}
 func (UnionString) ImplementsAlertingDestinationPagerdutyDeleteResponseUnion()                   {}
 func (UnionString) ImplementsAlertingDestinationWebhookDeleteResponseUnion()                     {}
-func (UnionString) ImplementsAlertingMechanismIDUnionParam()                                     {}
-func (UnionString) ImplementsAlertingMechanismIDUnion()                                          {}
+func (UnionString) ImplementsAlertingMechanismItemIDUnionParam()                                 {}
+func (UnionString) ImplementsAlertingMechanismItemIDUnion()                                      {}
 func (UnionString) ImplementsAlertingPolicyDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsD1DatabaseDeleteResponseUnion()                                     {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}

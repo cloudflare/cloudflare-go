@@ -48,7 +48,78 @@ func (r *R2ConfigurationService) Get(ctx context.Context, bucketName string, que
 	return
 }
 
-type R2ConfigurationGetResponse map[string]map[string]R2ConfigurationGetResponse
+type R2ConfigurationGetResponse map[string]map[string]R2ConfigurationGetResponseItem
+
+type R2ConfigurationGetResponseItem struct {
+	// Queue ID that will receive notifications based on the configured rules
+	Queue string `json:"queue,required"`
+	// Array of rules to drive notifications
+	Rules []R2ConfigurationGetResponseItemRule `json:"rules,required"`
+	JSON  r2ConfigurationGetResponseItemJSON   `json:"-"`
+}
+
+// r2ConfigurationGetResponseItemJSON contains the JSON metadata for the struct
+// [R2ConfigurationGetResponseItem]
+type r2ConfigurationGetResponseItemJSON struct {
+	Queue       apijson.Field
+	Rules       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *R2ConfigurationGetResponseItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2ConfigurationGetResponseItemJSON) RawJSON() string {
+	return r.raw
+}
+
+type R2ConfigurationGetResponseItemRule struct {
+	// Array of R2 object actions that will trigger notifications
+	Actions []R2ConfigurationGetResponseItemRulesAction `json:"actions,required"`
+	// Notifications will be sent only for objects with this prefix
+	Prefix string `json:"prefix"`
+	// Notifications will be sent only for objects with this suffix
+	Suffix string                                 `json:"suffix"`
+	JSON   r2ConfigurationGetResponseItemRuleJSON `json:"-"`
+}
+
+// r2ConfigurationGetResponseItemRuleJSON contains the JSON metadata for the struct
+// [R2ConfigurationGetResponseItemRule]
+type r2ConfigurationGetResponseItemRuleJSON struct {
+	Actions     apijson.Field
+	Prefix      apijson.Field
+	Suffix      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *R2ConfigurationGetResponseItemRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2ConfigurationGetResponseItemRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+type R2ConfigurationGetResponseItemRulesAction string
+
+const (
+	R2ConfigurationGetResponseItemRulesActionPutObject               R2ConfigurationGetResponseItemRulesAction = "PutObject"
+	R2ConfigurationGetResponseItemRulesActionCopyObject              R2ConfigurationGetResponseItemRulesAction = "CopyObject"
+	R2ConfigurationGetResponseItemRulesActionDeleteObject            R2ConfigurationGetResponseItemRulesAction = "DeleteObject"
+	R2ConfigurationGetResponseItemRulesActionCompleteMultipartUpload R2ConfigurationGetResponseItemRulesAction = "CompleteMultipartUpload"
+	R2ConfigurationGetResponseItemRulesActionAbortMultipartUpload    R2ConfigurationGetResponseItemRulesAction = "AbortMultipartUpload"
+)
+
+func (r R2ConfigurationGetResponseItemRulesAction) IsKnown() bool {
+	switch r {
+	case R2ConfigurationGetResponseItemRulesActionPutObject, R2ConfigurationGetResponseItemRulesActionCopyObject, R2ConfigurationGetResponseItemRulesActionDeleteObject, R2ConfigurationGetResponseItemRulesActionCompleteMultipartUpload, R2ConfigurationGetResponseItemRulesActionAbortMultipartUpload:
+		return true
+	}
+	return false
+}
 
 type R2ConfigurationGetParams struct {
 	// Identifier

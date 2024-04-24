@@ -34,14 +34,14 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeUniversalSSLEventType),
 		Enabled:   cloudflare.F(true),
 		Mechanisms: cloudflare.F(alerting.MechanismParam{
-			"email": []alerting.MechanismParam{{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("test@example.com")),
+			"email": []alerting.MechanismItemParam{{
+				ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("test@example.com")),
 			}},
-			"pagerduty": []alerting.MechanismParam{{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+			"pagerduty": []alerting.MechanismItemParam{{
+				ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
 			}},
-			"webhooks": []alerting.MechanismParam{{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+			"webhooks": []alerting.MechanismItemParam{{
+				ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 			}},
 		}),
 		Name:        cloudflare.F("SSL Notification Event Policy"),
@@ -163,14 +163,14 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				Zones:                        cloudflare.F([]string{"string", "string", "string"}),
 			}),
 			Mechanisms: cloudflare.F(alerting.MechanismParam{
-				"email": []alerting.MechanismParam{{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("test@example.com")),
+				"email": []alerting.MechanismItemParam{{
+					ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("test@example.com")),
 				}},
-				"pagerduty": []alerting.MechanismParam{{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+				"pagerduty": []alerting.MechanismItemParam{{
+					ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
 				}},
-				"webhooks": []alerting.MechanismParam{{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+				"webhooks": []alerting.MechanismItemParam{{
+					ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 				}},
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),

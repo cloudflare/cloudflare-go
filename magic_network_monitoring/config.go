@@ -126,19 +126,6 @@ func (r configurationJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConfigurationParam struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling param.Field[float64] `json:"default_sampling,required"`
-	// The account name.
-	Name      param.Field[string]   `json:"name,required"`
-	RouterIPs param.Field[[]string] `json:"router_ips,required"`
-}
-
-func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ConfigNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      interface{}         `json:"body,required"`

@@ -145,7 +145,7 @@ func (r firewallFilterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallFilter) implementsFirewallFirewallRuleFilter() {}
+func (r FirewallFilter) ImplementsFirewallFirewallRuleFilter() {}
 
 type FilterNewParams struct {
 	Body interface{} `json:"body,required"`
