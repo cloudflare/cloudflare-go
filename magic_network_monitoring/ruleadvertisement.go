@@ -37,7 +37,7 @@ func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, para
 	opts = append(r.Options[:], opts...)
 	var env RuleAdvertisementEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s/advertisement", params.AccountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

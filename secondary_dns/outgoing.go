@@ -78,7 +78,7 @@ func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisablePar
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/disable", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParam
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/enable", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -104,7 +104,7 @@ func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceN
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/force_notify", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

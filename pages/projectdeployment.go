@@ -100,7 +100,7 @@ func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentRetryResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", params.AccountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -114,7 +114,7 @@ func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName str
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentRollbackResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", params.AccountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

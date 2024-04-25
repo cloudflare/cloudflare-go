@@ -38,7 +38,7 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,7 +52,7 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,7 +78,7 @@ func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts 
 	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

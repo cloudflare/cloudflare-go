@@ -30,7 +30,7 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.New(context.TODO(), accounts.MemberNewParams{
-		AccountID: cloudflare.F[any](map[string]interface{}{}),
+		AccountID: cloudflare.F("string"),
 		Email:     cloudflare.F("user@example.com"),
 		Roles:     cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb"}),
 		Status:    cloudflare.F(accounts.MemberNewParamsStatusAccepted),
@@ -62,7 +62,7 @@ func TestMemberUpdate(t *testing.T) {
 		context.TODO(),
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberUpdateParams{
-			AccountID: cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("string"),
 			Member: shared.MemberParam{
 				Roles: cloudflare.F([]shared.MemberRoleParam{{
 					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
@@ -98,7 +98,7 @@ func TestMemberListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.List(context.TODO(), accounts.MemberListParams{
-		AccountID: cloudflare.F[any](map[string]interface{}{}),
+		AccountID: cloudflare.F("string"),
 		Direction: cloudflare.F(accounts.MemberListParamsDirectionDesc),
 		Order:     cloudflare.F(accounts.MemberListParamsOrderStatus),
 		Page:      cloudflare.F(1.000000),
@@ -132,7 +132,7 @@ func TestMemberDelete(t *testing.T) {
 		context.TODO(),
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberDeleteParams{
-			AccountID: cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -162,7 +162,7 @@ func TestMemberGet(t *testing.T) {
 		context.TODO(),
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberGetParams{
-			AccountID: cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("string"),
 		},
 	)
 	if err != nil {
