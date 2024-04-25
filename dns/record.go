@@ -183,7 +183,7 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 	opts = append(r.Options[:], opts...)
 	var env RecordScanResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_records/scan", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

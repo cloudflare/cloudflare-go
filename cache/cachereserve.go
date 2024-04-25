@@ -41,7 +41,7 @@ func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClea
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveClearResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

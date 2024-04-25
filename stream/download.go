@@ -38,7 +38,7 @@ func (r *DownloadService) New(ctx context.Context, identifier string, params Dow
 	opts = append(r.Options[:], opts...)
 	var env DownloadNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", params.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
