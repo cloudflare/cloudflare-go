@@ -95,7 +95,7 @@ func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServic
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/service_tokens", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}

@@ -92,7 +92,7 @@ func (r *JobService) List(ctx context.Context, query JobListParams, opts ...opti
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}

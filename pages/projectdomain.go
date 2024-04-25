@@ -54,7 +54,7 @@ func (r *ProjectDomainService) List(ctx context.Context, projectName string, que
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", query.AccountID, projectName)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", params.AccountID, projectName, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

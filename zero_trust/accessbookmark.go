@@ -38,7 +38,7 @@ func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -51,7 +51,7 @@ func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, u
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}

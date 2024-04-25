@@ -41,7 +41,7 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 	opts = append(r.Options[:], opts...)
 	var env KeyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

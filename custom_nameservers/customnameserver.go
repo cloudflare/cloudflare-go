@@ -91,7 +91,7 @@ func (r *CustomNameserverService) Verify(ctx context.Context, params CustomNames
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverVerifyResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns/verify", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

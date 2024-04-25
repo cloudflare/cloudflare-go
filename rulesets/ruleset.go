@@ -99,7 +99,7 @@ func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}

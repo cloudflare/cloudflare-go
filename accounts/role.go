@@ -39,8 +39,8 @@ func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...op
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%v/roles", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/roles", query.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, 
 func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoleGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/roles/%v", query.AccountID, roleID)
+	path := fmt.Sprintf("accounts/%s/roles/%v", query.AccountID, roleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -87,11 +87,11 @@ func init() {
 }
 
 type RoleListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RoleGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RoleGetResponseEnvelope struct {

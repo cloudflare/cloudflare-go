@@ -37,7 +37,7 @@ func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string,
 	opts = append(r.Options[:], opts...)
 	var env AddressMapZoneUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", params.AccountID, addressMapID, params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
