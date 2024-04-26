@@ -141,11 +141,10 @@ type Zone struct {
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The domain name
 	Name string `json:"name,required"`
-	// The name servers Cloudflare assigns to a zone
-	NameServers []string `json:"name_servers,required" format:"hostname"`
 	// DNS host at the time of switching to Cloudflare
 	OriginalDnshost string `json:"original_dnshost,required,nullable"`
-	// Original name servers before moving to Cloudflare
+	// Original name servers before moving to Cloudflare Notes: Is this only available
+	// for full zones?
 	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
 	// Registrar for the domain at the time of switching to Cloudflare
 	OriginalRegistrar string `json:"original_registrar,required,nullable"`
@@ -167,7 +166,6 @@ type zoneJSON struct {
 	Meta                apijson.Field
 	ModifiedOn          apijson.Field
 	Name                apijson.Field
-	NameServers         apijson.Field
 	OriginalDnshost     apijson.Field
 	OriginalNameServers apijson.Field
 	OriginalRegistrar   apijson.Field
