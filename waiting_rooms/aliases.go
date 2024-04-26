@@ -4,7 +4,7 @@ package waiting_rooms
 
 import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 type Error = apierror.Error
