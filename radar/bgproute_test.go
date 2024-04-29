@@ -89,7 +89,7 @@ func TestBGPRouteStatsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Stats(context.TODO(), radar.BGPRouteStatsParams{
-		ASN:      cloudflare.F(int64(0)),
+		ASN:      cloudflare.F(int64(174)),
 		Format:   cloudflare.F(radar.BGPRouteStatsParamsFormatJson),
 		Location: cloudflare.F("US"),
 	})
@@ -117,7 +117,7 @@ func TestBGPRouteTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Timeseries(context.TODO(), radar.BGPRouteTimeseriesParams{
-		ASN:          cloudflare.F(int64(0)),
+		ASN:          cloudflare.F(int64(174)),
 		DateEnd:      cloudflare.F(time.Now()),
 		DateRange:    cloudflare.F(radar.BGPRouteTimeseriesParamsDateRange7d),
 		DateStart:    cloudflare.F(time.Now()),

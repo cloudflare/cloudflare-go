@@ -40,7 +40,7 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 			Origin: cloudflare.F(hyperdrive.ConfigurationParam{
 				Database: cloudflare.F("postgres"),
 				Host:     cloudflare.F("database.example.com"),
-				Port:     cloudflare.F(int64(0)),
+				Port:     cloudflare.F(int64(5432)),
 				Scheme:   cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
 				User:     cloudflare.F("postgres"),
 			}),
@@ -84,7 +84,7 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
 					Database: cloudflare.F("postgres"),
 					Host:     cloudflare.F("database.example.com"),
-					Port:     cloudflare.F(int64(0)),
+					Port:     cloudflare.F(int64(5432)),
 					Scheme:   cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
 					User:     cloudflare.F("postgres"),
 				}),
@@ -185,7 +185,7 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
 					Database: cloudflare.F("postgres"),
 					Host:     cloudflare.F("database.example.com"),
-					Port:     cloudflare.F(int64(0)),
+					Port:     cloudflare.F(int64(5432)),
 					Scheme:   cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
 					User:     cloudflare.F("postgres"),
 				}),

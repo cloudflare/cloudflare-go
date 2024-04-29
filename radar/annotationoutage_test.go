@@ -30,7 +30,7 @@ func TestAnnotationOutageGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Annotations.Outages.Get(context.TODO(), radar.AnnotationOutageGetParams{
-		ASN:       cloudflare.F(int64(0)),
+		ASN:       cloudflare.F(int64(174)),
 		DateEnd:   cloudflare.F(time.Now()),
 		DateRange: cloudflare.F(radar.AnnotationOutageGetParamsDateRange7d),
 		DateStart: cloudflare.F(time.Now()),
