@@ -6673,35 +6673,9 @@ Methods:
 
 # Snippets
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#Snippet">Snippet</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#SnippetDeleteResponseUnion">SnippetDeleteResponseUnion</a>
-
-Methods:
-
-- <code title="put /zones/{zone_identifier}/snippets/{snippet_name}">client.Snippets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#SnippetService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, snippetName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#SnippetUpdateParams">SnippetUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#Snippet">Snippet</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_identifier}/snippets">client.Snippets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#SnippetService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#Snippet">Snippet</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /zones/{zone_identifier}/snippets/{snippet_name}">client.Snippets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#SnippetService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, snippetName <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#SnippetDeleteResponseUnion">SnippetDeleteResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_identifier}/snippets/{snippet_name}">client.Snippets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#SnippetService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, snippetName <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#Snippet">Snippet</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Content
 
-Methods:
-
-- <code title="get /zones/{zone_identifier}/snippets/{snippet_name}/content">client.Snippets.Content.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#ContentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, snippetName <a href="https://pkg.go.dev/builtin#string">string</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Rules
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#RuleUpdateResponse">RuleUpdateResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#RuleListResponse">RuleListResponse</a>
-
-Methods:
-
-- <code title="put /zones/{zone_identifier}/snippets/snippet_rules">client.Snippets.Rules.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#RuleService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#RuleUpdateParams">RuleUpdateParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#RuleUpdateResponse">RuleUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_identifier}/snippets/snippet_rules">client.Snippets.Rules.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#RuleService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets">snippets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/snippets#RuleListResponse">RuleListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Calls
 
