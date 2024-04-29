@@ -37,7 +37,7 @@ func TestScriptListWithOptionalParams(t *testing.T) {
 		Export:              cloudflare.F(page_shield.ScriptListParamsExportCsv),
 		Hosts:               cloudflare.F("blog.cloudflare.com,www.example*,*cloudflare.com"),
 		OrderBy:             cloudflare.F(page_shield.ScriptListParamsOrderByFirstSeenAt),
-		Page:                cloudflare.F("string"),
+		Page:                cloudflare.F("2"),
 		PageURL:             cloudflare.F("example.com/page,*/checkout,example.com/*,*checkout*"),
 		PerPage:             cloudflare.F(100.000000),
 		PrioritizeMalicious: cloudflare.F(true),

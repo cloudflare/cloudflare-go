@@ -30,7 +30,7 @@ func TestTrafficAnomalyGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.TrafficAnomalies.Get(context.TODO(), radar.TrafficAnomalyGetParams{
-		ASN:       cloudflare.F(int64(0)),
+		ASN:       cloudflare.F(int64(174)),
 		DateEnd:   cloudflare.F(time.Now()),
 		DateRange: cloudflare.F(radar.TrafficAnomalyGetParamsDateRange7d),
 		DateStart: cloudflare.F(time.Now()),

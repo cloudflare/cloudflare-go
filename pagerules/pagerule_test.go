@@ -36,6 +36,18 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 				Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
 				URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
 			}),
+		}, {
+			Name: cloudflare.F(pagerules.RouteNameForwardURL),
+			Value: cloudflare.F(pagerules.RouteValueParam{
+				Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+				URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+			}),
+		}, {
+			Name: cloudflare.F(pagerules.RouteNameForwardURL),
+			Value: cloudflare.F(pagerules.RouteValueParam{
+				Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+				URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+			}),
 		}}),
 		Targets: cloudflare.F([]pagerules.TargetParam{{
 			Constraint: cloudflare.F(pagerules.TargetConstraintParam{
@@ -76,6 +88,18 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 		pagerules.PageruleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]pagerules.RouteParam{{
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}, {
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}, {
 				Name: cloudflare.F(pagerules.RouteNameForwardURL),
 				Value: cloudflare.F(pagerules.RouteValueParam{
 					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
@@ -182,6 +206,18 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 		pagerules.PageruleEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]pagerules.RouteParam{{
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}, {
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}, {
 				Name: cloudflare.F(pagerules.RouteNameForwardURL),
 				Value: cloudflare.F(pagerules.RouteValueParam{
 					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
