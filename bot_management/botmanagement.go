@@ -796,11 +796,11 @@ func (r BotManagementUpdateParamsBodySBFMLikelyAutomated) IsKnown() bool {
 }
 
 type BotManagementUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   BotManagementUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  BotManagementUpdateResponse                `json:"result"`
 	JSON    botManagementUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -809,8 +809,8 @@ type BotManagementUpdateResponseEnvelope struct {
 type botManagementUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -844,11 +844,11 @@ type BotManagementGetParams struct {
 }
 
 type BotManagementGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   BotManagementGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BotManagementGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  BotManagementGetResponse                `json:"result"`
 	JSON    botManagementGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -857,8 +857,8 @@ type BotManagementGetResponseEnvelope struct {
 type botManagementGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
