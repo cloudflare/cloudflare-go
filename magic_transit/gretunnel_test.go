@@ -15,7 +15,7 @@ import (
 )
 
 func TestGRETunnelNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -42,7 +42,6 @@ func TestGRETunnelNew(t *testing.T) {
 }
 
 func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -86,7 +85,6 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestGRETunnelList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -112,7 +110,6 @@ func TestGRETunnelList(t *testing.T) {
 }
 
 func TestGRETunnelDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -142,7 +139,6 @@ func TestGRETunnelDelete(t *testing.T) {
 }
 
 func TestGRETunnelGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
