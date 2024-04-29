@@ -17,7 +17,6 @@ import (
 )
 
 func TestV1BlobGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		w.Write([]byte("abc"))

@@ -15,7 +15,7 @@ import (
 )
 
 func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -61,7 +61,6 @@ func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
 }
 
 func TestDevicePolicyList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,7 +86,6 @@ func TestDevicePolicyList(t *testing.T) {
 }
 
 func TestDevicePolicyDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -117,7 +115,7 @@ func TestDevicePolicyDelete(t *testing.T) {
 }
 
 func TestDevicePolicyEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -165,7 +163,7 @@ func TestDevicePolicyEditWithOptionalParams(t *testing.T) {
 }
 
 func TestDevicePolicyGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

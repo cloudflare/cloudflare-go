@@ -15,7 +15,7 @@ import (
 )
 
 func TestRouteNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -42,7 +42,6 @@ func TestRouteNew(t *testing.T) {
 }
 
 func TestRouteUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,7 +80,6 @@ func TestRouteUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestRouteList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -107,7 +105,6 @@ func TestRouteList(t *testing.T) {
 }
 
 func TestRouteDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -137,7 +134,6 @@ func TestRouteDelete(t *testing.T) {
 }
 
 func TestRouteEmpty(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -163,7 +159,6 @@ func TestRouteEmpty(t *testing.T) {
 }
 
 func TestRouteGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
