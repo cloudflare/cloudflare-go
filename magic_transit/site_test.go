@@ -35,8 +35,8 @@ func TestSiteNewWithOptionalParams(t *testing.T) {
 		Description: cloudflare.F("string"),
 		HaMode:      cloudflare.F(true),
 		Location: cloudflare.F(magic_transit.SiteLocationParam{
-			Lat: cloudflare.F("string"),
-			Lon: cloudflare.F("string"),
+			Lat: cloudflare.F("37.6192"),
+			Lon: cloudflare.F("122.3816"),
 		}),
 		SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
 	})
@@ -71,8 +71,8 @@ func TestSiteUpdateWithOptionalParams(t *testing.T) {
 			ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
 			Description: cloudflare.F("string"),
 			Location: cloudflare.F(magic_transit.SiteLocationParam{
-				Lat: cloudflare.F("string"),
-				Lon: cloudflare.F("string"),
+				Lat: cloudflare.F("37.6192"),
+				Lon: cloudflare.F("122.3816"),
 			}),
 			Name:                 cloudflare.F("site_1"),
 			SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
