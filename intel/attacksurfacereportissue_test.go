@@ -15,7 +15,6 @@ import (
 )
 
 func TestAttackSurfaceReportIssueListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -54,7 +53,6 @@ func TestAttackSurfaceReportIssueListWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackSurfaceReportIssueClassWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -91,7 +89,6 @@ func TestAttackSurfaceReportIssueClassWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackSurfaceReportIssueDismissWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -122,7 +119,6 @@ func TestAttackSurfaceReportIssueDismissWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackSurfaceReportIssueSeverityWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -159,7 +155,6 @@ func TestAttackSurfaceReportIssueSeverityWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackSurfaceReportIssueTypeWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

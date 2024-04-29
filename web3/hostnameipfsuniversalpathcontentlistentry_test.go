@@ -15,7 +15,6 @@ import (
 )
 
 func TestHostnameIPFSUniversalPathContentListEntryNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -48,7 +47,6 @@ func TestHostnameIPFSUniversalPathContentListEntryNewWithOptionalParams(t *testi
 }
 
 func TestHostnameIPFSUniversalPathContentListEntryUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -82,7 +80,6 @@ func TestHostnameIPFSUniversalPathContentListEntryUpdateWithOptionalParams(t *te
 }
 
 func TestHostnameIPFSUniversalPathContentListEntryList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -110,7 +107,6 @@ func TestHostnameIPFSUniversalPathContentListEntryList(t *testing.T) {
 }
 
 func TestHostnameIPFSUniversalPathContentListEntryDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -139,7 +135,6 @@ func TestHostnameIPFSUniversalPathContentListEntryDelete(t *testing.T) {
 }
 
 func TestHostnameIPFSUniversalPathContentListEntryGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

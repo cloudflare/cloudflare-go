@@ -15,7 +15,6 @@ import (
 )
 
 func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -66,7 +65,6 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -121,7 +119,6 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceDEXTestList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -147,7 +144,6 @@ func TestDeviceDEXTestList(t *testing.T) {
 }
 
 func TestDeviceDEXTestDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -177,7 +173,6 @@ func TestDeviceDEXTestDelete(t *testing.T) {
 }
 
 func TestDeviceDEXTestGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
