@@ -165,7 +165,6 @@ func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncrypt
 }
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                           {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                                {}
-func (UnionString) ImplementsSnippetsSnippetDeleteResponseUnion()                        {}
 func (UnionString) ImplementsCloudforceOneRequestDeleteResponseUnion()                   {}
 func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponseUnion()            {}
 func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion()           {}
