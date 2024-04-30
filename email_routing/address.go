@@ -148,9 +148,9 @@ func (r AddressNewParams) MarshalJSON() (data []byte, err error) {
 type AddressNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Address               `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Address                           `json:"result"`
 	JSON    addressNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -159,8 +159,8 @@ type AddressNewResponseEnvelope struct {
 type addressNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -242,9 +242,9 @@ func (r AddressListParamsVerified) IsKnown() bool {
 type AddressDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Address               `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  Address                              `json:"result"`
 	JSON    addressDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -253,8 +253,8 @@ type AddressDeleteResponseEnvelope struct {
 type addressDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -285,9 +285,9 @@ func (r AddressDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AddressGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Address               `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Address                           `json:"result"`
 	JSON    addressGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -296,8 +296,8 @@ type AddressGetResponseEnvelope struct {
 type addressGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
