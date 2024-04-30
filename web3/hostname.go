@@ -36,7 +36,7 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 }
 
 // Create Web3 Hostname
-func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body HostnameNewParams, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body HostnameNewParams, opts ...option.RequestOption) (res *HostnameNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
@@ -49,7 +49,7 @@ func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body H
 }
 
 // List Web3 Hostnames
-func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[Hostname], err error) {
+func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[HostnameListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,7 +67,7 @@ func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts 
 }
 
 // List Web3 Hostnames
-func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hostname] {
+func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[HostnameListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
 }
 
@@ -85,7 +85,7 @@ func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, ide
 }
 
 // Edit Web3 Hostname
-func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body HostnameEditParams, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body HostnameEditParams, opts ...option.RequestOption) (res *HostnameEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
@@ -98,7 +98,7 @@ func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, ident
 }
 
 // Web3 Hostname Details
-func (r *HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HostnameGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
@@ -110,7 +110,7 @@ func (r *HostnameService) Get(ctx context.Context, zoneIdentifier string, identi
 	return
 }
 
-type Hostname struct {
+type HostnameNewResponse struct {
 	// Identifier
 	ID        string    `json:"id"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
@@ -122,14 +122,15 @@ type Hostname struct {
 	// The hostname that will point to the target gateway via CNAME.
 	Name string `json:"name"`
 	// Status of the hostname's activation.
-	Status HostnameStatus `json:"status"`
+	Status HostnameNewResponseStatus `json:"status"`
 	// Target gateway of the hostname.
-	Target HostnameTarget `json:"target"`
-	JSON   hostnameJSON   `json:"-"`
+	Target HostnameNewResponseTarget `json:"target"`
+	JSON   hostnameNewResponseJSON   `json:"-"`
 }
 
-// hostnameJSON contains the JSON metadata for the struct [Hostname]
-type hostnameJSON struct {
+// hostnameNewResponseJSON contains the JSON metadata for the struct
+// [HostnameNewResponse]
+type hostnameNewResponseJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
@@ -142,46 +143,120 @@ type hostnameJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Hostname) UnmarshalJSON(data []byte) (err error) {
+func (r *HostnameNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r hostnameJSON) RawJSON() string {
+func (r hostnameNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Hostname) ImplementsRulesListItemGetResponseUnion() {}
-
 // Status of the hostname's activation.
-type HostnameStatus string
+type HostnameNewResponseStatus string
 
 const (
-	HostnameStatusActive   HostnameStatus = "active"
-	HostnameStatusPending  HostnameStatus = "pending"
-	HostnameStatusDeleting HostnameStatus = "deleting"
-	HostnameStatusError    HostnameStatus = "error"
+	HostnameNewResponseStatusActive   HostnameNewResponseStatus = "active"
+	HostnameNewResponseStatusPending  HostnameNewResponseStatus = "pending"
+	HostnameNewResponseStatusDeleting HostnameNewResponseStatus = "deleting"
+	HostnameNewResponseStatusError    HostnameNewResponseStatus = "error"
 )
 
-func (r HostnameStatus) IsKnown() bool {
+func (r HostnameNewResponseStatus) IsKnown() bool {
 	switch r {
-	case HostnameStatusActive, HostnameStatusPending, HostnameStatusDeleting, HostnameStatusError:
+	case HostnameNewResponseStatusActive, HostnameNewResponseStatusPending, HostnameNewResponseStatusDeleting, HostnameNewResponseStatusError:
 		return true
 	}
 	return false
 }
 
 // Target gateway of the hostname.
-type HostnameTarget string
+type HostnameNewResponseTarget string
 
 const (
-	HostnameTargetEthereum          HostnameTarget = "ethereum"
-	HostnameTargetIPFS              HostnameTarget = "ipfs"
-	HostnameTargetIPFSUniversalPath HostnameTarget = "ipfs_universal_path"
+	HostnameNewResponseTargetEthereum          HostnameNewResponseTarget = "ethereum"
+	HostnameNewResponseTargetIPFS              HostnameNewResponseTarget = "ipfs"
+	HostnameNewResponseTargetIPFSUniversalPath HostnameNewResponseTarget = "ipfs_universal_path"
 )
 
-func (r HostnameTarget) IsKnown() bool {
+func (r HostnameNewResponseTarget) IsKnown() bool {
 	switch r {
-	case HostnameTargetEthereum, HostnameTargetIPFS, HostnameTargetIPFSUniversalPath:
+	case HostnameNewResponseTargetEthereum, HostnameNewResponseTargetIPFS, HostnameNewResponseTargetIPFSUniversalPath:
+		return true
+	}
+	return false
+}
+
+type HostnameListResponse struct {
+	// Identifier
+	ID        string    `json:"id"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the hostname.
+	Description string `json:"description"`
+	// DNSLink value used if the target is ipfs.
+	Dnslink    string    `json:"dnslink"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The hostname that will point to the target gateway via CNAME.
+	Name string `json:"name"`
+	// Status of the hostname's activation.
+	Status HostnameListResponseStatus `json:"status"`
+	// Target gateway of the hostname.
+	Target HostnameListResponseTarget `json:"target"`
+	JSON   hostnameListResponseJSON   `json:"-"`
+}
+
+// hostnameListResponseJSON contains the JSON metadata for the struct
+// [HostnameListResponse]
+type hostnameListResponseJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Description apijson.Field
+	Dnslink     apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	Target      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the hostname's activation.
+type HostnameListResponseStatus string
+
+const (
+	HostnameListResponseStatusActive   HostnameListResponseStatus = "active"
+	HostnameListResponseStatusPending  HostnameListResponseStatus = "pending"
+	HostnameListResponseStatusDeleting HostnameListResponseStatus = "deleting"
+	HostnameListResponseStatusError    HostnameListResponseStatus = "error"
+)
+
+func (r HostnameListResponseStatus) IsKnown() bool {
+	switch r {
+	case HostnameListResponseStatusActive, HostnameListResponseStatusPending, HostnameListResponseStatusDeleting, HostnameListResponseStatusError:
+		return true
+	}
+	return false
+}
+
+// Target gateway of the hostname.
+type HostnameListResponseTarget string
+
+const (
+	HostnameListResponseTargetEthereum          HostnameListResponseTarget = "ethereum"
+	HostnameListResponseTargetIPFS              HostnameListResponseTarget = "ipfs"
+	HostnameListResponseTargetIPFSUniversalPath HostnameListResponseTarget = "ipfs_universal_path"
+)
+
+func (r HostnameListResponseTarget) IsKnown() bool {
+	switch r {
+	case HostnameListResponseTargetEthereum, HostnameListResponseTargetIPFS, HostnameListResponseTargetIPFSUniversalPath:
 		return true
 	}
 	return false
@@ -207,6 +282,158 @@ func (r *HostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r hostnameDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type HostnameEditResponse struct {
+	// Identifier
+	ID        string    `json:"id"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the hostname.
+	Description string `json:"description"`
+	// DNSLink value used if the target is ipfs.
+	Dnslink    string    `json:"dnslink"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The hostname that will point to the target gateway via CNAME.
+	Name string `json:"name"`
+	// Status of the hostname's activation.
+	Status HostnameEditResponseStatus `json:"status"`
+	// Target gateway of the hostname.
+	Target HostnameEditResponseTarget `json:"target"`
+	JSON   hostnameEditResponseJSON   `json:"-"`
+}
+
+// hostnameEditResponseJSON contains the JSON metadata for the struct
+// [HostnameEditResponse]
+type hostnameEditResponseJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Description apijson.Field
+	Dnslink     apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	Target      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the hostname's activation.
+type HostnameEditResponseStatus string
+
+const (
+	HostnameEditResponseStatusActive   HostnameEditResponseStatus = "active"
+	HostnameEditResponseStatusPending  HostnameEditResponseStatus = "pending"
+	HostnameEditResponseStatusDeleting HostnameEditResponseStatus = "deleting"
+	HostnameEditResponseStatusError    HostnameEditResponseStatus = "error"
+)
+
+func (r HostnameEditResponseStatus) IsKnown() bool {
+	switch r {
+	case HostnameEditResponseStatusActive, HostnameEditResponseStatusPending, HostnameEditResponseStatusDeleting, HostnameEditResponseStatusError:
+		return true
+	}
+	return false
+}
+
+// Target gateway of the hostname.
+type HostnameEditResponseTarget string
+
+const (
+	HostnameEditResponseTargetEthereum          HostnameEditResponseTarget = "ethereum"
+	HostnameEditResponseTargetIPFS              HostnameEditResponseTarget = "ipfs"
+	HostnameEditResponseTargetIPFSUniversalPath HostnameEditResponseTarget = "ipfs_universal_path"
+)
+
+func (r HostnameEditResponseTarget) IsKnown() bool {
+	switch r {
+	case HostnameEditResponseTargetEthereum, HostnameEditResponseTargetIPFS, HostnameEditResponseTargetIPFSUniversalPath:
+		return true
+	}
+	return false
+}
+
+type HostnameGetResponse struct {
+	// Identifier
+	ID        string    `json:"id"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the hostname.
+	Description string `json:"description"`
+	// DNSLink value used if the target is ipfs.
+	Dnslink    string    `json:"dnslink"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The hostname that will point to the target gateway via CNAME.
+	Name string `json:"name"`
+	// Status of the hostname's activation.
+	Status HostnameGetResponseStatus `json:"status"`
+	// Target gateway of the hostname.
+	Target HostnameGetResponseTarget `json:"target"`
+	JSON   hostnameGetResponseJSON   `json:"-"`
+}
+
+// hostnameGetResponseJSON contains the JSON metadata for the struct
+// [HostnameGetResponse]
+type hostnameGetResponseJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Description apijson.Field
+	Dnslink     apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	Target      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the hostname's activation.
+type HostnameGetResponseStatus string
+
+const (
+	HostnameGetResponseStatusActive   HostnameGetResponseStatus = "active"
+	HostnameGetResponseStatusPending  HostnameGetResponseStatus = "pending"
+	HostnameGetResponseStatusDeleting HostnameGetResponseStatus = "deleting"
+	HostnameGetResponseStatusError    HostnameGetResponseStatus = "error"
+)
+
+func (r HostnameGetResponseStatus) IsKnown() bool {
+	switch r {
+	case HostnameGetResponseStatusActive, HostnameGetResponseStatusPending, HostnameGetResponseStatusDeleting, HostnameGetResponseStatusError:
+		return true
+	}
+	return false
+}
+
+// Target gateway of the hostname.
+type HostnameGetResponseTarget string
+
+const (
+	HostnameGetResponseTargetEthereum          HostnameGetResponseTarget = "ethereum"
+	HostnameGetResponseTargetIPFS              HostnameGetResponseTarget = "ipfs"
+	HostnameGetResponseTargetIPFSUniversalPath HostnameGetResponseTarget = "ipfs_universal_path"
+)
+
+func (r HostnameGetResponseTarget) IsKnown() bool {
+	switch r {
+	case HostnameGetResponseTargetEthereum, HostnameGetResponseTargetIPFS, HostnameGetResponseTargetIPFSUniversalPath:
+		return true
+	}
+	return false
 }
 
 type HostnameNewParams struct {
@@ -242,7 +469,7 @@ func (r HostnameNewParamsTarget) IsKnown() bool {
 type HostnameNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Result   HostnameNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -339,7 +566,7 @@ func (r HostnameEditParams) MarshalJSON() (data []byte, err error) {
 type HostnameEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Result   HostnameEditResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -382,7 +609,7 @@ func (r HostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 type HostnameGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Result   HostnameGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`
