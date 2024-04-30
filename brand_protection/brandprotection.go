@@ -325,9 +325,9 @@ func (r BrandProtectionSubmitParams) MarshalJSON() (data []byte, err error) {
 type BrandProtectionSubmitResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Submit                `json:"result,required"`
 	// Whether the API call was successful
 	Success BrandProtectionSubmitResponseEnvelopeSuccess `json:"success,required"`
+	Result  Submit                                       `json:"result"`
 	JSON    brandProtectionSubmitResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -336,8 +336,8 @@ type BrandProtectionSubmitResponseEnvelope struct {
 type brandProtectionSubmitResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -398,9 +398,9 @@ func (r BrandProtectionURLInfoParamsURLIDParam) URLQuery() (v url.Values) {
 type BrandProtectionURLInfoResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Info                  `json:"result,required"`
 	// Whether the API call was successful
 	Success BrandProtectionURLInfoResponseEnvelopeSuccess `json:"success,required"`
+	Result  Info                                          `json:"result"`
 	JSON    brandProtectionURLInfoResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -409,8 +409,8 @@ type BrandProtectionURLInfoResponseEnvelope struct {
 type brandProtectionURLInfoResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
