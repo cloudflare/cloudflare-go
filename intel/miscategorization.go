@@ -106,11 +106,11 @@ func (r MiscategorizationNewParamsIndicatorType) IsKnown() bool {
 }
 
 type MiscategorizationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   MiscategorizationNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MiscategorizationNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  MiscategorizationNewResponseUnion           `json:"result"`
 	JSON    miscategorizationNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -119,8 +119,8 @@ type MiscategorizationNewResponseEnvelope struct {
 type miscategorizationNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
