@@ -329,9 +329,9 @@ func (r RuleNewParamsEnabled) IsKnown() bool {
 type RuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  EmailRoutingRule               `json:"result"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -340,8 +340,8 @@ type RuleNewResponseEnvelope struct {
 type ruleNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -405,9 +405,9 @@ func (r RuleUpdateParamsEnabled) IsKnown() bool {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  EmailRoutingRule                  `json:"result"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -416,8 +416,8 @@ type RuleUpdateResponseEnvelope struct {
 type ruleUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -481,9 +481,9 @@ func (r RuleListParamsEnabled) IsKnown() bool {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  EmailRoutingRule                  `json:"result"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -492,8 +492,8 @@ type RuleDeleteResponseEnvelope struct {
 type ruleDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -524,9 +524,9 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type RuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   EmailRoutingRule      `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  EmailRoutingRule               `json:"result"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -535,8 +535,8 @@ type RuleGetResponseEnvelope struct {
 type ruleGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

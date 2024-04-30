@@ -296,11 +296,11 @@ func (r RuleCatchAllUpdateParamsEnabled) IsKnown() bool {
 }
 
 type RuleCatchAllUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   RuleCatchAllUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleCatchAllUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  RuleCatchAllUpdateResponse                `json:"result"`
 	JSON    ruleCatchAllUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -309,8 +309,8 @@ type RuleCatchAllUpdateResponseEnvelope struct {
 type ruleCatchAllUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -339,11 +339,11 @@ func (r RuleCatchAllUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleCatchAllGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   RuleCatchAllGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleCatchAllGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  RuleCatchAllGetResponse                `json:"result"`
 	JSON    ruleCatchAllGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -352,8 +352,8 @@ type RuleCatchAllGetResponseEnvelope struct {
 type ruleCatchAllGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

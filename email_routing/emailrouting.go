@@ -183,9 +183,9 @@ func (r EmailRoutingDisableParams) MarshalJSON() (data []byte, err error) {
 type EmailRoutingDisableResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Settings              `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingDisableResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                                   `json:"result"`
 	JSON    emailRoutingDisableResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -194,8 +194,8 @@ type EmailRoutingDisableResponseEnvelope struct {
 type emailRoutingDisableResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -234,9 +234,9 @@ func (r EmailRoutingEnableParams) MarshalJSON() (data []byte, err error) {
 type EmailRoutingEnableResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Settings              `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingEnableResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                                  `json:"result"`
 	JSON    emailRoutingEnableResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -245,8 +245,8 @@ type EmailRoutingEnableResponseEnvelope struct {
 type emailRoutingEnableResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -277,9 +277,9 @@ func (r EmailRoutingEnableResponseEnvelopeSuccess) IsKnown() bool {
 type EmailRoutingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Settings              `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                               `json:"result"`
 	JSON    emailRoutingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -288,8 +288,8 @@ type EmailRoutingGetResponseEnvelope struct {
 type emailRoutingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
