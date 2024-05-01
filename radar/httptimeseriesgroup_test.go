@@ -330,6 +330,46 @@ func TestHTTPTimeseriesGroupOSWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestHTTPTimeseriesGroupPostQuantumWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Radar.HTTP.TimeseriesGroups.PostQuantum(context.TODO(), radar.HTTPTimeseriesGroupPostQuantumParams{
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupPostQuantumParamsAggInterval1h),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
+		BotClass:     cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsBotClass{radar.HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyHuman}),
+		Continent:    cloudflare.F([]string{"string", "string", "string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DateRange:    cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsDateRange{radar.HTTPTimeseriesGroupPostQuantumParamsDateRange1d, radar.HTTPTimeseriesGroupPostQuantumParamsDateRange2d, radar.HTTPTimeseriesGroupPostQuantumParamsDateRange7d}),
+		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DeviceType:   cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsDeviceType{radar.HTTPTimeseriesGroupPostQuantumParamsDeviceTypeDesktop, radar.HTTPTimeseriesGroupPostQuantumParamsDeviceTypeMobile, radar.HTTPTimeseriesGroupPostQuantumParamsDeviceTypeOther}),
+		Format:       cloudflare.F(radar.HTTPTimeseriesGroupPostQuantumParamsFormatJson),
+		HTTPProtocol: cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsHTTPProtocol{radar.HTTPTimeseriesGroupPostQuantumParamsHTTPProtocolHTTP, radar.HTTPTimeseriesGroupPostQuantumParamsHTTPProtocolHTTPS}),
+		HTTPVersion:  cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsHTTPVersion{radar.HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv1, radar.HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv2, radar.HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv3}),
+		IPVersion:    cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsIPVersion{radar.HTTPTimeseriesGroupPostQuantumParamsIPVersionIPv4, radar.HTTPTimeseriesGroupPostQuantumParamsIPVersionIPv6}),
+		Location:     cloudflare.F([]string{"string", "string", "string"}),
+		Name:         cloudflare.F([]string{"string", "string", "string"}),
+		OS:           cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsOS{radar.HTTPTimeseriesGroupPostQuantumParamsOSWindows, radar.HTTPTimeseriesGroupPostQuantumParamsOSMacosx, radar.HTTPTimeseriesGroupPostQuantumParamsOSIos}),
+		TLSVersion:   cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsTLSVersion{radar.HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_0, radar.HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_1, radar.HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_2}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestHTTPTimeseriesGroupTLSVersionWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

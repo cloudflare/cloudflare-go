@@ -118,6 +118,20 @@ func (r *HTTPSummaryService) OS(ctx context.Context, query HTTPSummaryOSParams, 
 	return
 }
 
+// Percentage distribution of traffic per Post Quantum support over a given time
+// period.
+func (r *HTTPSummaryService) PostQuantum(ctx context.Context, query HTTPSummaryPostQuantumParams, opts ...option.RequestOption) (res *HTTPSummaryPostQuantumResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env HTTPSummaryPostQuantumResponseEnvelope
+	path := "radar/http/summary/post_quantum"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Percentage distribution of traffic per TLS protocol version, over a given time
 // period.
 func (r *HTTPSummaryService) TLSVersion(ctx context.Context, query HTTPSummaryTLSVersionParams, opts ...option.RequestOption) (res *HTTPSummaryTLSVersionResponse, err error) {
@@ -1062,6 +1076,161 @@ func (r *HTTPSummaryOSResponseSummary0) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r httpSummaryOSResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPSummaryPostQuantumResponse struct {
+	Meta     HTTPSummaryPostQuantumResponseMeta     `json:"meta,required"`
+	Summary0 HTTPSummaryPostQuantumResponseSummary0 `json:"summary_0,required"`
+	JSON     httpSummaryPostQuantumResponseJSON     `json:"-"`
+}
+
+// httpSummaryPostQuantumResponseJSON contains the JSON metadata for the struct
+// [HTTPSummaryPostQuantumResponse]
+type httpSummaryPostQuantumResponseJSON struct {
+	Meta        apijson.Field
+	Summary0    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPSummaryPostQuantumResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpSummaryPostQuantumResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPSummaryPostQuantumResponseMeta struct {
+	DateRange      []HTTPSummaryPostQuantumResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                           `json:"lastUpdated,required"`
+	Normalization  string                                           `json:"normalization,required"`
+	ConfidenceInfo HTTPSummaryPostQuantumResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           httpSummaryPostQuantumResponseMetaJSON           `json:"-"`
+}
+
+// httpSummaryPostQuantumResponseMetaJSON contains the JSON metadata for the struct
+// [HTTPSummaryPostQuantumResponseMeta]
+type httpSummaryPostQuantumResponseMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPSummaryPostQuantumResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpSummaryPostQuantumResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPSummaryPostQuantumResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	JSON      httpSummaryPostQuantumResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpSummaryPostQuantumResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [HTTPSummaryPostQuantumResponseMetaDateRange]
+type httpSummaryPostQuantumResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPSummaryPostQuantumResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpSummaryPostQuantumResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPSummaryPostQuantumResponseMetaConfidenceInfo struct {
+	Annotations []HTTPSummaryPostQuantumResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                        `json:"level"`
+	JSON        httpSummaryPostQuantumResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// httpSummaryPostQuantumResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [HTTPSummaryPostQuantumResponseMetaConfidenceInfo]
+type httpSummaryPostQuantumResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPSummaryPostQuantumResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpSummaryPostQuantumResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPSummaryPostQuantumResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                         `json:"dataSource,required"`
+	Description     string                                                         `json:"description,required"`
+	EventType       string                                                         `json:"eventType,required"`
+	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
+	JSON            httpSummaryPostQuantumResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpSummaryPostQuantumResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [HTTPSummaryPostQuantumResponseMetaConfidenceInfoAnnotation]
+type httpSummaryPostQuantumResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPSummaryPostQuantumResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpSummaryPostQuantumResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPSummaryPostQuantumResponseSummary0 struct {
+	NotSupported string                                     `json:"NOT_SUPPORTED,required"`
+	Supported    string                                     `json:"SUPPORTED,required"`
+	JSON         httpSummaryPostQuantumResponseSummary0JSON `json:"-"`
+}
+
+// httpSummaryPostQuantumResponseSummary0JSON contains the JSON metadata for the
+// struct [HTTPSummaryPostQuantumResponseSummary0]
+type httpSummaryPostQuantumResponseSummary0JSON struct {
+	NotSupported apijson.Field
+	Supported    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *HTTPSummaryPostQuantumResponseSummary0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpSummaryPostQuantumResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2510,6 +2679,239 @@ func (r *HTTPSummaryOSResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r httpSummaryOSResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPSummaryPostQuantumParams struct {
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Filter for bot class. Refer to
+	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
+	BotClass param.Field[[]HTTPSummaryPostQuantumParamsBotClass] `query:"botClass"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]HTTPSummaryPostQuantumParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Filter for device type.
+	DeviceType param.Field[[]HTTPSummaryPostQuantumParamsDeviceType] `query:"deviceType"`
+	// Format results are returned in.
+	Format param.Field[HTTPSummaryPostQuantumParamsFormat] `query:"format"`
+	// Filter for http protocol.
+	HTTPProtocol param.Field[[]HTTPSummaryPostQuantumParamsHTTPProtocol] `query:"httpProtocol"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]HTTPSummaryPostQuantumParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]HTTPSummaryPostQuantumParamsIPVersion] `query:"ipVersion"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Filter for os name.
+	OS param.Field[[]HTTPSummaryPostQuantumParamsOS] `query:"os"`
+	// Filter for tls version.
+	TLSVersion param.Field[[]HTTPSummaryPostQuantumParamsTLSVersion] `query:"tlsVersion"`
+}
+
+// URLQuery serializes [HTTPSummaryPostQuantumParams]'s query parameters as
+// `url.Values`.
+func (r HTTPSummaryPostQuantumParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type HTTPSummaryPostQuantumParamsBotClass string
+
+const (
+	HTTPSummaryPostQuantumParamsBotClassLikelyAutomated HTTPSummaryPostQuantumParamsBotClass = "LIKELY_AUTOMATED"
+	HTTPSummaryPostQuantumParamsBotClassLikelyHuman     HTTPSummaryPostQuantumParamsBotClass = "LIKELY_HUMAN"
+)
+
+func (r HTTPSummaryPostQuantumParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsBotClassLikelyAutomated, HTTPSummaryPostQuantumParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumParamsDateRange string
+
+const (
+	HTTPSummaryPostQuantumParamsDateRange1d         HTTPSummaryPostQuantumParamsDateRange = "1d"
+	HTTPSummaryPostQuantumParamsDateRange2d         HTTPSummaryPostQuantumParamsDateRange = "2d"
+	HTTPSummaryPostQuantumParamsDateRange7d         HTTPSummaryPostQuantumParamsDateRange = "7d"
+	HTTPSummaryPostQuantumParamsDateRange14d        HTTPSummaryPostQuantumParamsDateRange = "14d"
+	HTTPSummaryPostQuantumParamsDateRange28d        HTTPSummaryPostQuantumParamsDateRange = "28d"
+	HTTPSummaryPostQuantumParamsDateRange12w        HTTPSummaryPostQuantumParamsDateRange = "12w"
+	HTTPSummaryPostQuantumParamsDateRange24w        HTTPSummaryPostQuantumParamsDateRange = "24w"
+	HTTPSummaryPostQuantumParamsDateRange52w        HTTPSummaryPostQuantumParamsDateRange = "52w"
+	HTTPSummaryPostQuantumParamsDateRange1dControl  HTTPSummaryPostQuantumParamsDateRange = "1dControl"
+	HTTPSummaryPostQuantumParamsDateRange2dControl  HTTPSummaryPostQuantumParamsDateRange = "2dControl"
+	HTTPSummaryPostQuantumParamsDateRange7dControl  HTTPSummaryPostQuantumParamsDateRange = "7dControl"
+	HTTPSummaryPostQuantumParamsDateRange14dControl HTTPSummaryPostQuantumParamsDateRange = "14dControl"
+	HTTPSummaryPostQuantumParamsDateRange28dControl HTTPSummaryPostQuantumParamsDateRange = "28dControl"
+	HTTPSummaryPostQuantumParamsDateRange12wControl HTTPSummaryPostQuantumParamsDateRange = "12wControl"
+	HTTPSummaryPostQuantumParamsDateRange24wControl HTTPSummaryPostQuantumParamsDateRange = "24wControl"
+)
+
+func (r HTTPSummaryPostQuantumParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsDateRange1d, HTTPSummaryPostQuantumParamsDateRange2d, HTTPSummaryPostQuantumParamsDateRange7d, HTTPSummaryPostQuantumParamsDateRange14d, HTTPSummaryPostQuantumParamsDateRange28d, HTTPSummaryPostQuantumParamsDateRange12w, HTTPSummaryPostQuantumParamsDateRange24w, HTTPSummaryPostQuantumParamsDateRange52w, HTTPSummaryPostQuantumParamsDateRange1dControl, HTTPSummaryPostQuantumParamsDateRange2dControl, HTTPSummaryPostQuantumParamsDateRange7dControl, HTTPSummaryPostQuantumParamsDateRange14dControl, HTTPSummaryPostQuantumParamsDateRange28dControl, HTTPSummaryPostQuantumParamsDateRange12wControl, HTTPSummaryPostQuantumParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumParamsDeviceType string
+
+const (
+	HTTPSummaryPostQuantumParamsDeviceTypeDesktop HTTPSummaryPostQuantumParamsDeviceType = "DESKTOP"
+	HTTPSummaryPostQuantumParamsDeviceTypeMobile  HTTPSummaryPostQuantumParamsDeviceType = "MOBILE"
+	HTTPSummaryPostQuantumParamsDeviceTypeOther   HTTPSummaryPostQuantumParamsDeviceType = "OTHER"
+)
+
+func (r HTTPSummaryPostQuantumParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsDeviceTypeDesktop, HTTPSummaryPostQuantumParamsDeviceTypeMobile, HTTPSummaryPostQuantumParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
+
+// Format results are returned in.
+type HTTPSummaryPostQuantumParamsFormat string
+
+const (
+	HTTPSummaryPostQuantumParamsFormatJson HTTPSummaryPostQuantumParamsFormat = "JSON"
+	HTTPSummaryPostQuantumParamsFormatCsv  HTTPSummaryPostQuantumParamsFormat = "CSV"
+)
+
+func (r HTTPSummaryPostQuantumParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsFormatJson, HTTPSummaryPostQuantumParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumParamsHTTPProtocol string
+
+const (
+	HTTPSummaryPostQuantumParamsHTTPProtocolHTTP  HTTPSummaryPostQuantumParamsHTTPProtocol = "HTTP"
+	HTTPSummaryPostQuantumParamsHTTPProtocolHTTPS HTTPSummaryPostQuantumParamsHTTPProtocol = "HTTPS"
+)
+
+func (r HTTPSummaryPostQuantumParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsHTTPProtocolHTTP, HTTPSummaryPostQuantumParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumParamsHTTPVersion string
+
+const (
+	HTTPSummaryPostQuantumParamsHTTPVersionHttPv1 HTTPSummaryPostQuantumParamsHTTPVersion = "HTTPv1"
+	HTTPSummaryPostQuantumParamsHTTPVersionHttPv2 HTTPSummaryPostQuantumParamsHTTPVersion = "HTTPv2"
+	HTTPSummaryPostQuantumParamsHTTPVersionHttPv3 HTTPSummaryPostQuantumParamsHTTPVersion = "HTTPv3"
+)
+
+func (r HTTPSummaryPostQuantumParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsHTTPVersionHttPv1, HTTPSummaryPostQuantumParamsHTTPVersionHttPv2, HTTPSummaryPostQuantumParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumParamsIPVersion string
+
+const (
+	HTTPSummaryPostQuantumParamsIPVersionIPv4 HTTPSummaryPostQuantumParamsIPVersion = "IPv4"
+	HTTPSummaryPostQuantumParamsIPVersionIPv6 HTTPSummaryPostQuantumParamsIPVersion = "IPv6"
+)
+
+func (r HTTPSummaryPostQuantumParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsIPVersionIPv4, HTTPSummaryPostQuantumParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumParamsOS string
+
+const (
+	HTTPSummaryPostQuantumParamsOSWindows  HTTPSummaryPostQuantumParamsOS = "WINDOWS"
+	HTTPSummaryPostQuantumParamsOSMacosx   HTTPSummaryPostQuantumParamsOS = "MACOSX"
+	HTTPSummaryPostQuantumParamsOSIos      HTTPSummaryPostQuantumParamsOS = "IOS"
+	HTTPSummaryPostQuantumParamsOSAndroid  HTTPSummaryPostQuantumParamsOS = "ANDROID"
+	HTTPSummaryPostQuantumParamsOSChromeos HTTPSummaryPostQuantumParamsOS = "CHROMEOS"
+	HTTPSummaryPostQuantumParamsOSLinux    HTTPSummaryPostQuantumParamsOS = "LINUX"
+	HTTPSummaryPostQuantumParamsOSSmartTv  HTTPSummaryPostQuantumParamsOS = "SMART_TV"
+)
+
+func (r HTTPSummaryPostQuantumParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsOSWindows, HTTPSummaryPostQuantumParamsOSMacosx, HTTPSummaryPostQuantumParamsOSIos, HTTPSummaryPostQuantumParamsOSAndroid, HTTPSummaryPostQuantumParamsOSChromeos, HTTPSummaryPostQuantumParamsOSLinux, HTTPSummaryPostQuantumParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumParamsTLSVersion string
+
+const (
+	HTTPSummaryPostQuantumParamsTLSVersionTlSv1_0  HTTPSummaryPostQuantumParamsTLSVersion = "TLSv1_0"
+	HTTPSummaryPostQuantumParamsTLSVersionTlSv1_1  HTTPSummaryPostQuantumParamsTLSVersion = "TLSv1_1"
+	HTTPSummaryPostQuantumParamsTLSVersionTlSv1_2  HTTPSummaryPostQuantumParamsTLSVersion = "TLSv1_2"
+	HTTPSummaryPostQuantumParamsTLSVersionTlSv1_3  HTTPSummaryPostQuantumParamsTLSVersion = "TLSv1_3"
+	HTTPSummaryPostQuantumParamsTLSVersionTlSvQuic HTTPSummaryPostQuantumParamsTLSVersion = "TLSvQUIC"
+)
+
+func (r HTTPSummaryPostQuantumParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsTLSVersionTlSv1_0, HTTPSummaryPostQuantumParamsTLSVersionTlSv1_1, HTTPSummaryPostQuantumParamsTLSVersionTlSv1_2, HTTPSummaryPostQuantumParamsTLSVersionTlSv1_3, HTTPSummaryPostQuantumParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumResponseEnvelope struct {
+	Result  HTTPSummaryPostQuantumResponse             `json:"result,required"`
+	Success bool                                       `json:"success,required"`
+	JSON    httpSummaryPostQuantumResponseEnvelopeJSON `json:"-"`
+}
+
+// httpSummaryPostQuantumResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HTTPSummaryPostQuantumResponseEnvelope]
+type httpSummaryPostQuantumResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPSummaryPostQuantumResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpSummaryPostQuantumResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
