@@ -3,6 +3,12 @@
 package snippets
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -21,4 +27,18 @@ func NewContentService(opts ...option.RequestOption) (r *ContentService) {
 	r = &ContentService{}
 	r.Options = opts
 	return
+}
+
+// Snippet Content
+func (r *ContentService) Get(ctx context.Context, snippetName string, query ContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "multipart/form-data")}, opts...)
+	path := fmt.Sprintf("zones/%s/snippets/%s/content", query.ZoneID, snippetName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+type ContentGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
