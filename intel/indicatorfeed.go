@@ -114,6 +114,10 @@ type IndicatorFeedNewResponse struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The description of the example test
 	Description string `json:"description"`
+	// Whether the indicator feed can be attributed to a provider
+	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed is exposed to customers
+	IsPublic bool `json:"is_public"`
 	// The date and time when the data entry was last modified
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The name of the indicator feed
@@ -124,13 +128,15 @@ type IndicatorFeedNewResponse struct {
 // indicatorFeedNewResponseJSON contains the JSON metadata for the struct
 // [IndicatorFeedNewResponse]
 type indicatorFeedNewResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	CreatedOn      apijson.Field
+	Description    apijson.Field
+	IsAttributable apijson.Field
+	IsPublic       apijson.Field
+	ModifiedOn     apijson.Field
+	Name           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IndicatorFeedNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -176,6 +182,10 @@ type IndicatorFeedListResponse struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The description of the example test
 	Description string `json:"description"`
+	// Whether the indicator feed can be attributed to a provider
+	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed is exposed to customers
+	IsPublic bool `json:"is_public"`
 	// The date and time when the data entry was last modified
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The name of the indicator feed
@@ -186,13 +196,15 @@ type IndicatorFeedListResponse struct {
 // indicatorFeedListResponseJSON contains the JSON metadata for the struct
 // [IndicatorFeedListResponse]
 type indicatorFeedListResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	CreatedOn      apijson.Field
+	Description    apijson.Field
+	IsAttributable apijson.Field
+	IsPublic       apijson.Field
+	ModifiedOn     apijson.Field
+	Name           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IndicatorFeedListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -274,11 +286,11 @@ func (r IndicatorFeedNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndicatorFeedNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   IndicatorFeedNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  IndicatorFeedNewResponse                `json:"result"`
 	JSON    indicatorFeedNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -287,8 +299,8 @@ type IndicatorFeedNewResponseEnvelope struct {
 type indicatorFeedNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -328,11 +340,11 @@ func (r IndicatorFeedUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndicatorFeedUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   IndicatorFeedUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  IndicatorFeedUpdateResponse                `json:"result"`
 	JSON    indicatorFeedUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -341,8 +353,8 @@ type IndicatorFeedUpdateResponseEnvelope struct {
 type indicatorFeedUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -386,11 +398,11 @@ type IndicatorFeedGetParams struct {
 }
 
 type IndicatorFeedGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   IndicatorFeedGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  IndicatorFeedGetResponse                `json:"result"`
 	JSON    indicatorFeedGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -399,8 +411,8 @@ type IndicatorFeedGetResponseEnvelope struct {
 type indicatorFeedGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
