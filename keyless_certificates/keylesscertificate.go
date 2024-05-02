@@ -265,9 +265,9 @@ func (r KeylessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type KeylessCertificateNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeylessCertificate                           `json:"result"`
 	JSON    keylessCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -276,8 +276,8 @@ type KeylessCertificateNewResponseEnvelope struct {
 type keylessCertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -316,11 +316,11 @@ type KeylessCertificateDeleteParams struct {
 }
 
 type KeylessCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   KeylessCertificateDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeylessCertificateDeleteResponse                `json:"result"`
 	JSON    keylessCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -329,8 +329,8 @@ type KeylessCertificateDeleteResponseEnvelope struct {
 type keylessCertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -381,9 +381,9 @@ func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
 type KeylessCertificateEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeylessCertificate                            `json:"result"`
 	JSON    keylessCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -392,8 +392,8 @@ type KeylessCertificateEditResponseEnvelope struct {
 type keylessCertificateEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -429,9 +429,9 @@ type KeylessCertificateGetParams struct {
 type KeylessCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeylessCertificate                           `json:"result"`
 	JSON    keylessCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -440,8 +440,8 @@ type KeylessCertificateGetResponseEnvelope struct {
 type keylessCertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

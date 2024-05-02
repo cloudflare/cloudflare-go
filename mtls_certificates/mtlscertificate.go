@@ -211,11 +211,11 @@ func (r MTLSCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MTLSCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MTLSCertificateNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  MTLSCertificateNewResponse                `json:"result"`
 	JSON    mtlsCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -224,8 +224,8 @@ type MTLSCertificateNewResponseEnvelope struct {
 type mtlsCertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -266,9 +266,9 @@ type MTLSCertificateDeleteParams struct {
 type MTLSCertificateDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MTLSCertificate       `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  MTLSCertificate                              `json:"result"`
 	JSON    mtlsCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -277,8 +277,8 @@ type MTLSCertificateDeleteResponseEnvelope struct {
 type mtlsCertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -314,9 +314,9 @@ type MTLSCertificateGetParams struct {
 type MTLSCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MTLSCertificate       `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  MTLSCertificate                           `json:"result"`
 	JSON    mtlsCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -325,8 +325,8 @@ type MTLSCertificateGetResponseEnvelope struct {
 type mtlsCertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -247,9 +247,9 @@ func (r ClientCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type ClientCertificateNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ClientCertificate                           `json:"result"`
 	JSON    clientCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -258,8 +258,8 @@ type ClientCertificateNewResponseEnvelope struct {
 type clientCertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -338,9 +338,9 @@ type ClientCertificateDeleteParams struct {
 type ClientCertificateDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ClientCertificate                              `json:"result"`
 	JSON    clientCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -349,8 +349,8 @@ type ClientCertificateDeleteResponseEnvelope struct {
 type clientCertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -386,9 +386,9 @@ type ClientCertificateEditParams struct {
 type ClientCertificateEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  ClientCertificate                            `json:"result"`
 	JSON    clientCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -397,8 +397,8 @@ type ClientCertificateEditResponseEnvelope struct {
 type clientCertificateEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -434,9 +434,9 @@ type ClientCertificateGetParams struct {
 type ClientCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ClientCertificate                           `json:"result"`
 	JSON    clientCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -445,8 +445,8 @@ type ClientCertificateGetResponseEnvelope struct {
 type clientCertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

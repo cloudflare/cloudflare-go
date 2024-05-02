@@ -305,11 +305,11 @@ func (r OriginCACertificateNewParamsRequestedValidity) IsKnown() bool {
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   OriginCACertificateNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  OriginCACertificateNewResponseUnion           `json:"result"`
 	JSON    originCACertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -318,8 +318,8 @@ type OriginCACertificateNewResponseEnvelope struct {
 type originCACertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -349,7 +349,7 @@ func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCACertificateListParams struct {
 	// Identifier
-	Identifier param.Field[string] `query:"identifier"`
+	ZoneID param.Field[string] `query:"zone_id"`
 }
 
 // URLQuery serializes [OriginCACertificateListParams]'s query parameters as
@@ -362,11 +362,11 @@ func (r OriginCACertificateListParams) URLQuery() (v url.Values) {
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   OriginCACertificateDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  OriginCACertificateDeleteResponse                `json:"result"`
 	JSON    originCACertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -375,8 +375,8 @@ type OriginCACertificateDeleteResponseEnvelope struct {
 type originCACertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -405,11 +405,11 @@ func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   OriginCACertificateGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  OriginCACertificateGetResponseUnion           `json:"result"`
 	JSON    originCACertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -418,8 +418,8 @@ type OriginCACertificateGetResponseEnvelope struct {
 type originCACertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
