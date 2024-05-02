@@ -55,7 +55,8 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 }
 
 // Union satisfied by [workers.AIRunResponseTextClassification],
-// [shared.UnionString], [workers.AIRunResponseSentenceSimilarity],
+// [shared.UnionString], [shared.UnionString],
+// [workers.AIRunResponseSentenceSimilarity],
 // [workers.AIRunResponseTextEmbeddings], [workers.AIRunResponseSpeechRecognition],
 // [workers.AIRunResponseImageClassification],
 // [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
@@ -72,6 +73,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AIRunResponseTextClassification{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -494,12 +499,12 @@ func (r AIRunParamsBodySummarization) MarshalJSON() (data []byte, err error) {
 func (r AIRunParamsBodySummarization) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyImageToText struct {
-	Image       param.Field[[]float64]                           `json:"image,required"`
-	MaxTokens   param.Field[int64]                               `json:"max_tokens"`
-	Messages    param.Field[[]AIRunParamsBodyImageToTextMessage] `json:"messages"`
-	Prompt      param.Field[string]                              `json:"prompt"`
-	Raw         param.Field[bool]                                `json:"raw"`
-	Temperature param.Field[float64]                             `json:"temperature"`
+	Image       param.Field[AIRunParamsBodyImageToTextImageUnion] `json:"image,required" format:"base64"`
+	MaxTokens   param.Field[int64]                                `json:"max_tokens"`
+	Messages    param.Field[[]AIRunParamsBodyImageToTextMessage]  `json:"messages"`
+	Prompt      param.Field[string]                               `json:"prompt"`
+	Raw         param.Field[bool]                                 `json:"raw"`
+	Temperature param.Field[float64]                              `json:"temperature"`
 }
 
 func (r AIRunParamsBodyImageToText) MarshalJSON() (data []byte, err error) {
@@ -507,6 +512,17 @@ func (r AIRunParamsBodyImageToText) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AIRunParamsBodyImageToText) implementsWorkersAIRunParamsBodyUnion() {}
+
+// Satisfied by [workers.AIRunParamsBodyImageToTextImageArray],
+// [shared.UnionString].
+type AIRunParamsBodyImageToTextImageUnion interface {
+	ImplementsWorkersAIRunParamsBodyImageToTextImageUnion()
+}
+
+type AIRunParamsBodyImageToTextImageArray []float64
+
+func (r AIRunParamsBodyImageToTextImageArray) ImplementsWorkersAIRunParamsBodyImageToTextImageUnion() {
+}
 
 type AIRunParamsBodyImageToTextMessage struct {
 	Content param.Field[string] `json:"content,required"`
