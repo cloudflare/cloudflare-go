@@ -3378,7 +3378,7 @@ func (r URIRecord) implementsDNSRecord() {}
 // Components of a URI record.
 type URIRecordData struct {
 	// The record content.
-	Content string `json:"content"`
+	Target string `json:"target"`
 	// The record weight.
 	Weight float64           `json:"weight"`
 	JSON   uriRecordDataJSON `json:"-"`
@@ -3386,7 +3386,7 @@ type URIRecordData struct {
 
 // uriRecordDataJSON contains the JSON metadata for the struct [URIRecordData]
 type uriRecordDataJSON struct {
-	Content     apijson.Field
+	Target      apijson.Field
 	Weight      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3445,7 +3445,7 @@ func (r URIRecordParam) implementsDNSRecordUnionParam() {}
 // Components of a URI record.
 type URIRecordDataParam struct {
 	// The record content.
-	Content param.Field[string] `json:"content"`
+	Target param.Field[string] `json:"target"`
 	// The record weight.
 	Weight param.Field[float64] `json:"weight"`
 }
