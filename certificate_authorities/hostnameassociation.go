@@ -129,11 +129,11 @@ func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type HostnameAssociationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   HostnameAssociationUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  HostnameAssociationUpdateResponse                `json:"result"`
 	JSON    hostnameAssociationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -142,8 +142,8 @@ type HostnameAssociationUpdateResponseEnvelope struct {
 type hostnameAssociationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -190,11 +190,11 @@ func (r HostnameAssociationGetParams) URLQuery() (v url.Values) {
 }
 
 type HostnameAssociationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   HostnameAssociationGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  HostnameAssociationGetResponse                `json:"result"`
 	JSON    hostnameAssociationGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -203,8 +203,8 @@ type HostnameAssociationGetResponseEnvelope struct {
 type hostnameAssociationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

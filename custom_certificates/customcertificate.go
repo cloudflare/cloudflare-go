@@ -409,11 +409,11 @@ func (r CustomCertificateNewParamsType) IsKnown() bool {
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   CustomCertificateNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomCertificateNewResponseUnion           `json:"result"`
 	JSON    customCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -422,8 +422,8 @@ type CustomCertificateNewResponseEnvelope struct {
 type customCertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -514,11 +514,11 @@ type CustomCertificateDeleteParams struct {
 }
 
 type CustomCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   CustomCertificateDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomCertificateDeleteResponse                `json:"result"`
 	JSON    customCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -527,8 +527,8 @@ type CustomCertificateDeleteResponseEnvelope struct {
 type customCertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -593,11 +593,11 @@ func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   CustomCertificateEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomCertificateEditResponseUnion           `json:"result"`
 	JSON    customCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -606,8 +606,8 @@ type CustomCertificateEditResponseEnvelope struct {
 type customCertificateEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -641,11 +641,11 @@ type CustomCertificateGetParams struct {
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   CustomCertificateGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomCertificateGetResponseUnion           `json:"result"`
 	JSON    customCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -654,8 +654,8 @@ type CustomCertificateGetResponseEnvelope struct {
 type customCertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

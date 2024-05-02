@@ -56,7 +56,7 @@ func TestOriginCACertificateListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.OriginCACertificates.List(context.TODO(), origin_ca_certificates.OriginCACertificateListParams{
-		Identifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

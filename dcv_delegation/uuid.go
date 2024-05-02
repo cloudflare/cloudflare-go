@@ -75,9 +75,9 @@ type UUIDGetParams struct {
 type UUIDGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DCVDelegationUUID     `json:"result,required"`
 	// Whether the API call was successful
 	Success UUIDGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DCVDelegationUUID              `json:"result"`
 	JSON    uuidGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -86,8 +86,8 @@ type UUIDGetResponseEnvelope struct {
 type uuidGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
