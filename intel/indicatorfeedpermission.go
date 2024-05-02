@@ -98,6 +98,10 @@ type IndicatorFeedPermissionListResponse struct {
 	ID int64 `json:"id"`
 	// The description of the example test
 	Description string `json:"description"`
+	// Whether the indicator feed can be attributed to a provider
+	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed is exposed to customers
+	IsPublic bool `json:"is_public"`
 	// The name of the indicator feed
 	Name string                                  `json:"name"`
 	JSON indicatorFeedPermissionListResponseJSON `json:"-"`
@@ -106,11 +110,13 @@ type IndicatorFeedPermissionListResponse struct {
 // indicatorFeedPermissionListResponseJSON contains the JSON metadata for the
 // struct [IndicatorFeedPermissionListResponse]
 type indicatorFeedPermissionListResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	Description    apijson.Field
+	IsAttributable apijson.Field
+	IsPublic       apijson.Field
+	Name           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IndicatorFeedPermissionListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -157,11 +163,11 @@ func (r IndicatorFeedPermissionNewParams) MarshalJSON() (data []byte, err error)
 }
 
 type IndicatorFeedPermissionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   IndicatorFeedPermissionNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  IndicatorFeedPermissionNewResponse                `json:"result"`
 	JSON    indicatorFeedPermissionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -170,8 +176,8 @@ type IndicatorFeedPermissionNewResponseEnvelope struct {
 type indicatorFeedPermissionNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -205,11 +211,11 @@ type IndicatorFeedPermissionListParams struct {
 }
 
 type IndicatorFeedPermissionListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   []IndicatorFeedPermissionListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionListResponseEnvelopeSuccess `json:"success,required"`
+	Result  []IndicatorFeedPermissionListResponse              `json:"result"`
 	JSON    indicatorFeedPermissionListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -218,8 +224,8 @@ type IndicatorFeedPermissionListResponseEnvelope struct {
 type indicatorFeedPermissionListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -261,11 +267,11 @@ func (r IndicatorFeedPermissionDeleteParams) MarshalJSON() (data []byte, err err
 }
 
 type IndicatorFeedPermissionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   IndicatorFeedPermissionDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  IndicatorFeedPermissionDeleteResponse                `json:"result"`
 	JSON    indicatorFeedPermissionDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -274,8 +280,8 @@ type IndicatorFeedPermissionDeleteResponseEnvelope struct {
 type indicatorFeedPermissionDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
