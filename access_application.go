@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -56,6 +57,7 @@ type AccessApplication struct {
 	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	ScimConfig               *AccessApplicationScimConfig   `json:"scim_config,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -74,6 +76,92 @@ type AccessApplicationCorsHeaders struct {
 	AllowAllOrigins  bool     `json:"allow_all_origins,omitempty"`
 	AllowCredentials bool     `json:"allow_credentials,omitempty"`
 	MaxAge           int      `json:"max_age,omitempty"`
+}
+
+// AccessApplicationScimConfig represents the configuration for provisioning to an Access Application via SCIM.
+type AccessApplicationScimConfig struct {
+	Enabled            *bool                                    `json:"enabled,omitempty"`
+	RemoteURI          string                                   `json:"remote_uri,omitempty"`
+	Authentication     *AccessApplicationScimAuthenticationJson `json:"authentication,omitempty"`
+	IdpUid             string                                   `json:"idp_uid,omitempty"`
+	DeactivateOnDelete *bool                                    `json:"deactivate_on_delete,omitempty"`
+	Mappings           []*AccessApplicationScimMapping          `json:"mappings,omitempty"`
+}
+
+type AccessApplicationScimAuthenticationScheme string
+
+const (
+	AccessApplicationScimAuthenticationSchemeHttpBasic        AccessApplicationScimAuthenticationScheme = "httpbasic"
+	AccessApplicationScimAuthenticationSchemeOauthBearerToken AccessApplicationScimAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationScimAuthenticationSchemeOauth2           AccessApplicationScimAuthenticationScheme = "oauth2"
+)
+
+type AccessApplicationScimAuthenticationJson struct {
+	Value AccessApplicationScimAuthentication
+}
+
+func (a *AccessApplicationScimAuthenticationJson) UnmarshalJSON(buf []byte) error {
+	var scheme baseScimAuthentication
+	if err := json.Unmarshal(buf, &scheme); err != nil {
+		return err
+	}
+
+	switch scheme.Scheme {
+	case AccessApplicationScimAuthenticationSchemeHttpBasic:
+		a.Value = new(AccessApplicationScimAuthenticationHttpBasic)
+	case AccessApplicationScimAuthenticationSchemeOauthBearerToken:
+		a.Value = new(AccessApplicationScimAuthenticationOauthBearerToken)
+	case AccessApplicationScimAuthenticationSchemeOauth2:
+		a.Value = new(AccessApplicationScimAuthenticationOauth2)
+	default:
+		return errors.New("invalid authentication scheme")
+	}
+
+	return json.Unmarshal(buf, a.Value)
+}
+
+type AccessApplicationScimAuthentication interface {
+	isScimAuthentication()
+}
+
+type baseScimAuthentication struct {
+	Scheme AccessApplicationScimAuthenticationScheme `json:"scheme"`
+}
+
+func (baseScimAuthentication) isScimAuthentication() {}
+
+type AccessApplicationScimAuthenticationHttpBasic struct {
+	baseScimAuthentication
+	User     string `json:"user"`
+	Password string `json:"password"`
+}
+
+type AccessApplicationScimAuthenticationOauthBearerToken struct {
+	baseScimAuthentication
+	Token string `json:"token"`
+}
+
+type AccessApplicationScimAuthenticationOauth2 struct {
+	baseScimAuthentication
+	ClientID         string   `json:"client_id"`
+	ClientSecret     string   `json:"client_secret"`
+	AuthorizationURL string   `json:"authorization_url"`
+	TokenURL         string   `json:"token_url"`
+	Scopes           []string `json:"scopes,omitempty"`
+}
+
+type AccessApplicationScimMapping struct {
+	Schema           string                                  `json:"schema"`
+	Enabled          *bool                                   `json:"enabled,omitempty"`
+	Filter           string                                  `json:"filter,omitempty"`
+	TransformJsonata string                                  `json:"transform_jsonata,omitempty"`
+	Operations       *AccessApplicationScimMappingOperations `json:"operations,omitempty"`
+}
+
+type AccessApplicationScimMappingOperations struct {
+	Create *bool `json:"create,omitempty"`
+	Update *bool `json:"update,omitempty"`
+	Delete *bool `json:"delete,omitempty"`
 }
 
 // AccessApplicationListResponse represents the response from the list
@@ -155,6 +243,7 @@ type AccessLandingPageDesign struct {
 	ButtonColor     string `json:"button_color"`
 	ButtonTextColor string `json:"button_text_color"`
 }
+
 type ListAccessApplicationsParams struct {
 	ResultInfo
 }
@@ -187,6 +276,7 @@ type CreateAccessApplicationParams struct {
 	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	ScimConfig               *AccessApplicationScimConfig   `json:"scim_config,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -219,6 +309,7 @@ type UpdateAccessApplicationParams struct {
 	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	ScimConfig               *AccessApplicationScimConfig   `json:"scim_config,omitempty"`
 	AccessAppLauncherCustomization
 }
 
