@@ -2264,11 +2264,11 @@ func (r CustomHostnameNewParamsCustomMetadata) MarshalJSON() (data []byte, err e
 }
 
 type CustomHostnameNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CustomHostnameNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomHostnameNewResponse                `json:"result"`
 	JSON    customHostnameNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2277,8 +2277,8 @@ type CustomHostnameNewResponseEnvelope struct {
 type customHostnameNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2553,11 +2553,11 @@ func (r CustomHostnameEditParamsSSLSettingsTLS1_3) IsKnown() bool {
 }
 
 type CustomHostnameEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CustomHostnameEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomHostnameEditResponse                `json:"result"`
 	JSON    customHostnameEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2566,8 +2566,8 @@ type CustomHostnameEditResponseEnvelope struct {
 type customHostnameEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2601,11 +2601,11 @@ type CustomHostnameGetParams struct {
 }
 
 type CustomHostnameGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CustomHostnameGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomHostnameGetResponse                `json:"result"`
 	JSON    customHostnameGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2614,8 +2614,8 @@ type CustomHostnameGetResponseEnvelope struct {
 type customHostnameGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

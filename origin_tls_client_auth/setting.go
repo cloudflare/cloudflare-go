@@ -118,9 +118,9 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 type SettingUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SettingUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  SettingUpdateResponse                `json:"result"`
 	JSON    settingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -129,8 +129,8 @@ type SettingUpdateResponseEnvelope struct {
 type settingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -166,9 +166,9 @@ type SettingGetParams struct {
 type SettingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SettingGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  SettingGetResponse                `json:"result"`
 	JSON    settingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -177,8 +177,8 @@ type SettingGetResponseEnvelope struct {
 type settingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

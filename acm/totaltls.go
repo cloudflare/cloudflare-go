@@ -210,9 +210,9 @@ func (r TotalTLSNewParamsCertificateAuthority) IsKnown() bool {
 type TotalTLSNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TotalTLSNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success TotalTLSNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  TotalTLSNewResponse                `json:"result"`
 	JSON    totalTLSNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -221,8 +221,8 @@ type TotalTLSNewResponseEnvelope struct {
 type totalTLSNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -258,9 +258,9 @@ type TotalTLSGetParams struct {
 type TotalTLSGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TotalTLSGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success TotalTLSGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  TotalTLSGetResponse                `json:"result"`
 	JSON    totalTLSGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -269,8 +269,8 @@ type TotalTLSGetResponseEnvelope struct {
 type totalTLSGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

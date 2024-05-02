@@ -97,11 +97,11 @@ type CertificatePackQuotaGetParams struct {
 }
 
 type CertificatePackQuotaGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   CertificatePackQuotaGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CertificatePackQuotaGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  CertificatePackQuotaGetResponse                `json:"result"`
 	JSON    certificatePackQuotaGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -110,8 +110,8 @@ type CertificatePackQuotaGetResponseEnvelope struct {
 type certificatePackQuotaGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

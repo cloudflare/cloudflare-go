@@ -195,11 +195,11 @@ func (r HostnameUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   []AuthenticatedOriginPull `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    HostnameUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []AuthenticatedOriginPull                `json:"result,nullable"`
 	ResultInfo HostnameUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       hostnameUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -209,8 +209,8 @@ type HostnameUpdateResponseEnvelope struct {
 type hostnameUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -276,11 +276,11 @@ type HostnameGetParams struct {
 }
 
 type HostnameGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   AuthenticatedOriginPull `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  AuthenticatedOriginPull            `json:"result"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -289,8 +289,8 @@ type HostnameGetResponseEnvelope struct {
 type hostnameGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
