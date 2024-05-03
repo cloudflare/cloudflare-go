@@ -660,6 +660,7 @@ type RulesetRule struct {
 	RateLimit              *RulesetRuleRateLimit              `json:"ratelimit,omitempty"`
 	ExposedCredentialCheck *RulesetRuleExposedCredentialCheck `json:"exposed_credential_check,omitempty"`
 	Logging                *RulesetRuleLogging                `json:"logging,omitempty"`
+	Position               *RulesetRulePosition               `json:"position,omitempty"`
 }
 
 // RulesetRuleRateLimit contains the structure of a HTTP rate limit Ruleset Rule.
@@ -672,6 +673,13 @@ type RulesetRuleRateLimit struct {
 	MitigationTimeout       int      `json:"mitigation_timeout,omitempty"`
 	CountingExpression      string   `json:"counting_expression,omitempty"`
 	RequestsToOrigin        bool     `json:"requests_to_origin,omitempty"`
+}
+
+// RulesetRulePositon contains the structure of a Ruleset Rule position.
+type RulesetRulePosition struct {
+	Index  int    `json:"index,omitempty"`
+	Before string `json:"before,omitempty"`
+	After  string `json:"after,omitempty"`
 }
 
 // RulesetRuleExposedCredentialCheck contains the structure of an exposed
