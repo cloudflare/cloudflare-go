@@ -23,6 +23,7 @@ import (
 // instead.
 type IndicatorFeedService struct {
 	Options     []option.RequestOption
+	Snapshots   *IndicatorFeedSnapshotService
 	Permissions *IndicatorFeedPermissionService
 }
 
@@ -32,6 +33,7 @@ type IndicatorFeedService struct {
 func NewIndicatorFeedService(opts ...option.RequestOption) (r *IndicatorFeedService) {
 	r = &IndicatorFeedService{}
 	r.Options = opts
+	r.Snapshots = NewIndicatorFeedSnapshotService(opts...)
 	r.Permissions = NewIndicatorFeedPermissionService(opts...)
 	return
 }
@@ -49,11 +51,11 @@ func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewP
 	return
 }
 
-// Update indicator feed data
+// Update indicator feed metadata
 func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params IndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/snapshot", params.AccountID, feedID)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", params.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -148,23 +150,35 @@ func (r indicatorFeedNewResponseJSON) RawJSON() string {
 }
 
 type IndicatorFeedUpdateResponse struct {
-	// Feed id
-	FileID int64 `json:"file_id"`
-	// Name of the file unified in our system
-	Filename string `json:"filename"`
-	// Current status of upload, should be unified
-	Status string                          `json:"status"`
-	JSON   indicatorFeedUpdateResponseJSON `json:"-"`
+	// The unique identifier for the indicator feed
+	ID int64 `json:"id"`
+	// The date and time when the data entry was created
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// The description of the example test
+	Description string `json:"description"`
+	// Whether the indicator feed can be attributed to a provider
+	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed is exposed to customers
+	IsPublic bool `json:"is_public"`
+	// The date and time when the data entry was last modified
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The name of the indicator feed
+	Name string                          `json:"name"`
+	JSON indicatorFeedUpdateResponseJSON `json:"-"`
 }
 
 // indicatorFeedUpdateResponseJSON contains the JSON metadata for the struct
 // [IndicatorFeedUpdateResponse]
 type indicatorFeedUpdateResponseJSON struct {
-	FileID      apijson.Field
-	Filename    apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	CreatedOn      apijson.Field
+	Description    apijson.Field
+	IsAttributable apijson.Field
+	IsPublic       apijson.Field
+	ModifiedOn     apijson.Field
+	Name           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IndicatorFeedUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -331,8 +345,12 @@ func (r IndicatorFeedNewResponseEnvelopeSuccess) IsKnown() bool {
 type IndicatorFeedUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The file to upload
-	Source param.Field[string] `json:"source"`
+	// The new description of the feed
+	FeedDescription param.Field[string] `json:"feed_description"`
+	// The new is_attributable value of the feed
+	IsAttributable param.Field[bool] `json:"is_attributable"`
+	// The new is_public value of the feed
+	IsPublic param.Field[bool] `json:"is_public"`
 }
 
 func (r IndicatorFeedUpdateParams) MarshalJSON() (data []byte, err error) {
