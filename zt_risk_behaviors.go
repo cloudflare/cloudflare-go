@@ -14,7 +14,7 @@ type Behavior struct {
 	Name        string    `json:"name,omitempty"`
 	Description string    `json:"description,omitempty"`
 	RiskLevel   RiskLevel `json:"risk_level"`
-	Enabled     bool      `json:"enabled"`
+	Enabled     *bool     `json:"enabled"`
 }
 
 // Wrapper used to have full-fidelity repro of json structure.

@@ -17,13 +17,13 @@ var (
 				Name:        "High Number of DLP Policies Triggered",
 				Description: "User has triggered an active DLP profile in a Gateway policy fifteen times or more within one minute.",
 				RiskLevel:   Low,
-				Enabled:     true,
+				Enabled:     BoolPtr(true),
 			},
 			"imp_travel": {
 				Name:        "Impossible Travel",
 				Description: "A user had a successful Access application log in from two locations that they could not have traveled to in that period of time.",
 				RiskLevel:   High,
-				Enabled:     false,
+				Enabled:     BoolPtr(false),
 			},
 		},
 	}
@@ -32,11 +32,11 @@ var (
 		Behaviors: map[string]Behavior{
 			"high_dlp": {
 				RiskLevel: Low,
-				Enabled:   true,
+				Enabled:   BoolPtr(true),
 			},
 			"imp_travel": {
 				RiskLevel: High,
-				Enabled:   false,
+				Enabled:   BoolPtr(false),
 			},
 		},
 	}
@@ -56,7 +56,7 @@ func TestBehaviors(t *testing.T) {
 							"name": "High Number of DLP Policies Triggered",
 							"description": "User has triggered an active DLP profile in a Gateway policy fifteen times or more within one minute.",
 							"risk_level": "low",
-							"enabled":true 
+							"enabled":true
 						},
 						"imp_travel": {
 							"name": "Impossible Travel",
@@ -96,7 +96,7 @@ func TestUpdateBehaviors(t *testing.T) {
 					"behaviors": {
 						"high_dlp": {
 							"risk_level": "low",
-							"enabled":true 
+							"enabled":true
 						},
 						"imp_travel": {
 							"risk_level": "high",
@@ -114,7 +114,7 @@ func TestUpdateBehaviors(t *testing.T) {
 							"name": "High Number of DLP Policies Triggered",
 							"description": "User has triggered an active DLP profile in a Gateway policy fifteen times or more within one minute.",
 							"risk_level": "low",
-							"enabled":true 
+							"enabled":true
 						},
 						"imp_travel": {
 							"name": "Impossible Travel",
