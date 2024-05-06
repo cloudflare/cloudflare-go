@@ -57,7 +57,7 @@ type AccessApplication struct {
 	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
-	SCIMConfig               *AccessApplicationScimConfig   `json:"scim_config,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -78,8 +78,8 @@ type AccessApplicationCorsHeaders struct {
 	MaxAge           int      `json:"max_age,omitempty"`
 }
 
-// AccessApplicationScimConfig represents the configuration for provisioning to an Access Application via SCIM.
-type AccessApplicationScimConfig struct {
+// AccessApplicationSCIMConfig represents the configuration for provisioning to an Access Application via SCIM.
+type AccessApplicationSCIMConfig struct {
 	Enabled            *bool                                    `json:"enabled,omitempty"`
 	RemoteURI          string                                   `json:"remote_uri,omitempty"`
 	Authentication     *AccessApplicationScimAuthenticationJson `json:"authentication,omitempty"`
@@ -276,7 +276,7 @@ type CreateAccessApplicationParams struct {
 	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
-	ScimConfig               *AccessApplicationScimConfig   `json:"scim_config,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -309,7 +309,7 @@ type UpdateAccessApplicationParams struct {
 	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
-	ScimConfig               *AccessApplicationScimConfig   `json:"scim_config,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
 	AccessAppLauncherCustomization
 }
 

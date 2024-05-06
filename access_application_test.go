@@ -1095,7 +1095,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 		UpdatedAt:                &updatedAt,
 		CustomNonIdentityDenyURL: "https://blocked.com",
 		Tags:                     []string{"engineers"},
-		SCIMConfig: &AccessApplicationScimConfig{
+		SCIMConfig: &AccessApplicationSCIMConfig{
 			Enabled:   BoolPtr(true),
 			RemoteURI: "https://scim.com",
 			Authentication: &AccessApplicationScimAuthenticationJson{
@@ -1126,7 +1126,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 
 	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name: "Admin Saas Site",
-		ScimConfig: &AccessApplicationScimConfig{
+		SCIMConfig: &AccessApplicationSCIMConfig{
 			Enabled:   BoolPtr(true),
 			RemoteURI: "https://scim.com",
 			Authentication: &AccessApplicationScimAuthenticationJson{
@@ -1161,7 +1161,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 
 	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name: "Admin SCIM Site",
-		ScimConfig: &AccessApplicationScimConfig{
+		SCIMConfig: &AccessApplicationSCIMConfig{
 			Enabled:   BoolPtr(true),
 			RemoteURI: "https://scim.com",
 			Authentication: &AccessApplicationScimAuthenticationJson{
