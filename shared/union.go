@@ -79,6 +79,7 @@ func (UnionString) ImplementsRateLimitsRateLimitEditResponseUnion()             
 func (UnionString) ImplementsRateLimitsRateLimitGetResponseUnion()                               {}
 func (UnionString) ImplementsWorkersAIRunResponseUnion()                                         {}
 func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                     {}
+func (UnionString) ImplementsWorkersAIRunParamsBodyImageToTextImageUnion()                       {}
 func (UnionString) ImplementsKVNamespaceUpdateResponseUnion()                                    {}
 func (UnionString) ImplementsKVNamespaceDeleteResponseUnion()                                    {}
 func (UnionString) ImplementsKVNamespaceBulkUpdateResponseUnion()                                {}
@@ -162,6 +163,9 @@ func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncrypt
 }
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                           {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                                {}
+func (UnionString) ImplementsCloudforceOneRequestDeleteResponseUnion()                   {}
+func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponseUnion()            {}
+func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion()           {}
 func (UnionString) ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion() {}
 
 type UnionInt int64
