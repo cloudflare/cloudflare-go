@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workers
+package ai_gateway
 
 import (
 	"context"
@@ -23,7 +23,7 @@ import (
 // service directly, and instead use the [NewAIGatewayService] method instead.
 type AIGatewayService struct {
 	Options []option.RequestOption
-	Logs    *AIGatewayLogService
+	Logs    *LogService
 }
 
 // NewAIGatewayService generates a new service that applies the given options to
@@ -32,7 +32,7 @@ type AIGatewayService struct {
 func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	r = &AIGatewayService{}
 	r.Options = opts
-	r.Logs = NewAIGatewayLogService(opts...)
+	r.Logs = NewLogService(opts...)
 	return
 }
 
