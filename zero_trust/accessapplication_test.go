@@ -32,7 +32,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Applications.New(context.TODO(), zero_trust.AccessApplicationNewParams{
 		Application: zero_trust.ApplicationSelfHostedApplicationParam{
 			AllowAuthenticateViaWARP: cloudflare.F(true),
-			AllowedIdps:              cloudflare.F([]zero_trust.AllowedIdpshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+			AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdpshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F(true),
 			AutoRedirectToIdentity:   cloudflare.F(true),
 			CORSHeaders: cloudflare.F(zero_trust.CORSHeadersParam{
@@ -96,7 +96,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.AccessApplicationUpdateParams{
 			Application: zero_trust.ApplicationSelfHostedApplicationParam{
 				AllowAuthenticateViaWARP: cloudflare.F(true),
-				AllowedIdps:              cloudflare.F([]zero_trust.AllowedIdpshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+				AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdpshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 				AppLauncherVisible:       cloudflare.F(true),
 				AutoRedirectToIdentity:   cloudflare.F(true),
 				CORSHeaders: cloudflare.F(zero_trust.CORSHeadersParam{
