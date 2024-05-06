@@ -142,6 +142,23 @@ func TestAccessPolicies(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
 	}
+
+	// Test Listing reusable policies
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/policies", handler)
+
+	actual, _, err = client.ListAccessPolicies(context.Background(), testAccountRC, ListAccessPoliciesParams{})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/policies", handler)
+
+	actual, _, err = client.ListAccessPolicies(context.Background(), testZoneRC, ListAccessPoliciesParams{})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
+	}
 }
 
 func TestAccessPolicy(t *testing.T) {
@@ -214,6 +231,23 @@ func TestAccessPolicy(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
 
 	actual, err = client.GetAccessPolicy(context.Background(), testZoneRC, GetAccessPolicyParams{ApplicationID: accessApplicationID, PolicyID: accessPolicyID})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
+
+	// Test getting a reusable policy
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/policies/"+accessPolicyID, handler)
+
+	actual, err = client.GetAccessPolicy(context.Background(), testAccountRC, GetAccessPolicyParams{PolicyID: accessPolicyID})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/policies/"+accessPolicyID, handler)
+
+	actual, err = client.GetAccessPolicy(context.Background(), testZoneRC, GetAccessPolicyParams{PolicyID: accessPolicyID})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -322,6 +356,24 @@ func TestCreateAccessPolicy(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
+
+	actual, err = client.CreateAccessPolicy(context.Background(), testZoneRC, accessPolicy)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
+
+	// Test creating a reusable policy
+	accessPolicy.ApplicationID = ""
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/policies", handler)
+
+	actual, err = client.CreateAccessPolicy(context.Background(), testAccountRC, accessPolicy)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/policies", handler)
 
 	actual, err = client.CreateAccessPolicy(context.Background(), testZoneRC, accessPolicy)
 
@@ -571,6 +623,22 @@ func TestUpdateAccessPolicy(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
 	}
+
+	// Test updating reusable policies
+	accessPolicy.ApplicationID = ""
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/policies/"+accessPolicyID, handler)
+	actual, err = client.UpdateAccessPolicy(context.Background(), testAccountRC, accessPolicy)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/policies/"+accessPolicyID, handler)
+	actual, err = client.UpdateAccessPolicy(context.Background(), testZoneRC, accessPolicy)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
 }
 
 func TestUpdateAccessPolicyWithMissingID(t *testing.T) {
@@ -609,6 +677,17 @@ func TestDeleteAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
 	err = client.DeleteAccessPolicy(context.Background(), testZoneRC, DeleteAccessPolicyParams{ApplicationID: accessApplicationID, PolicyID: accessPolicyID})
+
+	assert.NoError(t, err)
+
+	// Test deleting a reusable policy
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/policies/"+accessPolicyID, handler)
+	err = client.DeleteAccessPolicy(context.Background(), testAccountRC, DeleteAccessPolicyParams{PolicyID: accessPolicyID})
+
+	assert.NoError(t, err)
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/policies/"+accessPolicyID, handler)
+	err = client.DeleteAccessPolicy(context.Background(), testZoneRC, DeleteAccessPolicyParams{PolicyID: accessPolicyID})
 
 	assert.NoError(t, err)
 }
