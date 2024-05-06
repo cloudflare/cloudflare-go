@@ -22,8 +22,6 @@ func (UnionString) ImplementsUserSubscriptionUpdateResponseUnion()              
 func (UnionString) ImplementsUserSubscriptionEditResponseUnion()                       {}
 func (UnionString) ImplementsUserTokenUpdateResponseUnion()                            {}
 func (UnionString) ImplementsUserTokenGetResponseUnion()                               {}
-func (UnionString) ImplementsZonesCustomNameserverUpdateResponseUnion()                {}
-func (UnionString) ImplementsZonesCustomNameserverGetResponseUnion()                   {}
 func (UnionString) ImplementsZonesSubscriptionNewResponseUnion()                       {}
 func (UnionString) ImplementsZonesSubscriptionGetResponseUnion()                       {}
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                 {}
@@ -48,7 +46,6 @@ func (UnionString) ImplementsCustomCertificatesCustomCertificateGetResponseUnion
 func (UnionString) ImplementsCustomHostnamesFallbackOriginUpdateResponseUnion()        {}
 func (UnionString) ImplementsCustomHostnamesFallbackOriginDeleteResponseUnion()        {}
 func (UnionString) ImplementsCustomHostnamesFallbackOriginGetResponseUnion()           {}
-func (UnionString) ImplementsCustomNameserversCustomNameserverDeleteResponseUnion()    {}
 func (UnionString) ImplementsDNSFirewallIPsUnionParam()                                {}
 func (UnionString) ImplementsDNSFirewallIPsUnion()                                     {}
 func (UnionString) ImplementsDNSUpstreamIPsUnionParam()                                {}
