@@ -1095,7 +1095,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 		UpdatedAt:                &updatedAt,
 		CustomNonIdentityDenyURL: "https://blocked.com",
 		Tags:                     []string{"engineers"},
-		ScimConfig: &AccessApplicationScimConfig{
+		SCIMConfig: &AccessApplicationScimConfig{
 			Enabled:   BoolPtr(true),
 			RemoteURI: "https://scim.com",
 			Authentication: &AccessApplicationScimAuthenticationJson{
@@ -1104,7 +1104,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 					baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationSchemeOauthBearerToken},
 				},
 			},
-			IdpUid:             "1234567",
+			IdPUID:             "1234567",
 			DeactivateOnDelete: BoolPtr(true),
 			Mappings: []*AccessApplicationScimMapping{
 				{
@@ -1135,7 +1135,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 					baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationSchemeOauthBearerToken},
 				},
 			},
-			IdpUid:             "1234567",
+			IdPUID:             "1234567",
 			DeactivateOnDelete: BoolPtr(true),
 			Mappings: []*AccessApplicationScimMapping{
 				{
@@ -1170,7 +1170,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 					baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationSchemeOauthBearerToken},
 				},
 			},
-			IdpUid:             "1234567",
+			IdPUID:             "1234567",
 			DeactivateOnDelete: BoolPtr(true),
 			Mappings: []*AccessApplicationScimMapping{
 				{

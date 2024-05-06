@@ -57,7 +57,7 @@ type AccessApplication struct {
 	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
-	ScimConfig               *AccessApplicationScimConfig   `json:"scim_config,omitempty"`
+	SCIMConfig               *AccessApplicationScimConfig   `json:"scim_config,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -83,7 +83,7 @@ type AccessApplicationScimConfig struct {
 	Enabled            *bool                                    `json:"enabled,omitempty"`
 	RemoteURI          string                                   `json:"remote_uri,omitempty"`
 	Authentication     *AccessApplicationScimAuthenticationJson `json:"authentication,omitempty"`
-	IdpUid             string                                   `json:"idp_uid,omitempty"`
+	IdPUID             string                                   `json:"idp_uid,omitempty"`
 	DeactivateOnDelete *bool                                    `json:"deactivate_on_delete,omitempty"`
 	Mappings           []*AccessApplicationScimMapping          `json:"mappings,omitempty"`
 }
