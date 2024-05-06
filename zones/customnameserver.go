@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // CustomNameserverService contains methods and other services that help with
@@ -39,7 +37,7 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 // If you would like new zones in the account to use account custom nameservers by
 // default, use PUT /accounts/:identifier to set the account setting
 // use_account_custom_ns_by_default to true.
-func (r *CustomNameserverService) Update(ctx context.Context, params CustomNameserverUpdateParams, opts ...option.RequestOption) (res *CustomNameserverUpdateResponseUnion, err error) {
+func (r *CustomNameserverService) Update(ctx context.Context, params CustomNameserverUpdateParams, opts ...option.RequestOption) (res *[]CustomNameserverUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_ns", params.ZoneID)
@@ -52,7 +50,7 @@ func (r *CustomNameserverService) Update(ctx context.Context, params CustomNames
 }
 
 // Get metadata for account-level custom nameservers on a zone.
-func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *CustomNameserverGetResponseUnion, err error) {
+func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *[]CustomNameserverGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_ns", query.ZoneID)
@@ -64,55 +62,9 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 	return
 }
 
-// Union satisfied by [zones.CustomNameserverUpdateResponseUnknown],
-// [zones.CustomNameserverUpdateResponseArray] or [shared.UnionString].
-type CustomNameserverUpdateResponseUnion interface {
-	ImplementsZonesCustomNameserverUpdateResponseUnion()
-}
+type CustomNameserverUpdateResponse = interface{}
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomNameserverUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CustomNameserverUpdateResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type CustomNameserverUpdateResponseArray []interface{}
-
-func (r CustomNameserverUpdateResponseArray) ImplementsZonesCustomNameserverUpdateResponseUnion() {}
-
-// Union satisfied by [zones.CustomNameserverGetResponseUnknown],
-// [zones.CustomNameserverGetResponseArray] or [shared.UnionString].
-type CustomNameserverGetResponseUnion interface {
-	ImplementsZonesCustomNameserverGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomNameserverGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CustomNameserverGetResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type CustomNameserverGetResponseArray []interface{}
-
-func (r CustomNameserverGetResponseArray) ImplementsZonesCustomNameserverGetResponseUnion() {}
+type CustomNameserverGetResponse = interface{}
 
 type CustomNameserverUpdateParams struct {
 	// Identifier
@@ -128,11 +80,11 @@ func (r CustomNameserverUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   CustomNameserverUpdateResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    CustomNameserverUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []CustomNameserverUpdateResponse                 `json:"result,nullable"`
 	ResultInfo CustomNameserverUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       customNameserverUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -142,8 +94,8 @@ type CustomNameserverUpdateResponseEnvelope struct {
 type customNameserverUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -209,15 +161,15 @@ type CustomNameserverGetParams struct {
 }
 
 type CustomNameserverGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   CustomNameserverGetResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomNameserverGetResponseEnvelopeSuccess `json:"success,required"`
 	// Whether zone uses account-level custom nameservers.
 	Enabled bool `json:"enabled"`
 	// The number of the name server set to assign to the zone.
 	NSSet      float64                                       `json:"ns_set"`
+	Result     []CustomNameserverGetResponse                 `json:"result,nullable"`
 	ResultInfo CustomNameserverGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       customNameserverGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -227,10 +179,10 @@ type CustomNameserverGetResponseEnvelope struct {
 type customNameserverGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
 	Enabled     apijson.Field
 	NSSet       apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
