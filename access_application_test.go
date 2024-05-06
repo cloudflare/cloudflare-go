@@ -1127,7 +1127,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name: "Admin Saas Site",
 		ScimConfig: &AccessApplicationScimConfig{
-			Enabled:   true,
+			Enabled:   BoolPtr(true),
 			RemoteURI: "https://scim.com",
 			Authentication: &AccessApplicationScimAuthenticationJson{
 				Value: &AccessApplicationScimAuthenticationOauthBearerToken{
@@ -1136,11 +1136,11 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 				},
 			},
 			IdpUid:             "1234567",
-			DeactivateOnDelete: true,
+			DeactivateOnDelete: BoolPtr(true),
 			Mappings: []*AccessApplicationScimMapping{
 				{
 					Schema:           "urn:ietf:params:scim:schemas:core:2.0:User",
-					Enabled:          true,
+					Enabled:          BoolPtr(true),
 					Filter:           "title pr or userType eq \"Intern\"",
 					TransformJsonata: "$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])",
 					Operations: &AccessApplicationScimMappingOperations{
@@ -1162,7 +1162,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name: "Admin SCIM Site",
 		ScimConfig: &AccessApplicationScimConfig{
-			Enabled:   true,
+			Enabled:   BoolPtr(true),
 			RemoteURI: "https://scim.com",
 			Authentication: &AccessApplicationScimAuthenticationJson{
 				Value: &AccessApplicationScimAuthenticationOauthBearerToken{
@@ -1171,11 +1171,11 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 				},
 			},
 			IdpUid:             "1234567",
-			DeactivateOnDelete: true,
+			DeactivateOnDelete: BoolPtr(true),
 			Mappings: []*AccessApplicationScimMapping{
 				{
 					Schema:           "urn:ietf:params:scim:schemas:core:2.0:User",
-					Enabled:          true,
+					Enabled:          BoolPtr(true),
 					Filter:           "title pr or userType eq \"Intern\"",
 					TransformJsonata: "$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])",
 					Operations: &AccessApplicationScimMappingOperations{
