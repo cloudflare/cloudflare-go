@@ -21,7 +21,8 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewAIService] method instead.
 type AIService struct {
-	Options []option.RequestOption
+	Options  []option.RequestOption
+	Gateways *AIGatewayService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -30,6 +31,7 @@ type AIService struct {
 func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r = &AIService{}
 	r.Options = opts
+	r.Gateways = NewAIGatewayService(opts...)
 	return
 }
 
