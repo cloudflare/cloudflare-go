@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workers_test
+package ai_gateway_test
 
 import (
 	"context"
@@ -9,9 +9,9 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/ai_gateway"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/workers"
 )
 
 func TestAIGatewayNewWithOptionalParams(t *testing.T) {
@@ -27,10 +27,10 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.AI.Gateways.New(
+	_, err := client.AIGateway.New(
 		context.TODO(),
 		"0d37909e38d3e99c29fa2cd343ac421a",
-		workers.AIGatewayNewParams{
+		ai_gateway.AIGatewayNewParams{
 			CacheInvalidateOnUpdate: cloudflare.F(true),
 			CacheTTL:                cloudflare.F(int64(0)),
 			CollectLogs:             cloudflare.F(true),
@@ -63,11 +63,11 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.AI.Gateways.Update(
+	_, err := client.AIGateway.Update(
 		context.TODO(),
 		"0d37909e38d3e99c29fa2cd343ac421a",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		workers.AIGatewayUpdateParams{
+		ai_gateway.AIGatewayUpdateParams{
 			CacheInvalidateOnUpdate: cloudflare.F(true),
 			CacheTTL:                cloudflare.F(int64(0)),
 			CollectLogs:             cloudflare.F(true),
@@ -100,10 +100,10 @@ func TestAIGatewayListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.AI.Gateways.List(
+	_, err := client.AIGateway.List(
 		context.TODO(),
 		"0d37909e38d3e99c29fa2cd343ac421a",
-		workers.AIGatewayListParams{
+		ai_gateway.AIGatewayListParams{
 			ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			OrderBy: cloudflare.F("string"),
 			Page:    cloudflare.F(int64(1)),
@@ -132,7 +132,7 @@ func TestAIGatewayDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.AI.Gateways.Delete(
+	_, err := client.AIGateway.Delete(
 		context.TODO(),
 		"0d37909e38d3e99c29fa2cd343ac421a",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
@@ -159,7 +159,7 @@ func TestAIGatewayGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.AI.Gateways.Get(
+	_, err := client.AIGateway.Get(
 		context.TODO(),
 		"0d37909e38d3e99c29fa2cd343ac421a",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
