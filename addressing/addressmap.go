@@ -164,16 +164,16 @@ func (r addressMapJSON) RawJSON() string {
 }
 
 // The type of the membership.
-type AddressMapKind string
+type Kind string
 
 const (
-	AddressMapKindZone    AddressMapKind = "zone"
-	AddressMapKindAccount AddressMapKind = "account"
+	KindZone    Kind = "zone"
+	KindAccount Kind = "account"
 )
 
-func (r AddressMapKind) IsKnown() bool {
+func (r Kind) IsKnown() bool {
 	switch r {
-	case AddressMapKindZone, AddressMapKindAccount:
+	case KindZone, KindAccount:
 		return true
 	}
 	return false
@@ -266,7 +266,7 @@ type AddressMapNewResponseMembership struct {
 	// Identifier
 	Identifier string `json:"identifier"`
 	// The type of the membership.
-	Kind AddressMapKind                      `json:"kind"`
+	Kind Kind                                `json:"kind"`
 	JSON addressMapNewResponseMembershipJSON `json:"-"`
 }
 
@@ -378,7 +378,7 @@ type AddressMapGetResponseMembership struct {
 	// Identifier
 	Identifier string `json:"identifier"`
 	// The type of the membership.
-	Kind AddressMapKind                      `json:"kind"`
+	Kind Kind                                `json:"kind"`
 	JSON addressMapGetResponseMembershipJSON `json:"-"`
 }
 

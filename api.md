@@ -39,7 +39,7 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberStatus">MemberStatus</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#Status">Status</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#UserWithInviteCode">UserWithInviteCode</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberListResponse">MemberListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberDeleteResponse">MemberDeleteResponse</a>
@@ -1165,19 +1165,19 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackCA">CertificatePackCA</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackRequestType">CertificatePackRequestType</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackRequestValidity">CertificatePackRequestValidity</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificateAuthority">CertificateAuthority</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#HostParam">HostParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#RequestType">RequestType</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#RequestValidity">RequestValidity</a>
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackCA">CertificatePackCA</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackRequestType">CertificatePackRequestType</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackRequestValidity">CertificatePackRequestValidity</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackStatus">CertificatePackStatus</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackValidationMethod">CertificatePackValidationMethod</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificateAuthority">CertificateAuthority</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#Host">Host</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#RequestType">RequestType</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#RequestValidity">RequestValidity</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#Status">Status</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#ValidationMethod">ValidationMethod</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackListResponse">CertificatePackListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackDeleteResponse">CertificatePackDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackEditResponse">CertificatePackEditResponse</a>
@@ -1272,11 +1272,11 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#TotalTLSCertificateAuthority">TotalTLSCertificateAuthority</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#CertificateAuthority">CertificateAuthority</a>
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#TotalTLSCertificateAuthority">TotalTLSCertificateAuthority</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#CertificateAuthority">CertificateAuthority</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#TotalTLSNewResponse">TotalTLSNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#TotalTLSGetResponse">TotalTLSGetResponse</a>
 
@@ -1376,6 +1376,7 @@ Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates#CustomCertificate">CustomCertificate</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates#GeoRestrictions">GeoRestrictions</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates#Status">Status</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates#CustomCertificateNewResponseUnion">CustomCertificateNewResponseUnion</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates#CustomCertificateDeleteResponse">CustomCertificateDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/custom_certificates#CustomCertificateEditResponseUnion">CustomCertificateEditResponseUnion</a>
@@ -2995,7 +2996,7 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMap">AddressMap</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMapKind">AddressMapKind</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#Kind">Kind</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMapNewResponse">AddressMapNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMapDeleteResponse">AddressMapDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMapGetResponse">AddressMapGetResponse</a>

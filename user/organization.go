@@ -92,8 +92,8 @@ type Organization struct {
 	// List of roles that a user has within an organization.
 	Roles []string `json:"roles"`
 	// Whether the user is a member of the organization or has an inivitation pending.
-	Status accounts.MemberStatus `json:"status"`
-	JSON   organizationJSON      `json:"-"`
+	Status accounts.Status  `json:"status"`
+	JSON   organizationJSON `json:"-"`
 }
 
 // organizationJSON contains the JSON metadata for the struct [Organization]

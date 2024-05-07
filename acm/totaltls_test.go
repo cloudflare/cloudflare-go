@@ -30,7 +30,7 @@ func TestTotalTLSNewWithOptionalParams(t *testing.T) {
 	_, err := client.ACM.TotalTLS.New(context.TODO(), acm.TotalTLSNewParams{
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Enabled:              cloudflare.F(true),
-		CertificateAuthority: cloudflare.F(acm.TotalTLSCertificateAuthorityGoogle),
+		CertificateAuthority: cloudflare.F(acm.CertificateAuthorityGoogle),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
