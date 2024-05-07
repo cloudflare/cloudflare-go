@@ -2522,7 +2522,7 @@ type RouteRuleActionParameters struct {
 	// Override the IP/TCP destination.
 	Origin RouteRuleActionParametersOrigin `json:"origin"`
 	// Override the Server Name Indication (SNI).
-	Sni  RouteRuleActionParametersSni  `json:"sni"`
+	SNI  RouteRuleActionParametersSNI  `json:"sni"`
 	JSON routeRuleActionParametersJSON `json:"-"`
 }
 
@@ -2531,7 +2531,7 @@ type RouteRuleActionParameters struct {
 type routeRuleActionParametersJSON struct {
 	HostHeader  apijson.Field
 	Origin      apijson.Field
-	Sni         apijson.Field
+	SNI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2571,25 +2571,25 @@ func (r routeRuleActionParametersOriginJSON) RawJSON() string {
 }
 
 // Override the Server Name Indication (SNI).
-type RouteRuleActionParametersSni struct {
+type RouteRuleActionParametersSNI struct {
 	// The SNI override.
 	Value string                           `json:"value,required"`
-	JSON  routeRuleActionParametersSniJSON `json:"-"`
+	JSON  routeRuleActionParametersSNIJSON `json:"-"`
 }
 
-// routeRuleActionParametersSniJSON contains the JSON metadata for the struct
-// [RouteRuleActionParametersSni]
-type routeRuleActionParametersSniJSON struct {
+// routeRuleActionParametersSNIJSON contains the JSON metadata for the struct
+// [RouteRuleActionParametersSNI]
+type routeRuleActionParametersSNIJSON struct {
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteRuleActionParametersSni) UnmarshalJSON(data []byte) (err error) {
+func (r *RouteRuleActionParametersSNI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r routeRuleActionParametersSniJSON) RawJSON() string {
+func (r routeRuleActionParametersSNIJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2629,7 +2629,7 @@ type RouteRuleActionParametersParam struct {
 	// Override the IP/TCP destination.
 	Origin param.Field[RouteRuleActionParametersOriginParam] `json:"origin"`
 	// Override the Server Name Indication (SNI).
-	Sni param.Field[RouteRuleActionParametersSniParam] `json:"sni"`
+	SNI param.Field[RouteRuleActionParametersSNIParam] `json:"sni"`
 }
 
 func (r RouteRuleActionParametersParam) MarshalJSON() (data []byte, err error) {
@@ -2649,12 +2649,12 @@ func (r RouteRuleActionParametersOriginParam) MarshalJSON() (data []byte, err er
 }
 
 // Override the Server Name Indication (SNI).
-type RouteRuleActionParametersSniParam struct {
+type RouteRuleActionParametersSNIParam struct {
 	// The SNI override.
 	Value param.Field[string] `json:"value,required"`
 }
 
-func (r RouteRuleActionParametersSniParam) MarshalJSON() (data []byte, err error) {
+func (r RouteRuleActionParametersSNIParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

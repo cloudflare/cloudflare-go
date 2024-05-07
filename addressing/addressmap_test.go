@@ -113,7 +113,7 @@ func TestAddressMapEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapEditParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			DefaultSni:  cloudflare.F("*.example.com"),
+			DefaultSNI:  cloudflare.F("*.example.com"),
 			Description: cloudflare.F("My Ecommerce zones"),
 			Enabled:     cloudflare.F(true),
 		},

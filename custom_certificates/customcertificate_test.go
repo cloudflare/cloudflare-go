@@ -37,7 +37,7 @@ func TestCustomCertificateNewWithOptionalParams(t *testing.T) {
 			Label: cloudflare.F(custom_certificates.GeoRestrictionsLabelUs),
 		}),
 		Policy: cloudflare.F("(country: US) or (region: EU)"),
-		Type:   cloudflare.F(custom_certificates.CustomCertificateNewParamsTypeSniCustom),
+		Type:   cloudflare.F(custom_certificates.CustomCertificateNewParamsTypeSNICustom),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

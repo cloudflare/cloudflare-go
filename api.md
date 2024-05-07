@@ -39,6 +39,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberStatus">MemberStatus</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#UserWithInviteCode">UserWithInviteCode</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberListResponse">MemberListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberDeleteResponse">MemberDeleteResponse</a>
@@ -1269,8 +1270,13 @@ Methods:
 
 ## TotalTLS
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#TotalTLSCertificateAuthority">TotalTLSCertificateAuthority</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#TotalTLSCertificateAuthority">TotalTLSCertificateAuthority</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#TotalTLSNewResponse">TotalTLSNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/acm#TotalTLSGetResponse">TotalTLSGetResponse</a>
 
@@ -2989,6 +2995,7 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMap">AddressMap</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMapKind">AddressMapKind</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMapNewResponse">AddressMapNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMapDeleteResponse">AddressMapDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#AddressMapGetResponse">AddressMapGetResponse</a>

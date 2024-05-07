@@ -109,6 +109,22 @@ func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGe
 	return
 }
 
+// Whether the user is a member of the organization or has an inivitation pending.
+type MemberStatus string
+
+const (
+	MemberStatusMember  MemberStatus = "member"
+	MemberStatusInvited MemberStatus = "invited"
+)
+
+func (r MemberStatus) IsKnown() bool {
+	switch r {
+	case MemberStatusMember, MemberStatusInvited:
+		return true
+	}
+	return false
+}
+
 type UserWithInviteCode struct {
 	// Membership identifier tag.
 	ID string `json:"id,required"`
