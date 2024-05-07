@@ -1168,6 +1168,7 @@ Params Types:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackStatus">CertificatePackStatus</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#Host">Host</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackListResponse">CertificatePackListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackDeleteResponse">CertificatePackDeleteResponse</a>

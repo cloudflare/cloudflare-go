@@ -105,6 +105,41 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 	return
 }
 
+// Status of certificate pack.
+type CertificatePackStatus string
+
+const (
+	CertificatePackStatusInitializing         CertificatePackStatus = "initializing"
+	CertificatePackStatusPendingValidation    CertificatePackStatus = "pending_validation"
+	CertificatePackStatusDeleted              CertificatePackStatus = "deleted"
+	CertificatePackStatusPendingIssuance      CertificatePackStatus = "pending_issuance"
+	CertificatePackStatusPendingDeployment    CertificatePackStatus = "pending_deployment"
+	CertificatePackStatusPendingDeletion      CertificatePackStatus = "pending_deletion"
+	CertificatePackStatusPendingExpiration    CertificatePackStatus = "pending_expiration"
+	CertificatePackStatusExpired              CertificatePackStatus = "expired"
+	CertificatePackStatusActive               CertificatePackStatus = "active"
+	CertificatePackStatusInitializingTimedOut CertificatePackStatus = "initializing_timed_out"
+	CertificatePackStatusValidationTimedOut   CertificatePackStatus = "validation_timed_out"
+	CertificatePackStatusIssuanceTimedOut     CertificatePackStatus = "issuance_timed_out"
+	CertificatePackStatusDeploymentTimedOut   CertificatePackStatus = "deployment_timed_out"
+	CertificatePackStatusDeletionTimedOut     CertificatePackStatus = "deletion_timed_out"
+	CertificatePackStatusPendingCleanup       CertificatePackStatus = "pending_cleanup"
+	CertificatePackStatusStagingDeployment    CertificatePackStatus = "staging_deployment"
+	CertificatePackStatusStagingActive        CertificatePackStatus = "staging_active"
+	CertificatePackStatusDeactivating         CertificatePackStatus = "deactivating"
+	CertificatePackStatusInactive             CertificatePackStatus = "inactive"
+	CertificatePackStatusBackupIssued         CertificatePackStatus = "backup_issued"
+	CertificatePackStatusHoldingDeployment    CertificatePackStatus = "holding_deployment"
+)
+
+func (r CertificatePackStatus) IsKnown() bool {
+	switch r {
+	case CertificatePackStatusInitializing, CertificatePackStatusPendingValidation, CertificatePackStatusDeleted, CertificatePackStatusPendingIssuance, CertificatePackStatusPendingDeployment, CertificatePackStatusPendingDeletion, CertificatePackStatusPendingExpiration, CertificatePackStatusExpired, CertificatePackStatusActive, CertificatePackStatusInitializingTimedOut, CertificatePackStatusValidationTimedOut, CertificatePackStatusIssuanceTimedOut, CertificatePackStatusDeploymentTimedOut, CertificatePackStatusDeletionTimedOut, CertificatePackStatusPendingCleanup, CertificatePackStatusStagingDeployment, CertificatePackStatusStagingActive, CertificatePackStatusDeactivating, CertificatePackStatusInactive, CertificatePackStatusBackupIssued, CertificatePackStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
 type Host = string
 
 type HostParam = string
@@ -147,7 +182,7 @@ type CertificatePackEditResponse struct {
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
 	Hosts []Host `json:"hosts"`
 	// Status of certificate pack.
-	Status CertificatePackEditResponseStatus `json:"status"`
+	Status CertificatePackStatus `json:"status"`
 	// Type of certificate pack.
 	Type CertificatePackEditResponseType `json:"type"`
 	// Validation Method selected for the order.
@@ -193,41 +228,6 @@ const (
 func (r CertificatePackEditResponseCertificateAuthority) IsKnown() bool {
 	switch r {
 	case CertificatePackEditResponseCertificateAuthorityGoogle, CertificatePackEditResponseCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
-// Status of certificate pack.
-type CertificatePackEditResponseStatus string
-
-const (
-	CertificatePackEditResponseStatusInitializing         CertificatePackEditResponseStatus = "initializing"
-	CertificatePackEditResponseStatusPendingValidation    CertificatePackEditResponseStatus = "pending_validation"
-	CertificatePackEditResponseStatusDeleted              CertificatePackEditResponseStatus = "deleted"
-	CertificatePackEditResponseStatusPendingIssuance      CertificatePackEditResponseStatus = "pending_issuance"
-	CertificatePackEditResponseStatusPendingDeployment    CertificatePackEditResponseStatus = "pending_deployment"
-	CertificatePackEditResponseStatusPendingDeletion      CertificatePackEditResponseStatus = "pending_deletion"
-	CertificatePackEditResponseStatusPendingExpiration    CertificatePackEditResponseStatus = "pending_expiration"
-	CertificatePackEditResponseStatusExpired              CertificatePackEditResponseStatus = "expired"
-	CertificatePackEditResponseStatusActive               CertificatePackEditResponseStatus = "active"
-	CertificatePackEditResponseStatusInitializingTimedOut CertificatePackEditResponseStatus = "initializing_timed_out"
-	CertificatePackEditResponseStatusValidationTimedOut   CertificatePackEditResponseStatus = "validation_timed_out"
-	CertificatePackEditResponseStatusIssuanceTimedOut     CertificatePackEditResponseStatus = "issuance_timed_out"
-	CertificatePackEditResponseStatusDeploymentTimedOut   CertificatePackEditResponseStatus = "deployment_timed_out"
-	CertificatePackEditResponseStatusDeletionTimedOut     CertificatePackEditResponseStatus = "deletion_timed_out"
-	CertificatePackEditResponseStatusPendingCleanup       CertificatePackEditResponseStatus = "pending_cleanup"
-	CertificatePackEditResponseStatusStagingDeployment    CertificatePackEditResponseStatus = "staging_deployment"
-	CertificatePackEditResponseStatusStagingActive        CertificatePackEditResponseStatus = "staging_active"
-	CertificatePackEditResponseStatusDeactivating         CertificatePackEditResponseStatus = "deactivating"
-	CertificatePackEditResponseStatusInactive             CertificatePackEditResponseStatus = "inactive"
-	CertificatePackEditResponseStatusBackupIssued         CertificatePackEditResponseStatus = "backup_issued"
-	CertificatePackEditResponseStatusHoldingDeployment    CertificatePackEditResponseStatus = "holding_deployment"
-)
-
-func (r CertificatePackEditResponseStatus) IsKnown() bool {
-	switch r {
-	case CertificatePackEditResponseStatusInitializing, CertificatePackEditResponseStatusPendingValidation, CertificatePackEditResponseStatusDeleted, CertificatePackEditResponseStatusPendingIssuance, CertificatePackEditResponseStatusPendingDeployment, CertificatePackEditResponseStatusPendingDeletion, CertificatePackEditResponseStatusPendingExpiration, CertificatePackEditResponseStatusExpired, CertificatePackEditResponseStatusActive, CertificatePackEditResponseStatusInitializingTimedOut, CertificatePackEditResponseStatusValidationTimedOut, CertificatePackEditResponseStatusIssuanceTimedOut, CertificatePackEditResponseStatusDeploymentTimedOut, CertificatePackEditResponseStatusDeletionTimedOut, CertificatePackEditResponseStatusPendingCleanup, CertificatePackEditResponseStatusStagingDeployment, CertificatePackEditResponseStatusStagingActive, CertificatePackEditResponseStatusDeactivating, CertificatePackEditResponseStatusInactive, CertificatePackEditResponseStatusBackupIssued, CertificatePackEditResponseStatusHoldingDeployment:
 		return true
 	}
 	return false
