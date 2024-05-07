@@ -5,6 +5,7 @@
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificateRequestType">CertificateRequestType</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#MemberParam">MemberParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#PermissionGrantParam">PermissionGrantParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#SortDirection">SortDirection</a>
 
 # Shared Response Types
 
@@ -252,6 +253,10 @@ Methods:
 - <code title="put /user/tokens/{token_id}/value">client.User.Tokens.Value.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#TokenValueService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tokenID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#TokenValueUpdateParams">TokenValueUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#Value">Value</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Zones
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#Type">Type</a>
 
 Response Types:
 
@@ -1067,8 +1072,13 @@ Methods:
 
 ## Regions
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#RegionIDParam">RegionIDParam</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#RegionID">RegionID</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#RegionListResponseUnion">RegionListResponseUnion</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#RegionGetResponseUnion">RegionGetResponseUnion</a>
 
@@ -1103,6 +1113,7 @@ Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache#CacheReserve">CacheReserve</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache#CacheReserveClear">CacheReserveClear</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache#State">State</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache#CacheReserveClearResponse">CacheReserveClearResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache#CacheReserveEditResponse">CacheReserveEditResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cache#CacheReserveGetResponse">CacheReserveGetResponse</a>
@@ -2794,8 +2805,15 @@ Methods:
 
 # Rulesets
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Kind">Kind</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Phase">Phase</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Kind">Kind</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Phase">Phase</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Ruleset">Ruleset</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RulesetNewResponse">RulesetNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#RulesetUpdateResponse">RulesetUpdateResponse</a>
@@ -2818,8 +2836,8 @@ Response Types:
 
 Methods:
 
-- <code title="put /{account_or_zone}/{account_or_zone_id}/rulesets/phases/{ruleset_phase}/entrypoint">client.Rulesets.Phases.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, rulesetPhase <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseUpdateParamsRulesetPhase">PhaseUpdateParamsRulesetPhase</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseUpdateParams">PhaseUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseUpdateResponse">PhaseUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /{account_or_zone}/{account_or_zone_id}/rulesets/phases/{ruleset_phase}/entrypoint">client.Rulesets.Phases.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, rulesetPhase <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseGetParamsRulesetPhase">PhaseGetParamsRulesetPhase</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseGetParams">PhaseGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseGetResponse">PhaseGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /{account_or_zone}/{account_or_zone_id}/rulesets/phases/{ruleset_phase}/entrypoint">client.Rulesets.Phases.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, rulesetPhase <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Phase">Phase</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseUpdateParams">PhaseUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseUpdateResponse">PhaseUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /{account_or_zone}/{account_or_zone_id}/rulesets/phases/{ruleset_phase}/entrypoint">client.Rulesets.Phases.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, rulesetPhase <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Phase">Phase</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseGetParams">PhaseGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseGetResponse">PhaseGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Versions
 
@@ -2829,8 +2847,8 @@ Response Types:
 
 Methods:
 
-- <code title="get /{account_or_zone}/{account_or_zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions">client.Rulesets.Phases.Versions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, rulesetPhase <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionListParamsRulesetPhase">PhaseVersionListParamsRulesetPhase</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionListParams">PhaseVersionListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Ruleset">Ruleset</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /{account_or_zone}/{account_or_zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions/{ruleset_version}">client.Rulesets.Phases.Versions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, rulesetPhase <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionGetParamsRulesetPhase">PhaseVersionGetParamsRulesetPhase</a>, rulesetVersion <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionGetParams">PhaseVersionGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionGetResponse">PhaseVersionGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /{account_or_zone}/{account_or_zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions">client.Rulesets.Phases.Versions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, rulesetPhase <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Phase">Phase</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionListParams">PhaseVersionListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Ruleset">Ruleset</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /{account_or_zone}/{account_or_zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions/{ruleset_version}">client.Rulesets.Phases.Versions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, rulesetPhase <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Phase">Phase</a>, rulesetVersion <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionGetParams">PhaseVersionGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#PhaseVersionGetResponse">PhaseVersionGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Rules
 

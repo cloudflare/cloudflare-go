@@ -32,7 +32,7 @@ func TestZoneNewWithOptionalParams(t *testing.T) {
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.TypeFull),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
