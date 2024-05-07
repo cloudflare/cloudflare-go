@@ -118,7 +118,7 @@ type OriginCACertificate struct {
 	Hostnames []interface{} `json:"hostnames,required"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType shared.CertificatePackRequestType `json:"request_type,required"`
+	RequestType shared.CertificateRequestType `json:"request_type,required"`
 	// The number of days for which the certificate should be valid.
 	RequestedValidity ssl.RequestValidity `json:"requested_validity,required"`
 	// Identifier
@@ -218,7 +218,7 @@ type OriginCACertificateNewParams struct {
 	Hostnames param.Field[[]interface{}] `json:"hostnames"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType param.Field[shared.CertificatePackRequestType] `json:"request_type"`
+	RequestType param.Field[shared.CertificateRequestType] `json:"request_type"`
 	// The number of days for which the certificate should be valid.
 	RequestedValidity param.Field[ssl.RequestValidity] `json:"requested_validity"`
 }
