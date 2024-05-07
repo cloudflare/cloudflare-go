@@ -59,7 +59,7 @@ type CertificatePackOrderNewResponse struct {
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
 	Hosts []Host `json:"hosts"`
 	// Status of certificate pack.
-	Status CertificatePackStatus `json:"status"`
+	Status Status `json:"status"`
 	// Type of certificate pack.
 	Type CertificatePackOrderNewResponseType `json:"type"`
 	// Validation Method selected for the order.

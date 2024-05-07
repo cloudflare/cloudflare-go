@@ -118,9 +118,9 @@ type OriginCACertificate struct {
 	Hostnames []interface{} `json:"hostnames,required"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType ssl.CertificatePackRequestType `json:"request_type,required"`
+	RequestType ssl.RequestType `json:"request_type,required"`
 	// The number of days for which the certificate should be valid.
-	RequestedValidity ssl.CertificatePackRequestValidity `json:"requested_validity,required"`
+	RequestedValidity ssl.RequestValidity `json:"requested_validity,required"`
 	// Identifier
 	ID string `json:"id"`
 	// The Origin CA certificate. Will be newline-encoded.
@@ -218,9 +218,9 @@ type OriginCACertificateNewParams struct {
 	Hostnames param.Field[[]interface{}] `json:"hostnames"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType param.Field[ssl.CertificatePackRequestType] `json:"request_type"`
+	RequestType param.Field[ssl.RequestType] `json:"request_type"`
 	// The number of days for which the certificate should be valid.
-	RequestedValidity param.Field[ssl.CertificatePackRequestValidity] `json:"requested_validity"`
+	RequestedValidity param.Field[ssl.RequestValidity] `json:"requested_validity"`
 }
 
 func (r OriginCACertificateNewParams) MarshalJSON() (data []byte, err error) {

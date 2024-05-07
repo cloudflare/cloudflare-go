@@ -58,16 +58,16 @@ func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts
 }
 
 // The Certificate Authority that Total TLS certificates will be issued through.
-type TotalTLSCertificateAuthority string
+type CertificateAuthority string
 
 const (
-	TotalTLSCertificateAuthorityGoogle      TotalTLSCertificateAuthority = "google"
-	TotalTLSCertificateAuthorityLetsEncrypt TotalTLSCertificateAuthority = "lets_encrypt"
+	CertificateAuthorityGoogle      CertificateAuthority = "google"
+	CertificateAuthorityLetsEncrypt CertificateAuthority = "lets_encrypt"
 )
 
-func (r TotalTLSCertificateAuthority) IsKnown() bool {
+func (r CertificateAuthority) IsKnown() bool {
 	switch r {
-	case TotalTLSCertificateAuthorityGoogle, TotalTLSCertificateAuthorityLetsEncrypt:
+	case CertificateAuthorityGoogle, CertificateAuthorityLetsEncrypt:
 		return true
 	}
 	return false
@@ -75,7 +75,7 @@ func (r TotalTLSCertificateAuthority) IsKnown() bool {
 
 type TotalTLSNewResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority TotalTLSCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
@@ -119,7 +119,7 @@ func (r TotalTLSNewResponseValidityDays) IsKnown() bool {
 
 type TotalTLSGetResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority TotalTLSCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
@@ -168,7 +168,7 @@ type TotalTLSNewParams struct {
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority param.Field[TotalTLSCertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
 }
 
 func (r TotalTLSNewParams) MarshalJSON() (data []byte, err error) {

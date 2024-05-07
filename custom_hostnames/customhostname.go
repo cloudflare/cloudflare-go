@@ -239,7 +239,7 @@ type CustomHostnameNewResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority ssl.CertificatePackCA `json:"certificate_authority"`
+	CertificateAuthority ssl.CertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -701,7 +701,7 @@ type CustomHostnameListResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority ssl.CertificatePackCA `json:"certificate_authority"`
+	CertificateAuthority ssl.CertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -1185,7 +1185,7 @@ type CustomHostnameEditResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority ssl.CertificatePackCA `json:"certificate_authority"`
+	CertificateAuthority ssl.CertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -1647,7 +1647,7 @@ type CustomHostnameGetResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority ssl.CertificatePackCA `json:"certificate_authority"`
+	CertificateAuthority ssl.CertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -2064,7 +2064,7 @@ type CustomHostnameNewParamsSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority param.Field[ssl.CertificatePackCA] `json:"certificate_authority"`
+	CertificateAuthority param.Field[ssl.CertificateAuthority] `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2346,7 +2346,7 @@ type CustomHostnameEditParamsSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority param.Field[ssl.CertificatePackCA] `json:"certificate_authority"`
+	CertificateAuthority param.Field[ssl.CertificateAuthority] `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.

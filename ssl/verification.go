@@ -73,7 +73,7 @@ type Verification struct {
 	// Certificate's signature algorithm.
 	Signature VerificationSignature `json:"signature"`
 	// Validation method in use for a certificate pack order.
-	ValidationMethod CertificatePackValidationMethod `json:"validation_method"`
+	ValidationMethod ValidationMethod `json:"validation_method"`
 	// Certificate's required verification information.
 	VerificationInfo VerificationVerificationInfo `json:"verification_info"`
 	// Status of the required verification information, omitted if verification status
