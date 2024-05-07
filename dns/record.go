@@ -3639,7 +3639,7 @@ type RecordListParams struct {
 	// DNS record content.
 	Content param.Field[string] `query:"content"`
 	// Direction to order DNS records in.
-	Direction param.Field[RecordListParamsDirection] `query:"direction"`
+	Direction param.Field[shared.SortDirection] `query:"direction"`
 	// Whether to match all search requirements or at least one (any). If set to `all`,
 	// acts like a logical AND between filters. If set to `any`, acts like a logical OR
 	// instead. Note that the interaction between tag filters is controlled by the
@@ -3702,22 +3702,6 @@ func (r RecordListParamsComment) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-// Direction to order DNS records in.
-type RecordListParamsDirection string
-
-const (
-	RecordListParamsDirectionAsc  RecordListParamsDirection = "asc"
-	RecordListParamsDirectionDesc RecordListParamsDirection = "desc"
-)
-
-func (r RecordListParamsDirection) IsKnown() bool {
-	switch r {
-	case RecordListParamsDirectionAsc, RecordListParamsDirectionDesc:
-		return true
-	}
-	return false
 }
 
 // Whether to match all search requirements or at least one (any). If set to `all`,

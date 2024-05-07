@@ -113,13 +113,13 @@ type VersionGetResponse struct {
 	// The unique ID of the ruleset.
 	ID string `json:"id,required"`
 	// The kind of the ruleset.
-	Kind VersionGetResponseKind `json:"kind,required"`
+	Kind Kind `json:"kind,required"`
 	// The timestamp of when the ruleset was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name,required"`
 	// The phase of the ruleset.
-	Phase VersionGetResponsePhase `json:"phase,required"`
+	Phase Phase `json:"phase,required"`
 	// The list of rules in the ruleset.
 	Rules []VersionGetResponseRule `json:"rules,required"`
 	// The version of the ruleset.
@@ -150,61 +150,6 @@ func (r *VersionGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r versionGetResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// The kind of the ruleset.
-type VersionGetResponseKind string
-
-const (
-	VersionGetResponseKindManaged VersionGetResponseKind = "managed"
-	VersionGetResponseKindCustom  VersionGetResponseKind = "custom"
-	VersionGetResponseKindRoot    VersionGetResponseKind = "root"
-	VersionGetResponseKindZone    VersionGetResponseKind = "zone"
-)
-
-func (r VersionGetResponseKind) IsKnown() bool {
-	switch r {
-	case VersionGetResponseKindManaged, VersionGetResponseKindCustom, VersionGetResponseKindRoot, VersionGetResponseKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type VersionGetResponsePhase string
-
-const (
-	VersionGetResponsePhaseDDoSL4                         VersionGetResponsePhase = "ddos_l4"
-	VersionGetResponsePhaseDDoSL7                         VersionGetResponsePhase = "ddos_l7"
-	VersionGetResponsePhaseHTTPConfigSettings             VersionGetResponsePhase = "http_config_settings"
-	VersionGetResponsePhaseHTTPCustomErrors               VersionGetResponsePhase = "http_custom_errors"
-	VersionGetResponsePhaseHTTPLogCustomFields            VersionGetResponsePhase = "http_log_custom_fields"
-	VersionGetResponsePhaseHTTPRatelimit                  VersionGetResponsePhase = "http_ratelimit"
-	VersionGetResponsePhaseHTTPRequestCacheSettings       VersionGetResponsePhase = "http_request_cache_settings"
-	VersionGetResponsePhaseHTTPRequestDynamicRedirect     VersionGetResponsePhase = "http_request_dynamic_redirect"
-	VersionGetResponsePhaseHTTPRequestFirewallCustom      VersionGetResponsePhase = "http_request_firewall_custom"
-	VersionGetResponsePhaseHTTPRequestFirewallManaged     VersionGetResponsePhase = "http_request_firewall_managed"
-	VersionGetResponsePhaseHTTPRequestLateTransform       VersionGetResponsePhase = "http_request_late_transform"
-	VersionGetResponsePhaseHTTPRequestOrigin              VersionGetResponsePhase = "http_request_origin"
-	VersionGetResponsePhaseHTTPRequestRedirect            VersionGetResponsePhase = "http_request_redirect"
-	VersionGetResponsePhaseHTTPRequestSanitize            VersionGetResponsePhase = "http_request_sanitize"
-	VersionGetResponsePhaseHTTPRequestSBFM                VersionGetResponsePhase = "http_request_sbfm"
-	VersionGetResponsePhaseHTTPRequestSelectConfiguration VersionGetResponsePhase = "http_request_select_configuration"
-	VersionGetResponsePhaseHTTPRequestTransform           VersionGetResponsePhase = "http_request_transform"
-	VersionGetResponsePhaseHTTPResponseCompression        VersionGetResponsePhase = "http_response_compression"
-	VersionGetResponsePhaseHTTPResponseFirewallManaged    VersionGetResponsePhase = "http_response_firewall_managed"
-	VersionGetResponsePhaseHTTPResponseHeadersTransform   VersionGetResponsePhase = "http_response_headers_transform"
-	VersionGetResponsePhaseMagicTransit                   VersionGetResponsePhase = "magic_transit"
-	VersionGetResponsePhaseMagicTransitIDsManaged         VersionGetResponsePhase = "magic_transit_ids_managed"
-	VersionGetResponsePhaseMagicTransitManaged            VersionGetResponsePhase = "magic_transit_managed"
-)
-
-func (r VersionGetResponsePhase) IsKnown() bool {
-	switch r {
-	case VersionGetResponsePhaseDDoSL4, VersionGetResponsePhaseDDoSL7, VersionGetResponsePhaseHTTPConfigSettings, VersionGetResponsePhaseHTTPCustomErrors, VersionGetResponsePhaseHTTPLogCustomFields, VersionGetResponsePhaseHTTPRatelimit, VersionGetResponsePhaseHTTPRequestCacheSettings, VersionGetResponsePhaseHTTPRequestDynamicRedirect, VersionGetResponsePhaseHTTPRequestFirewallCustom, VersionGetResponsePhaseHTTPRequestFirewallManaged, VersionGetResponsePhaseHTTPRequestLateTransform, VersionGetResponsePhaseHTTPRequestOrigin, VersionGetResponsePhaseHTTPRequestRedirect, VersionGetResponsePhaseHTTPRequestSanitize, VersionGetResponsePhaseHTTPRequestSBFM, VersionGetResponsePhaseHTTPRequestSelectConfiguration, VersionGetResponsePhaseHTTPRequestTransform, VersionGetResponsePhaseHTTPResponseCompression, VersionGetResponsePhaseHTTPResponseFirewallManaged, VersionGetResponsePhaseHTTPResponseHeadersTransform, VersionGetResponsePhaseMagicTransit, VersionGetResponsePhaseMagicTransitIDsManaged, VersionGetResponsePhaseMagicTransitManaged:
-		return true
-	}
-	return false
 }
 
 type VersionGetResponseRule struct {

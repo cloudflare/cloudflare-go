@@ -52,13 +52,13 @@ type VersionByTagGetResponse struct {
 	// The unique ID of the ruleset.
 	ID string `json:"id,required"`
 	// The kind of the ruleset.
-	Kind VersionByTagGetResponseKind `json:"kind,required"`
+	Kind Kind `json:"kind,required"`
 	// The timestamp of when the ruleset was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name,required"`
 	// The phase of the ruleset.
-	Phase VersionByTagGetResponsePhase `json:"phase,required"`
+	Phase Phase `json:"phase,required"`
 	// The list of rules in the ruleset.
 	Rules []VersionByTagGetResponseRule `json:"rules,required"`
 	// The version of the ruleset.
@@ -89,61 +89,6 @@ func (r *VersionByTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r versionByTagGetResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// The kind of the ruleset.
-type VersionByTagGetResponseKind string
-
-const (
-	VersionByTagGetResponseKindManaged VersionByTagGetResponseKind = "managed"
-	VersionByTagGetResponseKindCustom  VersionByTagGetResponseKind = "custom"
-	VersionByTagGetResponseKindRoot    VersionByTagGetResponseKind = "root"
-	VersionByTagGetResponseKindZone    VersionByTagGetResponseKind = "zone"
-)
-
-func (r VersionByTagGetResponseKind) IsKnown() bool {
-	switch r {
-	case VersionByTagGetResponseKindManaged, VersionByTagGetResponseKindCustom, VersionByTagGetResponseKindRoot, VersionByTagGetResponseKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type VersionByTagGetResponsePhase string
-
-const (
-	VersionByTagGetResponsePhaseDDoSL4                         VersionByTagGetResponsePhase = "ddos_l4"
-	VersionByTagGetResponsePhaseDDoSL7                         VersionByTagGetResponsePhase = "ddos_l7"
-	VersionByTagGetResponsePhaseHTTPConfigSettings             VersionByTagGetResponsePhase = "http_config_settings"
-	VersionByTagGetResponsePhaseHTTPCustomErrors               VersionByTagGetResponsePhase = "http_custom_errors"
-	VersionByTagGetResponsePhaseHTTPLogCustomFields            VersionByTagGetResponsePhase = "http_log_custom_fields"
-	VersionByTagGetResponsePhaseHTTPRatelimit                  VersionByTagGetResponsePhase = "http_ratelimit"
-	VersionByTagGetResponsePhaseHTTPRequestCacheSettings       VersionByTagGetResponsePhase = "http_request_cache_settings"
-	VersionByTagGetResponsePhaseHTTPRequestDynamicRedirect     VersionByTagGetResponsePhase = "http_request_dynamic_redirect"
-	VersionByTagGetResponsePhaseHTTPRequestFirewallCustom      VersionByTagGetResponsePhase = "http_request_firewall_custom"
-	VersionByTagGetResponsePhaseHTTPRequestFirewallManaged     VersionByTagGetResponsePhase = "http_request_firewall_managed"
-	VersionByTagGetResponsePhaseHTTPRequestLateTransform       VersionByTagGetResponsePhase = "http_request_late_transform"
-	VersionByTagGetResponsePhaseHTTPRequestOrigin              VersionByTagGetResponsePhase = "http_request_origin"
-	VersionByTagGetResponsePhaseHTTPRequestRedirect            VersionByTagGetResponsePhase = "http_request_redirect"
-	VersionByTagGetResponsePhaseHTTPRequestSanitize            VersionByTagGetResponsePhase = "http_request_sanitize"
-	VersionByTagGetResponsePhaseHTTPRequestSBFM                VersionByTagGetResponsePhase = "http_request_sbfm"
-	VersionByTagGetResponsePhaseHTTPRequestSelectConfiguration VersionByTagGetResponsePhase = "http_request_select_configuration"
-	VersionByTagGetResponsePhaseHTTPRequestTransform           VersionByTagGetResponsePhase = "http_request_transform"
-	VersionByTagGetResponsePhaseHTTPResponseCompression        VersionByTagGetResponsePhase = "http_response_compression"
-	VersionByTagGetResponsePhaseHTTPResponseFirewallManaged    VersionByTagGetResponsePhase = "http_response_firewall_managed"
-	VersionByTagGetResponsePhaseHTTPResponseHeadersTransform   VersionByTagGetResponsePhase = "http_response_headers_transform"
-	VersionByTagGetResponsePhaseMagicTransit                   VersionByTagGetResponsePhase = "magic_transit"
-	VersionByTagGetResponsePhaseMagicTransitIDsManaged         VersionByTagGetResponsePhase = "magic_transit_ids_managed"
-	VersionByTagGetResponsePhaseMagicTransitManaged            VersionByTagGetResponsePhase = "magic_transit_managed"
-)
-
-func (r VersionByTagGetResponsePhase) IsKnown() bool {
-	switch r {
-	case VersionByTagGetResponsePhaseDDoSL4, VersionByTagGetResponsePhaseDDoSL7, VersionByTagGetResponsePhaseHTTPConfigSettings, VersionByTagGetResponsePhaseHTTPCustomErrors, VersionByTagGetResponsePhaseHTTPLogCustomFields, VersionByTagGetResponsePhaseHTTPRatelimit, VersionByTagGetResponsePhaseHTTPRequestCacheSettings, VersionByTagGetResponsePhaseHTTPRequestDynamicRedirect, VersionByTagGetResponsePhaseHTTPRequestFirewallCustom, VersionByTagGetResponsePhaseHTTPRequestFirewallManaged, VersionByTagGetResponsePhaseHTTPRequestLateTransform, VersionByTagGetResponsePhaseHTTPRequestOrigin, VersionByTagGetResponsePhaseHTTPRequestRedirect, VersionByTagGetResponsePhaseHTTPRequestSanitize, VersionByTagGetResponsePhaseHTTPRequestSBFM, VersionByTagGetResponsePhaseHTTPRequestSelectConfiguration, VersionByTagGetResponsePhaseHTTPRequestTransform, VersionByTagGetResponsePhaseHTTPResponseCompression, VersionByTagGetResponsePhaseHTTPResponseFirewallManaged, VersionByTagGetResponsePhaseHTTPResponseHeadersTransform, VersionByTagGetResponsePhaseMagicTransit, VersionByTagGetResponsePhaseMagicTransitIDsManaged, VersionByTagGetResponsePhaseMagicTransitManaged:
-		return true
-	}
-	return false
 }
 
 type VersionByTagGetResponseRule struct {

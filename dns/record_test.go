@@ -113,7 +113,7 @@ func TestRecordListWithOptionalParams(t *testing.T) {
 			Endswith:   cloudflare.F("o, world"),
 		}),
 		Content:   cloudflare.F("127.0.0.1"),
-		Direction: cloudflare.F(dns.RecordListParamsDirectionAsc),
+		Direction: cloudflare.F(shared.SortDirectionAsc),
 		Match:     cloudflare.F(dns.RecordListParamsMatchAny),
 		Name:      cloudflare.F("example.com"),
 		Order:     cloudflare.F(dns.RecordListParamsOrderType),

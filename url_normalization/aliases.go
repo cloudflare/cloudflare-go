@@ -142,3 +142,14 @@ type ResponseInfo = shared.ResponseInfo
 
 // This is an alias to an internal type.
 type Role = shared.Role
+
+// Direction to order DNS records in.
+//
+// This is an alias to an internal type.
+type SortDirection = shared.SortDirection
+
+// This is an alias to an internal value.
+const SortDirectionAsc = shared.SortDirectionAsc
+
+// This is an alias to an internal value.
+const SortDirectionDesc = shared.SortDirectionDesc

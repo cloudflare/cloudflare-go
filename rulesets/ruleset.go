@@ -156,6 +156,61 @@ func (r *RulesetService) Get(ctx context.Context, rulesetID string, query Rulese
 	return
 }
 
+// The kind of the ruleset.
+type Kind string
+
+const (
+	KindManaged Kind = "managed"
+	KindCustom  Kind = "custom"
+	KindRoot    Kind = "root"
+	KindZone    Kind = "zone"
+)
+
+func (r Kind) IsKnown() bool {
+	switch r {
+	case KindManaged, KindCustom, KindRoot, KindZone:
+		return true
+	}
+	return false
+}
+
+// The phase of the ruleset.
+type Phase string
+
+const (
+	PhaseDDoSL4                         Phase = "ddos_l4"
+	PhaseDDoSL7                         Phase = "ddos_l7"
+	PhaseHTTPConfigSettings             Phase = "http_config_settings"
+	PhaseHTTPCustomErrors               Phase = "http_custom_errors"
+	PhaseHTTPLogCustomFields            Phase = "http_log_custom_fields"
+	PhaseHTTPRatelimit                  Phase = "http_ratelimit"
+	PhaseHTTPRequestCacheSettings       Phase = "http_request_cache_settings"
+	PhaseHTTPRequestDynamicRedirect     Phase = "http_request_dynamic_redirect"
+	PhaseHTTPRequestFirewallCustom      Phase = "http_request_firewall_custom"
+	PhaseHTTPRequestFirewallManaged     Phase = "http_request_firewall_managed"
+	PhaseHTTPRequestLateTransform       Phase = "http_request_late_transform"
+	PhaseHTTPRequestOrigin              Phase = "http_request_origin"
+	PhaseHTTPRequestRedirect            Phase = "http_request_redirect"
+	PhaseHTTPRequestSanitize            Phase = "http_request_sanitize"
+	PhaseHTTPRequestSBFM                Phase = "http_request_sbfm"
+	PhaseHTTPRequestSelectConfiguration Phase = "http_request_select_configuration"
+	PhaseHTTPRequestTransform           Phase = "http_request_transform"
+	PhaseHTTPResponseCompression        Phase = "http_response_compression"
+	PhaseHTTPResponseFirewallManaged    Phase = "http_response_firewall_managed"
+	PhaseHTTPResponseHeadersTransform   Phase = "http_response_headers_transform"
+	PhaseMagicTransit                   Phase = "magic_transit"
+	PhaseMagicTransitIDsManaged         Phase = "magic_transit_ids_managed"
+	PhaseMagicTransitManaged            Phase = "magic_transit_managed"
+)
+
+func (r Phase) IsKnown() bool {
+	switch r {
+	case PhaseDDoSL4, PhaseDDoSL7, PhaseHTTPConfigSettings, PhaseHTTPCustomErrors, PhaseHTTPLogCustomFields, PhaseHTTPRatelimit, PhaseHTTPRequestCacheSettings, PhaseHTTPRequestDynamicRedirect, PhaseHTTPRequestFirewallCustom, PhaseHTTPRequestFirewallManaged, PhaseHTTPRequestLateTransform, PhaseHTTPRequestOrigin, PhaseHTTPRequestRedirect, PhaseHTTPRequestSanitize, PhaseHTTPRequestSBFM, PhaseHTTPRequestSelectConfiguration, PhaseHTTPRequestTransform, PhaseHTTPResponseCompression, PhaseHTTPResponseFirewallManaged, PhaseHTTPResponseHeadersTransform, PhaseMagicTransit, PhaseMagicTransitIDsManaged, PhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
 // A ruleset object.
 type Ruleset struct {
 	// The unique ID of the ruleset.
@@ -167,12 +222,12 @@ type Ruleset struct {
 	// An informative description of the ruleset.
 	Description string `json:"description"`
 	// The kind of the ruleset.
-	Kind RulesetKind `json:"kind"`
+	Kind Kind `json:"kind"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name"`
 	// The phase of the ruleset.
-	Phase RulesetPhase `json:"phase"`
-	JSON  rulesetJSON  `json:"-"`
+	Phase Phase       `json:"phase"`
+	JSON  rulesetJSON `json:"-"`
 }
 
 // rulesetJSON contains the JSON metadata for the struct [Ruleset]
@@ -196,73 +251,18 @@ func (r rulesetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The kind of the ruleset.
-type RulesetKind string
-
-const (
-	RulesetKindManaged RulesetKind = "managed"
-	RulesetKindCustom  RulesetKind = "custom"
-	RulesetKindRoot    RulesetKind = "root"
-	RulesetKindZone    RulesetKind = "zone"
-)
-
-func (r RulesetKind) IsKnown() bool {
-	switch r {
-	case RulesetKindManaged, RulesetKindCustom, RulesetKindRoot, RulesetKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type RulesetPhase string
-
-const (
-	RulesetPhaseDDoSL4                         RulesetPhase = "ddos_l4"
-	RulesetPhaseDDoSL7                         RulesetPhase = "ddos_l7"
-	RulesetPhaseHTTPConfigSettings             RulesetPhase = "http_config_settings"
-	RulesetPhaseHTTPCustomErrors               RulesetPhase = "http_custom_errors"
-	RulesetPhaseHTTPLogCustomFields            RulesetPhase = "http_log_custom_fields"
-	RulesetPhaseHTTPRatelimit                  RulesetPhase = "http_ratelimit"
-	RulesetPhaseHTTPRequestCacheSettings       RulesetPhase = "http_request_cache_settings"
-	RulesetPhaseHTTPRequestDynamicRedirect     RulesetPhase = "http_request_dynamic_redirect"
-	RulesetPhaseHTTPRequestFirewallCustom      RulesetPhase = "http_request_firewall_custom"
-	RulesetPhaseHTTPRequestFirewallManaged     RulesetPhase = "http_request_firewall_managed"
-	RulesetPhaseHTTPRequestLateTransform       RulesetPhase = "http_request_late_transform"
-	RulesetPhaseHTTPRequestOrigin              RulesetPhase = "http_request_origin"
-	RulesetPhaseHTTPRequestRedirect            RulesetPhase = "http_request_redirect"
-	RulesetPhaseHTTPRequestSanitize            RulesetPhase = "http_request_sanitize"
-	RulesetPhaseHTTPRequestSBFM                RulesetPhase = "http_request_sbfm"
-	RulesetPhaseHTTPRequestSelectConfiguration RulesetPhase = "http_request_select_configuration"
-	RulesetPhaseHTTPRequestTransform           RulesetPhase = "http_request_transform"
-	RulesetPhaseHTTPResponseCompression        RulesetPhase = "http_response_compression"
-	RulesetPhaseHTTPResponseFirewallManaged    RulesetPhase = "http_response_firewall_managed"
-	RulesetPhaseHTTPResponseHeadersTransform   RulesetPhase = "http_response_headers_transform"
-	RulesetPhaseMagicTransit                   RulesetPhase = "magic_transit"
-	RulesetPhaseMagicTransitIDsManaged         RulesetPhase = "magic_transit_ids_managed"
-	RulesetPhaseMagicTransitManaged            RulesetPhase = "magic_transit_managed"
-)
-
-func (r RulesetPhase) IsKnown() bool {
-	switch r {
-	case RulesetPhaseDDoSL4, RulesetPhaseDDoSL7, RulesetPhaseHTTPConfigSettings, RulesetPhaseHTTPCustomErrors, RulesetPhaseHTTPLogCustomFields, RulesetPhaseHTTPRatelimit, RulesetPhaseHTTPRequestCacheSettings, RulesetPhaseHTTPRequestDynamicRedirect, RulesetPhaseHTTPRequestFirewallCustom, RulesetPhaseHTTPRequestFirewallManaged, RulesetPhaseHTTPRequestLateTransform, RulesetPhaseHTTPRequestOrigin, RulesetPhaseHTTPRequestRedirect, RulesetPhaseHTTPRequestSanitize, RulesetPhaseHTTPRequestSBFM, RulesetPhaseHTTPRequestSelectConfiguration, RulesetPhaseHTTPRequestTransform, RulesetPhaseHTTPResponseCompression, RulesetPhaseHTTPResponseFirewallManaged, RulesetPhaseHTTPResponseHeadersTransform, RulesetPhaseMagicTransit, RulesetPhaseMagicTransitIDsManaged, RulesetPhaseMagicTransitManaged:
-		return true
-	}
-	return false
-}
-
 // A ruleset object.
 type RulesetNewResponse struct {
 	// The unique ID of the ruleset.
 	ID string `json:"id,required"`
 	// The kind of the ruleset.
-	Kind RulesetNewResponseKind `json:"kind,required"`
+	Kind Kind `json:"kind,required"`
 	// The timestamp of when the ruleset was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name,required"`
 	// The phase of the ruleset.
-	Phase RulesetNewResponsePhase `json:"phase,required"`
+	Phase Phase `json:"phase,required"`
 	// The list of rules in the ruleset.
 	Rules []RulesetNewResponseRule `json:"rules,required"`
 	// The version of the ruleset.
@@ -293,61 +293,6 @@ func (r *RulesetNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r rulesetNewResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// The kind of the ruleset.
-type RulesetNewResponseKind string
-
-const (
-	RulesetNewResponseKindManaged RulesetNewResponseKind = "managed"
-	RulesetNewResponseKindCustom  RulesetNewResponseKind = "custom"
-	RulesetNewResponseKindRoot    RulesetNewResponseKind = "root"
-	RulesetNewResponseKindZone    RulesetNewResponseKind = "zone"
-)
-
-func (r RulesetNewResponseKind) IsKnown() bool {
-	switch r {
-	case RulesetNewResponseKindManaged, RulesetNewResponseKindCustom, RulesetNewResponseKindRoot, RulesetNewResponseKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type RulesetNewResponsePhase string
-
-const (
-	RulesetNewResponsePhaseDDoSL4                         RulesetNewResponsePhase = "ddos_l4"
-	RulesetNewResponsePhaseDDoSL7                         RulesetNewResponsePhase = "ddos_l7"
-	RulesetNewResponsePhaseHTTPConfigSettings             RulesetNewResponsePhase = "http_config_settings"
-	RulesetNewResponsePhaseHTTPCustomErrors               RulesetNewResponsePhase = "http_custom_errors"
-	RulesetNewResponsePhaseHTTPLogCustomFields            RulesetNewResponsePhase = "http_log_custom_fields"
-	RulesetNewResponsePhaseHTTPRatelimit                  RulesetNewResponsePhase = "http_ratelimit"
-	RulesetNewResponsePhaseHTTPRequestCacheSettings       RulesetNewResponsePhase = "http_request_cache_settings"
-	RulesetNewResponsePhaseHTTPRequestDynamicRedirect     RulesetNewResponsePhase = "http_request_dynamic_redirect"
-	RulesetNewResponsePhaseHTTPRequestFirewallCustom      RulesetNewResponsePhase = "http_request_firewall_custom"
-	RulesetNewResponsePhaseHTTPRequestFirewallManaged     RulesetNewResponsePhase = "http_request_firewall_managed"
-	RulesetNewResponsePhaseHTTPRequestLateTransform       RulesetNewResponsePhase = "http_request_late_transform"
-	RulesetNewResponsePhaseHTTPRequestOrigin              RulesetNewResponsePhase = "http_request_origin"
-	RulesetNewResponsePhaseHTTPRequestRedirect            RulesetNewResponsePhase = "http_request_redirect"
-	RulesetNewResponsePhaseHTTPRequestSanitize            RulesetNewResponsePhase = "http_request_sanitize"
-	RulesetNewResponsePhaseHTTPRequestSBFM                RulesetNewResponsePhase = "http_request_sbfm"
-	RulesetNewResponsePhaseHTTPRequestSelectConfiguration RulesetNewResponsePhase = "http_request_select_configuration"
-	RulesetNewResponsePhaseHTTPRequestTransform           RulesetNewResponsePhase = "http_request_transform"
-	RulesetNewResponsePhaseHTTPResponseCompression        RulesetNewResponsePhase = "http_response_compression"
-	RulesetNewResponsePhaseHTTPResponseFirewallManaged    RulesetNewResponsePhase = "http_response_firewall_managed"
-	RulesetNewResponsePhaseHTTPResponseHeadersTransform   RulesetNewResponsePhase = "http_response_headers_transform"
-	RulesetNewResponsePhaseMagicTransit                   RulesetNewResponsePhase = "magic_transit"
-	RulesetNewResponsePhaseMagicTransitIDsManaged         RulesetNewResponsePhase = "magic_transit_ids_managed"
-	RulesetNewResponsePhaseMagicTransitManaged            RulesetNewResponsePhase = "magic_transit_managed"
-)
-
-func (r RulesetNewResponsePhase) IsKnown() bool {
-	switch r {
-	case RulesetNewResponsePhaseDDoSL4, RulesetNewResponsePhaseDDoSL7, RulesetNewResponsePhaseHTTPConfigSettings, RulesetNewResponsePhaseHTTPCustomErrors, RulesetNewResponsePhaseHTTPLogCustomFields, RulesetNewResponsePhaseHTTPRatelimit, RulesetNewResponsePhaseHTTPRequestCacheSettings, RulesetNewResponsePhaseHTTPRequestDynamicRedirect, RulesetNewResponsePhaseHTTPRequestFirewallCustom, RulesetNewResponsePhaseHTTPRequestFirewallManaged, RulesetNewResponsePhaseHTTPRequestLateTransform, RulesetNewResponsePhaseHTTPRequestOrigin, RulesetNewResponsePhaseHTTPRequestRedirect, RulesetNewResponsePhaseHTTPRequestSanitize, RulesetNewResponsePhaseHTTPRequestSBFM, RulesetNewResponsePhaseHTTPRequestSelectConfiguration, RulesetNewResponsePhaseHTTPRequestTransform, RulesetNewResponsePhaseHTTPResponseCompression, RulesetNewResponsePhaseHTTPResponseFirewallManaged, RulesetNewResponsePhaseHTTPResponseHeadersTransform, RulesetNewResponsePhaseMagicTransit, RulesetNewResponsePhaseMagicTransitIDsManaged, RulesetNewResponsePhaseMagicTransitManaged:
-		return true
-	}
-	return false
 }
 
 type RulesetNewResponseRule struct {
@@ -535,13 +480,13 @@ type RulesetUpdateResponse struct {
 	// The unique ID of the ruleset.
 	ID string `json:"id,required"`
 	// The kind of the ruleset.
-	Kind RulesetUpdateResponseKind `json:"kind,required"`
+	Kind Kind `json:"kind,required"`
 	// The timestamp of when the ruleset was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name,required"`
 	// The phase of the ruleset.
-	Phase RulesetUpdateResponsePhase `json:"phase,required"`
+	Phase Phase `json:"phase,required"`
 	// The list of rules in the ruleset.
 	Rules []RulesetUpdateResponseRule `json:"rules,required"`
 	// The version of the ruleset.
@@ -572,61 +517,6 @@ func (r *RulesetUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r rulesetUpdateResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// The kind of the ruleset.
-type RulesetUpdateResponseKind string
-
-const (
-	RulesetUpdateResponseKindManaged RulesetUpdateResponseKind = "managed"
-	RulesetUpdateResponseKindCustom  RulesetUpdateResponseKind = "custom"
-	RulesetUpdateResponseKindRoot    RulesetUpdateResponseKind = "root"
-	RulesetUpdateResponseKindZone    RulesetUpdateResponseKind = "zone"
-)
-
-func (r RulesetUpdateResponseKind) IsKnown() bool {
-	switch r {
-	case RulesetUpdateResponseKindManaged, RulesetUpdateResponseKindCustom, RulesetUpdateResponseKindRoot, RulesetUpdateResponseKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type RulesetUpdateResponsePhase string
-
-const (
-	RulesetUpdateResponsePhaseDDoSL4                         RulesetUpdateResponsePhase = "ddos_l4"
-	RulesetUpdateResponsePhaseDDoSL7                         RulesetUpdateResponsePhase = "ddos_l7"
-	RulesetUpdateResponsePhaseHTTPConfigSettings             RulesetUpdateResponsePhase = "http_config_settings"
-	RulesetUpdateResponsePhaseHTTPCustomErrors               RulesetUpdateResponsePhase = "http_custom_errors"
-	RulesetUpdateResponsePhaseHTTPLogCustomFields            RulesetUpdateResponsePhase = "http_log_custom_fields"
-	RulesetUpdateResponsePhaseHTTPRatelimit                  RulesetUpdateResponsePhase = "http_ratelimit"
-	RulesetUpdateResponsePhaseHTTPRequestCacheSettings       RulesetUpdateResponsePhase = "http_request_cache_settings"
-	RulesetUpdateResponsePhaseHTTPRequestDynamicRedirect     RulesetUpdateResponsePhase = "http_request_dynamic_redirect"
-	RulesetUpdateResponsePhaseHTTPRequestFirewallCustom      RulesetUpdateResponsePhase = "http_request_firewall_custom"
-	RulesetUpdateResponsePhaseHTTPRequestFirewallManaged     RulesetUpdateResponsePhase = "http_request_firewall_managed"
-	RulesetUpdateResponsePhaseHTTPRequestLateTransform       RulesetUpdateResponsePhase = "http_request_late_transform"
-	RulesetUpdateResponsePhaseHTTPRequestOrigin              RulesetUpdateResponsePhase = "http_request_origin"
-	RulesetUpdateResponsePhaseHTTPRequestRedirect            RulesetUpdateResponsePhase = "http_request_redirect"
-	RulesetUpdateResponsePhaseHTTPRequestSanitize            RulesetUpdateResponsePhase = "http_request_sanitize"
-	RulesetUpdateResponsePhaseHTTPRequestSBFM                RulesetUpdateResponsePhase = "http_request_sbfm"
-	RulesetUpdateResponsePhaseHTTPRequestSelectConfiguration RulesetUpdateResponsePhase = "http_request_select_configuration"
-	RulesetUpdateResponsePhaseHTTPRequestTransform           RulesetUpdateResponsePhase = "http_request_transform"
-	RulesetUpdateResponsePhaseHTTPResponseCompression        RulesetUpdateResponsePhase = "http_response_compression"
-	RulesetUpdateResponsePhaseHTTPResponseFirewallManaged    RulesetUpdateResponsePhase = "http_response_firewall_managed"
-	RulesetUpdateResponsePhaseHTTPResponseHeadersTransform   RulesetUpdateResponsePhase = "http_response_headers_transform"
-	RulesetUpdateResponsePhaseMagicTransit                   RulesetUpdateResponsePhase = "magic_transit"
-	RulesetUpdateResponsePhaseMagicTransitIDsManaged         RulesetUpdateResponsePhase = "magic_transit_ids_managed"
-	RulesetUpdateResponsePhaseMagicTransitManaged            RulesetUpdateResponsePhase = "magic_transit_managed"
-)
-
-func (r RulesetUpdateResponsePhase) IsKnown() bool {
-	switch r {
-	case RulesetUpdateResponsePhaseDDoSL4, RulesetUpdateResponsePhaseDDoSL7, RulesetUpdateResponsePhaseHTTPConfigSettings, RulesetUpdateResponsePhaseHTTPCustomErrors, RulesetUpdateResponsePhaseHTTPLogCustomFields, RulesetUpdateResponsePhaseHTTPRatelimit, RulesetUpdateResponsePhaseHTTPRequestCacheSettings, RulesetUpdateResponsePhaseHTTPRequestDynamicRedirect, RulesetUpdateResponsePhaseHTTPRequestFirewallCustom, RulesetUpdateResponsePhaseHTTPRequestFirewallManaged, RulesetUpdateResponsePhaseHTTPRequestLateTransform, RulesetUpdateResponsePhaseHTTPRequestOrigin, RulesetUpdateResponsePhaseHTTPRequestRedirect, RulesetUpdateResponsePhaseHTTPRequestSanitize, RulesetUpdateResponsePhaseHTTPRequestSBFM, RulesetUpdateResponsePhaseHTTPRequestSelectConfiguration, RulesetUpdateResponsePhaseHTTPRequestTransform, RulesetUpdateResponsePhaseHTTPResponseCompression, RulesetUpdateResponsePhaseHTTPResponseFirewallManaged, RulesetUpdateResponsePhaseHTTPResponseHeadersTransform, RulesetUpdateResponsePhaseMagicTransit, RulesetUpdateResponsePhaseMagicTransitIDsManaged, RulesetUpdateResponsePhaseMagicTransitManaged:
-		return true
-	}
-	return false
 }
 
 type RulesetUpdateResponseRule struct {
@@ -814,13 +704,13 @@ type RulesetGetResponse struct {
 	// The unique ID of the ruleset.
 	ID string `json:"id,required"`
 	// The kind of the ruleset.
-	Kind RulesetGetResponseKind `json:"kind,required"`
+	Kind Kind `json:"kind,required"`
 	// The timestamp of when the ruleset was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name,required"`
 	// The phase of the ruleset.
-	Phase RulesetGetResponsePhase `json:"phase,required"`
+	Phase Phase `json:"phase,required"`
 	// The list of rules in the ruleset.
 	Rules []RulesetGetResponseRule `json:"rules,required"`
 	// The version of the ruleset.
@@ -851,61 +741,6 @@ func (r *RulesetGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r rulesetGetResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// The kind of the ruleset.
-type RulesetGetResponseKind string
-
-const (
-	RulesetGetResponseKindManaged RulesetGetResponseKind = "managed"
-	RulesetGetResponseKindCustom  RulesetGetResponseKind = "custom"
-	RulesetGetResponseKindRoot    RulesetGetResponseKind = "root"
-	RulesetGetResponseKindZone    RulesetGetResponseKind = "zone"
-)
-
-func (r RulesetGetResponseKind) IsKnown() bool {
-	switch r {
-	case RulesetGetResponseKindManaged, RulesetGetResponseKindCustom, RulesetGetResponseKindRoot, RulesetGetResponseKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type RulesetGetResponsePhase string
-
-const (
-	RulesetGetResponsePhaseDDoSL4                         RulesetGetResponsePhase = "ddos_l4"
-	RulesetGetResponsePhaseDDoSL7                         RulesetGetResponsePhase = "ddos_l7"
-	RulesetGetResponsePhaseHTTPConfigSettings             RulesetGetResponsePhase = "http_config_settings"
-	RulesetGetResponsePhaseHTTPCustomErrors               RulesetGetResponsePhase = "http_custom_errors"
-	RulesetGetResponsePhaseHTTPLogCustomFields            RulesetGetResponsePhase = "http_log_custom_fields"
-	RulesetGetResponsePhaseHTTPRatelimit                  RulesetGetResponsePhase = "http_ratelimit"
-	RulesetGetResponsePhaseHTTPRequestCacheSettings       RulesetGetResponsePhase = "http_request_cache_settings"
-	RulesetGetResponsePhaseHTTPRequestDynamicRedirect     RulesetGetResponsePhase = "http_request_dynamic_redirect"
-	RulesetGetResponsePhaseHTTPRequestFirewallCustom      RulesetGetResponsePhase = "http_request_firewall_custom"
-	RulesetGetResponsePhaseHTTPRequestFirewallManaged     RulesetGetResponsePhase = "http_request_firewall_managed"
-	RulesetGetResponsePhaseHTTPRequestLateTransform       RulesetGetResponsePhase = "http_request_late_transform"
-	RulesetGetResponsePhaseHTTPRequestOrigin              RulesetGetResponsePhase = "http_request_origin"
-	RulesetGetResponsePhaseHTTPRequestRedirect            RulesetGetResponsePhase = "http_request_redirect"
-	RulesetGetResponsePhaseHTTPRequestSanitize            RulesetGetResponsePhase = "http_request_sanitize"
-	RulesetGetResponsePhaseHTTPRequestSBFM                RulesetGetResponsePhase = "http_request_sbfm"
-	RulesetGetResponsePhaseHTTPRequestSelectConfiguration RulesetGetResponsePhase = "http_request_select_configuration"
-	RulesetGetResponsePhaseHTTPRequestTransform           RulesetGetResponsePhase = "http_request_transform"
-	RulesetGetResponsePhaseHTTPResponseCompression        RulesetGetResponsePhase = "http_response_compression"
-	RulesetGetResponsePhaseHTTPResponseFirewallManaged    RulesetGetResponsePhase = "http_response_firewall_managed"
-	RulesetGetResponsePhaseHTTPResponseHeadersTransform   RulesetGetResponsePhase = "http_response_headers_transform"
-	RulesetGetResponsePhaseMagicTransit                   RulesetGetResponsePhase = "magic_transit"
-	RulesetGetResponsePhaseMagicTransitIDsManaged         RulesetGetResponsePhase = "magic_transit_ids_managed"
-	RulesetGetResponsePhaseMagicTransitManaged            RulesetGetResponsePhase = "magic_transit_managed"
-)
-
-func (r RulesetGetResponsePhase) IsKnown() bool {
-	switch r {
-	case RulesetGetResponsePhaseDDoSL4, RulesetGetResponsePhaseDDoSL7, RulesetGetResponsePhaseHTTPConfigSettings, RulesetGetResponsePhaseHTTPCustomErrors, RulesetGetResponsePhaseHTTPLogCustomFields, RulesetGetResponsePhaseHTTPRatelimit, RulesetGetResponsePhaseHTTPRequestCacheSettings, RulesetGetResponsePhaseHTTPRequestDynamicRedirect, RulesetGetResponsePhaseHTTPRequestFirewallCustom, RulesetGetResponsePhaseHTTPRequestFirewallManaged, RulesetGetResponsePhaseHTTPRequestLateTransform, RulesetGetResponsePhaseHTTPRequestOrigin, RulesetGetResponsePhaseHTTPRequestRedirect, RulesetGetResponsePhaseHTTPRequestSanitize, RulesetGetResponsePhaseHTTPRequestSBFM, RulesetGetResponsePhaseHTTPRequestSelectConfiguration, RulesetGetResponsePhaseHTTPRequestTransform, RulesetGetResponsePhaseHTTPResponseCompression, RulesetGetResponsePhaseHTTPResponseFirewallManaged, RulesetGetResponsePhaseHTTPResponseHeadersTransform, RulesetGetResponsePhaseMagicTransit, RulesetGetResponsePhaseMagicTransitIDsManaged, RulesetGetResponsePhaseMagicTransitManaged:
-		return true
-	}
-	return false
 }
 
 type RulesetGetResponseRule struct {
@@ -1090,11 +925,11 @@ func (r RulesetGetResponseRulesAction) IsKnown() bool {
 
 type RulesetNewParams struct {
 	// The kind of the ruleset.
-	Kind param.Field[RulesetNewParamsKind] `json:"kind,required"`
+	Kind param.Field[Kind] `json:"kind,required"`
 	// The human-readable name of the ruleset.
 	Name param.Field[string] `json:"name,required"`
 	// The phase of the ruleset.
-	Phase param.Field[RulesetNewParamsPhase] `json:"phase,required"`
+	Phase param.Field[Phase] `json:"phase,required"`
 	// The list of rules in the ruleset.
 	Rules param.Field[[]RulesetNewParamsRuleUnion] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -1107,61 +942,6 @@ type RulesetNewParams struct {
 
 func (r RulesetNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The kind of the ruleset.
-type RulesetNewParamsKind string
-
-const (
-	RulesetNewParamsKindManaged RulesetNewParamsKind = "managed"
-	RulesetNewParamsKindCustom  RulesetNewParamsKind = "custom"
-	RulesetNewParamsKindRoot    RulesetNewParamsKind = "root"
-	RulesetNewParamsKindZone    RulesetNewParamsKind = "zone"
-)
-
-func (r RulesetNewParamsKind) IsKnown() bool {
-	switch r {
-	case RulesetNewParamsKindManaged, RulesetNewParamsKindCustom, RulesetNewParamsKindRoot, RulesetNewParamsKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type RulesetNewParamsPhase string
-
-const (
-	RulesetNewParamsPhaseDDoSL4                         RulesetNewParamsPhase = "ddos_l4"
-	RulesetNewParamsPhaseDDoSL7                         RulesetNewParamsPhase = "ddos_l7"
-	RulesetNewParamsPhaseHTTPConfigSettings             RulesetNewParamsPhase = "http_config_settings"
-	RulesetNewParamsPhaseHTTPCustomErrors               RulesetNewParamsPhase = "http_custom_errors"
-	RulesetNewParamsPhaseHTTPLogCustomFields            RulesetNewParamsPhase = "http_log_custom_fields"
-	RulesetNewParamsPhaseHTTPRatelimit                  RulesetNewParamsPhase = "http_ratelimit"
-	RulesetNewParamsPhaseHTTPRequestCacheSettings       RulesetNewParamsPhase = "http_request_cache_settings"
-	RulesetNewParamsPhaseHTTPRequestDynamicRedirect     RulesetNewParamsPhase = "http_request_dynamic_redirect"
-	RulesetNewParamsPhaseHTTPRequestFirewallCustom      RulesetNewParamsPhase = "http_request_firewall_custom"
-	RulesetNewParamsPhaseHTTPRequestFirewallManaged     RulesetNewParamsPhase = "http_request_firewall_managed"
-	RulesetNewParamsPhaseHTTPRequestLateTransform       RulesetNewParamsPhase = "http_request_late_transform"
-	RulesetNewParamsPhaseHTTPRequestOrigin              RulesetNewParamsPhase = "http_request_origin"
-	RulesetNewParamsPhaseHTTPRequestRedirect            RulesetNewParamsPhase = "http_request_redirect"
-	RulesetNewParamsPhaseHTTPRequestSanitize            RulesetNewParamsPhase = "http_request_sanitize"
-	RulesetNewParamsPhaseHTTPRequestSBFM                RulesetNewParamsPhase = "http_request_sbfm"
-	RulesetNewParamsPhaseHTTPRequestSelectConfiguration RulesetNewParamsPhase = "http_request_select_configuration"
-	RulesetNewParamsPhaseHTTPRequestTransform           RulesetNewParamsPhase = "http_request_transform"
-	RulesetNewParamsPhaseHTTPResponseCompression        RulesetNewParamsPhase = "http_response_compression"
-	RulesetNewParamsPhaseHTTPResponseFirewallManaged    RulesetNewParamsPhase = "http_response_firewall_managed"
-	RulesetNewParamsPhaseHTTPResponseHeadersTransform   RulesetNewParamsPhase = "http_response_headers_transform"
-	RulesetNewParamsPhaseMagicTransit                   RulesetNewParamsPhase = "magic_transit"
-	RulesetNewParamsPhaseMagicTransitIDsManaged         RulesetNewParamsPhase = "magic_transit_ids_managed"
-	RulesetNewParamsPhaseMagicTransitManaged            RulesetNewParamsPhase = "magic_transit_managed"
-)
-
-func (r RulesetNewParamsPhase) IsKnown() bool {
-	switch r {
-	case RulesetNewParamsPhaseDDoSL4, RulesetNewParamsPhaseDDoSL7, RulesetNewParamsPhaseHTTPConfigSettings, RulesetNewParamsPhaseHTTPCustomErrors, RulesetNewParamsPhaseHTTPLogCustomFields, RulesetNewParamsPhaseHTTPRatelimit, RulesetNewParamsPhaseHTTPRequestCacheSettings, RulesetNewParamsPhaseHTTPRequestDynamicRedirect, RulesetNewParamsPhaseHTTPRequestFirewallCustom, RulesetNewParamsPhaseHTTPRequestFirewallManaged, RulesetNewParamsPhaseHTTPRequestLateTransform, RulesetNewParamsPhaseHTTPRequestOrigin, RulesetNewParamsPhaseHTTPRequestRedirect, RulesetNewParamsPhaseHTTPRequestSanitize, RulesetNewParamsPhaseHTTPRequestSBFM, RulesetNewParamsPhaseHTTPRequestSelectConfiguration, RulesetNewParamsPhaseHTTPRequestTransform, RulesetNewParamsPhaseHTTPResponseCompression, RulesetNewParamsPhaseHTTPResponseFirewallManaged, RulesetNewParamsPhaseHTTPResponseHeadersTransform, RulesetNewParamsPhaseMagicTransit, RulesetNewParamsPhaseMagicTransitIDsManaged, RulesetNewParamsPhaseMagicTransitManaged:
-		return true
-	}
-	return false
 }
 
 type RulesetNewParamsRule struct {
@@ -1391,11 +1171,11 @@ type RulesetUpdateParams struct {
 	// An informative description of the ruleset.
 	Description param.Field[string] `json:"description"`
 	// The kind of the ruleset.
-	Kind param.Field[RulesetUpdateParamsKind] `json:"kind"`
+	Kind param.Field[Kind] `json:"kind"`
 	// The human-readable name of the ruleset.
 	Name param.Field[string] `json:"name"`
 	// The phase of the ruleset.
-	Phase param.Field[RulesetUpdateParamsPhase] `json:"phase"`
+	Phase param.Field[Phase] `json:"phase"`
 }
 
 func (r RulesetUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1463,61 +1243,6 @@ const (
 func (r RulesetUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
 	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionJSChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip, RulesetUpdateParamsRulesActionSetCacheSettings:
-		return true
-	}
-	return false
-}
-
-// The kind of the ruleset.
-type RulesetUpdateParamsKind string
-
-const (
-	RulesetUpdateParamsKindManaged RulesetUpdateParamsKind = "managed"
-	RulesetUpdateParamsKindCustom  RulesetUpdateParamsKind = "custom"
-	RulesetUpdateParamsKindRoot    RulesetUpdateParamsKind = "root"
-	RulesetUpdateParamsKindZone    RulesetUpdateParamsKind = "zone"
-)
-
-func (r RulesetUpdateParamsKind) IsKnown() bool {
-	switch r {
-	case RulesetUpdateParamsKindManaged, RulesetUpdateParamsKindCustom, RulesetUpdateParamsKindRoot, RulesetUpdateParamsKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type RulesetUpdateParamsPhase string
-
-const (
-	RulesetUpdateParamsPhaseDDoSL4                         RulesetUpdateParamsPhase = "ddos_l4"
-	RulesetUpdateParamsPhaseDDoSL7                         RulesetUpdateParamsPhase = "ddos_l7"
-	RulesetUpdateParamsPhaseHTTPConfigSettings             RulesetUpdateParamsPhase = "http_config_settings"
-	RulesetUpdateParamsPhaseHTTPCustomErrors               RulesetUpdateParamsPhase = "http_custom_errors"
-	RulesetUpdateParamsPhaseHTTPLogCustomFields            RulesetUpdateParamsPhase = "http_log_custom_fields"
-	RulesetUpdateParamsPhaseHTTPRatelimit                  RulesetUpdateParamsPhase = "http_ratelimit"
-	RulesetUpdateParamsPhaseHTTPRequestCacheSettings       RulesetUpdateParamsPhase = "http_request_cache_settings"
-	RulesetUpdateParamsPhaseHTTPRequestDynamicRedirect     RulesetUpdateParamsPhase = "http_request_dynamic_redirect"
-	RulesetUpdateParamsPhaseHTTPRequestFirewallCustom      RulesetUpdateParamsPhase = "http_request_firewall_custom"
-	RulesetUpdateParamsPhaseHTTPRequestFirewallManaged     RulesetUpdateParamsPhase = "http_request_firewall_managed"
-	RulesetUpdateParamsPhaseHTTPRequestLateTransform       RulesetUpdateParamsPhase = "http_request_late_transform"
-	RulesetUpdateParamsPhaseHTTPRequestOrigin              RulesetUpdateParamsPhase = "http_request_origin"
-	RulesetUpdateParamsPhaseHTTPRequestRedirect            RulesetUpdateParamsPhase = "http_request_redirect"
-	RulesetUpdateParamsPhaseHTTPRequestSanitize            RulesetUpdateParamsPhase = "http_request_sanitize"
-	RulesetUpdateParamsPhaseHTTPRequestSBFM                RulesetUpdateParamsPhase = "http_request_sbfm"
-	RulesetUpdateParamsPhaseHTTPRequestSelectConfiguration RulesetUpdateParamsPhase = "http_request_select_configuration"
-	RulesetUpdateParamsPhaseHTTPRequestTransform           RulesetUpdateParamsPhase = "http_request_transform"
-	RulesetUpdateParamsPhaseHTTPResponseCompression        RulesetUpdateParamsPhase = "http_response_compression"
-	RulesetUpdateParamsPhaseHTTPResponseFirewallManaged    RulesetUpdateParamsPhase = "http_response_firewall_managed"
-	RulesetUpdateParamsPhaseHTTPResponseHeadersTransform   RulesetUpdateParamsPhase = "http_response_headers_transform"
-	RulesetUpdateParamsPhaseMagicTransit                   RulesetUpdateParamsPhase = "magic_transit"
-	RulesetUpdateParamsPhaseMagicTransitIDsManaged         RulesetUpdateParamsPhase = "magic_transit_ids_managed"
-	RulesetUpdateParamsPhaseMagicTransitManaged            RulesetUpdateParamsPhase = "magic_transit_managed"
-)
-
-func (r RulesetUpdateParamsPhase) IsKnown() bool {
-	switch r {
-	case RulesetUpdateParamsPhaseDDoSL4, RulesetUpdateParamsPhaseDDoSL7, RulesetUpdateParamsPhaseHTTPConfigSettings, RulesetUpdateParamsPhaseHTTPCustomErrors, RulesetUpdateParamsPhaseHTTPLogCustomFields, RulesetUpdateParamsPhaseHTTPRatelimit, RulesetUpdateParamsPhaseHTTPRequestCacheSettings, RulesetUpdateParamsPhaseHTTPRequestDynamicRedirect, RulesetUpdateParamsPhaseHTTPRequestFirewallCustom, RulesetUpdateParamsPhaseHTTPRequestFirewallManaged, RulesetUpdateParamsPhaseHTTPRequestLateTransform, RulesetUpdateParamsPhaseHTTPRequestOrigin, RulesetUpdateParamsPhaseHTTPRequestRedirect, RulesetUpdateParamsPhaseHTTPRequestSanitize, RulesetUpdateParamsPhaseHTTPRequestSBFM, RulesetUpdateParamsPhaseHTTPRequestSelectConfiguration, RulesetUpdateParamsPhaseHTTPRequestTransform, RulesetUpdateParamsPhaseHTTPResponseCompression, RulesetUpdateParamsPhaseHTTPResponseFirewallManaged, RulesetUpdateParamsPhaseHTTPResponseHeadersTransform, RulesetUpdateParamsPhaseMagicTransit, RulesetUpdateParamsPhaseMagicTransitIDsManaged, RulesetUpdateParamsPhaseMagicTransitManaged:
 		return true
 	}
 	return false
