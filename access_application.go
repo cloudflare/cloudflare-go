@@ -58,6 +58,7 @@ type AccessApplication struct {
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
 	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
+	Policies                 []AccessPolicy                 `json:"policies,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -277,6 +278,8 @@ type CreateAccessApplicationParams struct {
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
 	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
+	// List of policy ids to link to this application in ascending order of precedence.
+	Policies []string `json:"policies,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -310,6 +313,10 @@ type UpdateAccessApplicationParams struct {
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
 	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
+	// List of policy ids to link to this application in ascending order of precedence.
+	// Can reference reusable policies and policies specific to this application.
+	// If this field is not provided, the existing policies will not be modified.
+	Policies *[]string `json:"policies,omitempty"`
 	AccessAppLauncherCustomization
 }
 
