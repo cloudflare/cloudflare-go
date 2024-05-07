@@ -121,6 +121,10 @@ func (a *AccessApplicationScimAuthenticationJson) UnmarshalJSON(buf []byte) erro
 	return json.Unmarshal(buf, a.Value)
 }
 
+func (a *AccessApplicationScimAuthenticationJson) MarshalJSON() ([]byte, error) {
+	return json.Marshal(a.Value)
+}
+
 type AccessApplicationScimAuthentication interface {
 	isScimAuthentication()
 }
