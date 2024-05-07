@@ -188,35 +188,13 @@ type AllowedHeaders = string
 
 type AllowedHeadersParam = string
 
-type AllowedHTTPMethods []AllowedMethods
-
-type AllowedHTTPMethodsParam []AllowedMethods
-
 type AllowedIdPs = string
 
 type AllowedIdPsParam = string
 
-type AllowedMethods string
+type AllowedMethods []AllowedMethodsItemItem
 
-const (
-	AllowedMethodsGet     AllowedMethods = "GET"
-	AllowedMethodsPost    AllowedMethods = "POST"
-	AllowedMethodsHead    AllowedMethods = "HEAD"
-	AllowedMethodsPut     AllowedMethods = "PUT"
-	AllowedMethodsDelete  AllowedMethods = "DELETE"
-	AllowedMethodsConnect AllowedMethods = "CONNECT"
-	AllowedMethodsOptions AllowedMethods = "OPTIONS"
-	AllowedMethodsTrace   AllowedMethods = "TRACE"
-	AllowedMethodsPatch   AllowedMethods = "PATCH"
-)
-
-func (r AllowedMethods) IsKnown() bool {
-	switch r {
-	case AllowedMethodsGet, AllowedMethodsPost, AllowedMethodsHead, AllowedMethodsPut, AllowedMethodsDelete, AllowedMethodsConnect, AllowedMethodsOptions, AllowedMethodsTrace, AllowedMethodsPatch:
-		return true
-	}
-	return false
-}
+type AllowedMethodsParam []AllowedMethodsItemItem
 
 type AllowedOrigins = string
 
@@ -433,7 +411,7 @@ type ApplicationSelfHostedApplication struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []CustomPages `json:"custom_pages"`
+	CustomPages []string `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -529,7 +507,7 @@ type ApplicationSaaSApplication struct {
 	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
 	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []CustomPages `json:"custom_pages"`
+	CustomPages []string `json:"custom_pages"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
@@ -922,7 +900,7 @@ type ApplicationBrowserSSHApplication struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []CustomPages `json:"custom_pages"`
+	CustomPages []string `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -1038,7 +1016,7 @@ type ApplicationBrowserVncApplication struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []CustomPages `json:"custom_pages"`
+	CustomPages []string `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -1121,7 +1099,7 @@ func (r ApplicationBrowserVncApplication) implementsZeroTrustApplication() {}
 
 type ApplicationAppLauncherApplication struct {
 	// The application type.
-	Type ApplicationAppLauncherApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -1173,32 +1151,9 @@ func (r applicationAppLauncherApplicationJSON) RawJSON() string {
 
 func (r ApplicationAppLauncherApplication) implementsZeroTrustApplication() {}
 
-// The application type.
-type ApplicationAppLauncherApplicationType string
-
-const (
-	ApplicationAppLauncherApplicationTypeSelfHosted  ApplicationAppLauncherApplicationType = "self_hosted"
-	ApplicationAppLauncherApplicationTypeSaaS        ApplicationAppLauncherApplicationType = "saas"
-	ApplicationAppLauncherApplicationTypeSSH         ApplicationAppLauncherApplicationType = "ssh"
-	ApplicationAppLauncherApplicationTypeVnc         ApplicationAppLauncherApplicationType = "vnc"
-	ApplicationAppLauncherApplicationTypeAppLauncher ApplicationAppLauncherApplicationType = "app_launcher"
-	ApplicationAppLauncherApplicationTypeWARP        ApplicationAppLauncherApplicationType = "warp"
-	ApplicationAppLauncherApplicationTypeBiso        ApplicationAppLauncherApplicationType = "biso"
-	ApplicationAppLauncherApplicationTypeBookmark    ApplicationAppLauncherApplicationType = "bookmark"
-	ApplicationAppLauncherApplicationTypeDashSSO     ApplicationAppLauncherApplicationType = "dash_sso"
-)
-
-func (r ApplicationAppLauncherApplicationType) IsKnown() bool {
-	switch r {
-	case ApplicationAppLauncherApplicationTypeSelfHosted, ApplicationAppLauncherApplicationTypeSaaS, ApplicationAppLauncherApplicationTypeSSH, ApplicationAppLauncherApplicationTypeVnc, ApplicationAppLauncherApplicationTypeAppLauncher, ApplicationAppLauncherApplicationTypeWARP, ApplicationAppLauncherApplicationTypeBiso, ApplicationAppLauncherApplicationTypeBookmark, ApplicationAppLauncherApplicationTypeDashSSO:
-		return true
-	}
-	return false
-}
-
 type ApplicationDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
-	Type ApplicationDeviceEnrollmentPermissionsApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -1250,32 +1205,9 @@ func (r applicationDeviceEnrollmentPermissionsApplicationJSON) RawJSON() string 
 
 func (r ApplicationDeviceEnrollmentPermissionsApplication) implementsZeroTrustApplication() {}
 
-// The application type.
-type ApplicationDeviceEnrollmentPermissionsApplicationType string
-
-const (
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeSelfHosted  ApplicationDeviceEnrollmentPermissionsApplicationType = "self_hosted"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeSaaS        ApplicationDeviceEnrollmentPermissionsApplicationType = "saas"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeSSH         ApplicationDeviceEnrollmentPermissionsApplicationType = "ssh"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeVnc         ApplicationDeviceEnrollmentPermissionsApplicationType = "vnc"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeAppLauncher ApplicationDeviceEnrollmentPermissionsApplicationType = "app_launcher"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeWARP        ApplicationDeviceEnrollmentPermissionsApplicationType = "warp"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeBiso        ApplicationDeviceEnrollmentPermissionsApplicationType = "biso"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeBookmark    ApplicationDeviceEnrollmentPermissionsApplicationType = "bookmark"
-	ApplicationDeviceEnrollmentPermissionsApplicationTypeDashSSO     ApplicationDeviceEnrollmentPermissionsApplicationType = "dash_sso"
-)
-
-func (r ApplicationDeviceEnrollmentPermissionsApplicationType) IsKnown() bool {
-	switch r {
-	case ApplicationDeviceEnrollmentPermissionsApplicationTypeSelfHosted, ApplicationDeviceEnrollmentPermissionsApplicationTypeSaaS, ApplicationDeviceEnrollmentPermissionsApplicationTypeSSH, ApplicationDeviceEnrollmentPermissionsApplicationTypeVnc, ApplicationDeviceEnrollmentPermissionsApplicationTypeAppLauncher, ApplicationDeviceEnrollmentPermissionsApplicationTypeWARP, ApplicationDeviceEnrollmentPermissionsApplicationTypeBiso, ApplicationDeviceEnrollmentPermissionsApplicationTypeBookmark, ApplicationDeviceEnrollmentPermissionsApplicationTypeDashSSO:
-		return true
-	}
-	return false
-}
-
 type ApplicationBrowserIsolationPermissionsApplication struct {
 	// The application type.
-	Type ApplicationBrowserIsolationPermissionsApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -1326,29 +1258,6 @@ func (r applicationBrowserIsolationPermissionsApplicationJSON) RawJSON() string 
 }
 
 func (r ApplicationBrowserIsolationPermissionsApplication) implementsZeroTrustApplication() {}
-
-// The application type.
-type ApplicationBrowserIsolationPermissionsApplicationType string
-
-const (
-	ApplicationBrowserIsolationPermissionsApplicationTypeSelfHosted  ApplicationBrowserIsolationPermissionsApplicationType = "self_hosted"
-	ApplicationBrowserIsolationPermissionsApplicationTypeSaaS        ApplicationBrowserIsolationPermissionsApplicationType = "saas"
-	ApplicationBrowserIsolationPermissionsApplicationTypeSSH         ApplicationBrowserIsolationPermissionsApplicationType = "ssh"
-	ApplicationBrowserIsolationPermissionsApplicationTypeVnc         ApplicationBrowserIsolationPermissionsApplicationType = "vnc"
-	ApplicationBrowserIsolationPermissionsApplicationTypeAppLauncher ApplicationBrowserIsolationPermissionsApplicationType = "app_launcher"
-	ApplicationBrowserIsolationPermissionsApplicationTypeWARP        ApplicationBrowserIsolationPermissionsApplicationType = "warp"
-	ApplicationBrowserIsolationPermissionsApplicationTypeBiso        ApplicationBrowserIsolationPermissionsApplicationType = "biso"
-	ApplicationBrowserIsolationPermissionsApplicationTypeBookmark    ApplicationBrowserIsolationPermissionsApplicationType = "bookmark"
-	ApplicationBrowserIsolationPermissionsApplicationTypeDashSSO     ApplicationBrowserIsolationPermissionsApplicationType = "dash_sso"
-)
-
-func (r ApplicationBrowserIsolationPermissionsApplicationType) IsKnown() bool {
-	switch r {
-	case ApplicationBrowserIsolationPermissionsApplicationTypeSelfHosted, ApplicationBrowserIsolationPermissionsApplicationTypeSaaS, ApplicationBrowserIsolationPermissionsApplicationTypeSSH, ApplicationBrowserIsolationPermissionsApplicationTypeVnc, ApplicationBrowserIsolationPermissionsApplicationTypeAppLauncher, ApplicationBrowserIsolationPermissionsApplicationTypeWARP, ApplicationBrowserIsolationPermissionsApplicationTypeBiso, ApplicationBrowserIsolationPermissionsApplicationTypeBookmark, ApplicationBrowserIsolationPermissionsApplicationTypeDashSSO:
-		return true
-	}
-	return false
-}
 
 type ApplicationBookmarkApplication struct {
 	// UUID
@@ -1508,7 +1417,7 @@ type ApplicationSelfHostedApplicationParam struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]CustomPagesParam] `json:"custom_pages"`
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1559,7 +1468,7 @@ type ApplicationSaaSApplicationParam struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]CustomPagesParam] `json:"custom_pages"`
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
@@ -1724,7 +1633,7 @@ type ApplicationBrowserSSHApplicationParam struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]CustomPagesParam] `json:"custom_pages"`
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1795,7 +1704,7 @@ type ApplicationBrowserVncApplicationParam struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]CustomPagesParam] `json:"custom_pages"`
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1838,7 +1747,7 @@ func (r ApplicationBrowserVncApplicationParam) implementsZeroTrustApplicationUni
 
 type ApplicationAppLauncherApplicationParam struct {
 	// The application type.
-	Type param.Field[ApplicationAppLauncherApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -1859,7 +1768,7 @@ func (r ApplicationAppLauncherApplicationParam) implementsZeroTrustApplicationUn
 
 type ApplicationDeviceEnrollmentPermissionsApplicationParam struct {
 	// The application type.
-	Type param.Field[ApplicationDeviceEnrollmentPermissionsApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -1881,7 +1790,7 @@ func (r ApplicationDeviceEnrollmentPermissionsApplicationParam) implementsZeroTr
 
 type ApplicationBrowserIsolationPermissionsApplicationParam struct {
 	// The application type.
-	Type param.Field[ApplicationBrowserIsolationPermissionsApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -1923,6 +1832,29 @@ func (r ApplicationBookmarkApplicationParam) MarshalJSON() (data []byte, err err
 
 func (r ApplicationBookmarkApplicationParam) implementsZeroTrustApplicationUnionParam() {}
 
+// The application type.
+type ApplicationType string
+
+const (
+	ApplicationTypeSelfHosted  ApplicationType = "self_hosted"
+	ApplicationTypeSaaS        ApplicationType = "saas"
+	ApplicationTypeSSH         ApplicationType = "ssh"
+	ApplicationTypeVnc         ApplicationType = "vnc"
+	ApplicationTypeAppLauncher ApplicationType = "app_launcher"
+	ApplicationTypeWARP        ApplicationType = "warp"
+	ApplicationTypeBiso        ApplicationType = "biso"
+	ApplicationTypeBookmark    ApplicationType = "bookmark"
+	ApplicationTypeDashSSO     ApplicationType = "dash_sso"
+)
+
+func (r ApplicationType) IsKnown() bool {
+	switch r {
+	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVnc, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBiso, ApplicationTypeBookmark, ApplicationTypeDashSSO:
+		return true
+	}
+	return false
+}
+
 type CORSHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
@@ -1936,7 +1868,7 @@ type CORSHeaders struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods AllowedHTTPMethods `json:"allowed_methods"`
+	AllowedMethods AllowedMethods `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
@@ -1979,7 +1911,7 @@ type CORSHeadersParam struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods param.Field[AllowedHTTPMethodsParam] `json:"allowed_methods"`
+	AllowedMethods param.Field[AllowedMethodsParam] `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
@@ -1989,10 +1921,6 @@ type CORSHeadersParam struct {
 func (r CORSHeadersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type CustomPages = string
-
-type CustomPagesParam = string
 
 // A globally unique name for an identity or service provider.
 type SaaSAppNameFormat string
