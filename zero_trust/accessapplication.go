@@ -192,9 +192,27 @@ type AllowedIdPs = string
 
 type AllowedIdPsParam = string
 
-type AllowedMethods []AllowedMethodsItemItem
+type AllowedMethods string
 
-type AllowedMethodsParam []AllowedMethodsItemItem
+const (
+	AllowedMethodsGet     AllowedMethods = "GET"
+	AllowedMethodsPost    AllowedMethods = "POST"
+	AllowedMethodsHead    AllowedMethods = "HEAD"
+	AllowedMethodsPut     AllowedMethods = "PUT"
+	AllowedMethodsDelete  AllowedMethods = "DELETE"
+	AllowedMethodsConnect AllowedMethods = "CONNECT"
+	AllowedMethodsOptions AllowedMethods = "OPTIONS"
+	AllowedMethodsTrace   AllowedMethods = "TRACE"
+	AllowedMethodsPatch   AllowedMethods = "PATCH"
+)
+
+func (r AllowedMethods) IsKnown() bool {
+	switch r {
+	case AllowedMethodsGet, AllowedMethodsPost, AllowedMethodsHead, AllowedMethodsPut, AllowedMethodsDelete, AllowedMethodsConnect, AllowedMethodsOptions, AllowedMethodsTrace, AllowedMethodsPatch:
+		return true
+	}
+	return false
+}
 
 type AllowedOrigins = string
 
@@ -1868,7 +1886,7 @@ type CORSHeaders struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods AllowedMethods `json:"allowed_methods"`
+	AllowedMethods []AllowedMethods `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
@@ -1911,7 +1929,7 @@ type CORSHeadersParam struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods param.Field[AllowedMethodsParam] `json:"allowed_methods"`
+	AllowedMethods param.Field[[]AllowedMethods] `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
