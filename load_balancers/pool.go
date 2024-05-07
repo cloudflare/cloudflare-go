@@ -131,8 +131,8 @@ type Pool struct {
 	ID string `json:"id"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions RegionID  `json:"check_regions,nullable"`
-	CreatedOn    time.Time `json:"created_on" format:"date-time"`
+	CheckRegions []CheckRegion `json:"check_regions,nullable"`
+	CreatedOn    time.Time     `json:"created_on" format:"date-time"`
 	// A human-readable description of the pool.
 	Description string `json:"description"`
 	// This field shows up only if the pool is disabled. This field is set with the
@@ -333,7 +333,7 @@ type PoolUpdateParams struct {
 	Origins param.Field[[]OriginParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions param.Field[RegionIDParam] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
@@ -485,7 +485,7 @@ type PoolEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions param.Field[RegionIDParam] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
