@@ -29,9 +29,9 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.New(context.TODO(), rulesets.RulesetNewParams{
-		Kind:  cloudflare.F(rulesets.RulesetNewParamsKindRoot),
+		Kind:  cloudflare.F(rulesets.KindRoot),
 		Name:  cloudflare.F("My ruleset"),
-		Phase: cloudflare.F(rulesets.RulesetNewParamsPhaseHTTPRequestFirewallCustom),
+		Phase: cloudflare.F(rulesets.PhaseHTTPRequestFirewallCustom),
 		Rules: cloudflare.F([]rulesets.RulesetNewParamsRuleUnion{rulesets.BlockRuleParam{
 			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 			ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
@@ -170,9 +170,9 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("string"),
 			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
-			Kind:        cloudflare.F(rulesets.RulesetUpdateParamsKindRoot),
+			Kind:        cloudflare.F(rulesets.KindRoot),
 			Name:        cloudflare.F("My ruleset"),
-			Phase:       cloudflare.F(rulesets.RulesetUpdateParamsPhaseHTTPRequestFirewallCustom),
+			Phase:       cloudflare.F(rulesets.PhaseHTTPRequestFirewallCustom),
 		},
 	)
 	if err != nil {

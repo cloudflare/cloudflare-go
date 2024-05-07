@@ -122,6 +122,24 @@ func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...opti
 	return
 }
 
+// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
+// typically a partner-hosted zone or a CNAME setup.
+type Type string
+
+const (
+	TypeFull      Type = "full"
+	TypePartial   Type = "partial"
+	TypeSecondary Type = "secondary"
+)
+
+func (r Type) IsKnown() bool {
+	switch r {
+	case TypeFull, TypePartial, TypeSecondary:
+		return true
+	}
+	return false
+}
+
 type Zone struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -305,7 +323,7 @@ type ZoneNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup.
-	Type param.Field[ZoneNewParamsType] `json:"type"`
+	Type param.Field[Type] `json:"type"`
 }
 
 func (r ZoneNewParams) MarshalJSON() (data []byte, err error) {
@@ -319,24 +337,6 @@ type ZoneNewParamsAccount struct {
 
 func (r ZoneNewParamsAccount) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
-// typically a partner-hosted zone or a CNAME setup.
-type ZoneNewParamsType string
-
-const (
-	ZoneNewParamsTypeFull      ZoneNewParamsType = "full"
-	ZoneNewParamsTypePartial   ZoneNewParamsType = "partial"
-	ZoneNewParamsTypeSecondary ZoneNewParamsType = "secondary"
-)
-
-func (r ZoneNewParamsType) IsKnown() bool {
-	switch r {
-	case ZoneNewParamsTypeFull, ZoneNewParamsTypePartial, ZoneNewParamsTypeSecondary:
-		return true
-	}
-	return false
 }
 
 type ZoneNewResponseEnvelope struct {

@@ -131,6 +131,22 @@ func (r CacheReserveClear) IsKnown() bool {
 	return false
 }
 
+// The current state of the Cache Reserve Clear operation.
+type State string
+
+const (
+	StateInProgress State = "In-progress"
+	StateCompleted  State = "Completed"
+)
+
+func (r State) IsKnown() bool {
+	switch r {
+	case StateInProgress, StateCompleted:
+		return true
+	}
+	return false
+}
+
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -143,7 +159,7 @@ type CacheReserveClearResponse struct {
 	// The time that the latest Cache Reserve Clear operation started.
 	StartTs time.Time `json:"start_ts,required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State CacheReserveClearResponseState `json:"state,required"`
+	State State `json:"state,required"`
 	// The time that the latest Cache Reserve Clear operation completed.
 	EndTs time.Time                     `json:"end_ts" format:"date-time"`
 	JSON  cacheReserveClearResponseJSON `json:"-"`
@@ -167,22 +183,6 @@ func (r *CacheReserveClearResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r cacheReserveClearResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// The current state of the Cache Reserve Clear operation.
-type CacheReserveClearResponseState string
-
-const (
-	CacheReserveClearResponseStateInProgress CacheReserveClearResponseState = "In-progress"
-	CacheReserveClearResponseStateCompleted  CacheReserveClearResponseState = "Completed"
-)
-
-func (r CacheReserveClearResponseState) IsKnown() bool {
-	switch r {
-	case CacheReserveClearResponseStateInProgress, CacheReserveClearResponseStateCompleted:
-		return true
-	}
-	return false
 }
 
 // Increase cache lifetimes by automatically storing all cacheable files into
@@ -297,7 +297,7 @@ type CacheReserveStatusResponse struct {
 	// The time that the latest Cache Reserve Clear operation started.
 	StartTs time.Time `json:"start_ts,required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State CacheReserveStatusResponseState `json:"state,required"`
+	State State `json:"state,required"`
 	// The time that the latest Cache Reserve Clear operation completed.
 	EndTs time.Time                      `json:"end_ts" format:"date-time"`
 	JSON  cacheReserveStatusResponseJSON `json:"-"`
@@ -321,22 +321,6 @@ func (r *CacheReserveStatusResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r cacheReserveStatusResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// The current state of the Cache Reserve Clear operation.
-type CacheReserveStatusResponseState string
-
-const (
-	CacheReserveStatusResponseStateInProgress CacheReserveStatusResponseState = "In-progress"
-	CacheReserveStatusResponseStateCompleted  CacheReserveStatusResponseState = "Completed"
-)
-
-func (r CacheReserveStatusResponseState) IsKnown() bool {
-	switch r {
-	case CacheReserveStatusResponseStateInProgress, CacheReserveStatusResponseStateCompleted:
-		return true
-	}
-	return false
 }
 
 type CacheReserveClearParams struct {

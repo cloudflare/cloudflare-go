@@ -643,3 +643,19 @@ func (r *Role) UnmarshalJSON(data []byte) (err error) {
 func (r roleJSON) RawJSON() string {
 	return r.raw
 }
+
+// Direction to order DNS records in.
+type SortDirection string
+
+const (
+	SortDirectionAsc  SortDirection = "asc"
+	SortDirectionDesc SortDirection = "desc"
+)
+
+func (r SortDirection) IsKnown() bool {
+	switch r {
+	case SortDirectionAsc, SortDirectionDesc:
+		return true
+	}
+	return false
+}

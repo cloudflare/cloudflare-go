@@ -30,7 +30,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Update(
 		context.TODO(),
-		rulesets.PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom,
+		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseUpdateParams{
 			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRuleUnion{rulesets.BlockRuleParam{
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
@@ -87,9 +87,9 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("string"),
 			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
-			Kind:        cloudflare.F(rulesets.PhaseUpdateParamsKindRoot),
+			Kind:        cloudflare.F(rulesets.KindRoot),
 			Name:        cloudflare.F("My ruleset"),
-			Phase:       cloudflare.F(rulesets.PhaseUpdateParamsPhaseHTTPRequestFirewallCustom),
+			Phase:       cloudflare.F(rulesets.PhaseHTTPRequestFirewallCustom),
 		},
 	)
 	if err != nil {
@@ -117,7 +117,7 @@ func TestPhaseGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Get(
 		context.TODO(),
-		rulesets.PhaseGetParamsRulesetPhaseHTTPRequestFirewallCustom,
+		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseGetParams{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
