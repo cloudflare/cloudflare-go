@@ -126,24 +126,6 @@ type Host = string
 
 type HostParam = string
 
-// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
-// or "keyless-certificate" (for Keyless SSL servers).
-type RequestType string
-
-const (
-	RequestTypeOriginRsa          RequestType = "origin-rsa"
-	RequestTypeOriginEcc          RequestType = "origin-ecc"
-	RequestTypeKeylessCertificate RequestType = "keyless-certificate"
-)
-
-func (r RequestType) IsKnown() bool {
-	switch r {
-	case RequestTypeOriginRsa, RequestTypeOriginEcc, RequestTypeKeylessCertificate:
-		return true
-	}
-	return false
-}
-
 // The number of days for which the certificate should be valid.
 type RequestValidity float64
 

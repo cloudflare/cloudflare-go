@@ -69,7 +69,7 @@ type FirewallAnalyticsReportBytimeGetParams struct {
 	// prefixed by - (descending) or + (ascending).
 	Sort param.Field[string] `query:"sort"`
 	// Unit of time to group data by.
-	TimeDelta param.Field[FirewallAnalyticsReportBytimeGetParamsTimeDelta] `query:"time_delta"`
+	TimeDelta param.Field[Delta] `query:"time_delta"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
@@ -81,30 +81,6 @@ func (r FirewallAnalyticsReportBytimeGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-// Unit of time to group data by.
-type FirewallAnalyticsReportBytimeGetParamsTimeDelta string
-
-const (
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaAll        FirewallAnalyticsReportBytimeGetParamsTimeDelta = "all"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaAuto       FirewallAnalyticsReportBytimeGetParamsTimeDelta = "auto"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaYear       FirewallAnalyticsReportBytimeGetParamsTimeDelta = "year"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaQuarter    FirewallAnalyticsReportBytimeGetParamsTimeDelta = "quarter"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaMonth      FirewallAnalyticsReportBytimeGetParamsTimeDelta = "month"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaWeek       FirewallAnalyticsReportBytimeGetParamsTimeDelta = "week"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaDay        FirewallAnalyticsReportBytimeGetParamsTimeDelta = "day"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaHour       FirewallAnalyticsReportBytimeGetParamsTimeDelta = "hour"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaDekaminute FirewallAnalyticsReportBytimeGetParamsTimeDelta = "dekaminute"
-	FirewallAnalyticsReportBytimeGetParamsTimeDeltaMinute     FirewallAnalyticsReportBytimeGetParamsTimeDelta = "minute"
-)
-
-func (r FirewallAnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
-	switch r {
-	case FirewallAnalyticsReportBytimeGetParamsTimeDeltaAll, FirewallAnalyticsReportBytimeGetParamsTimeDeltaAuto, FirewallAnalyticsReportBytimeGetParamsTimeDeltaYear, FirewallAnalyticsReportBytimeGetParamsTimeDeltaQuarter, FirewallAnalyticsReportBytimeGetParamsTimeDeltaMonth, FirewallAnalyticsReportBytimeGetParamsTimeDeltaWeek, FirewallAnalyticsReportBytimeGetParamsTimeDeltaDay, FirewallAnalyticsReportBytimeGetParamsTimeDeltaHour, FirewallAnalyticsReportBytimeGetParamsTimeDeltaDekaminute, FirewallAnalyticsReportBytimeGetParamsTimeDeltaMinute:
-		return true
-	}
-	return false
 }
 
 type FirewallAnalyticsReportBytimeGetResponseEnvelope struct {
