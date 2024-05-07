@@ -1,6 +1,7 @@
 # Shared Params Types
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#ASNParam">ASNParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificateCA">CertificateCA</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificateRequestType">CertificateRequestType</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#MemberParam">MemberParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#PermissionGrantParam">PermissionGrantParam</a>
@@ -9,6 +10,7 @@
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#ASN">ASN</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#AuditLog">AuditLog</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificateCA">CertificateCA</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificateRequestType">CertificateRequestType</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CloudflareTunnel">CloudflareTunnel</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#ErrorData">ErrorData</a>
@@ -945,7 +947,9 @@ Params Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#OriginSteeringParam">OriginSteeringParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#RandomSteeringParam">RandomSteeringParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#RulesParam">RulesParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#SessionAffinity">SessionAffinity</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#SessionAffinityAttributesParam">SessionAffinityAttributesParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#SteeringPolicy">SteeringPolicy</a>
 
 Response Types:
 
@@ -963,7 +967,9 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#OriginSteering">OriginSteering</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#RandomSteering">RandomSteering</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#Rules">Rules</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#SessionAffinity">SessionAffinity</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#SessionAffinityAttributes">SessionAffinityAttributes</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#SteeringPolicy">SteeringPolicy</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#LoadBalancerDeleteResponse">LoadBalancerDeleteResponse</a>
 
 Methods:
@@ -1167,13 +1173,11 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificateAuthority">CertificateAuthority</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#HostParam">HostParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#RequestValidity">RequestValidity</a>
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificateAuthority">CertificateAuthority</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#Host">Host</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#RequestValidity">RequestValidity</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#Status">Status</a>

@@ -132,13 +132,13 @@ type VerificationSignature string
 
 const (
 	VerificationSignatureEcdsaWithSha256 VerificationSignature = "ECDSAWithSHA256"
-	VerificationSignatureSha1WithRsa     VerificationSignature = "SHA1WithRSA"
-	VerificationSignatureSha256WithRsa   VerificationSignature = "SHA256WithRSA"
+	VerificationSignatureSha1WithRSA     VerificationSignature = "SHA1WithRSA"
+	VerificationSignatureSha256WithRSA   VerificationSignature = "SHA256WithRSA"
 )
 
 func (r VerificationSignature) IsKnown() bool {
 	switch r {
-	case VerificationSignatureEcdsaWithSha256, VerificationSignatureSha1WithRsa, VerificationSignatureSha256WithRsa:
+	case VerificationSignatureEcdsaWithSha256, VerificationSignatureSha1WithRSA, VerificationSignatureSha256WithRSA:
 		return true
 	}
 	return false
