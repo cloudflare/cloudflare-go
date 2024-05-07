@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v2/ssl"
 )
 
 // CustomHostnameService contains methods and other services that help with
@@ -238,7 +239,7 @@ type CustomHostnameNewResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameNewResponseSSLCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority ssl.CertificatePackCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -307,23 +308,6 @@ func (r *CustomHostnameNewResponseSSL) UnmarshalJSON(data []byte) (err error) {
 
 func (r customHostnameNewResponseSSLJSON) RawJSON() string {
 	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameNewResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameNewResponseSSLCertificateAuthorityDigicert    CustomHostnameNewResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameNewResponseSSLCertificateAuthorityGoogle      CustomHostnameNewResponseSSLCertificateAuthority = "google"
-	CustomHostnameNewResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameNewResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameNewResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewResponseSSLCertificateAuthorityDigicert, CustomHostnameNewResponseSSLCertificateAuthorityGoogle, CustomHostnameNewResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -717,7 +701,7 @@ type CustomHostnameListResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameListResponseSSLCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority ssl.CertificatePackCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -786,23 +770,6 @@ func (r *CustomHostnameListResponseSSL) UnmarshalJSON(data []byte) (err error) {
 
 func (r customHostnameListResponseSSLJSON) RawJSON() string {
 	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameListResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameListResponseSSLCertificateAuthorityDigicert    CustomHostnameListResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameListResponseSSLCertificateAuthorityGoogle      CustomHostnameListResponseSSLCertificateAuthority = "google"
-	CustomHostnameListResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameListResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameListResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameListResponseSSLCertificateAuthorityDigicert, CustomHostnameListResponseSSLCertificateAuthorityGoogle, CustomHostnameListResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -1218,7 +1185,7 @@ type CustomHostnameEditResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameEditResponseSSLCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority ssl.CertificatePackCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -1287,23 +1254,6 @@ func (r *CustomHostnameEditResponseSSL) UnmarshalJSON(data []byte) (err error) {
 
 func (r customHostnameEditResponseSSLJSON) RawJSON() string {
 	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameEditResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameEditResponseSSLCertificateAuthorityDigicert    CustomHostnameEditResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameEditResponseSSLCertificateAuthorityGoogle      CustomHostnameEditResponseSSLCertificateAuthority = "google"
-	CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameEditResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameEditResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditResponseSSLCertificateAuthorityDigicert, CustomHostnameEditResponseSSLCertificateAuthorityGoogle, CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -1697,7 +1647,7 @@ type CustomHostnameGetResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameGetResponseSSLCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority ssl.CertificatePackCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -1766,23 +1716,6 @@ func (r *CustomHostnameGetResponseSSL) UnmarshalJSON(data []byte) (err error) {
 
 func (r customHostnameGetResponseSSLJSON) RawJSON() string {
 	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameGetResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameGetResponseSSLCertificateAuthorityDigicert    CustomHostnameGetResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameGetResponseSSLCertificateAuthorityGoogle      CustomHostnameGetResponseSSLCertificateAuthority = "google"
-	CustomHostnameGetResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameGetResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameGetResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameGetResponseSSLCertificateAuthorityDigicert, CustomHostnameGetResponseSSLCertificateAuthorityGoogle, CustomHostnameGetResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -2131,7 +2064,7 @@ type CustomHostnameNewParamsSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority param.Field[CustomHostnameNewParamsSSLCertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[ssl.CertificatePackCA] `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2149,23 +2082,6 @@ type CustomHostnameNewParamsSSL struct {
 
 func (r CustomHostnameNewParamsSSL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameNewParamsSSLCertificateAuthority string
-
-const (
-	CustomHostnameNewParamsSSLCertificateAuthorityDigicert    CustomHostnameNewParamsSSLCertificateAuthority = "digicert"
-	CustomHostnameNewParamsSSLCertificateAuthorityGoogle      CustomHostnameNewParamsSSLCertificateAuthority = "google"
-	CustomHostnameNewParamsSSLCertificateAuthorityLetsEncrypt CustomHostnameNewParamsSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameNewParamsSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewParamsSSLCertificateAuthorityDigicert, CustomHostnameNewParamsSSLCertificateAuthorityGoogle, CustomHostnameNewParamsSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -2430,7 +2346,7 @@ type CustomHostnameEditParamsSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority param.Field[CustomHostnameEditParamsSSLCertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[ssl.CertificatePackCA] `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2448,23 +2364,6 @@ type CustomHostnameEditParamsSSL struct {
 
 func (r CustomHostnameEditParamsSSL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameEditParamsSSLCertificateAuthority string
-
-const (
-	CustomHostnameEditParamsSSLCertificateAuthorityDigicert    CustomHostnameEditParamsSSLCertificateAuthority = "digicert"
-	CustomHostnameEditParamsSSLCertificateAuthorityGoogle      CustomHostnameEditParamsSSLCertificateAuthority = "google"
-	CustomHostnameEditParamsSSLCertificateAuthorityLetsEncrypt CustomHostnameEditParamsSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameEditParamsSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditParamsSSLCertificateAuthorityDigicert, CustomHostnameEditParamsSSLCertificateAuthorityGoogle, CustomHostnameEditParamsSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.

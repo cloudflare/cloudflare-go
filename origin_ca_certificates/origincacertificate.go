@@ -17,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v2/ssl"
 	"github.com/tidwall/gjson"
 )
 
@@ -117,9 +118,9 @@ type OriginCACertificate struct {
 	Hostnames []interface{} `json:"hostnames,required"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType OriginCACertificateRequestType `json:"request_type,required"`
+	RequestType ssl.CertificatePackRequestType `json:"request_type,required"`
 	// The number of days for which the certificate should be valid.
-	RequestedValidity OriginCACertificateRequestedValidity `json:"requested_validity,required"`
+	RequestedValidity ssl.CertificatePackRequestValidity `json:"requested_validity,required"`
 	// Identifier
 	ID string `json:"id"`
 	// The Origin CA certificate. Will be newline-encoded.
@@ -149,45 +150,6 @@ func (r *OriginCACertificate) UnmarshalJSON(data []byte) (err error) {
 
 func (r originCACertificateJSON) RawJSON() string {
 	return r.raw
-}
-
-// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
-// or "keyless-certificate" (for Keyless SSL servers).
-type OriginCACertificateRequestType string
-
-const (
-	OriginCACertificateRequestTypeOriginRsa          OriginCACertificateRequestType = "origin-rsa"
-	OriginCACertificateRequestTypeOriginEcc          OriginCACertificateRequestType = "origin-ecc"
-	OriginCACertificateRequestTypeKeylessCertificate OriginCACertificateRequestType = "keyless-certificate"
-)
-
-func (r OriginCACertificateRequestType) IsKnown() bool {
-	switch r {
-	case OriginCACertificateRequestTypeOriginRsa, OriginCACertificateRequestTypeOriginEcc, OriginCACertificateRequestTypeKeylessCertificate:
-		return true
-	}
-	return false
-}
-
-// The number of days for which the certificate should be valid.
-type OriginCACertificateRequestedValidity float64
-
-const (
-	OriginCACertificateRequestedValidity7    OriginCACertificateRequestedValidity = 7
-	OriginCACertificateRequestedValidity30   OriginCACertificateRequestedValidity = 30
-	OriginCACertificateRequestedValidity90   OriginCACertificateRequestedValidity = 90
-	OriginCACertificateRequestedValidity365  OriginCACertificateRequestedValidity = 365
-	OriginCACertificateRequestedValidity730  OriginCACertificateRequestedValidity = 730
-	OriginCACertificateRequestedValidity1095 OriginCACertificateRequestedValidity = 1095
-	OriginCACertificateRequestedValidity5475 OriginCACertificateRequestedValidity = 5475
-)
-
-func (r OriginCACertificateRequestedValidity) IsKnown() bool {
-	switch r {
-	case OriginCACertificateRequestedValidity7, OriginCACertificateRequestedValidity30, OriginCACertificateRequestedValidity90, OriginCACertificateRequestedValidity365, OriginCACertificateRequestedValidity730, OriginCACertificateRequestedValidity1095, OriginCACertificateRequestedValidity5475:
-		return true
-	}
-	return false
 }
 
 // Union satisfied by
@@ -256,52 +218,13 @@ type OriginCACertificateNewParams struct {
 	Hostnames param.Field[[]interface{}] `json:"hostnames"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType param.Field[OriginCACertificateNewParamsRequestType] `json:"request_type"`
+	RequestType param.Field[ssl.CertificatePackRequestType] `json:"request_type"`
 	// The number of days for which the certificate should be valid.
-	RequestedValidity param.Field[OriginCACertificateNewParamsRequestedValidity] `json:"requested_validity"`
+	RequestedValidity param.Field[ssl.CertificatePackRequestValidity] `json:"requested_validity"`
 }
 
 func (r OriginCACertificateNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
-// or "keyless-certificate" (for Keyless SSL servers).
-type OriginCACertificateNewParamsRequestType string
-
-const (
-	OriginCACertificateNewParamsRequestTypeOriginRsa          OriginCACertificateNewParamsRequestType = "origin-rsa"
-	OriginCACertificateNewParamsRequestTypeOriginEcc          OriginCACertificateNewParamsRequestType = "origin-ecc"
-	OriginCACertificateNewParamsRequestTypeKeylessCertificate OriginCACertificateNewParamsRequestType = "keyless-certificate"
-)
-
-func (r OriginCACertificateNewParamsRequestType) IsKnown() bool {
-	switch r {
-	case OriginCACertificateNewParamsRequestTypeOriginRsa, OriginCACertificateNewParamsRequestTypeOriginEcc, OriginCACertificateNewParamsRequestTypeKeylessCertificate:
-		return true
-	}
-	return false
-}
-
-// The number of days for which the certificate should be valid.
-type OriginCACertificateNewParamsRequestedValidity float64
-
-const (
-	OriginCACertificateNewParamsRequestedValidity7    OriginCACertificateNewParamsRequestedValidity = 7
-	OriginCACertificateNewParamsRequestedValidity30   OriginCACertificateNewParamsRequestedValidity = 30
-	OriginCACertificateNewParamsRequestedValidity90   OriginCACertificateNewParamsRequestedValidity = 90
-	OriginCACertificateNewParamsRequestedValidity365  OriginCACertificateNewParamsRequestedValidity = 365
-	OriginCACertificateNewParamsRequestedValidity730  OriginCACertificateNewParamsRequestedValidity = 730
-	OriginCACertificateNewParamsRequestedValidity1095 OriginCACertificateNewParamsRequestedValidity = 1095
-	OriginCACertificateNewParamsRequestedValidity5475 OriginCACertificateNewParamsRequestedValidity = 5475
-)
-
-func (r OriginCACertificateNewParamsRequestedValidity) IsKnown() bool {
-	switch r {
-	case OriginCACertificateNewParamsRequestedValidity7, OriginCACertificateNewParamsRequestedValidity30, OriginCACertificateNewParamsRequestedValidity90, OriginCACertificateNewParamsRequestedValidity365, OriginCACertificateNewParamsRequestedValidity730, OriginCACertificateNewParamsRequestedValidity1095, OriginCACertificateNewParamsRequestedValidity5475:
-		return true
-	}
-	return false
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
