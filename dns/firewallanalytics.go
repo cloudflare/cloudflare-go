@@ -25,3 +25,27 @@ func NewFirewallAnalyticsService(opts ...option.RequestOption) (r *FirewallAnaly
 	r.Reports = NewFirewallAnalyticsReportService(opts...)
 	return
 }
+
+// Unit of time to group data by.
+type Delta string
+
+const (
+	DeltaAll        Delta = "all"
+	DeltaAuto       Delta = "auto"
+	DeltaYear       Delta = "year"
+	DeltaQuarter    Delta = "quarter"
+	DeltaMonth      Delta = "month"
+	DeltaWeek       Delta = "week"
+	DeltaDay        Delta = "day"
+	DeltaHour       Delta = "hour"
+	DeltaDekaminute Delta = "dekaminute"
+	DeltaMinute     Delta = "minute"
+)
+
+func (r Delta) IsKnown() bool {
+	switch r {
+	case DeltaAll, DeltaAuto, DeltaYear, DeltaQuarter, DeltaMonth, DeltaWeek, DeltaDay, DeltaHour, DeltaDekaminute, DeltaMinute:
+		return true
+	}
+	return false
+}

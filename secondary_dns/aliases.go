@@ -44,6 +44,21 @@ type AuditLogOwner = shared.AuditLogOwner
 // This is an alias to an internal type.
 type AuditLogResource = shared.AuditLogResource
 
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+//
+// This is an alias to an internal type.
+type CertificatePackRequestType = shared.CertificatePackRequestType
+
+// This is an alias to an internal value.
+const CertificatePackRequestTypeOriginRsa = shared.CertificatePackRequestTypeOriginRsa
+
+// This is an alias to an internal value.
+const CertificatePackRequestTypeOriginEcc = shared.CertificatePackRequestTypeOriginEcc
+
+// This is an alias to an internal value.
+const CertificatePackRequestTypeKeylessCertificate = shared.CertificatePackRequestTypeKeylessCertificate
+
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // This is an alias to an internal type.

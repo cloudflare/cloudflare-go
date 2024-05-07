@@ -55,12 +55,12 @@ func TestVariantEditWithOptionalParams(t *testing.T) {
 	_, err := client.Cache.Variants.Edit(context.TODO(), cache.VariantEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Value: cloudflare.F(cache.VariantEditParamsValue{
-			Avif: cloudflare.F([]string{"image/webp", "image/jpeg"}),
+			AVIF: cloudflare.F([]string{"image/webp", "image/jpeg"}),
 			BMP:  cloudflare.F([]string{"image/webp", "image/jpeg"}),
 			GIF:  cloudflare.F([]string{"image/webp", "image/jpeg"}),
 			JP2:  cloudflare.F([]string{"image/webp", "image/avif"}),
 			JPEG: cloudflare.F([]string{"image/webp", "image/avif"}),
-			Jpg:  cloudflare.F([]string{"image/webp", "image/avif"}),
+			JPG:  cloudflare.F([]string{"image/webp", "image/avif"}),
 			JPG2: cloudflare.F([]string{"image/webp", "image/avif"}),
 			PNG:  cloudflare.F([]string{"image/webp", "image/avif"}),
 			TIF:  cloudflare.F([]string{"image/webp", "image/avif"}),

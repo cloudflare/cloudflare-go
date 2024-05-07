@@ -176,6 +176,24 @@ func (r auditLogResourceJSON) RawJSON() string {
 	return r.raw
 }
 
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+type CertificatePackRequestType string
+
+const (
+	CertificatePackRequestTypeOriginRsa          CertificatePackRequestType = "origin-rsa"
+	CertificatePackRequestTypeOriginEcc          CertificatePackRequestType = "origin-ecc"
+	CertificatePackRequestTypeKeylessCertificate CertificatePackRequestType = "keyless-certificate"
+)
+
+func (r CertificatePackRequestType) IsKnown() bool {
+	switch r {
+	case CertificatePackRequestTypeOriginRsa, CertificatePackRequestTypeOriginEcc, CertificatePackRequestTypeKeylessCertificate:
+		return true
+	}
+	return false
+}
+
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type CloudflareTunnel struct {
 	// UUID of the tunnel.
