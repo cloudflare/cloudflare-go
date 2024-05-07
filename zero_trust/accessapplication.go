@@ -184,39 +184,43 @@ func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppID
 	return
 }
 
-type AllowedHeadersh = string
+type AllowedHeaders = string
 
-type AllowedHeadershParam = string
+type AllowedHeadersParam = string
 
-type AllowedIdpsh = string
+type AllowedHTTPMethods []AllowedMethods
 
-type AllowedIdpshParam = string
+type AllowedHTTPMethodsParam []AllowedMethods
 
-type AllowedMethodsh string
+type AllowedIdPs = string
+
+type AllowedIdPsParam = string
+
+type AllowedMethods string
 
 const (
-	AllowedMethodshGet     AllowedMethodsh = "GET"
-	AllowedMethodshPost    AllowedMethodsh = "POST"
-	AllowedMethodshHead    AllowedMethodsh = "HEAD"
-	AllowedMethodshPut     AllowedMethodsh = "PUT"
-	AllowedMethodshDelete  AllowedMethodsh = "DELETE"
-	AllowedMethodshConnect AllowedMethodsh = "CONNECT"
-	AllowedMethodshOptions AllowedMethodsh = "OPTIONS"
-	AllowedMethodshTrace   AllowedMethodsh = "TRACE"
-	AllowedMethodshPatch   AllowedMethodsh = "PATCH"
+	AllowedMethodsGet     AllowedMethods = "GET"
+	AllowedMethodsPost    AllowedMethods = "POST"
+	AllowedMethodsHead    AllowedMethods = "HEAD"
+	AllowedMethodsPut     AllowedMethods = "PUT"
+	AllowedMethodsDelete  AllowedMethods = "DELETE"
+	AllowedMethodsConnect AllowedMethods = "CONNECT"
+	AllowedMethodsOptions AllowedMethods = "OPTIONS"
+	AllowedMethodsTrace   AllowedMethods = "TRACE"
+	AllowedMethodsPatch   AllowedMethods = "PATCH"
 )
 
-func (r AllowedMethodsh) IsKnown() bool {
+func (r AllowedMethods) IsKnown() bool {
 	switch r {
-	case AllowedMethodshGet, AllowedMethodshPost, AllowedMethodshHead, AllowedMethodshPut, AllowedMethodshDelete, AllowedMethodshConnect, AllowedMethodshOptions, AllowedMethodshTrace, AllowedMethodshPatch:
+	case AllowedMethodsGet, AllowedMethodsPost, AllowedMethodsHead, AllowedMethodsPut, AllowedMethodsDelete, AllowedMethodsConnect, AllowedMethodsOptions, AllowedMethodsTrace, AllowedMethodsPatch:
 		return true
 	}
 	return false
 }
 
-type AllowedOriginsh = string
+type AllowedOrigins = string
 
-type AllowedOriginshParam = string
+type AllowedOriginsParam = string
 
 // Identifier
 //
@@ -409,7 +413,7 @@ type ApplicationSelfHostedApplication struct {
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdpsh `json:"allowed_idps"`
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
@@ -429,7 +433,7 @@ type ApplicationSelfHostedApplication struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []CustomPagesh `json:"custom_pages"`
+	CustomPages []CustomPages `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -450,7 +454,7 @@ type ApplicationSelfHostedApplication struct {
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
 	// List of domains that Access will secure.
-	SelfHostedDomains []SelfHostedDomainsh `json:"self_hosted_domains"`
+	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -515,7 +519,7 @@ type ApplicationSaaSApplication struct {
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdpsh `json:"allowed_idps"`
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
@@ -525,7 +529,7 @@ type ApplicationSaaSApplication struct {
 	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
 	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []CustomPagesh `json:"custom_pages"`
+	CustomPages []CustomPages `json:"custom_pages"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
@@ -898,7 +902,7 @@ type ApplicationBrowserSSHApplication struct {
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdpsh `json:"allowed_idps"`
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
@@ -918,7 +922,7 @@ type ApplicationBrowserSSHApplication struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []CustomPagesh `json:"custom_pages"`
+	CustomPages []CustomPages `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -939,7 +943,7 @@ type ApplicationBrowserSSHApplication struct {
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
 	// List of domains that Access will secure.
-	SelfHostedDomains []SelfHostedDomainsh `json:"self_hosted_domains"`
+	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -1014,7 +1018,7 @@ type ApplicationBrowserVncApplication struct {
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdpsh `json:"allowed_idps"`
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
@@ -1034,7 +1038,7 @@ type ApplicationBrowserVncApplication struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []CustomPagesh `json:"custom_pages"`
+	CustomPages []CustomPages `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -1055,7 +1059,7 @@ type ApplicationBrowserVncApplication struct {
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
 	// List of domains that Access will secure.
-	SelfHostedDomains []SelfHostedDomainsh `json:"self_hosted_domains"`
+	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -1122,7 +1126,7 @@ type ApplicationAppLauncherApplication struct {
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdpsh `json:"allowed_idps"`
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1199,7 +1203,7 @@ type ApplicationDeviceEnrollmentPermissionsApplication struct {
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdpsh `json:"allowed_idps"`
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1276,7 +1280,7 @@ type ApplicationBrowserIsolationPermissionsApplication struct {
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdpsh `json:"allowed_idps"`
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1487,7 +1491,7 @@ type ApplicationSelfHostedApplicationParam struct {
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdpshParam] `json:"allowed_idps"`
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1504,7 +1508,7 @@ type ApplicationSelfHostedApplicationParam struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]CustomPageshParam] `json:"custom_pages"`
+	CustomPages param.Field[[]CustomPagesParam] `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1525,7 +1529,7 @@ type ApplicationSelfHostedApplicationParam struct {
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
 	// List of domains that Access will secure.
-	SelfHostedDomains param.Field[[]SelfHostedDomainshParam] `json:"self_hosted_domains"`
+	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -1548,14 +1552,14 @@ func (r ApplicationSelfHostedApplicationParam) implementsZeroTrustApplicationUni
 type ApplicationSaaSApplicationParam struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdpshParam] `json:"allowed_idps"`
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]CustomPageshParam] `json:"custom_pages"`
+	CustomPages param.Field[[]CustomPagesParam] `json:"custom_pages"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
@@ -1703,7 +1707,7 @@ type ApplicationBrowserSSHApplicationParam struct {
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdpshParam] `json:"allowed_idps"`
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1720,7 +1724,7 @@ type ApplicationBrowserSSHApplicationParam struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]CustomPageshParam] `json:"custom_pages"`
+	CustomPages param.Field[[]CustomPagesParam] `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1741,7 +1745,7 @@ type ApplicationBrowserSSHApplicationParam struct {
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
 	// List of domains that Access will secure.
-	SelfHostedDomains param.Field[[]SelfHostedDomainshParam] `json:"self_hosted_domains"`
+	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -1774,7 +1778,7 @@ type ApplicationBrowserVncApplicationParam struct {
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdpshParam] `json:"allowed_idps"`
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1791,7 +1795,7 @@ type ApplicationBrowserVncApplicationParam struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]CustomPageshParam] `json:"custom_pages"`
+	CustomPages param.Field[[]CustomPagesParam] `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1812,7 +1816,7 @@ type ApplicationBrowserVncApplicationParam struct {
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
 	// List of domains that Access will secure.
-	SelfHostedDomains param.Field[[]SelfHostedDomainshParam] `json:"self_hosted_domains"`
+	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -1837,7 +1841,7 @@ type ApplicationAppLauncherApplicationParam struct {
 	Type param.Field[ApplicationAppLauncherApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdpshParam] `json:"allowed_idps"`
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
@@ -1858,7 +1862,7 @@ type ApplicationDeviceEnrollmentPermissionsApplicationParam struct {
 	Type param.Field[ApplicationDeviceEnrollmentPermissionsApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdpshParam] `json:"allowed_idps"`
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
@@ -1880,7 +1884,7 @@ type ApplicationBrowserIsolationPermissionsApplicationParam struct {
 	Type param.Field[ApplicationBrowserIsolationPermissionsApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdpshParam] `json:"allowed_idps"`
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
@@ -1930,11 +1934,11 @@ type CORSHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials bool `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeadersh `json:"allowed_headers"`
+	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethodsh `json:"allowed_methods"`
+	AllowedMethods AllowedHTTPMethods `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins []AllowedOriginsh `json:"allowed_origins"`
+	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge float64         `json:"max_age"`
 	JSON   corsHeadersJSON `json:"-"`
@@ -1973,11 +1977,11 @@ type CORSHeadersParam struct {
 	// client certificates) with requests.
 	AllowCredentials param.Field[bool] `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]AllowedHeadershParam] `json:"allowed_headers"`
+	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AllowedMethodsh] `json:"allowed_methods"`
+	AllowedMethods param.Field[AllowedHTTPMethodsParam] `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins param.Field[[]AllowedOriginshParam] `json:"allowed_origins"`
+	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge param.Field[float64] `json:"max_age"`
 }
@@ -1986,9 +1990,9 @@ func (r CORSHeadersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type CustomPagesh = string
+type CustomPages = string
 
-type CustomPageshParam = string
+type CustomPagesParam = string
 
 // A globally unique name for an identity or service provider.
 type SaaSAppNameFormat string
@@ -2230,9 +2234,9 @@ func (r SAMLSaaSAppCustomAttributesParam) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-type SelfHostedDomainsh = string
+type SelfHostedDomains = string
 
-type SelfHostedDomainshParam = string
+type SelfHostedDomainsParam = string
 
 type AccessApplicationDeleteResponse struct {
 	// UUID
