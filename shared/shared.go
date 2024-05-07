@@ -178,17 +178,17 @@ func (r auditLogResourceJSON) RawJSON() string {
 
 // Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 // or "keyless-certificate" (for Keyless SSL servers).
-type CertificatePackRequestType string
+type CertificateRequestType string
 
 const (
-	CertificatePackRequestTypeOriginRsa          CertificatePackRequestType = "origin-rsa"
-	CertificatePackRequestTypeOriginEcc          CertificatePackRequestType = "origin-ecc"
-	CertificatePackRequestTypeKeylessCertificate CertificatePackRequestType = "keyless-certificate"
+	CertificateRequestTypeOriginRsa          CertificateRequestType = "origin-rsa"
+	CertificateRequestTypeOriginEcc          CertificateRequestType = "origin-ecc"
+	CertificateRequestTypeKeylessCertificate CertificateRequestType = "keyless-certificate"
 )
 
-func (r CertificatePackRequestType) IsKnown() bool {
+func (r CertificateRequestType) IsKnown() bool {
 	switch r {
-	case CertificatePackRequestTypeOriginRsa, CertificatePackRequestTypeOriginEcc, CertificatePackRequestTypeKeylessCertificate:
+	case CertificateRequestTypeOriginRsa, CertificateRequestTypeOriginEcc, CertificateRequestTypeKeylessCertificate:
 		return true
 	}
 	return false

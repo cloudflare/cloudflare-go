@@ -1,7 +1,7 @@
 # Shared Params Types
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#ASNParam">ASNParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificatePackRequestType">CertificatePackRequestType</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificateRequestType">CertificateRequestType</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#MemberParam">MemberParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#PermissionGrantParam">PermissionGrantParam</a>
 
@@ -9,7 +9,7 @@
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#ASN">ASN</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#AuditLog">AuditLog</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificatePackRequestType">CertificatePackRequestType</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificateRequestType">CertificateRequestType</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CloudflareTunnel">CloudflareTunnel</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#ErrorData">ErrorData</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#Member">Member</a>
