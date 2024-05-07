@@ -176,19 +176,36 @@ func (r auditLogResourceJSON) RawJSON() string {
 	return r.raw
 }
 
+// The Certificate Authority that will issue the certificate
+type CertificateCA string
+
+const (
+	CertificateCADigicert    CertificateCA = "digicert"
+	CertificateCAGoogle      CertificateCA = "google"
+	CertificateCALetsEncrypt CertificateCA = "lets_encrypt"
+)
+
+func (r CertificateCA) IsKnown() bool {
+	switch r {
+	case CertificateCADigicert, CertificateCAGoogle, CertificateCALetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 // or "keyless-certificate" (for Keyless SSL servers).
 type CertificateRequestType string
 
 const (
-	CertificateRequestTypeOriginRsa          CertificateRequestType = "origin-rsa"
-	CertificateRequestTypeOriginEcc          CertificateRequestType = "origin-ecc"
+	CertificateRequestTypeOriginRSA          CertificateRequestType = "origin-rsa"
+	CertificateRequestTypeOriginECC          CertificateRequestType = "origin-ecc"
 	CertificateRequestTypeKeylessCertificate CertificateRequestType = "keyless-certificate"
 )
 
 func (r CertificateRequestType) IsKnown() bool {
 	switch r {
-	case CertificateRequestTypeOriginRsa, CertificateRequestTypeOriginEcc, CertificateRequestTypeKeylessCertificate:
+	case CertificateRequestTypeOriginRSA, CertificateRequestTypeOriginECC, CertificateRequestTypeKeylessCertificate:
 		return true
 	}
 	return false

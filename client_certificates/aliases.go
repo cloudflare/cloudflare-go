@@ -44,6 +44,20 @@ type AuditLogOwner = shared.AuditLogOwner
 // This is an alias to an internal type.
 type AuditLogResource = shared.AuditLogResource
 
+// The Certificate Authority that will issue the certificate
+//
+// This is an alias to an internal type.
+type CertificateCA = shared.CertificateCA
+
+// This is an alias to an internal value.
+const CertificateCADigicert = shared.CertificateCADigicert
+
+// This is an alias to an internal value.
+const CertificateCAGoogle = shared.CertificateCAGoogle
+
+// This is an alias to an internal value.
+const CertificateCALetsEncrypt = shared.CertificateCALetsEncrypt
+
 // Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 // or "keyless-certificate" (for Keyless SSL servers).
 //
@@ -51,10 +65,10 @@ type AuditLogResource = shared.AuditLogResource
 type CertificateRequestType = shared.CertificateRequestType
 
 // This is an alias to an internal value.
-const CertificateRequestTypeOriginRsa = shared.CertificateRequestTypeOriginRsa
+const CertificateRequestTypeOriginRSA = shared.CertificateRequestTypeOriginRSA
 
 // This is an alias to an internal value.
-const CertificateRequestTypeOriginEcc = shared.CertificateRequestTypeOriginEcc
+const CertificateRequestTypeOriginECC = shared.CertificateRequestTypeOriginECC
 
 // This is an alias to an internal value.
 const CertificateRequestTypeKeylessCertificate = shared.CertificateRequestTypeKeylessCertificate

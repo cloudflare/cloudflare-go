@@ -105,23 +105,6 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 	return
 }
 
-// The Certificate Authority that will issue the certificate
-type CertificateAuthority string
-
-const (
-	CertificateAuthorityDigicert    CertificateAuthority = "digicert"
-	CertificateAuthorityGoogle      CertificateAuthority = "google"
-	CertificateAuthorityLetsEncrypt CertificateAuthority = "lets_encrypt"
-)
-
-func (r CertificateAuthority) IsKnown() bool {
-	switch r {
-	case CertificateAuthorityDigicert, CertificateAuthorityGoogle, CertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
 type Host = string
 
 type HostParam = string
