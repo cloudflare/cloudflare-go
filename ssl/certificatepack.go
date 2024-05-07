@@ -105,6 +105,62 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 	return
 }
 
+// The Certificate Authority that will issue the certificate
+type CertificatePackCA string
+
+const (
+	CertificatePackCADigicert    CertificatePackCA = "digicert"
+	CertificatePackCAGoogle      CertificatePackCA = "google"
+	CertificatePackCALetsEncrypt CertificatePackCA = "lets_encrypt"
+)
+
+func (r CertificatePackCA) IsKnown() bool {
+	switch r {
+	case CertificatePackCADigicert, CertificatePackCAGoogle, CertificatePackCALetsEncrypt:
+		return true
+	}
+	return false
+}
+
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+type CertificatePackRequestType string
+
+const (
+	CertificatePackRequestTypeOriginRsa          CertificatePackRequestType = "origin-rsa"
+	CertificatePackRequestTypeOriginEcc          CertificatePackRequestType = "origin-ecc"
+	CertificatePackRequestTypeKeylessCertificate CertificatePackRequestType = "keyless-certificate"
+)
+
+func (r CertificatePackRequestType) IsKnown() bool {
+	switch r {
+	case CertificatePackRequestTypeOriginRsa, CertificatePackRequestTypeOriginEcc, CertificatePackRequestTypeKeylessCertificate:
+		return true
+	}
+	return false
+}
+
+// The number of days for which the certificate should be valid.
+type CertificatePackRequestValidity float64
+
+const (
+	CertificatePackRequestValidity7    CertificatePackRequestValidity = 7
+	CertificatePackRequestValidity30   CertificatePackRequestValidity = 30
+	CertificatePackRequestValidity90   CertificatePackRequestValidity = 90
+	CertificatePackRequestValidity365  CertificatePackRequestValidity = 365
+	CertificatePackRequestValidity730  CertificatePackRequestValidity = 730
+	CertificatePackRequestValidity1095 CertificatePackRequestValidity = 1095
+	CertificatePackRequestValidity5475 CertificatePackRequestValidity = 5475
+)
+
+func (r CertificatePackRequestValidity) IsKnown() bool {
+	switch r {
+	case CertificatePackRequestValidity7, CertificatePackRequestValidity30, CertificatePackRequestValidity90, CertificatePackRequestValidity365, CertificatePackRequestValidity730, CertificatePackRequestValidity1095, CertificatePackRequestValidity5475:
+		return true
+	}
+	return false
+}
+
 // Status of certificate pack.
 type CertificatePackStatus string
 
@@ -135,6 +191,23 @@ const (
 func (r CertificatePackStatus) IsKnown() bool {
 	switch r {
 	case CertificatePackStatusInitializing, CertificatePackStatusPendingValidation, CertificatePackStatusDeleted, CertificatePackStatusPendingIssuance, CertificatePackStatusPendingDeployment, CertificatePackStatusPendingDeletion, CertificatePackStatusPendingExpiration, CertificatePackStatusExpired, CertificatePackStatusActive, CertificatePackStatusInitializingTimedOut, CertificatePackStatusValidationTimedOut, CertificatePackStatusIssuanceTimedOut, CertificatePackStatusDeploymentTimedOut, CertificatePackStatusDeletionTimedOut, CertificatePackStatusPendingCleanup, CertificatePackStatusStagingDeployment, CertificatePackStatusStagingActive, CertificatePackStatusDeactivating, CertificatePackStatusInactive, CertificatePackStatusBackupIssued, CertificatePackStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
+// Validation method in use for a certificate pack order.
+type CertificatePackValidationMethod string
+
+const (
+	CertificatePackValidationMethodHTTP  CertificatePackValidationMethod = "http"
+	CertificatePackValidationMethodCNAME CertificatePackValidationMethod = "cname"
+	CertificatePackValidationMethodTXT   CertificatePackValidationMethod = "txt"
+)
+
+func (r CertificatePackValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackValidationMethodHTTP, CertificatePackValidationMethodCNAME, CertificatePackValidationMethodTXT:
 		return true
 	}
 	return false
