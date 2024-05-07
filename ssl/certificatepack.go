@@ -106,108 +106,17 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 }
 
 // The Certificate Authority that will issue the certificate
-type CertificatePackCA string
+type CertificateAuthority string
 
 const (
-	CertificatePackCADigicert    CertificatePackCA = "digicert"
-	CertificatePackCAGoogle      CertificatePackCA = "google"
-	CertificatePackCALetsEncrypt CertificatePackCA = "lets_encrypt"
+	CertificateAuthorityDigicert    CertificateAuthority = "digicert"
+	CertificateAuthorityGoogle      CertificateAuthority = "google"
+	CertificateAuthorityLetsEncrypt CertificateAuthority = "lets_encrypt"
 )
 
-func (r CertificatePackCA) IsKnown() bool {
+func (r CertificateAuthority) IsKnown() bool {
 	switch r {
-	case CertificatePackCADigicert, CertificatePackCAGoogle, CertificatePackCALetsEncrypt:
-		return true
-	}
-	return false
-}
-
-// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
-// or "keyless-certificate" (for Keyless SSL servers).
-type CertificatePackRequestType string
-
-const (
-	CertificatePackRequestTypeOriginRsa          CertificatePackRequestType = "origin-rsa"
-	CertificatePackRequestTypeOriginEcc          CertificatePackRequestType = "origin-ecc"
-	CertificatePackRequestTypeKeylessCertificate CertificatePackRequestType = "keyless-certificate"
-)
-
-func (r CertificatePackRequestType) IsKnown() bool {
-	switch r {
-	case CertificatePackRequestTypeOriginRsa, CertificatePackRequestTypeOriginEcc, CertificatePackRequestTypeKeylessCertificate:
-		return true
-	}
-	return false
-}
-
-// The number of days for which the certificate should be valid.
-type CertificatePackRequestValidity float64
-
-const (
-	CertificatePackRequestValidity7    CertificatePackRequestValidity = 7
-	CertificatePackRequestValidity30   CertificatePackRequestValidity = 30
-	CertificatePackRequestValidity90   CertificatePackRequestValidity = 90
-	CertificatePackRequestValidity365  CertificatePackRequestValidity = 365
-	CertificatePackRequestValidity730  CertificatePackRequestValidity = 730
-	CertificatePackRequestValidity1095 CertificatePackRequestValidity = 1095
-	CertificatePackRequestValidity5475 CertificatePackRequestValidity = 5475
-)
-
-func (r CertificatePackRequestValidity) IsKnown() bool {
-	switch r {
-	case CertificatePackRequestValidity7, CertificatePackRequestValidity30, CertificatePackRequestValidity90, CertificatePackRequestValidity365, CertificatePackRequestValidity730, CertificatePackRequestValidity1095, CertificatePackRequestValidity5475:
-		return true
-	}
-	return false
-}
-
-// Status of certificate pack.
-type CertificatePackStatus string
-
-const (
-	CertificatePackStatusInitializing         CertificatePackStatus = "initializing"
-	CertificatePackStatusPendingValidation    CertificatePackStatus = "pending_validation"
-	CertificatePackStatusDeleted              CertificatePackStatus = "deleted"
-	CertificatePackStatusPendingIssuance      CertificatePackStatus = "pending_issuance"
-	CertificatePackStatusPendingDeployment    CertificatePackStatus = "pending_deployment"
-	CertificatePackStatusPendingDeletion      CertificatePackStatus = "pending_deletion"
-	CertificatePackStatusPendingExpiration    CertificatePackStatus = "pending_expiration"
-	CertificatePackStatusExpired              CertificatePackStatus = "expired"
-	CertificatePackStatusActive               CertificatePackStatus = "active"
-	CertificatePackStatusInitializingTimedOut CertificatePackStatus = "initializing_timed_out"
-	CertificatePackStatusValidationTimedOut   CertificatePackStatus = "validation_timed_out"
-	CertificatePackStatusIssuanceTimedOut     CertificatePackStatus = "issuance_timed_out"
-	CertificatePackStatusDeploymentTimedOut   CertificatePackStatus = "deployment_timed_out"
-	CertificatePackStatusDeletionTimedOut     CertificatePackStatus = "deletion_timed_out"
-	CertificatePackStatusPendingCleanup       CertificatePackStatus = "pending_cleanup"
-	CertificatePackStatusStagingDeployment    CertificatePackStatus = "staging_deployment"
-	CertificatePackStatusStagingActive        CertificatePackStatus = "staging_active"
-	CertificatePackStatusDeactivating         CertificatePackStatus = "deactivating"
-	CertificatePackStatusInactive             CertificatePackStatus = "inactive"
-	CertificatePackStatusBackupIssued         CertificatePackStatus = "backup_issued"
-	CertificatePackStatusHoldingDeployment    CertificatePackStatus = "holding_deployment"
-)
-
-func (r CertificatePackStatus) IsKnown() bool {
-	switch r {
-	case CertificatePackStatusInitializing, CertificatePackStatusPendingValidation, CertificatePackStatusDeleted, CertificatePackStatusPendingIssuance, CertificatePackStatusPendingDeployment, CertificatePackStatusPendingDeletion, CertificatePackStatusPendingExpiration, CertificatePackStatusExpired, CertificatePackStatusActive, CertificatePackStatusInitializingTimedOut, CertificatePackStatusValidationTimedOut, CertificatePackStatusIssuanceTimedOut, CertificatePackStatusDeploymentTimedOut, CertificatePackStatusDeletionTimedOut, CertificatePackStatusPendingCleanup, CertificatePackStatusStagingDeployment, CertificatePackStatusStagingActive, CertificatePackStatusDeactivating, CertificatePackStatusInactive, CertificatePackStatusBackupIssued, CertificatePackStatusHoldingDeployment:
-		return true
-	}
-	return false
-}
-
-// Validation method in use for a certificate pack order.
-type CertificatePackValidationMethod string
-
-const (
-	CertificatePackValidationMethodHTTP  CertificatePackValidationMethod = "http"
-	CertificatePackValidationMethodCNAME CertificatePackValidationMethod = "cname"
-	CertificatePackValidationMethodTXT   CertificatePackValidationMethod = "txt"
-)
-
-func (r CertificatePackValidationMethod) IsKnown() bool {
-	switch r {
-	case CertificatePackValidationMethodHTTP, CertificatePackValidationMethodCNAME, CertificatePackValidationMethodTXT:
+	case CertificateAuthorityDigicert, CertificateAuthorityGoogle, CertificateAuthorityLetsEncrypt:
 		return true
 	}
 	return false
@@ -216,6 +125,97 @@ func (r CertificatePackValidationMethod) IsKnown() bool {
 type Host = string
 
 type HostParam = string
+
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+type RequestType string
+
+const (
+	RequestTypeOriginRsa          RequestType = "origin-rsa"
+	RequestTypeOriginEcc          RequestType = "origin-ecc"
+	RequestTypeKeylessCertificate RequestType = "keyless-certificate"
+)
+
+func (r RequestType) IsKnown() bool {
+	switch r {
+	case RequestTypeOriginRsa, RequestTypeOriginEcc, RequestTypeKeylessCertificate:
+		return true
+	}
+	return false
+}
+
+// The number of days for which the certificate should be valid.
+type RequestValidity float64
+
+const (
+	RequestValidity7    RequestValidity = 7
+	RequestValidity30   RequestValidity = 30
+	RequestValidity90   RequestValidity = 90
+	RequestValidity365  RequestValidity = 365
+	RequestValidity730  RequestValidity = 730
+	RequestValidity1095 RequestValidity = 1095
+	RequestValidity5475 RequestValidity = 5475
+)
+
+func (r RequestValidity) IsKnown() bool {
+	switch r {
+	case RequestValidity7, RequestValidity30, RequestValidity90, RequestValidity365, RequestValidity730, RequestValidity1095, RequestValidity5475:
+		return true
+	}
+	return false
+}
+
+// Status of certificate pack.
+type Status string
+
+const (
+	StatusInitializing         Status = "initializing"
+	StatusPendingValidation    Status = "pending_validation"
+	StatusDeleted              Status = "deleted"
+	StatusPendingIssuance      Status = "pending_issuance"
+	StatusPendingDeployment    Status = "pending_deployment"
+	StatusPendingDeletion      Status = "pending_deletion"
+	StatusPendingExpiration    Status = "pending_expiration"
+	StatusExpired              Status = "expired"
+	StatusActive               Status = "active"
+	StatusInitializingTimedOut Status = "initializing_timed_out"
+	StatusValidationTimedOut   Status = "validation_timed_out"
+	StatusIssuanceTimedOut     Status = "issuance_timed_out"
+	StatusDeploymentTimedOut   Status = "deployment_timed_out"
+	StatusDeletionTimedOut     Status = "deletion_timed_out"
+	StatusPendingCleanup       Status = "pending_cleanup"
+	StatusStagingDeployment    Status = "staging_deployment"
+	StatusStagingActive        Status = "staging_active"
+	StatusDeactivating         Status = "deactivating"
+	StatusInactive             Status = "inactive"
+	StatusBackupIssued         Status = "backup_issued"
+	StatusHoldingDeployment    Status = "holding_deployment"
+)
+
+func (r Status) IsKnown() bool {
+	switch r {
+	case StatusInitializing, StatusPendingValidation, StatusDeleted, StatusPendingIssuance, StatusPendingDeployment, StatusPendingDeletion, StatusPendingExpiration, StatusExpired, StatusActive, StatusInitializingTimedOut, StatusValidationTimedOut, StatusIssuanceTimedOut, StatusDeploymentTimedOut, StatusDeletionTimedOut, StatusPendingCleanup, StatusStagingDeployment, StatusStagingActive, StatusDeactivating, StatusInactive, StatusBackupIssued, StatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
+// Validation method in use for a certificate pack order.
+type ValidationMethod string
+
+const (
+	ValidationMethodHTTP  ValidationMethod = "http"
+	ValidationMethodCNAME ValidationMethod = "cname"
+	ValidationMethodTXT   ValidationMethod = "txt"
+)
+
+func (r ValidationMethod) IsKnown() bool {
+	switch r {
+	case ValidationMethodHTTP, ValidationMethodCNAME, ValidationMethodTXT:
+		return true
+	}
+	return false
+}
 
 type CertificatePackListResponse = interface{}
 
@@ -255,7 +255,7 @@ type CertificatePackEditResponse struct {
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
 	Hosts []Host `json:"hosts"`
 	// Status of certificate pack.
-	Status CertificatePackStatus `json:"status"`
+	Status Status `json:"status"`
 	// Type of certificate pack.
 	Type CertificatePackEditResponseType `json:"type"`
 	// Validation Method selected for the order.

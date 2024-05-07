@@ -110,16 +110,16 @@ func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGe
 }
 
 // Whether the user is a member of the organization or has an inivitation pending.
-type MemberStatus string
+type Status string
 
 const (
-	MemberStatusMember  MemberStatus = "member"
-	MemberStatusInvited MemberStatus = "invited"
+	StatusMember  Status = "member"
+	StatusInvited Status = "invited"
 )
 
-func (r MemberStatus) IsKnown() bool {
+func (r Status) IsKnown() bool {
 	switch r {
-	case MemberStatusMember, MemberStatusInvited:
+	case StatusMember, StatusInvited:
 		return true
 	}
 	return false
