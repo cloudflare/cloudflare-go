@@ -59,7 +59,7 @@ type CertificatePackOrderNewResponse struct {
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
 	Hosts []Host `json:"hosts"`
 	// Status of certificate pack.
-	Status CertificatePackOrderNewResponseStatus `json:"status"`
+	Status CertificatePackStatus `json:"status"`
 	// Type of certificate pack.
 	Type CertificatePackOrderNewResponseType `json:"type"`
 	// Validation Method selected for the order.
@@ -105,41 +105,6 @@ const (
 func (r CertificatePackOrderNewResponseCertificateAuthority) IsKnown() bool {
 	switch r {
 	case CertificatePackOrderNewResponseCertificateAuthorityGoogle, CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
-// Status of certificate pack.
-type CertificatePackOrderNewResponseStatus string
-
-const (
-	CertificatePackOrderNewResponseStatusInitializing         CertificatePackOrderNewResponseStatus = "initializing"
-	CertificatePackOrderNewResponseStatusPendingValidation    CertificatePackOrderNewResponseStatus = "pending_validation"
-	CertificatePackOrderNewResponseStatusDeleted              CertificatePackOrderNewResponseStatus = "deleted"
-	CertificatePackOrderNewResponseStatusPendingIssuance      CertificatePackOrderNewResponseStatus = "pending_issuance"
-	CertificatePackOrderNewResponseStatusPendingDeployment    CertificatePackOrderNewResponseStatus = "pending_deployment"
-	CertificatePackOrderNewResponseStatusPendingDeletion      CertificatePackOrderNewResponseStatus = "pending_deletion"
-	CertificatePackOrderNewResponseStatusPendingExpiration    CertificatePackOrderNewResponseStatus = "pending_expiration"
-	CertificatePackOrderNewResponseStatusExpired              CertificatePackOrderNewResponseStatus = "expired"
-	CertificatePackOrderNewResponseStatusActive               CertificatePackOrderNewResponseStatus = "active"
-	CertificatePackOrderNewResponseStatusInitializingTimedOut CertificatePackOrderNewResponseStatus = "initializing_timed_out"
-	CertificatePackOrderNewResponseStatusValidationTimedOut   CertificatePackOrderNewResponseStatus = "validation_timed_out"
-	CertificatePackOrderNewResponseStatusIssuanceTimedOut     CertificatePackOrderNewResponseStatus = "issuance_timed_out"
-	CertificatePackOrderNewResponseStatusDeploymentTimedOut   CertificatePackOrderNewResponseStatus = "deployment_timed_out"
-	CertificatePackOrderNewResponseStatusDeletionTimedOut     CertificatePackOrderNewResponseStatus = "deletion_timed_out"
-	CertificatePackOrderNewResponseStatusPendingCleanup       CertificatePackOrderNewResponseStatus = "pending_cleanup"
-	CertificatePackOrderNewResponseStatusStagingDeployment    CertificatePackOrderNewResponseStatus = "staging_deployment"
-	CertificatePackOrderNewResponseStatusStagingActive        CertificatePackOrderNewResponseStatus = "staging_active"
-	CertificatePackOrderNewResponseStatusDeactivating         CertificatePackOrderNewResponseStatus = "deactivating"
-	CertificatePackOrderNewResponseStatusInactive             CertificatePackOrderNewResponseStatus = "inactive"
-	CertificatePackOrderNewResponseStatusBackupIssued         CertificatePackOrderNewResponseStatus = "backup_issued"
-	CertificatePackOrderNewResponseStatusHoldingDeployment    CertificatePackOrderNewResponseStatus = "holding_deployment"
-)
-
-func (r CertificatePackOrderNewResponseStatus) IsKnown() bool {
-	switch r {
-	case CertificatePackOrderNewResponseStatusInitializing, CertificatePackOrderNewResponseStatusPendingValidation, CertificatePackOrderNewResponseStatusDeleted, CertificatePackOrderNewResponseStatusPendingIssuance, CertificatePackOrderNewResponseStatusPendingDeployment, CertificatePackOrderNewResponseStatusPendingDeletion, CertificatePackOrderNewResponseStatusPendingExpiration, CertificatePackOrderNewResponseStatusExpired, CertificatePackOrderNewResponseStatusActive, CertificatePackOrderNewResponseStatusInitializingTimedOut, CertificatePackOrderNewResponseStatusValidationTimedOut, CertificatePackOrderNewResponseStatusIssuanceTimedOut, CertificatePackOrderNewResponseStatusDeploymentTimedOut, CertificatePackOrderNewResponseStatusDeletionTimedOut, CertificatePackOrderNewResponseStatusPendingCleanup, CertificatePackOrderNewResponseStatusStagingDeployment, CertificatePackOrderNewResponseStatusStagingActive, CertificatePackOrderNewResponseStatusDeactivating, CertificatePackOrderNewResponseStatusInactive, CertificatePackOrderNewResponseStatusBackupIssued, CertificatePackOrderNewResponseStatusHoldingDeployment:
 		return true
 	}
 	return false
