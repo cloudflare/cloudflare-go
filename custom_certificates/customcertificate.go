@@ -397,12 +397,12 @@ type CustomCertificateNewParamsType string
 
 const (
 	CustomCertificateNewParamsTypeLegacyCustom CustomCertificateNewParamsType = "legacy_custom"
-	CustomCertificateNewParamsTypeSniCustom    CustomCertificateNewParamsType = "sni_custom"
+	CustomCertificateNewParamsTypeSNICustom    CustomCertificateNewParamsType = "sni_custom"
 )
 
 func (r CustomCertificateNewParamsType) IsKnown() bool {
 	switch r {
-	case CustomCertificateNewParamsTypeLegacyCustom, CustomCertificateNewParamsTypeSniCustom:
+	case CustomCertificateNewParamsTypeLegacyCustom, CustomCertificateNewParamsTypeSNICustom:
 		return true
 	}
 	return false

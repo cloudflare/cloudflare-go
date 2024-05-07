@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"reflect"
 
+	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -91,8 +92,8 @@ type Organization struct {
 	// List of roles that a user has within an organization.
 	Roles []string `json:"roles"`
 	// Whether the user is a member of the organization or has an inivitation pending.
-	Status OrganizationStatus `json:"status"`
-	JSON   organizationJSON   `json:"-"`
+	Status accounts.MemberStatus `json:"status"`
+	JSON   organizationJSON      `json:"-"`
 }
 
 // organizationJSON contains the JSON metadata for the struct [Organization]
@@ -112,22 +113,6 @@ func (r *Organization) UnmarshalJSON(data []byte) (err error) {
 
 func (r organizationJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the user is a member of the organization or has an inivitation pending.
-type OrganizationStatus string
-
-const (
-	OrganizationStatusMember  OrganizationStatus = "member"
-	OrganizationStatusInvited OrganizationStatus = "invited"
-)
-
-func (r OrganizationStatus) IsKnown() bool {
-	switch r {
-	case OrganizationStatusMember, OrganizationStatusInvited:
-		return true
-	}
-	return false
 }
 
 type OrganizationDeleteResponse struct {
