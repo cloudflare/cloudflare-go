@@ -29,7 +29,7 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.New(context.TODO(), zero_trust.IdentityProviderNewParams{
-		Body: zero_trust.AzureADParam{
+		IdentityProvider: zero_trust.AzureADParam{
 			Config: cloudflare.F(zero_trust.AzureADConfigParam{
 				ClientID:                 cloudflare.F("<your client id>"),
 				ClientSecret:             cloudflare.F("<your client secret>"),
@@ -80,7 +80,7 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.IdentityProviderUpdateParams{
-			Body: zero_trust.AzureADParam{
+			IdentityProvider: zero_trust.AzureADParam{
 				Config: cloudflare.F(zero_trust.AzureADConfigParam{
 					ClientID:                 cloudflare.F("<your client id>"),
 					ClientSecret:             cloudflare.F("<your client secret>"),
