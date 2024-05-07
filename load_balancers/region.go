@@ -61,10 +61,6 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 	return
 }
 
-type RegionID []CheckRegion
-
-type RegionIDParam []CheckRegion
-
 // Union satisfied by [load_balancers.RegionListResponseUnknown] or
 // [shared.UnionString].
 type RegionListResponseUnion interface {
