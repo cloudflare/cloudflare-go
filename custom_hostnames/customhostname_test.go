@@ -143,7 +143,7 @@ func TestCustomHostnameEditWithOptionalParams(t *testing.T) {
 				Key: cloudflare.F("value"),
 			}),
 			CustomOriginServer: cloudflare.F("origin2.example.com"),
-			CustomOriginSni:    cloudflare.F("sni.example.com"),
+			CustomOriginSNI:    cloudflare.F("sni.example.com"),
 			SSL: cloudflare.F(custom_hostnames.CustomHostnameEditParamsSSL{
 				BundleMethod:         cloudflare.F(custom_hostnames.BundleMethodUbiquitous),
 				CertificateAuthority: cloudflare.F(ssl.CertificatePackCAGoogle),

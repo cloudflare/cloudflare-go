@@ -190,7 +190,7 @@ type CustomHostnameNewResponse struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
+	CustomOriginSNI string `json:"custom_origin_sni"`
 	// This is a record which can be placed to activate a hostname.
 	OwnershipVerification CustomHostnameNewResponseOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
@@ -212,7 +212,7 @@ type customHostnameNewResponseJSON struct {
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
+	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
 	Status                    apijson.Field
@@ -652,7 +652,7 @@ type CustomHostnameListResponse struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
+	CustomOriginSNI string `json:"custom_origin_sni"`
 	// This is a record which can be placed to activate a hostname.
 	OwnershipVerification CustomHostnameListResponseOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
@@ -674,7 +674,7 @@ type customHostnameListResponseJSON struct {
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
+	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
 	Status                    apijson.Field
@@ -1136,7 +1136,7 @@ type CustomHostnameEditResponse struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
+	CustomOriginSNI string `json:"custom_origin_sni"`
 	// This is a record which can be placed to activate a hostname.
 	OwnershipVerification CustomHostnameEditResponseOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
@@ -1158,7 +1158,7 @@ type customHostnameEditResponseJSON struct {
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
+	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
 	Status                    apijson.Field
@@ -1598,7 +1598,7 @@ type CustomHostnameGetResponse struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
+	CustomOriginSNI string `json:"custom_origin_sni"`
 	// This is a record which can be placed to activate a hostname.
 	OwnershipVerification CustomHostnameGetResponseOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
@@ -1620,7 +1620,7 @@ type customHostnameGetResponseJSON struct {
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
+	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
 	Status                    apijson.Field
@@ -2319,7 +2319,7 @@ type CustomHostnameEditParams struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni param.Field[string] `json:"custom_origin_sni"`
+	CustomOriginSNI param.Field[string] `json:"custom_origin_sni"`
 	// SSL properties used when creating the custom hostname.
 	SSL param.Field[CustomHostnameEditParamsSSL] `json:"ssl"`
 }
