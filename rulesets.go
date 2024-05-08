@@ -246,7 +246,7 @@ type RulesetRuleActionParameters struct {
 	DisableApps              *bool                                             `json:"disable_apps,omitempty"`
 	DisableZaraz             *bool                                             `json:"disable_zaraz,omitempty"`
 	DisableRailgun           *bool                                             `json:"disable_railgun,omitempty"`
-	DisableRum               *bool                                             `json:"disable_rum,omitempty"`
+	DisableRUM               *bool                                             `json:"disable_rum,omitempty"`
 	EmailObfuscation         *bool                                             `json:"email_obfuscation,omitempty"`
 	Fonts                    *bool                                             `json:"fonts,omitempty"`
 	Mirage                   *bool                                             `json:"mirage,omitempty"`

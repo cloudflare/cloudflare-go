@@ -440,7 +440,7 @@ func TestGetRuleset_SetConfig(t *testing.T) {
 			DisableApps:             BoolPtr(true),
 			DisableZaraz:            BoolPtr(true),
 			DisableRailgun:          BoolPtr(true),
-			DisableRum:              BoolPtr(true),
+			DisableRUM:              BoolPtr(true),
 			EmailObfuscation:        BoolPtr(true),
 			Fonts:                   BoolPtr(true),
 			Mirage:                  BoolPtr(true),
