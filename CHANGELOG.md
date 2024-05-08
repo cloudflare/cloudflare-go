@@ -1,5 +1,24 @@
 ## 0.95.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_application: add support for `policies` array ([#1956](https://github.com/cloudflare/cloudflare-go/issues/1956))
+* access_application: add support for `scim_config` ([#1921](https://github.com/cloudflare/cloudflare-go/issues/1921))
+* access_policy: add support for reusable policies ([#1956](https://github.com/cloudflare/cloudflare-go/issues/1956))
+* dlp: add support for zt risk behavior configuration ([#1887](https://github.com/cloudflare/cloudflare-go/issues/1887))
+
+BUG FIXES:
+
+* access_application: fix scim configuration authentication json marshalling ([#1959](https://github.com/cloudflare/cloudflare-go/issues/1959))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 2.0.0 to 2.1.0 ([#1839](https://github.com/cloudflare/cloudflare-go/issues/1839))
+* deps: bumps github.com/urfave/cli/v2 from 2.27.1 to 2.27.2 ([#1861](https://github.com/cloudflare/cloudflare-go/issues/1861))
+* deps: bumps golang.org/x/net from 0.24.0 to 0.25.0 ([#1974](https://github.com/cloudflare/cloudflare-go/issues/1974))
+* deps: bumps golangci/golangci-lint-action from 4 to 5 ([#1845](https://github.com/cloudflare/cloudflare-go/issues/1845))
+* deps: bumps golangci/golangci-lint-action from 5 to 6 ([#1975](https://github.com/cloudflare/cloudflare-go/issues/1975))
+
 ## 0.94.0 (April 24th, 2024)
 
 ENHANCEMENTS:
