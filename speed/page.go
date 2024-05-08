@@ -198,19 +198,13 @@ func (r PageTrendParamsRegion) IsKnown() bool {
 }
 
 type PageTrendResponseEnvelope struct {
-	Errors   interface{}                   `json:"errors,required"`
-	Messages interface{}                   `json:"messages,required"`
-	Success  interface{}                   `json:"success,required"`
-	Result   Trend                         `json:"result"`
-	JSON     pageTrendResponseEnvelopeJSON `json:"-"`
+	Result Trend                         `json:"result"`
+	JSON   pageTrendResponseEnvelopeJSON `json:"-"`
 }
 
 // pageTrendResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageTrendResponseEnvelope]
 type pageTrendResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

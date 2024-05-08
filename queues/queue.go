@@ -235,13 +235,9 @@ func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueNewResponseEnvelope struct {
-	CreatedOn  interface{}           `json:"created_on,required"`
-	Errors     []shared.ResponseInfo `json:"errors,required"`
-	Messages   []shared.ResponseInfo `json:"messages,required"`
-	ModifiedOn interface{}           `json:"modified_on,required"`
-	QueueID    interface{}           `json:"queue_id,required"`
-	QueueName  interface{}           `json:"queue_name,required"`
-	Result     QueueCreated          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   QueueCreated          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -251,12 +247,8 @@ type QueueNewResponseEnvelope struct {
 // queueNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueNewResponseEnvelope]
 type queueNewResponseEnvelopeJSON struct {
-	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
-	ModifiedOn  apijson.Field
-	QueueID     apijson.Field
-	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field
@@ -329,13 +321,9 @@ func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueUpdateResponseEnvelope struct {
-	CreatedOn  interface{}           `json:"created_on,required"`
-	Errors     []shared.ResponseInfo `json:"errors,required"`
-	Messages   []shared.ResponseInfo `json:"messages,required"`
-	ModifiedOn interface{}           `json:"modified_on,required"`
-	QueueID    interface{}           `json:"queue_id,required"`
-	QueueName  interface{}           `json:"queue_name,required"`
-	Result     QueueUpdated          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   QueueUpdated          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -345,12 +333,8 @@ type QueueUpdateResponseEnvelope struct {
 // queueUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueUpdateResponseEnvelope]
 type queueUpdateResponseEnvelopeJSON struct {
-	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
-	ModifiedOn  apijson.Field
-	QueueID     apijson.Field
-	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field
@@ -504,13 +488,9 @@ type QueueGetParams struct {
 }
 
 type QueueGetResponseEnvelope struct {
-	CreatedOn  interface{}           `json:"created_on,required"`
-	Errors     []shared.ResponseInfo `json:"errors,required"`
-	Messages   []shared.ResponseInfo `json:"messages,required"`
-	ModifiedOn interface{}           `json:"modified_on,required"`
-	QueueID    interface{}           `json:"queue_id,required"`
-	QueueName  interface{}           `json:"queue_name,required"`
-	Result     Queue                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Queue                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -520,12 +500,8 @@ type QueueGetResponseEnvelope struct {
 // queueGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueGetResponseEnvelope]
 type queueGetResponseEnvelopeJSON struct {
-	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
-	ModifiedOn  apijson.Field
-	QueueID     apijson.Field
-	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field

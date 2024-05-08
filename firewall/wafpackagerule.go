@@ -158,9 +158,10 @@ type WAFPackageRuleListResponse struct {
 	AllowedModes interface{} `json:"allowed_modes"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
-	Mode        AllowedModesAnomaly            `json:"mode,required"`
-	DefaultMode interface{}                    `json:"default_mode,required"`
-	JSON        wafPackageRuleListResponseJSON `json:"-"`
+	Mode AllowedModesAnomaly `json:"mode,required"`
+	// The default action/mode of a rule.
+	DefaultMode WAFPackageRuleListResponseDefaultMode `json:"default_mode"`
+	JSON        wafPackageRuleListResponseJSON        `json:"-"`
 	union       WAFPackageRuleListResponseUnion
 }
 
@@ -394,7 +395,6 @@ type WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule struct {
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule.
 	AllowedModes []WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
-	DefaultMode  interface{}                                                                `json:"default_mode,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
@@ -415,7 +415,6 @@ type WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule struct {
 type wafPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleJSON struct {
 	ID           apijson.Field
 	AllowedModes apijson.Field
-	DefaultMode  apijson.Field
 	Description  apijson.Field
 	Group        apijson.Field
 	Mode         apijson.Field
@@ -470,6 +469,24 @@ func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode) IsKno
 	return false
 }
 
+// The default action/mode of a rule.
+type WAFPackageRuleListResponseDefaultMode string
+
+const (
+	WAFPackageRuleListResponseDefaultModeDisable   WAFPackageRuleListResponseDefaultMode = "disable"
+	WAFPackageRuleListResponseDefaultModeSimulate  WAFPackageRuleListResponseDefaultMode = "simulate"
+	WAFPackageRuleListResponseDefaultModeBlock     WAFPackageRuleListResponseDefaultMode = "block"
+	WAFPackageRuleListResponseDefaultModeChallenge WAFPackageRuleListResponseDefaultMode = "challenge"
+)
+
+func (r WAFPackageRuleListResponseDefaultMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleListResponseDefaultModeDisable, WAFPackageRuleListResponseDefaultModeSimulate, WAFPackageRuleListResponseDefaultModeBlock, WAFPackageRuleListResponseDefaultModeChallenge:
+		return true
+	}
+	return false
+}
+
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
@@ -488,9 +505,10 @@ type WAFPackageRuleEditResponse struct {
 	AllowedModes interface{} `json:"allowed_modes"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
-	Mode        AllowedModesAnomaly            `json:"mode,required"`
-	DefaultMode interface{}                    `json:"default_mode,required"`
-	JSON        wafPackageRuleEditResponseJSON `json:"-"`
+	Mode AllowedModesAnomaly `json:"mode,required"`
+	// The default action/mode of a rule.
+	DefaultMode WAFPackageRuleEditResponseDefaultMode `json:"default_mode"`
+	JSON        wafPackageRuleEditResponseJSON        `json:"-"`
 	union       WAFPackageRuleEditResponseUnion
 }
 
@@ -724,7 +742,6 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule struct {
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule.
 	AllowedModes []WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
-	DefaultMode  interface{}                                                                `json:"default_mode,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
@@ -745,7 +762,6 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule struct {
 type wafPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleJSON struct {
 	ID           apijson.Field
 	AllowedModes apijson.Field
-	DefaultMode  apijson.Field
 	Description  apijson.Field
 	Group        apijson.Field
 	Mode         apijson.Field
@@ -795,6 +811,24 @@ const (
 func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode) IsKnown() bool {
 	switch r {
 	case WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleModeOn, WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleModeOff:
+		return true
+	}
+	return false
+}
+
+// The default action/mode of a rule.
+type WAFPackageRuleEditResponseDefaultMode string
+
+const (
+	WAFPackageRuleEditResponseDefaultModeDisable   WAFPackageRuleEditResponseDefaultMode = "disable"
+	WAFPackageRuleEditResponseDefaultModeSimulate  WAFPackageRuleEditResponseDefaultMode = "simulate"
+	WAFPackageRuleEditResponseDefaultModeBlock     WAFPackageRuleEditResponseDefaultMode = "block"
+	WAFPackageRuleEditResponseDefaultModeChallenge WAFPackageRuleEditResponseDefaultMode = "challenge"
+)
+
+func (r WAFPackageRuleEditResponseDefaultMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseDefaultModeDisable, WAFPackageRuleEditResponseDefaultModeSimulate, WAFPackageRuleEditResponseDefaultModeBlock, WAFPackageRuleEditResponseDefaultModeChallenge:
 		return true
 	}
 	return false
