@@ -215,19 +215,13 @@ func (r SiteInfoNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteInfoNewResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Success  interface{}                     `json:"success,required"`
-	Result   Site                            `json:"result"`
-	JSON     siteInfoNewResponseEnvelopeJSON `json:"-"`
+	Result Site                            `json:"result"`
+	JSON   siteInfoNewResponseEnvelopeJSON `json:"-"`
 }
 
 // siteInfoNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SiteInfoNewResponseEnvelope]
 type siteInfoNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -258,19 +252,13 @@ func (r SiteInfoUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteInfoUpdateResponseEnvelope struct {
-	Errors   interface{}                        `json:"errors,required"`
-	Messages interface{}                        `json:"messages,required"`
-	Success  interface{}                        `json:"success,required"`
-	Result   Site                               `json:"result"`
-	JSON     siteInfoUpdateResponseEnvelopeJSON `json:"-"`
+	Result Site                               `json:"result"`
+	JSON   siteInfoUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // siteInfoUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SiteInfoUpdateResponseEnvelope]
 type siteInfoUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -325,19 +313,13 @@ type SiteInfoDeleteParams struct {
 }
 
 type SiteInfoDeleteResponseEnvelope struct {
-	Errors   interface{}                        `json:"errors,required"`
-	Messages interface{}                        `json:"messages,required"`
-	Success  interface{}                        `json:"success,required"`
-	Result   SiteInfoDeleteResponse             `json:"result"`
-	JSON     siteInfoDeleteResponseEnvelopeJSON `json:"-"`
+	Result SiteInfoDeleteResponse             `json:"result"`
+	JSON   siteInfoDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // siteInfoDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SiteInfoDeleteResponseEnvelope]
 type siteInfoDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -357,19 +339,13 @@ type SiteInfoGetParams struct {
 }
 
 type SiteInfoGetResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Success  interface{}                     `json:"success,required"`
-	Result   Site                            `json:"result"`
-	JSON     siteInfoGetResponseEnvelopeJSON `json:"-"`
+	Result Site                            `json:"result"`
+	JSON   siteInfoGetResponseEnvelopeJSON `json:"-"`
 }
 
 // siteInfoGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SiteInfoGetResponseEnvelope]
 type siteInfoGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

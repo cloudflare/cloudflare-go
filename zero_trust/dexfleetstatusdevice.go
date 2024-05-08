@@ -61,13 +61,11 @@ type DEXFleetStatusDeviceListResponse struct {
 	// Cloudflare colo
 	Colo string `json:"colo,required"`
 	// Device identifier (UUID v4)
-	DeviceID string      `json:"deviceId,required"`
-	Mode     interface{} `json:"mode,required"`
+	DeviceID string `json:"deviceId,required"`
 	// Operating system
 	Platform string `json:"platform,required"`
 	// Network status
-	Status    string      `json:"status,required"`
-	Timestamp interface{} `json:"timestamp,required"`
+	Status string `json:"status,required"`
 	// WARP client version
 	Version string `json:"version,required"`
 	// Device identifier (human readable)
@@ -82,10 +80,8 @@ type DEXFleetStatusDeviceListResponse struct {
 type dexFleetStatusDeviceListResponseJSON struct {
 	Colo        apijson.Field
 	DeviceID    apijson.Field
-	Mode        apijson.Field
 	Platform    apijson.Field
 	Status      apijson.Field
-	Timestamp   apijson.Field
 	Version     apijson.Field
 	DeviceName  apijson.Field
 	PersonEmail apijson.Field

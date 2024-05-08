@@ -166,12 +166,8 @@ func (r DNSSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSSettingEditResponseEnvelope struct {
-	Errors             []shared.ResponseInfo `json:"errors,required"`
-	FoundationDNS      interface{}           `json:"foundation_dns,required"`
-	Messages           []shared.ResponseInfo `json:"messages,required"`
-	MultiProvider      interface{}           `json:"multi_provider,required"`
-	Nameservers        interface{}           `json:"nameservers,required"`
-	SecondaryOverrides interface{}           `json:"secondary_overrides,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSSetting                            `json:"result"`
@@ -181,16 +177,12 @@ type DNSSettingEditResponseEnvelope struct {
 // dnsSettingEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [DNSSettingEditResponseEnvelope]
 type dnsSettingEditResponseEnvelopeJSON struct {
-	Errors             apijson.Field
-	FoundationDNS      apijson.Field
-	Messages           apijson.Field
-	MultiProvider      apijson.Field
-	Nameservers        apijson.Field
-	SecondaryOverrides apijson.Field
-	Success            apijson.Field
-	Result             apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *DNSSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
@@ -222,12 +214,8 @@ type DNSSettingGetParams struct {
 }
 
 type DNSSettingGetResponseEnvelope struct {
-	Errors             []shared.ResponseInfo `json:"errors,required"`
-	FoundationDNS      interface{}           `json:"foundation_dns,required"`
-	Messages           []shared.ResponseInfo `json:"messages,required"`
-	MultiProvider      interface{}           `json:"multi_provider,required"`
-	Nameservers        interface{}           `json:"nameservers,required"`
-	SecondaryOverrides interface{}           `json:"secondary_overrides,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSSetting                           `json:"result"`
@@ -237,16 +225,12 @@ type DNSSettingGetResponseEnvelope struct {
 // dnsSettingGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [DNSSettingGetResponseEnvelope]
 type dnsSettingGetResponseEnvelopeJSON struct {
-	Errors             apijson.Field
-	FoundationDNS      apijson.Field
-	Messages           apijson.Field
-	MultiProvider      apijson.Field
-	Nameservers        apijson.Field
-	SecondaryOverrides apijson.Field
-	Success            apijson.Field
-	Result             apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *DNSSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {

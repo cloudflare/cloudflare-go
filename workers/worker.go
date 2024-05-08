@@ -67,7 +67,6 @@ type Binding struct {
 	Outbound  interface{} `json:"outbound,required"`
 	// ID of the certificate to bind to
 	CertificateID string      `json:"certificate_id"`
-	Certificate   interface{} `json:"certificate,required"`
 	JSON          bindingJSON `json:"-"`
 	union         BindingUnion
 }
@@ -88,7 +87,6 @@ type bindingJSON struct {
 	Namespace     apijson.Field
 	Outbound      apijson.Field
 	CertificateID apijson.Field
-	Certificate   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -247,8 +245,7 @@ type BindingParam struct {
 	Namespace param.Field[string]      `json:"namespace"`
 	Outbound  param.Field[interface{}] `json:"outbound,required"`
 	// ID of the certificate to bind to
-	CertificateID param.Field[string]      `json:"certificate_id"`
-	Certificate   param.Field[interface{}] `json:"certificate,required"`
+	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
 func (r BindingParam) MarshalJSON() (data []byte, err error) {
@@ -726,7 +723,6 @@ func (r MigrationStepTransferredClassParam) MarshalJSON() (data []byte, err erro
 }
 
 type MTLSCERTBinding struct {
-	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -738,7 +734,6 @@ type MTLSCERTBinding struct {
 
 // mtlscertBindingJSON contains the JSON metadata for the struct [MTLSCERTBinding]
 type mtlscertBindingJSON struct {
-	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -772,7 +767,6 @@ func (r MTLSCERTBindingType) IsKnown() bool {
 }
 
 type MTLSCERTBindingParam struct {
-	Certificate param.Field[interface{}] `json:"certificate,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[MTLSCERTBindingType] `json:"type,required"`
 	// ID of the certificate to bind to
