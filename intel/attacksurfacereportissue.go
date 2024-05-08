@@ -206,18 +206,18 @@ func (r attackSurfaceReportIssueListResponseResultJSON) RawJSON() string {
 }
 
 type AttackSurfaceReportIssueListResponseResultIssue struct {
-	ID          string                                                    `json:"id"`
-	Dismissed   bool                                                      `json:"dismissed"`
-	IssueClass  string                                                    `json:"issue_class"`
-	IssueType   AttackSurfaceReportIssueListResponseResultIssuesIssueType `json:"issue_type"`
-	Payload     interface{}                                               `json:"payload"`
-	ResolveLink string                                                    `json:"resolve_link"`
-	ResolveText string                                                    `json:"resolve_text"`
-	Severity    AttackSurfaceReportIssueListResponseResultIssuesSeverity  `json:"severity"`
-	Since       time.Time                                                 `json:"since" format:"date-time"`
-	Subject     string                                                    `json:"subject"`
-	Timestamp   time.Time                                                 `json:"timestamp" format:"date-time"`
-	JSON        attackSurfaceReportIssueListResponseResultIssueJSON       `json:"-"`
+	ID          string                                                   `json:"id"`
+	Dismissed   bool                                                     `json:"dismissed"`
+	IssueClass  string                                                   `json:"issue_class"`
+	IssueType   IssueType                                                `json:"issue_type"`
+	Payload     interface{}                                              `json:"payload"`
+	ResolveLink string                                                   `json:"resolve_link"`
+	ResolveText string                                                   `json:"resolve_text"`
+	Severity    AttackSurfaceReportIssueListResponseResultIssuesSeverity `json:"severity"`
+	Since       time.Time                                                `json:"since" format:"date-time"`
+	Subject     string                                                   `json:"subject"`
+	Timestamp   time.Time                                                `json:"timestamp" format:"date-time"`
+	JSON        attackSurfaceReportIssueListResponseResultIssueJSON      `json:"-"`
 }
 
 // attackSurfaceReportIssueListResponseResultIssueJSON contains the JSON metadata
@@ -244,24 +244,6 @@ func (r *AttackSurfaceReportIssueListResponseResultIssue) UnmarshalJSON(data []b
 
 func (r attackSurfaceReportIssueListResponseResultIssueJSON) RawJSON() string {
 	return r.raw
-}
-
-type AttackSurfaceReportIssueListResponseResultIssuesIssueType string
-
-const (
-	AttackSurfaceReportIssueListResponseResultIssuesIssueTypeComplianceViolation   AttackSurfaceReportIssueListResponseResultIssuesIssueType = "compliance_violation"
-	AttackSurfaceReportIssueListResponseResultIssuesIssueTypeEmailSecurity         AttackSurfaceReportIssueListResponseResultIssuesIssueType = "email_security"
-	AttackSurfaceReportIssueListResponseResultIssuesIssueTypeExposedInfrastructure AttackSurfaceReportIssueListResponseResultIssuesIssueType = "exposed_infrastructure"
-	AttackSurfaceReportIssueListResponseResultIssuesIssueTypeInsecureConfiguration AttackSurfaceReportIssueListResponseResultIssuesIssueType = "insecure_configuration"
-	AttackSurfaceReportIssueListResponseResultIssuesIssueTypeWeakAuthentication    AttackSurfaceReportIssueListResponseResultIssuesIssueType = "weak_authentication"
-)
-
-func (r AttackSurfaceReportIssueListResponseResultIssuesIssueType) IsKnown() bool {
-	switch r {
-	case AttackSurfaceReportIssueListResponseResultIssuesIssueTypeComplianceViolation, AttackSurfaceReportIssueListResponseResultIssuesIssueTypeEmailSecurity, AttackSurfaceReportIssueListResponseResultIssuesIssueTypeExposedInfrastructure, AttackSurfaceReportIssueListResponseResultIssuesIssueTypeInsecureConfiguration, AttackSurfaceReportIssueListResponseResultIssuesIssueTypeWeakAuthentication:
-		return true
-	}
-	return false
 }
 
 type AttackSurfaceReportIssueListResponseResultIssuesSeverity string

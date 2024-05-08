@@ -3457,6 +3457,7 @@ Params Types:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IssueType">IssueType</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#AttackSurfaceReportIssueListResponse">AttackSurfaceReportIssueListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#AttackSurfaceReportIssueClassResponse">AttackSurfaceReportIssueClassResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#AttackSurfaceReportIssueDismissResponseUnion">AttackSurfaceReportIssueDismissResponseUnion</a>
