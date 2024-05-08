@@ -1057,20 +1057,14 @@ func (r WaitingRoomNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomNewResponseEnvelope struct {
-	Errors   interface{}                        `json:"errors,required"`
-	Messages interface{}                        `json:"messages,required"`
-	Result   WaitingRoom                        `json:"result,required"`
-	Success  interface{}                        `json:"success,required"`
-	JSON     waitingRoomNewResponseEnvelopeJSON `json:"-"`
+	Result WaitingRoom                        `json:"result,required"`
+	JSON   waitingRoomNewResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomNewResponseEnvelope]
 type waitingRoomNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1094,20 +1088,14 @@ func (r WaitingRoomUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomUpdateResponseEnvelope struct {
-	Errors   interface{}                           `json:"errors,required"`
-	Messages interface{}                           `json:"messages,required"`
-	Result   WaitingRoom                           `json:"result,required"`
-	Success  interface{}                           `json:"success,required"`
-	JSON     waitingRoomUpdateResponseEnvelopeJSON `json:"-"`
+	Result WaitingRoom                           `json:"result,required"`
+	JSON   waitingRoomUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomUpdateResponseEnvelope]
 type waitingRoomUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1143,20 +1131,14 @@ type WaitingRoomDeleteParams struct {
 }
 
 type WaitingRoomDeleteResponseEnvelope struct {
-	Errors   interface{}                           `json:"errors,required"`
-	Messages interface{}                           `json:"messages,required"`
-	Result   WaitingRoomDeleteResponse             `json:"result,required"`
-	Success  interface{}                           `json:"success,required"`
-	JSON     waitingRoomDeleteResponseEnvelopeJSON `json:"-"`
+	Result WaitingRoomDeleteResponse             `json:"result,required"`
+	JSON   waitingRoomDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomDeleteResponseEnvelope]
 type waitingRoomDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1180,20 +1162,14 @@ func (r WaitingRoomEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomEditResponseEnvelope struct {
-	Errors   interface{}                         `json:"errors,required"`
-	Messages interface{}                         `json:"messages,required"`
-	Result   WaitingRoom                         `json:"result,required"`
-	Success  interface{}                         `json:"success,required"`
-	JSON     waitingRoomEditResponseEnvelopeJSON `json:"-"`
+	Result WaitingRoom                         `json:"result,required"`
+	JSON   waitingRoomEditResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomEditResponseEnvelope]
 type waitingRoomEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1212,20 +1188,14 @@ type WaitingRoomGetParams struct {
 }
 
 type WaitingRoomGetResponseEnvelope struct {
-	Errors   interface{}                        `json:"errors,required"`
-	Messages interface{}                        `json:"messages,required"`
-	Result   WaitingRoom                        `json:"result,required"`
-	Success  interface{}                        `json:"success,required"`
-	JSON     waitingRoomGetResponseEnvelopeJSON `json:"-"`
+	Result WaitingRoom                        `json:"result,required"`
+	JSON   waitingRoomGetResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomGetResponseEnvelope]
 type waitingRoomGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

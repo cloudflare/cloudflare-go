@@ -132,20 +132,14 @@ func (r PagePreviewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PagePreviewResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Result   PagePreviewResponse             `json:"result,required"`
-	Success  interface{}                     `json:"success,required"`
-	JSON     pagePreviewResponseEnvelopeJSON `json:"-"`
+	Result PagePreviewResponse             `json:"result,required"`
+	JSON   pagePreviewResponseEnvelopeJSON `json:"-"`
 }
 
 // pagePreviewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PagePreviewResponseEnvelope]
 type pagePreviewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

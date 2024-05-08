@@ -48,7 +48,6 @@ func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...o
 }
 
 type WhoisGetResponse struct {
-	Dnnsec                    interface{}          `json:"dnnsec,required"`
 	Domain                    string               `json:"domain,required"`
 	Extension                 string               `json:"extension,required"`
 	Found                     bool                 `json:"found,required"`
@@ -142,7 +141,6 @@ type WhoisGetResponse struct {
 // whoisGetResponseJSON contains the JSON metadata for the struct
 // [WhoisGetResponse]
 type whoisGetResponseJSON struct {
-	Dnnsec                    apijson.Field
 	Domain                    apijson.Field
 	Extension                 apijson.Field
 	Found                     apijson.Field

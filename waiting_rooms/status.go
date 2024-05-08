@@ -111,20 +111,14 @@ type StatusGetParams struct {
 }
 
 type StatusGetResponseEnvelope struct {
-	Errors   interface{}                   `json:"errors,required"`
-	Messages interface{}                   `json:"messages,required"`
-	Result   StatusGetResponse             `json:"result,required"`
-	Success  interface{}                   `json:"success,required"`
-	JSON     statusGetResponseEnvelopeJSON `json:"-"`
+	Result StatusGetResponse             `json:"result,required"`
+	JSON   statusGetResponseEnvelopeJSON `json:"-"`
 }
 
 // statusGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [StatusGetResponseEnvelope]
 type statusGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

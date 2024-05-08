@@ -247,19 +247,13 @@ func (r ScheduleNewParamsRegion) IsKnown() bool {
 }
 
 type ScheduleNewResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Success  interface{}                     `json:"success,required"`
-	Result   ScheduleNewResponse             `json:"result"`
-	JSON     scheduleNewResponseEnvelopeJSON `json:"-"`
+	Result ScheduleNewResponse             `json:"result"`
+	JSON   scheduleNewResponseEnvelopeJSON `json:"-"`
 }
 
 // scheduleNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [ScheduleNewResponseEnvelope]
 type scheduleNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -324,19 +318,13 @@ func (r ScheduleDeleteParamsRegion) IsKnown() bool {
 }
 
 type ScheduleDeleteResponseEnvelope struct {
-	Errors   interface{}                        `json:"errors,required"`
-	Messages interface{}                        `json:"messages,required"`
-	Success  interface{}                        `json:"success,required"`
-	Result   ScheduleDeleteResponse             `json:"result"`
-	JSON     scheduleDeleteResponseEnvelopeJSON `json:"-"`
+	Result ScheduleDeleteResponse             `json:"result"`
+	JSON   scheduleDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // scheduleDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [ScheduleDeleteResponseEnvelope]
 type scheduleDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -401,9 +389,6 @@ func (r ScheduleGetParamsRegion) IsKnown() bool {
 }
 
 type ScheduleGetResponseEnvelope struct {
-	Errors   interface{} `json:"errors,required"`
-	Messages interface{} `json:"messages,required"`
-	Success  interface{} `json:"success,required"`
 	// The test schedule.
 	Result Schedule                        `json:"result"`
 	JSON   scheduleGetResponseEnvelopeJSON `json:"-"`
@@ -412,9 +397,6 @@ type ScheduleGetResponseEnvelope struct {
 // scheduleGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [ScheduleGetResponseEnvelope]
 type scheduleGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

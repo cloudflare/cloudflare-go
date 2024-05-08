@@ -260,19 +260,13 @@ func (r PageTestNewParamsRegion) IsKnown() bool {
 }
 
 type PageTestNewResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Success  interface{}                     `json:"success,required"`
-	Result   Test                            `json:"result"`
-	JSON     pageTestNewResponseEnvelopeJSON `json:"-"`
+	Result Test                            `json:"result"`
+	JSON   pageTestNewResponseEnvelopeJSON `json:"-"`
 }
 
 // pageTestNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageTestNewResponseEnvelope]
 type pageTestNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -389,19 +383,13 @@ func (r PageTestDeleteParamsRegion) IsKnown() bool {
 }
 
 type PageTestDeleteResponseEnvelope struct {
-	Errors   interface{}                        `json:"errors,required"`
-	Messages interface{}                        `json:"messages,required"`
-	Success  interface{}                        `json:"success,required"`
-	Result   PageTestDeleteResponse             `json:"result"`
-	JSON     pageTestDeleteResponseEnvelopeJSON `json:"-"`
+	Result PageTestDeleteResponse             `json:"result"`
+	JSON   pageTestDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // pageTestDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageTestDeleteResponseEnvelope]
 type pageTestDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -421,19 +409,13 @@ type PageTestGetParams struct {
 }
 
 type PageTestGetResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Success  interface{}                     `json:"success,required"`
-	Result   Test                            `json:"result"`
-	JSON     pageTestGetResponseEnvelopeJSON `json:"-"`
+	Result Test                            `json:"result"`
+	JSON   pageTestGetResponseEnvelopeJSON `json:"-"`
 }
 
 // pageTestGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageTestGetResponseEnvelope]
 type pageTestGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
