@@ -134,34 +134,63 @@ func (UnionString) ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnio
 func (UnionString) ImplementsZeroTrustDeviceRevokeNewResponseUnion()                             {}
 func (UnionString) ImplementsZeroTrustDeviceUnrevokeNewResponseUnion()                           {}
 func (UnionString) ImplementsZeroTrustAppIDUnionParam()                                          {}
-func (UnionString) ImplementsZeroTrustAccessApplicationCANewResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustAccessApplicationCAGetResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustAccessKeyUpdateResponseUnion()                             {}
-func (UnionString) ImplementsZeroTrustAccessKeyGetResponseUnion()                                {}
-func (UnionString) ImplementsZeroTrustAccessKeyRotateResponseUnion()                             {}
-func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()                   {}
-func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()                              {}
-func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()                         {}
-func (UnionString) ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustGatewayListDeleteResponseUnion()                           {}
-func (UnionString) ImplementsZeroTrustGatewayLocationDeleteResponseUnion()                       {}
-func (UnionString) ImplementsZeroTrustGatewayProxyEndpointDeleteResponseUnion()                  {}
-func (UnionString) ImplementsZeroTrustGatewayRuleDeleteResponseUnion()                           {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion()                    {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion()                 {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion()                   {}
-func (UnionString) ImplementsZeroTrustRiskScoringResetResponseUnion()                            {}
-func (UnionString) ImplementsHyperdriveConfigDeleteResponseUnion()                               {}
-func (UnionString) ImplementsVectorizeIndexDeleteResponseUnion()                                 {}
-func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()                   {}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationCANewResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustAccessApplicationCAGetResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustAccessKeyUpdateResponseUnion()             {}
+func (UnionString) ImplementsZeroTrustAccessKeyGetResponseUnion()                {}
+func (UnionString) ImplementsZeroTrustAccessKeyRotateResponseUnion()             {}
+func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()   {}
+func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()              {}
+func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()         {}
+func (UnionString) ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustGatewayListDeleteResponseUnion()           {}
+func (UnionString) ImplementsZeroTrustGatewayLocationDeleteResponseUnion()       {}
+func (UnionString) ImplementsZeroTrustGatewayProxyEndpointDeleteResponseUnion()  {}
+func (UnionString) ImplementsZeroTrustGatewayRuleDeleteResponseUnion()           {}
+func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion()    {}
+func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion() {}
+func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion()   {}
+func (UnionString) ImplementsZeroTrustRiskScoringResetResponseUnion()            {}
+func (UnionString) ImplementsHyperdriveConfigDeleteResponseUnion()               {}
+func (UnionString) ImplementsVectorizeIndexDeleteResponseUnion()                 {}
+func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()   {}
 func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionUpdateResponseUnion() {
 }
 func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionGetResponseUnion() {
 }
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                           {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                                {}
+func (UnionString) ImplementsCloudforceOneRequestDeleteResponseUnion()                   {}
+func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponseUnion()            {}
+func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion()           {}
 func (UnionString) ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion() {}
 
 type UnionInt int64

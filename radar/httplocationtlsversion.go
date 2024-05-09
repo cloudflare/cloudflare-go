@@ -211,6 +211,8 @@ type HTTPLocationTLSVersionGetParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPLocationTLSVersionGetParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPLocationTLSVersionGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -283,6 +285,23 @@ const (
 func (r HTTPLocationTLSVersionGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPLocationTLSVersionGetParamsBotClassLikelyAutomated, HTTPLocationTLSVersionGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPLocationTLSVersionGetParamsBrowserFamily string
+
+const (
+	HTTPLocationTLSVersionGetParamsBrowserFamilyChrome  HTTPLocationTLSVersionGetParamsBrowserFamily = "CHROME"
+	HTTPLocationTLSVersionGetParamsBrowserFamilyEdge    HTTPLocationTLSVersionGetParamsBrowserFamily = "EDGE"
+	HTTPLocationTLSVersionGetParamsBrowserFamilyFirefox HTTPLocationTLSVersionGetParamsBrowserFamily = "FIREFOX"
+	HTTPLocationTLSVersionGetParamsBrowserFamilySafari  HTTPLocationTLSVersionGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPLocationTLSVersionGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPLocationTLSVersionGetParamsBrowserFamilyChrome, HTTPLocationTLSVersionGetParamsBrowserFamilyEdge, HTTPLocationTLSVersionGetParamsBrowserFamilyFirefox, HTTPLocationTLSVersionGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false
