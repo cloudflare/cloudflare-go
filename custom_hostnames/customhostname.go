@@ -19,10 +19,11 @@ import (
 )
 
 // CustomHostnameService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewCustomHostnameService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewCustomHostnameService] method instead.
 type CustomHostnameService struct {
 	Options        []option.RequestOption
 	FallbackOrigin *FallbackOriginService

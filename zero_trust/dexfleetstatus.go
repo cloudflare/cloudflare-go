@@ -17,10 +17,11 @@ import (
 )
 
 // DEXFleetStatusService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDEXFleetStatusService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDEXFleetStatusService] method instead.
 type DEXFleetStatusService struct {
 	Options []option.RequestOption
 	Devices *DEXFleetStatusDeviceService

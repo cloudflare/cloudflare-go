@@ -15,9 +15,11 @@ import (
 )
 
 // ASNService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewASNService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewASNService] method instead.
 type ASNService struct {
 	Options []option.RequestOption
 	Subnets *ASNSubnetService
