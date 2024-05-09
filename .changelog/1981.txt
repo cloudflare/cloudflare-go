@@ -1,0 +1,3 @@
+```release-note:enhancement
+Add Refresh Token, Custom Claims, and PKCE Without Client Secret support to Access OIDC SaaS Applications
+```

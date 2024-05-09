@@ -1115,7 +1115,18 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 					"grant_types": ["authorization_code"],
 					"scopes": ["openid", "email", "profile", "groups"],
 					"app_launcher_url": "https://saas.example.com",
-					"group_filter_regex": ".*"
+					"group_filter_regex": ".*",
+					"allow_pkce_without_client_secret": false,
+					"custom_claims": [
+						{
+							"name": "test1",
+							"source": {
+								"name": "test1"
+							},
+							"required": true,
+							"scope": "profile"
+						}
+					]
 				}
 			}
 		}
@@ -1141,14 +1152,23 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 		LogoURL:                "https://www.example.com/example.png",
 		SkipInterstitial:       BoolPtr(true),
 		SaasApplication: &SaasApplication{
-			AuthType:         "oidc",
-			ClientID:         "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
-			ClientSecret:     "secret",
-			RedirectURIs:     []string{"https://saas.example.com"},
-			GrantTypes:       []string{"authorization_code"},
-			Scopes:           []string{"openid", "email", "profile", "groups"},
-			AppLauncherURL:   "https://saas.example.com",
-			GroupFilterRegex: ".*",
+			AuthType:                     "oidc",
+			ClientID:                     "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+			ClientSecret:                 "secret",
+			RedirectURIs:                 []string{"https://saas.example.com"},
+			GrantTypes:                   []string{"authorization_code"},
+			Scopes:                       []string{"openid", "email", "profile", "groups"},
+			AppLauncherURL:               "https://saas.example.com",
+			GroupFilterRegex:             ".*",
+			AllowPKCEWithoutClientSecret: BoolPtr(false),
+			CustomClaims: []OIDCClaimConfig{
+				{
+					Name:     "test1",
+					Source:   SourceConfig{Name: "test1"},
+					Required: BoolPtr(true),
+					Scope:    "profile",
+				},
+			},
 		},
 		CreatedAt:                &createdAt,
 		UpdatedAt:                &updatedAt,
@@ -1161,10 +1181,19 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name: "Admin Saas Site",
 		SaasApplication: &SaasApplication{
-			AuthType:         "oidc",
-			RedirectURIs:     []string{"https://saas.example.com"},
-			AppLauncherURL:   "https://saas.example.com",
-			GroupFilterRegex: ".*",
+			AuthType:                     "oidc",
+			RedirectURIs:                 []string{"https://saas.example.com"},
+			AppLauncherURL:               "https://saas.example.com",
+			GroupFilterRegex:             ".*",
+			AllowPKCEWithoutClientSecret: BoolPtr(false),
+			CustomClaims: []OIDCClaimConfig{
+				{
+					Name:     "test1",
+					Source:   SourceConfig{Name: "test1"},
+					Required: BoolPtr(true),
+					Scope:    "profile",
+				},
+			},
 		},
 		SessionDuration: "24h",
 	})
@@ -1178,10 +1207,19 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name: "Admin Saas Site",
 		SaasApplication: &SaasApplication{
-			AuthType:         "oidc",
-			RedirectURIs:     []string{"https://saas.example.com"},
-			AppLauncherURL:   "https://saas.example.com",
-			GroupFilterRegex: ".*",
+			AuthType:                     "oidc",
+			RedirectURIs:                 []string{"https://saas.example.com"},
+			AppLauncherURL:               "https://saas.example.com",
+			GroupFilterRegex:             ".*",
+			AllowPKCEWithoutClientSecret: BoolPtr(false),
+			CustomClaims: []OIDCClaimConfig{
+				{
+					Name:     "test1",
+					Source:   SourceConfig{Name: "test1"},
+					Required: BoolPtr(true),
+					Scope:    "profile",
+				},
+			},
 		},
 		SessionDuration: "24h",
 	})
