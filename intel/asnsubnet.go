@@ -15,9 +15,11 @@ import (
 )
 
 // ASNSubnetService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewASNSubnetService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewASNSubnetService] method instead.
 type ASNSubnetService struct {
 	Options []option.RequestOption
 }

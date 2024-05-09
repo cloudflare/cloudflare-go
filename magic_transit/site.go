@@ -18,9 +18,11 @@ import (
 )
 
 // SiteService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewSiteService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSiteService] method instead.
 type SiteService struct {
 	Options []option.RequestOption
 	ACLs    *SiteACLService

@@ -17,9 +17,11 @@ import (
 )
 
 // HoldService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewHoldService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHoldService] method instead.
 type HoldService struct {
 	Options []option.RequestOption
 }
