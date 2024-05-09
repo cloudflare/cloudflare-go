@@ -16,10 +16,11 @@ import (
 )
 
 // SettingIPV6Service contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewSettingIPV6Service] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingIPV6Service] method instead.
 type SettingIPV6Service struct {
 	Options []option.RequestOption
 }

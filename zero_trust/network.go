@@ -7,9 +7,11 @@ import (
 )
 
 // NetworkService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewNetworkService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewNetworkService] method instead.
 type NetworkService struct {
 	Options         []option.RequestOption
 	Routes          *NetworkRouteService

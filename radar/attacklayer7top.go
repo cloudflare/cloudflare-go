@@ -16,10 +16,11 @@ import (
 )
 
 // AttackLayer7TopService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAttackLayer7TopService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAttackLayer7TopService] method instead.
 type AttackLayer7TopService struct {
 	Options   []option.RequestOption
 	Locations *AttackLayer7TopLocationService

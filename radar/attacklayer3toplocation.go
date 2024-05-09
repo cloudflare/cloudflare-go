@@ -16,10 +16,11 @@ import (
 )
 
 // AttackLayer3TopLocationService contains methods and other services that help
-// with interacting with the cloudflare API. Note, unlike clients, this service
-// does not read variables from the environment automatically. You should not
-// instantiate this service directly, and instead use the
-// [NewAttackLayer3TopLocationService] method instead.
+// with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAttackLayer3TopLocationService] method instead.
 type AttackLayer3TopLocationService struct {
 	Options []option.RequestOption
 }
