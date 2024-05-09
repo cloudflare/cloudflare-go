@@ -34,8 +34,11 @@ func NewAccessApplicationPolicyService(opts ...option.RequestOption) (r *AccessA
 	return
 }
 
-// Create a new Access policy for an application.
-func (r *AccessApplicationPolicyService) New(ctx context.Context, uuid string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *Policy, err error) {
+// Creates a policy applying exclusive to a single application that defines the
+// users or groups who can reach it. We recommend creating a reusable policy
+// instead and subsequently referencing its ID in the application's 'policies'
+// array.
+func (r *AccessApplicationPolicyService) New(ctx context.Context, uuid string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyNewResponseEnvelope
 	var accountOrZone string
@@ -56,8 +59,9 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, uuid string, p
 	return
 }
 
-// Update a configured Access policy.
-func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 string, uuid string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *Policy, err error) {
+// Updates an Access policy specific to an application. To update a reusable
+// policy, use the /account or zones/{identifier}/policies/{uid} endpoint.
+func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 string, uuid string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *AccessApplicationPolicyUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyUpdateResponseEnvelope
 	var accountOrZone string
@@ -78,8 +82,9 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 strin
 	return
 }
 
-// Lists Access policies configured for an application.
-func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Policy], err error) {
+// Lists Access policies configured for an application. Returns both exclusively
+// scoped and reusable policies used by the application.
+func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -105,12 +110,14 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, 
 	return res, nil
 }
 
-// Lists Access policies configured for an application.
-func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Policy] {
+// Lists Access policies configured for an application. Returns both exclusively
+// scoped and reusable policies used by the application.
+func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationPolicyListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, uuid, query, opts...))
 }
 
-// Delete an Access policy.
+// Deletes an Access policy specific to an application. To delete a reusable
+// policy, use the /account or zones/{identifier}/policies/{uid} endpoint.
 func (r *AccessApplicationPolicyService) Delete(ctx context.Context, uuid1 string, uuid string, body AccessApplicationPolicyDeleteParams, opts ...option.RequestOption) (res *AccessApplicationPolicyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyDeleteResponseEnvelope
@@ -132,8 +139,9 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, uuid1 strin
 	return
 }
 
-// Fetches a single Access policy.
-func (r *AccessApplicationPolicyService) Get(ctx context.Context, uuid1 string, uuid string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *Policy, err error) {
+// Fetches a single Access policy configured for an application. Returns both
+// exclusively owned and reusable policies used by the application.
+func (r *AccessApplicationPolicyService) Get(ctx context.Context, uuid1 string, uuid string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyGetResponseEnvelope
 	var accountOrZone string
@@ -196,8 +204,8 @@ func (r ApprovalGroupParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type Policy struct {
-	// UUID
+type AccessApplicationPolicyNewResponse struct {
+	// The ID of the Access policy.
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -206,7 +214,7 @@ type Policy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision PolicyDecision `json:"decision"`
+	Decision AccessApplicationPolicyNewResponseDecision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -219,8 +227,6 @@ type Policy struct {
 	IsolationRequired bool `json:"isolation_required"`
 	// The name of the Access policy.
 	Name string `json:"name"`
-	// The order of execution for this policy. Must be unique for each policy.
-	Precedence int64 `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
@@ -231,13 +237,14 @@ type Policy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string     `json:"session_duration"`
-	UpdatedAt       time.Time  `json:"updated_at" format:"date-time"`
-	JSON            policyJSON `json:"-"`
+	SessionDuration string                                 `json:"session_duration"`
+	UpdatedAt       time.Time                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationPolicyNewResponseJSON `json:"-"`
 }
 
-// policyJSON contains the JSON metadata for the struct [Policy]
-type policyJSON struct {
+// accessApplicationPolicyNewResponseJSON contains the JSON metadata for the struct
+// [AccessApplicationPolicyNewResponse]
+type accessApplicationPolicyNewResponseJSON struct {
 	ID                           apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
@@ -247,7 +254,6 @@ type policyJSON struct {
 	Include                      apijson.Field
 	IsolationRequired            apijson.Field
 	Name                         apijson.Field
-	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
 	Require                      apijson.Field
@@ -257,27 +263,197 @@ type policyJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *Policy) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r policyJSON) RawJSON() string {
+func (r accessApplicationPolicyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action Access will take if a user matches this policy.
-type PolicyDecision string
+type AccessApplicationPolicyNewResponseDecision string
 
 const (
-	PolicyDecisionAllow       PolicyDecision = "allow"
-	PolicyDecisionDeny        PolicyDecision = "deny"
-	PolicyDecisionNonIdentity PolicyDecision = "non_identity"
-	PolicyDecisionBypass      PolicyDecision = "bypass"
+	AccessApplicationPolicyNewResponseDecisionAllow       AccessApplicationPolicyNewResponseDecision = "allow"
+	AccessApplicationPolicyNewResponseDecisionDeny        AccessApplicationPolicyNewResponseDecision = "deny"
+	AccessApplicationPolicyNewResponseDecisionNonIdentity AccessApplicationPolicyNewResponseDecision = "non_identity"
+	AccessApplicationPolicyNewResponseDecisionBypass      AccessApplicationPolicyNewResponseDecision = "bypass"
 )
 
-func (r PolicyDecision) IsKnown() bool {
+func (r AccessApplicationPolicyNewResponseDecision) IsKnown() bool {
 	switch r {
-	case PolicyDecisionAllow, PolicyDecisionDeny, PolicyDecisionNonIdentity, PolicyDecisionBypass:
+	case AccessApplicationPolicyNewResponseDecisionAllow, AccessApplicationPolicyNewResponseDecisionDeny, AccessApplicationPolicyNewResponseDecisionNonIdentity, AccessApplicationPolicyNewResponseDecisionBypass:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationPolicyUpdateResponse struct {
+	// The ID of the Access policy.
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy.
+	Decision AccessApplicationPolicyUpdateResponseDecision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                    `json:"session_duration"`
+	UpdatedAt       time.Time                                 `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationPolicyUpdateResponseJSON `json:"-"`
+}
+
+// accessApplicationPolicyUpdateResponseJSON contains the JSON metadata for the
+// struct [AccessApplicationPolicyUpdateResponse]
+type accessApplicationPolicyUpdateResponseJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action Access will take if a user matches this policy.
+type AccessApplicationPolicyUpdateResponseDecision string
+
+const (
+	AccessApplicationPolicyUpdateResponseDecisionAllow       AccessApplicationPolicyUpdateResponseDecision = "allow"
+	AccessApplicationPolicyUpdateResponseDecisionDeny        AccessApplicationPolicyUpdateResponseDecision = "deny"
+	AccessApplicationPolicyUpdateResponseDecisionNonIdentity AccessApplicationPolicyUpdateResponseDecision = "non_identity"
+	AccessApplicationPolicyUpdateResponseDecisionBypass      AccessApplicationPolicyUpdateResponseDecision = "bypass"
+)
+
+func (r AccessApplicationPolicyUpdateResponseDecision) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyUpdateResponseDecisionAllow, AccessApplicationPolicyUpdateResponseDecisionDeny, AccessApplicationPolicyUpdateResponseDecisionNonIdentity, AccessApplicationPolicyUpdateResponseDecisionBypass:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationPolicyListResponse struct {
+	// The ID of the Access policy.
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy.
+	Decision AccessApplicationPolicyListResponseDecision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                  `json:"session_duration"`
+	UpdatedAt       time.Time                               `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationPolicyListResponseJSON `json:"-"`
+}
+
+// accessApplicationPolicyListResponseJSON contains the JSON metadata for the
+// struct [AccessApplicationPolicyListResponse]
+type accessApplicationPolicyListResponseJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action Access will take if a user matches this policy.
+type AccessApplicationPolicyListResponseDecision string
+
+const (
+	AccessApplicationPolicyListResponseDecisionAllow       AccessApplicationPolicyListResponseDecision = "allow"
+	AccessApplicationPolicyListResponseDecisionDeny        AccessApplicationPolicyListResponseDecision = "deny"
+	AccessApplicationPolicyListResponseDecisionNonIdentity AccessApplicationPolicyListResponseDecision = "non_identity"
+	AccessApplicationPolicyListResponseDecisionBypass      AccessApplicationPolicyListResponseDecision = "bypass"
+)
+
+func (r AccessApplicationPolicyListResponseDecision) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyListResponseDecisionAllow, AccessApplicationPolicyListResponseDecisionDeny, AccessApplicationPolicyListResponseDecisionNonIdentity, AccessApplicationPolicyListResponseDecisionBypass:
 		return true
 	}
 	return false
@@ -305,6 +481,91 @@ func (r accessApplicationPolicyDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type AccessApplicationPolicyGetResponse struct {
+	// The ID of the Access policy.
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy.
+	Decision AccessApplicationPolicyGetResponseDecision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                 `json:"session_duration"`
+	UpdatedAt       time.Time                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationPolicyGetResponseJSON `json:"-"`
+}
+
+// accessApplicationPolicyGetResponseJSON contains the JSON metadata for the struct
+// [AccessApplicationPolicyGetResponse]
+type accessApplicationPolicyGetResponseJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action Access will take if a user matches this policy.
+type AccessApplicationPolicyGetResponseDecision string
+
+const (
+	AccessApplicationPolicyGetResponseDecisionAllow       AccessApplicationPolicyGetResponseDecision = "allow"
+	AccessApplicationPolicyGetResponseDecisionDeny        AccessApplicationPolicyGetResponseDecision = "deny"
+	AccessApplicationPolicyGetResponseDecisionNonIdentity AccessApplicationPolicyGetResponseDecision = "non_identity"
+	AccessApplicationPolicyGetResponseDecisionBypass      AccessApplicationPolicyGetResponseDecision = "bypass"
+)
+
+func (r AccessApplicationPolicyGetResponseDecision) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyGetResponseDecisionAllow, AccessApplicationPolicyGetResponseDecisionDeny, AccessApplicationPolicyGetResponseDecisionNonIdentity, AccessApplicationPolicyGetResponseDecisionBypass:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationPolicyNewParams struct {
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[AccessApplicationPolicyNewParamsDecision] `json:"decision,required"`
@@ -329,7 +590,8 @@ type AccessApplicationPolicyNewParams struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy.
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
 	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
@@ -371,7 +633,7 @@ type AccessApplicationPolicyNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  Policy                                            `json:"result"`
+	Result  AccessApplicationPolicyNewResponse                `json:"result"`
 	JSON    accessApplicationPolicyNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -433,7 +695,8 @@ type AccessApplicationPolicyUpdateParams struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy.
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
 	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
@@ -475,7 +738,7 @@ type AccessApplicationPolicyUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Policy                                               `json:"result"`
+	Result  AccessApplicationPolicyUpdateResponse                `json:"result"`
 	JSON    accessApplicationPolicyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -582,7 +845,7 @@ type AccessApplicationPolicyGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  Policy                                            `json:"result"`
+	Result  AccessApplicationPolicyGetResponse                `json:"result"`
 	JSON    accessApplicationPolicyGetResponseEnvelopeJSON    `json:"-"`
 }
 

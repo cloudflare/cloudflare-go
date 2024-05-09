@@ -209,6 +209,8 @@ type HTTPAseBotClassGetParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPAseBotClassGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -265,6 +267,23 @@ const (
 func (r HTTPAseBotClassGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPAseBotClassGetParamsBotClassLikelyAutomated, HTTPAseBotClassGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPAseBotClassGetParamsBrowserFamily string
+
+const (
+	HTTPAseBotClassGetParamsBrowserFamilyChrome  HTTPAseBotClassGetParamsBrowserFamily = "CHROME"
+	HTTPAseBotClassGetParamsBrowserFamilyEdge    HTTPAseBotClassGetParamsBrowserFamily = "EDGE"
+	HTTPAseBotClassGetParamsBrowserFamilyFirefox HTTPAseBotClassGetParamsBrowserFamily = "FIREFOX"
+	HTTPAseBotClassGetParamsBrowserFamilySafari  HTTPAseBotClassGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPAseBotClassGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsBrowserFamilyChrome, HTTPAseBotClassGetParamsBrowserFamilyEdge, HTTPAseBotClassGetParamsBrowserFamilyFirefox, HTTPAseBotClassGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false

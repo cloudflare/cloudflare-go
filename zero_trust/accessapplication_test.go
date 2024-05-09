@@ -30,7 +30,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.New(context.TODO(), zero_trust.AccessApplicationNewParams{
-		Application: zero_trust.ApplicationSelfHostedApplicationParam{
+		Body: zero_trust.AccessApplicationNewParamsBodySelfHostedApplication{
 			AllowAuthenticateViaWARP: cloudflare.F(true),
 			AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F(true),
@@ -63,6 +63,16 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			SkipInterstitial:         cloudflare.F(true),
 			Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
 			Type:                     cloudflare.F("self_hosted"),
+			Policies: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				Precedence: cloudflare.F(int64(0)),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				Precedence: cloudflare.F(int64(0)),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				Precedence: cloudflare.F(int64(0)),
+			}}),
 		},
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
@@ -94,7 +104,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationUpdateParams{
-			Application: zero_trust.ApplicationSelfHostedApplicationParam{
+			Body: zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplication{
 				AllowAuthenticateViaWARP: cloudflare.F(true),
 				AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 				AppLauncherVisible:       cloudflare.F(true),
@@ -127,6 +137,16 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				SkipInterstitial:         cloudflare.F(true),
 				Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
 				Type:                     cloudflare.F("self_hosted"),
+				Policies: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					Precedence: cloudflare.F(int64(0)),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					Precedence: cloudflare.F(int64(0)),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					Precedence: cloudflare.F(int64(0)),
+				}}),
 			},
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),

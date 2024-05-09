@@ -216,7 +216,8 @@ func (r VersionGetResponseRule) AsUnion() VersionGetResponseRulesUnion {
 // [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule] or [rulesets.SetCacheSettingsRule].
+// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule] or
+// [rulesets.VersionGetResponseRulesRulesetsLogCustomFieldRule].
 type VersionGetResponseRulesUnion interface {
 	implementsRulesetsVersionGetResponseRule()
 }
@@ -300,7 +301,184 @@ func init() {
 			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
 			DiscriminatorValue: "set_cache_settings",
 		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionGetResponseRulesRulesetsLogCustomFieldRule{}),
+			DiscriminatorValue: "log_custom_field",
+		},
 	)
+}
+
+type VersionGetResponseRulesRulesetsLogCustomFieldRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action VersionGetResponseRulesRulesetsLogCustomFieldRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                                `json:"ref"`
+	JSON versionGetResponseRulesRulesetsLogCustomFieldRuleJSON `json:"-"`
+}
+
+// versionGetResponseRulesRulesetsLogCustomFieldRuleJSON contains the JSON metadata
+// for the struct [VersionGetResponseRulesRulesetsLogCustomFieldRule]
+type versionGetResponseRulesRulesetsLogCustomFieldRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *VersionGetResponseRulesRulesetsLogCustomFieldRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseRulesRulesetsLogCustomFieldRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseRulesRulesetsLogCustomFieldRule) implementsRulesetsVersionGetResponseRule() {
+}
+
+// The action to perform when the rule matches.
+type VersionGetResponseRulesRulesetsLogCustomFieldRuleAction string
+
+const (
+	VersionGetResponseRulesRulesetsLogCustomFieldRuleActionLogCustomField VersionGetResponseRulesRulesetsLogCustomFieldRuleAction = "log_custom_field"
+)
+
+func (r VersionGetResponseRulesRulesetsLogCustomFieldRuleAction) IsKnown() bool {
+	switch r {
+	case VersionGetResponseRulesRulesetsLogCustomFieldRuleActionLogCustomField:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParameters struct {
+	// The cookie fields to log.
+	CookieFields []VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField `json:"cookie_fields"`
+	// The request fields to log.
+	RequestFields []VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField `json:"request_fields"`
+	// The response fields to log.
+	ResponseFields []VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField `json:"response_fields"`
+	JSON           versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON            `json:"-"`
+}
+
+// versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON contains
+// the JSON metadata for the struct
+// [VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParameters]
+type versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON struct {
+	CookieFields   apijson.Field
+	RequestFields  apijson.Field
+	ResponseFields apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+// The cookie field to log.
+type VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField struct {
+	// The name of the field.
+	Name string                                                                           `json:"name,required"`
+	JSON versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON `json:"-"`
+}
+
+// versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField]
+type versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON) RawJSON() string {
+	return r.raw
+}
+
+// The request field to log.
+type VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField struct {
+	// The name of the field.
+	Name string                                                                            `json:"name,required"`
+	JSON versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON `json:"-"`
+}
+
+// versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField]
+type versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON) RawJSON() string {
+	return r.raw
+}
+
+// The response field to log.
+type VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField struct {
+	// The name of the field.
+	Name string                                                                             `json:"name,required"`
+	JSON versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON `json:"-"`
+}
+
+// versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField]
+type versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to perform when the rule matches.
@@ -322,11 +500,12 @@ const (
 	VersionGetResponseRulesActionSetConfig        VersionGetResponseRulesAction = "set_config"
 	VersionGetResponseRulesActionSkip             VersionGetResponseRulesAction = "skip"
 	VersionGetResponseRulesActionSetCacheSettings VersionGetResponseRulesAction = "set_cache_settings"
+	VersionGetResponseRulesActionLogCustomField   VersionGetResponseRulesAction = "log_custom_field"
 )
 
 func (r VersionGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case VersionGetResponseRulesActionBlock, VersionGetResponseRulesActionChallenge, VersionGetResponseRulesActionCompressResponse, VersionGetResponseRulesActionExecute, VersionGetResponseRulesActionJSChallenge, VersionGetResponseRulesActionLog, VersionGetResponseRulesActionManagedChallenge, VersionGetResponseRulesActionRedirect, VersionGetResponseRulesActionRewrite, VersionGetResponseRulesActionRoute, VersionGetResponseRulesActionScore, VersionGetResponseRulesActionServeError, VersionGetResponseRulesActionSetConfig, VersionGetResponseRulesActionSkip, VersionGetResponseRulesActionSetCacheSettings:
+	case VersionGetResponseRulesActionBlock, VersionGetResponseRulesActionChallenge, VersionGetResponseRulesActionCompressResponse, VersionGetResponseRulesActionExecute, VersionGetResponseRulesActionJSChallenge, VersionGetResponseRulesActionLog, VersionGetResponseRulesActionManagedChallenge, VersionGetResponseRulesActionRedirect, VersionGetResponseRulesActionRewrite, VersionGetResponseRulesActionRoute, VersionGetResponseRulesActionScore, VersionGetResponseRulesActionServeError, VersionGetResponseRulesActionSetConfig, VersionGetResponseRulesActionSkip, VersionGetResponseRulesActionSetCacheSettings, VersionGetResponseRulesActionLogCustomField:
 		return true
 	}
 	return false

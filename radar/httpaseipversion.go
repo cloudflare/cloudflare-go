@@ -211,6 +211,8 @@ type HTTPAseIPVersionGetParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPAseIPVersionGetParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPAseIPVersionGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -280,6 +282,23 @@ const (
 func (r HTTPAseIPVersionGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPAseIPVersionGetParamsBotClassLikelyAutomated, HTTPAseIPVersionGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPAseIPVersionGetParamsBrowserFamily string
+
+const (
+	HTTPAseIPVersionGetParamsBrowserFamilyChrome  HTTPAseIPVersionGetParamsBrowserFamily = "CHROME"
+	HTTPAseIPVersionGetParamsBrowserFamilyEdge    HTTPAseIPVersionGetParamsBrowserFamily = "EDGE"
+	HTTPAseIPVersionGetParamsBrowserFamilyFirefox HTTPAseIPVersionGetParamsBrowserFamily = "FIREFOX"
+	HTTPAseIPVersionGetParamsBrowserFamilySafari  HTTPAseIPVersionGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPAseIPVersionGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsBrowserFamilyChrome, HTTPAseIPVersionGetParamsBrowserFamilyEdge, HTTPAseIPVersionGetParamsBrowserFamilyFirefox, HTTPAseIPVersionGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false
