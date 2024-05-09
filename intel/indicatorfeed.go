@@ -346,7 +346,7 @@ type IndicatorFeedUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The new description of the feed
-	FeedDescription param.Field[string] `json:"feed_description"`
+	Description param.Field[string] `json:"description"`
 	// The new is_attributable value of the feed
 	IsAttributable param.Field[bool] `json:"is_attributable"`
 	// The new is_public value of the feed

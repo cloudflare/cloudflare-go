@@ -223,6 +223,8 @@ type HTTPLocationGetParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPLocationGetParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPLocationGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -277,6 +279,23 @@ const (
 func (r HTTPLocationGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPLocationGetParamsBotClassLikelyAutomated, HTTPLocationGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPLocationGetParamsBrowserFamily string
+
+const (
+	HTTPLocationGetParamsBrowserFamilyChrome  HTTPLocationGetParamsBrowserFamily = "CHROME"
+	HTTPLocationGetParamsBrowserFamilyEdge    HTTPLocationGetParamsBrowserFamily = "EDGE"
+	HTTPLocationGetParamsBrowserFamilyFirefox HTTPLocationGetParamsBrowserFamily = "FIREFOX"
+	HTTPLocationGetParamsBrowserFamilySafari  HTTPLocationGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPLocationGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPLocationGetParamsBrowserFamilyChrome, HTTPLocationGetParamsBrowserFamilyEdge, HTTPLocationGetParamsBrowserFamilyFirefox, HTTPLocationGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false

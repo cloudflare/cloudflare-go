@@ -61,7 +61,7 @@ func (r *CallService) Update(ctx context.Context, appID string, params CallUpdat
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CallsApp], err error) {
+func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *CallService) List(ctx context.Context, query CallListParams, opts ...op
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CallsApp] {
+func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -146,7 +146,7 @@ type CallsAppWithSecret struct {
 	Modified time.Time `json:"modified" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
 	Name string `json:"name"`
-	// Bearer token to use the Calls API.
+	// Bearer token
 	Secret string `json:"secret"`
 	// A Cloudflare-generated unique identifier for a item.
 	UID  string                 `json:"uid"`
