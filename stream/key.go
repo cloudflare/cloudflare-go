@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -41,7 +41,7 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 	opts = append(r.Options[:], opts...)
 	var env KeyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,10 +50,10 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *KeyService) Delete(ctx context.Context, identifier string, params KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponseUnion, err error) {
+func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys/%s", params.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -201,11 +201,6 @@ func (r KeyNewResponseEnvelopeSuccess) IsKnown() bool {
 type KeyDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type KeyDeleteResponseEnvelope struct {

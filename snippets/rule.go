@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -33,11 +33,11 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 }
 
 // Put Rules
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, body RuleUpdateParams, opts ...option.RequestOption) (res *[]RuleUpdateResponse, err error) {
+func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *[]RuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, body Ru
 }
 
 // Rules
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[RuleListResponse], err error) {
+func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -64,8 +64,8 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, opts ...o
 }
 
 // Rules
-func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
+func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type RuleUpdateResponse struct {
@@ -125,6 +125,8 @@ func (r ruleListResponseJSON) RawJSON() string {
 }
 
 type RuleUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// List of snippet rules
 	Rules param.Field[[]RuleUpdateParamsRule] `json:"rules"`
 }
@@ -148,11 +150,11 @@ func (r RuleUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// List of snippet rules
-	Result []RuleUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
+	// List of snippet rules
+	Result []RuleUpdateResponse           `json:"result"`
+	JSON   ruleUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // ruleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -160,8 +162,8 @@ type RuleUpdateResponseEnvelope struct {
 type ruleUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -187,4 +189,9 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RuleListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }

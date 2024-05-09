@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -246,9 +246,9 @@ func (r SettingTLSUpdateParamsSettingID) IsKnown() bool {
 type SettingTLSUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Setting               `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Setting                                 `json:"result"`
 	JSON    settingTLSUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -257,8 +257,8 @@ type SettingTLSUpdateResponseEnvelope struct {
 type settingTLSUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -309,11 +309,11 @@ func (r SettingTLSDeleteParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   SettingTLSDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  SettingTLSDeleteResponse                `json:"result"`
 	JSON    settingTLSDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -322,8 +322,8 @@ type SettingTLSDeleteResponseEnvelope struct {
 type settingTLSDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -374,11 +374,11 @@ func (r SettingTLSGetParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   []SettingTLSGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    SettingTLSGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []SettingTLSGetResponse                 `json:"result,nullable"`
 	ResultInfo SettingTLSGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       settingTLSGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -388,8 +388,8 @@ type SettingTLSGetResponseEnvelope struct {
 type settingTLSGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

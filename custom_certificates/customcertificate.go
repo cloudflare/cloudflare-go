@@ -16,9 +16,9 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/keyless_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -83,10 +83,10 @@ func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params Cu
 }
 
 // Remove a SSL certificate from a zone.
-func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, params CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
+func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, body CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
+	path := fmt.Sprintf("zones/%s/custom_certificates/%s", body.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -279,6 +279,25 @@ func (r GeoRestrictionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Client Certificates may be active or revoked, and the pending_reactivation or
+// pending_revocation represent in-progress asynchronous transitions
+type Status string
+
+const (
+	StatusActive              Status = "active"
+	StatusPendingReactivation Status = "pending_reactivation"
+	StatusPendingRevocation   Status = "pending_revocation"
+	StatusRevoked             Status = "revoked"
+)
+
+func (r Status) IsKnown() bool {
+	switch r {
+	case StatusActive, StatusPendingReactivation, StatusPendingRevocation, StatusRevoked:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [custom_certificates.CustomCertificateNewResponseUnknown] or
 // [shared.UnionString].
 type CustomCertificateNewResponseUnion interface {
@@ -397,23 +416,23 @@ type CustomCertificateNewParamsType string
 
 const (
 	CustomCertificateNewParamsTypeLegacyCustom CustomCertificateNewParamsType = "legacy_custom"
-	CustomCertificateNewParamsTypeSniCustom    CustomCertificateNewParamsType = "sni_custom"
+	CustomCertificateNewParamsTypeSNICustom    CustomCertificateNewParamsType = "sni_custom"
 )
 
 func (r CustomCertificateNewParamsType) IsKnown() bool {
 	switch r {
-	case CustomCertificateNewParamsTypeLegacyCustom, CustomCertificateNewParamsTypeSniCustom:
+	case CustomCertificateNewParamsTypeLegacyCustom, CustomCertificateNewParamsTypeSNICustom:
 		return true
 	}
 	return false
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   CustomCertificateNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomCertificateNewResponseUnion           `json:"result"`
 	JSON    customCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -422,8 +441,8 @@ type CustomCertificateNewResponseEnvelope struct {
 type customCertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -511,19 +530,14 @@ func (r CustomCertificateListParamsStatus) IsKnown() bool {
 type CustomCertificateDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r CustomCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   CustomCertificateDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomCertificateDeleteResponse                `json:"result"`
 	JSON    customCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -532,8 +546,8 @@ type CustomCertificateDeleteResponseEnvelope struct {
 type customCertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -598,11 +612,11 @@ func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   CustomCertificateEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomCertificateEditResponseUnion           `json:"result"`
 	JSON    customCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -611,8 +625,8 @@ type CustomCertificateEditResponseEnvelope struct {
 type customCertificateEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -646,11 +660,11 @@ type CustomCertificateGetParams struct {
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   CustomCertificateGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomCertificateGetResponseUnion           `json:"result"`
 	JSON    customCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -659,8 +673,8 @@ type CustomCertificateGetResponseEnvelope struct {
 type customCertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

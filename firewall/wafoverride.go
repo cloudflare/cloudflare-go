@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // WAFOverrideService contains methods and other services that help with
@@ -100,7 +100,7 @@ func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier 
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) Delete(ctx context.Context, zoneIdentifier string, id string, body WAFOverrideDeleteParams, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
+func (r *WAFOverrideService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
@@ -255,22 +255,22 @@ func (r RewriteActionDisable) IsKnown() bool {
 	return false
 }
 
-type WAFRule map[string]WAFRuleItem
+type WAFRule map[string]WAFRuleItemItem
 
 // The WAF rule action to apply.
-type WAFRuleItem string
+type WAFRuleItemItem string
 
 const (
-	WAFRuleItemChallenge WAFRuleItem = "challenge"
-	WAFRuleItemBlock     WAFRuleItem = "block"
-	WAFRuleItemSimulate  WAFRuleItem = "simulate"
-	WAFRuleItemDisable   WAFRuleItem = "disable"
-	WAFRuleItemDefault   WAFRuleItem = "default"
+	WAFRuleItemItemChallenge WAFRuleItemItem = "challenge"
+	WAFRuleItemItemBlock     WAFRuleItemItem = "block"
+	WAFRuleItemItemSimulate  WAFRuleItemItem = "simulate"
+	WAFRuleItemItemDisable   WAFRuleItemItem = "disable"
+	WAFRuleItemItemDefault   WAFRuleItemItem = "default"
 )
 
-func (r WAFRuleItem) IsKnown() bool {
+func (r WAFRuleItemItem) IsKnown() bool {
 	switch r {
-	case WAFRuleItemChallenge, WAFRuleItemBlock, WAFRuleItemSimulate, WAFRuleItemDisable, WAFRuleItemDefault:
+	case WAFRuleItemItemChallenge, WAFRuleItemItemBlock, WAFRuleItemItemSimulate, WAFRuleItemItemDisable, WAFRuleItemItemDefault:
 		return true
 	}
 	return false
@@ -413,14 +413,6 @@ func (r WAFOverrideListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type WAFOverrideDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r WAFOverrideDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type WAFOverrideDeleteResponseEnvelope struct {

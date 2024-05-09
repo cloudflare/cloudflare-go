@@ -22,7 +22,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v2@v2.1.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v2@v2.2.0'
 ```
 
 <!-- x-release-please-end -->
@@ -57,7 +57,7 @@ func main() {
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.TypeFull),
 	})
 	if err != nil {
 		panic(err.Error())

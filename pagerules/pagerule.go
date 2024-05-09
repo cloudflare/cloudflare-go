@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -79,10 +79,10 @@ func (r *PageruleService) List(ctx context.Context, params PageruleListParams, o
 }
 
 // Deletes an existing Page Rule.
-func (r *PageruleService) Delete(ctx context.Context, pageruleID string, params PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
+func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules/%s", params.ZoneID, pageruleID)
+	path := fmt.Sprintf("zones/%s/pagerules/%s", body.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -281,12 +281,12 @@ func (r RouteValueParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A request condition target.
+// URL target.
 type Target struct {
 	// String constraint.
-	Constraint TargetConstraint `json:"constraint,required"`
+	Constraint TargetConstraint `json:"constraint"`
 	// A target based on the URL of the request.
-	Target TargetTarget `json:"target,required"`
+	Target TargetTarget `json:"target"`
 	JSON   targetJSON   `json:"-"`
 }
 
@@ -367,12 +367,12 @@ func (r TargetTarget) IsKnown() bool {
 	return false
 }
 
-// A request condition target.
+// URL target.
 type TargetParam struct {
 	// String constraint.
-	Constraint param.Field[TargetConstraintParam] `json:"constraint,required"`
+	Constraint param.Field[TargetConstraintParam] `json:"constraint"`
 	// A target based on the URL of the request.
-	Target param.Field[TargetTarget] `json:"target,required"`
+	Target param.Field[TargetTarget] `json:"target"`
 }
 
 func (r TargetParam) MarshalJSON() (data []byte, err error) {
@@ -777,11 +777,6 @@ func (r PageruleListResponseEnvelopeSuccess) IsKnown() bool {
 type PageruleDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r PageruleDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type PageruleDeleteResponseEnvelope struct {

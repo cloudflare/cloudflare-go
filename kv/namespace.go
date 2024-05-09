@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -96,10 +96,10 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceL
 }
 
 // Deletes the namespace corresponding to the given ID.
-func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, params NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponseUnion, err error) {
+func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", params.AccountID, namespaceID)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", body.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -332,11 +332,6 @@ func (r NamespaceListParamsOrder) IsKnown() bool {
 type NamespaceDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r NamespaceDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type NamespaceDeleteResponseEnvelope struct {

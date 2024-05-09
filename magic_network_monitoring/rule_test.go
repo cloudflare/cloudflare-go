@@ -15,7 +15,6 @@ import (
 )
 
 func TestRuleNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -42,7 +41,6 @@ func TestRuleNew(t *testing.T) {
 }
 
 func TestRuleUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -69,7 +67,6 @@ func TestRuleUpdate(t *testing.T) {
 }
 
 func TestRuleList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -95,7 +92,6 @@ func TestRuleList(t *testing.T) {
 }
 
 func TestRuleDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -113,7 +109,6 @@ func TestRuleDelete(t *testing.T) {
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
 		magic_network_monitoring.RuleDeleteParams{
 			AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -126,7 +121,6 @@ func TestRuleDelete(t *testing.T) {
 }
 
 func TestRuleEdit(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -157,7 +151,6 @@ func TestRuleEdit(t *testing.T) {
 }
 
 func TestRuleGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

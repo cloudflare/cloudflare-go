@@ -16,7 +16,6 @@ import (
 )
 
 func TestAttackLayer3TimeseriesGroupBitrateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,7 +52,6 @@ func TestAttackLayer3TimeseriesGroupBitrateWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TimeseriesGroupDurationWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,7 +88,6 @@ func TestAttackLayer3TimeseriesGroupDurationWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TimeseriesGroupGetWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -124,7 +121,6 @@ func TestAttackLayer3TimeseriesGroupGetWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TimeseriesGroupIndustryWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -161,7 +157,6 @@ func TestAttackLayer3TimeseriesGroupIndustryWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -197,7 +192,6 @@ func TestAttackLayer3TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -233,7 +227,6 @@ func TestAttackLayer3TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TimeseriesGroupVectorWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -271,7 +264,6 @@ func TestAttackLayer3TimeseriesGroupVectorWithOptionalParams(t *testing.T) {
 }
 
 func TestAttackLayer3TimeseriesGroupVerticalWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

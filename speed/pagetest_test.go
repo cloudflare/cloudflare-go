@@ -14,8 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/speed"
 )
 
-func TestTestNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+func TestPageTestNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,12 +27,12 @@ func TestTestNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Speed.Tests.New(
+	_, err := client.Speed.Pages.Tests.New(
 		context.TODO(),
 		"example.com",
-		speed.TestNewParams{
+		speed.PageTestNewParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Region: cloudflare.F(speed.TestNewParamsRegionUsCentral1),
+			Region: cloudflare.F(speed.PageTestNewParamsRegionUsCentral1),
 		},
 	)
 	if err != nil {
@@ -45,8 +44,7 @@ func TestTestNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestTestListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+func TestPageTestListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,14 +57,14 @@ func TestTestListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Speed.Tests.List(
+	_, err := client.Speed.Pages.Tests.List(
 		context.TODO(),
 		"example.com",
-		speed.TestListParams{
+		speed.PageTestListParams{
 			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Page:    cloudflare.F(int64(1)),
 			PerPage: cloudflare.F(int64(20)),
-			Region:  cloudflare.F(speed.TestListParamsRegionUsCentral1),
+			Region:  cloudflare.F(speed.PageTestListParamsRegionUsCentral1),
 		},
 	)
 	if err != nil {
@@ -78,8 +76,7 @@ func TestTestListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestTestDeleteWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+func TestPageTestDeleteWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -92,12 +89,12 @@ func TestTestDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Speed.Tests.Delete(
+	_, err := client.Speed.Pages.Tests.Delete(
 		context.TODO(),
 		"example.com",
-		speed.TestDeleteParams{
+		speed.PageTestDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Region: cloudflare.F(speed.TestDeleteParamsRegionUsCentral1),
+			Region: cloudflare.F(speed.PageTestDeleteParamsRegionUsCentral1),
 		},
 	)
 	if err != nil {
@@ -109,8 +106,7 @@ func TestTestDeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestTestGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+func TestPageTestGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -123,11 +119,11 @@ func TestTestGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Speed.Tests.Get(
+	_, err := client.Speed.Pages.Tests.Get(
 		context.TODO(),
 		"example.com",
 		"string",
-		speed.TestGetParams{
+		speed.PageTestGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

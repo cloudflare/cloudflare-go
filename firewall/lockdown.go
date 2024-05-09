@@ -15,8 +15,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -89,7 +89,7 @@ func (r *LockdownService) ListAutoPaging(ctx context.Context, zoneIdentifier str
 }
 
 // Deletes an existing Zone Lockdown rule.
-func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, body LockdownDeleteParams, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
+func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LockdownDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
@@ -192,34 +192,6 @@ func (r ConfigurationTarget) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-type ConfigurationParam struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the Zone Lockdown rule.
-	Target param.Field[ConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-//
-// Satisfied by [firewall.LockdownIPConfigurationParam],
-// [firewall.LockdownCIDRConfigurationParam], [ConfigurationParam].
-type ConfigurationUnionParam interface {
-	implementsFirewallConfigurationUnionParam()
 }
 
 type Lockdown struct {
@@ -514,14 +486,6 @@ func (r LockdownListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type LockdownDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r LockdownDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type LockdownDeleteResponseEnvelope struct {

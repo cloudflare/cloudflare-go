@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // ListService contains methods and other services that help with interacting with
@@ -68,7 +68,7 @@ func (r *ListService) List(ctx context.Context, query ListListParams, opts ...op
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/rules/lists", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,10 +86,10 @@ func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, 
 }
 
 // Deletes a specific list and all its items.
-func (r *ListService) Delete(ctx context.Context, listID string, params ListDeleteParams, opts ...option.RequestOption) (res *ListDeleteResponse, err error) {
+func (r *ListService) Delete(ctx context.Context, listID string, body ListDeleteParams, opts ...option.RequestOption) (res *ListDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s", params.AccountID, listID)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s", body.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -442,11 +442,6 @@ type ListListParams struct {
 type ListDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ListDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ListDeleteResponseEnvelope struct {

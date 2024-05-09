@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // PeerService contains methods and other services that help with interacting with
@@ -64,7 +64,7 @@ func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...op
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -82,10 +82,10 @@ func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, 
 }
 
 // Delete Peer.
-func (r *PeerService) Delete(ctx context.Context, peerID string, params PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
+func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", params.AccountID, peerID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", body.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -302,11 +302,6 @@ type PeerListParams struct {
 
 type PeerDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r PeerDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type PeerDeleteResponseEnvelope struct {

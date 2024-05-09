@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // ScriptScheduleService contains methods and other services that help with
@@ -80,13 +80,6 @@ func (r *Schedule) UnmarshalJSON(data []byte) (err error) {
 
 func (r scheduleJSON) RawJSON() string {
 	return r.raw
-}
-
-type ScheduleParam struct {
-}
-
-func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type ScriptScheduleUpdateResponse struct {

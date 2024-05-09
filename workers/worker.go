@@ -67,7 +67,6 @@ type Binding struct {
 	Outbound  interface{} `json:"outbound,required"`
 	// ID of the certificate to bind to
 	CertificateID string      `json:"certificate_id"`
-	Certificate   interface{} `json:"certificate,required"`
 	JSON          bindingJSON `json:"-"`
 	union         BindingUnion
 }
@@ -88,7 +87,6 @@ type bindingJSON struct {
 	Namespace     apijson.Field
 	Outbound      apijson.Field
 	CertificateID apijson.Field
-	Certificate   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -247,8 +245,7 @@ type BindingParam struct {
 	Namespace param.Field[string]      `json:"namespace"`
 	Outbound  param.Field[interface{}] `json:"outbound,required"`
 	// ID of the certificate to bind to
-	CertificateID param.Field[string]      `json:"certificate_id"`
-	Certificate   param.Field[interface{}] `json:"certificate,required"`
+	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
 func (r BindingParam) MarshalJSON() (data []byte, err error) {
@@ -726,7 +723,6 @@ func (r MigrationStepTransferredClassParam) MarshalJSON() (data []byte, err erro
 }
 
 type MTLSCERTBinding struct {
-	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -738,7 +734,6 @@ type MTLSCERTBinding struct {
 
 // mtlscertBindingJSON contains the JSON metadata for the struct [MTLSCERTBinding]
 type mtlscertBindingJSON struct {
-	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -772,7 +767,6 @@ func (r MTLSCERTBindingType) IsKnown() bool {
 }
 
 type MTLSCERTBindingParam struct {
-	Certificate param.Field[interface{}] `json:"certificate,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[MTLSCERTBindingType] `json:"type,required"`
 	// ID of the certificate to bind to
@@ -996,10 +990,10 @@ func (r singleStepMigrationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SingleStepMigration) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
+func (r SingleStepMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
 }
 
-func (r SingleStepMigration) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
+func (r SingleStepMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
 }
 
 type SingleStepMigrationRenamedClass struct {
@@ -1075,10 +1069,10 @@ func (r SingleStepMigrationParam) MarshalJSON() (data []byte, err error) {
 func (r SingleStepMigrationParam) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SingleStepMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SingleStepMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
+func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 type SingleStepMigrationRenamedClassParam struct {
@@ -1129,10 +1123,10 @@ func (r steppedMigrationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SteppedMigration) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
+func (r SteppedMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
 }
 
-func (r SteppedMigration) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
+func (r SteppedMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
 }
 
 type SteppedMigrationParam struct {
@@ -1152,10 +1146,10 @@ func (r SteppedMigrationParam) MarshalJSON() (data []byte, err error) {
 func (r SteppedMigrationParam) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SteppedMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r SteppedMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
-func (r SteppedMigrationParam) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
+func (r SteppedMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.

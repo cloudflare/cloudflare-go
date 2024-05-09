@@ -15,7 +15,6 @@ import (
 )
 
 func TestTSIGNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -46,7 +45,6 @@ func TestTSIGNew(t *testing.T) {
 }
 
 func TestTSIGUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,7 +79,6 @@ func TestTSIGUpdate(t *testing.T) {
 }
 
 func TestTSIGList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -107,7 +104,6 @@ func TestTSIGList(t *testing.T) {
 }
 
 func TestTSIGDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -125,7 +121,6 @@ func TestTSIGDelete(t *testing.T) {
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
 		secondary_dns.TSIGDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -138,7 +133,6 @@ func TestTSIGDelete(t *testing.T) {
 }
 
 func TestTSIGGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

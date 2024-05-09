@@ -9,14 +9,14 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
 func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -32,7 +32,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Applications.New(context.TODO(), zero_trust.AccessApplicationNewParams{
 		Application: zero_trust.ApplicationSelfHostedApplicationParam{
 			AllowAuthenticateViaWARP: cloudflare.F(true),
-			AllowedIdps:              cloudflare.F([]zero_trust.AllowedIdpshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+			AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F(true),
 			AutoRedirectToIdentity:   cloudflare.F(true),
 			CORSHeaders: cloudflare.F(zero_trust.CORSHeadersParam{
@@ -40,15 +40,15 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				AllowAllMethods:  cloudflare.F(true),
 				AllowAllOrigins:  cloudflare.F(true),
 				AllowCredentials: cloudflare.F(true),
-				AllowedHeaders:   cloudflare.F([]zero_trust.AllowedHeadershParam{"string", "string", "string"}),
-				AllowedMethods:   cloudflare.F([]zero_trust.AllowedMethodsh{zero_trust.AllowedMethodshGet}),
-				AllowedOrigins:   cloudflare.F([]zero_trust.AllowedOriginshParam{"https://example.com"}),
+				AllowedHeaders:   cloudflare.F([]zero_trust.AllowedHeadersParam{"string", "string", "string"}),
+				AllowedMethods:   cloudflare.F([]zero_trust.AllowedMethods{zero_trust.AllowedMethodsGet}),
+				AllowedOrigins:   cloudflare.F([]zero_trust.AllowedOriginsParam{"https://example.com"}),
 				MaxAge:           cloudflare.F(-1.000000),
 			}),
 			CustomDenyMessage:        cloudflare.F("string"),
 			CustomDenyURL:            cloudflare.F("string"),
 			CustomNonIdentityDenyURL: cloudflare.F("string"),
-			CustomPages:              cloudflare.F([]zero_trust.CustomPageshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			Domain:                   cloudflare.F("test.example.com/admin"),
 			EnableBindingCookie:      cloudflare.F(true),
 			HTTPOnlyCookieAttribute:  cloudflare.F(true),
@@ -57,7 +57,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			OptionsPreflightBypass:   cloudflare.F(true),
 			PathCookieAttribute:      cloudflare.F(true),
 			SameSiteCookieAttribute:  cloudflare.F("strict"),
-			SelfHostedDomains:        cloudflare.F([]zero_trust.SelfHostedDomainshParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
+			SelfHostedDomains:        cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
 			ServiceAuth401Redirect:   cloudflare.F(true),
 			SessionDuration:          cloudflare.F("24h"),
 			SkipInterstitial:         cloudflare.F(true),
@@ -77,7 +77,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -96,7 +96,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.AccessApplicationUpdateParams{
 			Application: zero_trust.ApplicationSelfHostedApplicationParam{
 				AllowAuthenticateViaWARP: cloudflare.F(true),
-				AllowedIdps:              cloudflare.F([]zero_trust.AllowedIdpshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+				AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 				AppLauncherVisible:       cloudflare.F(true),
 				AutoRedirectToIdentity:   cloudflare.F(true),
 				CORSHeaders: cloudflare.F(zero_trust.CORSHeadersParam{
@@ -104,15 +104,15 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					AllowAllMethods:  cloudflare.F(true),
 					AllowAllOrigins:  cloudflare.F(true),
 					AllowCredentials: cloudflare.F(true),
-					AllowedHeaders:   cloudflare.F([]zero_trust.AllowedHeadershParam{"string", "string", "string"}),
-					AllowedMethods:   cloudflare.F([]zero_trust.AllowedMethodsh{zero_trust.AllowedMethodshGet}),
-					AllowedOrigins:   cloudflare.F([]zero_trust.AllowedOriginshParam{"https://example.com"}),
+					AllowedHeaders:   cloudflare.F([]zero_trust.AllowedHeadersParam{"string", "string", "string"}),
+					AllowedMethods:   cloudflare.F([]zero_trust.AllowedMethods{zero_trust.AllowedMethodsGet}),
+					AllowedOrigins:   cloudflare.F([]zero_trust.AllowedOriginsParam{"https://example.com"}),
 					MaxAge:           cloudflare.F(-1.000000),
 				}),
 				CustomDenyMessage:        cloudflare.F("string"),
 				CustomDenyURL:            cloudflare.F("string"),
 				CustomNonIdentityDenyURL: cloudflare.F("string"),
-				CustomPages:              cloudflare.F([]zero_trust.CustomPageshParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+				CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 				Domain:                   cloudflare.F("test.example.com/admin"),
 				EnableBindingCookie:      cloudflare.F(true),
 				HTTPOnlyCookieAttribute:  cloudflare.F(true),
@@ -121,7 +121,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				OptionsPreflightBypass:   cloudflare.F(true),
 				PathCookieAttribute:      cloudflare.F(true),
 				SameSiteCookieAttribute:  cloudflare.F("strict"),
-				SelfHostedDomains:        cloudflare.F([]zero_trust.SelfHostedDomainshParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
+				SelfHostedDomains:        cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
 				ServiceAuth401Redirect:   cloudflare.F(true),
 				SessionDuration:          cloudflare.F("24h"),
 				SkipInterstitial:         cloudflare.F(true),
@@ -142,7 +142,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -169,7 +169,7 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -200,7 +200,7 @@ func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -231,7 +231,7 @@ func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
 }
 
 func TestAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

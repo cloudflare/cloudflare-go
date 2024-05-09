@@ -15,7 +15,6 @@ import (
 )
 
 func TestRoleList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,7 +28,7 @@ func TestRoleList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Roles.List(context.TODO(), accounts.RoleListParams{
-		AccountID: cloudflare.F[any](map[string]interface{}{}),
+		AccountID: cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -41,7 +40,6 @@ func TestRoleList(t *testing.T) {
 }
 
 func TestRoleGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,7 +56,7 @@ func TestRoleGet(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		accounts.RoleGetParams{
-			AccountID: cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("string"),
 		},
 	)
 	if err != nil {

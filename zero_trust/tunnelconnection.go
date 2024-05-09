@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -37,11 +37,11 @@ func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnecti
 
 // Removes connections that are in a disconnected or pending reconnect state. We
 // recommend running this command after shutting down a tunnel.
-func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponseUnion, err error) {
+func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, body TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectionDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/tunnels/%s/connections", params.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/tunnels/%s/connections", body.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -178,11 +178,6 @@ func (r TunnelConnectionDeleteResponseArray) ImplementsZeroTrustTunnelConnection
 type TunnelConnectionDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r TunnelConnectionDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type TunnelConnectionDeleteResponseEnvelope struct {

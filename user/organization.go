@@ -9,13 +9,14 @@ import (
 	"net/url"
 	"reflect"
 
+	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -61,7 +62,7 @@ func (r *OrganizationService) ListAutoPaging(ctx context.Context, query Organiza
 }
 
 // Removes association to an organization.
-func (r *OrganizationService) Delete(ctx context.Context, organizationID string, body OrganizationDeleteParams, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
+func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -91,8 +92,8 @@ type Organization struct {
 	// List of roles that a user has within an organization.
 	Roles []string `json:"roles"`
 	// Whether the user is a member of the organization or has an inivitation pending.
-	Status OrganizationStatus `json:"status"`
-	JSON   organizationJSON   `json:"-"`
+	Status accounts.Status  `json:"status"`
+	JSON   organizationJSON `json:"-"`
 }
 
 // organizationJSON contains the JSON metadata for the struct [Organization]
@@ -112,22 +113,6 @@ func (r *Organization) UnmarshalJSON(data []byte) (err error) {
 
 func (r organizationJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the user is a member of the organization or has an inivitation pending.
-type OrganizationStatus string
-
-const (
-	OrganizationStatusMember  OrganizationStatus = "member"
-	OrganizationStatusInvited OrganizationStatus = "invited"
-)
-
-func (r OrganizationStatus) IsKnown() bool {
-	switch r {
-	case OrganizationStatusMember, OrganizationStatusInvited:
-		return true
-	}
-	return false
 }
 
 type OrganizationDeleteResponse struct {
@@ -257,14 +242,6 @@ func (r OrganizationListParamsStatus) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type OrganizationDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r OrganizationDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type OrganizationGetResponseEnvelope struct {

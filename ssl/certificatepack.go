@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -65,10 +65,10 @@ func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params Cert
 }
 
 // For a given zone, delete an advanced certificate pack.
-func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, params CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
+func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, body CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -84,7 +84,7 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -108,6 +108,79 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 type Host = string
 
 type HostParam = string
+
+// The number of days for which the certificate should be valid.
+type RequestValidity float64
+
+const (
+	RequestValidity7    RequestValidity = 7
+	RequestValidity30   RequestValidity = 30
+	RequestValidity90   RequestValidity = 90
+	RequestValidity365  RequestValidity = 365
+	RequestValidity730  RequestValidity = 730
+	RequestValidity1095 RequestValidity = 1095
+	RequestValidity5475 RequestValidity = 5475
+)
+
+func (r RequestValidity) IsKnown() bool {
+	switch r {
+	case RequestValidity7, RequestValidity30, RequestValidity90, RequestValidity365, RequestValidity730, RequestValidity1095, RequestValidity5475:
+		return true
+	}
+	return false
+}
+
+// Status of certificate pack.
+type Status string
+
+const (
+	StatusInitializing         Status = "initializing"
+	StatusPendingValidation    Status = "pending_validation"
+	StatusDeleted              Status = "deleted"
+	StatusPendingIssuance      Status = "pending_issuance"
+	StatusPendingDeployment    Status = "pending_deployment"
+	StatusPendingDeletion      Status = "pending_deletion"
+	StatusPendingExpiration    Status = "pending_expiration"
+	StatusExpired              Status = "expired"
+	StatusActive               Status = "active"
+	StatusInitializingTimedOut Status = "initializing_timed_out"
+	StatusValidationTimedOut   Status = "validation_timed_out"
+	StatusIssuanceTimedOut     Status = "issuance_timed_out"
+	StatusDeploymentTimedOut   Status = "deployment_timed_out"
+	StatusDeletionTimedOut     Status = "deletion_timed_out"
+	StatusPendingCleanup       Status = "pending_cleanup"
+	StatusStagingDeployment    Status = "staging_deployment"
+	StatusStagingActive        Status = "staging_active"
+	StatusDeactivating         Status = "deactivating"
+	StatusInactive             Status = "inactive"
+	StatusBackupIssued         Status = "backup_issued"
+	StatusHoldingDeployment    Status = "holding_deployment"
+)
+
+func (r Status) IsKnown() bool {
+	switch r {
+	case StatusInitializing, StatusPendingValidation, StatusDeleted, StatusPendingIssuance, StatusPendingDeployment, StatusPendingDeletion, StatusPendingExpiration, StatusExpired, StatusActive, StatusInitializingTimedOut, StatusValidationTimedOut, StatusIssuanceTimedOut, StatusDeploymentTimedOut, StatusDeletionTimedOut, StatusPendingCleanup, StatusStagingDeployment, StatusStagingActive, StatusDeactivating, StatusInactive, StatusBackupIssued, StatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
+// Validation method in use for a certificate pack order.
+type ValidationMethod string
+
+const (
+	ValidationMethodHTTP  ValidationMethod = "http"
+	ValidationMethodCNAME ValidationMethod = "cname"
+	ValidationMethodTXT   ValidationMethod = "txt"
+)
+
+func (r ValidationMethod) IsKnown() bool {
+	switch r {
+	case ValidationMethodHTTP, ValidationMethodCNAME, ValidationMethodTXT:
+		return true
+	}
+	return false
+}
 
 type CertificatePackListResponse = interface{}
 
@@ -147,7 +220,7 @@ type CertificatePackEditResponse struct {
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
 	Hosts []Host `json:"hosts"`
 	// Status of certificate pack.
-	Status CertificatePackEditResponseStatus `json:"status"`
+	Status Status `json:"status"`
 	// Type of certificate pack.
 	Type CertificatePackEditResponseType `json:"type"`
 	// Validation Method selected for the order.
@@ -193,41 +266,6 @@ const (
 func (r CertificatePackEditResponseCertificateAuthority) IsKnown() bool {
 	switch r {
 	case CertificatePackEditResponseCertificateAuthorityGoogle, CertificatePackEditResponseCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
-// Status of certificate pack.
-type CertificatePackEditResponseStatus string
-
-const (
-	CertificatePackEditResponseStatusInitializing         CertificatePackEditResponseStatus = "initializing"
-	CertificatePackEditResponseStatusPendingValidation    CertificatePackEditResponseStatus = "pending_validation"
-	CertificatePackEditResponseStatusDeleted              CertificatePackEditResponseStatus = "deleted"
-	CertificatePackEditResponseStatusPendingIssuance      CertificatePackEditResponseStatus = "pending_issuance"
-	CertificatePackEditResponseStatusPendingDeployment    CertificatePackEditResponseStatus = "pending_deployment"
-	CertificatePackEditResponseStatusPendingDeletion      CertificatePackEditResponseStatus = "pending_deletion"
-	CertificatePackEditResponseStatusPendingExpiration    CertificatePackEditResponseStatus = "pending_expiration"
-	CertificatePackEditResponseStatusExpired              CertificatePackEditResponseStatus = "expired"
-	CertificatePackEditResponseStatusActive               CertificatePackEditResponseStatus = "active"
-	CertificatePackEditResponseStatusInitializingTimedOut CertificatePackEditResponseStatus = "initializing_timed_out"
-	CertificatePackEditResponseStatusValidationTimedOut   CertificatePackEditResponseStatus = "validation_timed_out"
-	CertificatePackEditResponseStatusIssuanceTimedOut     CertificatePackEditResponseStatus = "issuance_timed_out"
-	CertificatePackEditResponseStatusDeploymentTimedOut   CertificatePackEditResponseStatus = "deployment_timed_out"
-	CertificatePackEditResponseStatusDeletionTimedOut     CertificatePackEditResponseStatus = "deletion_timed_out"
-	CertificatePackEditResponseStatusPendingCleanup       CertificatePackEditResponseStatus = "pending_cleanup"
-	CertificatePackEditResponseStatusStagingDeployment    CertificatePackEditResponseStatus = "staging_deployment"
-	CertificatePackEditResponseStatusStagingActive        CertificatePackEditResponseStatus = "staging_active"
-	CertificatePackEditResponseStatusDeactivating         CertificatePackEditResponseStatus = "deactivating"
-	CertificatePackEditResponseStatusInactive             CertificatePackEditResponseStatus = "inactive"
-	CertificatePackEditResponseStatusBackupIssued         CertificatePackEditResponseStatus = "backup_issued"
-	CertificatePackEditResponseStatusHoldingDeployment    CertificatePackEditResponseStatus = "holding_deployment"
-)
-
-func (r CertificatePackEditResponseStatus) IsKnown() bool {
-	switch r {
-	case CertificatePackEditResponseStatusInitializing, CertificatePackEditResponseStatusPendingValidation, CertificatePackEditResponseStatusDeleted, CertificatePackEditResponseStatusPendingIssuance, CertificatePackEditResponseStatusPendingDeployment, CertificatePackEditResponseStatusPendingDeletion, CertificatePackEditResponseStatusPendingExpiration, CertificatePackEditResponseStatusExpired, CertificatePackEditResponseStatusActive, CertificatePackEditResponseStatusInitializingTimedOut, CertificatePackEditResponseStatusValidationTimedOut, CertificatePackEditResponseStatusIssuanceTimedOut, CertificatePackEditResponseStatusDeploymentTimedOut, CertificatePackEditResponseStatusDeletionTimedOut, CertificatePackEditResponseStatusPendingCleanup, CertificatePackEditResponseStatusStagingDeployment, CertificatePackEditResponseStatusStagingActive, CertificatePackEditResponseStatusDeactivating, CertificatePackEditResponseStatusInactive, CertificatePackEditResponseStatusBackupIssued, CertificatePackEditResponseStatusHoldingDeployment:
 		return true
 	}
 	return false
@@ -334,19 +372,14 @@ func (r CertificatePackListParamsStatus) IsKnown() bool {
 type CertificatePackDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r CertificatePackDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type CertificatePackDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   CertificatePackDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CertificatePackDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  CertificatePackDeleteResponse                `json:"result"`
 	JSON    certificatePackDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -355,8 +388,8 @@ type CertificatePackDeleteResponseEnvelope struct {
 type certificatePackDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -395,11 +428,11 @@ func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CertificatePackEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   CertificatePackEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CertificatePackEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  CertificatePackEditResponse                `json:"result"`
 	JSON    certificatePackEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -408,8 +441,8 @@ type CertificatePackEditResponseEnvelope struct {
 type certificatePackEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -443,11 +476,11 @@ type CertificatePackGetParams struct {
 }
 
 type CertificatePackGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   CertificatePackGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  CertificatePackGetResponseUnion           `json:"result"`
 	JSON    certificatePackGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -456,8 +489,8 @@ type CertificatePackGetResponseEnvelope struct {
 type certificatePackGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

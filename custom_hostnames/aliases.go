@@ -4,7 +4,7 @@ package custom_hostnames
 
 import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 type Error = apierror.Error
@@ -43,6 +43,35 @@ type AuditLogOwner = shared.AuditLogOwner
 
 // This is an alias to an internal type.
 type AuditLogResource = shared.AuditLogResource
+
+// The Certificate Authority that will issue the certificate
+//
+// This is an alias to an internal type.
+type CertificateCA = shared.CertificateCA
+
+// This is an alias to an internal value.
+const CertificateCADigicert = shared.CertificateCADigicert
+
+// This is an alias to an internal value.
+const CertificateCAGoogle = shared.CertificateCAGoogle
+
+// This is an alias to an internal value.
+const CertificateCALetsEncrypt = shared.CertificateCALetsEncrypt
+
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+//
+// This is an alias to an internal type.
+type CertificateRequestType = shared.CertificateRequestType
+
+// This is an alias to an internal value.
+const CertificateRequestTypeOriginRSA = shared.CertificateRequestTypeOriginRSA
+
+// This is an alias to an internal value.
+const CertificateRequestTypeOriginECC = shared.CertificateRequestTypeOriginECC
+
+// This is an alias to an internal value.
+const CertificateRequestTypeKeylessCertificate = shared.CertificateRequestTypeKeylessCertificate
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
@@ -113,3 +142,14 @@ type ResponseInfo = shared.ResponseInfo
 
 // This is an alias to an internal type.
 type Role = shared.Role
+
+// Direction to order DNS records in.
+//
+// This is an alias to an internal type.
+type SortDirection = shared.SortDirection
+
+// This is an alias to an internal value.
+const SortDirectionAsc = shared.SortDirectionAsc
+
+// This is an alias to an internal value.
+const SortDirectionDesc = shared.SortDirectionDesc

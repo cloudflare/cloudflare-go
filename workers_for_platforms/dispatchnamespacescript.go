@@ -17,8 +17,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/workers"
 )
 
@@ -237,7 +237,7 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
@@ -246,7 +246,7 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) impleme
 // [workers.SteppedMigrationParam],
 // [DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations].
 type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
+	ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
 }
 
 // Usage model to apply to invocations.
@@ -311,15 +311,10 @@ func (r DispatchNamespaceScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DispatchNamespaceScriptDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
 	// objects will be deleted along with the script.
 	Force param.Field[bool] `query:"force"`
-}
-
-func (r DispatchNamespaceScriptDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [DispatchNamespaceScriptDeleteParams]'s query parameters as

@@ -15,7 +15,7 @@ import (
 )
 
 func TestSnippetUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("throwing HTTP 415")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,10 +30,10 @@ func TestSnippetUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Snippets.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"snippet_name_01",
 		snippets.SnippetUpdateParams{
-			Files: cloudflare.F("export { async function fetch(request, env) {return new Response('some_response') } }"),
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Files:  cloudflare.F("export { async function fetch(request, env) {return new Response('some_response') } }"),
 			Metadata: cloudflare.F(snippets.SnippetUpdateParamsMetadata{
 				MainModule: cloudflare.F("main.js"),
 			}),
@@ -49,7 +49,6 @@ func TestSnippetUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestSnippetList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -62,7 +61,9 @@ func TestSnippetList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Snippets.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Snippets.List(context.TODO(), snippets.SnippetListParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -73,7 +74,6 @@ func TestSnippetList(t *testing.T) {
 }
 
 func TestSnippetDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -88,8 +88,10 @@ func TestSnippetDelete(t *testing.T) {
 	)
 	_, err := client.Snippets.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"snippet_name_01",
+		snippets.SnippetDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -101,7 +103,6 @@ func TestSnippetDelete(t *testing.T) {
 }
 
 func TestSnippetGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -116,8 +117,10 @@ func TestSnippetGet(t *testing.T) {
 	)
 	_, err := client.Snippets.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"snippet_name_01",
+		snippets.SnippetGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

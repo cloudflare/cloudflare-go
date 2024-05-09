@@ -15,8 +15,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -99,10 +99,10 @@ func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListPar
 }
 
 // Delete DNS Record
-func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, params RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
+func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
+	path := fmt.Sprintf("zones/%s/dns_records/%s", body.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -183,7 +183,7 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 	opts = append(r.Options[:], opts...)
 	var env RecordScanResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_records/scan", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -3378,7 +3378,7 @@ func (r URIRecord) implementsDNSRecord() {}
 // Components of a URI record.
 type URIRecordData struct {
 	// The record content.
-	Content string `json:"content"`
+	Target string `json:"target"`
 	// The record weight.
 	Weight float64           `json:"weight"`
 	JSON   uriRecordDataJSON `json:"-"`
@@ -3386,7 +3386,7 @@ type URIRecordData struct {
 
 // uriRecordDataJSON contains the JSON metadata for the struct [URIRecordData]
 type uriRecordDataJSON struct {
-	Content     apijson.Field
+	Target      apijson.Field
 	Weight      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3445,7 +3445,7 @@ func (r URIRecordParam) implementsDNSRecordUnionParam() {}
 // Components of a URI record.
 type URIRecordDataParam struct {
 	// The record content.
-	Content param.Field[string] `json:"content"`
+	Target param.Field[string] `json:"target"`
 	// The record weight.
 	Weight param.Field[float64] `json:"weight"`
 }
@@ -3639,7 +3639,7 @@ type RecordListParams struct {
 	// DNS record content.
 	Content param.Field[string] `query:"content"`
 	// Direction to order DNS records in.
-	Direction param.Field[RecordListParamsDirection] `query:"direction"`
+	Direction param.Field[shared.SortDirection] `query:"direction"`
 	// Whether to match all search requirements or at least one (any). If set to `all`,
 	// acts like a logical AND between filters. If set to `any`, acts like a logical OR
 	// instead. Note that the interaction between tag filters is controlled by the
@@ -3702,22 +3702,6 @@ func (r RecordListParamsComment) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-// Direction to order DNS records in.
-type RecordListParamsDirection string
-
-const (
-	RecordListParamsDirectionAsc  RecordListParamsDirection = "asc"
-	RecordListParamsDirectionDesc RecordListParamsDirection = "desc"
-)
-
-func (r RecordListParamsDirection) IsKnown() bool {
-	switch r {
-	case RecordListParamsDirectionAsc, RecordListParamsDirectionDesc:
-		return true
-	}
-	return false
 }
 
 // Whether to match all search requirements or at least one (any). If set to `all`,
@@ -3847,11 +3831,6 @@ func (r RecordListParamsType) IsKnown() bool {
 type RecordDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r RecordDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type RecordDeleteResponseEnvelope struct {

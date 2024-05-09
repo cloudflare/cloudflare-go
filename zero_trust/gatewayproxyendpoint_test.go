@@ -15,7 +15,6 @@ import (
 )
 
 func TestGatewayProxyEndpointNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -43,7 +42,6 @@ func TestGatewayProxyEndpointNew(t *testing.T) {
 }
 
 func TestGatewayProxyEndpointList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -69,7 +67,6 @@ func TestGatewayProxyEndpointList(t *testing.T) {
 }
 
 func TestGatewayProxyEndpointDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,7 +84,6 @@ func TestGatewayProxyEndpointDelete(t *testing.T) {
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayProxyEndpointDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -100,7 +96,6 @@ func TestGatewayProxyEndpointDelete(t *testing.T) {
 }
 
 func TestGatewayProxyEndpointEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -132,7 +127,6 @@ func TestGatewayProxyEndpointEditWithOptionalParams(t *testing.T) {
 }
 
 func TestGatewayProxyEndpointGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

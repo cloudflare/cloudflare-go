@@ -18,7 +18,7 @@ import (
 )
 
 func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -113,7 +113,6 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -132,7 +131,6 @@ func TestDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 			Force:     cloudflare.F(true),
 		},
 	)
@@ -146,7 +144,6 @@ func TestDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestDispatchNamespaceScriptGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

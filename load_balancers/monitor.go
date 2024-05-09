@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // MonitorService contains methods and other services that help with interacting
@@ -69,7 +69,7 @@ func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,10 +87,10 @@ func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListPa
 }
 
 // Delete a configured monitor.
-func (r *MonitorService) Delete(ctx context.Context, monitorID string, params MonitorDeleteParams, opts ...option.RequestOption) (res *MonitorDeleteResponse, err error) {
+func (r *MonitorService) Delete(ctx context.Context, monitorID string, body MonitorDeleteParams, opts ...option.RequestOption) (res *MonitorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", body.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -508,11 +508,6 @@ type MonitorListParams struct {
 type MonitorDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r MonitorDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type MonitorDeleteResponseEnvelope struct {

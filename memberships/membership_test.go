@@ -15,7 +15,6 @@ import (
 )
 
 func TestMembershipUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -45,7 +44,6 @@ func TestMembershipUpdate(t *testing.T) {
 }
 
 func TestMembershipListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -79,7 +77,6 @@ func TestMembershipListWithOptionalParams(t *testing.T) {
 }
 
 func TestMembershipDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -92,13 +89,7 @@ func TestMembershipDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Memberships.Delete(
-		context.TODO(),
-		"4536bcfad5faccb111b47003c79917fa",
-		memberships.MembershipDeleteParams{
-			Body: map[string]interface{}{},
-		},
-	)
+	_, err := client.Memberships.Delete(context.TODO(), "4536bcfad5faccb111b47003c79917fa")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -109,7 +100,6 @@ func TestMembershipDelete(t *testing.T) {
 }
 
 func TestMembershipGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

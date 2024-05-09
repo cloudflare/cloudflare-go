@@ -15,7 +15,6 @@ import (
 )
 
 func TestDLPProfileCustomNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -141,7 +140,6 @@ func TestDLPProfileCustomNew(t *testing.T) {
 }
 
 func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -213,7 +211,6 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestDLPProfileCustomDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -231,7 +228,6 @@ func TestDLPProfileCustomDelete(t *testing.T) {
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
 		zero_trust.DLPProfileCustomDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -244,7 +240,6 @@ func TestDLPProfileCustomDelete(t *testing.T) {
 }
 
 func TestDLPProfileCustomGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -99,11 +99,11 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 // This operation is asynchronous. To get current the operation status, invoke the
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
-func (r *ListItemService) Delete(ctx context.Context, listID string, params ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
+func (r *ListItemService) Delete(ctx context.Context, listID string, body ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListItemDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", body.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -143,27 +143,6 @@ func (r *ListCursor) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r listCursorJSON) RawJSON() string {
-	return r.raw
-}
-
-type ListItem struct {
-	// The unique operation ID of the asynchronous action.
-	OperationID string       `json:"operation_id"`
-	JSON        listItemJSON `json:"-"`
-}
-
-// listItemJSON contains the JSON metadata for the struct [ListItem]
-type listItemJSON struct {
-	OperationID apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -438,21 +417,7 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 
 type ListItemDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string]                     `path:"account_id,required"`
-	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
-}
-
-func (r ListItemDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ListItemDeleteParamsItem struct {
-	// The unique ID of the item in the List.
-	ID param.Field[string] `json:"id"`
-}
-
-func (r ListItemDeleteParamsItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ListItemDeleteResponseEnvelope struct {

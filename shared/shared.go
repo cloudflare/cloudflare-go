@@ -176,6 +176,41 @@ func (r auditLogResourceJSON) RawJSON() string {
 	return r.raw
 }
 
+// The Certificate Authority that will issue the certificate
+type CertificateCA string
+
+const (
+	CertificateCADigicert    CertificateCA = "digicert"
+	CertificateCAGoogle      CertificateCA = "google"
+	CertificateCALetsEncrypt CertificateCA = "lets_encrypt"
+)
+
+func (r CertificateCA) IsKnown() bool {
+	switch r {
+	case CertificateCADigicert, CertificateCAGoogle, CertificateCALetsEncrypt:
+		return true
+	}
+	return false
+}
+
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+type CertificateRequestType string
+
+const (
+	CertificateRequestTypeOriginRSA          CertificateRequestType = "origin-rsa"
+	CertificateRequestTypeOriginECC          CertificateRequestType = "origin-ecc"
+	CertificateRequestTypeKeylessCertificate CertificateRequestType = "keyless-certificate"
+)
+
+func (r CertificateRequestType) IsKnown() bool {
+	switch r {
+	case CertificateRequestTypeOriginRSA, CertificateRequestTypeOriginECC, CertificateRequestTypeKeylessCertificate:
+		return true
+	}
+	return false
+}
+
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type CloudflareTunnel struct {
 	// UUID of the tunnel.
@@ -607,4 +642,20 @@ func (r *Role) UnmarshalJSON(data []byte) (err error) {
 
 func (r roleJSON) RawJSON() string {
 	return r.raw
+}
+
+// Direction to order DNS records in.
+type SortDirection string
+
+const (
+	SortDirectionAsc  SortDirection = "asc"
+	SortDirectionDesc SortDirection = "desc"
+)
+
+func (r SortDirection) IsKnown() bool {
+	switch r {
+	case SortDirectionAsc, SortDirectionDesc:
+		return true
+	}
+	return false
 }

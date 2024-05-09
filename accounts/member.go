@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // MemberService contains methods and other services that help with interacting
@@ -38,7 +38,7 @@ func NewMemberService(opts ...option.RequestOption) (r *MemberService) {
 func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ...option.RequestOption) (res *UserWithInviteCode, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/members", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -51,7 +51,7 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *shared.Member, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members/%s", params.AccountID, memberID)
+	path := fmt.Sprintf("accounts/%s/members/%s", params.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -65,7 +65,7 @@ func (r *MemberService) List(ctx context.Context, params MemberListParams, opts 
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%v/members", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/members", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -84,10 +84,10 @@ func (r *MemberService) ListAutoPaging(ctx context.Context, params MemberListPar
 }
 
 // Remove a member from an account.
-func (r *MemberService) Delete(ctx context.Context, memberID string, params MemberDeleteParams, opts ...option.RequestOption) (res *MemberDeleteResponse, err error) {
+func (r *MemberService) Delete(ctx context.Context, memberID string, body MemberDeleteParams, opts ...option.RequestOption) (res *MemberDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members/%s", params.AccountID, memberID)
+	path := fmt.Sprintf("accounts/%s/members/%s", body.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -100,13 +100,29 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, params Memb
 func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *shared.Member, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members/%s", query.AccountID, memberID)
+	path := fmt.Sprintf("accounts/%s/members/%s", query.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
+}
+
+// Whether the user is a member of the organization or has an inivitation pending.
+type Status string
+
+const (
+	StatusMember  Status = "member"
+	StatusInvited Status = "invited"
+)
+
+func (r Status) IsKnown() bool {
+	switch r {
+	case StatusMember, StatusInvited:
+		return true
+	}
+	return false
 }
 
 type UserWithInviteCode struct {
@@ -322,7 +338,7 @@ func (r memberDeleteResponseJSON) RawJSON() string {
 }
 
 type MemberNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
 	// Array of roles associated with this member.
@@ -393,8 +409,8 @@ func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MemberUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
-	Member    shared.MemberParam       `json:"member,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Member    shared.MemberParam  `json:"member,required"`
 }
 
 func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -445,7 +461,7 @@ func (r MemberUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MemberListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Direction to order results.
 	Direction param.Field[MemberListParamsDirection] `query:"direction"`
 	// Field to order results by.
@@ -518,12 +534,7 @@ func (r MemberListParamsStatus) IsKnown() bool {
 }
 
 type MemberDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
-	Body      interface{}              `json:"body,required"`
-}
-
-func (r MemberDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type MemberDeleteResponseEnvelope struct {
@@ -570,7 +581,7 @@ func (r MemberDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MemberGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type MemberGetResponseEnvelope struct {

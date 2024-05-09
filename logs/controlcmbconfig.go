@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // ControlCmbConfigService contains methods and other services that help with
@@ -46,10 +46,10 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 }
 
 // Deletes CMB config.
-func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponse, err error) {
+func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -159,11 +159,6 @@ func (r ControlCmbConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 type ControlCmbConfigDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ControlCmbConfigDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ControlCmbConfigDeleteResponseEnvelope struct {

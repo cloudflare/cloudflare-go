@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AddressMapService contains methods and other services that help with interacting
@@ -58,7 +58,7 @@ func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,10 +77,10 @@ func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMap
 
 // Delete a particular address map owned by the account. An Address Map must be
 // disabled before it can be deleted.
-func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, params AddressMapDeleteParams, opts ...option.RequestOption) (res *[]AddressMapDeleteResponse, err error) {
+func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, body AddressMapDeleteParams, opts ...option.RequestOption) (res *[]AddressMapDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", body.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -130,7 +130,7 @@ type AddressMap struct {
 	// handshake from a client without an SNI, it will respond with the default SNI on
 	// those IPs. The default SNI can be any valid zone or subdomain owned by the
 	// account.
-	DefaultSni string `json:"default_sni,nullable"`
+	DefaultSNI string `json:"default_sni,nullable"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
 	Description string `json:"description,nullable"`
@@ -147,7 +147,7 @@ type addressMapJSON struct {
 	CanDelete    apijson.Field
 	CanModifyIPs apijson.Field
 	CreatedAt    apijson.Field
-	DefaultSni   apijson.Field
+	DefaultSNI   apijson.Field
 	Description  apijson.Field
 	Enabled      apijson.Field
 	ModifiedAt   apijson.Field
@@ -161,6 +161,22 @@ func (r *AddressMap) UnmarshalJSON(data []byte) (err error) {
 
 func (r addressMapJSON) RawJSON() string {
 	return r.raw
+}
+
+// The type of the membership.
+type Kind string
+
+const (
+	KindZone    Kind = "zone"
+	KindAccount Kind = "account"
+)
+
+func (r Kind) IsKnown() bool {
+	switch r {
+	case KindZone, KindAccount:
+		return true
+	}
+	return false
 }
 
 type AddressMapNewResponse struct {
@@ -178,7 +194,7 @@ type AddressMapNewResponse struct {
 	// handshake from a client without an SNI, it will respond with the default SNI on
 	// those IPs. The default SNI can be any valid zone or subdomain owned by the
 	// account.
-	DefaultSni string `json:"default_sni,nullable"`
+	DefaultSNI string `json:"default_sni,nullable"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
 	Description string `json:"description,nullable"`
@@ -201,7 +217,7 @@ type addressMapNewResponseJSON struct {
 	CanDelete    apijson.Field
 	CanModifyIPs apijson.Field
 	CreatedAt    apijson.Field
-	DefaultSni   apijson.Field
+	DefaultSNI   apijson.Field
 	Description  apijson.Field
 	Enabled      apijson.Field
 	IPs          apijson.Field
@@ -250,8 +266,8 @@ type AddressMapNewResponseMembership struct {
 	// Identifier
 	Identifier string `json:"identifier"`
 	// The type of the membership.
-	Kind AddressMapNewResponseMembershipsKind `json:"kind"`
-	JSON addressMapNewResponseMembershipJSON  `json:"-"`
+	Kind Kind                                `json:"kind"`
+	JSON addressMapNewResponseMembershipJSON `json:"-"`
 }
 
 // addressMapNewResponseMembershipJSON contains the JSON metadata for the struct
@@ -273,22 +289,6 @@ func (r addressMapNewResponseMembershipJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of the membership.
-type AddressMapNewResponseMembershipsKind string
-
-const (
-	AddressMapNewResponseMembershipsKindZone    AddressMapNewResponseMembershipsKind = "zone"
-	AddressMapNewResponseMembershipsKindAccount AddressMapNewResponseMembershipsKind = "account"
-)
-
-func (r AddressMapNewResponseMembershipsKind) IsKnown() bool {
-	switch r {
-	case AddressMapNewResponseMembershipsKindZone, AddressMapNewResponseMembershipsKindAccount:
-		return true
-	}
-	return false
-}
-
 type AddressMapDeleteResponse = interface{}
 
 type AddressMapGetResponse struct {
@@ -306,7 +306,7 @@ type AddressMapGetResponse struct {
 	// handshake from a client without an SNI, it will respond with the default SNI on
 	// those IPs. The default SNI can be any valid zone or subdomain owned by the
 	// account.
-	DefaultSni string `json:"default_sni,nullable"`
+	DefaultSNI string `json:"default_sni,nullable"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
 	Description string `json:"description,nullable"`
@@ -329,7 +329,7 @@ type addressMapGetResponseJSON struct {
 	CanDelete    apijson.Field
 	CanModifyIPs apijson.Field
 	CreatedAt    apijson.Field
-	DefaultSni   apijson.Field
+	DefaultSNI   apijson.Field
 	Description  apijson.Field
 	Enabled      apijson.Field
 	IPs          apijson.Field
@@ -378,8 +378,8 @@ type AddressMapGetResponseMembership struct {
 	// Identifier
 	Identifier string `json:"identifier"`
 	// The type of the membership.
-	Kind AddressMapGetResponseMembershipsKind `json:"kind"`
-	JSON addressMapGetResponseMembershipJSON  `json:"-"`
+	Kind Kind                                `json:"kind"`
+	JSON addressMapGetResponseMembershipJSON `json:"-"`
 }
 
 // addressMapGetResponseMembershipJSON contains the JSON metadata for the struct
@@ -399,22 +399,6 @@ func (r *AddressMapGetResponseMembership) UnmarshalJSON(data []byte) (err error)
 
 func (r addressMapGetResponseMembershipJSON) RawJSON() string {
 	return r.raw
-}
-
-// The type of the membership.
-type AddressMapGetResponseMembershipsKind string
-
-const (
-	AddressMapGetResponseMembershipsKindZone    AddressMapGetResponseMembershipsKind = "zone"
-	AddressMapGetResponseMembershipsKindAccount AddressMapGetResponseMembershipsKind = "account"
-)
-
-func (r AddressMapGetResponseMembershipsKind) IsKnown() bool {
-	switch r {
-	case AddressMapGetResponseMembershipsKindZone, AddressMapGetResponseMembershipsKindAccount:
-		return true
-	}
-	return false
 }
 
 type AddressMapNewParams struct {
@@ -483,11 +467,6 @@ type AddressMapListParams struct {
 type AddressMapDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r AddressMapDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapDeleteResponseEnvelope struct {
@@ -574,7 +553,7 @@ type AddressMapEditParams struct {
 	// handshake from a client without an SNI, it will respond with the default SNI on
 	// those IPs. The default SNI can be any valid zone or subdomain owned by the
 	// account.
-	DefaultSni param.Field[string] `json:"default_sni"`
+	DefaultSNI param.Field[string] `json:"default_sni"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
 	Description param.Field[string] `json:"description"`

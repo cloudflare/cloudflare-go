@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // RuleAdvertisementService contains methods and other services that help with
@@ -37,7 +37,7 @@ func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, para
 	opts = append(r.Options[:], opts...)
 	var env RuleAdvertisementEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s/advertisement", params.AccountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

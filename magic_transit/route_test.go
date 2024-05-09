@@ -15,7 +15,7 @@ import (
 )
 
 func TestRouteNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -42,7 +42,6 @@ func TestRouteNew(t *testing.T) {
 }
 
 func TestRouteUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,7 +80,6 @@ func TestRouteUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestRouteList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -107,7 +105,6 @@ func TestRouteList(t *testing.T) {
 }
 
 func TestRouteDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -125,7 +122,6 @@ func TestRouteDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.RouteDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -138,7 +134,6 @@ func TestRouteDelete(t *testing.T) {
 }
 
 func TestRouteEmpty(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -153,7 +148,6 @@ func TestRouteEmpty(t *testing.T) {
 	)
 	_, err := client.MagicTransit.Routes.Empty(context.TODO(), magic_transit.RouteEmptyParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Routes:    cloudflare.F([]magic_transit.RouteEmptyParamsRoute{{}, {}, {}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -165,7 +159,6 @@ func TestRouteEmpty(t *testing.T) {
 }
 
 func TestRouteGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

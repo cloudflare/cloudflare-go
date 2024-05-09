@@ -15,7 +15,7 @@ import (
 )
 
 func TestACLNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -42,7 +42,6 @@ func TestACLNew(t *testing.T) {
 }
 
 func TestACLUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -76,7 +75,6 @@ func TestACLUpdate(t *testing.T) {
 }
 
 func TestACLList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -102,7 +100,6 @@ func TestACLList(t *testing.T) {
 }
 
 func TestACLDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -120,7 +117,6 @@ func TestACLDelete(t *testing.T) {
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.ACLDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -133,7 +129,6 @@ func TestACLDelete(t *testing.T) {
 }
 
 func TestACLGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

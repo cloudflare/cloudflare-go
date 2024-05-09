@@ -16,7 +16,6 @@ import (
 )
 
 func TestTunnelNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -44,7 +43,6 @@ func TestTunnelNew(t *testing.T) {
 }
 
 func TestTunnelListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,7 +79,6 @@ func TestTunnelListWithOptionalParams(t *testing.T) {
 }
 
 func TestTunnelDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -99,7 +96,6 @@ func TestTunnelDelete(t *testing.T) {
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		zero_trust.TunnelDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -112,7 +108,6 @@ func TestTunnelDelete(t *testing.T) {
 }
 
 func TestTunnelEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -144,7 +139,6 @@ func TestTunnelEditWithOptionalParams(t *testing.T) {
 }
 
 func TestTunnelGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

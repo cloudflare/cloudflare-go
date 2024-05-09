@@ -15,7 +15,6 @@ import (
 )
 
 func TestAddressMapNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -43,7 +42,6 @@ func TestAddressMapNewWithOptionalParams(t *testing.T) {
 }
 
 func TestAddressMapList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -69,7 +67,6 @@ func TestAddressMapList(t *testing.T) {
 }
 
 func TestAddressMapDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,7 +84,6 @@ func TestAddressMapDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -100,7 +96,6 @@ func TestAddressMapDelete(t *testing.T) {
 }
 
 func TestAddressMapEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,7 +113,7 @@ func TestAddressMapEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapEditParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			DefaultSni:  cloudflare.F("*.example.com"),
+			DefaultSNI:  cloudflare.F("*.example.com"),
 			Description: cloudflare.F("My Ecommerce zones"),
 			Enabled:     cloudflare.F(true),
 		},
@@ -133,7 +128,6 @@ func TestAddressMapEditWithOptionalParams(t *testing.T) {
 }
 
 func TestAddressMapGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

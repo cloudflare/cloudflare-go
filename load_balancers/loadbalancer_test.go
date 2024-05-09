@@ -15,7 +15,6 @@ import (
 )
 
 func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -138,7 +137,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 					},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
@@ -148,7 +147,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
@@ -211,7 +210,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 					},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
@@ -221,7 +220,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
@@ -284,7 +283,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 					},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
@@ -294,13 +293,13 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
 			Terminates: cloudflare.F(true),
 		}}),
-		SessionAffinity: cloudflare.F(load_balancers.LoadBalancerNewParamsSessionAffinityCookie),
+		SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 		SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 			DrainDuration:        cloudflare.F(100.000000),
 			Headers:              cloudflare.F([]string{"x"}),
@@ -310,7 +309,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 			ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 		}),
 		SessionAffinityTTL: cloudflare.F(1800.000000),
-		SteeringPolicy:     cloudflare.F(load_balancers.LoadBalancerNewParamsSteeringPolicyDynamicLatency),
+		SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 		TTL:                cloudflare.F(30.000000),
 	})
 	if err != nil {
@@ -323,7 +322,6 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 }
 
 func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -450,7 +448,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -460,7 +458,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -523,7 +521,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -533,7 +531,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -596,7 +594,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -606,13 +604,13 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
-			SessionAffinity: cloudflare.F(load_balancers.LoadBalancerUpdateParamsSessionAffinityCookie),
+			SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 			SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 				DrainDuration:        cloudflare.F(100.000000),
 				Headers:              cloudflare.F([]string{"x"}),
@@ -622,7 +620,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 				ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 			}),
 			SessionAffinityTTL: cloudflare.F(1800.000000),
-			SteeringPolicy:     cloudflare.F(load_balancers.LoadBalancerUpdateParamsSteeringPolicyDynamicLatency),
+			SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 			TTL:                cloudflare.F(30.000000),
 		},
 	)
@@ -636,7 +634,6 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestLoadBalancerList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -662,7 +659,6 @@ func TestLoadBalancerList(t *testing.T) {
 }
 
 func TestLoadBalancerDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -680,7 +676,6 @@ func TestLoadBalancerDelete(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		load_balancers.LoadBalancerDeleteParams{
 			ZoneID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -693,7 +688,6 @@ func TestLoadBalancerDelete(t *testing.T) {
 }
 
 func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -820,7 +814,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -830,7 +824,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -893,7 +887,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -903,7 +897,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -966,7 +960,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.RulesOverridesSessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -976,13 +970,13 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.RulesOverridesSteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
-			SessionAffinity: cloudflare.F(load_balancers.LoadBalancerEditParamsSessionAffinityCookie),
+			SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
 			SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 				DrainDuration:        cloudflare.F(100.000000),
 				Headers:              cloudflare.F([]string{"x"}),
@@ -992,7 +986,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 				ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
 			}),
 			SessionAffinityTTL: cloudflare.F(1800.000000),
-			SteeringPolicy:     cloudflare.F(load_balancers.LoadBalancerEditParamsSteeringPolicyDynamicLatency),
+			SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
 			TTL:                cloudflare.F(30.000000),
 		},
 	)
@@ -1006,7 +1000,6 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 }
 
 func TestLoadBalancerGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

@@ -15,7 +15,6 @@ import (
 )
 
 func TestMonitorNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -64,7 +63,6 @@ func TestMonitorNewWithOptionalParams(t *testing.T) {
 }
 
 func TestMonitorUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -117,7 +115,6 @@ func TestMonitorUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestMonitorList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -143,7 +140,6 @@ func TestMonitorList(t *testing.T) {
 }
 
 func TestMonitorDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -161,7 +157,6 @@ func TestMonitorDelete(t *testing.T) {
 		"f1aba936b94213e5b8dca0c0dbf1f9cc",
 		load_balancers.MonitorDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -174,7 +169,6 @@ func TestMonitorDelete(t *testing.T) {
 }
 
 func TestMonitorEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -227,7 +221,6 @@ func TestMonitorEditWithOptionalParams(t *testing.T) {
 }
 
 func TestMonitorGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

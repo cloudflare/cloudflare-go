@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // DomainService contains methods and other services that help with interacting
@@ -71,10 +71,10 @@ func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListPar
 }
 
 // Detaches a Worker from a zone and hostname.
-func (r *DomainService) Delete(ctx context.Context, domainID string, params DomainDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *DomainService) Delete(ctx context.Context, domainID string, body DomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/domains/%s", params.AccountID, domainID)
+	path := fmt.Sprintf("accounts/%s/workers/domains/%s", body.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
@@ -211,11 +211,6 @@ func (r DomainListParams) URLQuery() (v url.Values) {
 
 type DomainDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r DomainDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type DomainGetParams struct {

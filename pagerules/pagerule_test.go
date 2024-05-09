@@ -15,7 +15,6 @@ import (
 )
 
 func TestPageruleNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -31,6 +30,18 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 	_, err := client.Pagerules.New(context.TODO(), pagerules.PageruleNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Actions: cloudflare.F([]pagerules.RouteParam{{
+			Name: cloudflare.F(pagerules.RouteNameForwardURL),
+			Value: cloudflare.F(pagerules.RouteValueParam{
+				Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+				URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+			}),
+		}, {
+			Name: cloudflare.F(pagerules.RouteNameForwardURL),
+			Value: cloudflare.F(pagerules.RouteValueParam{
+				Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+				URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+			}),
+		}, {
 			Name: cloudflare.F(pagerules.RouteNameForwardURL),
 			Value: cloudflare.F(pagerules.RouteValueParam{
 				Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
@@ -57,7 +68,6 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 }
 
 func TestPageruleUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -76,6 +86,18 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 		pagerules.PageruleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]pagerules.RouteParam{{
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}, {
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}, {
 				Name: cloudflare.F(pagerules.RouteNameForwardURL),
 				Value: cloudflare.F(pagerules.RouteValueParam{
 					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
@@ -103,7 +125,6 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestPageruleListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -133,7 +154,6 @@ func TestPageruleListWithOptionalParams(t *testing.T) {
 }
 
 func TestPageruleDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -151,7 +171,6 @@ func TestPageruleDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pagerules.PageruleDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -164,7 +183,6 @@ func TestPageruleDelete(t *testing.T) {
 }
 
 func TestPageruleEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -183,6 +201,18 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 		pagerules.PageruleEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]pagerules.RouteParam{{
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}, {
+				Name: cloudflare.F(pagerules.RouteNameForwardURL),
+				Value: cloudflare.F(pagerules.RouteValueParam{
+					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}, {
 				Name: cloudflare.F(pagerules.RouteNameForwardURL),
 				Value: cloudflare.F(pagerules.RouteValueParam{
 					Type: cloudflare.F(pagerules.RouteValueTypeTemporary),
@@ -210,7 +240,6 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 }
 
 func TestPageruleGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

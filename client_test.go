@@ -42,7 +42,7 @@ func TestUserAgentHeader(t *testing.T) {
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.TypeFull),
 	})
 	if userAgent != fmt.Sprintf("Cloudflare/Go %s", internal.PackageVersion) {
 		t.Errorf("Expected User-Agent to be correct, but got: %#v", userAgent)
@@ -71,7 +71,7 @@ func TestRetryAfter(t *testing.T) {
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.TypeFull),
 	})
 	if err == nil || res != nil {
 		t.Error("Expected there to be a cancel error and for the response to be nil")
@@ -103,7 +103,7 @@ func TestRetryAfterMs(t *testing.T) {
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.TypeFull),
 	})
 	if err == nil || res != nil {
 		t.Error("Expected there to be a cancel error and for the response to be nil")
@@ -131,7 +131,7 @@ func TestContextCancel(t *testing.T) {
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.TypeFull),
 	})
 	if err == nil || res != nil {
 		t.Error("Expected there to be a cancel error and for the response to be nil")
@@ -156,7 +156,7 @@ func TestContextCancelDelay(t *testing.T) {
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.TypeFull),
 	})
 	if err == nil || res != nil {
 		t.Error("expected there to be a cancel error and for the response to be nil")
@@ -187,7 +187,7 @@ func TestContextDeadline(t *testing.T) {
 				ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			}),
 			Name: cloudflare.F("example.com"),
-			Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
+			Type: cloudflare.F(zones.TypeFull),
 		})
 		if err == nil || res != nil {
 			t.Error("expected there to be a deadline error and for the response to be nil")

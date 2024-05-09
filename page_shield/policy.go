@@ -53,7 +53,7 @@ func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts .
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies", query.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,26 +138,6 @@ func (r PolicyAction) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type PolicyParam struct {
-	// The ID of the policy
-	ID param.Field[string] `json:"id"`
-	// The action to take if the expression matches
-	Action param.Field[PolicyAction] `json:"action"`
-	// A description for the policy
-	Description param.Field[string] `json:"description"`
-	// Whether the policy is enabled
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression which must match for the policy to be applied, using the
-	// Cloudflare Firewall rule expression syntax
-	Expression param.Field[string] `json:"expression"`
-	// The policy which will be applied
-	Value param.Field[string] `json:"value"`
-}
-
-func (r PolicyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type PolicyNewParams struct {

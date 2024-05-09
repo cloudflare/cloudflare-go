@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -70,7 +70,7 @@ func (r *GatewayListService) List(ctx context.Context, query GatewayListListPara
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/gateway/lists", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,10 +88,10 @@ func (r *GatewayListService) ListAutoPaging(ctx context.Context, query GatewayLi
 }
 
 // Deletes a Zero Trust list.
-func (r *GatewayListService) Delete(ctx context.Context, listID string, params GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponseUnion, err error) {
+func (r *GatewayListService) Delete(ctx context.Context, listID string, body GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
+	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", body.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -427,11 +427,6 @@ type GatewayListListParams struct {
 
 type GatewayListDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r GatewayListDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayListDeleteResponseEnvelope struct {

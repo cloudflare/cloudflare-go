@@ -15,7 +15,6 @@ import (
 )
 
 func TestHostnameCertificateNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -43,7 +42,6 @@ func TestHostnameCertificateNew(t *testing.T) {
 }
 
 func TestHostnameCertificateList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -69,7 +67,6 @@ func TestHostnameCertificateList(t *testing.T) {
 }
 
 func TestHostnameCertificateDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,7 +84,6 @@ func TestHostnameCertificateDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		origin_tls_client_auth.HostnameCertificateDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -100,7 +96,6 @@ func TestHostnameCertificateDelete(t *testing.T) {
 }
 
 func TestHostnameCertificateGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // VerificationService contains methods and other services that help with
@@ -73,7 +73,7 @@ type Verification struct {
 	// Certificate's signature algorithm.
 	Signature VerificationSignature `json:"signature"`
 	// Validation method in use for a certificate pack order.
-	ValidationMethod VerificationValidationMethod `json:"validation_method"`
+	ValidationMethod ValidationMethod `json:"validation_method"`
 	// Certificate's required verification information.
 	VerificationInfo VerificationVerificationInfo `json:"verification_info"`
 	// Status of the required verification information, omitted if verification status
@@ -132,30 +132,13 @@ type VerificationSignature string
 
 const (
 	VerificationSignatureEcdsaWithSha256 VerificationSignature = "ECDSAWithSHA256"
-	VerificationSignatureSha1WithRsa     VerificationSignature = "SHA1WithRSA"
-	VerificationSignatureSha256WithRsa   VerificationSignature = "SHA256WithRSA"
+	VerificationSignatureSha1WithRSA     VerificationSignature = "SHA1WithRSA"
+	VerificationSignatureSha256WithRSA   VerificationSignature = "SHA256WithRSA"
 )
 
 func (r VerificationSignature) IsKnown() bool {
 	switch r {
-	case VerificationSignatureEcdsaWithSha256, VerificationSignatureSha1WithRsa, VerificationSignatureSha256WithRsa:
-		return true
-	}
-	return false
-}
-
-// Validation method in use for a certificate pack order.
-type VerificationValidationMethod string
-
-const (
-	VerificationValidationMethodHTTP  VerificationValidationMethod = "http"
-	VerificationValidationMethodCNAME VerificationValidationMethod = "cname"
-	VerificationValidationMethodTXT   VerificationValidationMethod = "txt"
-)
-
-func (r VerificationValidationMethod) IsKnown() bool {
-	switch r {
-	case VerificationValidationMethodHTTP, VerificationValidationMethodCNAME, VerificationValidationMethodTXT:
+	case VerificationSignatureEcdsaWithSha256, VerificationSignatureSha1WithRSA, VerificationSignatureSha256WithRSA:
 		return true
 	}
 	return false
@@ -312,11 +295,11 @@ func (r VerificationEditParamsValidationMethod) IsKnown() bool {
 }
 
 type VerificationEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   VerificationEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success VerificationEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  VerificationEditResponse                `json:"result"`
 	JSON    verificationEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -325,8 +308,8 @@ type VerificationEditResponseEnvelope struct {
 type verificationEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -91,10 +91,10 @@ func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string,
 }
 
 // Deletes an event for a waiting room.
-func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID string, params EventDeleteParams, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
+func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID string, body EventDeleteParams, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", body.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -243,20 +243,14 @@ func (r EventNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EventNewResponseEnvelope struct {
-	Errors   interface{}                  `json:"errors,required"`
-	Messages interface{}                  `json:"messages,required"`
-	Result   Event                        `json:"result,required"`
-	Success  interface{}                  `json:"success,required"`
-	JSON     eventNewResponseEnvelopeJSON `json:"-"`
+	Result Event                        `json:"result,required"`
+	JSON   eventNewResponseEnvelopeJSON `json:"-"`
 }
 
 // eventNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventNewResponseEnvelope]
 type eventNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -280,20 +274,14 @@ func (r EventUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EventUpdateResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Result   Event                           `json:"result,required"`
-	Success  interface{}                     `json:"success,required"`
-	JSON     eventUpdateResponseEnvelopeJSON `json:"-"`
+	Result Event                           `json:"result,required"`
+	JSON   eventUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // eventUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventUpdateResponseEnvelope]
 type eventUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -326,28 +314,17 @@ func (r EventListParams) URLQuery() (v url.Values) {
 type EventDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r EventDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type EventDeleteResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Result   EventDeleteResponse             `json:"result,required"`
-	Success  interface{}                     `json:"success,required"`
-	JSON     eventDeleteResponseEnvelopeJSON `json:"-"`
+	Result EventDeleteResponse             `json:"result,required"`
+	JSON   eventDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // eventDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventDeleteResponseEnvelope]
 type eventDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -371,20 +348,14 @@ func (r EventEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EventEditResponseEnvelope struct {
-	Errors   interface{}                   `json:"errors,required"`
-	Messages interface{}                   `json:"messages,required"`
-	Result   Event                         `json:"result,required"`
-	Success  interface{}                   `json:"success,required"`
-	JSON     eventEditResponseEnvelopeJSON `json:"-"`
+	Result Event                         `json:"result,required"`
+	JSON   eventEditResponseEnvelopeJSON `json:"-"`
 }
 
 // eventEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventEditResponseEnvelope]
 type eventEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -403,20 +374,14 @@ type EventGetParams struct {
 }
 
 type EventGetResponseEnvelope struct {
-	Errors   interface{}                  `json:"errors,required"`
-	Messages interface{}                  `json:"messages,required"`
-	Result   Event                        `json:"result,required"`
-	Success  interface{}                  `json:"success,required"`
-	JSON     eventGetResponseEnvelopeJSON `json:"-"`
+	Result Event                        `json:"result,required"`
+	JSON   eventGetResponseEnvelopeJSON `json:"-"`
 }
 
 // eventGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventGetResponseEnvelope]
 type eventGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

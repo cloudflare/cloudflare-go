@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // CaptionLanguageService contains methods and other services that help with
@@ -49,10 +49,10 @@ func (r *CaptionLanguageService) Update(ctx context.Context, identifier string, 
 }
 
 // Removes the captions or subtitles from a video.
-func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, language string, params CaptionLanguageDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, language string, body CaptionLanguageDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionLanguageDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
+	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", body.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -131,11 +131,6 @@ func (r CaptionLanguageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type CaptionLanguageDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r CaptionLanguageDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type CaptionLanguageDeleteResponseEnvelope struct {

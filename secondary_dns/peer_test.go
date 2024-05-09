@@ -15,7 +15,7 @@ import (
 )
 
 func TestPeerNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -42,7 +42,6 @@ func TestPeerNew(t *testing.T) {
 }
 
 func TestPeerUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -79,7 +78,6 @@ func TestPeerUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestPeerList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -105,7 +103,6 @@ func TestPeerList(t *testing.T) {
 }
 
 func TestPeerDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -123,7 +120,6 @@ func TestPeerDelete(t *testing.T) {
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.PeerDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -136,7 +132,6 @@ func TestPeerDelete(t *testing.T) {
 }
 
 func TestPeerGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

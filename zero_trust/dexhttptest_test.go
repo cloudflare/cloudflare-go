@@ -15,7 +15,6 @@ import (
 )
 
 func TestDEXHTTPTestGetWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -34,8 +33,8 @@ func TestDEXHTTPTestGetWithOptionalParams(t *testing.T) {
 		zero_trust.DEXHTTPTestGetParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			Interval:  cloudflare.F(zero_trust.DexhttpTestGetParamsIntervalMinute),
-			TimeEnd:   cloudflare.F("string"),
-			TimeStart: cloudflare.F("string"),
+			TimeEnd:   cloudflare.F("1689606812000"),
+			TimeStart: cloudflare.F("1689520412000"),
 			Colo:      cloudflare.F("string"),
 			DeviceID:  cloudflare.F([]string{"string", "string", "string"}),
 		},

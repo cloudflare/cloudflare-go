@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -68,7 +68,7 @@ func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocation
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/gateway/locations", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,10 +86,10 @@ func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query Gatew
 }
 
 // Deletes a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, params GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponseUnion, err error) {
+func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", params.AccountID, locationID)
+	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", body.AccountID, locationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -327,11 +327,6 @@ type GatewayLocationListParams struct {
 
 type GatewayLocationDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r GatewayLocationDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayLocationDeleteResponseEnvelope struct {

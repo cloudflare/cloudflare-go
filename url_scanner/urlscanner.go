@@ -135,19 +135,19 @@ type URLScannerScanParams struct {
 	NextCursor param.Field[string] `query:"next_cursor"`
 	// Filter scans by main page Autonomous System Number (ASN).
 	PageASN param.Field[string] `query:"page_asn"`
-	// Filter scans by main page hostname .
+	// Filter scans by main page hostname (domain of effective URL).
 	PageHostname param.Field[string] `query:"page_hostname"`
 	// Filter scans by main page IP address (IPv4 or IPv6).
 	PageIP param.Field[string] `query:"page_ip"`
-	// Filter scans by exact match URL path (also supports suffix search).
+	// Filter scans by exact match of effective URL path (also supports suffix search).
 	PagePath param.Field[string] `query:"page_path"`
-	// Filter scans by exact match to scanned URL (_after redirects_)
+	// Filter scans by submitted or scanned URL
 	PageURL param.Field[string] `query:"page_url"`
 	// Filter scans by url path of _any_ request made by the webpage.
 	Path param.Field[string] `query:"path"`
 	// Scan uuid
 	ScanID param.Field[string] `query:"scanId" format:"uuid"`
-	// Filter scans by exact match URL of _any_ request made by the webpage
+	// Filter scans by URL of _any_ request made by the webpage
 	URL param.Field[string] `query:"url"`
 }
 

@@ -15,7 +15,6 @@ import (
 )
 
 func TestTotalTLSNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -31,7 +30,7 @@ func TestTotalTLSNewWithOptionalParams(t *testing.T) {
 	_, err := client.ACM.TotalTLS.New(context.TODO(), acm.TotalTLSNewParams{
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Enabled:              cloudflare.F(true),
-		CertificateAuthority: cloudflare.F(acm.TotalTLSNewParamsCertificateAuthorityGoogle),
+		CertificateAuthority: cloudflare.F(acm.CertificateAuthorityGoogle),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -43,7 +42,6 @@ func TestTotalTLSNewWithOptionalParams(t *testing.T) {
 }
 
 func TestTotalTLSGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

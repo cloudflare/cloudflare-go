@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // ConfigService contains methods and other services that help with interacting
@@ -38,7 +38,7 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,7 +52,7 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,10 +61,10 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 }
 
 // Delete an existing network monitoring configuration.
-func (r *ConfigService) Delete(ctx context.Context, params ConfigDeleteParams, opts ...option.RequestOption) (res *Configuration, err error) {
+func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -78,7 +78,7 @@ func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts 
 	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -124,19 +124,6 @@ func (r *Configuration) UnmarshalJSON(data []byte) (err error) {
 
 func (r configurationJSON) RawJSON() string {
 	return r.raw
-}
-
-type ConfigurationParam struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling param.Field[float64] `json:"default_sampling,required"`
-	// The account name.
-	Name      param.Field[string]   `json:"name,required"`
-	RouterIPs param.Field[[]string] `json:"router_ips,required"`
-}
-
-func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type ConfigNewParams struct {
@@ -245,11 +232,6 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ConfigDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigDeleteResponseEnvelope struct {

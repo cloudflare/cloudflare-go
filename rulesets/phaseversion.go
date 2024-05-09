@@ -36,7 +36,7 @@ func NewPhaseVersionService(opts ...option.RequestOption) (r *PhaseVersionServic
 }
 
 // Fetches the versions of an account or zone entry point ruleset.
-func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Ruleset], err error) {
+func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase Phase, query PhaseVersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Ruleset], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -50,7 +50,7 @@ func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersio
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/phases/%v/entrypoint/versions", accountOrZone, accountOrZoneID, rulesetPhase)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,12 +63,12 @@ func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersio
 }
 
 // Fetches the versions of an account or zone entry point ruleset.
-func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Ruleset] {
+func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase Phase, query PhaseVersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Ruleset] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, rulesetPhase, query, opts...))
 }
 
 // Fetches a specific version of an account or zone entry point ruleset.
-func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase PhaseVersionGetParamsRulesetPhase, rulesetVersion string, query PhaseVersionGetParams, opts ...option.RequestOption) (res *PhaseVersionGetResponse, err error) {
+func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase Phase, rulesetVersion string, query PhaseVersionGetParams, opts ...option.RequestOption) (res *PhaseVersionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PhaseVersionGetResponseEnvelope
 	var accountOrZone string
@@ -94,13 +94,13 @@ type PhaseVersionGetResponse struct {
 	// The unique ID of the ruleset.
 	ID string `json:"id,required"`
 	// The kind of the ruleset.
-	Kind PhaseVersionGetResponseKind `json:"kind,required"`
+	Kind Kind `json:"kind,required"`
 	// The timestamp of when the ruleset was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name,required"`
 	// The phase of the ruleset.
-	Phase PhaseVersionGetResponsePhase `json:"phase,required"`
+	Phase Phase `json:"phase,required"`
 	// The list of rules in the ruleset.
 	Rules []PhaseVersionGetResponseRule `json:"rules,required"`
 	// The version of the ruleset.
@@ -131,61 +131,6 @@ func (r *PhaseVersionGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r phaseVersionGetResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// The kind of the ruleset.
-type PhaseVersionGetResponseKind string
-
-const (
-	PhaseVersionGetResponseKindManaged PhaseVersionGetResponseKind = "managed"
-	PhaseVersionGetResponseKindCustom  PhaseVersionGetResponseKind = "custom"
-	PhaseVersionGetResponseKindRoot    PhaseVersionGetResponseKind = "root"
-	PhaseVersionGetResponseKindZone    PhaseVersionGetResponseKind = "zone"
-)
-
-func (r PhaseVersionGetResponseKind) IsKnown() bool {
-	switch r {
-	case PhaseVersionGetResponseKindManaged, PhaseVersionGetResponseKindCustom, PhaseVersionGetResponseKindRoot, PhaseVersionGetResponseKindZone:
-		return true
-	}
-	return false
-}
-
-// The phase of the ruleset.
-type PhaseVersionGetResponsePhase string
-
-const (
-	PhaseVersionGetResponsePhaseDDoSL4                         PhaseVersionGetResponsePhase = "ddos_l4"
-	PhaseVersionGetResponsePhaseDDoSL7                         PhaseVersionGetResponsePhase = "ddos_l7"
-	PhaseVersionGetResponsePhaseHTTPConfigSettings             PhaseVersionGetResponsePhase = "http_config_settings"
-	PhaseVersionGetResponsePhaseHTTPCustomErrors               PhaseVersionGetResponsePhase = "http_custom_errors"
-	PhaseVersionGetResponsePhaseHTTPLogCustomFields            PhaseVersionGetResponsePhase = "http_log_custom_fields"
-	PhaseVersionGetResponsePhaseHTTPRatelimit                  PhaseVersionGetResponsePhase = "http_ratelimit"
-	PhaseVersionGetResponsePhaseHTTPRequestCacheSettings       PhaseVersionGetResponsePhase = "http_request_cache_settings"
-	PhaseVersionGetResponsePhaseHTTPRequestDynamicRedirect     PhaseVersionGetResponsePhase = "http_request_dynamic_redirect"
-	PhaseVersionGetResponsePhaseHTTPRequestFirewallCustom      PhaseVersionGetResponsePhase = "http_request_firewall_custom"
-	PhaseVersionGetResponsePhaseHTTPRequestFirewallManaged     PhaseVersionGetResponsePhase = "http_request_firewall_managed"
-	PhaseVersionGetResponsePhaseHTTPRequestLateTransform       PhaseVersionGetResponsePhase = "http_request_late_transform"
-	PhaseVersionGetResponsePhaseHTTPRequestOrigin              PhaseVersionGetResponsePhase = "http_request_origin"
-	PhaseVersionGetResponsePhaseHTTPRequestRedirect            PhaseVersionGetResponsePhase = "http_request_redirect"
-	PhaseVersionGetResponsePhaseHTTPRequestSanitize            PhaseVersionGetResponsePhase = "http_request_sanitize"
-	PhaseVersionGetResponsePhaseHTTPRequestSBFM                PhaseVersionGetResponsePhase = "http_request_sbfm"
-	PhaseVersionGetResponsePhaseHTTPRequestSelectConfiguration PhaseVersionGetResponsePhase = "http_request_select_configuration"
-	PhaseVersionGetResponsePhaseHTTPRequestTransform           PhaseVersionGetResponsePhase = "http_request_transform"
-	PhaseVersionGetResponsePhaseHTTPResponseCompression        PhaseVersionGetResponsePhase = "http_response_compression"
-	PhaseVersionGetResponsePhaseHTTPResponseFirewallManaged    PhaseVersionGetResponsePhase = "http_response_firewall_managed"
-	PhaseVersionGetResponsePhaseHTTPResponseHeadersTransform   PhaseVersionGetResponsePhase = "http_response_headers_transform"
-	PhaseVersionGetResponsePhaseMagicTransit                   PhaseVersionGetResponsePhase = "magic_transit"
-	PhaseVersionGetResponsePhaseMagicTransitIDsManaged         PhaseVersionGetResponsePhase = "magic_transit_ids_managed"
-	PhaseVersionGetResponsePhaseMagicTransitManaged            PhaseVersionGetResponsePhase = "magic_transit_managed"
-)
-
-func (r PhaseVersionGetResponsePhase) IsKnown() bool {
-	switch r {
-	case PhaseVersionGetResponsePhaseDDoSL4, PhaseVersionGetResponsePhaseDDoSL7, PhaseVersionGetResponsePhaseHTTPConfigSettings, PhaseVersionGetResponsePhaseHTTPCustomErrors, PhaseVersionGetResponsePhaseHTTPLogCustomFields, PhaseVersionGetResponsePhaseHTTPRatelimit, PhaseVersionGetResponsePhaseHTTPRequestCacheSettings, PhaseVersionGetResponsePhaseHTTPRequestDynamicRedirect, PhaseVersionGetResponsePhaseHTTPRequestFirewallCustom, PhaseVersionGetResponsePhaseHTTPRequestFirewallManaged, PhaseVersionGetResponsePhaseHTTPRequestLateTransform, PhaseVersionGetResponsePhaseHTTPRequestOrigin, PhaseVersionGetResponsePhaseHTTPRequestRedirect, PhaseVersionGetResponsePhaseHTTPRequestSanitize, PhaseVersionGetResponsePhaseHTTPRequestSBFM, PhaseVersionGetResponsePhaseHTTPRequestSelectConfiguration, PhaseVersionGetResponsePhaseHTTPRequestTransform, PhaseVersionGetResponsePhaseHTTPResponseCompression, PhaseVersionGetResponsePhaseHTTPResponseFirewallManaged, PhaseVersionGetResponsePhaseHTTPResponseHeadersTransform, PhaseVersionGetResponsePhaseMagicTransit, PhaseVersionGetResponsePhaseMagicTransitIDsManaged, PhaseVersionGetResponsePhaseMagicTransitManaged:
-		return true
-	}
-	return false
 }
 
 type PhaseVersionGetResponseRule struct {
@@ -375,85 +320,11 @@ type PhaseVersionListParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
-// The phase of the ruleset.
-type PhaseVersionListParamsRulesetPhase string
-
-const (
-	PhaseVersionListParamsRulesetPhaseDDoSL4                         PhaseVersionListParamsRulesetPhase = "ddos_l4"
-	PhaseVersionListParamsRulesetPhaseDDoSL7                         PhaseVersionListParamsRulesetPhase = "ddos_l7"
-	PhaseVersionListParamsRulesetPhaseHTTPConfigSettings             PhaseVersionListParamsRulesetPhase = "http_config_settings"
-	PhaseVersionListParamsRulesetPhaseHTTPCustomErrors               PhaseVersionListParamsRulesetPhase = "http_custom_errors"
-	PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields            PhaseVersionListParamsRulesetPhase = "http_log_custom_fields"
-	PhaseVersionListParamsRulesetPhaseHTTPRatelimit                  PhaseVersionListParamsRulesetPhase = "http_ratelimit"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestCacheSettings       PhaseVersionListParamsRulesetPhase = "http_request_cache_settings"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestDynamicRedirect     PhaseVersionListParamsRulesetPhase = "http_request_dynamic_redirect"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom      PhaseVersionListParamsRulesetPhase = "http_request_firewall_custom"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallManaged     PhaseVersionListParamsRulesetPhase = "http_request_firewall_managed"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestLateTransform       PhaseVersionListParamsRulesetPhase = "http_request_late_transform"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestOrigin              PhaseVersionListParamsRulesetPhase = "http_request_origin"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestRedirect            PhaseVersionListParamsRulesetPhase = "http_request_redirect"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestSanitize            PhaseVersionListParamsRulesetPhase = "http_request_sanitize"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestSBFM                PhaseVersionListParamsRulesetPhase = "http_request_sbfm"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestSelectConfiguration PhaseVersionListParamsRulesetPhase = "http_request_select_configuration"
-	PhaseVersionListParamsRulesetPhaseHTTPRequestTransform           PhaseVersionListParamsRulesetPhase = "http_request_transform"
-	PhaseVersionListParamsRulesetPhaseHTTPResponseCompression        PhaseVersionListParamsRulesetPhase = "http_response_compression"
-	PhaseVersionListParamsRulesetPhaseHTTPResponseFirewallManaged    PhaseVersionListParamsRulesetPhase = "http_response_firewall_managed"
-	PhaseVersionListParamsRulesetPhaseHTTPResponseHeadersTransform   PhaseVersionListParamsRulesetPhase = "http_response_headers_transform"
-	PhaseVersionListParamsRulesetPhaseMagicTransit                   PhaseVersionListParamsRulesetPhase = "magic_transit"
-	PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged         PhaseVersionListParamsRulesetPhase = "magic_transit_ids_managed"
-	PhaseVersionListParamsRulesetPhaseMagicTransitManaged            PhaseVersionListParamsRulesetPhase = "magic_transit_managed"
-)
-
-func (r PhaseVersionListParamsRulesetPhase) IsKnown() bool {
-	switch r {
-	case PhaseVersionListParamsRulesetPhaseDDoSL4, PhaseVersionListParamsRulesetPhaseDDoSL7, PhaseVersionListParamsRulesetPhaseHTTPConfigSettings, PhaseVersionListParamsRulesetPhaseHTTPCustomErrors, PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionListParamsRulesetPhaseHTTPRatelimit, PhaseVersionListParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionListParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionListParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionListParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionListParamsRulesetPhaseHTTPRequestSBFM, PhaseVersionListParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionListParamsRulesetPhaseHTTPRequestTransform, PhaseVersionListParamsRulesetPhaseHTTPResponseCompression, PhaseVersionListParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionListParamsRulesetPhaseMagicTransit, PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionListParamsRulesetPhaseMagicTransitManaged:
-		return true
-	}
-	return false
-}
-
 type PhaseVersionGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-// The phase of the ruleset.
-type PhaseVersionGetParamsRulesetPhase string
-
-const (
-	PhaseVersionGetParamsRulesetPhaseDDoSL4                         PhaseVersionGetParamsRulesetPhase = "ddos_l4"
-	PhaseVersionGetParamsRulesetPhaseDDoSL7                         PhaseVersionGetParamsRulesetPhase = "ddos_l7"
-	PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings             PhaseVersionGetParamsRulesetPhase = "http_config_settings"
-	PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors               PhaseVersionGetParamsRulesetPhase = "http_custom_errors"
-	PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields            PhaseVersionGetParamsRulesetPhase = "http_log_custom_fields"
-	PhaseVersionGetParamsRulesetPhaseHTTPRatelimit                  PhaseVersionGetParamsRulesetPhase = "http_ratelimit"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestCacheSettings       PhaseVersionGetParamsRulesetPhase = "http_request_cache_settings"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestDynamicRedirect     PhaseVersionGetParamsRulesetPhase = "http_request_dynamic_redirect"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom      PhaseVersionGetParamsRulesetPhase = "http_request_firewall_custom"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallManaged     PhaseVersionGetParamsRulesetPhase = "http_request_firewall_managed"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestLateTransform       PhaseVersionGetParamsRulesetPhase = "http_request_late_transform"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestOrigin              PhaseVersionGetParamsRulesetPhase = "http_request_origin"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestRedirect            PhaseVersionGetParamsRulesetPhase = "http_request_redirect"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestSanitize            PhaseVersionGetParamsRulesetPhase = "http_request_sanitize"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestSBFM                PhaseVersionGetParamsRulesetPhase = "http_request_sbfm"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestSelectConfiguration PhaseVersionGetParamsRulesetPhase = "http_request_select_configuration"
-	PhaseVersionGetParamsRulesetPhaseHTTPRequestTransform           PhaseVersionGetParamsRulesetPhase = "http_request_transform"
-	PhaseVersionGetParamsRulesetPhaseHTTPResponseCompression        PhaseVersionGetParamsRulesetPhase = "http_response_compression"
-	PhaseVersionGetParamsRulesetPhaseHTTPResponseFirewallManaged    PhaseVersionGetParamsRulesetPhase = "http_response_firewall_managed"
-	PhaseVersionGetParamsRulesetPhaseHTTPResponseHeadersTransform   PhaseVersionGetParamsRulesetPhase = "http_response_headers_transform"
-	PhaseVersionGetParamsRulesetPhaseMagicTransit                   PhaseVersionGetParamsRulesetPhase = "magic_transit"
-	PhaseVersionGetParamsRulesetPhaseMagicTransitIDsManaged         PhaseVersionGetParamsRulesetPhase = "magic_transit_ids_managed"
-	PhaseVersionGetParamsRulesetPhaseMagicTransitManaged            PhaseVersionGetParamsRulesetPhase = "magic_transit_managed"
-)
-
-func (r PhaseVersionGetParamsRulesetPhase) IsKnown() bool {
-	switch r {
-	case PhaseVersionGetParamsRulesetPhaseDDoSL4, PhaseVersionGetParamsRulesetPhaseDDoSL7, PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings, PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors, PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionGetParamsRulesetPhaseHTTPRatelimit, PhaseVersionGetParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionGetParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionGetParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionGetParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionGetParamsRulesetPhaseHTTPRequestSBFM, PhaseVersionGetParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionGetParamsRulesetPhaseHTTPRequestTransform, PhaseVersionGetParamsRulesetPhaseHTTPResponseCompression, PhaseVersionGetParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionGetParamsRulesetPhaseMagicTransit, PhaseVersionGetParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionGetParamsRulesetPhaseMagicTransitManaged:
-		return true
-	}
-	return false
 }
 
 // A response object.

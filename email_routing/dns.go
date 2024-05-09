@@ -10,8 +10,8 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -153,9 +153,9 @@ func (r DNSRecordType) IsKnown() bool {
 type DNSGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []DNSRecord           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DNSGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []DNSRecord                      `json:"result,nullable"`
 	ResultInfo DNSGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dnsGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -165,8 +165,8 @@ type DNSGetResponseEnvelope struct {
 type dnsGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

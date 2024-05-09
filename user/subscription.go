@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -49,7 +49,7 @@ func (r *SubscriptionService) Update(ctx context.Context, identifier string, bod
 }
 
 // Deletes a user's subscription.
-func (r *SubscriptionService) Delete(ctx context.Context, identifier string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
+func (r *SubscriptionService) Delete(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -467,14 +467,6 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type SubscriptionDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r SubscriptionDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type SubscriptionEditParams struct {

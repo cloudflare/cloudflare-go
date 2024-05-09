@@ -15,8 +15,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -75,10 +75,10 @@ func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, param
 }
 
 // Deletes an existing virtual network.
-func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkDeleteResponseUnion, err error) {
+func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, body NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", params.AccountID, virtualNetworkID)
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", body.AccountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -300,11 +300,6 @@ func (r NetworkVirtualNetworkListParams) URLQuery() (v url.Values) {
 type NetworkVirtualNetworkDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r NetworkVirtualNetworkDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type NetworkVirtualNetworkDeleteResponseEnvelope struct {

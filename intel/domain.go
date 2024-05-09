@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // DomainService contains methods and other services that help with interacting
@@ -239,9 +239,9 @@ func (r DomainGetParams) URLQuery() (v url.Values) {
 type DomainGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Domain                `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Domain                           `json:"result"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -250,8 +250,8 @@ type DomainGetResponseEnvelope struct {
 type domainGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

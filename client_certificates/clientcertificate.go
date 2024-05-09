@@ -8,13 +8,14 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/cloudflare/cloudflare-go/v2/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // ClientCertificateService contains methods and other services that help with
@@ -149,7 +150,7 @@ type ClientCertificate struct {
 	State string `json:"state"`
 	// Client Certificates may be active or revoked, and the pending_reactivation or
 	// pending_revocation represent in-progress asynchronous transitions
-	Status ClientCertificateStatus `json:"status"`
+	Status custom_certificates.Status `json:"status"`
 	// The number of days the Client Certificate will be valid after the issued_on date
 	ValidityDays int64                 `json:"validity_days"`
 	JSON         clientCertificateJSON `json:"-"`
@@ -212,25 +213,6 @@ func (r clientCertificateCertificateAuthorityJSON) RawJSON() string {
 	return r.raw
 }
 
-// Client Certificates may be active or revoked, and the pending_reactivation or
-// pending_revocation represent in-progress asynchronous transitions
-type ClientCertificateStatus string
-
-const (
-	ClientCertificateStatusActive              ClientCertificateStatus = "active"
-	ClientCertificateStatusPendingReactivation ClientCertificateStatus = "pending_reactivation"
-	ClientCertificateStatusPendingRevocation   ClientCertificateStatus = "pending_revocation"
-	ClientCertificateStatusRevoked             ClientCertificateStatus = "revoked"
-)
-
-func (r ClientCertificateStatus) IsKnown() bool {
-	switch r {
-	case ClientCertificateStatusActive, ClientCertificateStatusPendingReactivation, ClientCertificateStatusPendingRevocation, ClientCertificateStatusRevoked:
-		return true
-	}
-	return false
-}
-
 type ClientCertificateNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -247,9 +229,9 @@ func (r ClientCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type ClientCertificateNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ClientCertificate                           `json:"result"`
 	JSON    clientCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -258,8 +240,8 @@ type ClientCertificateNewResponseEnvelope struct {
 type clientCertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -338,9 +320,9 @@ type ClientCertificateDeleteParams struct {
 type ClientCertificateDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ClientCertificate                              `json:"result"`
 	JSON    clientCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -349,8 +331,8 @@ type ClientCertificateDeleteResponseEnvelope struct {
 type clientCertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -386,9 +368,9 @@ type ClientCertificateEditParams struct {
 type ClientCertificateEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  ClientCertificate                            `json:"result"`
 	JSON    clientCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -397,8 +379,8 @@ type ClientCertificateEditResponseEnvelope struct {
 type clientCertificateEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -434,9 +416,9 @@ type ClientCertificateGetParams struct {
 type ClientCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ClientCertificate                           `json:"result"`
 	JSON    clientCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -445,8 +427,8 @@ type ClientCertificateGetResponseEnvelope struct {
 type clientCertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

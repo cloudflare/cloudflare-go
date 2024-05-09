@@ -15,7 +15,6 @@ import (
 )
 
 func TestSiteNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -35,8 +34,8 @@ func TestSiteNewWithOptionalParams(t *testing.T) {
 		Description: cloudflare.F("string"),
 		HaMode:      cloudflare.F(true),
 		Location: cloudflare.F(magic_transit.SiteLocationParam{
-			Lat: cloudflare.F("string"),
-			Lon: cloudflare.F("string"),
+			Lat: cloudflare.F("37.6192"),
+			Lon: cloudflare.F("122.3816"),
 		}),
 		SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
 	})
@@ -50,7 +49,6 @@ func TestSiteNewWithOptionalParams(t *testing.T) {
 }
 
 func TestSiteUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -71,8 +69,8 @@ func TestSiteUpdateWithOptionalParams(t *testing.T) {
 			ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
 			Description: cloudflare.F("string"),
 			Location: cloudflare.F(magic_transit.SiteLocationParam{
-				Lat: cloudflare.F("string"),
-				Lon: cloudflare.F("string"),
+				Lat: cloudflare.F("37.6192"),
+				Lon: cloudflare.F("122.3816"),
 			}),
 			Name:                 cloudflare.F("site_1"),
 			SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
@@ -88,7 +86,6 @@ func TestSiteUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestSiteListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -115,7 +112,6 @@ func TestSiteListWithOptionalParams(t *testing.T) {
 }
 
 func TestSiteDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -133,7 +129,6 @@ func TestSiteDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -146,7 +141,6 @@ func TestSiteDelete(t *testing.T) {
 }
 
 func TestSiteGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

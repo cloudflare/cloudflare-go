@@ -15,7 +15,6 @@ import (
 )
 
 func TestProjectDomainNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -48,7 +47,6 @@ func TestProjectDomainNew(t *testing.T) {
 }
 
 func TestProjectDomainList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -78,7 +76,6 @@ func TestProjectDomainList(t *testing.T) {
 }
 
 func TestProjectDomainDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -97,7 +94,6 @@ func TestProjectDomainDelete(t *testing.T) {
 		"this-is-my-domain-01.com",
 		pages.ProjectDomainDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -110,7 +106,6 @@ func TestProjectDomainDelete(t *testing.T) {
 }
 
 func TestProjectDomainEdit(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -142,7 +137,6 @@ func TestProjectDomainEdit(t *testing.T) {
 }
 
 func TestProjectDomainGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

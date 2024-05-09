@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // LoadBalancerService contains methods and other services that help with
@@ -76,7 +76,7 @@ func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListPa
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/load_balancers", query.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,10 +94,10 @@ func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBala
 }
 
 // Delete a configured load balancer.
-func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, params LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
+func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
+	path := fmt.Sprintf("zones/%s/load_balancers/%s", body.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -379,7 +379,7 @@ type LoadBalancer struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity LoadBalancerSessionAffinity `json:"session_affinity"`
+	SessionAffinity SessionAffinity `json:"session_affinity"`
 	// Configures attributes for session affinity.
 	SessionAffinityAttributes SessionAffinityAttributes `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
@@ -415,7 +415,7 @@ type LoadBalancer struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy LoadBalancerSteeringPolicy `json:"steering_policy"`
+	SteeringPolicy SteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
 	TTL  float64          `json:"ttl"`
@@ -455,90 +455,6 @@ func (r *LoadBalancer) UnmarshalJSON(data []byte) (err error) {
 
 func (r loadBalancerJSON) RawJSON() string {
 	return r.raw
-}
-
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type LoadBalancerSessionAffinity string
-
-const (
-	LoadBalancerSessionAffinityNone     LoadBalancerSessionAffinity = "none"
-	LoadBalancerSessionAffinityCookie   LoadBalancerSessionAffinity = "cookie"
-	LoadBalancerSessionAffinityIPCookie LoadBalancerSessionAffinity = "ip_cookie"
-	LoadBalancerSessionAffinityHeader   LoadBalancerSessionAffinity = "header"
-	LoadBalancerSessionAffinityEmpty    LoadBalancerSessionAffinity = "\"\""
-)
-
-func (r LoadBalancerSessionAffinity) IsKnown() bool {
-	switch r {
-	case LoadBalancerSessionAffinityNone, LoadBalancerSessionAffinityCookie, LoadBalancerSessionAffinityIPCookie, LoadBalancerSessionAffinityHeader, LoadBalancerSessionAffinityEmpty:
-		return true
-	}
-	return false
-}
-
-// Steering Policy for this load balancer.
-//
-//   - `"off"`: Use `default_pools`.
-//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-//     requests, the country for `country_pools` is determined by
-//     `location_strategy`.
-//   - `"random"`: Select a pool randomly.
-//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-//     default_pools (requires pool health checks).
-//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-//     pool using the Cloudflare PoP location for proxied requests or the location
-//     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
-//   - `""`: Will map to `"geo"` if you use
-//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type LoadBalancerSteeringPolicy string
-
-const (
-	LoadBalancerSteeringPolicyOff                      LoadBalancerSteeringPolicy = "off"
-	LoadBalancerSteeringPolicyGeo                      LoadBalancerSteeringPolicy = "geo"
-	LoadBalancerSteeringPolicyRandom                   LoadBalancerSteeringPolicy = "random"
-	LoadBalancerSteeringPolicyDynamicLatency           LoadBalancerSteeringPolicy = "dynamic_latency"
-	LoadBalancerSteeringPolicyProximity                LoadBalancerSteeringPolicy = "proximity"
-	LoadBalancerSteeringPolicyLeastOutstandingRequests LoadBalancerSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerSteeringPolicyLeastConnections         LoadBalancerSteeringPolicy = "least_connections"
-	LoadBalancerSteeringPolicyEmpty                    LoadBalancerSteeringPolicy = "\"\""
-)
-
-func (r LoadBalancerSteeringPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerSteeringPolicyOff, LoadBalancerSteeringPolicyGeo, LoadBalancerSteeringPolicyRandom, LoadBalancerSteeringPolicyDynamicLatency, LoadBalancerSteeringPolicyProximity, LoadBalancerSteeringPolicyLeastOutstandingRequests, LoadBalancerSteeringPolicyLeastConnections, LoadBalancerSteeringPolicyEmpty:
-		return true
-	}
-	return false
 }
 
 // Configures load shedding policies and percentages for the pool.
@@ -1166,7 +1082,7 @@ type RulesOverrides struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity RulesOverridesSessionAffinity `json:"session_affinity"`
+	SessionAffinity SessionAffinity `json:"session_affinity"`
 	// Configures attributes for session affinity.
 	SessionAffinityAttributes SessionAffinityAttributes `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
@@ -1202,7 +1118,7 @@ type RulesOverrides struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy RulesOverridesSteeringPolicy `json:"steering_policy"`
+	SteeringPolicy SteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
 	TTL  float64            `json:"ttl"`
@@ -1234,90 +1150,6 @@ func (r *RulesOverrides) UnmarshalJSON(data []byte) (err error) {
 
 func (r rulesOverridesJSON) RawJSON() string {
 	return r.raw
-}
-
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type RulesOverridesSessionAffinity string
-
-const (
-	RulesOverridesSessionAffinityNone     RulesOverridesSessionAffinity = "none"
-	RulesOverridesSessionAffinityCookie   RulesOverridesSessionAffinity = "cookie"
-	RulesOverridesSessionAffinityIPCookie RulesOverridesSessionAffinity = "ip_cookie"
-	RulesOverridesSessionAffinityHeader   RulesOverridesSessionAffinity = "header"
-	RulesOverridesSessionAffinityEmpty    RulesOverridesSessionAffinity = "\"\""
-)
-
-func (r RulesOverridesSessionAffinity) IsKnown() bool {
-	switch r {
-	case RulesOverridesSessionAffinityNone, RulesOverridesSessionAffinityCookie, RulesOverridesSessionAffinityIPCookie, RulesOverridesSessionAffinityHeader, RulesOverridesSessionAffinityEmpty:
-		return true
-	}
-	return false
-}
-
-// Steering Policy for this load balancer.
-//
-//   - `"off"`: Use `default_pools`.
-//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-//     requests, the country for `country_pools` is determined by
-//     `location_strategy`.
-//   - `"random"`: Select a pool randomly.
-//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-//     default_pools (requires pool health checks).
-//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-//     pool using the Cloudflare PoP location for proxied requests or the location
-//     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
-//   - `""`: Will map to `"geo"` if you use
-//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type RulesOverridesSteeringPolicy string
-
-const (
-	RulesOverridesSteeringPolicyOff                      RulesOverridesSteeringPolicy = "off"
-	RulesOverridesSteeringPolicyGeo                      RulesOverridesSteeringPolicy = "geo"
-	RulesOverridesSteeringPolicyRandom                   RulesOverridesSteeringPolicy = "random"
-	RulesOverridesSteeringPolicyDynamicLatency           RulesOverridesSteeringPolicy = "dynamic_latency"
-	RulesOverridesSteeringPolicyProximity                RulesOverridesSteeringPolicy = "proximity"
-	RulesOverridesSteeringPolicyLeastOutstandingRequests RulesOverridesSteeringPolicy = "least_outstanding_requests"
-	RulesOverridesSteeringPolicyLeastConnections         RulesOverridesSteeringPolicy = "least_connections"
-	RulesOverridesSteeringPolicyEmpty                    RulesOverridesSteeringPolicy = "\"\""
-)
-
-func (r RulesOverridesSteeringPolicy) IsKnown() bool {
-	switch r {
-	case RulesOverridesSteeringPolicyOff, RulesOverridesSteeringPolicyGeo, RulesOverridesSteeringPolicyRandom, RulesOverridesSteeringPolicyDynamicLatency, RulesOverridesSteeringPolicyProximity, RulesOverridesSteeringPolicyLeastOutstandingRequests, RulesOverridesSteeringPolicyLeastConnections, RulesOverridesSteeringPolicyEmpty:
-		return true
-	}
-	return false
 }
 
 // A rule object containing conditions and overrides for this load balancer to
@@ -1436,7 +1268,7 @@ type RulesOverridesParam struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity param.Field[RulesOverridesSessionAffinity] `json:"session_affinity"`
+	SessionAffinity param.Field[SessionAffinity] `json:"session_affinity"`
 	// Configures attributes for session affinity.
 	SessionAffinityAttributes param.Field[SessionAffinityAttributesParam] `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
@@ -1472,7 +1304,7 @@ type RulesOverridesParam struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy param.Field[RulesOverridesSteeringPolicy] `json:"steering_policy"`
+	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
 	TTL param.Field[float64] `json:"ttl"`
@@ -1480,6 +1312,47 @@ type RulesOverridesParam struct {
 
 func (r RulesOverridesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Specifies the type of session affinity the load balancer should use unless
+// specified as `"none"` or "" (default). The supported types are:
+//
+//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
+//     generated, encoding information of which origin the request will be forwarded
+//     to. Subsequent requests, by the same client to the same load balancer, will be
+//     sent to the origin server the cookie encodes, for the duration of the cookie
+//     and as long as the origin server remains healthy. If the cookie has expired or
+//     the origin server is unhealthy, then a new origin server is calculated and
+//     used.
+//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
+//     selection is stable and based on the client's ip address.
+//   - `"header"`: On the first request to a proxied load balancer, a session key
+//     based on the configured HTTP headers (see
+//     `session_affinity_attributes.headers`) is generated, encoding the request
+//     headers used for storing in the load balancer session state which origin the
+//     request will be forwarded to. Subsequent requests to the load balancer with
+//     the same headers will be sent to the same origin server, for the duration of
+//     the session and as long as the origin server remains healthy. If the session
+//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
+//     server is unhealthy, then a new origin server is calculated and used. See
+//     `headers` in `session_affinity_attributes` for additional required
+//     configuration.
+type SessionAffinity string
+
+const (
+	SessionAffinityNone     SessionAffinity = "none"
+	SessionAffinityCookie   SessionAffinity = "cookie"
+	SessionAffinityIPCookie SessionAffinity = "ip_cookie"
+	SessionAffinityHeader   SessionAffinity = "header"
+	SessionAffinityEmpty    SessionAffinity = "\"\""
+)
+
+func (r SessionAffinity) IsKnown() bool {
+	switch r {
+	case SessionAffinityNone, SessionAffinityCookie, SessionAffinityIPCookie, SessionAffinityHeader, SessionAffinityEmpty:
+		return true
+	}
+	return false
 }
 
 // Configures attributes for session affinity.
@@ -1671,6 +1544,49 @@ func (r SessionAffinityAttributesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Steering Policy for this load balancer.
+//
+//   - `"off"`: Use `default_pools`.
+//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+//     requests, the country for `country_pools` is determined by
+//     `location_strategy`.
+//   - `"random"`: Select a pool randomly.
+//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
+//     default_pools (requires pool health checks).
+//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
+//     pool using the Cloudflare PoP location for proxied requests or the location
+//     determined by `location_strategy` for non-proxied requests.
+//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
+//     `random_steering` weights, as well as each pool's number of outstanding
+//     requests. Pools with more pending requests are weighted proportionately less
+//     relative to others.
+//   - `"least_connections"`: Select a pool by taking into consideration
+//     `random_steering` weights, as well as each pool's number of open connections.
+//     Pools with more open connections are weighted proportionately less relative to
+//     others. Supported for HTTP/1 and HTTP/2 connections.
+//   - `""`: Will map to `"geo"` if you use
+//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+type SteeringPolicy string
+
+const (
+	SteeringPolicyOff                      SteeringPolicy = "off"
+	SteeringPolicyGeo                      SteeringPolicy = "geo"
+	SteeringPolicyRandom                   SteeringPolicy = "random"
+	SteeringPolicyDynamicLatency           SteeringPolicy = "dynamic_latency"
+	SteeringPolicyProximity                SteeringPolicy = "proximity"
+	SteeringPolicyLeastOutstandingRequests SteeringPolicy = "least_outstanding_requests"
+	SteeringPolicyLeastConnections         SteeringPolicy = "least_connections"
+	SteeringPolicyEmpty                    SteeringPolicy = "\"\""
+)
+
+func (r SteeringPolicy) IsKnown() bool {
+	switch r {
+	case SteeringPolicyOff, SteeringPolicyGeo, SteeringPolicyRandom, SteeringPolicyDynamicLatency, SteeringPolicyProximity, SteeringPolicyLeastOutstandingRequests, SteeringPolicyLeastConnections, SteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerDeleteResponse struct {
 	ID   string                         `json:"id"`
 	JSON loadBalancerDeleteResponseJSON `json:"-"`
@@ -1766,7 +1682,7 @@ type LoadBalancerNewParams struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity param.Field[LoadBalancerNewParamsSessionAffinity] `json:"session_affinity"`
+	SessionAffinity param.Field[SessionAffinity] `json:"session_affinity"`
 	// Configures attributes for session affinity.
 	SessionAffinityAttributes param.Field[SessionAffinityAttributesParam] `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
@@ -1802,7 +1718,7 @@ type LoadBalancerNewParams struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy param.Field[LoadBalancerNewParamsSteeringPolicy] `json:"steering_policy"`
+	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
 	TTL param.Field[float64] `json:"ttl"`
@@ -1810,90 +1726,6 @@ type LoadBalancerNewParams struct {
 
 func (r LoadBalancerNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type LoadBalancerNewParamsSessionAffinity string
-
-const (
-	LoadBalancerNewParamsSessionAffinityNone     LoadBalancerNewParamsSessionAffinity = "none"
-	LoadBalancerNewParamsSessionAffinityCookie   LoadBalancerNewParamsSessionAffinity = "cookie"
-	LoadBalancerNewParamsSessionAffinityIPCookie LoadBalancerNewParamsSessionAffinity = "ip_cookie"
-	LoadBalancerNewParamsSessionAffinityHeader   LoadBalancerNewParamsSessionAffinity = "header"
-	LoadBalancerNewParamsSessionAffinityEmpty    LoadBalancerNewParamsSessionAffinity = "\"\""
-)
-
-func (r LoadBalancerNewParamsSessionAffinity) IsKnown() bool {
-	switch r {
-	case LoadBalancerNewParamsSessionAffinityNone, LoadBalancerNewParamsSessionAffinityCookie, LoadBalancerNewParamsSessionAffinityIPCookie, LoadBalancerNewParamsSessionAffinityHeader, LoadBalancerNewParamsSessionAffinityEmpty:
-		return true
-	}
-	return false
-}
-
-// Steering Policy for this load balancer.
-//
-//   - `"off"`: Use `default_pools`.
-//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-//     requests, the country for `country_pools` is determined by
-//     `location_strategy`.
-//   - `"random"`: Select a pool randomly.
-//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-//     default_pools (requires pool health checks).
-//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-//     pool using the Cloudflare PoP location for proxied requests or the location
-//     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
-//   - `""`: Will map to `"geo"` if you use
-//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type LoadBalancerNewParamsSteeringPolicy string
-
-const (
-	LoadBalancerNewParamsSteeringPolicyOff                      LoadBalancerNewParamsSteeringPolicy = "off"
-	LoadBalancerNewParamsSteeringPolicyGeo                      LoadBalancerNewParamsSteeringPolicy = "geo"
-	LoadBalancerNewParamsSteeringPolicyRandom                   LoadBalancerNewParamsSteeringPolicy = "random"
-	LoadBalancerNewParamsSteeringPolicyDynamicLatency           LoadBalancerNewParamsSteeringPolicy = "dynamic_latency"
-	LoadBalancerNewParamsSteeringPolicyProximity                LoadBalancerNewParamsSteeringPolicy = "proximity"
-	LoadBalancerNewParamsSteeringPolicyLeastOutstandingRequests LoadBalancerNewParamsSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerNewParamsSteeringPolicyLeastConnections         LoadBalancerNewParamsSteeringPolicy = "least_connections"
-	LoadBalancerNewParamsSteeringPolicyEmpty                    LoadBalancerNewParamsSteeringPolicy = "\"\""
-)
-
-func (r LoadBalancerNewParamsSteeringPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerNewParamsSteeringPolicyOff, LoadBalancerNewParamsSteeringPolicyGeo, LoadBalancerNewParamsSteeringPolicyRandom, LoadBalancerNewParamsSteeringPolicyDynamicLatency, LoadBalancerNewParamsSteeringPolicyProximity, LoadBalancerNewParamsSteeringPolicyLeastOutstandingRequests, LoadBalancerNewParamsSteeringPolicyLeastConnections, LoadBalancerNewParamsSteeringPolicyEmpty:
-		return true
-	}
-	return false
 }
 
 type LoadBalancerNewResponseEnvelope struct {
@@ -2015,7 +1847,7 @@ type LoadBalancerUpdateParams struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity param.Field[LoadBalancerUpdateParamsSessionAffinity] `json:"session_affinity"`
+	SessionAffinity param.Field[SessionAffinity] `json:"session_affinity"`
 	// Configures attributes for session affinity.
 	SessionAffinityAttributes param.Field[SessionAffinityAttributesParam] `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
@@ -2051,7 +1883,7 @@ type LoadBalancerUpdateParams struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy param.Field[LoadBalancerUpdateParamsSteeringPolicy] `json:"steering_policy"`
+	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
 	TTL param.Field[float64] `json:"ttl"`
@@ -2059,90 +1891,6 @@ type LoadBalancerUpdateParams struct {
 
 func (r LoadBalancerUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type LoadBalancerUpdateParamsSessionAffinity string
-
-const (
-	LoadBalancerUpdateParamsSessionAffinityNone     LoadBalancerUpdateParamsSessionAffinity = "none"
-	LoadBalancerUpdateParamsSessionAffinityCookie   LoadBalancerUpdateParamsSessionAffinity = "cookie"
-	LoadBalancerUpdateParamsSessionAffinityIPCookie LoadBalancerUpdateParamsSessionAffinity = "ip_cookie"
-	LoadBalancerUpdateParamsSessionAffinityHeader   LoadBalancerUpdateParamsSessionAffinity = "header"
-	LoadBalancerUpdateParamsSessionAffinityEmpty    LoadBalancerUpdateParamsSessionAffinity = "\"\""
-)
-
-func (r LoadBalancerUpdateParamsSessionAffinity) IsKnown() bool {
-	switch r {
-	case LoadBalancerUpdateParamsSessionAffinityNone, LoadBalancerUpdateParamsSessionAffinityCookie, LoadBalancerUpdateParamsSessionAffinityIPCookie, LoadBalancerUpdateParamsSessionAffinityHeader, LoadBalancerUpdateParamsSessionAffinityEmpty:
-		return true
-	}
-	return false
-}
-
-// Steering Policy for this load balancer.
-//
-//   - `"off"`: Use `default_pools`.
-//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-//     requests, the country for `country_pools` is determined by
-//     `location_strategy`.
-//   - `"random"`: Select a pool randomly.
-//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-//     default_pools (requires pool health checks).
-//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-//     pool using the Cloudflare PoP location for proxied requests or the location
-//     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
-//   - `""`: Will map to `"geo"` if you use
-//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type LoadBalancerUpdateParamsSteeringPolicy string
-
-const (
-	LoadBalancerUpdateParamsSteeringPolicyOff                      LoadBalancerUpdateParamsSteeringPolicy = "off"
-	LoadBalancerUpdateParamsSteeringPolicyGeo                      LoadBalancerUpdateParamsSteeringPolicy = "geo"
-	LoadBalancerUpdateParamsSteeringPolicyRandom                   LoadBalancerUpdateParamsSteeringPolicy = "random"
-	LoadBalancerUpdateParamsSteeringPolicyDynamicLatency           LoadBalancerUpdateParamsSteeringPolicy = "dynamic_latency"
-	LoadBalancerUpdateParamsSteeringPolicyProximity                LoadBalancerUpdateParamsSteeringPolicy = "proximity"
-	LoadBalancerUpdateParamsSteeringPolicyLeastOutstandingRequests LoadBalancerUpdateParamsSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerUpdateParamsSteeringPolicyLeastConnections         LoadBalancerUpdateParamsSteeringPolicy = "least_connections"
-	LoadBalancerUpdateParamsSteeringPolicyEmpty                    LoadBalancerUpdateParamsSteeringPolicy = "\"\""
-)
-
-func (r LoadBalancerUpdateParamsSteeringPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerUpdateParamsSteeringPolicyOff, LoadBalancerUpdateParamsSteeringPolicyGeo, LoadBalancerUpdateParamsSteeringPolicyRandom, LoadBalancerUpdateParamsSteeringPolicyDynamicLatency, LoadBalancerUpdateParamsSteeringPolicyProximity, LoadBalancerUpdateParamsSteeringPolicyLeastOutstandingRequests, LoadBalancerUpdateParamsSteeringPolicyLeastConnections, LoadBalancerUpdateParamsSteeringPolicyEmpty:
-		return true
-	}
-	return false
 }
 
 type LoadBalancerUpdateResponseEnvelope struct {
@@ -2194,11 +1942,6 @@ type LoadBalancerListParams struct {
 
 type LoadBalancerDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r LoadBalancerDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type LoadBalancerDeleteResponseEnvelope struct {
@@ -2320,7 +2063,7 @@ type LoadBalancerEditParams struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity param.Field[LoadBalancerEditParamsSessionAffinity] `json:"session_affinity"`
+	SessionAffinity param.Field[SessionAffinity] `json:"session_affinity"`
 	// Configures attributes for session affinity.
 	SessionAffinityAttributes param.Field[SessionAffinityAttributesParam] `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
@@ -2356,7 +2099,7 @@ type LoadBalancerEditParams struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy param.Field[LoadBalancerEditParamsSteeringPolicy] `json:"steering_policy"`
+	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
 	TTL param.Field[float64] `json:"ttl"`
@@ -2364,90 +2107,6 @@ type LoadBalancerEditParams struct {
 
 func (r LoadBalancerEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type LoadBalancerEditParamsSessionAffinity string
-
-const (
-	LoadBalancerEditParamsSessionAffinityNone     LoadBalancerEditParamsSessionAffinity = "none"
-	LoadBalancerEditParamsSessionAffinityCookie   LoadBalancerEditParamsSessionAffinity = "cookie"
-	LoadBalancerEditParamsSessionAffinityIPCookie LoadBalancerEditParamsSessionAffinity = "ip_cookie"
-	LoadBalancerEditParamsSessionAffinityHeader   LoadBalancerEditParamsSessionAffinity = "header"
-	LoadBalancerEditParamsSessionAffinityEmpty    LoadBalancerEditParamsSessionAffinity = "\"\""
-)
-
-func (r LoadBalancerEditParamsSessionAffinity) IsKnown() bool {
-	switch r {
-	case LoadBalancerEditParamsSessionAffinityNone, LoadBalancerEditParamsSessionAffinityCookie, LoadBalancerEditParamsSessionAffinityIPCookie, LoadBalancerEditParamsSessionAffinityHeader, LoadBalancerEditParamsSessionAffinityEmpty:
-		return true
-	}
-	return false
-}
-
-// Steering Policy for this load balancer.
-//
-//   - `"off"`: Use `default_pools`.
-//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-//     requests, the country for `country_pools` is determined by
-//     `location_strategy`.
-//   - `"random"`: Select a pool randomly.
-//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-//     default_pools (requires pool health checks).
-//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-//     pool using the Cloudflare PoP location for proxied requests or the location
-//     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
-//   - `""`: Will map to `"geo"` if you use
-//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type LoadBalancerEditParamsSteeringPolicy string
-
-const (
-	LoadBalancerEditParamsSteeringPolicyOff                      LoadBalancerEditParamsSteeringPolicy = "off"
-	LoadBalancerEditParamsSteeringPolicyGeo                      LoadBalancerEditParamsSteeringPolicy = "geo"
-	LoadBalancerEditParamsSteeringPolicyRandom                   LoadBalancerEditParamsSteeringPolicy = "random"
-	LoadBalancerEditParamsSteeringPolicyDynamicLatency           LoadBalancerEditParamsSteeringPolicy = "dynamic_latency"
-	LoadBalancerEditParamsSteeringPolicyProximity                LoadBalancerEditParamsSteeringPolicy = "proximity"
-	LoadBalancerEditParamsSteeringPolicyLeastOutstandingRequests LoadBalancerEditParamsSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerEditParamsSteeringPolicyLeastConnections         LoadBalancerEditParamsSteeringPolicy = "least_connections"
-	LoadBalancerEditParamsSteeringPolicyEmpty                    LoadBalancerEditParamsSteeringPolicy = "\"\""
-)
-
-func (r LoadBalancerEditParamsSteeringPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerEditParamsSteeringPolicyOff, LoadBalancerEditParamsSteeringPolicyGeo, LoadBalancerEditParamsSteeringPolicyRandom, LoadBalancerEditParamsSteeringPolicyDynamicLatency, LoadBalancerEditParamsSteeringPolicyProximity, LoadBalancerEditParamsSteeringPolicyLeastOutstandingRequests, LoadBalancerEditParamsSteeringPolicyLeastConnections, LoadBalancerEditParamsSteeringPolicyEmpty:
-		return true
-	}
-	return false
 }
 
 type LoadBalancerEditResponseEnvelope struct {

@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -417,7 +417,7 @@ func (r AIRunParamsBodyTextEmbeddingsTextArray) ImplementsWorkersAIRunParamsBody
 }
 
 type AIRunParamsBodySpeechRecognition struct {
-	Audio param.Field[[]float64] `json:"audio"`
+	Audio param.Field[[]float64] `json:"audio,required"`
 }
 
 func (r AIRunParamsBodySpeechRecognition) MarshalJSON() (data []byte, err error) {
@@ -427,7 +427,7 @@ func (r AIRunParamsBodySpeechRecognition) MarshalJSON() (data []byte, err error)
 func (r AIRunParamsBodySpeechRecognition) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyImageClassification struct {
-	Image param.Field[[]float64] `json:"image"`
+	Image param.Field[[]float64] `json:"image,required"`
 }
 
 func (r AIRunParamsBodyImageClassification) MarshalJSON() (data []byte, err error) {

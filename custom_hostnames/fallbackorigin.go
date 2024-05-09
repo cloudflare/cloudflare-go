@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -48,10 +48,10 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 }
 
 // Delete Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Delete(ctx context.Context, params FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
+func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -136,11 +136,11 @@ func (r FallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   FallbackOriginUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  FallbackOriginUpdateResponseUnion           `json:"result"`
 	JSON    fallbackOriginUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -149,8 +149,8 @@ type FallbackOriginUpdateResponseEnvelope struct {
 type fallbackOriginUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -181,19 +181,14 @@ func (r FallbackOriginUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type FallbackOriginDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r FallbackOriginDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type FallbackOriginDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   FallbackOriginDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  FallbackOriginDeleteResponseUnion           `json:"result"`
 	JSON    fallbackOriginDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -202,8 +197,8 @@ type FallbackOriginDeleteResponseEnvelope struct {
 type fallbackOriginDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -237,11 +232,11 @@ type FallbackOriginGetParams struct {
 }
 
 type FallbackOriginGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   FallbackOriginGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  FallbackOriginGetResponseUnion           `json:"result"`
 	JSON    fallbackOriginGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -250,8 +245,8 @@ type FallbackOriginGetResponseEnvelope struct {
 type fallbackOriginGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

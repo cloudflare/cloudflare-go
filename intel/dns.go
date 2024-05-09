@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -116,40 +116,12 @@ func (r dnsReverseRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSParam struct {
-	// Total results returned based on your search parameters.
-	Count param.Field[float64] `json:"count"`
-	// Current page within paginated list of results.
-	Page param.Field[float64] `json:"page"`
-	// Number of results per page of results.
-	PerPage param.Field[float64] `json:"per_page"`
-	// Reverse DNS look-ups observed during the time period.
-	ReverseRecords param.Field[[]DNSReverseRecordParam] `json:"reverse_records"`
-}
-
-func (r DNSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DNSReverseRecordParam struct {
-	// First seen date of the DNS record during the time period.
-	FirstSeen param.Field[time.Time] `json:"first_seen" format:"date"`
-	// Hostname that the IP was observed resolving to.
-	Hostname param.Field[interface{}] `json:"hostname"`
-	// Last seen date of the DNS record during the time period.
-	LastSeen param.Field[time.Time] `json:"last_seen" format:"date"`
-}
-
-func (r DNSReverseRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type DNSListResponse struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNS                   `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSListResponseSuccess `json:"success,required"`
+	Result  DNS                    `json:"result"`
 	JSON    dnsListResponseJSON    `json:"-"`
 }
 
@@ -157,8 +129,8 @@ type DNSListResponse struct {
 type dnsListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

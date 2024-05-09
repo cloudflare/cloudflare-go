@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // TotalTLSService contains methods and other services that help with interacting
@@ -57,9 +57,25 @@ func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts
 	return
 }
 
+// The Certificate Authority that Total TLS certificates will be issued through.
+type CertificateAuthority string
+
+const (
+	CertificateAuthorityGoogle      CertificateAuthority = "google"
+	CertificateAuthorityLetsEncrypt CertificateAuthority = "lets_encrypt"
+)
+
+func (r CertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificateAuthorityGoogle, CertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 type TotalTLSNewResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority TotalTLSNewResponseCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
@@ -86,22 +102,6 @@ func (r totalTLSNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The Certificate Authority that Total TLS certificates will be issued through.
-type TotalTLSNewResponseCertificateAuthority string
-
-const (
-	TotalTLSNewResponseCertificateAuthorityGoogle      TotalTLSNewResponseCertificateAuthority = "google"
-	TotalTLSNewResponseCertificateAuthorityLetsEncrypt TotalTLSNewResponseCertificateAuthority = "lets_encrypt"
-)
-
-func (r TotalTLSNewResponseCertificateAuthority) IsKnown() bool {
-	switch r {
-	case TotalTLSNewResponseCertificateAuthorityGoogle, TotalTLSNewResponseCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
 // The validity period in days for the certificates ordered via Total TLS.
 type TotalTLSNewResponseValidityDays int64
 
@@ -119,7 +119,7 @@ func (r TotalTLSNewResponseValidityDays) IsKnown() bool {
 
 type TotalTLSGetResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority TotalTLSGetResponseCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
@@ -146,22 +146,6 @@ func (r totalTLSGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The Certificate Authority that Total TLS certificates will be issued through.
-type TotalTLSGetResponseCertificateAuthority string
-
-const (
-	TotalTLSGetResponseCertificateAuthorityGoogle      TotalTLSGetResponseCertificateAuthority = "google"
-	TotalTLSGetResponseCertificateAuthorityLetsEncrypt TotalTLSGetResponseCertificateAuthority = "lets_encrypt"
-)
-
-func (r TotalTLSGetResponseCertificateAuthority) IsKnown() bool {
-	switch r {
-	case TotalTLSGetResponseCertificateAuthorityGoogle, TotalTLSGetResponseCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
 // The validity period in days for the certificates ordered via Total TLS.
 type TotalTLSGetResponseValidityDays int64
 
@@ -184,35 +168,19 @@ type TotalTLSNewParams struct {
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority param.Field[TotalTLSNewParamsCertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
 }
 
 func (r TotalTLSNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The Certificate Authority that Total TLS certificates will be issued through.
-type TotalTLSNewParamsCertificateAuthority string
-
-const (
-	TotalTLSNewParamsCertificateAuthorityGoogle      TotalTLSNewParamsCertificateAuthority = "google"
-	TotalTLSNewParamsCertificateAuthorityLetsEncrypt TotalTLSNewParamsCertificateAuthority = "lets_encrypt"
-)
-
-func (r TotalTLSNewParamsCertificateAuthority) IsKnown() bool {
-	switch r {
-	case TotalTLSNewParamsCertificateAuthorityGoogle, TotalTLSNewParamsCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
 type TotalTLSNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TotalTLSNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success TotalTLSNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  TotalTLSNewResponse                `json:"result"`
 	JSON    totalTLSNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -221,8 +189,8 @@ type TotalTLSNewResponseEnvelope struct {
 type totalTLSNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -258,9 +226,9 @@ type TotalTLSGetParams struct {
 type TotalTLSGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TotalTLSGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success TotalTLSGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  TotalTLSGetResponse                `json:"result"`
 	JSON    totalTLSGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -269,8 +237,8 @@ type TotalTLSGetResponseEnvelope struct {
 type totalTLSGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

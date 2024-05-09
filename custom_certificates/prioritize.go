@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // PrioritizeService contains methods and other services that help with interacting
@@ -72,9 +72,9 @@ func (r PrioritizeUpdateParamsCertificate) MarshalJSON() (data []byte, err error
 type PrioritizeUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []CustomCertificate   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PrioritizeUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []CustomCertificate                        `json:"result,nullable"`
 	ResultInfo PrioritizeUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       prioritizeUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -84,8 +84,8 @@ type PrioritizeUpdateResponseEnvelope struct {
 type prioritizeUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

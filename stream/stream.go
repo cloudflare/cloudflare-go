@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // StreamService contains methods and other services that help with interacting
@@ -69,7 +69,7 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
 	return
 }
 
@@ -99,10 +99,10 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 }
 
 // Deletes a video and its copies from Cloudflare Stream.
-func (r *StreamService) Delete(ctx context.Context, identifier string, params StreamDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *StreamService) Delete(ctx context.Context, identifier string, body StreamDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/%s", params.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
@@ -430,11 +430,6 @@ func (r StreamListParamsStatus) IsKnown() bool {
 type StreamDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r StreamDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type StreamGetParams struct {

@@ -173,20 +173,14 @@ type EventDetailGetParams struct {
 }
 
 type EventDetailGetResponseEnvelope struct {
-	Errors   interface{}                        `json:"errors,required"`
-	Messages interface{}                        `json:"messages,required"`
-	Result   EventDetailGetResponse             `json:"result,required"`
-	Success  interface{}                        `json:"success,required"`
-	JSON     eventDetailGetResponseEnvelopeJSON `json:"-"`
+	Result EventDetailGetResponse             `json:"result,required"`
+	JSON   eventDetailGetResponseEnvelopeJSON `json:"-"`
 }
 
 // eventDetailGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventDetailGetResponseEnvelope]
 type eventDetailGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

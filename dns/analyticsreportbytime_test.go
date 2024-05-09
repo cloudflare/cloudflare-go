@@ -16,7 +16,6 @@ import (
 )
 
 func TestAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -37,7 +36,7 @@ func TestAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
 		Metrics:    cloudflare.F("queryCount,uncachedCount"),
 		Since:      cloudflare.F(time.Now()),
 		Sort:       cloudflare.F("+responseCode,-queryName"),
-		TimeDelta:  cloudflare.F(dns.AnalyticsReportBytimeGetParamsTimeDeltaHour),
+		TimeDelta:  cloudflare.F(dns.DeltaHour),
 		Until:      cloudflare.F(time.Now()),
 	})
 	if err != nil {

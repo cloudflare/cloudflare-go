@@ -10,13 +10,12 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/alerting"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 func TestPolicyNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -34,14 +33,14 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeUniversalSSLEventType),
 		Enabled:   cloudflare.F(true),
 		Mechanisms: cloudflare.F(alerting.MechanismParam{
-			"email": []alerting.MechanismParam{{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("test@example.com")),
+			"email": []alerting.MechanismItemParam{{
+				ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("test@example.com")),
 			}},
-			"pagerduty": []alerting.MechanismParam{{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+			"pagerduty": []alerting.MechanismItemParam{{
+				ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
 			}},
-			"webhooks": []alerting.MechanismParam{{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+			"webhooks": []alerting.MechanismItemParam{{
+				ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 			}},
 		}),
 		Name:        cloudflare.F("SSL Notification Event Policy"),
@@ -99,7 +98,6 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 }
 
 func TestPolicyUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -163,14 +161,14 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				Zones:                        cloudflare.F([]string{"string", "string", "string"}),
 			}),
 			Mechanisms: cloudflare.F(alerting.MechanismParam{
-				"email": []alerting.MechanismParam{{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("test@example.com")),
+				"email": []alerting.MechanismItemParam{{
+					ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("test@example.com")),
 				}},
-				"pagerduty": []alerting.MechanismParam{{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+				"pagerduty": []alerting.MechanismItemParam{{
+					ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
 				}},
-				"webhooks": []alerting.MechanismParam{{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+				"webhooks": []alerting.MechanismItemParam{{
+					ID: cloudflare.F[alerting.MechanismItemIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 				}},
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),
@@ -186,7 +184,6 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestPolicyList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -212,7 +209,6 @@ func TestPolicyList(t *testing.T) {
 }
 
 func TestPolicyDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -242,7 +238,6 @@ func TestPolicyDelete(t *testing.T) {
 }
 
 func TestPolicyGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

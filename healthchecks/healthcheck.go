@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // HealthcheckService contains methods and other services that help with
@@ -88,10 +88,10 @@ func (r *HealthcheckService) ListAutoPaging(ctx context.Context, params Healthch
 }
 
 // Delete a health check.
-func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, params HealthcheckDeleteParams, opts ...option.RequestOption) (res *HealthcheckDeleteResponse, err error) {
+func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, body HealthcheckDeleteParams, opts ...option.RequestOption) (res *HealthcheckDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
+	path := fmt.Sprintf("zones/%s/healthchecks/%s", body.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -588,11 +588,6 @@ func (r HealthcheckListParams) URLQuery() (v url.Values) {
 type HealthcheckDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r HealthcheckDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type HealthcheckDeleteResponseEnvelope struct {

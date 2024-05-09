@@ -6,15 +6,13 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // SnippetService contains methods and other services that help with interacting
@@ -39,11 +37,11 @@ func NewSnippetService(opts ...option.RequestOption) (r *SnippetService) {
 }
 
 // Put Snippet
-func (r *SnippetService) Update(ctx context.Context, zoneIdentifier string, snippetName string, body SnippetUpdateParams, opts ...option.RequestOption) (res *Snippet, err error) {
+func (r *SnippetService) Update(ctx context.Context, snippetName string, params SnippetUpdateParams, opts ...option.RequestOption) (res *Snippet, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/snippets/%s", params.ZoneID, snippetName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +50,11 @@ func (r *SnippetService) Update(ctx context.Context, zoneIdentifier string, snip
 }
 
 // All Snippets
-func (r *SnippetService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[Snippet], err error) {
+func (r *SnippetService) List(ctx context.Context, query SnippetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Snippet], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/snippets", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/snippets", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -70,28 +68,23 @@ func (r *SnippetService) List(ctx context.Context, zoneIdentifier string, opts .
 }
 
 // All Snippets
-func (r *SnippetService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Snippet] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
+func (r *SnippetService) ListAutoPaging(ctx context.Context, query SnippetListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Snippet] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Snippet
-func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *SnippetDeleteResponseUnion, err error) {
+func (r *SnippetService) Delete(ctx context.Context, snippetName string, body SnippetDeleteParams, opts ...option.RequestOption) (res *SnippetDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SnippetDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	path := fmt.Sprintf("zones/%s/snippets/%s", body.ZoneID, snippetName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
 // Snippet
-func (r *SnippetService) Get(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *Snippet, err error) {
+func (r *SnippetService) Get(ctx context.Context, snippetName string, query SnippetGetParams, opts ...option.RequestOption) (res *Snippet, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
+	path := fmt.Sprintf("zones/%s/snippets/%s", query.ZoneID, snippetName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -128,32 +121,50 @@ func (r snippetJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [snippets.SnippetDeleteResponseUnknown],
-// [snippets.SnippetDeleteResponseArray] or [shared.UnionString].
-type SnippetDeleteResponseUnion interface {
-	ImplementsSnippetsSnippetDeleteResponseUnion()
+type SnippetDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success SnippetDeleteResponseSuccess `json:"success,required"`
+	JSON    snippetDeleteResponseJSON    `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SnippetDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SnippetDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// snippetDeleteResponseJSON contains the JSON metadata for the struct
+// [SnippetDeleteResponse]
+type snippetDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-type SnippetDeleteResponseArray []interface{}
+func (r *SnippetDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r SnippetDeleteResponseArray) ImplementsSnippetsSnippetDeleteResponseUnion() {}
+func (r snippetDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SnippetDeleteResponseSuccess bool
+
+const (
+	SnippetDeleteResponseSuccessTrue SnippetDeleteResponseSuccess = true
+)
+
+func (r SnippetDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case SnippetDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SnippetUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Content files of uploaded snippet
 	Files    param.Field[string]                      `json:"files"`
 	Metadata param.Field[SnippetUpdateParamsMetadata] `json:"metadata"`
@@ -175,11 +186,11 @@ func (r SnippetUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 type SnippetUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Snippet Information
-	Result Snippet `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    snippetUpdateResponseEnvelopeJSON    `json:"-"`
+	// Snippet Information
+	Result Snippet                           `json:"result"`
+	JSON   snippetUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // snippetUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -187,8 +198,8 @@ type SnippetUpdateResponseEnvelope struct {
 type snippetUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -216,57 +227,29 @@ func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type SnippetDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   SnippetDeleteResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success SnippetDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    snippetDeleteResponseEnvelopeJSON    `json:"-"`
+type SnippetListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-// snippetDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SnippetDeleteResponseEnvelope]
-type snippetDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+type SnippetDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-func (r *SnippetDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SnippetDeleteResponseEnvelopeSuccess bool
-
-const (
-	SnippetDeleteResponseEnvelopeSuccessTrue SnippetDeleteResponseEnvelopeSuccess = true
-)
-
-func (r SnippetDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SnippetDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+type SnippetGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SnippetGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Snippet Information
-	Result Snippet `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    snippetGetResponseEnvelopeJSON    `json:"-"`
+	// Snippet Information
+	Result Snippet                        `json:"result"`
+	JSON   snippetGetResponseEnvelopeJSON `json:"-"`
 }
 
 // snippetGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -274,8 +257,8 @@ type SnippetGetResponseEnvelope struct {
 type snippetGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

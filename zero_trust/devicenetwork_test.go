@@ -15,7 +15,6 @@ import (
 )
 
 func TestDeviceNetworkNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -47,7 +46,6 @@ func TestDeviceNetworkNewWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceNetworkUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,7 +81,6 @@ func TestDeviceNetworkUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceNetworkList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -109,7 +106,6 @@ func TestDeviceNetworkList(t *testing.T) {
 }
 
 func TestDeviceNetworkDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -127,7 +123,6 @@ func TestDeviceNetworkDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DeviceNetworkDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -140,7 +135,6 @@ func TestDeviceNetworkDelete(t *testing.T) {
 }
 
 func TestDeviceNetworkGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

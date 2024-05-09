@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -63,7 +63,7 @@ func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSCl
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", query.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -81,10 +81,10 @@ func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query O
 }
 
 // Delete Certificate
-func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, params OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponseUnion, err error) {
+func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, body OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", params.ZoneID, certificateID)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", body.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -235,11 +235,11 @@ func (r OriginTLSClientAuthNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OriginTLSClientAuthNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   OriginTLSClientAuthNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  OriginTLSClientAuthNewResponseUnion           `json:"result"`
 	JSON    originTLSClientAuthNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -248,8 +248,8 @@ type OriginTLSClientAuthNewResponseEnvelope struct {
 type originTLSClientAuthNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -285,19 +285,14 @@ type OriginTLSClientAuthListParams struct {
 type OriginTLSClientAuthDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r OriginTLSClientAuthDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   OriginTLSClientAuthDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  OriginTLSClientAuthDeleteResponseUnion           `json:"result"`
 	JSON    originTLSClientAuthDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -306,8 +301,8 @@ type OriginTLSClientAuthDeleteResponseEnvelope struct {
 type originTLSClientAuthDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -341,11 +336,11 @@ type OriginTLSClientAuthGetParams struct {
 }
 
 type OriginTLSClientAuthGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   OriginTLSClientAuthGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  OriginTLSClientAuthGetResponseUnion           `json:"result"`
 	JSON    originTLSClientAuthGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -354,8 +349,8 @@ type OriginTLSClientAuthGetResponseEnvelope struct {
 type originTLSClientAuthGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

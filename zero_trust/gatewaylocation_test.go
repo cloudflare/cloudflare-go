@@ -15,7 +15,6 @@ import (
 )
 
 func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -51,7 +50,6 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 }
 
 func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -91,7 +89,6 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestGatewayLocationList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -117,7 +114,6 @@ func TestGatewayLocationList(t *testing.T) {
 }
 
 func TestGatewayLocationDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -135,7 +131,6 @@ func TestGatewayLocationDelete(t *testing.T) {
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayLocationDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -148,7 +143,6 @@ func TestGatewayLocationDelete(t *testing.T) {
 }
 
 func TestGatewayLocationGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

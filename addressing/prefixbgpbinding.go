@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // PrefixBGPBindingService contains methods and other services that help with
@@ -60,7 +60,7 @@ func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, que
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", query.AccountID, prefixID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -177,34 +177,6 @@ func (r ServiceBindingProvisioningState) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type ServiceBindingParam struct {
-	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR param.Field[string] `json:"cidr"`
-	// Status of a Service Binding's deployment to the Cloudflare network
-	Provisioning param.Field[ServiceBindingProvisioningParam] `json:"provisioning"`
-	// Identifier
-	ServiceID param.Field[string] `json:"service_id"`
-	// Name of a service running on the Cloudflare network
-	ServiceName param.Field[string] `json:"service_name"`
-}
-
-func (r ServiceBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ServiceBindingParam) implementsWorkersBindingUnionParam() {}
-
-// Status of a Service Binding's deployment to the Cloudflare network
-type ServiceBindingProvisioningParam struct {
-	// When a binding has been deployed to a majority of Cloudflare datacenters, the
-	// binding will become active and can be used with its associated service.
-	State param.Field[ServiceBindingProvisioningState] `json:"state"`
-}
-
-func (r ServiceBindingProvisioningParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type PrefixBGPBindingDeleteResponse struct {

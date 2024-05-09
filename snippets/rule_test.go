@@ -15,7 +15,6 @@ import (
 )
 
 func TestRuleUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,28 +27,25 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Snippets.Rules.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		snippets.RuleUpdateParams{
-			Rules: cloudflare.F([]snippets.RuleUpdateParamsRule{{
-				Description: cloudflare.F("Rule description"),
-				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("http.cookie eq \"a=b\""),
-				SnippetName: cloudflare.F("snippet_name_01"),
-			}, {
-				Description: cloudflare.F("Rule description"),
-				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("http.cookie eq \"a=b\""),
-				SnippetName: cloudflare.F("snippet_name_01"),
-			}, {
-				Description: cloudflare.F("Rule description"),
-				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("http.cookie eq \"a=b\""),
-				SnippetName: cloudflare.F("snippet_name_01"),
-			}}),
-		},
-	)
+	_, err := client.Snippets.Rules.Update(context.TODO(), snippets.RuleUpdateParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Rules: cloudflare.F([]snippets.RuleUpdateParamsRule{{
+			Description: cloudflare.F("Rule description"),
+			Enabled:     cloudflare.F(true),
+			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
+			SnippetName: cloudflare.F("snippet_name_01"),
+		}, {
+			Description: cloudflare.F("Rule description"),
+			Enabled:     cloudflare.F(true),
+			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
+			SnippetName: cloudflare.F("snippet_name_01"),
+		}, {
+			Description: cloudflare.F("Rule description"),
+			Enabled:     cloudflare.F(true),
+			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
+			SnippetName: cloudflare.F("snippet_name_01"),
+		}}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -60,7 +56,6 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestRuleList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -73,7 +68,9 @@ func TestRuleList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Snippets.Rules.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Snippets.Rules.List(context.TODO(), snippets.RuleListParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

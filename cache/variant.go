@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // VariantService contains methods and other services that help with interacting
@@ -37,10 +37,10 @@ func NewVariantService(opts ...option.RequestOption) (r *VariantService) {
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 // does not serve the variant requested, the response will not be cached. This will
 // be indicated with BYPASS cache status in the response headers.
-func (r *VariantService) Delete(ctx context.Context, params VariantDeleteParams, opts ...option.RequestOption) (res *CacheVariant, err error) {
+func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, opts ...option.RequestOption) (res *CacheVariant, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VariantDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/variants", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/cache/variants", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -164,7 +164,7 @@ func (r variantEditResponseJSON) RawJSON() string {
 type VariantEditResponseValue struct {
 	// List of strings with the MIME types of all the variants that should be served
 	// for avif.
-	Avif []string `json:"avif"`
+	AVIF []string `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
 	BMP []string `json:"bmp"`
@@ -179,7 +179,7 @@ type VariantEditResponseValue struct {
 	JPEG []string `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
-	Jpg []string `json:"jpg"`
+	JPG []string `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
 	JPG2 []string `json:"jpg2"`
@@ -201,12 +201,12 @@ type VariantEditResponseValue struct {
 // variantEditResponseValueJSON contains the JSON metadata for the struct
 // [VariantEditResponseValue]
 type variantEditResponseValueJSON struct {
-	Avif        apijson.Field
+	AVIF        apijson.Field
 	BMP         apijson.Field
 	GIF         apijson.Field
 	JP2         apijson.Field
 	JPEG        apijson.Field
-	Jpg         apijson.Field
+	JPG         apijson.Field
 	JPG2        apijson.Field
 	PNG         apijson.Field
 	TIF         apijson.Field
@@ -261,7 +261,7 @@ func (r variantGetResponseJSON) RawJSON() string {
 type VariantGetResponseValue struct {
 	// List of strings with the MIME types of all the variants that should be served
 	// for avif.
-	Avif []string `json:"avif"`
+	AVIF []string `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
 	BMP []string `json:"bmp"`
@@ -276,7 +276,7 @@ type VariantGetResponseValue struct {
 	JPEG []string `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
-	Jpg []string `json:"jpg"`
+	JPG []string `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
 	JPG2 []string `json:"jpg2"`
@@ -298,12 +298,12 @@ type VariantGetResponseValue struct {
 // variantGetResponseValueJSON contains the JSON metadata for the struct
 // [VariantGetResponseValue]
 type variantGetResponseValueJSON struct {
-	Avif        apijson.Field
+	AVIF        apijson.Field
 	BMP         apijson.Field
 	GIF         apijson.Field
 	JP2         apijson.Field
 	JPEG        apijson.Field
-	Jpg         apijson.Field
+	JPG         apijson.Field
 	JPG2        apijson.Field
 	PNG         apijson.Field
 	TIF         apijson.Field
@@ -324,11 +324,6 @@ func (r variantGetResponseValueJSON) RawJSON() string {
 type VariantDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r VariantDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type VariantDeleteResponseEnvelope struct {
@@ -394,7 +389,7 @@ func (r VariantEditParams) MarshalJSON() (data []byte, err error) {
 type VariantEditParamsValue struct {
 	// List of strings with the MIME types of all the variants that should be served
 	// for avif.
-	Avif param.Field[[]string] `json:"avif"`
+	AVIF param.Field[[]string] `json:"avif"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for bmp.
 	BMP param.Field[[]string] `json:"bmp"`
@@ -409,7 +404,7 @@ type VariantEditParamsValue struct {
 	JPEG param.Field[[]string] `json:"jpeg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg.
-	Jpg param.Field[[]string] `json:"jpg"`
+	JPG param.Field[[]string] `json:"jpg"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for jpg2.
 	JPG2 param.Field[[]string] `json:"jpg2"`

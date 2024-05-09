@@ -145,6 +145,20 @@ func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeserie
 	return
 }
 
+// Get a time series of the percentage distribution of traffic per Post Quantum
+// suport.
+func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTPTimeseriesGroupPostQuantumParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupPostQuantumResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env HTTPTimeseriesGroupPostQuantumResponseEnvelope
+	path := "radar/http/timeseries_groups/post_quantum"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get a time series of the percentage distribution of traffic per TLS protocol
 // version.
 func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupTLSVersionResponse, err error) {
@@ -535,6 +549,54 @@ func (r *HTTPTimeseriesGroupOSResponseSerie0) UnmarshalJSON(data []byte) (err er
 }
 
 func (r httpTimeseriesGroupOSResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupPostQuantumResponse struct {
+	Meta   interface{}                                  `json:"meta,required"`
+	Serie0 HTTPTimeseriesGroupPostQuantumResponseSerie0 `json:"serie_0,required"`
+	JSON   httpTimeseriesGroupPostQuantumResponseJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupPostQuantumResponseJSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupPostQuantumResponse]
+type httpTimeseriesGroupPostQuantumResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupPostQuantumResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupPostQuantumResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupPostQuantumResponseSerie0 struct {
+	NotSupported []string                                         `json:"NOT_SUPPORTED,required"`
+	Supported    []string                                         `json:"SUPPORTED,required"`
+	Timestamps   []string                                         `json:"timestamps,required"`
+	JSON         httpTimeseriesGroupPostQuantumResponseSerie0JSON `json:"-"`
+}
+
+// httpTimeseriesGroupPostQuantumResponseSerie0JSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupPostQuantumResponseSerie0]
+type httpTimeseriesGroupPostQuantumResponseSerie0JSON struct {
+	NotSupported apijson.Field
+	Supported    apijson.Field
+	Timestamps   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupPostQuantumResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupPostQuantumResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2538,6 +2600,263 @@ func (r *HTTPTimeseriesGroupOSResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r httpTimeseriesGroupOSResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupPostQuantumParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[HTTPTimeseriesGroupPostQuantumParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Filter for bot class. Refer to
+	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
+	BotClass param.Field[[]HTTPTimeseriesGroupPostQuantumParamsBotClass] `query:"botClass"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]HTTPTimeseriesGroupPostQuantumParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Filter for device type.
+	DeviceType param.Field[[]HTTPTimeseriesGroupPostQuantumParamsDeviceType] `query:"deviceType"`
+	// Format results are returned in.
+	Format param.Field[HTTPTimeseriesGroupPostQuantumParamsFormat] `query:"format"`
+	// Filter for http protocol.
+	HTTPProtocol param.Field[[]HTTPTimeseriesGroupPostQuantumParamsHTTPProtocol] `query:"httpProtocol"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]HTTPTimeseriesGroupPostQuantumParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]HTTPTimeseriesGroupPostQuantumParamsIPVersion] `query:"ipVersion"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Filter for os name.
+	OS param.Field[[]HTTPTimeseriesGroupPostQuantumParamsOS] `query:"os"`
+	// Filter for tls version.
+	TLSVersion param.Field[[]HTTPTimeseriesGroupPostQuantumParamsTLSVersion] `query:"tlsVersion"`
+}
+
+// URLQuery serializes [HTTPTimeseriesGroupPostQuantumParams]'s query parameters as
+// `url.Values`.
+func (r HTTPTimeseriesGroupPostQuantumParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupPostQuantumParamsAggInterval string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsAggInterval15m HTTPTimeseriesGroupPostQuantumParamsAggInterval = "15m"
+	HTTPTimeseriesGroupPostQuantumParamsAggInterval1h  HTTPTimeseriesGroupPostQuantumParamsAggInterval = "1h"
+	HTTPTimeseriesGroupPostQuantumParamsAggInterval1d  HTTPTimeseriesGroupPostQuantumParamsAggInterval = "1d"
+	HTTPTimeseriesGroupPostQuantumParamsAggInterval1w  HTTPTimeseriesGroupPostQuantumParamsAggInterval = "1w"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsAggInterval15m, HTTPTimeseriesGroupPostQuantumParamsAggInterval1h, HTTPTimeseriesGroupPostQuantumParamsAggInterval1d, HTTPTimeseriesGroupPostQuantumParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumParamsBotClass string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyAutomated HTTPTimeseriesGroupPostQuantumParamsBotClass = "LIKELY_AUTOMATED"
+	HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyHuman     HTTPTimeseriesGroupPostQuantumParamsBotClass = "LIKELY_HUMAN"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyAutomated, HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumParamsDateRange string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsDateRange1d         HTTPTimeseriesGroupPostQuantumParamsDateRange = "1d"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange2d         HTTPTimeseriesGroupPostQuantumParamsDateRange = "2d"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange7d         HTTPTimeseriesGroupPostQuantumParamsDateRange = "7d"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange14d        HTTPTimeseriesGroupPostQuantumParamsDateRange = "14d"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange28d        HTTPTimeseriesGroupPostQuantumParamsDateRange = "28d"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange12w        HTTPTimeseriesGroupPostQuantumParamsDateRange = "12w"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange24w        HTTPTimeseriesGroupPostQuantumParamsDateRange = "24w"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange52w        HTTPTimeseriesGroupPostQuantumParamsDateRange = "52w"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange1dControl  HTTPTimeseriesGroupPostQuantumParamsDateRange = "1dControl"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange2dControl  HTTPTimeseriesGroupPostQuantumParamsDateRange = "2dControl"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange7dControl  HTTPTimeseriesGroupPostQuantumParamsDateRange = "7dControl"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange14dControl HTTPTimeseriesGroupPostQuantumParamsDateRange = "14dControl"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange28dControl HTTPTimeseriesGroupPostQuantumParamsDateRange = "28dControl"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange12wControl HTTPTimeseriesGroupPostQuantumParamsDateRange = "12wControl"
+	HTTPTimeseriesGroupPostQuantumParamsDateRange24wControl HTTPTimeseriesGroupPostQuantumParamsDateRange = "24wControl"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsDateRange1d, HTTPTimeseriesGroupPostQuantumParamsDateRange2d, HTTPTimeseriesGroupPostQuantumParamsDateRange7d, HTTPTimeseriesGroupPostQuantumParamsDateRange14d, HTTPTimeseriesGroupPostQuantumParamsDateRange28d, HTTPTimeseriesGroupPostQuantumParamsDateRange12w, HTTPTimeseriesGroupPostQuantumParamsDateRange24w, HTTPTimeseriesGroupPostQuantumParamsDateRange52w, HTTPTimeseriesGroupPostQuantumParamsDateRange1dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange2dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange7dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange14dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange28dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange12wControl, HTTPTimeseriesGroupPostQuantumParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumParamsDeviceType string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsDeviceTypeDesktop HTTPTimeseriesGroupPostQuantumParamsDeviceType = "DESKTOP"
+	HTTPTimeseriesGroupPostQuantumParamsDeviceTypeMobile  HTTPTimeseriesGroupPostQuantumParamsDeviceType = "MOBILE"
+	HTTPTimeseriesGroupPostQuantumParamsDeviceTypeOther   HTTPTimeseriesGroupPostQuantumParamsDeviceType = "OTHER"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsDeviceTypeDesktop, HTTPTimeseriesGroupPostQuantumParamsDeviceTypeMobile, HTTPTimeseriesGroupPostQuantumParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
+
+// Format results are returned in.
+type HTTPTimeseriesGroupPostQuantumParamsFormat string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsFormatJson HTTPTimeseriesGroupPostQuantumParamsFormat = "JSON"
+	HTTPTimeseriesGroupPostQuantumParamsFormatCsv  HTTPTimeseriesGroupPostQuantumParamsFormat = "CSV"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsFormatJson, HTTPTimeseriesGroupPostQuantumParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumParamsHTTPProtocol string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsHTTPProtocolHTTP  HTTPTimeseriesGroupPostQuantumParamsHTTPProtocol = "HTTP"
+	HTTPTimeseriesGroupPostQuantumParamsHTTPProtocolHTTPS HTTPTimeseriesGroupPostQuantumParamsHTTPProtocol = "HTTPS"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsHTTPProtocolHTTP, HTTPTimeseriesGroupPostQuantumParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumParamsHTTPVersion string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv1 HTTPTimeseriesGroupPostQuantumParamsHTTPVersion = "HTTPv1"
+	HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv2 HTTPTimeseriesGroupPostQuantumParamsHTTPVersion = "HTTPv2"
+	HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv3 HTTPTimeseriesGroupPostQuantumParamsHTTPVersion = "HTTPv3"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv1, HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv2, HTTPTimeseriesGroupPostQuantumParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumParamsIPVersion string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsIPVersionIPv4 HTTPTimeseriesGroupPostQuantumParamsIPVersion = "IPv4"
+	HTTPTimeseriesGroupPostQuantumParamsIPVersionIPv6 HTTPTimeseriesGroupPostQuantumParamsIPVersion = "IPv6"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsIPVersionIPv4, HTTPTimeseriesGroupPostQuantumParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumParamsOS string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsOSWindows  HTTPTimeseriesGroupPostQuantumParamsOS = "WINDOWS"
+	HTTPTimeseriesGroupPostQuantumParamsOSMacosx   HTTPTimeseriesGroupPostQuantumParamsOS = "MACOSX"
+	HTTPTimeseriesGroupPostQuantumParamsOSIos      HTTPTimeseriesGroupPostQuantumParamsOS = "IOS"
+	HTTPTimeseriesGroupPostQuantumParamsOSAndroid  HTTPTimeseriesGroupPostQuantumParamsOS = "ANDROID"
+	HTTPTimeseriesGroupPostQuantumParamsOSChromeos HTTPTimeseriesGroupPostQuantumParamsOS = "CHROMEOS"
+	HTTPTimeseriesGroupPostQuantumParamsOSLinux    HTTPTimeseriesGroupPostQuantumParamsOS = "LINUX"
+	HTTPTimeseriesGroupPostQuantumParamsOSSmartTv  HTTPTimeseriesGroupPostQuantumParamsOS = "SMART_TV"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsOSWindows, HTTPTimeseriesGroupPostQuantumParamsOSMacosx, HTTPTimeseriesGroupPostQuantumParamsOSIos, HTTPTimeseriesGroupPostQuantumParamsOSAndroid, HTTPTimeseriesGroupPostQuantumParamsOSChromeos, HTTPTimeseriesGroupPostQuantumParamsOSLinux, HTTPTimeseriesGroupPostQuantumParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumParamsTLSVersion string
+
+const (
+	HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_0  HTTPTimeseriesGroupPostQuantumParamsTLSVersion = "TLSv1_0"
+	HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_1  HTTPTimeseriesGroupPostQuantumParamsTLSVersion = "TLSv1_1"
+	HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_2  HTTPTimeseriesGroupPostQuantumParamsTLSVersion = "TLSv1_2"
+	HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupPostQuantumParamsTLSVersion = "TLSv1_3"
+	HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSvQuic HTTPTimeseriesGroupPostQuantumParamsTLSVersion = "TLSvQUIC"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupPostQuantumParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumResponseEnvelope struct {
+	Result  HTTPTimeseriesGroupPostQuantumResponse             `json:"result,required"`
+	Success bool                                               `json:"success,required"`
+	JSON    httpTimeseriesGroupPostQuantumResponseEnvelopeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupPostQuantumResponseEnvelopeJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupPostQuantumResponseEnvelope]
+type httpTimeseriesGroupPostQuantumResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupPostQuantumResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupPostQuantumResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 

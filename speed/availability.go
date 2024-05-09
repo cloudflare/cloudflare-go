@@ -108,19 +108,13 @@ type AvailabilityListParams struct {
 }
 
 type AvailabilityListResponseEnvelope struct {
-	Errors   interface{}                          `json:"errors,required"`
-	Messages interface{}                          `json:"messages,required"`
-	Success  interface{}                          `json:"success,required"`
-	Result   Availability                         `json:"result"`
-	JSON     availabilityListResponseEnvelopeJSON `json:"-"`
+	Result Availability                         `json:"result"`
+	JSON   availabilityListResponseEnvelopeJSON `json:"-"`
 }
 
 // availabilityListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AvailabilityListResponseEnvelope]
 type availabilityListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

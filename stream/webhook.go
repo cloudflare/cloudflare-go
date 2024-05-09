@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -47,10 +47,10 @@ func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams,
 }
 
 // Deletes a webhook.
-func (r *WebhookService) Delete(ctx context.Context, params WebhookDeleteParams, opts ...option.RequestOption) (res *WebhookDeleteResponseUnion, err error) {
+func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, opts ...option.RequestOption) (res *WebhookDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/webhook", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/stream/webhook", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -179,11 +179,6 @@ func (r WebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type WebhookDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r WebhookDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type WebhookDeleteResponseEnvelope struct {

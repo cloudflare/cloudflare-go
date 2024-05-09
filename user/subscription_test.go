@@ -15,7 +15,6 @@ import (
 )
 
 func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -76,7 +75,6 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestSubscriptionDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -89,13 +87,7 @@ func TestSubscriptionDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Subscriptions.Delete(
-		context.TODO(),
-		"506e3185e9c882d175a2d0cb0093d9f2",
-		user.SubscriptionDeleteParams{
-			Body: map[string]interface{}{},
-		},
-	)
+	_, err := client.User.Subscriptions.Delete(context.TODO(), "506e3185e9c882d175a2d0cb0093d9f2")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -106,7 +98,6 @@ func TestSubscriptionDelete(t *testing.T) {
 }
 
 func TestSubscriptionEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -167,7 +158,6 @@ func TestSubscriptionEditWithOptionalParams(t *testing.T) {
 }
 
 func TestSubscriptionGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

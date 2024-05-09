@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/workers"
 	"github.com/tidwall/gjson"
 )
@@ -182,7 +182,7 @@ func (r DispatchNamespaceScriptSettingEditResponseMigrations) AsUnion() Dispatch
 //
 // Union satisfied by [workers.SingleStepMigration] or [workers.SteppedMigration].
 type DispatchNamespaceScriptSettingEditResponseMigrationsUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations()
+	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations()
 }
 
 func init() {
@@ -321,7 +321,7 @@ func (r DispatchNamespaceScriptSettingGetResponseMigrations) AsUnion() DispatchN
 //
 // Union satisfied by [workers.SingleStepMigration] or [workers.SteppedMigration].
 type DispatchNamespaceScriptSettingGetResponseMigrationsUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations()
+	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations()
 }
 
 func init() {
@@ -403,7 +403,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
@@ -412,7 +412,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) implementsWo
 // [workers.SteppedMigrationParam],
 // [DispatchNamespaceScriptSettingEditParamsSettingsMigrations].
 type DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion()
+	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion()
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {

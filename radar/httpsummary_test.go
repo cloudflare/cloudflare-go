@@ -16,7 +16,6 @@ import (
 )
 
 func TestHTTPSummaryBotClassWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,7 +54,6 @@ func TestHTTPSummaryBotClassWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPSummaryDeviceTypeWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -94,7 +92,6 @@ func TestHTTPSummaryDeviceTypeWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPSummaryHTTPProtocolWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -133,7 +130,6 @@ func TestHTTPSummaryHTTPProtocolWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPSummaryHTTPVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -172,7 +168,6 @@ func TestHTTPSummaryHTTPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPSummaryIPVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -211,7 +206,6 @@ func TestHTTPSummaryIPVersionWithOptionalParams(t *testing.T) {
 }
 
 func TestHTTPSummaryOSWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -249,8 +243,46 @@ func TestHTTPSummaryOSWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestHTTPSummaryPostQuantumWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Radar.HTTP.Summary.PostQuantum(context.TODO(), radar.HTTPSummaryPostQuantumParams{
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
+		BotClass:     cloudflare.F([]radar.HTTPSummaryPostQuantumParamsBotClass{radar.HTTPSummaryPostQuantumParamsBotClassLikelyAutomated, radar.HTTPSummaryPostQuantumParamsBotClassLikelyHuman}),
+		Continent:    cloudflare.F([]string{"string", "string", "string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DateRange:    cloudflare.F([]radar.HTTPSummaryPostQuantumParamsDateRange{radar.HTTPSummaryPostQuantumParamsDateRange1d, radar.HTTPSummaryPostQuantumParamsDateRange2d, radar.HTTPSummaryPostQuantumParamsDateRange7d}),
+		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DeviceType:   cloudflare.F([]radar.HTTPSummaryPostQuantumParamsDeviceType{radar.HTTPSummaryPostQuantumParamsDeviceTypeDesktop, radar.HTTPSummaryPostQuantumParamsDeviceTypeMobile, radar.HTTPSummaryPostQuantumParamsDeviceTypeOther}),
+		Format:       cloudflare.F(radar.HTTPSummaryPostQuantumParamsFormatJson),
+		HTTPProtocol: cloudflare.F([]radar.HTTPSummaryPostQuantumParamsHTTPProtocol{radar.HTTPSummaryPostQuantumParamsHTTPProtocolHTTP, radar.HTTPSummaryPostQuantumParamsHTTPProtocolHTTPS}),
+		HTTPVersion:  cloudflare.F([]radar.HTTPSummaryPostQuantumParamsHTTPVersion{radar.HTTPSummaryPostQuantumParamsHTTPVersionHttPv1, radar.HTTPSummaryPostQuantumParamsHTTPVersionHttPv2, radar.HTTPSummaryPostQuantumParamsHTTPVersionHttPv3}),
+		IPVersion:    cloudflare.F([]radar.HTTPSummaryPostQuantumParamsIPVersion{radar.HTTPSummaryPostQuantumParamsIPVersionIPv4, radar.HTTPSummaryPostQuantumParamsIPVersionIPv6}),
+		Location:     cloudflare.F([]string{"string", "string", "string"}),
+		Name:         cloudflare.F([]string{"string", "string", "string"}),
+		OS:           cloudflare.F([]radar.HTTPSummaryPostQuantumParamsOS{radar.HTTPSummaryPostQuantumParamsOSWindows, radar.HTTPSummaryPostQuantumParamsOSMacosx, radar.HTTPSummaryPostQuantumParamsOSIos}),
+		TLSVersion:   cloudflare.F([]radar.HTTPSummaryPostQuantumParamsTLSVersion{radar.HTTPSummaryPostQuantumParamsTLSVersionTlSv1_0, radar.HTTPSummaryPostQuantumParamsTLSVersionTlSv1_1, radar.HTTPSummaryPostQuantumParamsTLSVersionTlSv1_2}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestHTTPSummaryTLSVersionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

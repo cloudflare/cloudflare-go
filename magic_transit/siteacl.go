@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -66,7 +66,7 @@ func (r *SiteACLService) List(ctx context.Context, siteID string, query SiteACLL
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", query.AccountID, siteID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,10 +84,10 @@ func (r *SiteACLService) ListAutoPaging(ctx context.Context, siteID string, quer
 }
 
 // Remove a specific Site ACL.
-func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, params SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
+func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, body SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", body.AccountID, siteID, aclIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -147,26 +147,6 @@ func (r *ACL) UnmarshalJSON(data []byte) (err error) {
 
 func (r aclJSON) RawJSON() string {
 	return r.raw
-}
-
-// Bidirectional ACL policy for network traffic within a site.
-type ACLParam struct {
-	// Description for the ACL.
-	Description param.Field[string] `json:"description"`
-	// The desired forwarding action for this ACL policy. If set to "false", the policy
-	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
-	ForwardLocally param.Field[bool]                  `json:"forward_locally"`
-	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
-	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
-	// The name of the ACL.
-	Name      param.Field[string]            `json:"name"`
-	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
-}
-
-func (r ACLParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type ACLConfiguration struct {
@@ -404,11 +384,6 @@ type SiteACLListParams struct {
 type SiteACLDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r SiteACLDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type SiteACLDeleteResponseEnvelope struct {

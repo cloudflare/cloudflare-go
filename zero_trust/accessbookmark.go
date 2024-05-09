@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AccessBookmarkService contains methods and other services that help with
@@ -38,7 +38,7 @@ func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -51,7 +51,7 @@ func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, u
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -83,7 +83,7 @@ func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, identifier s
 }
 
 // Deletes a Bookmark application.
-func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, uuid string, body AccessBookmarkDeleteParams, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
+func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -267,14 +267,6 @@ func (r AccessBookmarkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type AccessBookmarkDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r AccessBookmarkDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AccessBookmarkDeleteResponseEnvelope struct {

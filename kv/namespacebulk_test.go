@@ -15,7 +15,6 @@ import (
 )
 
 func TestNamespaceBulkUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -73,7 +72,6 @@ func TestNamespaceBulkUpdate(t *testing.T) {
 }
 
 func TestNamespaceBulkDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -91,7 +89,6 @@ func TestNamespaceBulkDelete(t *testing.T) {
 		"0f2ac74b498b48028cb68387c421e279",
 		kv.NamespaceBulkDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      []string{"My-Key", "My-Key", "My-Key"},
 		},
 	)
 	if err != nil {

@@ -8,10 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // RatePlanService contains methods and other services that help with interacting
@@ -142,28 +141,6 @@ func (r RatePlanFrequency) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type RatePlanParam struct {
-	// Array of available components values for the plan.
-	Components param.Field[[]RatePlanComponentParam] `json:"components"`
-	// The duration of the plan subscription.
-	Duration param.Field[float64] `json:"duration"`
-}
-
-func (r RatePlanParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RatePlanComponentParam struct {
-	// The default amount allocated.
-	Default param.Field[float64] `json:"default"`
-	// The unique component.
-	Name param.Field[RatePlanComponentsName] `json:"name"`
-}
-
-func (r RatePlanComponentParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type RatePlanGetResponseEnvelope struct {

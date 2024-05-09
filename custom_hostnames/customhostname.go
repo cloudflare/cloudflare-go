@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // CustomHostnameService contains methods and other services that help with
@@ -81,9 +81,9 @@ func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params Custo
 }
 
 // Delete Custom Hostname (and any issued SSL certificates)
-func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, params CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
+func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, body CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", params.ZoneID, customHostnameID)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", body.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -189,7 +189,7 @@ type CustomHostnameNewResponse struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
+	CustomOriginSNI string `json:"custom_origin_sni"`
 	// This is a record which can be placed to activate a hostname.
 	OwnershipVerification CustomHostnameNewResponseOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
@@ -211,7 +211,7 @@ type customHostnameNewResponseJSON struct {
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
+	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
 	Status                    apijson.Field
@@ -238,7 +238,7 @@ type CustomHostnameNewResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameNewResponseSSLCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -307,23 +307,6 @@ func (r *CustomHostnameNewResponseSSL) UnmarshalJSON(data []byte) (err error) {
 
 func (r customHostnameNewResponseSSLJSON) RawJSON() string {
 	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameNewResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameNewResponseSSLCertificateAuthorityDigicert    CustomHostnameNewResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameNewResponseSSLCertificateAuthorityGoogle      CustomHostnameNewResponseSSLCertificateAuthority = "google"
-	CustomHostnameNewResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameNewResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameNewResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewResponseSSLCertificateAuthorityDigicert, CustomHostnameNewResponseSSLCertificateAuthorityGoogle, CustomHostnameNewResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -668,7 +651,7 @@ type CustomHostnameListResponse struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
+	CustomOriginSNI string `json:"custom_origin_sni"`
 	// This is a record which can be placed to activate a hostname.
 	OwnershipVerification CustomHostnameListResponseOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
@@ -690,7 +673,7 @@ type customHostnameListResponseJSON struct {
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
+	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
 	Status                    apijson.Field
@@ -717,7 +700,7 @@ type CustomHostnameListResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameListResponseSSLCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -786,23 +769,6 @@ func (r *CustomHostnameListResponseSSL) UnmarshalJSON(data []byte) (err error) {
 
 func (r customHostnameListResponseSSLJSON) RawJSON() string {
 	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameListResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameListResponseSSLCertificateAuthorityDigicert    CustomHostnameListResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameListResponseSSLCertificateAuthorityGoogle      CustomHostnameListResponseSSLCertificateAuthority = "google"
-	CustomHostnameListResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameListResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameListResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameListResponseSSLCertificateAuthorityDigicert, CustomHostnameListResponseSSLCertificateAuthorityGoogle, CustomHostnameListResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -1169,7 +1135,7 @@ type CustomHostnameEditResponse struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
+	CustomOriginSNI string `json:"custom_origin_sni"`
 	// This is a record which can be placed to activate a hostname.
 	OwnershipVerification CustomHostnameEditResponseOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
@@ -1191,7 +1157,7 @@ type customHostnameEditResponseJSON struct {
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
+	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
 	Status                    apijson.Field
@@ -1218,7 +1184,7 @@ type CustomHostnameEditResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameEditResponseSSLCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -1287,23 +1253,6 @@ func (r *CustomHostnameEditResponseSSL) UnmarshalJSON(data []byte) (err error) {
 
 func (r customHostnameEditResponseSSLJSON) RawJSON() string {
 	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameEditResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameEditResponseSSLCertificateAuthorityDigicert    CustomHostnameEditResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameEditResponseSSLCertificateAuthorityGoogle      CustomHostnameEditResponseSSLCertificateAuthority = "google"
-	CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameEditResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameEditResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditResponseSSLCertificateAuthorityDigicert, CustomHostnameEditResponseSSLCertificateAuthorityGoogle, CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -1648,7 +1597,7 @@ type CustomHostnameGetResponse struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
+	CustomOriginSNI string `json:"custom_origin_sni"`
 	// This is a record which can be placed to activate a hostname.
 	OwnershipVerification CustomHostnameGetResponseOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
@@ -1670,7 +1619,7 @@ type customHostnameGetResponseJSON struct {
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
+	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
 	Status                    apijson.Field
@@ -1697,7 +1646,7 @@ type CustomHostnameGetResponseSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameGetResponseSSLCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -1766,23 +1715,6 @@ func (r *CustomHostnameGetResponseSSL) UnmarshalJSON(data []byte) (err error) {
 
 func (r customHostnameGetResponseSSLJSON) RawJSON() string {
 	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameGetResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameGetResponseSSLCertificateAuthorityDigicert    CustomHostnameGetResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameGetResponseSSLCertificateAuthorityGoogle      CustomHostnameGetResponseSSLCertificateAuthority = "google"
-	CustomHostnameGetResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameGetResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameGetResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameGetResponseSSLCertificateAuthorityDigicert, CustomHostnameGetResponseSSLCertificateAuthorityGoogle, CustomHostnameGetResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -2131,7 +2063,7 @@ type CustomHostnameNewParamsSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority param.Field[CustomHostnameNewParamsSSLCertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2149,23 +2081,6 @@ type CustomHostnameNewParamsSSL struct {
 
 func (r CustomHostnameNewParamsSSL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameNewParamsSSLCertificateAuthority string
-
-const (
-	CustomHostnameNewParamsSSLCertificateAuthorityDigicert    CustomHostnameNewParamsSSLCertificateAuthority = "digicert"
-	CustomHostnameNewParamsSSLCertificateAuthorityGoogle      CustomHostnameNewParamsSSLCertificateAuthority = "google"
-	CustomHostnameNewParamsSSLCertificateAuthorityLetsEncrypt CustomHostnameNewParamsSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameNewParamsSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewParamsSSLCertificateAuthorityDigicert, CustomHostnameNewParamsSSLCertificateAuthorityGoogle, CustomHostnameNewParamsSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -2264,11 +2179,11 @@ func (r CustomHostnameNewParamsCustomMetadata) MarshalJSON() (data []byte, err e
 }
 
 type CustomHostnameNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CustomHostnameNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomHostnameNewResponse                `json:"result"`
 	JSON    customHostnameNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2277,8 +2192,8 @@ type CustomHostnameNewResponseEnvelope struct {
 type customHostnameNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2388,11 +2303,6 @@ func (r CustomHostnameListParamsSSL) IsKnown() bool {
 type CustomHostnameDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r CustomHostnameDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomHostnameEditParams struct {
@@ -2408,7 +2318,7 @@ type CustomHostnameEditParams struct {
 	// name or the string ':request_host_header:' which will cause the host header in
 	// the request to be used as SNI. Not configurable with default/fallback origin
 	// server.
-	CustomOriginSni param.Field[string] `json:"custom_origin_sni"`
+	CustomOriginSNI param.Field[string] `json:"custom_origin_sni"`
 	// SSL properties used when creating the custom hostname.
 	SSL param.Field[CustomHostnameEditParamsSSL] `json:"ssl"`
 }
@@ -2435,7 +2345,7 @@ type CustomHostnameEditParamsSSL struct {
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority param.Field[CustomHostnameEditParamsSSLCertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2453,23 +2363,6 @@ type CustomHostnameEditParamsSSL struct {
 
 func (r CustomHostnameEditParamsSSL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameEditParamsSSLCertificateAuthority string
-
-const (
-	CustomHostnameEditParamsSSLCertificateAuthorityDigicert    CustomHostnameEditParamsSSLCertificateAuthority = "digicert"
-	CustomHostnameEditParamsSSLCertificateAuthorityGoogle      CustomHostnameEditParamsSSLCertificateAuthority = "google"
-	CustomHostnameEditParamsSSLCertificateAuthorityLetsEncrypt CustomHostnameEditParamsSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameEditParamsSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditParamsSSLCertificateAuthorityDigicert, CustomHostnameEditParamsSSLCertificateAuthorityGoogle, CustomHostnameEditParamsSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
 }
 
 // SSL specific settings.
@@ -2558,11 +2451,11 @@ func (r CustomHostnameEditParamsSSLSettingsTLS1_3) IsKnown() bool {
 }
 
 type CustomHostnameEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CustomHostnameEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomHostnameEditResponse                `json:"result"`
 	JSON    customHostnameEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2571,8 +2464,8 @@ type CustomHostnameEditResponseEnvelope struct {
 type customHostnameEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2606,11 +2499,11 @@ type CustomHostnameGetParams struct {
 }
 
 type CustomHostnameGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CustomHostnameGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  CustomHostnameGetResponse                `json:"result"`
 	JSON    customHostnameGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2619,8 +2512,8 @@ type CustomHostnameGetResponseEnvelope struct {
 type customHostnameGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

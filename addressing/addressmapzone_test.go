@@ -15,7 +15,6 @@ import (
 )
 
 func TestAddressMapZoneUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -47,7 +46,6 @@ func TestAddressMapZoneUpdate(t *testing.T) {
 }
 
 func TestAddressMapZoneDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -66,7 +64,6 @@ func TestAddressMapZoneDelete(t *testing.T) {
 		addressing.AddressMapZoneDeleteParams{
 			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // ZoneService contains methods and other services that help with interacting with
@@ -122,6 +122,24 @@ func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...opti
 	return
 }
 
+// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
+// typically a partner-hosted zone or a CNAME setup.
+type Type string
+
+const (
+	TypeFull      Type = "full"
+	TypePartial   Type = "partial"
+	TypeSecondary Type = "secondary"
+)
+
+func (r Type) IsKnown() bool {
+	switch r {
+	case TypeFull, TypePartial, TypeSecondary:
+		return true
+	}
+	return false
+}
+
 type Zone struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -141,10 +159,11 @@ type Zone struct {
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The domain name
 	Name string `json:"name,required"`
+	// The name servers Cloudflare assigns to a zone
+	NameServers []string `json:"name_servers,required" format:"hostname"`
 	// DNS host at the time of switching to Cloudflare
 	OriginalDnshost string `json:"original_dnshost,required,nullable"`
-	// Original name servers before moving to Cloudflare Notes: Is this only available
-	// for full zones?
+	// Original name servers before moving to Cloudflare
 	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
 	// Registrar for the domain at the time of switching to Cloudflare
 	OriginalRegistrar string `json:"original_registrar,required,nullable"`
@@ -166,6 +185,7 @@ type zoneJSON struct {
 	Meta                apijson.Field
 	ModifiedOn          apijson.Field
 	Name                apijson.Field
+	NameServers         apijson.Field
 	OriginalDnshost     apijson.Field
 	OriginalNameServers apijson.Field
 	OriginalRegistrar   apijson.Field
@@ -303,7 +323,7 @@ type ZoneNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup.
-	Type param.Field[ZoneNewParamsType] `json:"type"`
+	Type param.Field[Type] `json:"type"`
 }
 
 func (r ZoneNewParams) MarshalJSON() (data []byte, err error) {
@@ -317,24 +337,6 @@ type ZoneNewParamsAccount struct {
 
 func (r ZoneNewParamsAccount) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
-// typically a partner-hosted zone or a CNAME setup.
-type ZoneNewParamsType string
-
-const (
-	ZoneNewParamsTypeFull      ZoneNewParamsType = "full"
-	ZoneNewParamsTypePartial   ZoneNewParamsType = "partial"
-	ZoneNewParamsTypeSecondary ZoneNewParamsType = "secondary"
-)
-
-func (r ZoneNewParamsType) IsKnown() bool {
-	switch r {
-	case ZoneNewParamsTypeFull, ZoneNewParamsTypePartial, ZoneNewParamsTypeSecondary:
-		return true
-	}
-	return false
 }
 
 type ZoneNewResponseEnvelope struct {

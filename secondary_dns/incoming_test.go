@@ -15,7 +15,6 @@ import (
 )
 
 func TestIncomingNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -44,7 +43,6 @@ func TestIncomingNew(t *testing.T) {
 }
 
 func TestIncomingUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -73,7 +71,6 @@ func TestIncomingUpdate(t *testing.T) {
 }
 
 func TestIncomingDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -88,7 +85,6 @@ func TestIncomingDelete(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.Incoming.Delete(context.TODO(), secondary_dns.IncomingDeleteParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -100,7 +96,6 @@ func TestIncomingDelete(t *testing.T) {
 }
 
 func TestIncomingGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // DevicePolicyService contains methods and other services that help with
@@ -61,7 +61,7 @@ func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListPa
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/devices/policies", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,10 +80,10 @@ func (r *DevicePolicyService) ListAutoPaging(ctx context.Context, query DevicePo
 
 // Deletes a device settings profile and fetches a list of the remaining profiles
 // for an account.
-func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, params DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]SettingsPolicy, err error) {
+func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]SettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/devices/policy/%s", params.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s", body.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -408,11 +408,6 @@ type DevicePolicyListParams struct {
 
 type DevicePolicyDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r DevicePolicyDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type DevicePolicyDeleteResponseEnvelope struct {

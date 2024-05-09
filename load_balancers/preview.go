@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // PreviewService contains methods and other services that help with interacting
@@ -44,7 +44,58 @@ func (r *PreviewService) Get(ctx context.Context, previewID string, query Previe
 	return
 }
 
-type PreviewGetResponse map[string]PreviewGetResponse
+type PreviewGetResponse map[string]PreviewGetResponseItem
+
+type PreviewGetResponseItem struct {
+	Healthy bool                                      `json:"healthy"`
+	Origins []map[string]PreviewGetResponseItemOrigin `json:"origins"`
+	JSON    previewGetResponseItemJSON                `json:"-"`
+}
+
+// previewGetResponseItemJSON contains the JSON metadata for the struct
+// [PreviewGetResponseItem]
+type previewGetResponseItemJSON struct {
+	Healthy     apijson.Field
+	Origins     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PreviewGetResponseItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r previewGetResponseItemJSON) RawJSON() string {
+	return r.raw
+}
+
+// The origin ipv4/ipv6 address or domain name mapped to it's health data.
+type PreviewGetResponseItemOrigin struct {
+	FailureReason string                           `json:"failure_reason"`
+	Healthy       bool                             `json:"healthy"`
+	ResponseCode  float64                          `json:"response_code"`
+	RTT           string                           `json:"rtt"`
+	JSON          previewGetResponseItemOriginJSON `json:"-"`
+}
+
+// previewGetResponseItemOriginJSON contains the JSON metadata for the struct
+// [PreviewGetResponseItemOrigin]
+type previewGetResponseItemOriginJSON struct {
+	FailureReason apijson.Field
+	Healthy       apijson.Field
+	ResponseCode  apijson.Field
+	RTT           apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *PreviewGetResponseItemOrigin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r previewGetResponseItemOriginJSON) RawJSON() string {
+	return r.raw
+}
 
 type PreviewGetParams struct {
 	// Identifier

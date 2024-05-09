@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // FilterService contains methods and other services that help with interacting
@@ -86,7 +86,7 @@ func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier strin
 }
 
 // Deletes an existing filter.
-func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, body FilterDeleteParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
+func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -145,7 +145,7 @@ func (r firewallFilterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallFilter) implementsFirewallFirewallRuleFilter() {}
+func (r FirewallFilter) ImplementsFirewallFirewallRuleFilter() {}
 
 type FilterNewParams struct {
 	Body interface{} `json:"body,required"`
@@ -305,14 +305,6 @@ func (r FilterListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type FilterDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r FilterDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type FilterDeleteResponseEnvelope struct {

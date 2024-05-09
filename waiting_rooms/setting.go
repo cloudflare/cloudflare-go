@@ -69,29 +69,6 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	return
 }
 
-type Setting struct {
-	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
-	// this zone. Verified search engine crawlers will not be tracked or counted by the
-	// waiting room system, and will not appear in waiting room analytics.
-	SearchEngineCrawlerBypass bool        `json:"search_engine_crawler_bypass,required"`
-	JSON                      settingJSON `json:"-"`
-}
-
-// settingJSON contains the JSON metadata for the struct [Setting]
-type settingJSON struct {
-	SearchEngineCrawlerBypass apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *Setting) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingUpdateResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
@@ -178,20 +155,14 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingUpdateResponseEnvelope struct {
-	Errors   interface{}                       `json:"errors,required"`
-	Messages interface{}                       `json:"messages,required"`
-	Result   SettingUpdateResponse             `json:"result,required"`
-	Success  interface{}                       `json:"success,required"`
-	JSON     settingUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingUpdateResponse             `json:"result,required"`
+	JSON   settingUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // settingUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingUpdateResponseEnvelope]
 type settingUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -218,20 +189,14 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingEditResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Result   SettingEditResponse             `json:"result,required"`
-	Success  interface{}                     `json:"success,required"`
-	JSON     settingEditResponseEnvelopeJSON `json:"-"`
+	Result SettingEditResponse             `json:"result,required"`
+	JSON   settingEditResponseEnvelopeJSON `json:"-"`
 }
 
 // settingEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingEditResponseEnvelope]
 type settingEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -250,20 +215,14 @@ type SettingGetParams struct {
 }
 
 type SettingGetResponseEnvelope struct {
-	Errors   interface{}                    `json:"errors,required"`
-	Messages interface{}                    `json:"messages,required"`
-	Result   SettingGetResponse             `json:"result,required"`
-	Success  interface{}                    `json:"success,required"`
-	JSON     settingGetResponseEnvelopeJSON `json:"-"`
+	Result SettingGetResponse             `json:"result,required"`
+	JSON   settingGetResponseEnvelopeJSON `json:"-"`
 }
 
 // settingGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingGetResponseEnvelope]
 type settingGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

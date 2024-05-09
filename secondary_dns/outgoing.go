@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // OutgoingService contains methods and other services that help with interacting
@@ -60,10 +60,10 @@ func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParam
 }
 
 // Delete primary zone configuration for outgoing zone transfers.
-func (r *OutgoingService) Delete(ctx context.Context, params OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
+func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -78,7 +78,7 @@ func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisablePar
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/disable", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParam
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/enable", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -104,7 +104,7 @@ func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceN
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/force_notify", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -379,11 +379,6 @@ func (r OutgoingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type OutgoingDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r OutgoingDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type OutgoingDeleteResponseEnvelope struct {

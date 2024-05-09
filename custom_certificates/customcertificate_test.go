@@ -16,7 +16,6 @@ import (
 )
 
 func TestCustomCertificateNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -38,7 +37,7 @@ func TestCustomCertificateNewWithOptionalParams(t *testing.T) {
 			Label: cloudflare.F(custom_certificates.GeoRestrictionsLabelUs),
 		}),
 		Policy: cloudflare.F("(country: US) or (region: EU)"),
-		Type:   cloudflare.F(custom_certificates.CustomCertificateNewParamsTypeSniCustom),
+		Type:   cloudflare.F(custom_certificates.CustomCertificateNewParamsTypeSNICustom),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -50,7 +49,6 @@ func TestCustomCertificateNewWithOptionalParams(t *testing.T) {
 }
 
 func TestCustomCertificateListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -80,7 +78,6 @@ func TestCustomCertificateListWithOptionalParams(t *testing.T) {
 }
 
 func TestCustomCertificateDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -98,7 +95,6 @@ func TestCustomCertificateDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		custom_certificates.CustomCertificateDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:   map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -111,7 +107,6 @@ func TestCustomCertificateDelete(t *testing.T) {
 }
 
 func TestCustomCertificateEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -148,7 +143,6 @@ func TestCustomCertificateEditWithOptionalParams(t *testing.T) {
 }
 
 func TestCustomCertificateGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

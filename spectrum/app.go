@@ -15,8 +15,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -89,7 +89,7 @@ func (r *AppService) ListAutoPaging(ctx context.Context, zone string, query AppL
 }
 
 // Deletes a previously existing application.
-func (r *AppService) Delete(ctx context.Context, zone string, appID string, body AppDeleteParams, opts ...option.RequestOption) (res *AppDeleteResponse, err error) {
+func (r *AppService) Delete(ctx context.Context, zone string, appID string, opts ...option.RequestOption) (res *AppDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AppDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/apps/%s", zone, appID)
@@ -759,14 +759,6 @@ func (r AppListParamsOrder) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type AppDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r AppDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AppDeleteResponseEnvelope struct {

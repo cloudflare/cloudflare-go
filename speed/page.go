@@ -6,8 +6,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -20,6 +23,7 @@ import (
 // directly, and instead use the [NewPageService] method instead.
 type PageService struct {
 	Options []option.RequestOption
+	Tests   *PageTestService
 }
 
 // NewPageService generates a new service that applies the given options to each
@@ -28,6 +32,7 @@ type PageService struct {
 func NewPageService(opts ...option.RequestOption) (r *PageService) {
 	r = &PageService{}
 	r.Options = opts
+	r.Tests = NewPageTestService(opts...)
 	return
 }
 
@@ -37,7 +42,7 @@ func (r *PageService) List(ctx context.Context, query PageListParams, opts ...op
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/speed_api/pages", query.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,6 +57,19 @@ func (r *PageService) List(ctx context.Context, query PageListParams, opts ...op
 // Lists all webpages which have been tested.
 func (r *PageService) ListAutoPaging(ctx context.Context, query PageListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+}
+
+// Lists the core web vital metrics trend over time for a specific page.
+func (r *PageService) Trend(ctx context.Context, url string, params PageTrendParams, opts ...option.RequestOption) (res *Trend, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageTrendResponseEnvelope
+	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type PageListResponse struct {
@@ -103,4 +121,99 @@ func (r PageListResponseScheduleFrequency) IsKnown() bool {
 type PageListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type PageTrendParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// The type of device.
+	DeviceType param.Field[PageTrendParamsDeviceType] `query:"deviceType,required"`
+	// A comma-separated list of metrics to include in the results.
+	Metrics param.Field[string] `query:"metrics,required"`
+	// A test region.
+	Region param.Field[PageTrendParamsRegion] `query:"region,required"`
+	Start  param.Field[time.Time]             `query:"start,required" format:"date-time"`
+	// The timezone of the start and end timestamps.
+	Tz  param.Field[string]    `query:"tz,required"`
+	End param.Field[time.Time] `query:"end" format:"date-time"`
+}
+
+// URLQuery serializes [PageTrendParams]'s query parameters as `url.Values`.
+func (r PageTrendParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// The type of device.
+type PageTrendParamsDeviceType string
+
+const (
+	PageTrendParamsDeviceTypeDesktop PageTrendParamsDeviceType = "DESKTOP"
+	PageTrendParamsDeviceTypeMobile  PageTrendParamsDeviceType = "MOBILE"
+)
+
+func (r PageTrendParamsDeviceType) IsKnown() bool {
+	switch r {
+	case PageTrendParamsDeviceTypeDesktop, PageTrendParamsDeviceTypeMobile:
+		return true
+	}
+	return false
+}
+
+// A test region.
+type PageTrendParamsRegion string
+
+const (
+	PageTrendParamsRegionAsiaEast1           PageTrendParamsRegion = "asia-east1"
+	PageTrendParamsRegionAsiaNortheast1      PageTrendParamsRegion = "asia-northeast1"
+	PageTrendParamsRegionAsiaNortheast2      PageTrendParamsRegion = "asia-northeast2"
+	PageTrendParamsRegionAsiaSouth1          PageTrendParamsRegion = "asia-south1"
+	PageTrendParamsRegionAsiaSoutheast1      PageTrendParamsRegion = "asia-southeast1"
+	PageTrendParamsRegionAustraliaSoutheast1 PageTrendParamsRegion = "australia-southeast1"
+	PageTrendParamsRegionEuropeNorth1        PageTrendParamsRegion = "europe-north1"
+	PageTrendParamsRegionEuropeSouthwest1    PageTrendParamsRegion = "europe-southwest1"
+	PageTrendParamsRegionEuropeWest1         PageTrendParamsRegion = "europe-west1"
+	PageTrendParamsRegionEuropeWest2         PageTrendParamsRegion = "europe-west2"
+	PageTrendParamsRegionEuropeWest3         PageTrendParamsRegion = "europe-west3"
+	PageTrendParamsRegionEuropeWest4         PageTrendParamsRegion = "europe-west4"
+	PageTrendParamsRegionEuropeWest8         PageTrendParamsRegion = "europe-west8"
+	PageTrendParamsRegionEuropeWest9         PageTrendParamsRegion = "europe-west9"
+	PageTrendParamsRegionMeWest1             PageTrendParamsRegion = "me-west1"
+	PageTrendParamsRegionSouthamericaEast1   PageTrendParamsRegion = "southamerica-east1"
+	PageTrendParamsRegionUsCentral1          PageTrendParamsRegion = "us-central1"
+	PageTrendParamsRegionUsEast1             PageTrendParamsRegion = "us-east1"
+	PageTrendParamsRegionUsEast4             PageTrendParamsRegion = "us-east4"
+	PageTrendParamsRegionUsSouth1            PageTrendParamsRegion = "us-south1"
+	PageTrendParamsRegionUsWest1             PageTrendParamsRegion = "us-west1"
+)
+
+func (r PageTrendParamsRegion) IsKnown() bool {
+	switch r {
+	case PageTrendParamsRegionAsiaEast1, PageTrendParamsRegionAsiaNortheast1, PageTrendParamsRegionAsiaNortheast2, PageTrendParamsRegionAsiaSouth1, PageTrendParamsRegionAsiaSoutheast1, PageTrendParamsRegionAustraliaSoutheast1, PageTrendParamsRegionEuropeNorth1, PageTrendParamsRegionEuropeSouthwest1, PageTrendParamsRegionEuropeWest1, PageTrendParamsRegionEuropeWest2, PageTrendParamsRegionEuropeWest3, PageTrendParamsRegionEuropeWest4, PageTrendParamsRegionEuropeWest8, PageTrendParamsRegionEuropeWest9, PageTrendParamsRegionMeWest1, PageTrendParamsRegionSouthamericaEast1, PageTrendParamsRegionUsCentral1, PageTrendParamsRegionUsEast1, PageTrendParamsRegionUsEast4, PageTrendParamsRegionUsSouth1, PageTrendParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
+
+type PageTrendResponseEnvelope struct {
+	Result Trend                         `json:"result"`
+	JSON   pageTrendResponseEnvelopeJSON `json:"-"`
+}
+
+// pageTrendResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageTrendResponseEnvelope]
+type pageTrendResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageTrendResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageTrendResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

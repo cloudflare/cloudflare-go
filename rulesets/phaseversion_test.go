@@ -15,7 +15,7 @@ import (
 )
 
 func TestPhaseVersionListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,7 +30,7 @@ func TestPhaseVersionListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Versions.List(
 		context.TODO(),
-		rulesets.PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom,
+		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseVersionListParams{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
@@ -46,7 +46,7 @@ func TestPhaseVersionListWithOptionalParams(t *testing.T) {
 }
 
 func TestPhaseVersionGetWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -61,7 +61,7 @@ func TestPhaseVersionGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Versions.Get(
 		context.TODO(),
-		rulesets.PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom,
+		rulesets.PhaseHTTPRequestFirewallCustom,
 		"1",
 		rulesets.PhaseVersionGetParams{
 			AccountID: cloudflare.F("string"),

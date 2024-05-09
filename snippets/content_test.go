@@ -13,10 +13,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/snippets"
 )
 
 func TestContentGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("throwing HTTP 415")
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		w.Write([]byte("abc"))
@@ -30,8 +31,10 @@ func TestContentGet(t *testing.T) {
 	)
 	resp, err := client.Snippets.Content.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"snippet_name_01",
+		snippets.ContentGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

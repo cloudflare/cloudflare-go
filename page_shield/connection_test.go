@@ -15,7 +15,6 @@ import (
 )
 
 func TestConnectionListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -36,7 +35,7 @@ func TestConnectionListWithOptionalParams(t *testing.T) {
 		Export:              cloudflare.F(page_shield.ConnectionListParamsExportCsv),
 		Hosts:               cloudflare.F("blog.cloudflare.com,www.example*,*cloudflare.com"),
 		OrderBy:             cloudflare.F(page_shield.ConnectionListParamsOrderByFirstSeenAt),
-		Page:                cloudflare.F("string"),
+		Page:                cloudflare.F("2"),
 		PageURL:             cloudflare.F("example.com/page,*/checkout,example.com/*,*checkout*"),
 		PerPage:             cloudflare.F(100.000000),
 		PrioritizeMalicious: cloudflare.F(true),
@@ -53,7 +52,6 @@ func TestConnectionListWithOptionalParams(t *testing.T) {
 }
 
 func TestConnectionGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

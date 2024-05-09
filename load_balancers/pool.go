@@ -14,8 +14,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // PoolService contains methods and other services that help with interacting with
@@ -89,10 +89,10 @@ func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams,
 }
 
 // Delete a configured pool.
-func (r *PoolService) Delete(ctx context.Context, poolID string, params PoolDeleteParams, opts ...option.RequestOption) (res *PoolDeleteResponse, err error) {
+func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDeleteParams, opts ...option.RequestOption) (res *PoolDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", body.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -435,11 +435,6 @@ func (r PoolListParams) URLQuery() (v url.Values) {
 type PoolDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r PoolDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type PoolDeleteResponseEnvelope struct {

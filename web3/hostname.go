@@ -12,8 +12,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // HostnameService contains methods and other services that help with interacting
@@ -72,7 +72,7 @@ func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier str
 }
 
 // Delete Web3 Hostname
-func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, identifier string, body HostnameDeleteParams, opts ...option.RequestOption) (res *HostnameDeleteResponse, err error) {
+func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
@@ -187,19 +187,6 @@ func (r HostnameTarget) IsKnown() bool {
 	return false
 }
 
-type HostnameParam struct {
-	// An optional description of the hostname.
-	Description param.Field[string] `json:"description"`
-	// DNSLink value used if the target is ipfs.
-	Dnslink param.Field[string] `json:"dnslink"`
-	// Target gateway of the hostname.
-	Target param.Field[HostnameTarget] `json:"target"`
-}
-
-func (r HostnameParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type HostnameDeleteResponse struct {
 	// Identifier
 	ID   string                     `json:"id,required"`
@@ -293,14 +280,6 @@ func (r HostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type HostnameDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r HostnameDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type HostnameDeleteResponseEnvelope struct {

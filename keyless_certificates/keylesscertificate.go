@@ -13,8 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // KeylessCertificateService contains methods and other services that help with
@@ -54,7 +54,7 @@ func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCerti
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/keyless_certificates", query.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -72,10 +72,10 @@ func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query Ke
 }
 
 // Delete Keyless SSL Configuration
-func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertificateID string, params KeylessCertificateDeleteParams, opts ...option.RequestOption) (res *KeylessCertificateDeleteResponse, err error) {
+func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertificateID string, body KeylessCertificateDeleteParams, opts ...option.RequestOption) (res *KeylessCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", params.ZoneID, keylessCertificateID)
+	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", body.ZoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -265,9 +265,9 @@ func (r KeylessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type KeylessCertificateNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeylessCertificate                           `json:"result"`
 	JSON    keylessCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -276,8 +276,8 @@ type KeylessCertificateNewResponseEnvelope struct {
 type keylessCertificateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -313,19 +313,14 @@ type KeylessCertificateListParams struct {
 type KeylessCertificateDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
-}
-
-func (r KeylessCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type KeylessCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   KeylessCertificateDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeylessCertificateDeleteResponse                `json:"result"`
 	JSON    keylessCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -334,8 +329,8 @@ type KeylessCertificateDeleteResponseEnvelope struct {
 type keylessCertificateDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -386,9 +381,9 @@ func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
 type KeylessCertificateEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeylessCertificate                            `json:"result"`
 	JSON    keylessCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -397,8 +392,8 @@ type KeylessCertificateEditResponseEnvelope struct {
 type keylessCertificateEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -434,9 +429,9 @@ type KeylessCertificateGetParams struct {
 type KeylessCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   KeylessCertificate    `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  KeylessCertificate                           `json:"result"`
 	JSON    keylessCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -445,8 +440,8 @@ type KeylessCertificateGetResponseEnvelope struct {
 type keylessCertificateGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

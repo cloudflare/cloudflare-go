@@ -359,6 +359,9 @@ func (e *encoder) encodeMapEntries(json []byte, v reflect.Value) ([]byte, error)
 		if err != nil {
 			return nil, err
 		}
+		if len(encodedValue) == 0 {
+			continue
+		}
 		json, err = sjson.SetRawBytes(json, string(p.key), encodedValue)
 		if err != nil {
 			return nil, err

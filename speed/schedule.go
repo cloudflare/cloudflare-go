@@ -45,6 +45,32 @@ func (r *ScheduleService) New(ctx context.Context, url string, params ScheduleNe
 	return
 }
 
+// Deletes a scheduled test for a page.
+func (r *ScheduleService) Delete(ctx context.Context, url string, params ScheduleDeleteParams, opts ...option.RequestOption) (res *ScheduleDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ScheduleDeleteResponseEnvelope
+	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Retrieves the test schedule for a page in a specific region.
+func (r *ScheduleService) Get(ctx context.Context, url string, params ScheduleGetParams, opts ...option.RequestOption) (res *Schedule, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ScheduleGetResponseEnvelope
+	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // The test schedule.
 type Schedule struct {
 	// The frequency of the test.
@@ -124,20 +150,6 @@ func (r ScheduleRegion) IsKnown() bool {
 	return false
 }
 
-// The test schedule.
-type ScheduleParam struct {
-	// The frequency of the test.
-	Frequency param.Field[ScheduleFrequency] `json:"frequency"`
-	// A test region.
-	Region param.Field[ScheduleRegion] `json:"region"`
-	// A URL.
-	URL param.Field[string] `json:"url"`
-}
-
-func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ScheduleNewResponse struct {
 	// The test schedule.
 	Schedule Schedule                `json:"schedule"`
@@ -159,6 +171,28 @@ func (r *ScheduleNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scheduleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleDeleteResponse struct {
+	// Number of items affected.
+	Count float64                    `json:"count"`
+	JSON  scheduleDeleteResponseJSON `json:"-"`
+}
+
+// scheduleDeleteResponseJSON contains the JSON metadata for the struct
+// [ScheduleDeleteResponse]
+type scheduleDeleteResponseJSON struct {
+	Count       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -213,19 +247,13 @@ func (r ScheduleNewParamsRegion) IsKnown() bool {
 }
 
 type ScheduleNewResponseEnvelope struct {
-	Errors   interface{}                     `json:"errors,required"`
-	Messages interface{}                     `json:"messages,required"`
-	Success  interface{}                     `json:"success,required"`
-	Result   ScheduleNewResponse             `json:"result"`
-	JSON     scheduleNewResponseEnvelopeJSON `json:"-"`
+	Result ScheduleNewResponse             `json:"result"`
+	JSON   scheduleNewResponseEnvelopeJSON `json:"-"`
 }
 
 // scheduleNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [ScheduleNewResponseEnvelope]
 type scheduleNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -236,5 +264,148 @@ func (r *ScheduleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scheduleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// A test region.
+	Region param.Field[ScheduleDeleteParamsRegion] `query:"region"`
+}
+
+// URLQuery serializes [ScheduleDeleteParams]'s query parameters as `url.Values`.
+func (r ScheduleDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// A test region.
+type ScheduleDeleteParamsRegion string
+
+const (
+	ScheduleDeleteParamsRegionAsiaEast1           ScheduleDeleteParamsRegion = "asia-east1"
+	ScheduleDeleteParamsRegionAsiaNortheast1      ScheduleDeleteParamsRegion = "asia-northeast1"
+	ScheduleDeleteParamsRegionAsiaNortheast2      ScheduleDeleteParamsRegion = "asia-northeast2"
+	ScheduleDeleteParamsRegionAsiaSouth1          ScheduleDeleteParamsRegion = "asia-south1"
+	ScheduleDeleteParamsRegionAsiaSoutheast1      ScheduleDeleteParamsRegion = "asia-southeast1"
+	ScheduleDeleteParamsRegionAustraliaSoutheast1 ScheduleDeleteParamsRegion = "australia-southeast1"
+	ScheduleDeleteParamsRegionEuropeNorth1        ScheduleDeleteParamsRegion = "europe-north1"
+	ScheduleDeleteParamsRegionEuropeSouthwest1    ScheduleDeleteParamsRegion = "europe-southwest1"
+	ScheduleDeleteParamsRegionEuropeWest1         ScheduleDeleteParamsRegion = "europe-west1"
+	ScheduleDeleteParamsRegionEuropeWest2         ScheduleDeleteParamsRegion = "europe-west2"
+	ScheduleDeleteParamsRegionEuropeWest3         ScheduleDeleteParamsRegion = "europe-west3"
+	ScheduleDeleteParamsRegionEuropeWest4         ScheduleDeleteParamsRegion = "europe-west4"
+	ScheduleDeleteParamsRegionEuropeWest8         ScheduleDeleteParamsRegion = "europe-west8"
+	ScheduleDeleteParamsRegionEuropeWest9         ScheduleDeleteParamsRegion = "europe-west9"
+	ScheduleDeleteParamsRegionMeWest1             ScheduleDeleteParamsRegion = "me-west1"
+	ScheduleDeleteParamsRegionSouthamericaEast1   ScheduleDeleteParamsRegion = "southamerica-east1"
+	ScheduleDeleteParamsRegionUsCentral1          ScheduleDeleteParamsRegion = "us-central1"
+	ScheduleDeleteParamsRegionUsEast1             ScheduleDeleteParamsRegion = "us-east1"
+	ScheduleDeleteParamsRegionUsEast4             ScheduleDeleteParamsRegion = "us-east4"
+	ScheduleDeleteParamsRegionUsSouth1            ScheduleDeleteParamsRegion = "us-south1"
+	ScheduleDeleteParamsRegionUsWest1             ScheduleDeleteParamsRegion = "us-west1"
+)
+
+func (r ScheduleDeleteParamsRegion) IsKnown() bool {
+	switch r {
+	case ScheduleDeleteParamsRegionAsiaEast1, ScheduleDeleteParamsRegionAsiaNortheast1, ScheduleDeleteParamsRegionAsiaNortheast2, ScheduleDeleteParamsRegionAsiaSouth1, ScheduleDeleteParamsRegionAsiaSoutheast1, ScheduleDeleteParamsRegionAustraliaSoutheast1, ScheduleDeleteParamsRegionEuropeNorth1, ScheduleDeleteParamsRegionEuropeSouthwest1, ScheduleDeleteParamsRegionEuropeWest1, ScheduleDeleteParamsRegionEuropeWest2, ScheduleDeleteParamsRegionEuropeWest3, ScheduleDeleteParamsRegionEuropeWest4, ScheduleDeleteParamsRegionEuropeWest8, ScheduleDeleteParamsRegionEuropeWest9, ScheduleDeleteParamsRegionMeWest1, ScheduleDeleteParamsRegionSouthamericaEast1, ScheduleDeleteParamsRegionUsCentral1, ScheduleDeleteParamsRegionUsEast1, ScheduleDeleteParamsRegionUsEast4, ScheduleDeleteParamsRegionUsSouth1, ScheduleDeleteParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
+
+type ScheduleDeleteResponseEnvelope struct {
+	Result ScheduleDeleteResponse             `json:"result"`
+	JSON   scheduleDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// scheduleDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScheduleDeleteResponseEnvelope]
+type scheduleDeleteResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// A test region.
+	Region param.Field[ScheduleGetParamsRegion] `query:"region"`
+}
+
+// URLQuery serializes [ScheduleGetParams]'s query parameters as `url.Values`.
+func (r ScheduleGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// A test region.
+type ScheduleGetParamsRegion string
+
+const (
+	ScheduleGetParamsRegionAsiaEast1           ScheduleGetParamsRegion = "asia-east1"
+	ScheduleGetParamsRegionAsiaNortheast1      ScheduleGetParamsRegion = "asia-northeast1"
+	ScheduleGetParamsRegionAsiaNortheast2      ScheduleGetParamsRegion = "asia-northeast2"
+	ScheduleGetParamsRegionAsiaSouth1          ScheduleGetParamsRegion = "asia-south1"
+	ScheduleGetParamsRegionAsiaSoutheast1      ScheduleGetParamsRegion = "asia-southeast1"
+	ScheduleGetParamsRegionAustraliaSoutheast1 ScheduleGetParamsRegion = "australia-southeast1"
+	ScheduleGetParamsRegionEuropeNorth1        ScheduleGetParamsRegion = "europe-north1"
+	ScheduleGetParamsRegionEuropeSouthwest1    ScheduleGetParamsRegion = "europe-southwest1"
+	ScheduleGetParamsRegionEuropeWest1         ScheduleGetParamsRegion = "europe-west1"
+	ScheduleGetParamsRegionEuropeWest2         ScheduleGetParamsRegion = "europe-west2"
+	ScheduleGetParamsRegionEuropeWest3         ScheduleGetParamsRegion = "europe-west3"
+	ScheduleGetParamsRegionEuropeWest4         ScheduleGetParamsRegion = "europe-west4"
+	ScheduleGetParamsRegionEuropeWest8         ScheduleGetParamsRegion = "europe-west8"
+	ScheduleGetParamsRegionEuropeWest9         ScheduleGetParamsRegion = "europe-west9"
+	ScheduleGetParamsRegionMeWest1             ScheduleGetParamsRegion = "me-west1"
+	ScheduleGetParamsRegionSouthamericaEast1   ScheduleGetParamsRegion = "southamerica-east1"
+	ScheduleGetParamsRegionUsCentral1          ScheduleGetParamsRegion = "us-central1"
+	ScheduleGetParamsRegionUsEast1             ScheduleGetParamsRegion = "us-east1"
+	ScheduleGetParamsRegionUsEast4             ScheduleGetParamsRegion = "us-east4"
+	ScheduleGetParamsRegionUsSouth1            ScheduleGetParamsRegion = "us-south1"
+	ScheduleGetParamsRegionUsWest1             ScheduleGetParamsRegion = "us-west1"
+)
+
+func (r ScheduleGetParamsRegion) IsKnown() bool {
+	switch r {
+	case ScheduleGetParamsRegionAsiaEast1, ScheduleGetParamsRegionAsiaNortheast1, ScheduleGetParamsRegionAsiaNortheast2, ScheduleGetParamsRegionAsiaSouth1, ScheduleGetParamsRegionAsiaSoutheast1, ScheduleGetParamsRegionAustraliaSoutheast1, ScheduleGetParamsRegionEuropeNorth1, ScheduleGetParamsRegionEuropeSouthwest1, ScheduleGetParamsRegionEuropeWest1, ScheduleGetParamsRegionEuropeWest2, ScheduleGetParamsRegionEuropeWest3, ScheduleGetParamsRegionEuropeWest4, ScheduleGetParamsRegionEuropeWest8, ScheduleGetParamsRegionEuropeWest9, ScheduleGetParamsRegionMeWest1, ScheduleGetParamsRegionSouthamericaEast1, ScheduleGetParamsRegionUsCentral1, ScheduleGetParamsRegionUsEast1, ScheduleGetParamsRegionUsEast4, ScheduleGetParamsRegionUsSouth1, ScheduleGetParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
+
+type ScheduleGetResponseEnvelope struct {
+	// The test schedule.
+	Result Schedule                        `json:"result"`
+	JSON   scheduleGetResponseEnvelopeJSON `json:"-"`
+}
+
+// scheduleGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScheduleGetResponseEnvelope]
+type scheduleGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

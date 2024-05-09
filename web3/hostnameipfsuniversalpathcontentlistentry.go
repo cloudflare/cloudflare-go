@@ -11,8 +11,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // HostnameIPFSUniversalPathContentListEntryService contains methods and other
@@ -74,7 +74,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Cont
 }
 
 // Delete IPFS Universal Path Gateway Content List Entry
-func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, body HostnameIPFSUniversalPathContentListEntryDeleteParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryDeleteResponse, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", zoneIdentifier, identifier, contentListEntryIdentifier)
@@ -578,14 +578,6 @@ func (r *HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfo
 
 func (r hostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
-}
-
-type HostnameIPFSUniversalPathContentListEntryDeleteParams struct {
-	Body interface{} `json:"body,required"`
-}
-
-func (r HostnameIPFSUniversalPathContentListEntryDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope struct {

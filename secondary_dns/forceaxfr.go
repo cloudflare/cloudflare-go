@@ -10,8 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // ForceAXFRService contains methods and other services that help with interacting
@@ -36,7 +36,7 @@ func (r *ForceAXFRService) New(ctx context.Context, params ForceAXFRNewParams, o
 	opts = append(r.Options[:], opts...)
 	var env ForceAXFRNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -15,7 +15,6 @@ import (
 )
 
 func TestCustomNameserverNewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -43,7 +42,6 @@ func TestCustomNameserverNewWithOptionalParams(t *testing.T) {
 }
 
 func TestCustomNameserverDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -61,7 +59,6 @@ func TestCustomNameserverDelete(t *testing.T) {
 		"ns1.example.com",
 		custom_nameservers.CustomNameserverDeleteParams{
 			AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -74,7 +71,6 @@ func TestCustomNameserverDelete(t *testing.T) {
 }
 
 func TestCustomNameserverAvailabilty(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -100,7 +96,6 @@ func TestCustomNameserverAvailabilty(t *testing.T) {
 }
 
 func TestCustomNameserverGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -115,33 +110,6 @@ func TestCustomNameserverGet(t *testing.T) {
 	)
 	_, err := client.CustomNameservers.Get(context.TODO(), custom_nameservers.CustomNameserverGetParams{
 		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestCustomNameserverVerify(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.CustomNameservers.Verify(context.TODO(), custom_nameservers.CustomNameserverVerifyParams{
-		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
-		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
