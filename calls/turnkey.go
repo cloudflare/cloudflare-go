@@ -16,27 +16,27 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
-// TurnKeyService contains methods and other services that help with interacting
+// TURNKeyService contains methods and other services that help with interacting
 // with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewTurnKeyService] method instead.
-type TurnKeyService struct {
+// the [NewTURNKeyService] method instead.
+type TURNKeyService struct {
 	Options []option.RequestOption
 }
 
-// NewTurnKeyService generates a new service that applies the given options to each
+// NewTURNKeyService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewTurnKeyService(opts ...option.RequestOption) (r *TurnKeyService) {
-	r = &TurnKeyService{}
+func NewTURNKeyService(opts ...option.RequestOption) (r *TURNKeyService) {
+	r = &TURNKeyService{}
 	r.Options = opts
 	return
 }
 
 // Creates a new Cloudflare Calls TURN key.
-func (r *TurnKeyService) New(ctx context.Context, params TurnKeyNewParams, opts ...option.RequestOption) (res *TurnKeyNewResponse, err error) {
+func (r *TURNKeyService) New(ctx context.Context, params TURNKeyNewParams, opts ...option.RequestOption) (res *TURNKeyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
@@ -44,9 +44,9 @@ func (r *TurnKeyService) New(ctx context.Context, params TurnKeyNewParams, opts 
 }
 
 // Edit details for a single TURN key.
-func (r *TurnKeyService) Update(ctx context.Context, keyID string, params TurnKeyUpdateParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *TURNKeyService) Update(ctx context.Context, keyID string, params TURNKeyUpdateParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	var env TurnKeyUpdateResponseEnvelope
+	var env TURNKeyUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", params.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -57,7 +57,7 @@ func (r *TurnKeyService) Update(ctx context.Context, keyID string, params TurnKe
 }
 
 // Lists all TURN keys in the Cloudflare account
-func (r *TurnKeyService) List(ctx context.Context, query TurnKeyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
+func (r *TURNKeyService) List(ctx context.Context, query TURNKeyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -75,14 +75,14 @@ func (r *TurnKeyService) List(ctx context.Context, query TurnKeyListParams, opts
 }
 
 // Lists all TURN keys in the Cloudflare account
-func (r *TurnKeyService) ListAutoPaging(ctx context.Context, query TurnKeyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
+func (r *TURNKeyService) ListAutoPaging(ctx context.Context, query TURNKeyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a TURN key from Cloudflare Calls
-func (r *TurnKeyService) Delete(ctx context.Context, keyID string, body TurnKeyDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *TURNKeyService) Delete(ctx context.Context, keyID string, body TURNKeyDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	var env TurnKeyDeleteResponseEnvelope
+	var env TURNKeyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", body.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -93,9 +93,9 @@ func (r *TurnKeyService) Delete(ctx context.Context, keyID string, body TurnKeyD
 }
 
 // Fetches details for a single TURN key.
-func (r *TurnKeyService) Get(ctx context.Context, keyID string, query TurnKeyGetParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *TURNKeyService) Get(ctx context.Context, keyID string, query TURNKeyGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	var env TurnKeyGetResponseEnvelope
+	var env TURNKeyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", query.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -105,7 +105,7 @@ func (r *TurnKeyService) Get(ctx context.Context, keyID string, query TurnKeyGet
 	return
 }
 
-type TurnKeyNewResponse struct {
+type TURNKeyNewResponse struct {
 	// The date and time the item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// Bearer token
@@ -120,7 +120,7 @@ type TurnKeyNewResponse struct {
 }
 
 // turnKeyNewResponseJSON contains the JSON metadata for the struct
-// [TurnKeyNewResponse]
+// [TURNKeyNewResponse]
 type turnKeyNewResponseJSON struct {
 	Created     apijson.Field
 	Key         apijson.Field
@@ -131,7 +131,7 @@ type turnKeyNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TurnKeyNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TURNKeyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -139,40 +139,40 @@ func (r turnKeyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type TurnKeyNewParams struct {
+type TURNKeyNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A short description of a TURN key, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r TurnKeyNewParams) MarshalJSON() (data []byte, err error) {
+func (r TURNKeyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type TurnKeyUpdateParams struct {
+type TURNKeyUpdateParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A short description of a TURN key, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r TurnKeyUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r TURNKeyUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type TurnKeyUpdateResponseEnvelope struct {
+type TURNKeyUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success TurnKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success TURNKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// Bearer token
 	Result string                            `json:"result"`
 	JSON   turnKeyUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // turnKeyUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TurnKeyUpdateResponseEnvelope]
+// [TURNKeyUpdateResponseEnvelope]
 type turnKeyUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -182,7 +182,7 @@ type turnKeyUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TurnKeyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TURNKeyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -191,42 +191,42 @@ func (r turnKeyUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 // Whether the API call was successful
-type TurnKeyUpdateResponseEnvelopeSuccess bool
+type TURNKeyUpdateResponseEnvelopeSuccess bool
 
 const (
-	TurnKeyUpdateResponseEnvelopeSuccessTrue TurnKeyUpdateResponseEnvelopeSuccess = true
+	TURNKeyUpdateResponseEnvelopeSuccessTrue TURNKeyUpdateResponseEnvelopeSuccess = true
 )
 
-func (r TurnKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r TURNKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case TurnKeyUpdateResponseEnvelopeSuccessTrue:
+	case TURNKeyUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type TurnKeyListParams struct {
+type TURNKeyListParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type TurnKeyDeleteParams struct {
+type TURNKeyDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type TurnKeyDeleteResponseEnvelope struct {
+type TURNKeyDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success TurnKeyDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success TURNKeyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	// Bearer token
 	Result string                            `json:"result"`
 	JSON   turnKeyDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // turnKeyDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TurnKeyDeleteResponseEnvelope]
+// [TURNKeyDeleteResponseEnvelope]
 type turnKeyDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -236,7 +236,7 @@ type turnKeyDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TurnKeyDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TURNKeyDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -245,37 +245,37 @@ func (r turnKeyDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 // Whether the API call was successful
-type TurnKeyDeleteResponseEnvelopeSuccess bool
+type TURNKeyDeleteResponseEnvelopeSuccess bool
 
 const (
-	TurnKeyDeleteResponseEnvelopeSuccessTrue TurnKeyDeleteResponseEnvelopeSuccess = true
+	TURNKeyDeleteResponseEnvelopeSuccessTrue TURNKeyDeleteResponseEnvelopeSuccess = true
 )
 
-func (r TurnKeyDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r TURNKeyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case TurnKeyDeleteResponseEnvelopeSuccessTrue:
+	case TURNKeyDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type TurnKeyGetParams struct {
+type TURNKeyGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type TurnKeyGetResponseEnvelope struct {
+type TURNKeyGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success TurnKeyGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TURNKeyGetResponseEnvelopeSuccess `json:"success,required"`
 	// Bearer token
 	Result string                         `json:"result"`
 	JSON   turnKeyGetResponseEnvelopeJSON `json:"-"`
 }
 
 // turnKeyGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TurnKeyGetResponseEnvelope]
+// [TURNKeyGetResponseEnvelope]
 type turnKeyGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -285,7 +285,7 @@ type turnKeyGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TurnKeyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TURNKeyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -294,15 +294,15 @@ func (r turnKeyGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 // Whether the API call was successful
-type TurnKeyGetResponseEnvelopeSuccess bool
+type TURNKeyGetResponseEnvelopeSuccess bool
 
 const (
-	TurnKeyGetResponseEnvelopeSuccessTrue TurnKeyGetResponseEnvelopeSuccess = true
+	TURNKeyGetResponseEnvelopeSuccessTrue TURNKeyGetResponseEnvelopeSuccess = true
 )
 
-func (r TurnKeyGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r TURNKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case TurnKeyGetResponseEnvelopeSuccessTrue:
+	case TURNKeyGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
