@@ -869,7 +869,7 @@ func (r AccessApplicationNewResponseSelfHostedApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -1402,7 +1402,7 @@ func (r AccessApplicationNewResponseSaaSApplication) implementsZeroTrustAccessAp
 }
 
 type AccessApplicationNewResponseSaaSApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -1692,8 +1692,6 @@ func (r AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthT
 type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims struct {
 	// The name of the claim.
 	Name string `json:"name"`
-	// A mapping from IdP ID to claim name.
-	NameByIdP map[string]string `json:"name_by_idp"`
 	// If the claim is required when building an OIDC token.
 	Required bool `json:"required"`
 	// The scope of the claim.
@@ -1707,7 +1705,6 @@ type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomCl
 // [AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims]
 type accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsJSON struct {
 	Name        apijson.Field
-	NameByIdP   apijson.Field
 	Required    apijson.Field
 	Scope       apijson.Field
 	Source      apijson.Field
@@ -1743,8 +1740,10 @@ func (r AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCusto
 
 type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource struct {
 	// The name of the IdP claim.
-	Name string                                                                                    `json:"name"`
-	JSON accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
+	Name string `json:"name"`
+	// A mapping from IdP ID to claim name.
+	NameByIdP map[string]string                                                                         `json:"name_by_idp"`
+	JSON      accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
 }
 
 // accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON
@@ -1752,6 +1751,7 @@ type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomCl
 // [AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource]
 type accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON struct {
 	Name        apijson.Field
+	NameByIdP   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2341,7 +2341,7 @@ func (r AccessApplicationNewResponseBrowserSSHApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -2930,7 +2930,7 @@ func (r AccessApplicationNewResponseBrowserVncApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationNewResponseBrowserVncApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -3457,7 +3457,7 @@ func (r AccessApplicationNewResponseAppLauncherApplication) implementsZeroTrustA
 }
 
 type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -3985,7 +3985,7 @@ func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication) impl
 }
 
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -4513,7 +4513,7 @@ func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplication) impl
 }
 
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -5712,7 +5712,7 @@ func (r AccessApplicationUpdateResponseSelfHostedApplication) implementsZeroTrus
 }
 
 type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -6245,7 +6245,7 @@ func (r AccessApplicationUpdateResponseSaaSApplication) implementsZeroTrustAcces
 }
 
 type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -6535,8 +6535,6 @@ func (r AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppAu
 type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims struct {
 	// The name of the claim.
 	Name string `json:"name"`
-	// A mapping from IdP ID to claim name.
-	NameByIdP map[string]string `json:"name_by_idp"`
 	// If the claim is required when building an OIDC token.
 	Required bool `json:"required"`
 	// The scope of the claim.
@@ -6550,7 +6548,6 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCusto
 // [AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims]
 type accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsJSON struct {
 	Name        apijson.Field
-	NameByIdP   apijson.Field
 	Required    apijson.Field
 	Scope       apijson.Field
 	Source      apijson.Field
@@ -6586,8 +6583,10 @@ func (r AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCu
 
 type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource struct {
 	// The name of the IdP claim.
-	Name string                                                                                       `json:"name"`
-	JSON accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
+	Name string `json:"name"`
+	// A mapping from IdP ID to claim name.
+	NameByIdP map[string]string                                                                            `json:"name_by_idp"`
+	JSON      accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON
@@ -6595,6 +6594,7 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCusto
 // [AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource]
 type accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON struct {
 	Name        apijson.Field
+	NameByIdP   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -7185,7 +7185,7 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplication) implementsZeroTrus
 }
 
 type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -7774,7 +7774,7 @@ func (r AccessApplicationUpdateResponseBrowserVncApplication) implementsZeroTrus
 }
 
 type AccessApplicationUpdateResponseBrowserVncApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -8301,7 +8301,7 @@ func (r AccessApplicationUpdateResponseAppLauncherApplication) implementsZeroTru
 }
 
 type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -8829,7 +8829,7 @@ func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication) i
 }
 
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -9357,7 +9357,7 @@ func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication) i
 }
 
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -10556,7 +10556,7 @@ func (r AccessApplicationListResponseSelfHostedApplication) implementsZeroTrustA
 }
 
 type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -11089,7 +11089,7 @@ func (r AccessApplicationListResponseSaaSApplication) implementsZeroTrustAccessA
 }
 
 type AccessApplicationListResponseSaaSApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -11379,8 +11379,6 @@ func (r AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppAuth
 type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims struct {
 	// The name of the claim.
 	Name string `json:"name"`
-	// A mapping from IdP ID to claim name.
-	NameByIdP map[string]string `json:"name_by_idp"`
 	// If the claim is required when building an OIDC token.
 	Required bool `json:"required"`
 	// The scope of the claim.
@@ -11394,7 +11392,6 @@ type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomC
 // [AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims]
 type accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsJSON struct {
 	Name        apijson.Field
-	NameByIdP   apijson.Field
 	Required    apijson.Field
 	Scope       apijson.Field
 	Source      apijson.Field
@@ -11430,8 +11427,10 @@ func (r AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCust
 
 type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource struct {
 	// The name of the IdP claim.
-	Name string                                                                                     `json:"name"`
-	JSON accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
+	Name string `json:"name"`
+	// A mapping from IdP ID to claim name.
+	NameByIdP map[string]string                                                                          `json:"name_by_idp"`
+	JSON      accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
 }
 
 // accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON
@@ -11439,6 +11438,7 @@ type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomC
 // [AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource]
 type accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON struct {
 	Name        apijson.Field
+	NameByIdP   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -12028,7 +12028,7 @@ func (r AccessApplicationListResponseBrowserSSHApplication) implementsZeroTrustA
 }
 
 type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -12617,7 +12617,7 @@ func (r AccessApplicationListResponseBrowserVncApplication) implementsZeroTrustA
 }
 
 type AccessApplicationListResponseBrowserVncApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -13144,7 +13144,7 @@ func (r AccessApplicationListResponseAppLauncherApplication) implementsZeroTrust
 }
 
 type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -13672,7 +13672,7 @@ func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplication) imp
 }
 
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -14200,7 +14200,7 @@ func (r AccessApplicationListResponseBrowserIsolationPermissionsApplication) imp
 }
 
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -15421,7 +15421,7 @@ func (r AccessApplicationGetResponseSelfHostedApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -15954,7 +15954,7 @@ func (r AccessApplicationGetResponseSaaSApplication) implementsZeroTrustAccessAp
 }
 
 type AccessApplicationGetResponseSaaSApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -16244,8 +16244,6 @@ func (r AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppAuthT
 type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims struct {
 	// The name of the claim.
 	Name string `json:"name"`
-	// A mapping from IdP ID to claim name.
-	NameByIdP map[string]string `json:"name_by_idp"`
 	// If the claim is required when building an OIDC token.
 	Required bool `json:"required"`
 	// The scope of the claim.
@@ -16259,7 +16257,6 @@ type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomCl
 // [AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims]
 type accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsJSON struct {
 	Name        apijson.Field
-	NameByIdP   apijson.Field
 	Required    apijson.Field
 	Scope       apijson.Field
 	Source      apijson.Field
@@ -16295,8 +16292,10 @@ func (r AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCusto
 
 type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource struct {
 	// The name of the IdP claim.
-	Name string                                                                                    `json:"name"`
-	JSON accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
+	Name string `json:"name"`
+	// A mapping from IdP ID to claim name.
+	NameByIdP map[string]string                                                                         `json:"name_by_idp"`
+	JSON      accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON `json:"-"`
 }
 
 // accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON
@@ -16304,6 +16303,7 @@ type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomCl
 // [AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource]
 type accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSourceJSON struct {
 	Name        apijson.Field
+	NameByIdP   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -16893,7 +16893,7 @@ func (r AccessApplicationGetResponseBrowserSSHApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -17482,7 +17482,7 @@ func (r AccessApplicationGetResponseBrowserVncApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationGetResponseBrowserVncApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -18009,7 +18009,7 @@ func (r AccessApplicationGetResponseAppLauncherApplication) implementsZeroTrustA
 }
 
 type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -18537,7 +18537,7 @@ func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication) impl
 }
 
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -19065,7 +19065,7 @@ func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplication) impl
 }
 
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -20035,9 +20035,10 @@ type AccessApplicationNewParamsBody struct {
 	SkipInterstitial param.Field[bool]        `json:"skip_interstitial"`
 	Tags             param.Field[interface{}] `json:"tags,required"`
 	// The application type.
-	Type     param.Field[string]      `json:"type"`
-	Policies param.Field[interface{}] `json:"policies,required"`
-	SaaSApp  param.Field[interface{}] `json:"saas_app,required"`
+	Type       param.Field[string]      `json:"type"`
+	Policies   param.Field[interface{}] `json:"policies,required"`
+	ScimConfig param.Field[interface{}] `json:"scim_config,required"`
+	SaaSApp    param.Field[interface{}] `json:"saas_app,required"`
 }
 
 func (r AccessApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -20053,7 +20054,7 @@ func (r AccessApplicationNewParamsBody) implementsZeroTrustAccessApplicationNewP
 // [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationNewParamsBodyAccessBookmarkProps],
+// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplication],
 // [AccessApplicationNewParamsBody].
 type AccessApplicationNewParamsBodyUnion interface {
 	implementsZeroTrustAccessApplicationNewParamsBodyUnion()
@@ -20113,6 +20114,9 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationNewParamsBodySelfHostedApplicationScimConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -20137,8 +20141,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplication) implementsZeroTrust
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -20187,8 +20189,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -20209,8 +20209,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -20264,6 +20262,236 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisio
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthentication].
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationNewParamsBodySaaSApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -20284,6 +20512,9 @@ type AccessApplicationNewParamsBodySaaSApplication struct {
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
 	SaaSApp  param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppUnion]  `json:"saas_app"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationNewParamsBodySaaSApplicationScimConfig] `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -20300,8 +20531,6 @@ func (r AccessApplicationNewParamsBodySaaSApplication) implementsZeroTrustAccess
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -20350,8 +20579,6 @@ type AccessApplicationNewParamsBodySaaSApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -20372,8 +20599,6 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -20547,8 +20772,6 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppAut
 type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims struct {
 	// The name of the claim.
 	Name param.Field[string] `json:"name"`
-	// A mapping from IdP ID to claim name.
-	NameByIdP param.Field[map[string]string] `json:"name_by_idp"`
 	// If the claim is required when building an OIDC token.
 	Required param.Field[bool] `json:"required"`
 	// The scope of the claim.
@@ -20581,6 +20804,8 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCus
 type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource struct {
 	// The name of the IdP claim.
 	Name param.Field[string] `json:"name"`
+	// A mapping from IdP ID to claim name.
+	NameByIdP param.Field[map[string]string] `json:"name_by_idp"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource) MarshalJSON() (data []byte, err error) {
@@ -20647,6 +20872,236 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAuthType) IsKnown() 
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationNewParamsBodySaaSApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthentication].
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodySaaSApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationNewParamsBodySaaSApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationNewParamsBodySaaSApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
@@ -20701,6 +21156,9 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -20725,8 +21183,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplication) implementsZeroTrust
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -20775,8 +21231,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -20797,8 +21251,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -20850,6 +21302,236 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisio
 		return true
 	}
 	return false
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthentication].
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationNewParamsBodyBrowserVncApplication struct {
@@ -20906,6 +21588,9 @@ type AccessApplicationNewParamsBodyBrowserVncApplication struct {
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationScimConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -20930,8 +21615,6 @@ func (r AccessApplicationNewParamsBodyBrowserVncApplication) implementsZeroTrust
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserVncApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -20980,8 +21663,6 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -21002,8 +21683,6 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -21057,6 +21736,236 @@ func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisio
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthentication].
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVncApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
@@ -21070,6 +21979,9 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationScimConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
@@ -21085,8 +21997,6 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplication) implementsZeroTrus
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -21135,8 +22045,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -21157,8 +22065,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -21212,6 +22118,236 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisi
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthentication].
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
@@ -21225,6 +22361,9 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
@@ -21240,8 +22379,6 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) im
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -21290,8 +22427,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyU
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -21312,8 +22447,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -21367,6 +22500,236 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthentication].
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
@@ -21380,6 +22743,9 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
@@ -21395,8 +22761,6 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) im
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -21445,8 +22809,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyU
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -21467,8 +22829,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -21522,7 +22882,237 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 	return false
 }
 
-type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthentication].
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationNewParamsBodyBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
@@ -21531,6 +23121,9 @@ type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationNewParamsBodyBookmarkApplicationScimConfig] `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -21538,11 +23131,241 @@ type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
 	Type param.Field[string] `json:"type"`
 }
 
-func (r AccessApplicationNewParamsBodyAccessBookmarkProps) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBookmarkApplication) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsBodyAccessBookmarkProps) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
+func (r AccessApplicationNewParamsBodyBookmarkApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationNewParamsBodyBookmarkApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthentication].
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationNewParamsBodyBookmarkApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationNewParamsBodyBookmarkApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationNewResponseEnvelope struct {
@@ -21656,9 +23479,10 @@ type AccessApplicationUpdateParamsBody struct {
 	SkipInterstitial param.Field[bool]        `json:"skip_interstitial"`
 	Tags             param.Field[interface{}] `json:"tags,required"`
 	// The application type.
-	Type     param.Field[string]      `json:"type"`
-	Policies param.Field[interface{}] `json:"policies,required"`
-	SaaSApp  param.Field[interface{}] `json:"saas_app,required"`
+	Type       param.Field[string]      `json:"type"`
+	Policies   param.Field[interface{}] `json:"policies,required"`
+	ScimConfig param.Field[interface{}] `json:"scim_config,required"`
+	SaaSApp    param.Field[interface{}] `json:"saas_app,required"`
 }
 
 func (r AccessApplicationUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -21676,7 +23500,7 @@ func (r AccessApplicationUpdateParamsBody) implementsZeroTrustAccessApplicationU
 // [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateParamsBodyAccessBookmarkProps],
+// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplication],
 // [AccessApplicationUpdateParamsBody].
 type AccessApplicationUpdateParamsBodyUnion interface {
 	implementsZeroTrustAccessApplicationUpdateParamsBodyUnion()
@@ -21736,6 +23560,9 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -21760,8 +23587,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplication) implementsZeroTr
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -21810,8 +23635,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion interface
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -21832,8 +23655,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -21887,6 +23708,236 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDeci
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthentication].
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -21907,6 +23958,9 @@ type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
 	SaaSApp  param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion]  `json:"saas_app"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationUpdateParamsBodySaaSApplicationScimConfig] `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -21923,8 +23977,6 @@ func (r AccessApplicationUpdateParamsBodySaaSApplication) implementsZeroTrustAcc
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -21973,8 +24025,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -21995,8 +24045,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -22170,8 +24218,6 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims struct {
 	// The name of the claim.
 	Name param.Field[string] `json:"name"`
-	// A mapping from IdP ID to claim name.
-	NameByIdP param.Field[map[string]string] `json:"name_by_idp"`
 	// If the claim is required when building an OIDC token.
 	Required param.Field[bool] `json:"required"`
 	// The scope of the claim.
@@ -22204,6 +24250,8 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource struct {
 	// The name of the IdP claim.
 	Name param.Field[string] `json:"name"`
+	// A mapping from IdP ID to claim name.
+	NameByIdP param.Field[map[string]string] `json:"name_by_idp"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaimsSource) MarshalJSON() (data []byte, err error) {
@@ -22270,6 +24318,236 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAuthType) IsKnown
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthentication].
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodySaaSApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationUpdateParamsBodySaaSApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationUpdateParamsBodySaaSApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
@@ -22324,6 +24602,9 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -22348,8 +24629,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) implementsZeroTr
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -22398,8 +24677,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion interface
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -22420,8 +24697,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -22473,6 +24748,236 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDeci
 		return true
 	}
 	return false
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthentication].
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationUpdateParamsBodyBrowserVncApplication struct {
@@ -22529,6 +25034,9 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplication struct {
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -22553,8 +25061,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVncApplication) implementsZeroTr
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -22603,8 +25109,6 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion interface
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -22625,8 +25129,6 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject struct
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -22680,6 +25182,236 @@ func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDeci
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthentication].
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
@@ -22693,6 +25425,9 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
@@ -22708,8 +25443,6 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplication) implementsZeroT
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -22758,8 +25491,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion interfac
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -22780,8 +25511,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -22835,6 +25564,236 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDec
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthentication].
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
@@ -22848,6 +25807,9 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
@@ -22863,8 +25825,6 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication)
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -22913,8 +25873,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -22935,8 +25893,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -22990,6 +25946,236 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 	return false
 }
 
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthentication].
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
@@ -23003,6 +26189,9 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
@@ -23018,8 +26207,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication)
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -23068,8 +26255,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink struct {
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -23090,8 +26275,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
-	// The ID of the Access policy.
-	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -23145,7 +26328,237 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 	return false
 }
 
-type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthentication].
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationUpdateParamsBodyBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
@@ -23154,6 +26567,9 @@ type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	ScimConfig param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfig] `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -23161,11 +26577,241 @@ type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {
 	Type param.Field[string] `json:"type"`
 }
 
-func (r AccessApplicationUpdateParamsBodyAccessBookmarkProps) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBookmarkApplication) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsBodyAccessBookmarkProps) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
+func (r AccessApplicationUpdateParamsBodyBookmarkApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID param.Field[string] `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationUnion] `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings param.Field[[]AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigMapping] `json:"mappings"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthentication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationUnion() {
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2],
+// [AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthentication].
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationUnion()
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string] `json:"password,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme = "httpbasic"
+)
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth Bearer Token authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken struct {
+	// Token used to authenticate with the remote SCIM service.
+	Token param.Field[string] `json:"token,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme = "oauthbearertoken"
+)
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOAuthBearerTokenSchemeOauthbearertoken:
+		return true
+	}
+	return false
+}
+
+// Attributes for configuring OAuth 2 authentication scheme for SCIM provisioning
+// to an application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2 struct {
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL param.Field[string] `json:"token_url,required"`
+	// The authorization scopes to request when generating the token used to
+	// authenticate with the remove SCIM service.
+	Scopes param.Field[[]string] `json:"scopes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationUnion() {
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2 AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2Scheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationAccessScimConfigAuthenticationOauth2SchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+// Transformations and filters applied to resources before they are provisioned in
+// the remote SCIM service.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigMapping struct {
+	// Which SCIM resource type this mapping applies to.
+	Schema param.Field[string] `json:"schema,required"`
+	// Whether or not this mapping is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A
+	// [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2)
+	// that matches resources that should be provisioned to this application.
+	Filter param.Field[string] `json:"filter"`
+	// Whether or not this mapping applies to creates, updates, or deletes.
+	Operations param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigMappingsOperations] `json:"operations"`
+	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
+	// provisioning it in the application.
+	TransformJsonata param.Field[string] `json:"transform_jsonata"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigMapping) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not this mapping applies to creates, updates, or deletes.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigMappingsOperations struct {
+	// Whether or not this mapping applies to create (POST) operations.
+	Create param.Field[bool] `json:"create"`
+	// Whether or not this mapping applies to DELETE operations.
+	Delete param.Field[bool] `json:"delete"`
+	// Whether or not this mapping applies to update (PATCH/PUT) operations.
+	Update param.Field[bool] `json:"update"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationScimConfigMappingsOperations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
