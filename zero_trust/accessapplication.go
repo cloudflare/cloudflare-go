@@ -1522,7 +1522,7 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// The application client id
@@ -1556,7 +1556,7 @@ type accessApplicationNewResponseSaaSApplicationSaaSAppJSON struct {
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
-	AllowPkceWithoutClientSecret  apijson.Field
+	AllowPKCEWithoutClientSecret  apijson.Field
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
@@ -1610,7 +1610,7 @@ func init() {
 type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
@@ -1643,7 +1643,7 @@ type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct 
 // the JSON metadata for the struct
 // [AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp]
 type accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
-	AllowPkceWithoutClientSecret apijson.Field
+	AllowPKCEWithoutClientSecret apijson.Field
 	AppLauncherURL               apijson.Field
 	AuthType                     apijson.Field
 	ClientID                     apijson.Field
@@ -1768,13 +1768,13 @@ type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTyp
 
 const (
 	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
-	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
+	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
 )
 
 func (r AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
 		return true
 	}
 	return false
@@ -6365,7 +6365,7 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// The application client id
@@ -6399,7 +6399,7 @@ type accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON struct {
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
-	AllowPkceWithoutClientSecret  apijson.Field
+	AllowPKCEWithoutClientSecret  apijson.Field
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
@@ -6453,7 +6453,7 @@ func init() {
 type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
@@ -6486,7 +6486,7 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp stru
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp]
 type accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
-	AllowPkceWithoutClientSecret apijson.Field
+	AllowPKCEWithoutClientSecret apijson.Field
 	AppLauncherURL               apijson.Field
 	AuthType                     apijson.Field
 	ClientID                     apijson.Field
@@ -6611,13 +6611,13 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrant
 
 const (
 	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
-	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
+	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
 )
 
 func (r AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
 		return true
 	}
 	return false
@@ -11209,7 +11209,7 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// The application client id
@@ -11243,7 +11243,7 @@ type accessApplicationListResponseSaaSApplicationSaaSAppJSON struct {
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
-	AllowPkceWithoutClientSecret  apijson.Field
+	AllowPKCEWithoutClientSecret  apijson.Field
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
@@ -11297,7 +11297,7 @@ func init() {
 type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
@@ -11330,7 +11330,7 @@ type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp]
 type accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
-	AllowPkceWithoutClientSecret apijson.Field
+	AllowPKCEWithoutClientSecret apijson.Field
 	AppLauncherURL               apijson.Field
 	AuthType                     apijson.Field
 	ClientID                     apijson.Field
@@ -11455,13 +11455,13 @@ type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTy
 
 const (
 	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
-	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
+	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
 )
 
 func (r AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
 		return true
 	}
 	return false
@@ -16074,7 +16074,7 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// The application client id
@@ -16108,7 +16108,7 @@ type accessApplicationGetResponseSaaSApplicationSaaSAppJSON struct {
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
-	AllowPkceWithoutClientSecret  apijson.Field
+	AllowPKCEWithoutClientSecret  apijson.Field
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
@@ -16162,7 +16162,7 @@ func init() {
 type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
@@ -16195,7 +16195,7 @@ type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct 
 // the JSON metadata for the struct
 // [AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp]
 type accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
-	AllowPkceWithoutClientSecret apijson.Field
+	AllowPKCEWithoutClientSecret apijson.Field
 	AppLauncherURL               apijson.Field
 	AuthType                     apijson.Field
 	ClientID                     apijson.Field
@@ -16320,13 +16320,13 @@ type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTyp
 
 const (
 	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
-	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
+	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
 )
 
 func (r AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
 		return true
 	}
 	return false
@@ -20461,7 +20461,7 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
 	// The application client id
@@ -20494,7 +20494,7 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSAppUnion interface {
 type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
@@ -20591,13 +20591,13 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantT
 
 const (
 	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
-	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
+	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
 )
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
 		return true
 	}
 	return false
@@ -22084,7 +22084,7 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
 	// The application client id
@@ -22117,7 +22117,7 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion interface {
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
-	AllowPkceWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
+	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
 	// The URL where this applications tile redirects users
 	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
@@ -22214,13 +22214,13 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGra
 
 const (
 	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
-	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
+	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
 )
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPkce, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
 		return true
 	}
 	return false
