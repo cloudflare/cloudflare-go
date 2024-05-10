@@ -32,7 +32,7 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessApplicationPolicyNewParams{
-			Decision: cloudflare.F(zero_trust.AccessApplicationPolicyNewParamsDecisionAllow),
+			Decision: cloudflare.F(zero_trust.DecisionAllow),
 			Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
@@ -120,7 +120,7 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessApplicationPolicyUpdateParams{
-			Decision: cloudflare.F(zero_trust.AccessApplicationPolicyUpdateParamsDecisionAllow),
+			Decision: cloudflare.F(zero_trust.DecisionAllow),
 			Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),

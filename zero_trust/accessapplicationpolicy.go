@@ -215,7 +215,7 @@ type AccessApplicationPolicyNewResponse struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationPolicyNewResponseDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -272,24 +272,6 @@ func (r accessApplicationPolicyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The action Access will take if a user matches this policy.
-type AccessApplicationPolicyNewResponseDecision string
-
-const (
-	AccessApplicationPolicyNewResponseDecisionAllow       AccessApplicationPolicyNewResponseDecision = "allow"
-	AccessApplicationPolicyNewResponseDecisionDeny        AccessApplicationPolicyNewResponseDecision = "deny"
-	AccessApplicationPolicyNewResponseDecisionNonIdentity AccessApplicationPolicyNewResponseDecision = "non_identity"
-	AccessApplicationPolicyNewResponseDecisionBypass      AccessApplicationPolicyNewResponseDecision = "bypass"
-)
-
-func (r AccessApplicationPolicyNewResponseDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyNewResponseDecisionAllow, AccessApplicationPolicyNewResponseDecisionDeny, AccessApplicationPolicyNewResponseDecisionNonIdentity, AccessApplicationPolicyNewResponseDecisionBypass:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationPolicyUpdateResponse struct {
 	// UUID
 	ID string `json:"id"`
@@ -300,7 +282,7 @@ type AccessApplicationPolicyUpdateResponse struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationPolicyUpdateResponseDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -357,24 +339,6 @@ func (r accessApplicationPolicyUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The action Access will take if a user matches this policy.
-type AccessApplicationPolicyUpdateResponseDecision string
-
-const (
-	AccessApplicationPolicyUpdateResponseDecisionAllow       AccessApplicationPolicyUpdateResponseDecision = "allow"
-	AccessApplicationPolicyUpdateResponseDecisionDeny        AccessApplicationPolicyUpdateResponseDecision = "deny"
-	AccessApplicationPolicyUpdateResponseDecisionNonIdentity AccessApplicationPolicyUpdateResponseDecision = "non_identity"
-	AccessApplicationPolicyUpdateResponseDecisionBypass      AccessApplicationPolicyUpdateResponseDecision = "bypass"
-)
-
-func (r AccessApplicationPolicyUpdateResponseDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyUpdateResponseDecisionAllow, AccessApplicationPolicyUpdateResponseDecisionDeny, AccessApplicationPolicyUpdateResponseDecisionNonIdentity, AccessApplicationPolicyUpdateResponseDecisionBypass:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationPolicyListResponse struct {
 	// UUID
 	ID string `json:"id"`
@@ -385,7 +349,7 @@ type AccessApplicationPolicyListResponse struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationPolicyListResponseDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -442,24 +406,6 @@ func (r accessApplicationPolicyListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The action Access will take if a user matches this policy.
-type AccessApplicationPolicyListResponseDecision string
-
-const (
-	AccessApplicationPolicyListResponseDecisionAllow       AccessApplicationPolicyListResponseDecision = "allow"
-	AccessApplicationPolicyListResponseDecisionDeny        AccessApplicationPolicyListResponseDecision = "deny"
-	AccessApplicationPolicyListResponseDecisionNonIdentity AccessApplicationPolicyListResponseDecision = "non_identity"
-	AccessApplicationPolicyListResponseDecisionBypass      AccessApplicationPolicyListResponseDecision = "bypass"
-)
-
-func (r AccessApplicationPolicyListResponseDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyListResponseDecisionAllow, AccessApplicationPolicyListResponseDecisionDeny, AccessApplicationPolicyListResponseDecisionNonIdentity, AccessApplicationPolicyListResponseDecisionBypass:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationPolicyDeleteResponse struct {
 	// UUID
 	ID   string                                    `json:"id"`
@@ -492,7 +438,7 @@ type AccessApplicationPolicyGetResponse struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationPolicyGetResponseDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -549,27 +495,9 @@ func (r accessApplicationPolicyGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The action Access will take if a user matches this policy.
-type AccessApplicationPolicyGetResponseDecision string
-
-const (
-	AccessApplicationPolicyGetResponseDecisionAllow       AccessApplicationPolicyGetResponseDecision = "allow"
-	AccessApplicationPolicyGetResponseDecisionDeny        AccessApplicationPolicyGetResponseDecision = "deny"
-	AccessApplicationPolicyGetResponseDecisionNonIdentity AccessApplicationPolicyGetResponseDecision = "non_identity"
-	AccessApplicationPolicyGetResponseDecisionBypass      AccessApplicationPolicyGetResponseDecision = "bypass"
-)
-
-func (r AccessApplicationPolicyGetResponseDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyGetResponseDecisionAllow, AccessApplicationPolicyGetResponseDecisionDeny, AccessApplicationPolicyGetResponseDecisionNonIdentity, AccessApplicationPolicyGetResponseDecisionBypass:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationPolicyNewParams struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationPolicyNewParamsDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -609,24 +537,6 @@ type AccessApplicationPolicyNewParams struct {
 
 func (r AccessApplicationPolicyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationPolicyNewParamsDecision string
-
-const (
-	AccessApplicationPolicyNewParamsDecisionAllow       AccessApplicationPolicyNewParamsDecision = "allow"
-	AccessApplicationPolicyNewParamsDecisionDeny        AccessApplicationPolicyNewParamsDecision = "deny"
-	AccessApplicationPolicyNewParamsDecisionNonIdentity AccessApplicationPolicyNewParamsDecision = "non_identity"
-	AccessApplicationPolicyNewParamsDecisionBypass      AccessApplicationPolicyNewParamsDecision = "bypass"
-)
-
-func (r AccessApplicationPolicyNewParamsDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyNewParamsDecisionAllow, AccessApplicationPolicyNewParamsDecisionDeny, AccessApplicationPolicyNewParamsDecisionNonIdentity, AccessApplicationPolicyNewParamsDecisionBypass:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationPolicyNewResponseEnvelope struct {
@@ -674,7 +584,7 @@ func (r AccessApplicationPolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationPolicyUpdateParams struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationPolicyUpdateParamsDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -714,24 +624,6 @@ type AccessApplicationPolicyUpdateParams struct {
 
 func (r AccessApplicationPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationPolicyUpdateParamsDecision string
-
-const (
-	AccessApplicationPolicyUpdateParamsDecisionAllow       AccessApplicationPolicyUpdateParamsDecision = "allow"
-	AccessApplicationPolicyUpdateParamsDecisionDeny        AccessApplicationPolicyUpdateParamsDecision = "deny"
-	AccessApplicationPolicyUpdateParamsDecisionNonIdentity AccessApplicationPolicyUpdateParamsDecision = "non_identity"
-	AccessApplicationPolicyUpdateParamsDecisionBypass      AccessApplicationPolicyUpdateParamsDecision = "bypass"
-)
-
-func (r AccessApplicationPolicyUpdateParamsDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyUpdateParamsDecisionAllow, AccessApplicationPolicyUpdateParamsDecisionDeny, AccessApplicationPolicyUpdateParamsDecisionNonIdentity, AccessApplicationPolicyUpdateParamsDecisionBypass:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelope struct {
