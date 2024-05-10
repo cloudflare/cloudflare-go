@@ -316,6 +316,24 @@ func (r CORSHeadersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The action Access will take if a user matches this policy.
+type Decision string
+
+const (
+	DecisionAllow       Decision = "allow"
+	DecisionDeny        Decision = "deny"
+	DecisionNonIdentity Decision = "non_identity"
+	DecisionBypass      Decision = "bypass"
+)
+
+func (r Decision) IsKnown() bool {
+	switch r {
+	case DecisionAllow, DecisionDeny, DecisionNonIdentity, DecisionBypass:
+		return true
+	}
+	return false
+}
+
 // A globally unique name for an identity or service provider.
 type SaaSAppNameFormat string
 
@@ -878,7 +896,7 @@ type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationNewResponseSelfHostedApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -934,24 +952,6 @@ func (r *AccessApplicationNewResponseSelfHostedApplicationPolicy) UnmarshalJSON(
 
 func (r accessApplicationNewResponseSelfHostedApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewResponseSelfHostedApplicationPoliciesDecision string
-
-const (
-	AccessApplicationNewResponseSelfHostedApplicationPoliciesDecisionAllow       AccessApplicationNewResponseSelfHostedApplicationPoliciesDecision = "allow"
-	AccessApplicationNewResponseSelfHostedApplicationPoliciesDecisionDeny        AccessApplicationNewResponseSelfHostedApplicationPoliciesDecision = "deny"
-	AccessApplicationNewResponseSelfHostedApplicationPoliciesDecisionNonIdentity AccessApplicationNewResponseSelfHostedApplicationPoliciesDecision = "non_identity"
-	AccessApplicationNewResponseSelfHostedApplicationPoliciesDecisionBypass      AccessApplicationNewResponseSelfHostedApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationNewResponseSelfHostedApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseSelfHostedApplicationPoliciesDecisionAllow, AccessApplicationNewResponseSelfHostedApplicationPoliciesDecisionDeny, AccessApplicationNewResponseSelfHostedApplicationPoliciesDecisionNonIdentity, AccessApplicationNewResponseSelfHostedApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -1411,7 +1411,7 @@ type AccessApplicationNewResponseSaaSApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationNewResponseSaaSApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -1466,24 +1466,6 @@ func (r *AccessApplicationNewResponseSaaSApplicationPolicy) UnmarshalJSON(data [
 
 func (r accessApplicationNewResponseSaaSApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewResponseSaaSApplicationPoliciesDecision string
-
-const (
-	AccessApplicationNewResponseSaaSApplicationPoliciesDecisionAllow       AccessApplicationNewResponseSaaSApplicationPoliciesDecision = "allow"
-	AccessApplicationNewResponseSaaSApplicationPoliciesDecisionDeny        AccessApplicationNewResponseSaaSApplicationPoliciesDecision = "deny"
-	AccessApplicationNewResponseSaaSApplicationPoliciesDecisionNonIdentity AccessApplicationNewResponseSaaSApplicationPoliciesDecision = "non_identity"
-	AccessApplicationNewResponseSaaSApplicationPoliciesDecisionBypass      AccessApplicationNewResponseSaaSApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationNewResponseSaaSApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseSaaSApplicationPoliciesDecisionAllow, AccessApplicationNewResponseSaaSApplicationPoliciesDecisionDeny, AccessApplicationNewResponseSaaSApplicationPoliciesDecisionNonIdentity, AccessApplicationNewResponseSaaSApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
@@ -2350,7 +2332,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -2406,24 +2388,6 @@ func (r *AccessApplicationNewResponseBrowserSSHApplicationPolicy) UnmarshalJSON(
 
 func (r accessApplicationNewResponseBrowserSSHApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecision string
-
-const (
-	AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecisionAllow       AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecision = "allow"
-	AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecisionDeny        AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecision = "deny"
-	AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecisionNonIdentity AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecision = "non_identity"
-	AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecisionBypass      AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecisionAllow, AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecisionDeny, AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecisionNonIdentity, AccessApplicationNewResponseBrowserSSHApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -2939,7 +2903,7 @@ type AccessApplicationNewResponseBrowserVncApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationNewResponseBrowserVncApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -2995,24 +2959,6 @@ func (r *AccessApplicationNewResponseBrowserVncApplicationPolicy) UnmarshalJSON(
 
 func (r accessApplicationNewResponseBrowserVncApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewResponseBrowserVncApplicationPoliciesDecision string
-
-const (
-	AccessApplicationNewResponseBrowserVncApplicationPoliciesDecisionAllow       AccessApplicationNewResponseBrowserVncApplicationPoliciesDecision = "allow"
-	AccessApplicationNewResponseBrowserVncApplicationPoliciesDecisionDeny        AccessApplicationNewResponseBrowserVncApplicationPoliciesDecision = "deny"
-	AccessApplicationNewResponseBrowserVncApplicationPoliciesDecisionNonIdentity AccessApplicationNewResponseBrowserVncApplicationPoliciesDecision = "non_identity"
-	AccessApplicationNewResponseBrowserVncApplicationPoliciesDecisionBypass      AccessApplicationNewResponseBrowserVncApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationNewResponseBrowserVncApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBrowserVncApplicationPoliciesDecisionAllow, AccessApplicationNewResponseBrowserVncApplicationPoliciesDecisionDeny, AccessApplicationNewResponseBrowserVncApplicationPoliciesDecisionNonIdentity, AccessApplicationNewResponseBrowserVncApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -3466,7 +3412,7 @@ type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationNewResponseAppLauncherApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -3522,24 +3468,6 @@ func (r *AccessApplicationNewResponseAppLauncherApplicationPolicy) UnmarshalJSON
 
 func (r accessApplicationNewResponseAppLauncherApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewResponseAppLauncherApplicationPoliciesDecision string
-
-const (
-	AccessApplicationNewResponseAppLauncherApplicationPoliciesDecisionAllow       AccessApplicationNewResponseAppLauncherApplicationPoliciesDecision = "allow"
-	AccessApplicationNewResponseAppLauncherApplicationPoliciesDecisionDeny        AccessApplicationNewResponseAppLauncherApplicationPoliciesDecision = "deny"
-	AccessApplicationNewResponseAppLauncherApplicationPoliciesDecisionNonIdentity AccessApplicationNewResponseAppLauncherApplicationPoliciesDecision = "non_identity"
-	AccessApplicationNewResponseAppLauncherApplicationPoliciesDecisionBypass      AccessApplicationNewResponseAppLauncherApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationNewResponseAppLauncherApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseAppLauncherApplicationPoliciesDecisionAllow, AccessApplicationNewResponseAppLauncherApplicationPoliciesDecisionDeny, AccessApplicationNewResponseAppLauncherApplicationPoliciesDecisionNonIdentity, AccessApplicationNewResponseAppLauncherApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -3994,7 +3922,7 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy st
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -4050,24 +3978,6 @@ func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolic
 
 func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision string
-
-const (
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionAllow       AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "allow"
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionDeny        AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "deny"
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionNonIdentity AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "non_identity"
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionBypass      AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionAllow, AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionDeny, AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionNonIdentity, AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -4522,7 +4432,7 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy st
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -4578,24 +4488,6 @@ func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolic
 
 func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecision string
-
-const (
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecisionAllow       AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "allow"
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecisionDeny        AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "deny"
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecisionNonIdentity AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "non_identity"
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecisionBypass      AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecisionAllow, AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecisionDeny, AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecisionNonIdentity, AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -5721,7 +5613,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -5777,24 +5669,6 @@ func (r *AccessApplicationUpdateResponseSelfHostedApplicationPolicy) UnmarshalJS
 
 func (r accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecision string
-
-const (
-	AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecisionAllow       AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecision = "allow"
-	AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecisionDeny        AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecision = "deny"
-	AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecisionNonIdentity AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecision = "non_identity"
-	AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecisionBypass      AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecisionAllow, AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecisionDeny, AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecisionNonIdentity, AccessApplicationUpdateResponseSelfHostedApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -6254,7 +6128,7 @@ type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationUpdateResponseSaaSApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -6309,24 +6183,6 @@ func (r *AccessApplicationUpdateResponseSaaSApplicationPolicy) UnmarshalJSON(dat
 
 func (r accessApplicationUpdateResponseSaaSApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateResponseSaaSApplicationPoliciesDecision string
-
-const (
-	AccessApplicationUpdateResponseSaaSApplicationPoliciesDecisionAllow       AccessApplicationUpdateResponseSaaSApplicationPoliciesDecision = "allow"
-	AccessApplicationUpdateResponseSaaSApplicationPoliciesDecisionDeny        AccessApplicationUpdateResponseSaaSApplicationPoliciesDecision = "deny"
-	AccessApplicationUpdateResponseSaaSApplicationPoliciesDecisionNonIdentity AccessApplicationUpdateResponseSaaSApplicationPoliciesDecision = "non_identity"
-	AccessApplicationUpdateResponseSaaSApplicationPoliciesDecisionBypass      AccessApplicationUpdateResponseSaaSApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateResponseSaaSApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseSaaSApplicationPoliciesDecisionAllow, AccessApplicationUpdateResponseSaaSApplicationPoliciesDecisionDeny, AccessApplicationUpdateResponseSaaSApplicationPoliciesDecisionNonIdentity, AccessApplicationUpdateResponseSaaSApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
@@ -7194,7 +7050,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -7250,24 +7106,6 @@ func (r *AccessApplicationUpdateResponseBrowserSSHApplicationPolicy) UnmarshalJS
 
 func (r accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecision string
-
-const (
-	AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecisionAllow       AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecision = "allow"
-	AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecisionDeny        AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecision = "deny"
-	AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecisionNonIdentity AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecision = "non_identity"
-	AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecisionBypass      AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecisionAllow, AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecisionDeny, AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecisionNonIdentity, AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -7783,7 +7621,7 @@ type AccessApplicationUpdateResponseBrowserVncApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -7839,24 +7677,6 @@ func (r *AccessApplicationUpdateResponseBrowserVncApplicationPolicy) UnmarshalJS
 
 func (r accessApplicationUpdateResponseBrowserVncApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecision string
-
-const (
-	AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecisionAllow       AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecision = "allow"
-	AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecisionDeny        AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecision = "deny"
-	AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecisionNonIdentity AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecision = "non_identity"
-	AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecisionBypass      AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecisionAllow, AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecisionDeny, AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecisionNonIdentity, AccessApplicationUpdateResponseBrowserVncApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8310,7 +8130,7 @@ type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -8366,24 +8186,6 @@ func (r *AccessApplicationUpdateResponseAppLauncherApplicationPolicy) UnmarshalJ
 
 func (r accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecision string
-
-const (
-	AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecisionAllow       AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecision = "allow"
-	AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecisionDeny        AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecision = "deny"
-	AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecisionNonIdentity AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecision = "non_identity"
-	AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecisionBypass      AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecisionAllow, AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecisionDeny, AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecisionNonIdentity, AccessApplicationUpdateResponseAppLauncherApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8838,7 +8640,7 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -8894,24 +8696,6 @@ func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPo
 
 func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision string
-
-const (
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionAllow       AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "allow"
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionDeny        AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "deny"
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionNonIdentity AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "non_identity"
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionBypass      AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionAllow, AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionDeny, AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionNonIdentity, AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -9366,7 +9150,7 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -9422,24 +9206,6 @@ func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPo
 
 func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecision string
-
-const (
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecisionAllow       AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "allow"
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecisionDeny        AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "deny"
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecisionNonIdentity AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "non_identity"
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecisionBypass      AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecisionAllow, AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecisionDeny, AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecisionNonIdentity, AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10565,7 +10331,7 @@ type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationListResponseSelfHostedApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -10621,24 +10387,6 @@ func (r *AccessApplicationListResponseSelfHostedApplicationPolicy) UnmarshalJSON
 
 func (r accessApplicationListResponseSelfHostedApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationListResponseSelfHostedApplicationPoliciesDecision string
-
-const (
-	AccessApplicationListResponseSelfHostedApplicationPoliciesDecisionAllow       AccessApplicationListResponseSelfHostedApplicationPoliciesDecision = "allow"
-	AccessApplicationListResponseSelfHostedApplicationPoliciesDecisionDeny        AccessApplicationListResponseSelfHostedApplicationPoliciesDecision = "deny"
-	AccessApplicationListResponseSelfHostedApplicationPoliciesDecisionNonIdentity AccessApplicationListResponseSelfHostedApplicationPoliciesDecision = "non_identity"
-	AccessApplicationListResponseSelfHostedApplicationPoliciesDecisionBypass      AccessApplicationListResponseSelfHostedApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationListResponseSelfHostedApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseSelfHostedApplicationPoliciesDecisionAllow, AccessApplicationListResponseSelfHostedApplicationPoliciesDecisionDeny, AccessApplicationListResponseSelfHostedApplicationPoliciesDecisionNonIdentity, AccessApplicationListResponseSelfHostedApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -11098,7 +10846,7 @@ type AccessApplicationListResponseSaaSApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationListResponseSaaSApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -11153,24 +10901,6 @@ func (r *AccessApplicationListResponseSaaSApplicationPolicy) UnmarshalJSON(data 
 
 func (r accessApplicationListResponseSaaSApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationListResponseSaaSApplicationPoliciesDecision string
-
-const (
-	AccessApplicationListResponseSaaSApplicationPoliciesDecisionAllow       AccessApplicationListResponseSaaSApplicationPoliciesDecision = "allow"
-	AccessApplicationListResponseSaaSApplicationPoliciesDecisionDeny        AccessApplicationListResponseSaaSApplicationPoliciesDecision = "deny"
-	AccessApplicationListResponseSaaSApplicationPoliciesDecisionNonIdentity AccessApplicationListResponseSaaSApplicationPoliciesDecision = "non_identity"
-	AccessApplicationListResponseSaaSApplicationPoliciesDecisionBypass      AccessApplicationListResponseSaaSApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationListResponseSaaSApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseSaaSApplicationPoliciesDecisionAllow, AccessApplicationListResponseSaaSApplicationPoliciesDecisionDeny, AccessApplicationListResponseSaaSApplicationPoliciesDecisionNonIdentity, AccessApplicationListResponseSaaSApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
@@ -12037,7 +11767,7 @@ type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationListResponseBrowserSSHApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -12093,24 +11823,6 @@ func (r *AccessApplicationListResponseBrowserSSHApplicationPolicy) UnmarshalJSON
 
 func (r accessApplicationListResponseBrowserSSHApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationListResponseBrowserSSHApplicationPoliciesDecision string
-
-const (
-	AccessApplicationListResponseBrowserSSHApplicationPoliciesDecisionAllow       AccessApplicationListResponseBrowserSSHApplicationPoliciesDecision = "allow"
-	AccessApplicationListResponseBrowserSSHApplicationPoliciesDecisionDeny        AccessApplicationListResponseBrowserSSHApplicationPoliciesDecision = "deny"
-	AccessApplicationListResponseBrowserSSHApplicationPoliciesDecisionNonIdentity AccessApplicationListResponseBrowserSSHApplicationPoliciesDecision = "non_identity"
-	AccessApplicationListResponseBrowserSSHApplicationPoliciesDecisionBypass      AccessApplicationListResponseBrowserSSHApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationListResponseBrowserSSHApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBrowserSSHApplicationPoliciesDecisionAllow, AccessApplicationListResponseBrowserSSHApplicationPoliciesDecisionDeny, AccessApplicationListResponseBrowserSSHApplicationPoliciesDecisionNonIdentity, AccessApplicationListResponseBrowserSSHApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -12626,7 +12338,7 @@ type AccessApplicationListResponseBrowserVncApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationListResponseBrowserVncApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -12682,24 +12394,6 @@ func (r *AccessApplicationListResponseBrowserVncApplicationPolicy) UnmarshalJSON
 
 func (r accessApplicationListResponseBrowserVncApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationListResponseBrowserVncApplicationPoliciesDecision string
-
-const (
-	AccessApplicationListResponseBrowserVncApplicationPoliciesDecisionAllow       AccessApplicationListResponseBrowserVncApplicationPoliciesDecision = "allow"
-	AccessApplicationListResponseBrowserVncApplicationPoliciesDecisionDeny        AccessApplicationListResponseBrowserVncApplicationPoliciesDecision = "deny"
-	AccessApplicationListResponseBrowserVncApplicationPoliciesDecisionNonIdentity AccessApplicationListResponseBrowserVncApplicationPoliciesDecision = "non_identity"
-	AccessApplicationListResponseBrowserVncApplicationPoliciesDecisionBypass      AccessApplicationListResponseBrowserVncApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationListResponseBrowserVncApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBrowserVncApplicationPoliciesDecisionAllow, AccessApplicationListResponseBrowserVncApplicationPoliciesDecisionDeny, AccessApplicationListResponseBrowserVncApplicationPoliciesDecisionNonIdentity, AccessApplicationListResponseBrowserVncApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -13153,7 +12847,7 @@ type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationListResponseAppLauncherApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -13209,24 +12903,6 @@ func (r *AccessApplicationListResponseAppLauncherApplicationPolicy) UnmarshalJSO
 
 func (r accessApplicationListResponseAppLauncherApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationListResponseAppLauncherApplicationPoliciesDecision string
-
-const (
-	AccessApplicationListResponseAppLauncherApplicationPoliciesDecisionAllow       AccessApplicationListResponseAppLauncherApplicationPoliciesDecision = "allow"
-	AccessApplicationListResponseAppLauncherApplicationPoliciesDecisionDeny        AccessApplicationListResponseAppLauncherApplicationPoliciesDecision = "deny"
-	AccessApplicationListResponseAppLauncherApplicationPoliciesDecisionNonIdentity AccessApplicationListResponseAppLauncherApplicationPoliciesDecision = "non_identity"
-	AccessApplicationListResponseAppLauncherApplicationPoliciesDecisionBypass      AccessApplicationListResponseAppLauncherApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationListResponseAppLauncherApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseAppLauncherApplicationPoliciesDecisionAllow, AccessApplicationListResponseAppLauncherApplicationPoliciesDecisionDeny, AccessApplicationListResponseAppLauncherApplicationPoliciesDecisionNonIdentity, AccessApplicationListResponseAppLauncherApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -13681,7 +13357,7 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy s
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -13737,24 +13413,6 @@ func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoli
 
 func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision string
-
-const (
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionAllow       AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "allow"
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionDeny        AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "deny"
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionNonIdentity AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "non_identity"
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionBypass      AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionAllow, AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionDeny, AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionNonIdentity, AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -14209,7 +13867,7 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy s
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -14265,24 +13923,6 @@ func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoli
 
 func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecision string
-
-const (
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecisionAllow       AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "allow"
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecisionDeny        AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "deny"
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecisionNonIdentity AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "non_identity"
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecisionBypass      AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecisionAllow, AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecisionDeny, AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecisionNonIdentity, AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -15430,7 +15070,7 @@ type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationGetResponseSelfHostedApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -15486,24 +15126,6 @@ func (r *AccessApplicationGetResponseSelfHostedApplicationPolicy) UnmarshalJSON(
 
 func (r accessApplicationGetResponseSelfHostedApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationGetResponseSelfHostedApplicationPoliciesDecision string
-
-const (
-	AccessApplicationGetResponseSelfHostedApplicationPoliciesDecisionAllow       AccessApplicationGetResponseSelfHostedApplicationPoliciesDecision = "allow"
-	AccessApplicationGetResponseSelfHostedApplicationPoliciesDecisionDeny        AccessApplicationGetResponseSelfHostedApplicationPoliciesDecision = "deny"
-	AccessApplicationGetResponseSelfHostedApplicationPoliciesDecisionNonIdentity AccessApplicationGetResponseSelfHostedApplicationPoliciesDecision = "non_identity"
-	AccessApplicationGetResponseSelfHostedApplicationPoliciesDecisionBypass      AccessApplicationGetResponseSelfHostedApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationGetResponseSelfHostedApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseSelfHostedApplicationPoliciesDecisionAllow, AccessApplicationGetResponseSelfHostedApplicationPoliciesDecisionDeny, AccessApplicationGetResponseSelfHostedApplicationPoliciesDecisionNonIdentity, AccessApplicationGetResponseSelfHostedApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -15963,7 +15585,7 @@ type AccessApplicationGetResponseSaaSApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationGetResponseSaaSApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -16018,24 +15640,6 @@ func (r *AccessApplicationGetResponseSaaSApplicationPolicy) UnmarshalJSON(data [
 
 func (r accessApplicationGetResponseSaaSApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationGetResponseSaaSApplicationPoliciesDecision string
-
-const (
-	AccessApplicationGetResponseSaaSApplicationPoliciesDecisionAllow       AccessApplicationGetResponseSaaSApplicationPoliciesDecision = "allow"
-	AccessApplicationGetResponseSaaSApplicationPoliciesDecisionDeny        AccessApplicationGetResponseSaaSApplicationPoliciesDecision = "deny"
-	AccessApplicationGetResponseSaaSApplicationPoliciesDecisionNonIdentity AccessApplicationGetResponseSaaSApplicationPoliciesDecision = "non_identity"
-	AccessApplicationGetResponseSaaSApplicationPoliciesDecisionBypass      AccessApplicationGetResponseSaaSApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationGetResponseSaaSApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseSaaSApplicationPoliciesDecisionAllow, AccessApplicationGetResponseSaaSApplicationPoliciesDecisionDeny, AccessApplicationGetResponseSaaSApplicationPoliciesDecisionNonIdentity, AccessApplicationGetResponseSaaSApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
@@ -16902,7 +16506,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -16958,24 +16562,6 @@ func (r *AccessApplicationGetResponseBrowserSSHApplicationPolicy) UnmarshalJSON(
 
 func (r accessApplicationGetResponseBrowserSSHApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecision string
-
-const (
-	AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecisionAllow       AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecision = "allow"
-	AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecisionDeny        AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecision = "deny"
-	AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecisionNonIdentity AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecision = "non_identity"
-	AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecisionBypass      AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecisionAllow, AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecisionDeny, AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecisionNonIdentity, AccessApplicationGetResponseBrowserSSHApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17491,7 +17077,7 @@ type AccessApplicationGetResponseBrowserVncApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationGetResponseBrowserVncApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -17547,24 +17133,6 @@ func (r *AccessApplicationGetResponseBrowserVncApplicationPolicy) UnmarshalJSON(
 
 func (r accessApplicationGetResponseBrowserVncApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationGetResponseBrowserVncApplicationPoliciesDecision string
-
-const (
-	AccessApplicationGetResponseBrowserVncApplicationPoliciesDecisionAllow       AccessApplicationGetResponseBrowserVncApplicationPoliciesDecision = "allow"
-	AccessApplicationGetResponseBrowserVncApplicationPoliciesDecisionDeny        AccessApplicationGetResponseBrowserVncApplicationPoliciesDecision = "deny"
-	AccessApplicationGetResponseBrowserVncApplicationPoliciesDecisionNonIdentity AccessApplicationGetResponseBrowserVncApplicationPoliciesDecision = "non_identity"
-	AccessApplicationGetResponseBrowserVncApplicationPoliciesDecisionBypass      AccessApplicationGetResponseBrowserVncApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationGetResponseBrowserVncApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBrowserVncApplicationPoliciesDecisionAllow, AccessApplicationGetResponseBrowserVncApplicationPoliciesDecisionDeny, AccessApplicationGetResponseBrowserVncApplicationPoliciesDecisionNonIdentity, AccessApplicationGetResponseBrowserVncApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -18018,7 +17586,7 @@ type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationGetResponseAppLauncherApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -18074,24 +17642,6 @@ func (r *AccessApplicationGetResponseAppLauncherApplicationPolicy) UnmarshalJSON
 
 func (r accessApplicationGetResponseAppLauncherApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationGetResponseAppLauncherApplicationPoliciesDecision string
-
-const (
-	AccessApplicationGetResponseAppLauncherApplicationPoliciesDecisionAllow       AccessApplicationGetResponseAppLauncherApplicationPoliciesDecision = "allow"
-	AccessApplicationGetResponseAppLauncherApplicationPoliciesDecisionDeny        AccessApplicationGetResponseAppLauncherApplicationPoliciesDecision = "deny"
-	AccessApplicationGetResponseAppLauncherApplicationPoliciesDecisionNonIdentity AccessApplicationGetResponseAppLauncherApplicationPoliciesDecision = "non_identity"
-	AccessApplicationGetResponseAppLauncherApplicationPoliciesDecisionBypass      AccessApplicationGetResponseAppLauncherApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationGetResponseAppLauncherApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseAppLauncherApplicationPoliciesDecisionAllow, AccessApplicationGetResponseAppLauncherApplicationPoliciesDecisionDeny, AccessApplicationGetResponseAppLauncherApplicationPoliciesDecisionNonIdentity, AccessApplicationGetResponseAppLauncherApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -18546,7 +18096,7 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy st
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -18602,24 +18152,6 @@ func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolic
 
 func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision string
-
-const (
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionAllow       AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "allow"
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionDeny        AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "deny"
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionNonIdentity AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "non_identity"
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionBypass      AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionAllow, AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionDeny, AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionNonIdentity, AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -19074,7 +18606,7 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy st
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecision `json:"decision"`
+	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -19130,24 +18662,6 @@ func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolic
 
 func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecision string
-
-const (
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecisionAllow       AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "allow"
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecisionDeny        AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "deny"
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecisionNonIdentity AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "non_identity"
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecisionBypass      AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecision = "bypass"
-)
-
-func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecisionAllow, AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecisionDeny, AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecisionNonIdentity, AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -20149,9 +19663,9 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodySelfHostedApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                         `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                         `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -20203,7 +19717,7 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPoli
 
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -20242,24 +19756,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisionAllow       AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisionDeny        AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisionNonIdentity AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisionBypass      AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisionAllow, AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisionDeny, AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -20539,9 +20035,9 @@ type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodySaaSApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                   `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                   `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -20593,7 +20089,7 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink
 
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -20632,24 +20128,6 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) MarshalJSON
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecisionAllow       AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecisionDeny        AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecisionNonIdentity AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecisionBypass      AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecisionAllow, AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecisionDeny, AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
@@ -21191,9 +20669,9 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                         `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                         `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -21245,7 +20723,7 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPoli
 
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -21284,24 +20762,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisionAllow       AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisionDeny        AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisionNonIdentity AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisionBypass      AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisionAllow, AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisionDeny, AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -21623,9 +21083,9 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                         `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                         `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -21677,7 +21137,7 @@ func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesAccessAppPoli
 
 type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -21716,24 +21176,6 @@ func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisionAllow       AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisionDeny        AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisionNonIdentity AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisionBypass      AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisionAllow, AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisionDeny, AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -22005,9 +21447,9 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                          `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                          `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -22059,7 +21501,7 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPol
 
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -22098,24 +21540,6 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) Mars
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisionAllow       AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisionDeny        AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisionNonIdentity AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisionBypass      AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisionAllow, AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisionDeny, AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -22387,9 +21811,9 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy 
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                                          `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                                          `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -22441,7 +21865,7 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -22480,24 +21904,6 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionAllow       AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionDeny        AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionNonIdentity AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionBypass      AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionAllow, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionDeny, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -22769,9 +22175,9 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy 
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                                          `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                                          `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -22823,7 +22229,7 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -22862,24 +22268,6 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionAllow       AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionDeny        AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionNonIdentity AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionBypass      AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionAllow, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionDeny, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -23595,9 +22983,9 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                            `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                            `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -23649,7 +23037,7 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppP
 
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -23688,24 +23076,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecisionAllow       AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecisionDeny        AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecisionNonIdentity AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecisionBypass      AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecisionAllow, AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecisionDeny, AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -23985,9 +23355,9 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodySaaSApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                      `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                      `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -24039,7 +23409,7 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyL
 
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -24078,24 +23448,6 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) MarshalJ
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecisionAllow       AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecisionDeny        AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecisionNonIdentity AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecisionBypass      AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecisionAllow, AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecisionDeny, AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
@@ -24637,9 +23989,9 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                            `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                            `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -24691,7 +24043,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppP
 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -24730,24 +24082,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecisionAllow       AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecisionDeny        AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecisionNonIdentity AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecisionBypass      AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecisionAllow, AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecisionDeny, AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -25069,9 +24403,9 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                            `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                            `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -25123,7 +24457,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesAccessAppP
 
 type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -25162,24 +24496,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecisionAllow       AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecisionDeny        AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecisionNonIdentity AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecisionBypass      AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecisionAllow, AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecisionDeny, AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -25451,9 +24767,9 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                             `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                             `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -25505,7 +24821,7 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessApp
 
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -25544,24 +24860,6 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) M
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecisionAllow       AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecisionDeny        AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecisionNonIdentity AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecisionBypass      AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecisionAllow, AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecisionDeny, AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -25833,9 +25131,9 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                                             `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                                             `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -25887,7 +25185,7 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -25926,24 +25224,6 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionAllow       AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionDeny        AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionNonIdentity AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionBypass      AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionAllow, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionDeny, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -26215,9 +25495,9 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesDecision] `json:"decision"`
-	Exclude  param.Field[interface{}]                                                                             `json:"exclude,required"`
-	Include  param.Field[interface{}]                                                                             `json:"include,required"`
+	Decision param.Field[Decision]    `json:"decision"`
+	Exclude  param.Field[interface{}] `json:"exclude,required"`
+	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -26269,7 +25549,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
-	Decision param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
@@ -26308,24 +25588,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-// The action Access will take if a user matches this policy.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionAllow       AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision = "allow"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionDeny        AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision = "deny"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionNonIdentity AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision = "non_identity"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionBypass      AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision = "bypass"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecision) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionAllow, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionDeny, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionNonIdentity, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectDecisionBypass:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
