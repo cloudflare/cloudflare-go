@@ -206,7 +206,7 @@ func (r ApprovalGroupParam) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessApplicationPolicyNewResponse struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -291,7 +291,7 @@ func (r AccessApplicationPolicyNewResponseDecision) IsKnown() bool {
 }
 
 type AccessApplicationPolicyUpdateResponse struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -376,7 +376,7 @@ func (r AccessApplicationPolicyUpdateResponseDecision) IsKnown() bool {
 }
 
 type AccessApplicationPolicyListResponse struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -483,7 +483,7 @@ func (r accessApplicationPolicyDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessApplicationPolicyGetResponse struct {
-	// The ID of the Access policy.
+	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
