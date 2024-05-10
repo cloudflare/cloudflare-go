@@ -22,14 +22,15 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewHTTPLocationService] method instead.
 type HTTPLocationService struct {
-	Options      []option.RequestOption
-	BotClass     *HTTPLocationBotClassService
-	DeviceType   *HTTPLocationDeviceTypeService
-	HTTPProtocol *HTTPLocationHTTPProtocolService
-	HTTPMethod   *HTTPLocationHTTPMethodService
-	IPVersion    *HTTPLocationIPVersionService
-	OS           *HTTPLocationOSService
-	TLSVersion   *HTTPLocationTLSVersionService
+	Options       []option.RequestOption
+	BotClass      *HTTPLocationBotClassService
+	DeviceType    *HTTPLocationDeviceTypeService
+	HTTPProtocol  *HTTPLocationHTTPProtocolService
+	HTTPMethod    *HTTPLocationHTTPMethodService
+	IPVersion     *HTTPLocationIPVersionService
+	OS            *HTTPLocationOSService
+	TLSVersion    *HTTPLocationTLSVersionService
+	BrowserFamily *HTTPLocationBrowserFamilyService
 }
 
 // NewHTTPLocationService generates a new service that applies the given options to
@@ -45,6 +46,7 @@ func NewHTTPLocationService(opts ...option.RequestOption) (r *HTTPLocationServic
 	r.IPVersion = NewHTTPLocationIPVersionService(opts...)
 	r.OS = NewHTTPLocationOSService(opts...)
 	r.TLSVersion = NewHTTPLocationTLSVersionService(opts...)
+	r.BrowserFamily = NewHTTPLocationBrowserFamilyService(opts...)
 	return
 }
 
