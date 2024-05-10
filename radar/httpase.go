@@ -22,14 +22,15 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewHTTPAseService] method instead.
 type HTTPAseService struct {
-	Options      []option.RequestOption
-	BotClass     *HTTPAseBotClassService
-	DeviceType   *HTTPAseDeviceTypeService
-	HTTPProtocol *HTTPAseHTTPProtocolService
-	HTTPMethod   *HTTPAseHTTPMethodService
-	IPVersion    *HTTPAseIPVersionService
-	OS           *HTTPAseOSService
-	TLSVersion   *HTTPAseTLSVersionService
+	Options       []option.RequestOption
+	BotClass      *HTTPAseBotClassService
+	DeviceType    *HTTPAseDeviceTypeService
+	HTTPProtocol  *HTTPAseHTTPProtocolService
+	HTTPMethod    *HTTPAseHTTPMethodService
+	IPVersion     *HTTPAseIPVersionService
+	OS            *HTTPAseOSService
+	TLSVersion    *HTTPAseTLSVersionService
+	BrowserFamily *HTTPAseBrowserFamilyService
 }
 
 // NewHTTPAseService generates a new service that applies the given options to each
@@ -45,6 +46,7 @@ func NewHTTPAseService(opts ...option.RequestOption) (r *HTTPAseService) {
 	r.IPVersion = NewHTTPAseIPVersionService(opts...)
 	r.OS = NewHTTPAseOSService(opts...)
 	r.TLSVersion = NewHTTPAseTLSVersionService(opts...)
+	r.BrowserFamily = NewHTTPAseBrowserFamilyService(opts...)
 	return
 }
 

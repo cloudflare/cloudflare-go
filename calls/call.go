@@ -24,6 +24,7 @@ import (
 // the [NewCallService] method instead.
 type CallService struct {
 	Options []option.RequestOption
+	Turn    *TurnService
 }
 
 // NewCallService generates a new service that applies the given options to each
@@ -32,6 +33,7 @@ type CallService struct {
 func NewCallService(opts ...option.RequestOption) (r *CallService) {
 	r = &CallService{}
 	r.Options = opts
+	r.Turn = NewTurnService(opts...)
 	return
 }
 
