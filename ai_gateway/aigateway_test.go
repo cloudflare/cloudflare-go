@@ -29,11 +29,10 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AIGateway.New(context.TODO(), ai_gateway.AIGatewayNewParams{
 		AccountID:               cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+		ID:                      cloudflare.F("my-gateway"),
 		CacheInvalidateOnUpdate: cloudflare.F(true),
 		CacheTTL:                cloudflare.F(int64(0)),
 		CollectLogs:             cloudflare.F(true),
-		Name:                    cloudflare.F("string"),
-		Slug:                    cloudflare.F("string"),
 		RateLimitingInterval:    cloudflare.F(int64(0)),
 		RateLimitingLimit:       cloudflare.F(int64(0)),
 		RateLimitingTechnique:   cloudflare.F("string"),
@@ -62,14 +61,12 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AIGateway.Update(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"my-gateway",
 		ai_gateway.AIGatewayUpdateParams{
 			AccountID:               cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
 			CacheInvalidateOnUpdate: cloudflare.F(true),
 			CacheTTL:                cloudflare.F(int64(0)),
 			CollectLogs:             cloudflare.F(true),
-			Name:                    cloudflare.F("string"),
-			Slug:                    cloudflare.F("string"),
 			RateLimitingInterval:    cloudflare.F(int64(0)),
 			RateLimitingLimit:       cloudflare.F(int64(0)),
 			RateLimitingTechnique:   cloudflare.F("string"),
@@ -99,7 +96,7 @@ func TestAIGatewayListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AIGateway.List(context.TODO(), ai_gateway.AIGatewayListParams{
 		AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
-		ID:        cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+		ID:        cloudflare.F("my-gateway"),
 		OrderBy:   cloudflare.F("string"),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(5)),
@@ -128,7 +125,7 @@ func TestAIGatewayDelete(t *testing.T) {
 	)
 	_, err := client.AIGateway.Delete(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"my-gateway",
 		ai_gateway.AIGatewayDeleteParams{
 			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
 		},
@@ -157,7 +154,7 @@ func TestAIGatewayGet(t *testing.T) {
 	)
 	_, err := client.AIGateway.Get(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"my-gateway",
 		ai_gateway.AIGatewayGetParams{
 			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
 		},

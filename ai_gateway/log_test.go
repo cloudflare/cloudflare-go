@@ -30,7 +30,7 @@ func TestLogGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AIGateway.Logs.Get(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"my-gateway",
 		ai_gateway.LogGetParams{
 			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
 			Cached:    cloudflare.F(true),
