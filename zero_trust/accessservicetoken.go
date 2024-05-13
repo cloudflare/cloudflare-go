@@ -163,7 +163,7 @@ func (r *AccessServiceTokenService) Rotate(ctx context.Context, identifier strin
 
 type ServiceToken struct {
 	// The ID of the service token.
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
 	// `CF-Access-Client-ID` request header.
 	ClientID  string    `json:"client_id"`
