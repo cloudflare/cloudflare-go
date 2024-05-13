@@ -135,6 +135,28 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, bod
 	return
 }
 
+// Fetches a single service token.
+func (r *AccessServiceTokenService) Get(ctx context.Context, uuid string, query AccessServiceTokenGetParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessServiceTokenGetResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Refreshes the expiration of a service token.
 func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	opts = append(r.Options[:], opts...)
@@ -454,6 +476,56 @@ const (
 func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case AccessServiceTokenDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type AccessServiceTokenGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
+}
+
+type AccessServiceTokenGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AccessServiceTokenGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceToken                                 `json:"result"`
+	JSON    accessServiceTokenGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessServiceTokenGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AccessServiceTokenGetResponseEnvelope]
+type accessServiceTokenGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessServiceTokenGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AccessServiceTokenGetResponseEnvelopeSuccess bool
+
+const (
+	AccessServiceTokenGetResponseEnvelopeSuccessTrue AccessServiceTokenGetResponseEnvelopeSuccess = true
+)
+
+func (r AccessServiceTokenGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessServiceTokenGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

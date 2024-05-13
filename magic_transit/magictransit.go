@@ -21,6 +21,7 @@ type MagicTransitService struct {
 	IPSECTunnels    *IPSECTunnelService
 	Routes          *RouteService
 	Sites           *SiteService
+	Connectors      *ConnectorService
 }
 
 // NewMagicTransitService generates a new service that applies the given options to
@@ -34,6 +35,7 @@ func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitServic
 	r.IPSECTunnels = NewIPSECTunnelService(opts...)
 	r.Routes = NewRouteService(opts...)
 	r.Sites = NewSiteService(opts...)
+	r.Connectors = NewConnectorService(opts...)
 	return
 }
 
