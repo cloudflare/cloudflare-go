@@ -19,8 +19,8 @@ jobs:
       - name: Setup go
         uses: actions/setup-go@v5
 
-      - run: |
-          go build ./...
+      - name: Run lints
+        run: ./scripts/lint
   test:
     name: test
     runs-on: ubuntu-latest
