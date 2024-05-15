@@ -416,7 +416,8 @@ func (cfg *RequestConfig) Execute() (err error) {
 	}
 
 	// If we are not json, return plaintext
-	isJSON := strings.Contains(res.Header.Get("content-type"), "application/json")
+	contentType := res.Header.Get("content-type")
+	isJSON := strings.Contains(contentType, "application/json") || strings.Contains(contentType, "application/vnd.api+json")
 	if !isJSON {
 		switch dst := cfg.ResponseBodyInto.(type) {
 		case *string:
