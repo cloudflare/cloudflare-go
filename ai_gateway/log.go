@@ -49,19 +49,20 @@ func (r *LogService) Get(ctx context.Context, id string, params LogGetParams, op
 }
 
 type LogGetResponse struct {
-	ID        string             `json:"id,required" format:"uuid"`
-	Cached    bool               `json:"cached,required"`
-	CreatedAt time.Time          `json:"created_at,required" format:"date-time"`
-	Duration  int64              `json:"duration,required"`
-	Model     string             `json:"model,required"`
-	Path      string             `json:"path,required"`
-	Provider  string             `json:"provider,required"`
-	Request   string             `json:"request,required"`
-	Response  string             `json:"response,required"`
-	Success   bool               `json:"success,required"`
-	TokensIn  int64              `json:"tokens_in,required"`
-	TokensOut int64              `json:"tokens_out,required"`
-	JSON      logGetResponseJSON `json:"-"`
+	ID         string             `json:"id,required" format:"uuid"`
+	Cached     bool               `json:"cached,required"`
+	CreatedAt  time.Time          `json:"created_at,required" format:"date-time"`
+	Duration   int64              `json:"duration,required"`
+	Model      string             `json:"model,required"`
+	Path       string             `json:"path,required"`
+	Provider   string             `json:"provider,required"`
+	Request    string             `json:"request,required"`
+	Response   string             `json:"response,required"`
+	Success    bool               `json:"success,required"`
+	TokensIn   int64              `json:"tokens_in,required"`
+	TokensOut  int64              `json:"tokens_out,required"`
+	StatusCode int64              `json:"status_code"`
+	JSON       logGetResponseJSON `json:"-"`
 }
 
 // logGetResponseJSON contains the JSON metadata for the struct [LogGetResponse]
@@ -78,6 +79,7 @@ type logGetResponseJSON struct {
 	Success     apijson.Field
 	TokensIn    apijson.Field
 	TokensOut   apijson.Field
+	StatusCode  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
