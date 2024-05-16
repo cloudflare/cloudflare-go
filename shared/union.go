@@ -127,7 +127,6 @@ func (UnionString) ImplementsAlertingDestinationWebhookDeleteResponseUnion()    
 func (UnionString) ImplementsAlertingMechanismItemIDUnionParam()                                 {}
 func (UnionString) ImplementsAlertingMechanismItemIDUnion()                                      {}
 func (UnionString) ImplementsAlertingPolicyDeleteResponseUnion()                                 {}
-func (UnionString) ImplementsD1DatabaseDeleteResponseUnion()                                     {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}
 func (UnionString) ImplementsZeroTrustDeviceGetResponseUnion()                                   {}
 func (UnionString) ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnion()              {}
@@ -188,6 +187,9 @@ func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncrypt
 }
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                           {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                                {}
+func (UnionString) ImplementsCloudforceOneRequestDeleteResponseUnion()                   {}
+func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponseUnion()            {}
+func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion()           {}
 func (UnionString) ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion() {}
 
 type UnionInt int64

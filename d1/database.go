@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // DatabaseService contains methods and other services that help with interacting
@@ -74,101 +72,6 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes the specified D1 database.
-func (r *DatabaseService) Delete(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *DatabaseDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DatabaseDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/d1/database/%s", accountIdentifier, databaseIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Returns the specified D1 database.
-func (r *DatabaseService) Get(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *D1, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DatabaseGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/d1/database/%s", accountIdentifier, databaseIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Returns the query result.
-func (r *DatabaseService) Query(ctx context.Context, accountIdentifier string, databaseIdentifier string, body DatabaseQueryParams, opts ...option.RequestOption) (res *[]QueryResult, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DatabaseQueryResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/d1/database/%s/query", accountIdentifier, databaseIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-type QueryResult struct {
-	Meta    QueryResultMeta `json:"meta"`
-	Results []interface{}   `json:"results"`
-	Success bool            `json:"success"`
-	JSON    queryResultJSON `json:"-"`
-}
-
-// queryResultJSON contains the JSON metadata for the struct [QueryResult]
-type queryResultJSON struct {
-	Meta        apijson.Field
-	Results     apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueryResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queryResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueryResultMeta struct {
-	ChangedDB   bool                `json:"changed_db"`
-	Changes     float64             `json:"changes"`
-	Duration    float64             `json:"duration"`
-	LastRowID   float64             `json:"last_row_id"`
-	RowsRead    float64             `json:"rows_read"`
-	RowsWritten float64             `json:"rows_written"`
-	SizeAfter   float64             `json:"size_after"`
-	JSON        queryResultMetaJSON `json:"-"`
-}
-
-// queryResultMetaJSON contains the JSON metadata for the struct [QueryResultMeta]
-type queryResultMetaJSON struct {
-	ChangedDB   apijson.Field
-	Changes     apijson.Field
-	Duration    apijson.Field
-	LastRowID   apijson.Field
-	RowsRead    apijson.Field
-	RowsWritten apijson.Field
-	SizeAfter   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueryResultMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queryResultMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type DatabaseNewResponse struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
 	CreatedAt string                  `json:"created_at"`
@@ -223,22 +126,6 @@ func (r *DatabaseListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r databaseListResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by [d1.DatabaseDeleteResponseUnknown] or [shared.UnionString].
-type DatabaseDeleteResponseUnion interface {
-	ImplementsD1DatabaseDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DatabaseDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type DatabaseNewParams struct {
@@ -311,142 +198,4 @@ func (r DatabaseListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type DatabaseDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DatabaseDeleteResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    databaseDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// databaseDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DatabaseDeleteResponseEnvelope]
-type databaseDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DatabaseDeleteResponseEnvelopeSuccess bool
-
-const (
-	DatabaseDeleteResponseEnvelopeSuccessTrue DatabaseDeleteResponseEnvelopeSuccess = true
-)
-
-func (r DatabaseDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DatabaseDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DatabaseGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   D1                    `json:"result,required"`
-	// Whether the API call was successful
-	Success DatabaseGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    databaseGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// databaseGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DatabaseGetResponseEnvelope]
-type databaseGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DatabaseGetResponseEnvelopeSuccess bool
-
-const (
-	DatabaseGetResponseEnvelopeSuccessTrue DatabaseGetResponseEnvelopeSuccess = true
-)
-
-func (r DatabaseGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DatabaseGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DatabaseQueryParams struct {
-	Sql    param.Field[string]   `json:"sql,required"`
-	Params param.Field[[]string] `json:"params"`
-}
-
-func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DatabaseQueryResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []QueryResult         `json:"result,required"`
-	// Whether the API call was successful
-	Success DatabaseQueryResponseEnvelopeSuccess `json:"success,required"`
-	JSON    databaseQueryResponseEnvelopeJSON    `json:"-"`
-}
-
-// databaseQueryResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DatabaseQueryResponseEnvelope]
-type databaseQueryResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseQueryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseQueryResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DatabaseQueryResponseEnvelopeSuccess bool
-
-const (
-	DatabaseQueryResponseEnvelopeSuccessTrue DatabaseQueryResponseEnvelopeSuccess = true
-)
-
-func (r DatabaseQueryResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DatabaseQueryResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
