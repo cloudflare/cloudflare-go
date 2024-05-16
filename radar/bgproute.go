@@ -485,7 +485,7 @@ type BGPRouteMoasParams struct {
 	InvalidOnly param.Field[bool] `query:"invalid_only"`
 	// Lookup MOASes originated by the given ASN
 	Origin param.Field[int64] `query:"origin"`
-	// Lookup MOASes by prefix
+	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
 }
 
@@ -544,7 +544,7 @@ type BGPRoutePfx2asParams struct {
 	LongestPrefixMatch param.Field[bool] `query:"longestPrefixMatch"`
 	// Lookup prefixes originated by the given ASN
 	Origin param.Field[int64] `query:"origin"`
-	// Lookup origin ASNs of the given prefix
+	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
 	// Return only results with matching rpki status: valid, invalid or unknown
 	RPKIStatus param.Field[BGPRoutePfx2asParamsRPKIStatus] `query:"rpkiStatus"`

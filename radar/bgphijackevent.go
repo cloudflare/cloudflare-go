@@ -264,7 +264,7 @@ type BGPHijackEventListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// Number of entries per page
 	PerPage param.Field[int64] `query:"per_page"`
-	// The prefix hijacked during a BGP hijack event
+	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
 	// Sort events by field
 	SortBy param.Field[BGPHijackEventListParamsSortBy] `query:"sortBy"`

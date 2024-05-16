@@ -32,7 +32,7 @@ func TestBGPRouteMoasWithOptionalParams(t *testing.T) {
 		Format:      cloudflare.F(radar.BGPRouteMoasParamsFormatJson),
 		InvalidOnly: cloudflare.F(true),
 		Origin:      cloudflare.F(int64(0)),
-		Prefix:      cloudflare.F("string"),
+		Prefix:      cloudflare.F("1.1.1.0/24"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
