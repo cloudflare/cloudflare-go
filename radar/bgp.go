@@ -233,7 +233,7 @@ type BGPTimeseriesParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Array of BGP network prefixes.
-	Prefix param.Field[[]string] `query:"prefix"`
+	Prefix param.Field[[]BGPTimeseriesParamsPrefix] `query:"prefix"`
 	// Array of BGP update types.
 	UpdateType param.Field[[]BGPTimeseriesParamsUpdateType] `query:"updateType"`
 }
@@ -308,6 +308,22 @@ func (r BGPTimeseriesParamsFormat) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type BGPTimeseriesParamsPrefix struct {
+	Location param.Field[string] `query:"location,required"`
+	Name     param.Field[string] `query:"name,required"`
+	// Network prefix, IPv4 or IPv6.
+	Type param.Field[string] `query:"type"`
+}
+
+// URLQuery serializes [BGPTimeseriesParamsPrefix]'s query parameters as
+// `url.Values`.
+func (r BGPTimeseriesParamsPrefix) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type BGPTimeseriesParamsUpdateType string
