@@ -3,6 +3,7 @@
 package d1
 
 import (
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -25,4 +26,36 @@ func NewD1Service(opts ...option.RequestOption) (r *D1Service) {
 	r.Options = opts
 	r.Database = NewDatabaseService(opts...)
 	return
+}
+
+type D1 struct {
+	// Specifies the timestamp the resource was created as an ISO8601 string.
+	CreatedAt string `json:"created_at"`
+	// The D1 database's size, in bytes.
+	FileSize  float64 `json:"file_size"`
+	Name      string  `json:"name"`
+	NumTables float64 `json:"num_tables"`
+	UUID      string  `json:"uuid"`
+	Version   string  `json:"version"`
+	JSON      d1JSON  `json:"-"`
+}
+
+// d1JSON contains the JSON metadata for the struct [D1]
+type d1JSON struct {
+	CreatedAt   apijson.Field
+	FileSize    apijson.Field
+	Name        apijson.Field
+	NumTables   apijson.Field
+	UUID        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *D1) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1JSON) RawJSON() string {
+	return r.raw
 }
