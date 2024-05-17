@@ -98,6 +98,19 @@ func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifie
 	return
 }
 
+// Patch a specific Site ACL.
+func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclIdentifier string, params SiteACLEditParams, opts ...option.RequestOption) (res *ACL, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SiteACLEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get a specific Site ACL.
 func (r *SiteACLService) Get(ctx context.Context, siteID string, aclIdentifier string, query SiteACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
@@ -427,6 +440,71 @@ const (
 func (r SiteACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SiteACLDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteACLEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Description for the ACL.
+	Description param.Field[string] `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic WAN Connector. If not included in request, will
+	// default to false.
+	ForwardLocally param.Field[bool]                  `json:"forward_locally"`
+	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
+	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
+	// The name of the ACL.
+	Name      param.Field[string]            `json:"name"`
+	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
+}
+
+func (r SiteACLEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SiteACLEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Bidirectional ACL policy for network traffic within a site.
+	Result ACL `json:"result,required"`
+	// Whether the API call was successful
+	Success SiteACLEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteACLEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// siteACLEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteACLEditResponseEnvelope]
+type siteACLEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteACLEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteACLEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SiteACLEditResponseEnvelopeSuccess bool
+
+const (
+	SiteACLEditResponseEnvelopeSuccessTrue SiteACLEditResponseEnvelopeSuccess = true
+)
+
+func (r SiteACLEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
