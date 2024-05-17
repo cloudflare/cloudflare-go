@@ -97,6 +97,19 @@ func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string
 	return
 }
 
+// Patch a specific LAN.
+func (r *SiteLANService) Edit(ctx context.Context, siteID string, lanID string, params SiteLANEditParams, opts ...option.RequestOption) (res *LAN, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SiteLANEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", params.AccountID, siteID, lanID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get a specific LAN.
 func (r *SiteLANService) Get(ctx context.Context, siteID string, lanID string, query SiteLANGetParams, opts ...option.RequestOption) (res *LAN, err error) {
 	opts = append(r.Options[:], opts...)
@@ -525,6 +538,68 @@ const (
 func (r SiteLANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SiteLANDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteLANEditParams struct {
+	// Identifier
+	AccountID     param.Field[string]              `path:"account_id,required"`
+	Name          param.Field[string]              `json:"name"`
+	Nat           param.Field[NatParam]            `json:"nat"`
+	Physport      param.Field[int64]               `json:"physport"`
+	RoutedSubnets param.Field[[]RoutedSubnetParam] `json:"routed_subnets"`
+	// If the site is not configured in high availability mode, this configuration is
+	// optional (if omitted, use DHCP). However, if in high availability mode,
+	// static_address is required along with secondary and virtual address.
+	StaticAddressing param.Field[LANStaticAddressingParam] `json:"static_addressing"`
+	// VLAN port number.
+	VlanTag param.Field[int64] `json:"vlan_tag"`
+}
+
+func (r SiteLANEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SiteLANEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LAN                   `json:"result,required"`
+	// Whether the API call was successful
+	Success SiteLANEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteLANEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// siteLANEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteLANEditResponseEnvelope]
+type siteLANEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SiteLANEditResponseEnvelopeSuccess bool
+
+const (
+	SiteLANEditResponseEnvelopeSuccessTrue SiteLANEditResponseEnvelopeSuccess = true
+)
+
+func (r SiteLANEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLANEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

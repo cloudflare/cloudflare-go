@@ -96,6 +96,19 @@ func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string
 	return
 }
 
+// Patch a specific WAN.
+func (r *SiteWANService) Edit(ctx context.Context, siteID string, wanID string, params SiteWANEditParams, opts ...option.RequestOption) (res *WAN, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SiteWANEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get a specific WAN.
 func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, query SiteWANGetParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
@@ -360,6 +373,66 @@ const (
 func (r SiteWANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SiteWANDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteWANEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	Name      param.Field[string] `json:"name"`
+	Physport  param.Field[int64]  `json:"physport"`
+	Priority  param.Field[int64]  `json:"priority"`
+	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
+	// availability mode.
+	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
+	// VLAN port number.
+	VlanTag param.Field[int64] `json:"vlan_tag"`
+}
+
+func (r SiteWANEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SiteWANEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WAN                   `json:"result,required"`
+	// Whether the API call was successful
+	Success SiteWANEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteWANEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// siteWANEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteWANEditResponseEnvelope]
+type siteWANEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteWANEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteWANEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SiteWANEditResponseEnvelopeSuccess bool
+
+const (
+	SiteWANEditResponseEnvelopeSuccessTrue SiteWANEditResponseEnvelopeSuccess = true
+)
+
+func (r SiteWANEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWANEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

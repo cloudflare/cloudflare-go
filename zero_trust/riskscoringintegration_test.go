@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package d1_test
+package zero_trust_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/d1"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestDatabaseNew(t *testing.T) {
+func TestRiskScoringIntegrationNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,9 +27,11 @@ func TestDatabaseNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.D1.Database.New(context.TODO(), d1.DatabaseNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:      cloudflare.F("my-database"),
+	_, err := client.ZeroTrust.RiskScoring.Integrations.New(context.TODO(), zero_trust.RiskScoringIntegrationNewParams{
+		AccountID:       cloudflare.F("string"),
+		IntegrationType: cloudflare.F(zero_trust.RiskScoringIntegrationNewParamsIntegrationTypeOkta),
+		TenantURL:       cloudflare.F("https://example.com"),
+		ReferenceID:     cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -40,7 +42,7 @@ func TestDatabaseNew(t *testing.T) {
 	}
 }
 
-func TestDatabaseListWithOptionalParams(t *testing.T) {
+func TestRiskScoringIntegrationUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,39 +55,14 @@ func TestDatabaseListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.D1.Database.List(context.TODO(), d1.DatabaseListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:      cloudflare.F("string"),
-		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(10.000000),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestDatabaseDelete(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.D1.Database.Delete(
+	_, err := client.ZeroTrust.RiskScoring.Integrations.Update(
 		context.TODO(),
-		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-		d1.DatabaseDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		zero_trust.RiskScoringIntegrationUpdateParams{
+			AccountID:   cloudflare.F("string"),
+			Active:      cloudflare.F(true),
+			TenantURL:   cloudflare.F("https://example.com"),
+			ReferenceID: cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -97,7 +74,7 @@ func TestDatabaseDelete(t *testing.T) {
 	}
 }
 
-func TestDatabaseGet(t *testing.T) {
+func TestRiskScoringIntegrationList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -110,11 +87,36 @@ func TestDatabaseGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.D1.Database.Get(
+	_, err := client.ZeroTrust.RiskScoring.Integrations.List(context.TODO(), zero_trust.RiskScoringIntegrationListParams{
+		AccountID: cloudflare.F("string"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRiskScoringIntegrationDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.RiskScoring.Integrations.Delete(
 		context.TODO(),
-		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-		d1.DatabaseGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		zero_trust.RiskScoringIntegrationDeleteParams{
+			AccountID: cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -126,7 +128,7 @@ func TestDatabaseGet(t *testing.T) {
 	}
 }
 
-func TestDatabaseQueryWithOptionalParams(t *testing.T) {
+func TestRiskScoringIntegrationGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -139,13 +141,11 @@ func TestDatabaseQueryWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.D1.Database.Query(
+	_, err := client.ZeroTrust.RiskScoring.Integrations.Get(
 		context.TODO(),
-		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-		d1.DatabaseQueryParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Sql:       cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
-			Params:    cloudflare.F([]string{"firstParam", "secondParam"}),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		zero_trust.RiskScoringIntegrationGetParams{
+			AccountID: cloudflare.F("string"),
 		},
 	)
 	if err != nil {

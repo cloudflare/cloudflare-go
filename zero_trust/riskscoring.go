@@ -26,9 +26,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewRiskScoringService] method instead.
 type RiskScoringService struct {
-	Options    []option.RequestOption
-	Behaviours *RiskScoringBehaviourService
-	Summary    *RiskScoringSummaryService
+	Options      []option.RequestOption
+	Behaviours   *RiskScoringBehaviourService
+	Summary      *RiskScoringSummaryService
+	Integrations *RiskScoringIntegrationService
 }
 
 // NewRiskScoringService generates a new service that applies the given options to
@@ -39,6 +40,7 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 	r.Options = opts
 	r.Behaviours = NewRiskScoringBehaviourService(opts...)
 	r.Summary = NewRiskScoringSummaryService(opts...)
+	r.Integrations = NewRiskScoringIntegrationService(opts...)
 	return
 }
 
