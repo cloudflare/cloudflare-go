@@ -135,7 +135,7 @@ func (r aiGatewayNewResponseJSON) RawJSON() string {
 }
 
 type AIGatewayNewResponseTask struct {
-	// gateway slug
+	// gateway id
 	ID                      string                       `json:"id,required"`
 	CacheInvalidateOnUpdate bool                         `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                        `json:"cache_ttl,required"`
@@ -173,7 +173,7 @@ func (r aiGatewayNewResponseTaskJSON) RawJSON() string {
 }
 
 type AIGatewayUpdateResponse struct {
-	// gateway slug
+	// gateway id
 	ID                      string                      `json:"id,required"`
 	CacheInvalidateOnUpdate bool                        `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                       `json:"cache_ttl,required"`
@@ -211,7 +211,7 @@ func (r aiGatewayUpdateResponseJSON) RawJSON() string {
 }
 
 type AIGatewayListResponse struct {
-	// gateway slug
+	// gateway id
 	ID                      string                    `json:"id,required"`
 	CacheInvalidateOnUpdate bool                      `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                     `json:"cache_ttl,required"`
@@ -249,7 +249,7 @@ func (r aiGatewayListResponseJSON) RawJSON() string {
 }
 
 type AIGatewayDeleteResponse struct {
-	// gateway slug
+	// gateway id
 	ID                      string                      `json:"id,required"`
 	CacheInvalidateOnUpdate bool                        `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                       `json:"cache_ttl,required"`
@@ -287,7 +287,7 @@ func (r aiGatewayDeleteResponseJSON) RawJSON() string {
 }
 
 type AIGatewayGetResponse struct {
-	// gateway slug
+	// gateway id
 	ID                      string                   `json:"id,required"`
 	CacheInvalidateOnUpdate bool                     `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                    `json:"cache_ttl,required"`
@@ -326,7 +326,7 @@ func (r aiGatewayGetResponseJSON) RawJSON() string {
 
 type AIGatewayNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// gateway slug
+	// gateway id
 	ID                      param.Field[string] `json:"id,required"`
 	CacheInvalidateOnUpdate param.Field[bool]   `json:"cache_invalidate_on_update,required"`
 	CacheTTL                param.Field[int64]  `json:"cache_ttl,required"`
@@ -402,7 +402,7 @@ func (r aiGatewayUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type AIGatewayListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// gateway slug
+	// gateway id
 	ID param.Field[string] `query:"id"`
 	// Order By Column Name
 	OrderBy param.Field[string] `query:"order_by"`
