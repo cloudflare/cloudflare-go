@@ -61,6 +61,7 @@ type LogGetResponse struct {
 	Success    bool               `json:"success,required"`
 	TokensIn   int64              `json:"tokens_in,required"`
 	TokensOut  int64              `json:"tokens_out,required"`
+	Metadata   string             `json:"metadata"`
 	StatusCode int64              `json:"status_code"`
 	JSON       logGetResponseJSON `json:"-"`
 }
@@ -79,6 +80,7 @@ type logGetResponseJSON struct {
 	Success     apijson.Field
 	TokensIn    apijson.Field
 	TokensOut   apijson.Field
+	Metadata    apijson.Field
 	StatusCode  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
