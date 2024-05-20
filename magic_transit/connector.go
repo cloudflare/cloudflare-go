@@ -38,7 +38,7 @@ func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectorUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s", params.AccountID, connectorID)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s", params.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -52,7 +52,7 @@ func (r *ConnectorService) List(ctx context.Context, query ConnectorListParams, 
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%v/magic/connectors", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/magic/connectors", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (r *ConnectorService) ListAutoPaging(ctx context.Context, query ConnectorLi
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectorEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s", params.AccountID, connectorID)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s", params.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -87,7 +87,7 @@ func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params 
 func (r *ConnectorService) Get(ctx context.Context, connectorID string, query ConnectorGetParams, opts ...option.RequestOption) (res *ConnectorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectorGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s", query.AccountID, connectorID)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s", query.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -345,7 +345,8 @@ func (r connectorGetResponseDeviceJSON) RawJSON() string {
 }
 
 type ConnectorUpdateParams struct {
-	AccountID                    param.Field[float64] `path:"account_id,required"`
+	// Account identifier
+	AccountID                    param.Field[string]  `path:"account_id,required"`
 	Activated                    param.Field[bool]    `json:"activated"`
 	InterruptWindowDurationHours param.Field[float64] `json:"interrupt_window_duration_hours"`
 	InterruptWindowHourOfDay     param.Field[float64] `json:"interrupt_window_hour_of_day"`
@@ -385,11 +386,13 @@ func (r connectorUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConnectorListParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
+	// Account identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConnectorEditParams struct {
-	AccountID                    param.Field[float64] `path:"account_id,required"`
+	// Account identifier
+	AccountID                    param.Field[string]  `path:"account_id,required"`
 	Activated                    param.Field[bool]    `json:"activated"`
 	InterruptWindowDurationHours param.Field[float64] `json:"interrupt_window_duration_hours"`
 	InterruptWindowHourOfDay     param.Field[float64] `json:"interrupt_window_hour_of_day"`
@@ -429,7 +432,8 @@ func (r connectorEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConnectorGetParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
+	// Account identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConnectorGetResponseEnvelope struct {
