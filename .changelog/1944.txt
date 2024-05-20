@@ -1,0 +1,3 @@
+```release-note:bug
+cli: fix for DNS create-or-update
+```
