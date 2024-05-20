@@ -31,7 +31,7 @@ func TestConnectorUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"string",
 		magic_transit.ConnectorUpdateParams{
-			AccountID:                    cloudflare.F(0.000000),
+			AccountID:                    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Activated:                    cloudflare.F(true),
 			InterruptWindowDurationHours: cloudflare.F(0.000000),
 			InterruptWindowHourOfDay:     cloudflare.F(0.000000),
@@ -62,7 +62,7 @@ func TestConnectorList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.Connectors.List(context.TODO(), magic_transit.ConnectorListParams{
-		AccountID: cloudflare.F(0.000000),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -90,7 +90,7 @@ func TestConnectorEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"string",
 		magic_transit.ConnectorEditParams{
-			AccountID:                    cloudflare.F(0.000000),
+			AccountID:                    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Activated:                    cloudflare.F(true),
 			InterruptWindowDurationHours: cloudflare.F(0.000000),
 			InterruptWindowHourOfDay:     cloudflare.F(0.000000),
@@ -124,7 +124,7 @@ func TestConnectorGet(t *testing.T) {
 		context.TODO(),
 		"string",
 		magic_transit.ConnectorGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
