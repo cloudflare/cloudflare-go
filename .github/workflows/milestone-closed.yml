@@ -15,7 +15,7 @@ jobs:
       ids: ${{ steps.milestone-comment.outputs.ids }}
     steps:
       - id: milestone-comment
-        uses: bflad/action-milestone-comment@v1
+        uses: bflad/action-milestone-comment@v2
         with:
           body: |
             This functionality has been released in [${{ github.event.milestone.title }}](https://github.com/${{ github.repository }}/releases/tag/${{ github.event.milestone.title }}).
