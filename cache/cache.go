@@ -106,14 +106,16 @@ func (r cachePurgeResponseJSON) RawJSON() string {
 }
 
 type CachePurgeParams struct {
-	ZoneID param.Field[string]       `path:"zone_id,required"`
-	Body   CachePurgeParamsBodyUnion `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Flex purge by tags
+	Body CachePurgeParamsBodyUnion `json:"body,required"`
 }
 
 func (r CachePurgeParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
+// Flex purge by tags
 type CachePurgeParamsBody struct {
 	Tags            param.Field[interface{}] `json:"tags,required"`
 	Hosts           param.Field[interface{}] `json:"hosts,required"`
@@ -128,6 +130,8 @@ func (r CachePurgeParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r CachePurgeParamsBody) implementsCacheCachePurgeParamsBodyUnion() {}
 
+// Flex purge by tags
+//
 // Satisfied by [cache.CachePurgeParamsBodyCachePurgeTags],
 // [cache.CachePurgeParamsBodyCachePurgeHosts],
 // [cache.CachePurgeParamsBodyCachePurgePrefixes],
@@ -137,6 +141,7 @@ type CachePurgeParamsBodyUnion interface {
 	implementsCacheCachePurgeParamsBodyUnion()
 }
 
+// Flex purge by tags
 type CachePurgeParamsBodyCachePurgeTags struct {
 	Tags param.Field[[]string] `json:"tags"`
 }
@@ -147,6 +152,7 @@ func (r CachePurgeParamsBodyCachePurgeTags) MarshalJSON() (data []byte, err erro
 
 func (r CachePurgeParamsBodyCachePurgeTags) implementsCacheCachePurgeParamsBodyUnion() {}
 
+// Flex purge by host
 type CachePurgeParamsBodyCachePurgeHosts struct {
 	Hosts param.Field[[]string] `json:"hosts"`
 }
@@ -157,6 +163,7 @@ func (r CachePurgeParamsBodyCachePurgeHosts) MarshalJSON() (data []byte, err err
 
 func (r CachePurgeParamsBodyCachePurgeHosts) implementsCacheCachePurgeParamsBodyUnion() {}
 
+// Flex purge by prefixes
 type CachePurgeParamsBodyCachePurgePrefixes struct {
 	Prefixes param.Field[[]string] `json:"prefixes"`
 }
