@@ -132,8 +132,8 @@ type ACL struct {
 	Description string `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
+	// traffic locally on the Magic Connector. If not included in request, will default
+	// to false.
 	ForwardLocally bool             `json:"forward_locally"`
 	LAN1           ACLConfiguration `json:"lan_1"`
 	LAN2           ACLConfiguration `json:"lan_2"`
@@ -272,8 +272,8 @@ type SiteACLNewParams struct {
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
+	// traffic locally on the Magic Connector. If not included in request, will default
+	// to false.
 	ForwardLocally param.Field[bool]              `json:"forward_locally"`
 	Protocols      param.Field[[]AllowedProtocol] `json:"protocols"`
 }
@@ -333,8 +333,8 @@ type SiteACLUpdateParams struct {
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
+	// traffic locally on the Magic Connector. If not included in request, will default
+	// to false.
 	ForwardLocally param.Field[bool]                  `json:"forward_locally"`
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
@@ -452,8 +452,8 @@ type SiteACLEditParams struct {
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
+	// traffic locally on the Magic Connector. If not included in request, will default
+	// to false.
 	ForwardLocally param.Field[bool]                  `json:"forward_locally"`
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
