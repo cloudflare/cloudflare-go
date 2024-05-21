@@ -34,8 +34,8 @@ func NewSiteLANService(opts ...option.RequestOption) (r *SiteLANService) {
 	return
 }
 
-// Creates a new LAN. If the site is in high availability mode, static_addressing
-// is required along with secondary and virtual address.
+// Creates a new Site LAN. If the site is in high availability mode,
+// static_addressing is required along with secondary and virtual address.
 func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANNewParams, opts ...option.RequestOption) (res *[]LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANNewResponseEnvelope
@@ -48,7 +48,7 @@ func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANN
 	return
 }
 
-// Update a specific LAN.
+// Update a specific Site LAN.
 func (r *SiteLANService) Update(ctx context.Context, siteID string, lanID string, params SiteLANUpdateParams, opts ...option.RequestOption) (res *LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANUpdateResponseEnvelope
@@ -61,7 +61,7 @@ func (r *SiteLANService) Update(ctx context.Context, siteID string, lanID string
 	return
 }
 
-// Lists LANs associated with an account and site.
+// Lists Site LANs associated with an account.
 func (r *SiteLANService) List(ctx context.Context, siteID string, query SiteLANListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LAN], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -79,12 +79,12 @@ func (r *SiteLANService) List(ctx context.Context, siteID string, query SiteLANL
 	return res, nil
 }
 
-// Lists LANs associated with an account and site.
+// Lists Site LANs associated with an account.
 func (r *SiteLANService) ListAutoPaging(ctx context.Context, siteID string, query SiteLANListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LAN] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, siteID, query, opts...))
 }
 
-// Remove a specific LAN.
+// Remove a specific Site LAN.
 func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string, body SiteLANDeleteParams, opts ...option.RequestOption) (res *LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANDeleteResponseEnvelope
@@ -97,7 +97,7 @@ func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string
 	return
 }
 
-// Patch a specific LAN.
+// Patch a specific Site LAN.
 func (r *SiteLANService) Edit(ctx context.Context, siteID string, lanID string, params SiteLANEditParams, opts ...option.RequestOption) (res *LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANEditResponseEnvelope
@@ -110,7 +110,7 @@ func (r *SiteLANService) Edit(ctx context.Context, siteID string, lanID string, 
 	return
 }
 
-// Get a specific LAN.
+// Get a specific Site LAN.
 func (r *SiteLANService) Get(ctx context.Context, siteID string, lanID string, query SiteLANGetParams, opts ...option.RequestOption) (res *LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANGetResponseEnvelope

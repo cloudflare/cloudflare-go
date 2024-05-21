@@ -137,7 +137,7 @@ func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParam
 type Site struct {
 	// Identifier
 	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
+	// Magic Connector identifier tag.
 	ConnectorID string `json:"connector_id"`
 	Description string `json:"description"`
 	// Site high availability mode. If set to true, the site can have two connectors
@@ -147,7 +147,7 @@ type Site struct {
 	Location SiteLocation `json:"location"`
 	// The name of the site.
 	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
+	// Magic Connector identifier tag. Used when high availability mode is on.
 	SecondaryConnectorID string   `json:"secondary_connector_id"`
 	JSON                 siteJSON `json:"-"`
 }
@@ -215,7 +215,7 @@ type SiteNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the site.
 	Name param.Field[string] `json:"name,required"`
-	// Magic WAN Connector identifier tag.
+	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
 	// Site high availability mode. If set to true, the site can have two connectors
@@ -223,7 +223,7 @@ type SiteNewParams struct {
 	HaMode param.Field[bool] `json:"ha_mode"`
 	// Location of site in latitude and longitude.
 	Location param.Field[SiteLocationParam] `json:"location"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
+	// Magic Connector identifier tag. Used when high availability mode is on.
 	SecondaryConnectorID param.Field[string] `json:"secondary_connector_id"`
 }
 
@@ -277,14 +277,14 @@ func (r SiteNewResponseEnvelopeSuccess) IsKnown() bool {
 type SiteUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Magic WAN Connector identifier tag.
+	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
 	// Location of site in latitude and longitude.
 	Location param.Field[SiteLocationParam] `json:"location"`
 	// The name of the site.
 	Name param.Field[string] `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
+	// Magic Connector identifier tag. Used when high availability mode is on.
 	SecondaryConnectorID param.Field[string] `json:"secondary_connector_id"`
 }
 
@@ -401,14 +401,14 @@ func (r SiteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type SiteEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Magic WAN Connector identifier tag.
+	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
 	// Location of site in latitude and longitude.
 	Location param.Field[SiteLocationParam] `json:"location"`
 	// The name of the site.
 	Name param.Field[string] `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
+	// Magic Connector identifier tag. Used when high availability mode is on.
 	SecondaryConnectorID param.Field[string] `json:"secondary_connector_id"`
 }
 
