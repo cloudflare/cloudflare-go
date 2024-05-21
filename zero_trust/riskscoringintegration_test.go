@@ -75,6 +75,7 @@ func TestRiskScoringIntegrationUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestRiskScoringIntegrationList(t *testing.T) {
+	t.Skip("bug in prism where it confuses this method with /zt_risk_scoring/{user_id}")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
