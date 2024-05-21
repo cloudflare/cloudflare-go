@@ -200,9 +200,9 @@ func (r RuleNewParamsAction) IsKnown() bool {
 type RuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []WaitingRoomRule                 `json:"result,nullable"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -212,8 +212,8 @@ type RuleNewResponseEnvelope struct {
 type ruleNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -316,9 +316,9 @@ func (r RuleUpdateParamsBodyAction) IsKnown() bool {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []WaitingRoomRule                    `json:"result,nullable"`
 	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -328,8 +328,8 @@ type RuleUpdateResponseEnvelope struct {
 type ruleUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -402,9 +402,9 @@ type RuleDeleteParams struct {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []WaitingRoomRule                    `json:"result,nullable"`
 	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -414,8 +414,8 @@ type RuleDeleteResponseEnvelope struct {
 type ruleDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -556,9 +556,9 @@ func (r RuleEditParamsPositionObject) implementsWaitingRoomsRuleEditParamsPositi
 type RuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []WaitingRoomRule                  `json:"result,nullable"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleEditResponseEnvelopeJSON       `json:"-"`
 }
@@ -568,8 +568,8 @@ type RuleEditResponseEnvelope struct {
 type ruleEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
