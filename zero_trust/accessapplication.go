@@ -1514,12 +1514,13 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	CustomClaims interface{} `json:"custom_claims,required"`
 	GrantTypes   interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex    string                                                 `json:"group_filter_regex"`
-	RedirectURIs        interface{}                                            `json:"redirect_uris,required"`
-	RefreshTokenOptions interface{}                                            `json:"refresh_token_options,required"`
-	Scopes              interface{}                                            `json:"scopes,required"`
-	JSON                accessApplicationNewResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union               AccessApplicationNewResponseSaaSApplicationSaaSAppUnion
+	GroupFilterRegex         string                                                 `json:"group_filter_regex"`
+	HybridAndImplicitOptions interface{}                                            `json:"hybrid_and_implicit_options,required"`
+	RedirectURIs             interface{}                                            `json:"redirect_uris,required"`
+	RefreshTokenOptions      interface{}                                            `json:"refresh_token_options,required"`
+	Scopes                   interface{}                                            `json:"scopes,required"`
+	JSON                     accessApplicationNewResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union                    AccessApplicationNewResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationNewResponseSaaSApplicationSaaSAppJSON contains the JSON
@@ -1545,6 +1546,7 @@ type accessApplicationNewResponseSaaSApplicationSaaSAppJSON struct {
 	CustomClaims                  apijson.Field
 	GrantTypes                    apijson.Field
 	GroupFilterRegex              apijson.Field
+	HybridAndImplicitOptions      apijson.Field
 	RedirectURIs                  apijson.Field
 	RefreshTokenOptions           apijson.Field
 	Scopes                        apijson.Field
@@ -1607,7 +1609,8 @@ type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct 
 	// The OIDC flows supported by this application
 	GrantTypes []AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex string `json:"group_filter_regex"`
+	GroupFilterRegex         string                                                                                      `json:"group_filter_regex"`
+	HybridAndImplicitOptions AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions `json:"hybrid_and_implicit_options"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
 	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
@@ -1634,6 +1637,7 @@ type accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON str
 	CustomClaims                 apijson.Field
 	GrantTypes                   apijson.Field
 	GroupFilterRegex             apijson.Field
+	HybridAndImplicitOptions     apijson.Field
 	PublicKey                    apijson.Field
 	RedirectURIs                 apijson.Field
 	RefreshTokenOptions          apijson.Field
@@ -1752,14 +1756,42 @@ const (
 	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
 	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
+	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid                    AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "hybrid"
+	AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit                  AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "implicit"
 )
 
 func (r AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid, AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit:
 		return true
 	}
 	return false
+}
+
+type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions struct {
+	// If an Access Token should be returned from the OIDC Authorization endpoint
+	ReturnAccessTokenFromAuthorizationEndpoint bool `json:"return_access_token_from_authorization_endpoint"`
+	// If an ID Token should be returned from the OIDC Authorization endpoint
+	ReturnIDTokenFromAuthorizationEndpoint bool                                                                                            `json:"return_id_token_from_authorization_endpoint"`
+	JSON                                   accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions]
+type accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON struct {
+	ReturnAccessTokenFromAuthorizationEndpoint apijson.Field
+	ReturnIDTokenFromAuthorizationEndpoint     apijson.Field
+	raw                                        string
+	ExtraFields                                map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions struct {
@@ -6231,12 +6263,13 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	CustomClaims interface{} `json:"custom_claims,required"`
 	GrantTypes   interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex    string                                                    `json:"group_filter_regex"`
-	RedirectURIs        interface{}                                               `json:"redirect_uris,required"`
-	RefreshTokenOptions interface{}                                               `json:"refresh_token_options,required"`
-	Scopes              interface{}                                               `json:"scopes,required"`
-	JSON                accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union               AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion
+	GroupFilterRegex         string                                                    `json:"group_filter_regex"`
+	HybridAndImplicitOptions interface{}                                               `json:"hybrid_and_implicit_options,required"`
+	RedirectURIs             interface{}                                               `json:"redirect_uris,required"`
+	RefreshTokenOptions      interface{}                                               `json:"refresh_token_options,required"`
+	Scopes                   interface{}                                               `json:"scopes,required"`
+	JSON                     accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union                    AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON contains the JSON
@@ -6262,6 +6295,7 @@ type accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON struct {
 	CustomClaims                  apijson.Field
 	GrantTypes                    apijson.Field
 	GroupFilterRegex              apijson.Field
+	HybridAndImplicitOptions      apijson.Field
 	RedirectURIs                  apijson.Field
 	RefreshTokenOptions           apijson.Field
 	Scopes                        apijson.Field
@@ -6324,7 +6358,8 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp stru
 	// The OIDC flows supported by this application
 	GrantTypes []AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex string `json:"group_filter_regex"`
+	GroupFilterRegex         string                                                                                         `json:"group_filter_regex"`
+	HybridAndImplicitOptions AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions `json:"hybrid_and_implicit_options"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
 	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
@@ -6351,6 +6386,7 @@ type accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON 
 	CustomClaims                 apijson.Field
 	GrantTypes                   apijson.Field
 	GroupFilterRegex             apijson.Field
+	HybridAndImplicitOptions     apijson.Field
 	PublicKey                    apijson.Field
 	RedirectURIs                 apijson.Field
 	RefreshTokenOptions          apijson.Field
@@ -6469,14 +6505,42 @@ const (
 	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
 	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
+	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid                    AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "hybrid"
+	AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit                  AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "implicit"
 )
 
 func (r AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid, AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit:
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions struct {
+	// If an Access Token should be returned from the OIDC Authorization endpoint
+	ReturnAccessTokenFromAuthorizationEndpoint bool `json:"return_access_token_from_authorization_endpoint"`
+	// If an ID Token should be returned from the OIDC Authorization endpoint
+	ReturnIDTokenFromAuthorizationEndpoint bool                                                                                               `json:"return_id_token_from_authorization_endpoint"`
+	JSON                                   accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions]
+type accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON struct {
+	ReturnAccessTokenFromAuthorizationEndpoint apijson.Field
+	ReturnIDTokenFromAuthorizationEndpoint     apijson.Field
+	raw                                        string
+	ExtraFields                                map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions struct {
@@ -10949,12 +11013,13 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	CustomClaims interface{} `json:"custom_claims,required"`
 	GrantTypes   interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex    string                                                  `json:"group_filter_regex"`
-	RedirectURIs        interface{}                                             `json:"redirect_uris,required"`
-	RefreshTokenOptions interface{}                                             `json:"refresh_token_options,required"`
-	Scopes              interface{}                                             `json:"scopes,required"`
-	JSON                accessApplicationListResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union               AccessApplicationListResponseSaaSApplicationSaaSAppUnion
+	GroupFilterRegex         string                                                  `json:"group_filter_regex"`
+	HybridAndImplicitOptions interface{}                                             `json:"hybrid_and_implicit_options,required"`
+	RedirectURIs             interface{}                                             `json:"redirect_uris,required"`
+	RefreshTokenOptions      interface{}                                             `json:"refresh_token_options,required"`
+	Scopes                   interface{}                                             `json:"scopes,required"`
+	JSON                     accessApplicationListResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union                    AccessApplicationListResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationListResponseSaaSApplicationSaaSAppJSON contains the JSON
@@ -10980,6 +11045,7 @@ type accessApplicationListResponseSaaSApplicationSaaSAppJSON struct {
 	CustomClaims                  apijson.Field
 	GrantTypes                    apijson.Field
 	GroupFilterRegex              apijson.Field
+	HybridAndImplicitOptions      apijson.Field
 	RedirectURIs                  apijson.Field
 	RefreshTokenOptions           apijson.Field
 	Scopes                        apijson.Field
@@ -11042,7 +11108,8 @@ type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct
 	// The OIDC flows supported by this application
 	GrantTypes []AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex string `json:"group_filter_regex"`
+	GroupFilterRegex         string                                                                                       `json:"group_filter_regex"`
+	HybridAndImplicitOptions AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions `json:"hybrid_and_implicit_options"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
 	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
@@ -11069,6 +11136,7 @@ type accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON st
 	CustomClaims                 apijson.Field
 	GrantTypes                   apijson.Field
 	GroupFilterRegex             apijson.Field
+	HybridAndImplicitOptions     apijson.Field
 	PublicKey                    apijson.Field
 	RedirectURIs                 apijson.Field
 	RefreshTokenOptions          apijson.Field
@@ -11187,14 +11255,42 @@ const (
 	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
 	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
+	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid                    AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "hybrid"
+	AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit                  AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "implicit"
 )
 
 func (r AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid, AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit:
 		return true
 	}
 	return false
+}
+
+type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions struct {
+	// If an Access Token should be returned from the OIDC Authorization endpoint
+	ReturnAccessTokenFromAuthorizationEndpoint bool `json:"return_access_token_from_authorization_endpoint"`
+	// If an ID Token should be returned from the OIDC Authorization endpoint
+	ReturnIDTokenFromAuthorizationEndpoint bool                                                                                             `json:"return_id_token_from_authorization_endpoint"`
+	JSON                                   accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON `json:"-"`
+}
+
+// accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions]
+type accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON struct {
+	ReturnAccessTokenFromAuthorizationEndpoint apijson.Field
+	ReturnIDTokenFromAuthorizationEndpoint     apijson.Field
+	raw                                        string
+	ExtraFields                                map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions struct {
@@ -15688,12 +15784,13 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	CustomClaims interface{} `json:"custom_claims,required"`
 	GrantTypes   interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex    string                                                 `json:"group_filter_regex"`
-	RedirectURIs        interface{}                                            `json:"redirect_uris,required"`
-	RefreshTokenOptions interface{}                                            `json:"refresh_token_options,required"`
-	Scopes              interface{}                                            `json:"scopes,required"`
-	JSON                accessApplicationGetResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union               AccessApplicationGetResponseSaaSApplicationSaaSAppUnion
+	GroupFilterRegex         string                                                 `json:"group_filter_regex"`
+	HybridAndImplicitOptions interface{}                                            `json:"hybrid_and_implicit_options,required"`
+	RedirectURIs             interface{}                                            `json:"redirect_uris,required"`
+	RefreshTokenOptions      interface{}                                            `json:"refresh_token_options,required"`
+	Scopes                   interface{}                                            `json:"scopes,required"`
+	JSON                     accessApplicationGetResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union                    AccessApplicationGetResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationGetResponseSaaSApplicationSaaSAppJSON contains the JSON
@@ -15719,6 +15816,7 @@ type accessApplicationGetResponseSaaSApplicationSaaSAppJSON struct {
 	CustomClaims                  apijson.Field
 	GrantTypes                    apijson.Field
 	GroupFilterRegex              apijson.Field
+	HybridAndImplicitOptions      apijson.Field
 	RedirectURIs                  apijson.Field
 	RefreshTokenOptions           apijson.Field
 	Scopes                        apijson.Field
@@ -15781,7 +15879,8 @@ type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct 
 	// The OIDC flows supported by this application
 	GrantTypes []AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex string `json:"group_filter_regex"`
+	GroupFilterRegex         string                                                                                      `json:"group_filter_regex"`
+	HybridAndImplicitOptions AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions `json:"hybrid_and_implicit_options"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
 	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
@@ -15808,6 +15907,7 @@ type accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON str
 	CustomClaims                 apijson.Field
 	GrantTypes                   apijson.Field
 	GroupFilterRegex             apijson.Field
+	HybridAndImplicitOptions     apijson.Field
 	PublicKey                    apijson.Field
 	RedirectURIs                 apijson.Field
 	RefreshTokenOptions          apijson.Field
@@ -15926,14 +16026,42 @@ const (
 	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
 	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
+	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid                    AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "hybrid"
+	AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit                  AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "implicit"
 )
 
 func (r AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid, AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit:
 		return true
 	}
 	return false
+}
+
+type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions struct {
+	// If an Access Token should be returned from the OIDC Authorization endpoint
+	ReturnAccessTokenFromAuthorizationEndpoint bool `json:"return_access_token_from_authorization_endpoint"`
+	// If an ID Token should be returned from the OIDC Authorization endpoint
+	ReturnIDTokenFromAuthorizationEndpoint bool                                                                                            `json:"return_id_token_from_authorization_endpoint"`
+	JSON                                   accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions]
+type accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON struct {
+	ReturnAccessTokenFromAuthorizationEndpoint apijson.Field
+	ReturnIDTokenFromAuthorizationEndpoint     apijson.Field
+	raw                                        string
+	ExtraFields                                map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions struct {
@@ -20174,10 +20302,11 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	CustomClaims param.Field[interface{}] `json:"custom_claims,required"`
 	GrantTypes   param.Field[interface{}] `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex    param.Field[string]      `json:"group_filter_regex"`
-	RedirectURIs        param.Field[interface{}] `json:"redirect_uris,required"`
-	RefreshTokenOptions param.Field[interface{}] `json:"refresh_token_options,required"`
-	Scopes              param.Field[interface{}] `json:"scopes,required"`
+	GroupFilterRegex         param.Field[string]      `json:"group_filter_regex"`
+	HybridAndImplicitOptions param.Field[interface{}] `json:"hybrid_and_implicit_options,required"`
+	RedirectURIs             param.Field[interface{}] `json:"redirect_uris,required"`
+	RefreshTokenOptions      param.Field[interface{}] `json:"refresh_token_options,required"`
+	Scopes                   param.Field[interface{}] `json:"scopes,required"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSaaSApp) MarshalJSON() (data []byte, err error) {
@@ -20211,7 +20340,8 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp struc
 	// The OIDC flows supported by this application
 	GrantTypes param.Field[[]AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType] `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex param.Field[string] `json:"group_filter_regex"`
+	GroupFilterRegex         param.Field[string]                                                                                        `json:"group_filter_regex"`
+	HybridAndImplicitOptions param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions] `json:"hybrid_and_implicit_options"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey param.Field[string] `json:"public_key"`
 	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
@@ -20296,14 +20426,27 @@ const (
 	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
 	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
+	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid                    AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "hybrid"
+	AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit                  AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "implicit"
 )
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid, AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit:
 		return true
 	}
 	return false
+}
+
+type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions struct {
+	// If an Access Token should be returned from the OIDC Authorization endpoint
+	ReturnAccessTokenFromAuthorizationEndpoint param.Field[bool] `json:"return_access_token_from_authorization_endpoint"`
+	// If an ID Token should be returned from the OIDC Authorization endpoint
+	ReturnIDTokenFromAuthorizationEndpoint param.Field[bool] `json:"return_id_token_from_authorization_endpoint"`
+}
+
+func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions struct {
@@ -23494,10 +23637,11 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	CustomClaims param.Field[interface{}] `json:"custom_claims,required"`
 	GrantTypes   param.Field[interface{}] `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex    param.Field[string]      `json:"group_filter_regex"`
-	RedirectURIs        param.Field[interface{}] `json:"redirect_uris,required"`
-	RefreshTokenOptions param.Field[interface{}] `json:"refresh_token_options,required"`
-	Scopes              param.Field[interface{}] `json:"scopes,required"`
+	GroupFilterRegex         param.Field[string]      `json:"group_filter_regex"`
+	HybridAndImplicitOptions param.Field[interface{}] `json:"hybrid_and_implicit_options,required"`
+	RedirectURIs             param.Field[interface{}] `json:"redirect_uris,required"`
+	RefreshTokenOptions      param.Field[interface{}] `json:"refresh_token_options,required"`
+	Scopes                   param.Field[interface{}] `json:"scopes,required"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp) MarshalJSON() (data []byte, err error) {
@@ -23531,7 +23675,8 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp st
 	// The OIDC flows supported by this application
 	GrantTypes param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType] `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex param.Field[string] `json:"group_filter_regex"`
+	GroupFilterRegex         param.Field[string]                                                                                           `json:"group_filter_regex"`
+	HybridAndImplicitOptions param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions] `json:"hybrid_and_implicit_options"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey param.Field[string] `json:"public_key"`
 	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
@@ -23616,14 +23761,27 @@ const (
 	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode         AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code"
 	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "authorization_code_with_pkce"
 	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens             AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "refresh_tokens"
+	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid                    AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "hybrid"
+	AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit                  AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType = "implicit"
 )
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens:
+	case AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCode, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeAuthorizationCodeWithPKCE, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeRefreshTokens, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeHybrid, AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantTypeImplicit:
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions struct {
+	// If an Access Token should be returned from the OIDC Authorization endpoint
+	ReturnAccessTokenFromAuthorizationEndpoint param.Field[bool] `json:"return_access_token_from_authorization_endpoint"`
+	// If an ID Token should be returned from the OIDC Authorization endpoint
+	ReturnIDTokenFromAuthorizationEndpoint param.Field[bool] `json:"return_id_token_from_authorization_endpoint"`
+}
+
+func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions struct {
