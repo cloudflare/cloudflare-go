@@ -1,5 +1,16 @@
 ## 0.96.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_application: Add Refresh Token, Custom Claims, and PKCE Without Client Secret support for OIDC SaaS configurations ([#1981](https://github.com/cloudflare/cloudflare-go/issues/1981))
+* ruleset: add support for action parameters `fonts` and `disable_rum` ([#1832](https://github.com/cloudflare/cloudflare-go/issues/1832))
+
+DEPENDENCIES:
+
+* deps: bumps bflad/action-milestone-comment from 1 to 2 ([#1991](https://github.com/cloudflare/cloudflare-go/issues/1991))
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.5 to 0.7.6 ([#1993](https://github.com/cloudflare/cloudflare-go/issues/1993))
+* deps: bumps goreleaser/goreleaser-action from 5.0.0 to 5.1.0 ([#1992](https://github.com/cloudflare/cloudflare-go/issues/1992))
+
 ## 0.95.0 (May 8th, 2024)
 
 ENHANCEMENTS:
