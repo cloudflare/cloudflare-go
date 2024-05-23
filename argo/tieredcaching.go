@@ -6,14 +6,13 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // TieredCachingService contains methods and other services that help with
@@ -36,7 +35,7 @@ func NewTieredCachingService(opts ...option.RequestOption) (r *TieredCachingServ
 }
 
 // Updates enablement of Tiered Caching
-func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponseUnion, err error) {
+func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", params.ZoneID)
@@ -49,7 +48,7 @@ func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEdi
 }
 
 // Get Tiered Caching setting
-func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponseUnion, err error) {
+func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", query.ZoneID)
@@ -61,38 +60,98 @@ func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetPa
 	return
 }
 
-// Union satisfied by [argo.TieredCachingEditResponseUnknown] or
-// [shared.UnionString].
-type TieredCachingEditResponseUnion interface {
-	ImplementsArgoTieredCachingEditResponseUnion()
+type TieredCachingEditResponse struct {
+	// The identifier of the caching setting
+	ID string `json:"id,required"`
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The time when the setting was last modified
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The status of the feature being on / off
+	Value TieredCachingEditResponseValue `json:"value,required"`
+	JSON  tieredCachingEditResponseJSON  `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TieredCachingEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// tieredCachingEditResponseJSON contains the JSON metadata for the struct
+// [TieredCachingEditResponse]
+type tieredCachingEditResponseJSON struct {
+	ID          apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-// Union satisfied by [argo.TieredCachingGetResponseUnknown] or
-// [shared.UnionString].
-type TieredCachingGetResponseUnion interface {
-	ImplementsArgoTieredCachingGetResponseUnion()
+func (r *TieredCachingEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TieredCachingGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r tieredCachingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The status of the feature being on / off
+type TieredCachingEditResponseValue string
+
+const (
+	TieredCachingEditResponseValueOn  TieredCachingEditResponseValue = "on"
+	TieredCachingEditResponseValueOff TieredCachingEditResponseValue = "off"
+)
+
+func (r TieredCachingEditResponseValue) IsKnown() bool {
+	switch r {
+	case TieredCachingEditResponseValueOn, TieredCachingEditResponseValueOff:
+		return true
+	}
+	return false
+}
+
+type TieredCachingGetResponse struct {
+	// The identifier of the caching setting
+	ID string `json:"id,required"`
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The time when the setting was last modified
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The status of the feature being on / off
+	Value TieredCachingGetResponseValue `json:"value,required"`
+	JSON  tieredCachingGetResponseJSON  `json:"-"`
+}
+
+// tieredCachingGetResponseJSON contains the JSON metadata for the struct
+// [TieredCachingGetResponse]
+type tieredCachingGetResponseJSON struct {
+	ID          apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TieredCachingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tieredCachingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The status of the feature being on / off
+type TieredCachingGetResponseValue string
+
+const (
+	TieredCachingGetResponseValueOn  TieredCachingGetResponseValue = "on"
+	TieredCachingGetResponseValueOff TieredCachingGetResponseValue = "off"
+)
+
+func (r TieredCachingGetResponseValue) IsKnown() bool {
+	switch r {
+	case TieredCachingGetResponseValueOn, TieredCachingGetResponseValueOff:
+		return true
+	}
+	return false
 }
 
 type TieredCachingEditParams struct {
@@ -123,9 +182,9 @@ func (r TieredCachingEditParamsValue) IsKnown() bool {
 }
 
 type TieredCachingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   TieredCachingEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   TieredCachingEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingEditResponseEnvelopeJSON    `json:"-"`
@@ -171,9 +230,9 @@ type TieredCachingGetParams struct {
 }
 
 type TieredCachingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   TieredCachingGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   TieredCachingGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingGetResponseEnvelopeJSON    `json:"-"`
