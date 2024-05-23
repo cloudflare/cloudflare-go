@@ -28,9 +28,6 @@ func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()          
 func (UnionString) ImplementsLoadBalancersRegionListResponseUnion()                    {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()                     {}
 func (UnionString) ImplementsCacheCachePurgeParamsBodyCachePurgeFilesFileUnion()       {}
-func (UnionString) ImplementsCacheSmartTieredCacheDeleteResponseUnion()                {}
-func (UnionString) ImplementsCacheSmartTieredCacheEditResponseUnion()                  {}
-func (UnionString) ImplementsCacheSmartTieredCacheGetResponseUnion()                   {}
 func (UnionString) ImplementsSSLAnalyzeNewResponseUnion()                              {}
 func (UnionString) ImplementsSSLCertificatePackGetResponseUnion()                      {}
 func (UnionString) ImplementsSubscriptionsSubscriptionNewResponseUnion()               {}
@@ -38,8 +35,6 @@ func (UnionString) ImplementsSubscriptionsSubscriptionUpdateResponseUnion()     
 func (UnionString) ImplementsSubscriptionsSubscriptionGetResponseUnion()               {}
 func (UnionString) ImplementsArgoSmartRoutingEditResponseUnion()                       {}
 func (UnionString) ImplementsArgoSmartRoutingGetResponseUnion()                        {}
-func (UnionString) ImplementsArgoTieredCachingEditResponseUnion()                      {}
-func (UnionString) ImplementsArgoTieredCachingGetResponseUnion()                       {}
 func (UnionString) ImplementsCustomCertificatesCustomCertificateNewResponseUnion()     {}
 func (UnionString) ImplementsCustomCertificatesCustomCertificateEditResponseUnion()    {}
 func (UnionString) ImplementsCustomCertificatesCustomCertificateGetResponseUnion()     {}
@@ -188,9 +183,6 @@ func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncrypt
 }
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                           {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                                {}
-func (UnionString) ImplementsCloudforceOneRequestDeleteResponseUnion()                   {}
-func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponseUnion()            {}
-func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion()           {}
 func (UnionString) ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion() {}
 
 type UnionInt int64
