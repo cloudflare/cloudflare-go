@@ -1112,7 +1112,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 					"client_id": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 					"client_secret": "secret",
 					"redirect_uris": ["https://saas.example.com"],
-					"grant_types": ["authorization_code"],
+					"grant_types": ["authorization_code", "hybrid", "implicit"],
 					"scopes": ["openid", "email", "profile", "groups"],
 					"app_launcher_url": "https://saas.example.com",
 					"group_filter_regex": ".*",
@@ -1126,7 +1126,11 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 							"required": true,
 							"scope": "profile"
 						}
-					]
+					],
+					"hybrid_and_implicit_options": {
+						"return_id_token_from_authorization_endpoint": true,
+						"return_access_token_from_authorization_endpoint": true
+					}
 				}
 			}
 		}
@@ -1156,7 +1160,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 			ClientID:                     "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 			ClientSecret:                 "secret",
 			RedirectURIs:                 []string{"https://saas.example.com"},
-			GrantTypes:                   []string{"authorization_code"},
+			GrantTypes:                   []string{"authorization_code", "hybrid", "implicit"},
 			Scopes:                       []string{"openid", "email", "profile", "groups"},
 			AppLauncherURL:               "https://saas.example.com",
 			GroupFilterRegex:             ".*",
@@ -1168,6 +1172,10 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 					Required: BoolPtr(true),
 					Scope:    "profile",
 				},
+			},
+			HybridAndImplicitOptions: &AccessApplicationHybridAndImplicitOptions{
+				ReturnIDTokenFromAuthorizationEndpoint:     BoolPtr(true),
+				ReturnAccessTokenFromAuthorizationEndpoint: BoolPtr(true),
 			},
 		},
 		CreatedAt:                &createdAt,
@@ -1182,6 +1190,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 		Name: "Admin Saas Site",
 		SaasApplication: &SaasApplication{
 			AuthType:                     "oidc",
+			GrantTypes:                   []string{"authorization_code", "hybrid", "implicit"},
 			RedirectURIs:                 []string{"https://saas.example.com"},
 			AppLauncherURL:               "https://saas.example.com",
 			GroupFilterRegex:             ".*",
@@ -1193,6 +1202,10 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 					Required: BoolPtr(true),
 					Scope:    "profile",
 				},
+			},
+			HybridAndImplicitOptions: &AccessApplicationHybridAndImplicitOptions{
+				ReturnIDTokenFromAuthorizationEndpoint:     BoolPtr(true),
+				ReturnAccessTokenFromAuthorizationEndpoint: BoolPtr(true),
 			},
 		},
 		SessionDuration: "24h",
@@ -1208,6 +1221,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 		Name: "Admin Saas Site",
 		SaasApplication: &SaasApplication{
 			AuthType:                     "oidc",
+			GrantTypes:                   []string{"authorization_code", "hybrid", "implicit"},
 			RedirectURIs:                 []string{"https://saas.example.com"},
 			AppLauncherURL:               "https://saas.example.com",
 			GroupFilterRegex:             ".*",
@@ -1219,6 +1233,10 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 					Required: BoolPtr(true),
 					Scope:    "profile",
 				},
+			},
+			HybridAndImplicitOptions: &AccessApplicationHybridAndImplicitOptions{
+				ReturnIDTokenFromAuthorizationEndpoint:     BoolPtr(true),
+				ReturnAccessTokenFromAuthorizationEndpoint: BoolPtr(true),
 			},
 		},
 		SessionDuration: "24h",

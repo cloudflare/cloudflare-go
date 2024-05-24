@@ -210,6 +210,11 @@ type RefreshTokenOptions struct {
 	Lifetime string `json:"lifetime,omitempty"`
 }
 
+type AccessApplicationHybridAndImplicitOptions struct {
+	ReturnIDTokenFromAuthorizationEndpoint     *bool `json:"return_id_token_from_authorization_endpoint,omitempty"`
+	ReturnAccessTokenFromAuthorizationEndpoint *bool `json:"return_access_token_from_authorization_endpoint,omitempty"`
+}
+
 type SaasApplication struct {
 	// Items common to both SAML and OIDC
 	AppID     string     `json:"app_id,omitempty"`
@@ -230,16 +235,17 @@ type SaasApplication struct {
 	SamlAttributeTransformJsonata string                `json:"saml_attribute_transform_jsonata"`
 
 	// OIDC saas app
-	ClientID                     string               `json:"client_id,omitempty"`
-	ClientSecret                 string               `json:"client_secret,omitempty"`
-	RedirectURIs                 []string             `json:"redirect_uris,omitempty"`
-	GrantTypes                   []string             `json:"grant_types,omitempty"`
-	Scopes                       []string             `json:"scopes,omitempty"`
-	AppLauncherURL               string               `json:"app_launcher_url,omitempty"`
-	GroupFilterRegex             string               `json:"group_filter_regex,omitempty"`
-	CustomClaims                 []OIDCClaimConfig    `json:"custom_claims,omitempty"`
-	AllowPKCEWithoutClientSecret *bool                `json:"allow_pkce_without_client_secret,omitempty"`
-	RefreshTokenOptions          *RefreshTokenOptions `json:"refresh_token_options,omitempty"`
+	ClientID                     string                                     `json:"client_id,omitempty"`
+	ClientSecret                 string                                     `json:"client_secret,omitempty"`
+	RedirectURIs                 []string                                   `json:"redirect_uris,omitempty"`
+	GrantTypes                   []string                                   `json:"grant_types,omitempty"`
+	Scopes                       []string                                   `json:"scopes,omitempty"`
+	AppLauncherURL               string                                     `json:"app_launcher_url,omitempty"`
+	GroupFilterRegex             string                                     `json:"group_filter_regex,omitempty"`
+	CustomClaims                 []OIDCClaimConfig                          `json:"custom_claims,omitempty"`
+	AllowPKCEWithoutClientSecret *bool                                      `json:"allow_pkce_without_client_secret,omitempty"`
+	RefreshTokenOptions          *RefreshTokenOptions                       `json:"refresh_token_options,omitempty"`
+	HybridAndImplicitOptions     *AccessApplicationHybridAndImplicitOptions `json:"hybrid_and_implicit_options,omitempty"`
 }
 
 type AccessAppLauncherCustomization struct {
