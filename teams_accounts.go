@@ -147,14 +147,14 @@ type TeamsLoggingSettingsResponse struct {
 	Result TeamsLoggingSettings `json:"result"`
 }
 
-type TeamsAccountConnectivitySettings struct {
+type TeamsConnectivitySettings struct {
 	ICMPProxyEnabled   *bool `json:"icmp_proxy_enabled"`
 	OfframpWarpEnabled *bool `json:"offramp_warp_enabled"`
 }
 
 type TeamsAccountConnectivitySettingsResponse struct {
 	Response
-	Result TeamsAccountConnectivitySettings `json:"result"`
+	Result TeamsConnectivitySettings `json:"result"`
 }
 
 // TeamsAccount returns teams account information with internal and external ID.
@@ -240,18 +240,18 @@ func (api *API) TeamsAccountLoggingConfiguration(ctx context.Context, accountID 
 // TeamsAccountConnectivityConfiguration returns zero trust account connectivity settings.
 //
 // API reference: https://developers.cloudflare.com/api/operations/zero-trust-accounts-get-connectivity-settings
-func (api *API) TeamsAccountConnectivityConfiguration(ctx context.Context, accountID string) (TeamsAccountConnectivitySettings, error) {
+func (api *API) TeamsAccountConnectivityConfiguration(ctx context.Context, accountID string) (TeamsConnectivitySettings, error) {
 	uri := fmt.Sprintf("/accounts/%s/zerotrust/connectivity_settings", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return TeamsAccountConnectivitySettings{}, err
+		return TeamsConnectivitySettings{}, err
 	}
 
 	var teamsConnectivityResponse TeamsAccountConnectivitySettingsResponse
 	err = json.Unmarshal(res, &teamsConnectivityResponse)
 	if err != nil {
-		return TeamsAccountConnectivitySettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return TeamsConnectivitySettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsConnectivityResponse.Result, nil
@@ -320,18 +320,18 @@ func (api *API) TeamsAccountDeviceUpdateConfiguration(ctx context.Context, accou
 // TeamsAccountConnectivityUpdateConfiguration updates zero trust account connectivity settings.
 //
 // API reference: https://developers.cloudflare.com/api/operations/zero-trust-accounts-patch-connectivity-settings
-func (api *API) TeamsAccountConnectivityUpdateConfiguration(ctx context.Context, accountID string, settings TeamsAccountConnectivitySettings) (TeamsAccountConnectivitySettings, error) {
+func (api *API) TeamsAccountConnectivityUpdateConfiguration(ctx context.Context, accountID string, settings TeamsConnectivitySettings) (TeamsConnectivitySettings, error) {
 	uri := fmt.Sprintf("/accounts/%s/zerotrust/connectivity_settings", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, settings)
 	if err != nil {
-		return TeamsAccountConnectivitySettings{}, err
+		return TeamsConnectivitySettings{}, err
 	}
 
 	var teamsConnectivityResponse TeamsAccountConnectivitySettingsResponse
 	err = json.Unmarshal(res, &teamsConnectivityResponse)
 	if err != nil {
-		return TeamsAccountConnectivitySettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return TeamsConnectivitySettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsConnectivityResponse.Result, nil

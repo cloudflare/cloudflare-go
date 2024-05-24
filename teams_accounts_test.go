@@ -361,7 +361,7 @@ func TestTeamsAccountGetConnectivityConfiguration(t *testing.T) {
 	actual, err := client.TeamsAccountConnectivityConfiguration(context.Background(), testAccountID)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, actual, TeamsAccountConnectivitySettings{
+		assert.Equal(t, actual, TeamsConnectivitySettings{
 			ICMPProxyEnabled:   BoolPtr(false),
 			OfframpWarpEnabled: BoolPtr(false),
 		})
@@ -385,13 +385,13 @@ func TestTeamsAccountUpdateConnectivityConfiguration(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/zerotrust/connectivity_settings", handler)
 
-	actual, err := client.TeamsAccountConnectivityUpdateConfiguration(context.Background(), testAccountID, TeamsAccountConnectivitySettings{
+	actual, err := client.TeamsAccountConnectivityUpdateConfiguration(context.Background(), testAccountID, TeamsConnectivitySettings{
 		ICMPProxyEnabled:   BoolPtr(true),
 		OfframpWarpEnabled: BoolPtr(true),
 	})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, actual, TeamsAccountConnectivitySettings{
+		assert.Equal(t, actual, TeamsConnectivitySettings{
 			ICMPProxyEnabled:   BoolPtr(true),
 			OfframpWarpEnabled: BoolPtr(true),
 		})
