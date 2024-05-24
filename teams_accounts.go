@@ -131,10 +131,10 @@ type TeamsLoggingSettings struct {
 }
 
 type TeamsDeviceSettings struct {
-	GatewayProxyEnabled                bool `json:"gateway_proxy_enabled"`
-	GatewayProxyUDPEnabled             bool `json:"gateway_udp_proxy_enabled"`
-	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
-	UseZTVirtualIP                     bool `json:"use_zt_virtual_ip"`
+	GatewayProxyEnabled                bool  `json:"gateway_proxy_enabled"`
+	GatewayProxyUDPEnabled             bool  `json:"gateway_udp_proxy_enabled"`
+	RootCertificateInstallationEnabled bool  `json:"root_certificate_installation_enabled"`
+	UseZTVirtualIP                     *bool `json:"use_zt_virtual_ip"`
 }
 
 type TeamsDeviceSettingsResponse struct {
