@@ -302,7 +302,7 @@ func TestTeamsAccountGetDeviceConfiguration(t *testing.T) {
 			GatewayProxyEnabled:                true,
 			GatewayProxyUDPEnabled:             false,
 			RootCertificateInstallationEnabled: true,
-			UseZtVirtualIP:                     false,
+			UseZTVirtualIP:                     false,
 		})
 	}
 }
@@ -328,7 +328,7 @@ func TestTeamsAccountUpdateDeviceConfiguration(t *testing.T) {
 		GatewayProxyUDPEnabled:             true,
 		GatewayProxyEnabled:                true,
 		RootCertificateInstallationEnabled: true,
-		UseZtVirtualIP:                     true,
+		UseZTVirtualIP:                     true,
 	})
 
 	if assert.NoError(t, err) {
@@ -336,7 +336,7 @@ func TestTeamsAccountUpdateDeviceConfiguration(t *testing.T) {
 			GatewayProxyEnabled:                true,
 			GatewayProxyUDPEnabled:             true,
 			RootCertificateInstallationEnabled: true,
-			UseZtVirtualIP:                     true,
+			UseZTVirtualIP:                     true,
 		})
 	}
 }
