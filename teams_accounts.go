@@ -248,13 +248,13 @@ func (api *API) TeamsAccountConnectivityConfiguration(ctx context.Context, accou
 		return TeamsAccountConnectivitySettings{}, err
 	}
 
-	var zeroTrustConfigResponse TeamsAccountConnectivitySettingsResponse
-	err = json.Unmarshal(res, &zeroTrustConfigResponse)
+	var teamsConnectivityResponse TeamsAccountConnectivitySettingsResponse
+	err = json.Unmarshal(res, &teamsConnectivityResponse)
 	if err != nil {
 		return TeamsAccountConnectivitySettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return zeroTrustConfigResponse.Result, nil
+	return teamsConnectivityResponse.Result, nil
 }
 
 // TeamsAccountUpdateConfiguration updates a teams account configuration.
@@ -328,11 +328,11 @@ func (api *API) TeamsAccountConnectivityUpdateConfiguration(ctx context.Context,
 		return TeamsAccountConnectivitySettings{}, err
 	}
 
-	var zeroTrustConfigResponse TeamsAccountConnectivitySettingsResponse
-	err = json.Unmarshal(res, &zeroTrustConfigResponse)
+	var teamsConnectivityResponse TeamsAccountConnectivitySettingsResponse
+	err = json.Unmarshal(res, &teamsConnectivityResponse)
 	if err != nil {
 		return TeamsAccountConnectivitySettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return zeroTrustConfigResponse.Result, nil
+	return teamsConnectivityResponse.Result, nil
 }
