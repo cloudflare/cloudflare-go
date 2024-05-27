@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // AvailableAlertService contains methods and other services that help with
@@ -36,7 +34,7 @@ func NewAvailableAlertService(opts ...option.RequestOption) (r *AvailableAlertSe
 }
 
 // Gets a list of all alert types for which an account is eligible.
-func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *AvailableAlertListResponseUnion, err error) {
+func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *AvailableAlertListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailableAlertListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/available_alerts", query.AccountID)
@@ -48,30 +46,39 @@ func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertLi
 	return
 }
 
-// Union satisfied by [alerting.AvailableAlertListResponseUnknown],
-// [alerting.AvailableAlertListResponseArray] or [shared.UnionString].
-type AvailableAlertListResponseUnion interface {
-	ImplementsAlertingAvailableAlertListResponseUnion()
+type AvailableAlertListResponse map[string][]AvailableAlertListResponseItem
+
+type AvailableAlertListResponseItem struct {
+	// Describes the alert type.
+	Description string `json:"description"`
+	// Alert type name.
+	DisplayName string `json:"display_name"`
+	// Format of additional configuration options (filters) for the alert type. Data
+	// type of filters during policy creation: Array of strings.
+	FilterOptions []interface{} `json:"filter_options"`
+	// Use this value when creating and updating a notification policy.
+	Type string                             `json:"type"`
+	JSON availableAlertListResponseItemJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AvailableAlertListResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AvailableAlertListResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// availableAlertListResponseItemJSON contains the JSON metadata for the struct
+// [AvailableAlertListResponseItem]
+type availableAlertListResponseItemJSON struct {
+	Description   apijson.Field
+	DisplayName   apijson.Field
+	FilterOptions apijson.Field
+	Type          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
-type AvailableAlertListResponseArray []interface{}
+func (r *AvailableAlertListResponseItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r AvailableAlertListResponseArray) ImplementsAlertingAvailableAlertListResponseUnion() {}
+func (r availableAlertListResponseItemJSON) RawJSON() string {
+	return r.raw
+}
 
 type AvailableAlertListParams struct {
 	// The account id
@@ -79,11 +86,11 @@ type AvailableAlertListParams struct {
 }
 
 type AvailableAlertListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   AvailableAlertListResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AvailableAlertListResponseEnvelopeSuccess    `json:"success,required"`
+	Result     AvailableAlertListResponse                   `json:"result"`
 	ResultInfo AvailableAlertListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       availableAlertListResponseEnvelopeJSON       `json:"-"`
 }
@@ -93,8 +100,8 @@ type AvailableAlertListResponseEnvelope struct {
 type availableAlertListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
