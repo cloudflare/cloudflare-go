@@ -35,19 +35,6 @@ func NewAccessCustomPageService(opts ...option.RequestOption) (r *AccessCustomPa
 	return
 }
 
-// Create a custom page
-func (r *AccessCustomPageService) New(ctx context.Context, identifier string, body AccessCustomPageNewParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessCustomPageNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/custom_pages", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Update a custom page
 func (r *AccessCustomPageService) Update(ctx context.Context, identifier string, uuid string, body AccessCustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	opts = append(r.Options[:], opts...)
@@ -249,57 +236,6 @@ func (r *AccessCustomPageDeleteResponse) UnmarshalJSON(data []byte) (err error) 
 
 func (r accessCustomPageDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type AccessCustomPageNewParams struct {
-	CustomPage CustomPageParam `json:"custom_page,required"`
-}
-
-func (r AccessCustomPageNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.CustomPage)
-}
-
-type AccessCustomPageNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  CustomPageWithoutHTML                      `json:"result"`
-	JSON    accessCustomPageNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessCustomPageNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessCustomPageNewResponseEnvelope]
-type accessCustomPageNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessCustomPageNewResponseEnvelopeSuccess bool
-
-const (
-	AccessCustomPageNewResponseEnvelopeSuccessTrue AccessCustomPageNewResponseEnvelopeSuccess = true
-)
-
-func (r AccessCustomPageNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessCustomPageNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type AccessCustomPageUpdateParams struct {
