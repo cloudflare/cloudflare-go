@@ -4,6 +4,7 @@ package email_routing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,10 @@ func NewRuleCatchAllService(opts ...option.RequestOption) (r *RuleCatchAllServic
 func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string, body RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *RuleCatchAllUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleCatchAllUpdateResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -51,6 +56,10 @@ func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string,
 func (r *RuleCatchAllService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *RuleCatchAllGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleCatchAllGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -40,6 +41,10 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionUpdateResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -52,6 +57,10 @@ func (r *SubscriptionService) Update(ctx context.Context, identifier string, bod
 // Deletes a user's subscription.
 func (r *SubscriptionService) Delete(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -61,6 +70,10 @@ func (r *SubscriptionService) Delete(ctx context.Context, identifier string, opt
 func (r *SubscriptionService) Edit(ctx context.Context, identifier string, body SubscriptionEditParams, opts ...option.RequestOption) (res *SubscriptionEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionEditResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {

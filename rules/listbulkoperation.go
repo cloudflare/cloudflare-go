@@ -4,6 +4,7 @@ package rules
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -40,6 +41,14 @@ func NewListBulkOperationService(opts ...option.RequestOption) (r *ListBulkOpera
 func (r *ListBulkOperationService) Get(ctx context.Context, accountIdentifier string, operationID string, opts ...option.RequestOption) (res *[]ListBulkOperationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListBulkOperationGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if operationID == "" {
+		err = errors.New("missing required operation_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/bulk_operations/%s", accountIdentifier, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

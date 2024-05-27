@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,6 +40,14 @@ func NewTunnelConfigurationService(opts ...option.RequestOption) (r *TunnelConfi
 func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +61,14 @@ func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string
 func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *TunnelConfigurationGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

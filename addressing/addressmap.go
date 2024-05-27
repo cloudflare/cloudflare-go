@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -45,6 +46,10 @@ func NewAddressMapService(opts ...option.RequestOption) (r *AddressMapService) {
 func (r *AddressMapService) New(ctx context.Context, params AddressMapNewParams, opts ...option.RequestOption) (res *AddressMapNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -82,6 +87,14 @@ func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMap
 func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, body AddressMapDeleteParams, opts ...option.RequestOption) (res *[]AddressMapDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", body.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -95,6 +108,14 @@ func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, bod
 func (r *AddressMapService) Edit(ctx context.Context, addressMapID string, params AddressMapEditParams, opts ...option.RequestOption) (res *AddressMap, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -108,6 +129,14 @@ func (r *AddressMapService) Edit(ctx context.Context, addressMapID string, param
 func (r *AddressMapService) Get(ctx context.Context, addressMapID string, query AddressMapGetParams, opts ...option.RequestOption) (res *AddressMapGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", query.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package event_notifications
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -40,6 +41,14 @@ func NewR2ConfigurationService(opts ...option.RequestOption) (r *R2Configuration
 func (r *R2ConfigurationService) Get(ctx context.Context, bucketName string, query R2ConfigurationGetParams, opts ...option.RequestOption) (res *R2ConfigurationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2ConfigurationGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration", query.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,10 @@ func NewSettingTLSClientAuthService(opts ...option.RequestOption) (r *SettingTLS
 func (r *SettingTLSClientAuthService) Edit(ctx context.Context, params SettingTLSClientAuthEditParams, opts ...option.RequestOption) (res *TLSClientAuth, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSClientAuthEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,10 @@ func (r *SettingTLSClientAuthService) Edit(ctx context.Context, params SettingTL
 func (r *SettingTLSClientAuthService) Get(ctx context.Context, query SettingTLSClientAuthGetParams, opts ...option.RequestOption) (res *TLSClientAuth, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSClientAuthGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

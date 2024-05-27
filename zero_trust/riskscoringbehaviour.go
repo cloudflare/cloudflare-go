@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewRiskScoringBehaviourService(opts ...option.RequestOption) (r *RiskScorin
 func (r *RiskScoringBehaviourService) Update(ctx context.Context, accountIdentifier string, body RiskScoringBehaviourUpdateParams, opts ...option.RequestOption) (res *RiskScoringBehaviourUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringBehaviourUpdateResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/behaviors", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -50,6 +55,10 @@ func (r *RiskScoringBehaviourService) Update(ctx context.Context, accountIdentif
 func (r *RiskScoringBehaviourService) Get(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RiskScoringBehaviourGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringBehaviourGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/behaviors", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,10 @@ func NewGRETunnelService(opts ...option.RequestOption) (r *GRETunnelService) {
 func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, opts ...option.RequestOption) (res *GRETunnelNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,14 @@ func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, o
 func (r *GRETunnelService) Update(ctx context.Context, tunnelIdentifier string, params GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelIdentifier == "" {
+		err = errors.New("missing required tunnel_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -66,6 +79,10 @@ func (r *GRETunnelService) Update(ctx context.Context, tunnelIdentifier string, 
 func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, opts ...option.RequestOption) (res *GRETunnelListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -80,6 +97,14 @@ func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, 
 func (r *GRETunnelService) Delete(ctx context.Context, tunnelIdentifier string, body GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelIdentifier == "" {
+		err = errors.New("missing required tunnel_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", body.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -93,6 +118,14 @@ func (r *GRETunnelService) Delete(ctx context.Context, tunnelIdentifier string, 
 func (r *GRETunnelService) Get(ctx context.Context, tunnelIdentifier string, query GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelIdentifier == "" {
+		err = errors.New("missing required tunnel_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", query.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

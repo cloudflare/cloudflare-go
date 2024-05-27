@@ -4,6 +4,7 @@ package kv
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -44,6 +45,14 @@ func NewNamespaceBulkService(opts ...option.RequestOption) (r *NamespaceBulkServ
 func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -58,6 +67,14 @@ func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, p
 func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, body NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", body.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {

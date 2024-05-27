@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,14 @@ func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectorUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if connectorID == "" {
+		err = errors.New("missing required connector_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s", params.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -74,6 +83,14 @@ func (r *ConnectorService) ListAutoPaging(ctx context.Context, query ConnectorLi
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectorEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if connectorID == "" {
+		err = errors.New("missing required connector_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s", params.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -87,6 +104,14 @@ func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params 
 func (r *ConnectorService) Get(ctx context.Context, connectorID string, query ConnectorGetParams, opts ...option.RequestOption) (res *ConnectorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectorGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if connectorID == "" {
+		err = errors.New("missing required connector_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s", query.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

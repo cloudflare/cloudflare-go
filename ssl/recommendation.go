@@ -4,6 +4,7 @@ package ssl
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -37,6 +38,10 @@ func NewRecommendationService(opts ...option.RequestOption) (r *RecommendationSe
 func (r *RecommendationService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *RecommendationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecommendationGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/recommendation", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

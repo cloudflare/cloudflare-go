@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewDevicePolicyDefaultPolicyService(opts ...option.RequestOption) (r *Devic
 func (r *DevicePolicyDefaultPolicyService) Get(ctx context.Context, query DevicePolicyDefaultPolicyGetParams, opts ...option.RequestOption) (res *[]DevicePolicyDefaultPolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDefaultPolicyGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,10 @@ func NewDeviceNetworkService(opts ...option.RequestOption) (r *DeviceNetworkServ
 func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/networks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +56,14 @@ func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewP
 func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, params DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if networkID == "" {
+		err = errors.New("missing required network_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", params.AccountID, networkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -88,6 +101,14 @@ func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceN
 func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if networkID == "" {
+		err = errors.New("missing required network_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", body.AccountID, networkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -101,6 +122,14 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, bod
 func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query DeviceNetworkGetParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if networkID == "" {
+		err = errors.New("missing required network_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", query.AccountID, networkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

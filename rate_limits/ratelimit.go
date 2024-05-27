@@ -4,6 +4,7 @@ package rate_limits
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -48,6 +49,10 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body RateLimitNewParams, opts ...option.RequestOption) (res *RateLimitNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -99,6 +104,14 @@ func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier st
 func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitDeleteResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -117,6 +130,14 @@ func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id
 func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id string, body RateLimitEditParams, opts ...option.RequestOption) (res *RateLimitEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitEditResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -135,6 +156,14 @@ func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id s
 func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package ssl
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -69,6 +70,14 @@ func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params Cert
 func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, body CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if certificatePackID == "" {
+		err = errors.New("missing required certificate_pack_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -84,6 +93,14 @@ func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID s
 func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID string, params CertificatePackEditParams, opts ...option.RequestOption) (res *CertificatePackEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if certificatePackID == "" {
+		err = errors.New("missing required certificate_pack_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -97,6 +114,14 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if certificatePackID == "" {
+		err = errors.New("missing required certificate_pack_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", query.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

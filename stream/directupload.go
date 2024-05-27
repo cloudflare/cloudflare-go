@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,10 @@ func NewDirectUploadService(opts ...option.RequestOption) (r *DirectUploadServic
 func (r *DirectUploadService) New(ctx context.Context, params DirectUploadNewParams, opts ...option.RequestOption) (res *DirectUploadNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DirectUploadNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/direct_upload", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

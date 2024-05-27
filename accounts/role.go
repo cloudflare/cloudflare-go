@@ -4,6 +4,7 @@ package accounts
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -63,6 +64,10 @@ func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, 
 func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoleGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/roles/%v", query.AccountID, roleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package rules
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -46,6 +47,14 @@ func NewListItemService(opts ...option.RequestOption) (r *ListItemService) {
 func (r *ListItemService) New(ctx context.Context, listID string, params ListItemNewParams, opts ...option.RequestOption) (res *ListItemNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListItemNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -64,6 +73,14 @@ func (r *ListItemService) New(ctx context.Context, listID string, params ListIte
 func (r *ListItemService) Update(ctx context.Context, listID string, params ListItemUpdateParams, opts ...option.RequestOption) (res *ListItemUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListItemUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -104,6 +121,14 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 func (r *ListItemService) Delete(ctx context.Context, listID string, body ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListItemDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", body.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -117,6 +142,18 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, body ListIt
 func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, listID string, itemID string, opts ...option.RequestOption) (res *ListItemGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListItemGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
+	if itemID == "" {
+		err = errors.New("missing required item_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items/%s", accountIdentifier, listID, itemID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

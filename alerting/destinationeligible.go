@@ -4,6 +4,7 @@ package alerting
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewDestinationEligibleService(opts ...option.RequestOption) (r *Destination
 func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationEligibleGetParams, opts ...option.RequestOption) (res *DestinationEligibleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationEligibleGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

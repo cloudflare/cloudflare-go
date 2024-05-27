@@ -4,6 +4,7 @@ package storage
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,6 +41,10 @@ func NewAnalyticsService(opts ...option.RequestOption) (r *AnalyticsService) {
 func (r *AnalyticsService) List(ctx context.Context, params AnalyticsListParams, opts ...option.RequestOption) (res *Schema, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsListResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/analytics", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,10 @@ func (r *AnalyticsService) List(ctx context.Context, params AnalyticsListParams,
 func (r *AnalyticsService) Stored(ctx context.Context, params AnalyticsStoredParams, opts ...option.RequestOption) (res *Components, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsStoredResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/analytics/stored", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package workers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -47,6 +48,14 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParams, opts ...option.RequestOption) (res *AIRunResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AIRunResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if modelName == "" {
+		err = errors.New("missing required model_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/ai/run/%s", params.AccountID, modelName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

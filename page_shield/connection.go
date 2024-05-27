@@ -4,6 +4,7 @@ package page_shield
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -61,6 +62,14 @@ func (r *ConnectionService) ListAutoPaging(ctx context.Context, params Connectio
 // Fetches a connection detected by Page Shield by connection ID.
 func (r *ConnectionService) Get(ctx context.Context, connectionID string, query ConnectionGetParams, opts ...option.RequestOption) (res *Connection, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if connectionID == "" {
+		err = errors.New("missing required connection_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield/connections/%s", query.ZoneID, connectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

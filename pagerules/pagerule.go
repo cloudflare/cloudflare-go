@@ -4,6 +4,7 @@ package pagerules
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -49,6 +50,10 @@ func NewPageruleService(opts ...option.RequestOption) (r *PageruleService) {
 func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opts ...option.RequestOption) (res *PageruleNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/pagerules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -68,6 +73,14 @@ func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opt
 func (r *PageruleService) Update(ctx context.Context, pageruleID string, params PageruleUpdateParams, opts ...option.RequestOption) (res *PageruleUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if pageruleID == "" {
+		err = errors.New("missing required pagerule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/pagerules/%s", params.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -86,6 +99,10 @@ func (r *PageruleService) Update(ctx context.Context, pageruleID string, params 
 func (r *PageruleService) List(ctx context.Context, params PageruleListParams, opts ...option.RequestOption) (res *[]PageRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleListResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/pagerules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -104,6 +121,14 @@ func (r *PageruleService) List(ctx context.Context, params PageruleListParams, o
 func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if pageruleID == "" {
+		err = errors.New("missing required pagerule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/pagerules/%s", body.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -122,6 +147,14 @@ func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body Pa
 func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params PageruleEditParams, opts ...option.RequestOption) (res *PageruleEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if pageruleID == "" {
+		err = errors.New("missing required pagerule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/pagerules/%s", params.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -140,6 +173,14 @@ func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params Pa
 func (r *PageruleService) Get(ctx context.Context, pageruleID string, query PageruleGetParams, opts ...option.RequestOption) (res *PageruleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if pageruleID == "" {
+		err = errors.New("missing required pagerule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/pagerules/%s", query.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

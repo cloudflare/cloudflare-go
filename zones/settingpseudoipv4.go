@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,10 @@ func NewSettingPseudoIPV4Service(opts ...option.RequestOption) (r *SettingPseudo
 func (r *SettingPseudoIPV4Service) Edit(ctx context.Context, params SettingPseudoIPV4EditParams, opts ...option.RequestOption) (res *PseudoIPV4, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPseudoIPV4EditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +56,10 @@ func (r *SettingPseudoIPV4Service) Edit(ctx context.Context, params SettingPseud
 func (r *SettingPseudoIPV4Service) Get(ctx context.Context, query SettingPseudoIPV4GetParams, opts ...option.RequestOption) (res *PseudoIPV4, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPseudoIPV4GetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,10 @@ func NewAccessTagService(opts ...option.RequestOption) (r *AccessTagService) {
 func (r *AccessTagService) New(ctx context.Context, identifier string, body AccessTagNewParams, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagNewResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/tags", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -52,6 +57,14 @@ func (r *AccessTagService) New(ctx context.Context, identifier string, body Acce
 func (r *AccessTagService) Update(ctx context.Context, identifier string, tagName string, body AccessTagUpdateParams, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagUpdateResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if tagName == "" {
+		err = errors.New("missing required tag_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, tagName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -88,6 +101,14 @@ func (r *AccessTagService) ListAutoPaging(ctx context.Context, identifier string
 func (r *AccessTagService) Delete(ctx context.Context, identifier string, name string, opts ...option.RequestOption) (res *AccessTagDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagDeleteResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if name == "" {
+		err = errors.New("missing required name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, name)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -101,6 +122,14 @@ func (r *AccessTagService) Delete(ctx context.Context, identifier string, name s
 func (r *AccessTagService) Get(ctx context.Context, identifier string, name string, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagGetResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if name == "" {
+		err = errors.New("missing required name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, name)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

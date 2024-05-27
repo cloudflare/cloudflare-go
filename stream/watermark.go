@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -42,6 +43,10 @@ func NewWatermarkService(opts ...option.RequestOption) (r *WatermarkService) {
 func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *Watermark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -78,6 +83,14 @@ func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkLi
 func (r *WatermarkService) Delete(ctx context.Context, identifier string, body WatermarkDeleteParams, opts ...option.RequestOption) (res *WatermarkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -91,6 +104,14 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, body W
 func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *Watermark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

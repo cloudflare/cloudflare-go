@@ -5,6 +5,7 @@ package vectorize
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -44,6 +45,10 @@ func NewIndexService(opts ...option.RequestOption) (r *IndexService) {
 func (r *IndexService) New(ctx context.Context, params IndexNewParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -57,6 +62,14 @@ func (r *IndexService) New(ctx context.Context, params IndexNewParams, opts ...o
 func (r *IndexService) Update(ctx context.Context, indexName string, params IndexUpdateParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -93,6 +106,14 @@ func (r *IndexService) ListAutoPaging(ctx context.Context, query IndexListParams
 func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexDeleteParams, opts ...option.RequestOption) (res *IndexDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s", body.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -106,6 +127,14 @@ func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexD
 func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params IndexDeleteByIDsParams, opts ...option.RequestOption) (res *IndexDeleteVectorsByID, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexDeleteByIDsResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/delete-by-ids", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -119,6 +148,14 @@ func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params
 func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGetParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s", query.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -132,6 +169,14 @@ func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGet
 func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params IndexGetByIDsParams, opts ...option.RequestOption) (res *IndexGetByIDsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexGetByIDsResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/get-by-ids", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -146,6 +191,14 @@ func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params In
 func (r *IndexService) Insert(ctx context.Context, indexName string, params IndexInsertParams, opts ...option.RequestOption) (res *IndexInsert, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexInsertResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/insert", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -159,6 +212,14 @@ func (r *IndexService) Insert(ctx context.Context, indexName string, params Inde
 func (r *IndexService) Query(ctx context.Context, indexName string, params IndexQueryParams, opts ...option.RequestOption) (res *IndexQuery, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexQueryResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/query", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -173,6 +234,14 @@ func (r *IndexService) Query(ctx context.Context, indexName string, params Index
 func (r *IndexService) Upsert(ctx context.Context, indexName string, params IndexUpsertParams, opts ...option.RequestOption) (res *IndexUpsert, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexUpsertResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/upsert", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

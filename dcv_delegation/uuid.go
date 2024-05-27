@@ -4,6 +4,7 @@ package dcv_delegation
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,10 @@ func NewUUIDService(opts ...option.RequestOption) (r *UUIDService) {
 func (r *UUIDService) Get(ctx context.Context, query UUIDGetParams, opts ...option.RequestOption) (res *DCVDelegationUUID, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UUIDGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dcv_delegation/uuid", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

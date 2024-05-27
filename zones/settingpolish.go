@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -40,6 +41,10 @@ func NewSettingPolishService(opts ...option.RequestOption) (r *SettingPolishServ
 func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEditParams, opts ...option.RequestOption) (res *Polish, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/polish", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -55,6 +60,10 @@ func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEdi
 func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetParams, opts ...option.RequestOption) (res *Polish, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/polish", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

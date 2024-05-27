@@ -4,6 +4,7 @@ package speed
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -36,6 +37,10 @@ func NewAvailabilityService(opts ...option.RequestOption) (r *AvailabilityServic
 func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListParams, opts ...option.RequestOption) (res *Availability, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailabilityListResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/speed_api/availabilities", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

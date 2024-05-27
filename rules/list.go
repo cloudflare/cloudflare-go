@@ -4,6 +4,7 @@ package rules
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -42,6 +43,10 @@ func NewListService(opts ...option.RequestOption) (r *ListService) {
 func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...option.RequestOption) (res *ListsList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -55,6 +60,14 @@ func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...opt
 func (r *ListService) Update(ctx context.Context, listID string, params ListUpdateParams, opts ...option.RequestOption) (res *ListsList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -91,6 +104,14 @@ func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, 
 func (r *ListService) Delete(ctx context.Context, listID string, body ListDeleteParams, opts ...option.RequestOption) (res *ListDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", body.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -104,6 +125,14 @@ func (r *ListService) Delete(ctx context.Context, listID string, body ListDelete
 func (r *ListService) Get(ctx context.Context, listID string, query ListGetParams, opts ...option.RequestOption) (res *ListsList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", query.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

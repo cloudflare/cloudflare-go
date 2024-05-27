@@ -4,6 +4,7 @@ package logs
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewControlRetentionService(opts ...option.RequestOption) (r *ControlRetenti
 func (r *ControlRetentionService) New(ctx context.Context, zoneIdentifier string, body ControlRetentionNewParams, opts ...option.RequestOption) (res *ControlRetentionNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlRetentionNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -50,6 +55,10 @@ func (r *ControlRetentionService) New(ctx context.Context, zoneIdentifier string
 func (r *ControlRetentionService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ControlRetentionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlRetentionGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

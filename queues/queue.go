@@ -4,6 +4,7 @@ package queues
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -44,6 +45,10 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *QueueCreated, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -57,6 +62,14 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 func (r *QueueService) Update(ctx context.Context, queueID string, params QueueUpdateParams, opts ...option.RequestOption) (res *QueueUpdated, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -93,6 +106,14 @@ func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams
 func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s", body.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -106,6 +127,14 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetParams, opts ...option.RequestOption) (res *Queue, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s", query.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

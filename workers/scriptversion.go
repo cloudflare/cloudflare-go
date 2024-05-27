@@ -5,6 +5,7 @@ package workers
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -41,6 +42,14 @@ func NewScriptVersionService(opts ...option.RequestOption) (r *ScriptVersionServ
 func (r *ScriptVersionService) New(ctx context.Context, scriptName string, params ScriptVersionNewParams, opts ...option.RequestOption) (res *ScriptVersionNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptVersionNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/versions", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +63,14 @@ func (r *ScriptVersionService) New(ctx context.Context, scriptName string, param
 func (r *ScriptVersionService) List(ctx context.Context, scriptName string, query ScriptVersionListParams, opts ...option.RequestOption) (res *ScriptVersionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptVersionListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/versions", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -67,6 +84,18 @@ func (r *ScriptVersionService) List(ctx context.Context, scriptName string, quer
 func (r *ScriptVersionService) Get(ctx context.Context, scriptName string, versionID string, query ScriptVersionGetParams, opts ...option.RequestOption) (res *ScriptVersionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptVersionGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
+	if versionID == "" {
+		err = errors.New("missing required version_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/versions/%s", query.AccountID, scriptName, versionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

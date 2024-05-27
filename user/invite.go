@@ -4,6 +4,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -64,6 +65,10 @@ func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.Reque
 func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteEditResponseEnvelope
+	if inviteID == "" {
+		err = errors.New("missing required invite_id parameter")
+		return
+	}
 	path := fmt.Sprintf("user/invites/%s", inviteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -77,6 +82,10 @@ func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEd
 func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteGetResponseEnvelope
+	if inviteID == "" {
+		err = errors.New("missing required invite_id parameter")
+		return
+	}
 	path := fmt.Sprintf("user/invites/%s", inviteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

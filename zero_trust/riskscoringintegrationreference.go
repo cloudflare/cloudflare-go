@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,14 @@ func NewRiskScoringIntegrationReferenceService(opts ...option.RequestOption) (r 
 func (r *RiskScoringIntegrationReferenceService) Get(ctx context.Context, referenceID string, query RiskScoringIntegrationReferenceGetParams, opts ...option.RequestOption) (res *RiskScoringIntegrationReferenceGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationReferenceGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if referenceID == "" {
+		err = errors.New("missing required reference_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations/reference_id/%s", query.AccountID, referenceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

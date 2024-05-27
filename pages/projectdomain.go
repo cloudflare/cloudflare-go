@@ -4,6 +4,7 @@ package pages
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -40,6 +41,14 @@ func NewProjectDomainService(opts ...option.RequestOption) (r *ProjectDomainServ
 func (r *ProjectDomainService) New(ctx context.Context, projectName string, params ProjectDomainNewParams, opts ...option.RequestOption) (res *ProjectDomainNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", params.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -75,6 +84,18 @@ func (r *ProjectDomainService) ListAutoPaging(ctx context.Context, projectName s
 // Delete a Pages project's domain.
 func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, domainName string, body ProjectDomainDeleteParams, opts ...option.RequestOption) (res *ProjectDomainDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
+	if domainName == "" {
+		err = errors.New("missing required domain_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -84,6 +105,18 @@ func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, d
 func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, params ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
+	if domainName == "" {
+		err = errors.New("missing required domain_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", params.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -97,6 +130,18 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 func (r *ProjectDomainService) Get(ctx context.Context, projectName string, domainName string, query ProjectDomainGetParams, opts ...option.RequestOption) (res *ProjectDomainGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
+	if domainName == "" {
+		err = errors.New("missing required domain_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", query.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

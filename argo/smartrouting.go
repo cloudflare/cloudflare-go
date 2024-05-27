@@ -4,6 +4,7 @@ package argo
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,6 +40,10 @@ func NewSmartRoutingService(opts ...option.RequestOption) (r *SmartRoutingServic
 func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditParams, opts ...option.RequestOption) (res *SmartRoutingEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartRoutingEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/argo/smart_routing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +57,10 @@ func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditP
 func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetParams, opts ...option.RequestOption) (res *SmartRoutingGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartRoutingGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/argo/smart_routing", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

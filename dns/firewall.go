@@ -4,6 +4,7 @@ package dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -45,6 +46,10 @@ func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
 func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opts ...option.RequestOption) (res *Firewall, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -81,6 +86,14 @@ func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallLis
 func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body FirewallDeleteParams, opts ...option.RequestOption) (res *FirewallDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dnsFirewallID == "" {
+		err = errors.New("missing required dns_firewall_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", body.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -94,6 +107,14 @@ func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body
 func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params FirewallEditParams, opts ...option.RequestOption) (res *Firewall, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dnsFirewallID == "" {
+		err = errors.New("missing required dns_firewall_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", params.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -107,6 +128,14 @@ func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params
 func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query FirewallGetParams, opts ...option.RequestOption) (res *Firewall, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dnsFirewallID == "" {
+		err = errors.New("missing required dns_firewall_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", query.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -45,6 +46,10 @@ func NewPoolService(opts ...option.RequestOption) (r *PoolService) {
 func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -58,6 +63,14 @@ func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...opt
 func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if poolID == "" {
+		err = errors.New("missing required pool_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -94,6 +107,14 @@ func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams,
 func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDeleteParams, opts ...option.RequestOption) (res *PoolDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if poolID == "" {
+		err = errors.New("missing required pool_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", body.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -107,6 +128,14 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDelete
 func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if poolID == "" {
+		err = errors.New("missing required pool_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -120,6 +149,14 @@ func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditPa
 func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if poolID == "" {
+		err = errors.New("missing required pool_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", query.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

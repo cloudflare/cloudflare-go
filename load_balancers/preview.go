@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,14 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *PreviewGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if previewID == "" {
+		err = errors.New("missing required preview_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%s", query.AccountID, previewID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

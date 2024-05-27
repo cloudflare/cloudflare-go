@@ -4,6 +4,7 @@ package request_tracers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewTraceService(opts ...option.RequestOption) (r *TraceService) {
 func (r *TraceService) New(ctx context.Context, params TraceNewParams, opts ...option.RequestOption) (res *TraceNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TraceNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/request-tracer/trace", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package cache
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -42,6 +43,10 @@ func NewVariantService(opts ...option.RequestOption) (r *VariantService) {
 func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, opts ...option.RequestOption) (res *CacheVariant, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VariantDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/variants", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -59,6 +64,10 @@ func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, o
 func (r *VariantService) Edit(ctx context.Context, params VariantEditParams, opts ...option.RequestOption) (res *VariantEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VariantEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/variants", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -76,6 +85,10 @@ func (r *VariantService) Edit(ctx context.Context, params VariantEditParams, opt
 func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts ...option.RequestOption) (res *VariantGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VariantGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/variants", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

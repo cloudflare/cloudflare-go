@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,10 @@ func NewAccessCustomPageService(opts ...option.RequestOption) (r *AccessCustomPa
 func (r *AccessCustomPageService) New(ctx context.Context, identifier string, body AccessCustomPageNewParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCustomPageNewResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -52,6 +57,14 @@ func (r *AccessCustomPageService) New(ctx context.Context, identifier string, bo
 func (r *AccessCustomPageService) Update(ctx context.Context, identifier string, uuid string, body AccessCustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCustomPageUpdateResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -88,6 +101,14 @@ func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, identifier
 func (r *AccessCustomPageService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessCustomPageDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCustomPageDeleteResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -101,6 +122,14 @@ func (r *AccessCustomPageService) Delete(ctx context.Context, identifier string,
 func (r *AccessCustomPageService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *CustomPage, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCustomPageGetResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

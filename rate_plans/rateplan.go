@@ -4,6 +4,7 @@ package rate_plans
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -36,6 +37,10 @@ func NewRatePlanService(opts ...option.RequestOption) (r *RatePlanService) {
 func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]RatePlan, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RatePlanGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/available_rate_plans", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

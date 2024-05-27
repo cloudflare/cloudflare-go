@@ -4,6 +4,7 @@ package dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -50,6 +51,10 @@ func NewRecordService(opts ...option.RequestOption) (r *RecordService) {
 func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ...option.RequestOption) (res *Record, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -68,6 +73,14 @@ func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ..
 func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params RecordUpdateParams, opts ...option.RequestOption) (res *Record, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if dnsRecordID == "" {
+		err = errors.New("missing required dns_record_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -104,6 +117,14 @@ func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListPar
 func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if dnsRecordID == "" {
+		err = errors.New("missing required dns_record_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", body.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -122,6 +143,14 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params RecordEditParams, opts ...option.RequestOption) (res *Record, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if dnsRecordID == "" {
+		err = errors.New("missing required dns_record_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -141,6 +170,10 @@ func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params Rec
 func (r *RecordService) Export(ctx context.Context, query RecordExportParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/export", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
@@ -150,6 +183,14 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query RecordGetParams, opts ...option.RequestOption) (res *Record, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if dnsRecordID == "" {
+		err = errors.New("missing required dns_record_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", query.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -170,6 +211,10 @@ func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query Recor
 func (r *RecordService) Import(ctx context.Context, params RecordImportParams, opts ...option.RequestOption) (res *RecordImportResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordImportResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/import", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -184,6 +229,10 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordScanResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/scan", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

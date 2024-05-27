@@ -4,6 +4,7 @@ package keyless_certificates
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -40,6 +41,10 @@ func NewKeylessCertificateService(opts ...option.RequestOption) (r *KeylessCerti
 func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCertificateNewParams, opts ...option.RequestOption) (res *KeylessCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -76,6 +81,14 @@ func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query Ke
 func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertificateID string, body KeylessCertificateDeleteParams, opts ...option.RequestOption) (res *KeylessCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if keylessCertificateID == "" {
+		err = errors.New("missing required keyless_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", body.ZoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -90,6 +103,14 @@ func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertifica
 func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificateID string, params KeylessCertificateEditParams, opts ...option.RequestOption) (res *KeylessCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if keylessCertificateID == "" {
+		err = errors.New("missing required keyless_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", params.ZoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -103,6 +124,14 @@ func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificate
 func (r *KeylessCertificateService) Get(ctx context.Context, keylessCertificateID string, query KeylessCertificateGetParams, opts ...option.RequestOption) (res *KeylessCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if keylessCertificateID == "" {
+		err = errors.New("missing required keyless_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", query.ZoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

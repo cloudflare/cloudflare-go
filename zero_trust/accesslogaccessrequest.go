@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -37,6 +38,10 @@ func NewAccessLogAccessRequestService(opts ...option.RequestOption) (r *AccessLo
 func (r *AccessLogAccessRequestService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessRequests, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessLogAccessRequestListResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/logs/access_requests", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

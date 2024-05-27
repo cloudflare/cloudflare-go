@@ -4,6 +4,7 @@ package email_routing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -38,6 +39,10 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

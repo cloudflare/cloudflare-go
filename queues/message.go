@@ -4,6 +4,7 @@ package queues
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,14 @@ func NewMessageService(opts ...option.RequestOption) (r *MessageService) {
 func (r *MessageService) Ack(ctx context.Context, queueID string, params MessageAckParams, opts ...option.RequestOption) (res *MessageAckResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MessageAckResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/ack", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +59,14 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *[]MessagePullResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MessagePullResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/pull", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

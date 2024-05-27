@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,10 @@ func NewSeatService(opts ...option.RequestOption) (r *SeatService) {
 func (r *SeatService) Edit(ctx context.Context, identifier string, body SeatEditParams, opts ...option.RequestOption) (res *[]Seat, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SeatEditResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/seats", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {

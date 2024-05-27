@@ -4,6 +4,7 @@ package custom_certificates
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -47,6 +48,10 @@ func NewCustomCertificateService(opts ...option.RequestOption) (r *CustomCertifi
 func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -87,6 +92,14 @@ func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params Cu
 func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, body CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if customCertificateID == "" {
+		err = errors.New("missing required custom_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", body.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -102,6 +115,14 @@ func (r *CustomCertificateService) Delete(ctx context.Context, customCertificate
 func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if customCertificateID == "" {
+		err = errors.New("missing required custom_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -115,6 +136,14 @@ func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID
 func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if customCertificateID == "" {
+		err = errors.New("missing required custom_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", query.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

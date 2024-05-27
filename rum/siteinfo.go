@@ -4,6 +4,7 @@ package rum
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,6 +41,10 @@ func NewSiteInfoService(opts ...option.RequestOption) (r *SiteInfoService) {
 func (r *SiteInfoService) New(ctx context.Context, params SiteInfoNewParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,14 @@ func (r *SiteInfoService) New(ctx context.Context, params SiteInfoNewParams, opt
 func (r *SiteInfoService) Update(ctx context.Context, siteID string, params SiteInfoUpdateParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -89,6 +102,14 @@ func (r *SiteInfoService) ListAutoPaging(ctx context.Context, params SiteInfoLis
 func (r *SiteInfoService) Delete(ctx context.Context, siteID string, body SiteInfoDeleteParams, opts ...option.RequestOption) (res *SiteInfoDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", body.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -102,6 +123,14 @@ func (r *SiteInfoService) Delete(ctx context.Context, siteID string, body SiteIn
 func (r *SiteInfoService) Get(ctx context.Context, siteID string, query SiteInfoGetParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", query.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
