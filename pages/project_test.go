@@ -97,7 +97,8 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 					}),
 					R2Buckets: cloudflare.F(pages.ProjectDeploymentConfigsPreviewR2BucketsParam{
 						R2Binding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam{
-							Name: cloudflare.F("some-bucket"),
+							Jurisdiction: cloudflare.F("eu"),
+							Name:         cloudflare.F("some-bucket"),
 						}),
 					}),
 					Services: cloudflare.F(pages.ProjectDeploymentConfigsPreviewServicesParam{
@@ -170,7 +171,8 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 					}),
 					R2Buckets: cloudflare.F(pages.ProjectDeploymentConfigsProductionR2BucketsParam{
 						R2Binding: cloudflare.F(pages.ProjectDeploymentConfigsProductionR2BucketsR2BindingParam{
-							Name: cloudflare.F("some-bucket"),
+							Jurisdiction: cloudflare.F("eu"),
+							Name:         cloudflare.F("some-bucket"),
 						}),
 					}),
 					Services: cloudflare.F(pages.ProjectDeploymentConfigsProductionServicesParam{

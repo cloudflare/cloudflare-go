@@ -949,6 +949,8 @@ func (r projectDeploymentConfigsPreviewR2BucketsJSON) RawJSON() string {
 
 // R2 binding.
 type ProjectDeploymentConfigsPreviewR2BucketsR2Binding struct {
+	// Jurisdiction of the R2 bucket.
+	Jurisdiction string `json:"jurisdiction,nullable"`
 	// Name of the R2 bucket.
 	Name string                                                `json:"name"`
 	JSON projectDeploymentConfigsPreviewR2BucketsR2BindingJSON `json:"-"`
@@ -957,9 +959,10 @@ type ProjectDeploymentConfigsPreviewR2BucketsR2Binding struct {
 // projectDeploymentConfigsPreviewR2BucketsR2BindingJSON contains the JSON metadata
 // for the struct [ProjectDeploymentConfigsPreviewR2BucketsR2Binding]
 type projectDeploymentConfigsPreviewR2BucketsR2BindingJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Jurisdiction apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProjectDeploymentConfigsPreviewR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
@@ -1645,6 +1648,8 @@ func (r projectDeploymentConfigsProductionR2BucketsJSON) RawJSON() string {
 
 // R2 binding.
 type ProjectDeploymentConfigsProductionR2BucketsR2Binding struct {
+	// Jurisdiction of the R2 bucket.
+	Jurisdiction string `json:"jurisdiction,nullable"`
 	// Name of the R2 bucket.
 	Name string                                                   `json:"name"`
 	JSON projectDeploymentConfigsProductionR2BucketsR2BindingJSON `json:"-"`
@@ -1653,9 +1658,10 @@ type ProjectDeploymentConfigsProductionR2BucketsR2Binding struct {
 // projectDeploymentConfigsProductionR2BucketsR2BindingJSON contains the JSON
 // metadata for the struct [ProjectDeploymentConfigsProductionR2BucketsR2Binding]
 type projectDeploymentConfigsProductionR2BucketsR2BindingJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Jurisdiction apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProjectDeploymentConfigsProductionR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
@@ -2065,6 +2071,8 @@ func (r ProjectDeploymentConfigsPreviewR2BucketsParam) MarshalJSON() (data []byt
 
 // R2 binding.
 type ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam struct {
+	// Jurisdiction of the R2 bucket.
+	Jurisdiction param.Field[string] `json:"jurisdiction"`
 	// Name of the R2 bucket.
 	Name param.Field[string] `json:"name"`
 }
@@ -2367,6 +2375,8 @@ func (r ProjectDeploymentConfigsProductionR2BucketsParam) MarshalJSON() (data []
 
 // R2 binding.
 type ProjectDeploymentConfigsProductionR2BucketsR2BindingParam struct {
+	// Jurisdiction of the R2 bucket.
+	Jurisdiction param.Field[string] `json:"jurisdiction"`
 	// Name of the R2 bucket.
 	Name param.Field[string] `json:"name"`
 }

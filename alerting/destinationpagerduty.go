@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // DestinationPagerdutyService contains methods and other services that help with
@@ -49,15 +47,10 @@ func (r *DestinationPagerdutyService) New(ctx context.Context, body DestinationP
 }
 
 // Deletes all the PagerDuty Services connected to the account.
-func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *DestinationPagerdutyDeleteResponseUnion, err error) {
+func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *DestinationPagerdutyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DestinationPagerdutyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -133,30 +126,78 @@ func (r destinationPagerdutyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [alerting.DestinationPagerdutyDeleteResponseUnknown],
-// [alerting.DestinationPagerdutyDeleteResponseArray] or [shared.UnionString].
-type DestinationPagerdutyDeleteResponseUnion interface {
-	ImplementsAlertingDestinationPagerdutyDeleteResponseUnion()
+type DestinationPagerdutyDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    DestinationPagerdutyDeleteResponseSuccess    `json:"success,required"`
+	ResultInfo DestinationPagerdutyDeleteResponseResultInfo `json:"result_info"`
+	JSON       destinationPagerdutyDeleteResponseJSON       `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DestinationPagerdutyDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DestinationPagerdutyDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// destinationPagerdutyDeleteResponseJSON contains the JSON metadata for the struct
+// [DestinationPagerdutyDeleteResponse]
+type destinationPagerdutyDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-type DestinationPagerdutyDeleteResponseArray []interface{}
+func (r *DestinationPagerdutyDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r DestinationPagerdutyDeleteResponseArray) ImplementsAlertingDestinationPagerdutyDeleteResponseUnion() {
+func (r destinationPagerdutyDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DestinationPagerdutyDeleteResponseSuccess bool
+
+const (
+	DestinationPagerdutyDeleteResponseSuccessTrue DestinationPagerdutyDeleteResponseSuccess = true
+)
+
+func (r DestinationPagerdutyDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case DestinationPagerdutyDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DestinationPagerdutyDeleteResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                          `json:"total_count"`
+	JSON       destinationPagerdutyDeleteResponseResultInfoJSON `json:"-"`
+}
+
+// destinationPagerdutyDeleteResponseResultInfoJSON contains the JSON metadata for
+// the struct [DestinationPagerdutyDeleteResponseResultInfo]
+type destinationPagerdutyDeleteResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DestinationPagerdutyDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r destinationPagerdutyDeleteResponseResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type DestinationPagerdutyLinkResponse struct {
@@ -187,21 +228,14 @@ type DestinationPagerdutyNewParams struct {
 }
 
 type DestinationPagerdutyNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   DestinationPagerdutyNewResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success DestinationPagerdutyNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    destinationPagerdutyNewResponseEnvelopeJSON    `json:"-"`
+	Result DestinationPagerdutyNewResponse             `json:"result"`
+	JSON   destinationPagerdutyNewResponseEnvelopeJSON `json:"-"`
 }
 
 // destinationPagerdutyNewResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationPagerdutyNewResponseEnvelope]
 type destinationPagerdutyNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -214,100 +248,9 @@ func (r destinationPagerdutyNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type DestinationPagerdutyNewResponseEnvelopeSuccess bool
-
-const (
-	DestinationPagerdutyNewResponseEnvelopeSuccessTrue DestinationPagerdutyNewResponseEnvelopeSuccess = true
-)
-
-func (r DestinationPagerdutyNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DestinationPagerdutyNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type DestinationPagerdutyDeleteParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DestinationPagerdutyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   DestinationPagerdutyDeleteResponseUnion `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    DestinationPagerdutyDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DestinationPagerdutyDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       destinationPagerdutyDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// destinationPagerdutyDeleteResponseEnvelopeJSON contains the JSON metadata for
-// the struct [DestinationPagerdutyDeleteResponseEnvelope]
-type destinationPagerdutyDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DestinationPagerdutyDeleteResponseEnvelopeSuccess bool
-
-const (
-	DestinationPagerdutyDeleteResponseEnvelopeSuccessTrue DestinationPagerdutyDeleteResponseEnvelopeSuccess = true
-)
-
-func (r DestinationPagerdutyDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DestinationPagerdutyDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DestinationPagerdutyDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                  `json:"total_count"`
-	JSON       destinationPagerdutyDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// destinationPagerdutyDeleteResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [DestinationPagerdutyDeleteResponseEnvelopeResultInfo]
-type destinationPagerdutyDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationPagerdutyDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationPagerdutyDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DestinationPagerdutyGetParams struct {
@@ -318,9 +261,9 @@ type DestinationPagerdutyGetParams struct {
 type DestinationPagerdutyGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Pagerduty           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []Pagerduty                                       `json:"result"`
 	ResultInfo DestinationPagerdutyGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       destinationPagerdutyGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -330,8 +273,8 @@ type DestinationPagerdutyGetResponseEnvelope struct {
 type destinationPagerdutyGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -397,21 +340,14 @@ type DestinationPagerdutyLinkParams struct {
 }
 
 type DestinationPagerdutyLinkResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   DestinationPagerdutyLinkResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success DestinationPagerdutyLinkResponseEnvelopeSuccess `json:"success,required"`
-	JSON    destinationPagerdutyLinkResponseEnvelopeJSON    `json:"-"`
+	Result DestinationPagerdutyLinkResponse             `json:"result"`
+	JSON   destinationPagerdutyLinkResponseEnvelopeJSON `json:"-"`
 }
 
 // destinationPagerdutyLinkResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationPagerdutyLinkResponseEnvelope]
 type destinationPagerdutyLinkResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -422,19 +358,4 @@ func (r *DestinationPagerdutyLinkResponseEnvelope) UnmarshalJSON(data []byte) (e
 
 func (r destinationPagerdutyLinkResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type DestinationPagerdutyLinkResponseEnvelopeSuccess bool
-
-const (
-	DestinationPagerdutyLinkResponseEnvelopeSuccessTrue DestinationPagerdutyLinkResponseEnvelopeSuccess = true
-)
-
-func (r DestinationPagerdutyLinkResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DestinationPagerdutyLinkResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
