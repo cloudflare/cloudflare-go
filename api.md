@@ -1994,17 +1994,15 @@ Methods:
 
 ### Retention
 
-#### Flag
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionFlagNewResponse">ControlRetentionFlagNewResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionFlagGetResponse">ControlRetentionFlagGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewResponse">ControlRetentionNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionGetResponse">ControlRetentionGetResponse</a>
 
 Methods:
 
-- <code title="post /zones/{zone_identifier}/logs/control/retention/flag">client.Logs.Control.Retention.Flag.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionFlagService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionFlagNewParams">ControlRetentionFlagNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionFlagNewResponse">ControlRetentionFlagNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_identifier}/logs/control/retention/flag">client.Logs.Control.Retention.Flag.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionFlagService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionFlagGetResponse">ControlRetentionFlagGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /zones/{zone_identifier}/logs/control/retention/flag">client.Logs.Control.Retention.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewParams">ControlRetentionNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewResponse">ControlRetentionNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_identifier}/logs/control/retention/flag">client.Logs.Control.Retention.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionGetResponse">ControlRetentionGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Cmb
 
