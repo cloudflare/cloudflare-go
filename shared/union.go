@@ -13,7 +13,6 @@ func (UnionString) ImplementsMembershipsMembershipUpdateResponseUnion()         
 func (UnionString) ImplementsMembershipsMembershipGetResponseUnion()                   {}
 func (UnionString) ImplementsUserUserEditResponseUnion()                               {}
 func (UnionString) ImplementsUserUserGetResponseUnion()                                {}
-func (UnionString) ImplementsUserAuditLogListResponse()                                {}
 func (UnionString) ImplementsUserBillingProfileGetResponseUnion()                      {}
 func (UnionString) ImplementsUserInviteEditResponseUnion()                             {}
 func (UnionString) ImplementsUserInviteGetResponseUnion()                              {}
@@ -87,7 +86,6 @@ func (UnionString) ImplementsSpectrumOriginPortUnion()                          
 func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()                      {}
 func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()                     {}
 func (UnionString) ImplementsSpectrumAppGetResponseUnion()                                       {}
-func (UnionString) ImplementsAuditLogsAuditLogListResponse()                                     {}
 func (UnionString) ImplementsBillingProfileGetResponseUnion()                                    {}
 func (UnionString) ImplementsImagesImageVariantsUnion()                                          {}
 func (UnionString) ImplementsImagesV1DeleteResponseUnion()                                       {}
@@ -115,13 +113,8 @@ func (UnionString) ImplementsStreamWebhookGetResponseUnion()                    
 func (UnionString) ImplementsStreamDownloadNewResponseUnion()                                    {}
 func (UnionString) ImplementsStreamDownloadDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsStreamDownloadGetResponseUnion()                                    {}
-func (UnionString) ImplementsAlertingAvailableAlertListResponseUnion()                           {}
-func (UnionString) ImplementsAlertingDestinationEligibleGetResponseUnion()                       {}
-func (UnionString) ImplementsAlertingDestinationPagerdutyDeleteResponseUnion()                   {}
-func (UnionString) ImplementsAlertingDestinationWebhookDeleteResponseUnion()                     {}
 func (UnionString) ImplementsAlertingMechanismItemIDUnionParam()                                 {}
 func (UnionString) ImplementsAlertingMechanismItemIDUnion()                                      {}
-func (UnionString) ImplementsAlertingPolicyDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsD1DatabaseDeleteResponseUnion()                                     {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}
 func (UnionString) ImplementsZeroTrustDeviceGetResponseUnion()                                   {}
