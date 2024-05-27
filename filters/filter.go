@@ -37,6 +37,11 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 }
 
 // Creates one or more filters.
+//
+// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterNewResponseEnvelope
@@ -50,6 +55,11 @@ func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body Fil
 }
 
 // Updates an existing filter.
+//
+// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterUpdateResponseEnvelope
@@ -64,6 +74,11 @@ func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
+//
+// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallFilter], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -83,11 +98,21 @@ func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query F
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
+//
+// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallFilter] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing filter.
+//
+// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
@@ -101,6 +126,11 @@ func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a filter.
+//
+// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterGetResponseEnvelope
