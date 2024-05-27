@@ -179,8 +179,8 @@ type FirewallRule struct {
 	// The priority of the rule. Optional value used to define the processing order. A
 	// lower number indicates a higher priority. If not provided, rules with a defined
 	// priority will be processed before rules without a priority.
-	Priority float64    `json:"priority"`
-	Products []Products `json:"products"`
+	Priority float64   `json:"priority"`
+	Products []Product `json:"products"`
 	// A short reference tag. Allows you to select related firewall rules.
 	Ref  string           `json:"ref"`
 	JSON firewallRuleJSON `json:"-"`
@@ -276,21 +276,21 @@ func init() {
 }
 
 // A list of products to bypass for a request when using the `bypass` action.
-type Products string
+type Product string
 
 const (
-	ProductsZoneLockdown  Products = "zoneLockdown"
-	ProductsUABlock       Products = "uaBlock"
-	ProductsBic           Products = "bic"
-	ProductsHot           Products = "hot"
-	ProductsSecurityLevel Products = "securityLevel"
-	ProductsRateLimit     Products = "rateLimit"
-	ProductsWAF           Products = "waf"
+	ProductZoneLockdown  Product = "zoneLockdown"
+	ProductUABlock       Product = "uaBlock"
+	ProductBic           Product = "bic"
+	ProductHot           Product = "hot"
+	ProductSecurityLevel Product = "securityLevel"
+	ProductRateLimit     Product = "rateLimit"
+	ProductWAF           Product = "waf"
 )
 
-func (r Products) IsKnown() bool {
+func (r Product) IsKnown() bool {
 	switch r {
-	case ProductsZoneLockdown, ProductsUABlock, ProductsBic, ProductsHot, ProductsSecurityLevel, ProductsRateLimit, ProductsWAF:
+	case ProductZoneLockdown, ProductUABlock, ProductBic, ProductHot, ProductSecurityLevel, ProductRateLimit, ProductWAF:
 		return true
 	}
 	return false
