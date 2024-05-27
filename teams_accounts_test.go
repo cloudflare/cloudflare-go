@@ -363,7 +363,7 @@ func TestTeamsAccountGetConnectivityConfiguration(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual, TeamsConnectivitySettings{
 			ICMPProxyEnabled:   BoolPtr(false),
-			OfframpWarpEnabled: BoolPtr(false),
+			OfframpWARPEnabled: BoolPtr(false),
 		})
 	}
 }
@@ -387,13 +387,13 @@ func TestTeamsAccountUpdateConnectivityConfiguration(t *testing.T) {
 
 	actual, err := client.TeamsAccountConnectivityUpdateConfiguration(context.Background(), testAccountID, TeamsConnectivitySettings{
 		ICMPProxyEnabled:   BoolPtr(true),
-		OfframpWarpEnabled: BoolPtr(true),
+		OfframpWARPEnabled: BoolPtr(true),
 	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual, TeamsConnectivitySettings{
 			ICMPProxyEnabled:   BoolPtr(true),
-			OfframpWarpEnabled: BoolPtr(true),
+			OfframpWARPEnabled: BoolPtr(true),
 		})
 	}
 }

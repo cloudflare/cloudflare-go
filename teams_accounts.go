@@ -149,7 +149,7 @@ type TeamsLoggingSettingsResponse struct {
 
 type TeamsConnectivitySettings struct {
 	ICMPProxyEnabled   *bool `json:"icmp_proxy_enabled"`
-	OfframpWarpEnabled *bool `json:"offramp_warp_enabled"`
+	OfframpWARPEnabled *bool `json:"offramp_warp_enabled"`
 }
 
 type TeamsAccountConnectivitySettingsResponse struct {
