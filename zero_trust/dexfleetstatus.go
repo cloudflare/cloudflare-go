@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -41,6 +42,10 @@ func NewDEXFleetStatusService(opts ...option.RequestOption) (r *DEXFleetStatusSe
 func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusLiveParams, opts ...option.RequestOption) (res *DEXFleetStatusLiveResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXFleetStatusLiveResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/live", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +59,10 @@ func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusL
 func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetStatusOverTimeParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/over-time", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, nil, opts...)
 	return

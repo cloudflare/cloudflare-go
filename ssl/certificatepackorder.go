@@ -4,6 +4,7 @@ package ssl
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewCertificatePackOrderService(opts ...option.RequestOption) (r *Certificat
 func (r *CertificatePackOrderService) New(ctx context.Context, params CertificatePackOrderNewParams, opts ...option.RequestOption) (res *CertificatePackOrderNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackOrderNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/order", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

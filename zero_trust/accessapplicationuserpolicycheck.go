@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -39,10 +40,19 @@ func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appI
 	var env AccessApplicationUserPolicyCheckListResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}

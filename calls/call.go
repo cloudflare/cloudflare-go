@@ -4,6 +4,7 @@ package calls
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -42,6 +43,10 @@ func NewCallService(opts ...option.RequestOption) (r *CallService) {
 func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...option.RequestOption) (res *CallsAppWithSecret, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -55,6 +60,14 @@ func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...opt
 func (r *CallService) Update(ctx context.Context, appID string, params CallUpdateParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -91,6 +104,14 @@ func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, 
 func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", body.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -104,6 +125,14 @@ func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteP
 func (r *CallService) Get(ctx context.Context, appID string, query CallGetParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", query.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package queues
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,6 +40,14 @@ func NewConsumerService(opts ...option.RequestOption) (r *ConsumerService) {
 func (r *ConsumerService) New(ctx context.Context, queueID string, params ConsumerNewParams, opts ...option.RequestOption) (res *ConsumerNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +61,18 @@ func (r *ConsumerService) New(ctx context.Context, queueID string, params Consum
 func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID string, params ConsumerUpdateParams, opts ...option.RequestOption) (res *ConsumerUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	if consumerID == "" {
+		err = errors.New("missing required consumer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", params.AccountID, queueID, consumerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -65,6 +86,18 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	if consumerID == "" {
+		err = errors.New("missing required consumer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", body.AccountID, queueID, consumerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -78,6 +111,14 @@ func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID
 func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *[]Consumer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers", query.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

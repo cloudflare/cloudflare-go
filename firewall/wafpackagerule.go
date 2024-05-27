@@ -4,6 +4,7 @@ package firewall
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -74,6 +75,18 @@ func (r *WAFPackageRuleService) ListAutoPaging(ctx context.Context, packageID st
 func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, ruleID string, params WAFPackageRuleEditParams, opts ...option.RequestOption) (res *WAFPackageRuleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageRuleEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if packageID == "" {
+		err = errors.New("missing required package_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", params.ZoneID, packageID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -90,6 +103,18 @@ func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, rule
 func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *WAFPackageRuleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageRuleGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if packageID == "" {
+		err = errors.New("missing required package_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", query.ZoneID, packageID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

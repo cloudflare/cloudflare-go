@@ -4,6 +4,7 @@ package page_shield
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -61,6 +62,14 @@ func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListPar
 // Fetches a script detected by Page Shield by script ID.
 func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGetParams, opts ...option.RequestOption) (res *ScriptGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if scriptID == "" {
+		err = errors.New("missing required script_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield/scripts/%s", query.ZoneID, scriptID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

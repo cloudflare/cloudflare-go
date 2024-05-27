@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,10 @@ func NewDevicePolicyExcludeService(opts ...option.RequestOption) (r *DevicePolic
 func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePolicyExcludeUpdateParams, opts ...option.RequestOption) (res *[]SplitTunnelExclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/exclude", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -75,6 +80,14 @@ func (r *DevicePolicyExcludeService) ListAutoPaging(ctx context.Context, query D
 func (r *DevicePolicyExcludeService) Get(ctx context.Context, policyID string, query DevicePolicyExcludeGetParams, opts ...option.RequestOption) (res *[]SplitTunnelExclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/exclude", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

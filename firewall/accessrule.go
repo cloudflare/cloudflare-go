@@ -4,6 +4,7 @@ package firewall
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -48,10 +49,19 @@ func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams,
 	var env AccessRuleNewResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
@@ -73,10 +83,19 @@ func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
@@ -108,10 +127,19 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 	var env AccessRuleDeleteResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = body.AccountID
-	} else {
+	}
+	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
@@ -132,10 +160,19 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, pa
 	var env AccessRuleEditResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
@@ -154,10 +191,19 @@ func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, que
 	var env AccessRuleGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}

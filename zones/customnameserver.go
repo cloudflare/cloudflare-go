@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -41,6 +42,10 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 func (r *CustomNameserverService) Update(ctx context.Context, params CustomNameserverUpdateParams, opts ...option.RequestOption) (res *[]CustomNameserverUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_ns", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +59,10 @@ func (r *CustomNameserverService) Update(ctx context.Context, params CustomNames
 func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *[]CustomNameserverGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_ns", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

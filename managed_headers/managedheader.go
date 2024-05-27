@@ -4,6 +4,7 @@ package managed_headers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -35,6 +36,10 @@ func NewManagedHeaderService(opts ...option.RequestOption) (r *ManagedHeaderServ
 // Fetches a list of all Managed Transforms.
 func (r *ManagedHeaderService) List(ctx context.Context, query ManagedHeaderListParams, opts ...option.RequestOption) (res *ManagedHeaderListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/managed_headers", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
@@ -43,6 +48,10 @@ func (r *ManagedHeaderService) List(ctx context.Context, query ManagedHeaderList
 // Updates the status of one or more Managed Transforms.
 func (r *ManagedHeaderService) Edit(ctx context.Context, params ManagedHeaderEditParams, opts ...option.RequestOption) (res *ManagedHeaderEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/managed_headers", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
 	return

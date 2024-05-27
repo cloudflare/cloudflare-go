@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -39,6 +40,10 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 func (r *SearchService) Get(ctx context.Context, params SearchGetParams, opts ...option.RequestOption) (res *[]SearchGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SearchGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/search", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

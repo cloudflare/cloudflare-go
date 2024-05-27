@@ -4,6 +4,7 @@ package warp_connector
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -43,6 +44,10 @@ func NewWARPConnectorService(opts ...option.RequestOption) (r *WARPConnectorServ
 func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewParams, opts ...option.RequestOption) (res *WARPConnectorNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/warp_connector", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -79,6 +84,14 @@ func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPCo
 func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, body WARPConnectorDeleteParams, opts ...option.RequestOption) (res *WARPConnectorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", body.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -92,6 +105,14 @@ func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, body
 func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params WARPConnectorEditParams, opts ...option.RequestOption) (res *WARPConnectorEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -105,6 +126,14 @@ func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params
 func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query WARPConnectorGetParams, opts ...option.RequestOption) (res *WARPConnectorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -119,6 +148,14 @@ func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query W
 func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query WARPConnectorTokenParams, opts ...option.RequestOption) (res *WARPConnectorTokenResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorTokenResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s/token", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

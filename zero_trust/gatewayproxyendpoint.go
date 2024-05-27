@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -41,6 +42,10 @@ func NewGatewayProxyEndpointService(opts ...option.RequestOption) (r *GatewayPro
 func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayProxyEndpointNewParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -77,6 +82,14 @@ func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query 
 func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, body GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if proxyEndpointID == "" {
+		err = errors.New("missing required proxy_endpoint_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", body.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -90,6 +103,14 @@ func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointI
 func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointEditParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if proxyEndpointID == "" {
+		err = errors.New("missing required proxy_endpoint_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", params.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -103,6 +124,14 @@ func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID 
 func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID string, query GatewayProxyEndpointGetParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if proxyEndpointID == "" {
+		err = errors.New("missing required proxy_endpoint_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", query.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

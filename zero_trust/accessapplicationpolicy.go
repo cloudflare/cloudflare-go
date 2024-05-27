@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -44,12 +45,25 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, uuid string, p
 	var env AccessApplicationPolicyNewResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies", accountOrZone, accountOrZoneID, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
@@ -67,12 +81,29 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 strin
 	var env AccessApplicationPolicyUpdateResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
+	}
+	if uuid1 == "" {
+		err = errors.New("missing required uuid1 parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, uuid1, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
@@ -91,10 +122,19 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
@@ -124,12 +164,29 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, uuid1 strin
 	var env AccessApplicationPolicyDeleteResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = body.AccountID
-	} else {
+	}
+	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
+	}
+	if uuid1 == "" {
+		err = errors.New("missing required uuid1 parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, uuid1, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
@@ -147,12 +204,29 @@ func (r *AccessApplicationPolicyService) Get(ctx context.Context, uuid1 string, 
 	var env AccessApplicationPolicyGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
+	}
+	if uuid1 == "" {
+		err = errors.New("missing required uuid1 parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, uuid1, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)

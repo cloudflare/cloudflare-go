@@ -4,6 +4,7 @@ package rulesets
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -43,10 +44,19 @@ func (r *PhaseService) Update(ctx context.Context, rulesetPhase Phase, params Ph
 	var env PhaseUpdateResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
@@ -66,10 +76,19 @@ func (r *PhaseService) Get(ctx context.Context, rulesetPhase Phase, query PhaseG
 	var env PhaseGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}

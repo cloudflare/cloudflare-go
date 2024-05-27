@@ -4,6 +4,7 @@ package secondary_dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,10 @@ func NewACLService(opts ...option.RequestOption) (r *ACLService) {
 func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +56,14 @@ func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...optio
 func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if aclID == "" {
+		err = errors.New("missing required acl_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", params.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -87,6 +100,14 @@ func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, op
 func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if aclID == "" {
+		err = errors.New("missing required acl_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", body.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -100,6 +121,14 @@ func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeletePar
 func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if aclID == "" {
+		err = errors.New("missing required acl_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", query.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

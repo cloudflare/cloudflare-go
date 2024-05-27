@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -69,6 +70,18 @@ func (r *PrefixBGPPrefixService) ListAutoPaging(ctx context.Context, prefixID st
 func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpPrefixID string, params PrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPPrefixEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
+	if bgpPrefixID == "" {
+		err = errors.New("missing required bgp_prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", params.AccountID, prefixID, bgpPrefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -82,6 +95,18 @@ func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpP
 func (r *PrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPrefixID string, query PrefixBGPPrefixGetParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPPrefixGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
+	if bgpPrefixID == "" {
+		err = errors.New("missing required bgp_prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", query.AccountID, prefixID, bgpPrefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

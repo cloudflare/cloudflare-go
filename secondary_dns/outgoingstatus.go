@@ -4,6 +4,7 @@ package secondary_dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewOutgoingStatusService(opts ...option.RequestOption) (r *OutgoingStatusSe
 func (r *OutgoingStatusService) Get(ctx context.Context, query OutgoingStatusGetParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingStatusGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/status", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

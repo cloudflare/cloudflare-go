@@ -5,6 +5,7 @@ package workers_for_platforms
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -57,6 +58,18 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", params.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -71,6 +84,18 @@ func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNam
 func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", params.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
 	return
@@ -80,6 +105,18 @@ func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNam
 func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptGetParams, opts ...option.RequestOption) (res *Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", query.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

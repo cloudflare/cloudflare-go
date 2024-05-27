@@ -4,6 +4,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -65,6 +66,10 @@ func (r *OrganizationService) ListAutoPaging(ctx context.Context, query Organiza
 // Removes association to an organization.
 func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if organizationID == "" {
+		err = errors.New("missing required organization_id parameter")
+		return
+	}
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -74,6 +79,10 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationGetResponseEnvelope
+	if organizationID == "" {
+		err = errors.New("missing required organization_id parameter")
+		return
+	}
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

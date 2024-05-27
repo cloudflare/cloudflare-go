@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,10 @@ func NewSettingHTTP3Service(opts ...option.RequestOption) (r *SettingHTTP3Servic
 func (r *SettingHTTP3Service) Edit(ctx context.Context, params SettingHTTP3EditParams, opts ...option.RequestOption) (res *HTTP3, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHTTP3EditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/http3", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +56,10 @@ func (r *SettingHTTP3Service) Edit(ctx context.Context, params SettingHTTP3EditP
 func (r *SettingHTTP3Service) Get(ctx context.Context, query SettingHTTP3GetParams, opts ...option.RequestOption) (res *HTTP3, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHTTP3GetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/http3", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package logs
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -35,6 +36,10 @@ func NewReceivedFieldService(opts ...option.RequestOption) (r *ReceivedFieldServ
 // where keys are field names, and values are descriptions.
 func (r *ReceivedFieldService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ReceivedFieldGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/logs/received/fields", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

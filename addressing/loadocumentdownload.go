@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -34,6 +35,14 @@ func NewLOADocumentDownloadService(opts ...option.RequestOption) (r *LOADocument
 // Download specified LOA document under the account.
 func (r *LOADocumentDownloadService) Get(ctx context.Context, loaDocumentID string, query LOADocumentDownloadGetParams, opts ...option.RequestOption) (res *LOADocumentDownloadGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if loaDocumentID == "" {
+		err = errors.New("missing required loa_document_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/loa_documents/%s/download", query.AccountID, loaDocumentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

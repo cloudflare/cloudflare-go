@@ -4,6 +4,7 @@ package rulesets
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -45,10 +46,19 @@ func (r *VersionService) List(ctx context.Context, rulesetID string, query Versi
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
@@ -76,12 +86,29 @@ func (r *VersionService) Delete(ctx context.Context, rulesetID string, rulesetVe
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = body.AccountID
-	} else {
+	}
+	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
+	}
+	if rulesetVersion == "" {
+		err = errors.New("missing required ruleset_version parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
@@ -94,12 +121,29 @@ func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersi
 	var env VersionGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
+	}
+	if rulesetVersion == "" {
+		err = errors.New("missing required ruleset_version parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)

@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -43,6 +44,10 @@ func NewNetworkVirtualNetworkService(opts ...option.RequestOption) (r *NetworkVi
 func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVirtualNetworkNewParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -79,6 +84,14 @@ func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, param
 func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, body NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if virtualNetworkID == "" {
+		err = errors.New("missing required virtual_network_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", body.AccountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -92,6 +105,14 @@ func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetwor
 func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkEditParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if virtualNetworkID == "" {
+		err = errors.New("missing required virtual_network_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", params.AccountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {

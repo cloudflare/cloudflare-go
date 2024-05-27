@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,14 @@ func NewSiteWANService(opts ...option.RequestOption) (r *SiteWANService) {
 func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANNewParams, opts ...option.RequestOption) (res *[]WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +60,18 @@ func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANN
 func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string, params SiteWANUpdateParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if wanID == "" {
+		err = errors.New("missing required wan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -87,6 +108,18 @@ func (r *SiteWANService) ListAutoPaging(ctx context.Context, siteID string, quer
 func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string, body SiteWANDeleteParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if wanID == "" {
+		err = errors.New("missing required wan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", body.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -100,6 +133,18 @@ func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string
 func (r *SiteWANService) Edit(ctx context.Context, siteID string, wanID string, params SiteWANEditParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if wanID == "" {
+		err = errors.New("missing required wan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -113,6 +158,18 @@ func (r *SiteWANService) Edit(ctx context.Context, siteID string, wanID string, 
 func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, query SiteWANGetParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if wanID == "" {
+		err = errors.New("missing required wan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", query.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

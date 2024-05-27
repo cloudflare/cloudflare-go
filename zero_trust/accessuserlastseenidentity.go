@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -36,6 +37,14 @@ func NewAccessUserLastSeenIdentityService(opts ...option.RequestOption) (r *Acce
 func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *Identity, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessUserLastSeenIdentityGetResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/users/%s/last_seen_identity", identifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package spectrum
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -42,6 +43,10 @@ func NewAnalyticsEventSummaryService(opts ...option.RequestOption) (r *Analytics
 func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, query AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventSummaryGetResponseEnvelope
+	if zone == "" {
+		err = errors.New("missing required zone parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/summary", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package origin_post_quantum_encryption
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -44,6 +45,10 @@ func NewOriginPostQuantumEncryptionService(opts ...option.RequestOption) (r *Ori
 func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params OriginPostQuantumEncryptionUpdateParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginPostQuantumEncryptionUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -62,6 +67,10 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params 
 func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query OriginPostQuantumEncryptionGetParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginPostQuantumEncryptionGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

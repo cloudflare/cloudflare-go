@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -80,6 +81,14 @@ func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListPara
 func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if deviceID == "" {
+		err = errors.New("missing required device_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/%s", query.AccountID, deviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

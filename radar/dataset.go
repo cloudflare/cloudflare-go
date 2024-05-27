@@ -4,6 +4,7 @@ package radar
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -66,6 +67,10 @@ func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadPar
 func (r *DatasetService) Get(ctx context.Context, alias string, query DatasetGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
+	if alias == "" {
+		err = errors.New("missing required alias parameter")
+		return
+	}
 	path := fmt.Sprintf("radar/datasets/%s", alias)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return

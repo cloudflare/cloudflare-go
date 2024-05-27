@@ -4,6 +4,7 @@ package origin_tls_client_auth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -40,6 +41,10 @@ func NewHostnameCertificateService(opts ...option.RequestOption) (r *HostnameCer
 func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCertificateNewParams, opts ...option.RequestOption) (res *HostnameCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -76,6 +81,14 @@ func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query H
 func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, body HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *HostnameCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", body.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -89,6 +102,14 @@ func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID s
 func (r *HostnameCertificateService) Get(ctx context.Context, certificateID string, query HostnameCertificateGetParams, opts ...option.RequestOption) (res *HostnameCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", query.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

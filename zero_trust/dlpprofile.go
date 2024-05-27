@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -68,6 +69,14 @@ func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfile
 func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *DLPProfileGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if profileID == "" {
+		err = errors.New("missing required profile_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/%s", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

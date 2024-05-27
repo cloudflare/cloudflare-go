@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -40,6 +41,10 @@ func NewAccessKeyService(opts ...option.RequestOption) (r *AccessKeyService) {
 func (r *AccessKeyService) Update(ctx context.Context, identifier string, body AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyUpdateResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -53,6 +58,10 @@ func (r *AccessKeyService) Update(ctx context.Context, identifier string, body A
 func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyGetResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -66,6 +75,10 @@ func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...o
 func (r *AccessKeyService) Rotate(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyRotateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyRotateResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/keys/rotate", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {

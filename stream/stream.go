@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -70,6 +71,10 @@ func NewStreamService(opts ...option.RequestOption) (r *StreamService) {
 func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
 	return
@@ -104,6 +109,14 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 func (r *StreamService) Delete(ctx context.Context, identifier string, body StreamDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
@@ -113,6 +126,14 @@ func (r *StreamService) Delete(ctx context.Context, identifier string, body Stre
 func (r *StreamService) Get(ctx context.Context, identifier string, query StreamGetParams, opts ...option.RequestOption) (res *Video, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s", query.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

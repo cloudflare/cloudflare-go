@@ -4,6 +4,7 @@ package custom_nameservers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserverNewParams, opts ...option.RequestOption) (res *CustomNameserver, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/custom_ns", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +55,14 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *[]CustomNameserverDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if customNSID == "" {
+		err = errors.New("missing required custom_ns_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNSID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -63,6 +76,10 @@ func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string,
 func (r *CustomNameserverService) Availabilty(ctx context.Context, query CustomNameserverAvailabiltyParams, opts ...option.RequestOption) (res *[]string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverAvailabiltyResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/custom_ns/availability", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -76,6 +93,10 @@ func (r *CustomNameserverService) Availabilty(ctx context.Context, query CustomN
 func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *[]CustomNameserver, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/custom_ns", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

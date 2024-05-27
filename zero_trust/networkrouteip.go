@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -39,6 +40,14 @@ func NewNetworkRouteIPService(opts ...option.RequestOption) (r *NetworkRouteIPSe
 func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params NetworkRouteIPGetParams, opts ...option.RequestOption) (res *Teamnet, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteIPGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ip == "" {
+		err = errors.New("missing required ip parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/ip/%s", params.AccountID, ip)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

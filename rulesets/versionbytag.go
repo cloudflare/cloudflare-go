@@ -4,6 +4,7 @@ package rulesets
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,6 +40,22 @@ func NewVersionByTagService(opts ...option.RequestOption) (r *VersionByTagServic
 func (r *VersionByTagService) Get(ctx context.Context, rulesetID string, rulesetVersion string, ruleTag string, query VersionByTagGetParams, opts ...option.RequestOption) (res *VersionByTagGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VersionByTagGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
+	}
+	if rulesetVersion == "" {
+		err = errors.New("missing required ruleset_version parameter")
+		return
+	}
+	if ruleTag == "" {
+		err = errors.New("missing required rule_tag parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rulesets/%s/versions/%s/by_tag/%s", query.AccountID, rulesetID, rulesetVersion, ruleTag)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

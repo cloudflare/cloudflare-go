@@ -4,6 +4,7 @@ package alerting
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewAvailableAlertService(opts ...option.RequestOption) (r *AvailableAlertSe
 func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *AvailableAlertListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailableAlertListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/available_alerts", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package origin_tls_client_auth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -39,6 +40,10 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams, opts ...option.RequestOption) (res *SettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,10 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

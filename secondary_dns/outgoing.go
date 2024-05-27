@@ -4,6 +4,7 @@ package secondary_dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -39,6 +40,10 @@ func NewOutgoingService(opts ...option.RequestOption) (r *OutgoingService) {
 func (r *OutgoingService) New(ctx context.Context, params OutgoingNewParams, opts ...option.RequestOption) (res *OutgoingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +57,10 @@ func (r *OutgoingService) New(ctx context.Context, params OutgoingNewParams, opt
 func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParams, opts ...option.RequestOption) (res *OutgoingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -65,6 +74,10 @@ func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParam
 func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -79,6 +92,10 @@ func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams,
 func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisableParams, opts ...option.RequestOption) (res *DisableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/disable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -92,6 +109,10 @@ func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisablePar
 func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/enable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -105,6 +126,10 @@ func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParam
 func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/force_notify", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -118,6 +143,10 @@ func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceN
 func (r *OutgoingService) Get(ctx context.Context, query OutgoingGetParams, opts ...option.RequestOption) (res *OutgoingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

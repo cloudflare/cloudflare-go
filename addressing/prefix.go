@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -43,6 +44,10 @@ func NewPrefixService(opts ...option.RequestOption) (r *PrefixService) {
 func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -79,6 +84,14 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 func (r *PrefixService) Delete(ctx context.Context, prefixID string, body PrefixDeleteParams, opts ...option.RequestOption) (res *[]PrefixDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", body.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -92,6 +105,14 @@ func (r *PrefixService) Delete(ctx context.Context, prefixID string, body Prefix
 func (r *PrefixService) Edit(ctx context.Context, prefixID string, params PrefixEditParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -105,6 +126,14 @@ func (r *PrefixService) Edit(ctx context.Context, prefixID string, params Prefix
 func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGetParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", query.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

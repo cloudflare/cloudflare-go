@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,14 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *DeviceOverrideCodeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceOverrideCodeListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if deviceID == "" {
+		err = errors.New("missing required device_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/%s/override_codes", query.AccountID, deviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

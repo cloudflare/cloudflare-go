@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,14 @@ func NewPoolReferenceService(opts ...option.RequestOption) (r *PoolReferenceServ
 func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query PoolReferenceGetParams, opts ...option.RequestOption) (res *[]PoolReferenceGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolReferenceGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if poolID == "" {
+		err = errors.New("missing required pool_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/references", query.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

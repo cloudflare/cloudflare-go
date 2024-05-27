@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -43,6 +44,10 @@ func NewIndicatorFeedService(opts ...option.RequestOption) (r *IndicatorFeedServ
 func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewParams, opts ...option.RequestOption) (res *IndicatorFeedNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -56,6 +61,10 @@ func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewP
 func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params IndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", params.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -92,6 +101,10 @@ func (r *IndicatorFeedService) ListAutoPaging(ctx context.Context, query Indicat
 func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query IndicatorFeedDataParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/data", query.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
@@ -101,6 +114,10 @@ func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query Ind
 func (r *IndicatorFeedService) Get(ctx context.Context, feedID int64, query IndicatorFeedGetParams, opts ...option.RequestOption) (res *IndicatorFeedGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", query.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package workers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,14 @@ func NewScriptScheduleService(opts ...option.RequestOption) (r *ScriptScheduleSe
 func (r *ScriptScheduleService) Update(ctx context.Context, scriptName string, params ScriptScheduleUpdateParams, opts ...option.RequestOption) (res *ScriptScheduleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptScheduleUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +59,14 @@ func (r *ScriptScheduleService) Update(ctx context.Context, scriptName string, p
 func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, query ScriptScheduleGetParams, opts ...option.RequestOption) (res *ScriptScheduleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptScheduleGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package spectrum
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -44,6 +45,10 @@ func NewAppService(opts ...option.RequestOption) (r *AppService) {
 func (r *AppService) New(ctx context.Context, zone string, body AppNewParams, opts ...option.RequestOption) (res *AppNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AppNewResponseEnvelope
+	if zone == "" {
+		err = errors.New("missing required zone parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/spectrum/apps", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -58,6 +63,14 @@ func (r *AppService) New(ctx context.Context, zone string, body AppNewParams, op
 func (r *AppService) Update(ctx context.Context, zone string, appID string, body AppUpdateParams, opts ...option.RequestOption) (res *AppUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AppUpdateResponseEnvelope
+	if zone == "" {
+		err = errors.New("missing required zone parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/spectrum/apps/%s", zone, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -94,6 +107,14 @@ func (r *AppService) ListAutoPaging(ctx context.Context, zone string, query AppL
 func (r *AppService) Delete(ctx context.Context, zone string, appID string, opts ...option.RequestOption) (res *AppDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AppDeleteResponseEnvelope
+	if zone == "" {
+		err = errors.New("missing required zone parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/spectrum/apps/%s", zone, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -107,6 +128,14 @@ func (r *AppService) Delete(ctx context.Context, zone string, appID string, opts
 func (r *AppService) Get(ctx context.Context, zone string, appID string, opts ...option.RequestOption) (res *AppGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AppGetResponseEnvelope
+	if zone == "" {
+		err = errors.New("missing required zone parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/spectrum/apps/%s", zone, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package memberships
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -43,6 +44,10 @@ func NewMembershipService(opts ...option.RequestOption) (r *MembershipService) {
 func (r *MembershipService) Update(ctx context.Context, membershipID string, body MembershipUpdateParams, opts ...option.RequestOption) (res *MembershipUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MembershipUpdateResponseEnvelope
+	if membershipID == "" {
+		err = errors.New("missing required membership_id parameter")
+		return
+	}
 	path := fmt.Sprintf("memberships/%s", membershipID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -79,6 +84,10 @@ func (r *MembershipService) ListAutoPaging(ctx context.Context, query Membership
 func (r *MembershipService) Delete(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *MembershipDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MembershipDeleteResponseEnvelope
+	if membershipID == "" {
+		err = errors.New("missing required membership_id parameter")
+		return
+	}
 	path := fmt.Sprintf("memberships/%s", membershipID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -92,6 +101,10 @@ func (r *MembershipService) Delete(ctx context.Context, membershipID string, opt
 func (r *MembershipService) Get(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *MembershipGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MembershipGetResponseEnvelope
+	if membershipID == "" {
+		err = errors.New("missing required membership_id parameter")
+		return
+	}
 	path := fmt.Sprintf("memberships/%s", membershipID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -40,6 +41,10 @@ func NewSettingMinifyService(opts ...option.RequestOption) (r *SettingMinifyServ
 func (r *SettingMinifyService) Edit(ctx context.Context, params SettingMinifyEditParams, opts ...option.RequestOption) (res *Minify, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinifyEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/minify", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -55,6 +60,10 @@ func (r *SettingMinifyService) Edit(ctx context.Context, params SettingMinifyEdi
 func (r *SettingMinifyService) Get(ctx context.Context, query SettingMinifyGetParams, opts ...option.RequestOption) (res *Minify, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinifyGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/minify", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

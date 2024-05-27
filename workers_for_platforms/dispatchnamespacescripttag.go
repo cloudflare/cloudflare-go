@@ -4,6 +4,7 @@ package workers_for_platforms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,18 @@ func NewDispatchNamespaceScriptTagService(opts ...option.RequestOption) (r *Disp
 func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptTagUpdateParams, opts ...option.RequestOption) (res *[]string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptTagUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags", params.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -74,6 +87,22 @@ func (r *DispatchNamespaceScriptTagService) ListAutoPaging(ctx context.Context, 
 func (r *DispatchNamespaceScriptTagService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, tag string, body DispatchNamespaceScriptTagDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptTagDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptTagDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
+	if tag == "" {
+		err = errors.New("missing required tag parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags/%s", body.AccountID, dispatchNamespace, scriptName, tag)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {

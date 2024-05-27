@@ -4,6 +4,7 @@ package page_shield
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -36,6 +37,10 @@ func NewPolicyService(opts ...option.RequestOption) (r *PolicyService) {
 // Create a Page Shield policy.
 func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *Policy, err error) {
 	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
@@ -44,6 +49,14 @@ func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ..
 // Update a Page Shield policy by ID.
 func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *Policy, err error) {
 	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", params.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
@@ -76,6 +89,14 @@ func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListPara
 func (r *PolicyService) Delete(ctx context.Context, policyID string, body PolicyDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", body.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
@@ -84,6 +105,14 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 // Fetches a Page Shield policy by ID.
 func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *Policy, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", query.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

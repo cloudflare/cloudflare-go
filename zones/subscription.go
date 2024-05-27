@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -40,6 +41,10 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionNewResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -76,6 +81,10 @@ func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentif
 func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionGetResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
