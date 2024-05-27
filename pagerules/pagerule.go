@@ -41,6 +41,11 @@ func NewPageruleService(opts ...option.RequestOption) (r *PageruleService) {
 }
 
 // Creates a new Page Rule.
+//
+// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
+// for full details.
 func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opts ...option.RequestOption) (res *PageruleNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleNewResponseEnvelope
@@ -55,6 +60,11 @@ func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opt
 
 // Replaces the configuration of an existing Page Rule. The configuration of the
 // updated Page Rule will exactly match the data passed in the API request.
+//
+// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
+// for full details.
 func (r *PageruleService) Update(ctx context.Context, pageruleID string, params PageruleUpdateParams, opts ...option.RequestOption) (res *PageruleUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleUpdateResponseEnvelope
@@ -68,6 +78,11 @@ func (r *PageruleService) Update(ctx context.Context, pageruleID string, params 
 }
 
 // Fetches Page Rules in a zone.
+//
+// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
+// for full details.
 func (r *PageruleService) List(ctx context.Context, params PageruleListParams, opts ...option.RequestOption) (res *[]PageRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleListResponseEnvelope
@@ -81,6 +96,11 @@ func (r *PageruleService) List(ctx context.Context, params PageruleListParams, o
 }
 
 // Deletes an existing Page Rule.
+//
+// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
+// for full details.
 func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleDeleteResponseEnvelope
@@ -94,6 +114,11 @@ func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body Pa
 }
 
 // Updates one or more fields of an existing Page Rule.
+//
+// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
+// for full details.
 func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params PageruleEditParams, opts ...option.RequestOption) (res *PageruleEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleEditResponseEnvelope
@@ -107,6 +132,11 @@ func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params Pa
 }
 
 // Fetches the details of a Page Rule.
+//
+// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
+// for full details.
 func (r *PageruleService) Get(ctx context.Context, pageruleID string, query PageruleGetParams, opts ...option.RequestOption) (res *PageruleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleGetResponseEnvelope

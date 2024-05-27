@@ -40,6 +40,11 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 
 // Creates a new rate limit for a zone. Refer to the object definition for a list
 // of required attributes.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body RateLimitNewParams, opts ...option.RequestOption) (res *RateLimitNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitNewResponseEnvelope
@@ -53,6 +58,11 @@ func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body 
 }
 
 // Fetches the rate limits for a zone.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RateLimit], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -71,11 +81,21 @@ func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, quer
 }
 
 // Fetches the rate limits for a zone.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RateLimit] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing rate limit.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitDeleteResponseEnvelope
@@ -89,6 +109,11 @@ func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id
 }
 
 // Updates an existing rate limit.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id string, body RateLimitEditParams, opts ...option.RequestOption) (res *RateLimitEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitEditResponseEnvelope
@@ -102,6 +127,11 @@ func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id s
 }
 
 // Fetches the details of a rate limit.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitGetResponseEnvelope

@@ -38,7 +38,7 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 
 // Creates one or more filters.
 //
-// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
@@ -56,7 +56,7 @@ func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body Fil
 
 // Updates an existing filter.
 //
-// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
@@ -75,7 +75,7 @@ func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id st
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
 //
-// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
@@ -99,7 +99,7 @@ func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query F
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
 //
-// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
@@ -109,7 +109,7 @@ func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier strin
 
 // Deletes an existing filter.
 //
-// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
@@ -127,7 +127,7 @@ func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches the details of a filter.
 //
-// Deprecated: Filters are being deprecated in favour of using the Ruleset Engine.
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
