@@ -41,6 +41,11 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 }
 
 // Create one or more firewall rules.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
@@ -54,6 +59,11 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 }
 
 // Updates an existing firewall rule.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id string, body RuleUpdateParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
@@ -68,6 +78,11 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id stri
 
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -87,11 +102,21 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query Rul
 
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallRule] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing firewall rule.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
@@ -105,6 +130,11 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id stri
 }
 
 // Updates the priority of an existing firewall rule.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body RuleEditParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
@@ -118,6 +148,11 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string
 }
 
 // Fetches the details of a firewall rule.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
