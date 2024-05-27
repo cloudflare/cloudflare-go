@@ -4294,6 +4294,20 @@ Methods:
 - <code title="delete /accounts/{account_id}/r2/buckets/{bucket_name}/sippy">client.R2.Sippy.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#SippyService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, bucketName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2">r2</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#SippyDeleteParams">SippyDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2">r2</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#SippyDeleteResponse">SippyDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/r2/buckets/{bucket_name}/sippy">client.R2.Sippy.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#SippyService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, bucketName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2">r2</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#SippyGetParams">SippyGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2">r2</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#Sippy">Sippy</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## TemporaryCredentials
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2">r2</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#TemporaryCredentialParam">TemporaryCredentialParam</a>
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2">r2</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#TemporaryCredentialNewResponse">TemporaryCredentialNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/r2/temp-access-credentials">client.R2.TemporaryCredentials.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#TemporaryCredentialService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2">r2</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#TemporaryCredentialNewParams">TemporaryCredentialNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2">r2</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/r2#TemporaryCredentialNewResponse">TemporaryCredentialNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # WARPConnector
 
 Response Types:
