@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestControlRetentionFlagNew(t *testing.T) {
+func TestControlRetentionNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestControlRetentionFlagNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logs.Control.Retention.Flag.New(
+	_, err := client.Logs.Control.Retention.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		logs.ControlRetentionFlagNewParams{
+		logs.ControlRetentionNewParams{
 			Flag: cloudflare.F(true),
 		},
 	)
@@ -43,7 +43,7 @@ func TestControlRetentionFlagNew(t *testing.T) {
 	}
 }
 
-func TestControlRetentionFlagGet(t *testing.T) {
+func TestControlRetentionGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -56,7 +56,7 @@ func TestControlRetentionFlagGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logs.Control.Retention.Flag.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Logs.Control.Retention.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
