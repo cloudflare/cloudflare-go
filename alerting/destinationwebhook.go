@@ -4,6 +4,7 @@ package alerting
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,10 @@ func NewDestinationWebhookService(opts ...option.RequestOption) (r *DestinationW
 func (r *DestinationWebhookService) New(ctx context.Context, params DestinationWebhookNewParams, opts ...option.RequestOption) (res *DestinationWebhookNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +57,14 @@ func (r *DestinationWebhookService) New(ctx context.Context, params DestinationW
 func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string, params DestinationWebhookUpdateParams, opts ...option.RequestOption) (res *DestinationWebhookUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if webhookID == "" {
+		err = errors.New("missing required webhook_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", params.AccountID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -87,6 +100,14 @@ func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query De
 // Delete a configured webhook destination.
 func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *DestinationWebhookDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if webhookID == "" {
+		err = errors.New("missing required webhook_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", body.AccountID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -96,6 +117,14 @@ func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string
 func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, query DestinationWebhookGetParams, opts ...option.RequestOption) (res *Webhooks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if webhookID == "" {
+		err = errors.New("missing required webhook_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", query.AccountID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

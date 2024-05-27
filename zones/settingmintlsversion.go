@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,10 @@ func NewSettingMinTLSVersionService(opts ...option.RequestOption) (r *SettingMin
 func (r *SettingMinTLSVersionService) Edit(ctx context.Context, params SettingMinTLSVersionEditParams, opts ...option.RequestOption) (res *MinTLSVersion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinTLSVersionEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/min_tls_version", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +56,10 @@ func (r *SettingMinTLSVersionService) Edit(ctx context.Context, params SettingMi
 func (r *SettingMinTLSVersionService) Get(ctx context.Context, query SettingMinTLSVersionGetParams, opts ...option.RequestOption) (res *MinTLSVersion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinTLSVersionGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/min_tls_version", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

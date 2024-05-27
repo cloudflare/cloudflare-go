@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -39,6 +40,14 @@ func NewDEXTracerouteTestResultNetworkPathService(opts ...option.RequestOption) 
 func (r *DEXTracerouteTestResultNetworkPathService) Get(ctx context.Context, testResultID string, query DEXTracerouteTestResultNetworkPathGetParams, opts ...option.RequestOption) (res *DEXTracerouteTestResultNetworkPathGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestResultNetworkPathGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if testResultID == "" {
+		err = errors.New("missing required test_result_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-test-results/%s/network-path", query.AccountID, testResultID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

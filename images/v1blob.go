@@ -4,6 +4,7 @@ package images
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -36,6 +37,14 @@ func NewV1BlobService(opts ...option.RequestOption) (r *V1BlobService) {
 func (r *V1BlobService) Get(ctx context.Context, imageID string, query V1BlobGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/*")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if imageID == "" {
+		err = errors.New("missing required image_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1/%s/blob", query.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

@@ -4,6 +4,7 @@ package waiting_rooms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -71,6 +72,10 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 func (r *PageService) Preview(ctx context.Context, params PagePreviewParams, opts ...option.RequestOption) (res *PagePreviewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PagePreviewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/preview", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

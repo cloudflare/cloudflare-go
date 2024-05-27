@@ -4,6 +4,7 @@ package origin_ca_certificates
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -87,6 +88,10 @@ func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query O
 func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateDeleteResponseEnvelope
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("certificates/%s", certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -102,6 +107,10 @@ func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID s
 func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateGetResponseEnvelope
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("certificates/%s", certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

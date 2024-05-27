@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,10 @@ func NewClipService(opts ...option.RequestOption) (r *ClipService) {
 func (r *ClipService) New(ctx context.Context, params ClipNewParams, opts ...option.RequestOption) (res *Clip, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClipNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/clip", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

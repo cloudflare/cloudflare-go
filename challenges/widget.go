@@ -4,6 +4,7 @@ package challenges
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -41,6 +42,10 @@ func NewWidgetService(opts ...option.RequestOption) (r *WidgetService) {
 func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ...option.RequestOption) (res *Widget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/challenges/widgets", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +59,14 @@ func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ..
 func (r *WidgetService) Update(ctx context.Context, sitekey string, params WidgetUpdateParams, opts ...option.RequestOption) (res *Widget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if sitekey == "" {
+		err = errors.New("missing required sitekey parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", params.AccountID, sitekey)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -90,6 +103,14 @@ func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListPar
 func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetDeleteParams, opts ...option.RequestOption) (res *Widget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if sitekey == "" {
+		err = errors.New("missing required sitekey parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", body.AccountID, sitekey)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -103,6 +124,14 @@ func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetD
 func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGetParams, opts ...option.RequestOption) (res *Widget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if sitekey == "" {
+		err = errors.New("missing required sitekey parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", query.AccountID, sitekey)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -119,6 +148,14 @@ func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGet
 func (r *WidgetService) RotateSecret(ctx context.Context, sitekey string, params WidgetRotateSecretParams, opts ...option.RequestOption) (res *Widget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetRotateSecretResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if sitekey == "" {
+		err = errors.New("missing required sitekey parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s/rotate_secret", params.AccountID, sitekey)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

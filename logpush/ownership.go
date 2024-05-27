@@ -4,6 +4,7 @@ package logpush
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -39,10 +40,19 @@ func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, o
 	var env OwnershipNewResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
@@ -61,10 +71,19 @@ func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidat
 	var env OwnershipValidateResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}

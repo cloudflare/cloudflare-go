@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -66,6 +67,10 @@ func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, pa
 func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params AttackSurfaceReportIssueClassParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueClassResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueClassResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/issues/class", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -79,6 +84,14 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueDismissResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if issueID == "" {
+		err = errors.New("missing required issue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/%s/dismiss", params.AccountID, issueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -92,6 +105,10 @@ func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID s
 func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params AttackSurfaceReportIssueSeverityParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueSeverityResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueSeverityResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/issues/severity", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -105,6 +122,10 @@ func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params A
 func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params AttackSurfaceReportIssueTypeParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueTypeResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueTypeResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/issues/type", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

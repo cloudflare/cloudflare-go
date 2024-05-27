@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -41,6 +42,10 @@ func NewSettingSecurityLevelService(opts ...option.RequestOption) (r *SettingSec
 func (r *SettingSecurityLevelService) Edit(ctx context.Context, params SettingSecurityLevelEditParams, opts ...option.RequestOption) (res *SecurityLevel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSecurityLevelEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/security_level", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -57,6 +62,10 @@ func (r *SettingSecurityLevelService) Edit(ctx context.Context, params SettingSe
 func (r *SettingSecurityLevelService) Get(ctx context.Context, query SettingSecurityLevelGetParams, opts ...option.RequestOption) (res *SecurityLevel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSecurityLevelGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/security_level", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

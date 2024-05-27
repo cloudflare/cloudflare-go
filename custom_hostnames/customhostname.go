@@ -4,6 +4,7 @@ package custom_hostnames
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -49,6 +50,10 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNewParams, opts ...option.RequestOption) (res *CustomHostnameNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -84,6 +89,14 @@ func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params Custo
 // Delete Custom Hostname (and any issued SSL certificates)
 func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, body CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if customHostnameID == "" {
+		err = errors.New("missing required custom_hostname_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", body.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -96,6 +109,14 @@ func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID str
 func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID string, params CustomHostnameEditParams, opts ...option.RequestOption) (res *CustomHostnameEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if customHostnameID == "" {
+		err = errors.New("missing required custom_hostname_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", params.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -109,6 +130,14 @@ func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID strin
 func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string, query CustomHostnameGetParams, opts ...option.RequestOption) (res *CustomHostnameGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if customHostnameID == "" {
+		err = errors.New("missing required custom_hostname_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", query.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

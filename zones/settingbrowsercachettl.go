@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -41,6 +42,10 @@ func NewSettingBrowserCacheTTLService(opts ...option.RequestOption) (r *SettingB
 func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, params SettingBrowserCacheTTLEditParams, opts ...option.RequestOption) (res *BrowserCacheTTL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCacheTTLEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -57,6 +62,10 @@ func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, params Setting
 func (r *SettingBrowserCacheTTLService) Get(ctx context.Context, query SettingBrowserCacheTTLGetParams, opts ...option.RequestOption) (res *BrowserCacheTTL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCacheTTLGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,10 @@ func NewSettingH2PrioritizationService(opts ...option.RequestOption) (r *Setting
 func (r *SettingH2PrioritizationService) Edit(ctx context.Context, params SettingH2PrioritizationEditParams, opts ...option.RequestOption) (res *H2Prioritization, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingH2PrioritizationEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/h2_prioritization", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +56,10 @@ func (r *SettingH2PrioritizationService) Edit(ctx context.Context, params Settin
 func (r *SettingH2PrioritizationService) Get(ctx context.Context, query SettingH2PrioritizationGetParams, opts ...option.RequestOption) (res *H2Prioritization, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingH2PrioritizationGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/h2_prioritization", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

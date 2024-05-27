@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,6 +40,10 @@ func NewWebhookService(opts ...option.RequestOption) (r *WebhookService) {
 func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *WebhookUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/webhook", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +57,10 @@ func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams,
 func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, opts ...option.RequestOption) (res *WebhookDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/webhook", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -65,6 +74,10 @@ func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, o
 func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *WebhookGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/webhook", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

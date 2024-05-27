@@ -4,6 +4,7 @@ package magic_network_monitoring
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigFullGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/mnm/config/full", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

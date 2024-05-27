@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewIndicatorFeedPermissionService(opts ...option.RequestOption) (r *Indicat
 func (r *IndicatorFeedPermissionService) New(ctx context.Context, params IndicatorFeedPermissionNewParams, opts ...option.RequestOption) (res *IndicatorFeedPermissionNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedPermissionNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/add", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +55,10 @@ func (r *IndicatorFeedPermissionService) New(ctx context.Context, params Indicat
 func (r *IndicatorFeedPermissionService) List(ctx context.Context, query IndicatorFeedPermissionListParams, opts ...option.RequestOption) (res *[]IndicatorFeedPermissionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedPermissionListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/view", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -63,6 +72,10 @@ func (r *IndicatorFeedPermissionService) List(ctx context.Context, query Indicat
 func (r *IndicatorFeedPermissionService) Delete(ctx context.Context, params IndicatorFeedPermissionDeleteParams, opts ...option.RequestOption) (res *IndicatorFeedPermissionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedPermissionDeleteResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/remove", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {

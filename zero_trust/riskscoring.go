@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -48,6 +49,14 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 func (r *RiskScoringService) Get(ctx context.Context, accountIdentifier string, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if userID == "" {
+		err = errors.New("missing required user_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s", accountIdentifier, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -61,6 +70,14 @@ func (r *RiskScoringService) Get(ctx context.Context, accountIdentifier string, 
 func (r *RiskScoringService) Reset(ctx context.Context, accountIdentifier string, userID string, opts ...option.RequestOption) (res *RiskScoringResetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringResetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if userID == "" {
+		err = errors.New("missing required user_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s/reset", accountIdentifier, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {

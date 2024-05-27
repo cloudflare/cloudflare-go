@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,10 @@ func NewSettingTrueClientIPHeaderService(opts ...option.RequestOption) (r *Setti
 func (r *SettingTrueClientIPHeaderService) Edit(ctx context.Context, params SettingTrueClientIPHeaderEditParams, opts ...option.RequestOption) (res *TrueClientIPHeader, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTrueClientIPHeaderEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,10 @@ func (r *SettingTrueClientIPHeaderService) Edit(ctx context.Context, params Sett
 func (r *SettingTrueClientIPHeaderService) Get(ctx context.Context, query SettingTrueClientIPHeaderGetParams, opts ...option.RequestOption) (res *TrueClientIPHeader, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTrueClientIPHeaderGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

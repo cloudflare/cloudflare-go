@@ -4,6 +4,7 @@ package registrar
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -41,6 +42,14 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 func (r *DomainService) Update(ctx context.Context, domainName string, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if domainName == "" {
+		err = errors.New("missing required domain_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", params.AccountID, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -77,6 +86,14 @@ func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListPara
 func (r *DomainService) Get(ctx context.Context, domainName string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if domainName == "" {
+		err = errors.New("missing required domain_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", query.AccountID, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

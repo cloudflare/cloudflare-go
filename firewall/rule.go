@@ -4,6 +4,7 @@ package firewall
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -49,6 +50,10 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -67,6 +72,14 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id string, body RuleUpdateParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -120,6 +133,14 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string,
 func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -138,6 +159,14 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id stri
 func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body RuleEditParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -156,6 +185,14 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string
 func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
+	if params.PathID.Value == "" {
+		err = errors.New("missing required path_id parameter")
+		return
+	}
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, params.PathID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

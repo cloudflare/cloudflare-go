@@ -4,6 +4,7 @@ package dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -44,6 +45,14 @@ func NewFirewallAnalyticsReportBytimeService(opts ...option.RequestOption) (r *F
 func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *ByTime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAnalyticsReportBytimeGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dnsFirewallID == "" {
+		err = errors.New("missing required dns_firewall_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", params.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package accounts
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,6 +41,10 @@ func NewMemberService(opts ...option.RequestOption) (r *MemberService) {
 func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ...option.RequestOption) (res *UserWithInviteCode, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/members", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,14 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *shared.Member, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if memberID == "" {
+		err = errors.New("missing required member_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/members/%s", params.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -89,6 +102,14 @@ func (r *MemberService) ListAutoPaging(ctx context.Context, params MemberListPar
 func (r *MemberService) Delete(ctx context.Context, memberID string, body MemberDeleteParams, opts ...option.RequestOption) (res *MemberDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if memberID == "" {
+		err = errors.New("missing required member_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/members/%s", body.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -102,6 +123,14 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, body Member
 func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *shared.Member, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if memberID == "" {
+		err = errors.New("missing required member_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/members/%s", query.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,10 @@ func NewRouteService(opts ...option.RequestOption) (r *RouteService) {
 func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/routes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,14 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 func (r *RouteService) Update(ctx context.Context, routeIdentifier string, params RouteUpdateParams, opts ...option.RequestOption) (res *RouteUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeIdentifier == "" {
+		err = errors.New("missing required route_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", params.AccountID, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -66,6 +79,10 @@ func (r *RouteService) Update(ctx context.Context, routeIdentifier string, param
 func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *RouteListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/routes", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -79,6 +96,14 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 func (r *RouteService) Delete(ctx context.Context, routeIdentifier string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeIdentifier == "" {
+		err = errors.New("missing required route_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", body.AccountID, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -92,6 +117,10 @@ func (r *RouteService) Delete(ctx context.Context, routeIdentifier string, body 
 func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ...option.RequestOption) (res *RouteEmptyResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteEmptyResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/routes", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -105,6 +134,14 @@ func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ..
 func (r *RouteService) Get(ctx context.Context, routeIdentifier string, query RouteGetParams, opts ...option.RequestOption) (res *RouteGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeIdentifier == "" {
+		err = errors.New("missing required route_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", query.AccountID, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

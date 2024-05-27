@@ -4,6 +4,7 @@ package d1
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -42,6 +43,10 @@ func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *DatabaseNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/d1/database", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -78,6 +83,14 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body DatabaseDeleteParams, opts ...option.RequestOption) (res *DatabaseDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if databaseID == "" {
+		err = errors.New("missing required database_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", body.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -91,6 +104,14 @@ func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body Da
 func (r *DatabaseService) Get(ctx context.Context, databaseID string, query DatabaseGetParams, opts ...option.RequestOption) (res *D1, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if databaseID == "" {
+		err = errors.New("missing required database_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", query.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -104,6 +125,14 @@ func (r *DatabaseService) Get(ctx context.Context, databaseID string, query Data
 func (r *DatabaseService) Query(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) (res *[]QueryResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseQueryResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if databaseID == "" {
+		err = errors.New("missing required database_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/query", params.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

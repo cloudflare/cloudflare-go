@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,6 +41,10 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 func (r *RiskScoringSummaryService) Get(ctx context.Context, accountIdentifier string, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringSummaryGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/summary", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

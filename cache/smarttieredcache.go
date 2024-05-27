@@ -4,6 +4,7 @@ package cache
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,10 @@ func NewSmartTieredCacheService(opts ...option.RequestOption) (r *SmartTieredCac
 func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCacheDeleteParams, opts ...option.RequestOption) (res *SmartTieredCacheDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -51,6 +56,10 @@ func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCa
 func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCacheEditParams, opts ...option.RequestOption) (res *SmartTieredCacheEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -64,6 +73,10 @@ func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCa
 func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCacheGetParams, opts ...option.RequestOption) (res *SmartTieredCacheGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

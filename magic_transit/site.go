@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -46,6 +47,10 @@ func NewSiteService(opts ...option.RequestOption) (r *SiteService) {
 func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -59,6 +64,14 @@ func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...opt
 func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpdateParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -99,6 +112,14 @@ func (r *SiteService) ListAutoPaging(ctx context.Context, params SiteListParams,
 func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDeleteParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", body.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -112,6 +133,14 @@ func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDelete
 func (r *SiteService) Edit(ctx context.Context, siteID string, params SiteEditParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -125,6 +154,14 @@ func (r *SiteService) Edit(ctx context.Context, siteID string, params SiteEditPa
 func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", query.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

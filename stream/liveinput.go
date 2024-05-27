@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -43,6 +44,10 @@ func NewLiveInputService(opts ...option.RequestOption) (r *LiveInputService) {
 func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, opts ...option.RequestOption) (res *LiveInput, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -56,6 +61,14 @@ func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, o
 func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier string, params LiveInputUpdateParams, opts ...option.RequestOption) (res *LiveInput, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if liveInputIdentifier == "" {
+		err = errors.New("missing required live_input_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", params.AccountID, liveInputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -70,6 +83,10 @@ func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier strin
 func (r *LiveInputService) List(ctx context.Context, params LiveInputListParams, opts ...option.RequestOption) (res *LiveInputListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputListResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -84,6 +101,14 @@ func (r *LiveInputService) List(ctx context.Context, params LiveInputListParams,
 func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier string, body LiveInputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if liveInputIdentifier == "" {
+		err = errors.New("missing required live_input_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", body.AccountID, liveInputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
@@ -93,6 +118,14 @@ func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier strin
 func (r *LiveInputService) Get(ctx context.Context, liveInputIdentifier string, query LiveInputGetParams, opts ...option.RequestOption) (res *LiveInput, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if liveInputIdentifier == "" {
+		err = errors.New("missing required live_input_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", query.AccountID, liveInputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

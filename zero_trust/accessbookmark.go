@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,14 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid string, body AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -51,6 +60,14 @@ func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid
 func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, uuid string, body AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -87,6 +104,14 @@ func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, identifier s
 func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkDeleteResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -100,6 +125,14 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, u
 func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *Bookmark, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkGetResponseEnvelope
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if uuid == "" {
+		err = errors.New("missing required uuid parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

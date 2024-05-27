@@ -4,6 +4,7 @@ package pages
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,6 +40,18 @@ func NewProjectDeploymentHistoryLogService(opts ...option.RequestOption) (r *Pro
 func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *ProjectDeploymentHistoryLogGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentHistoryLogGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
+	if deploymentID == "" {
+		err = errors.New("missing required deployment_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", query.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

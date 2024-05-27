@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,14 @@ func NewMonitorPreviewService(opts ...option.RequestOption) (r *MonitorPreviewSe
 func (r *MonitorPreviewService) New(ctx context.Context, monitorID string, params MonitorPreviewNewParams, opts ...option.RequestOption) (res *MonitorPreviewNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorPreviewNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if monitorID == "" {
+		err = errors.New("missing required monitor_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/preview", params.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

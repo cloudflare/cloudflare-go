@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,6 +40,14 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +61,14 @@ func (r *DownloadService) New(ctx context.Context, identifier string, params Dow
 func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *DownloadDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -65,6 +82,14 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", query.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

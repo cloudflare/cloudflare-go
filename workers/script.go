@@ -5,6 +5,7 @@ package workers
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -57,6 +58,14 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -93,6 +102,14 @@ func (r *ScriptService) ListAutoPaging(ctx context.Context, query ScriptListPara
 func (r *ScriptService) Delete(ctx context.Context, scriptName string, params ScriptDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
 	return
@@ -103,6 +120,14 @@ func (r *ScriptService) Delete(ctx context.Context, scriptName string, params Sc
 func (r *ScriptService) Get(ctx context.Context, scriptName string, query ScriptGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "undefined")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

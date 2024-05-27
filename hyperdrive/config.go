@@ -4,6 +4,7 @@ package hyperdrive
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -40,6 +41,10 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +58,14 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if hyperdriveID == "" {
+		err = errors.New("missing required hyperdrive_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -89,6 +102,14 @@ func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListPara
 func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body ConfigDeleteParams, opts ...option.RequestOption) (res *ConfigDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if hyperdriveID == "" {
+		err = errors.New("missing required hyperdrive_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", body.AccountID, hyperdriveID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -103,6 +124,14 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if hyperdriveID == "" {
+		err = errors.New("missing required hyperdrive_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -116,6 +145,14 @@ func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params Co
 func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query ConfigGetParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if hyperdriveID == "" {
+		err = errors.New("missing required hyperdrive_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", query.AccountID, hyperdriveID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

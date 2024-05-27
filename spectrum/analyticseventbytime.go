@@ -4,6 +4,7 @@ package spectrum
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -42,6 +43,10 @@ func NewAnalyticsEventBytimeService(opts ...option.RequestOption) (r *AnalyticsE
 func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, query AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventBytimeGetResponseEnvelope
+	if zone == "" {
+		err = errors.New("missing required zone parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/bytime", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

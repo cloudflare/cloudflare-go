@@ -4,6 +4,7 @@ package plans
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -60,6 +61,14 @@ func (r *PlanService) ListAutoPaging(ctx context.Context, zoneIdentifier string,
 func (r *PlanService) Get(ctx context.Context, zoneIdentifier string, planIdentifier string, opts ...option.RequestOption) (res *AvailableRatePlan, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PlanGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if planIdentifier == "" {
+		err = errors.New("missing required plan_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/available_plans/%s", zoneIdentifier, planIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

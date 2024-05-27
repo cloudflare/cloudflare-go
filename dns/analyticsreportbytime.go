@@ -4,6 +4,7 @@ package dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -44,6 +45,10 @@ func NewAnalyticsReportBytimeService(opts ...option.RequestOption) (r *Analytics
 func (r *AnalyticsReportBytimeService) Get(ctx context.Context, params AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *ByTime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsReportBytimeGetResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_analytics/report/bytime", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

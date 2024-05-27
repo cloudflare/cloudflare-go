@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -36,6 +37,14 @@ func NewEmbedService(opts ...option.RequestOption) (r *EmbedService) {
 // a video. On failure, returns a JSON response body.
 func (r *EmbedService) Get(ctx context.Context, identifier string, query EmbedGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/embed", query.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

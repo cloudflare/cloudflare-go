@@ -4,6 +4,7 @@ package spectrum
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,6 +41,10 @@ func NewAnalyticsAggregateCurrentService(opts ...option.RequestOption) (r *Analy
 func (r *AnalyticsAggregateCurrentService) Get(ctx context.Context, zone string, query AnalyticsAggregateCurrentGetParams, opts ...option.RequestOption) (res *[]AnalyticsAggregateCurrentGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsAggregateCurrentGetResponseEnvelope
+	if zone == "" {
+		err = errors.New("missing required zone parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/aggregate/current", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

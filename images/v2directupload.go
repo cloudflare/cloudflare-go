@@ -4,6 +4,7 @@ package images
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -44,6 +45,10 @@ func NewV2DirectUploadService(opts ...option.RequestOption) (r *V2DirectUploadSe
 func (r *V2DirectUploadService) New(ctx context.Context, params V2DirectUploadNewParams, opts ...option.RequestOption) (res *V2DirectUploadNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V2DirectUploadNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v2/direct_upload", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

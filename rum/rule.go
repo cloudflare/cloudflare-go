@@ -4,6 +4,7 @@ package rum
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -37,6 +38,14 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *RUMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule", params.AccountID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +59,18 @@ func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewP
 func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RuleUpdateParams, opts ...option.RequestOption) (res *RUMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", params.AccountID, rulesetID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -63,6 +84,14 @@ func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID strin
 func (r *RuleService) List(ctx context.Context, rulesetID string, query RuleListParams, opts ...option.RequestOption) (res *RuleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rules", query.AccountID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -76,6 +105,18 @@ func (r *RuleService) List(ctx context.Context, rulesetID string, query RuleList
 func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", body.AccountID, rulesetID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {

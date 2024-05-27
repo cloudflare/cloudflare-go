@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,6 +40,10 @@ func NewMiscategorizationService(opts ...option.RequestOption) (r *Miscategoriza
 func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *MiscategorizationNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MiscategorizationNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/miscategorization", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

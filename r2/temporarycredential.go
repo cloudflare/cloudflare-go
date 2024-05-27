@@ -4,6 +4,7 @@ package r2
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,10 @@ func NewTemporaryCredentialService(opts ...option.RequestOption) (r *TemporaryCr
 func (r *TemporaryCredentialService) New(ctx context.Context, params TemporaryCredentialNewParams, opts ...option.RequestOption) (res *TemporaryCredentialNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TemporaryCredentialNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/r2/temp-access-credentials", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

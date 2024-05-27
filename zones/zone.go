@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -89,6 +90,10 @@ func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, 
 func (r *ZoneService) Delete(ctx context.Context, body ZoneDeleteParams, opts ...option.RequestOption) (res *ZoneDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -102,6 +107,10 @@ func (r *ZoneService) Delete(ctx context.Context, body ZoneDeleteParams, opts ..
 func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...option.RequestOption) (res *Zone, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -115,6 +124,10 @@ func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...o
 func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...option.RequestOption) (res *Zone, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

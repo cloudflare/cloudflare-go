@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -53,6 +54,10 @@ func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ...option.RequestOption) (res *TunnelNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -89,6 +94,14 @@ func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListPar
 func (r *TunnelService) Delete(ctx context.Context, tunnelID string, body TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", body.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -102,6 +115,14 @@ func (r *TunnelService) Delete(ctx context.Context, tunnelID string, body Tunnel
 func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params TunnelEditParams, opts ...option.RequestOption) (res *TunnelEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -115,6 +136,14 @@ func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params Tunnel
 func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGetParams, opts ...option.RequestOption) (res *TunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

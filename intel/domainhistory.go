@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,6 +41,10 @@ func NewDomainHistoryService(opts ...option.RequestOption) (r *DomainHistoryServ
 func (r *DomainHistoryService) Get(ctx context.Context, params DomainHistoryGetParams, opts ...option.RequestOption) (res *[]DomainHistory, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainHistoryGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/domain-history", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

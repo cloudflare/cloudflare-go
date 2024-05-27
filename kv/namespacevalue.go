@@ -4,6 +4,7 @@ package kv
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -44,6 +45,18 @@ func NewNamespaceValueService(opts ...option.RequestOption) (r *NamespaceValueSe
 func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params NamespaceValueUpdateParams, opts ...option.RequestOption) (res *NamespaceValueUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceValueUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
+	if keyName == "" {
+		err = errors.New("missing required key_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", params.AccountID, namespaceID, keyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -58,6 +71,18 @@ func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, 
 func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, keyName string, body NamespaceValueDeleteParams, opts ...option.RequestOption) (res *NamespaceValueDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceValueDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
+	if keyName == "" {
+		err = errors.New("missing required key_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", body.AccountID, namespaceID, keyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -74,6 +99,18 @@ func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, 
 // response header.
 func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceValueGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
+	if keyName == "" {
+		err = errors.New("missing required key_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", query.AccountID, namespaceID, keyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

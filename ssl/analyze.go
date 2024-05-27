@@ -4,6 +4,7 @@ package ssl
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -41,6 +42,10 @@ func NewAnalyzeService(opts ...option.RequestOption) (r *AnalyzeService) {
 func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *AnalyzeNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyzeNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/analyze", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

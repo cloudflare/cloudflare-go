@@ -4,6 +4,7 @@ package secondary_dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,10 @@ func NewIncomingService(opts ...option.RequestOption) (r *IncomingService) {
 func (r *IncomingService) New(ctx context.Context, params IncomingNewParams, opts ...option.RequestOption) (res *IncomingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +55,10 @@ func (r *IncomingService) New(ctx context.Context, params IncomingNewParams, opt
 func (r *IncomingService) Update(ctx context.Context, params IncomingUpdateParams, opts ...option.RequestOption) (res *IncomingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -63,6 +72,10 @@ func (r *IncomingService) Update(ctx context.Context, params IncomingUpdateParam
 func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams, opts ...option.RequestOption) (res *IncomingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -76,6 +89,10 @@ func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams,
 func (r *IncomingService) Get(ctx context.Context, query IncomingGetParams, opts ...option.RequestOption) (res *IncomingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

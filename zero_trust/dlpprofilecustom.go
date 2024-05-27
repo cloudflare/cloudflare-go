@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -40,6 +41,10 @@ func NewDLPProfileCustomService(opts ...option.RequestOption) (r *DLPProfileCust
 func (r *DLPProfileCustomService) New(ctx context.Context, params DLPProfileCustomNewParams, opts ...option.RequestOption) (res *[]CustomProfile, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +57,14 @@ func (r *DLPProfileCustomService) New(ctx context.Context, params DLPProfileCust
 // Updates a DLP custom profile.
 func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, params DLPProfileCustomUpdateParams, opts ...option.RequestOption) (res *CustomProfile, err error) {
 	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if profileID == "" {
+		err = errors.New("missing required profile_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
@@ -61,6 +74,14 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, body DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if profileID == "" {
+		err = errors.New("missing required profile_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", body.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -74,6 +95,14 @@ func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, 
 func (r *DLPProfileCustomService) Get(ctx context.Context, profileID string, query DLPProfileCustomGetParams, opts ...option.RequestOption) (res *CustomProfile, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if profileID == "" {
+		err = errors.New("missing required profile_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

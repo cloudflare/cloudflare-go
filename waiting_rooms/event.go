@@ -4,6 +4,7 @@ package waiting_rooms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -47,6 +48,14 @@ func NewEventService(opts ...option.RequestOption) (r *EventService) {
 func (r *EventService) New(ctx context.Context, waitingRoomID string, params EventNewParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -60,6 +69,18 @@ func (r *EventService) New(ctx context.Context, waitingRoomID string, params Eve
 func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID string, params EventUpdateParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
+	if eventID == "" {
+		err = errors.New("missing required event_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -96,6 +117,18 @@ func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string,
 func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID string, body EventDeleteParams, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
+	if eventID == "" {
+		err = errors.New("missing required event_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", body.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -109,6 +142,18 @@ func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID
 func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID string, params EventEditParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
+	if eventID == "" {
+		err = errors.New("missing required event_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -122,6 +167,18 @@ func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID s
 func (r *EventService) Get(ctx context.Context, waitingRoomID string, eventID string, query EventGetParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
+	if eventID == "" {
+		err = errors.New("missing required event_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", query.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

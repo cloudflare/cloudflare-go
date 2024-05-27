@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,6 +38,14 @@ func NewMonitorReferenceService(opts ...option.RequestOption) (r *MonitorReferen
 func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, query MonitorReferenceGetParams, opts ...option.RequestOption) (res *[]MonitorReferenceGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorReferenceGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if monitorID == "" {
+		err = errors.New("missing required monitor_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/references", query.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

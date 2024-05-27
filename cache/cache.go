@@ -4,6 +4,7 @@ package cache
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -74,6 +75,10 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CachePurgeResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/purge_cache", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

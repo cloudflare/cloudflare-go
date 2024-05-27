@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -42,6 +43,10 @@ func NewDevicePostureService(opts ...option.RequestOption) (r *DevicePostureServ
 func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/posture", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -55,6 +60,14 @@ func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewP
 func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params DevicePostureUpdateParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -91,6 +104,14 @@ func (r *DevicePostureService) ListAutoPaging(ctx context.Context, query DeviceP
 func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body DevicePostureDeleteParams, opts ...option.RequestOption) (res *DevicePostureDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -104,6 +125,14 @@ func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body D
 func (r *DevicePostureService) Get(ctx context.Context, ruleID string, query DevicePostureGetParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/%s", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

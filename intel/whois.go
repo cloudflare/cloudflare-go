@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,6 +41,10 @@ func NewWhoisService(opts ...option.RequestOption) (r *WhoisService) {
 func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...option.RequestOption) (res *WhoisGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WhoisGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/whois", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -259,9 +264,9 @@ func (r WhoisGetParams) URLQuery() (v url.Values) {
 type WhoisGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   WhoisGetResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success WhoisGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  WhoisGetResponse                `json:"result"`
 	JSON    whoisGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -270,8 +275,8 @@ type WhoisGetResponseEnvelope struct {
 type whoisGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -4,6 +4,7 @@ package certificate_authorities
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -39,6 +40,10 @@ func NewHostnameAssociationService(opts ...option.RequestOption) (r *HostnameAss
 func (r *HostnameAssociationService) Update(ctx context.Context, params HostnameAssociationUpdateParams, opts ...option.RequestOption) (res *HostnameAssociationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameAssociationUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +57,10 @@ func (r *HostnameAssociationService) Update(ctx context.Context, params Hostname
 func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAssociationGetParams, opts ...option.RequestOption) (res *HostnameAssociationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameAssociationGetResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

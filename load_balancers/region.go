@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -41,6 +42,10 @@ func NewRegionService(opts ...option.RequestOption) (r *RegionService) {
 func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *RegionListResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegionListResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +59,10 @@ func (r *RegionService) List(ctx context.Context, params RegionListParams, opts 
 func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionID, query RegionGetParams, opts ...option.RequestOption) (res *RegionGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegionGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions/%v", query.AccountID, regionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

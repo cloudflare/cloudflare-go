@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -39,6 +40,10 @@ func NewLOADocumentService(opts ...option.RequestOption) (r *LOADocumentService)
 func (r *LOADocumentService) New(ctx context.Context, params LOADocumentNewParams, opts ...option.RequestOption) (res *LOADocumentNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LOADocumentNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/loa_documents", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

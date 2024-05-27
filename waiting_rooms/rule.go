@@ -4,6 +4,7 @@ package waiting_rooms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -40,6 +41,14 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) New(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +63,14 @@ func (r *RuleService) New(ctx context.Context, waitingRoomID string, params Rule
 func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -90,6 +107,18 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, waitingRoomID string, 
 func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", body.ZoneID, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -103,6 +132,18 @@ func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID s
 func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", params.ZoneID, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {

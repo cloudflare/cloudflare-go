@@ -4,6 +4,7 @@ package snippets
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,10 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *[]RuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {

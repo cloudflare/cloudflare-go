@@ -4,6 +4,7 @@ package healthchecks
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -43,6 +44,10 @@ func NewHealthcheckService(opts ...option.RequestOption) (r *HealthcheckService)
 func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/healthchecks", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -56,6 +61,14 @@ func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParam
 func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, params HealthcheckUpdateParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if healthcheckID == "" {
+		err = errors.New("missing required healthcheck_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -92,6 +105,14 @@ func (r *HealthcheckService) ListAutoPaging(ctx context.Context, params Healthch
 func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, body HealthcheckDeleteParams, opts ...option.RequestOption) (res *HealthcheckDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if healthcheckID == "" {
+		err = errors.New("missing required healthcheck_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", body.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -105,6 +126,14 @@ func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, b
 func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, params HealthcheckEditParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if healthcheckID == "" {
+		err = errors.New("missing required healthcheck_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -118,6 +147,14 @@ func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, par
 func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, query HealthcheckGetParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if healthcheckID == "" {
+		err = errors.New("missing required healthcheck_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", query.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

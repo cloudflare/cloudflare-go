@@ -4,6 +4,7 @@ package calls
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -38,6 +39,10 @@ func NewTURNKeyService(opts ...option.RequestOption) (r *TURNKeyService) {
 // Creates a new Cloudflare Calls TURN key.
 func (r *TURNKeyService) New(ctx context.Context, params TURNKeyNewParams, opts ...option.RequestOption) (res *TURNKeyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
@@ -47,6 +52,14 @@ func (r *TURNKeyService) New(ctx context.Context, params TURNKeyNewParams, opts 
 func (r *TURNKeyService) Update(ctx context.Context, keyID string, params TURNKeyUpdateParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TURNKeyUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if keyID == "" {
+		err = errors.New("missing required key_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", params.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -83,6 +96,14 @@ func (r *TURNKeyService) ListAutoPaging(ctx context.Context, query TURNKeyListPa
 func (r *TURNKeyService) Delete(ctx context.Context, keyID string, body TURNKeyDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TURNKeyDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if keyID == "" {
+		err = errors.New("missing required key_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", body.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -96,6 +117,14 @@ func (r *TURNKeyService) Delete(ctx context.Context, keyID string, body TURNKeyD
 func (r *TURNKeyService) Get(ctx context.Context, keyID string, query TURNKeyGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TURNKeyGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if keyID == "" {
+		err = errors.New("missing required key_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", query.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

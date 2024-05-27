@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -41,6 +42,10 @@ func NewRiskScoringIntegrationService(opts ...option.RequestOption) (r *RiskScor
 func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScoringIntegrationNewParams, opts ...option.RequestOption) (res *RiskScoringIntegrationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -56,6 +61,14 @@ func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScor
 func (r *RiskScoringIntegrationService) Update(ctx context.Context, integrationID string, params RiskScoringIntegrationUpdateParams, opts ...option.RequestOption) (res *RiskScoringIntegrationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if integrationID == "" {
+		err = errors.New("missing required integration_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations/%s", params.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -92,6 +105,14 @@ func (r *RiskScoringIntegrationService) ListAutoPaging(ctx context.Context, quer
 func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationID string, body RiskScoringIntegrationDeleteParams, opts ...option.RequestOption) (res *RiskScoringIntegrationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if integrationID == "" {
+		err = errors.New("missing required integration_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations/%s", body.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -105,6 +126,14 @@ func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationI
 func (r *RiskScoringIntegrationService) Get(ctx context.Context, integrationID string, query RiskScoringIntegrationGetParams, opts ...option.RequestOption) (res *RiskScoringIntegrationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if integrationID == "" {
+		err = errors.New("missing required integration_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations/%s", query.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package url_scanner
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -46,6 +47,10 @@ func NewURLScannerService(opts ...option.RequestOption) (r *URLScannerService) {
 func (r *URLScannerService) Scan(ctx context.Context, accountID string, query URLScannerScanParams, opts ...option.RequestOption) (res *URLScannerScanResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env URLScannerScanResponseEnvelope
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

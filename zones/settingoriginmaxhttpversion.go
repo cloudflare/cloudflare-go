@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -43,6 +44,10 @@ func NewSettingOriginMaxHTTPVersionService(opts ...option.RequestOption) (r *Set
 func (r *SettingOriginMaxHTTPVersionService) Edit(ctx context.Context, params SettingOriginMaxHTTPVersionEditParams, opts ...option.RequestOption) (res *SettingOriginMaxHTTPVersionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginMaxHTTPVersionEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/origin_max_http_version", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -61,6 +66,10 @@ func (r *SettingOriginMaxHTTPVersionService) Edit(ctx context.Context, params Se
 func (r *SettingOriginMaxHTTPVersionService) Get(ctx context.Context, query SettingOriginMaxHTTPVersionGetParams, opts ...option.RequestOption) (res *SettingOriginMaxHTTPVersionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginMaxHTTPVersionGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/origin_max_http_version", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

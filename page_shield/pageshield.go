@@ -4,6 +4,7 @@ package page_shield
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -43,6 +44,10 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -56,6 +61,10 @@ func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateP
 func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, opts ...option.RequestOption) (res *Setting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

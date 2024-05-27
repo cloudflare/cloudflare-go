@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,6 +39,10 @@ func NewDeviceDEXTestService(opts ...option.RequestOption) (r *DeviceDEXTestServ
 func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewParams, opts ...option.RequestOption) (res *SchemaHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +56,14 @@ func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewP
 func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, params DeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *SchemaHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dexTestID == "" {
+		err = errors.New("missing required dex_test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", params.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -88,6 +101,14 @@ func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceD
 func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body DeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]SchemaHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dexTestID == "" {
+		err = errors.New("missing required dex_test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", body.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -101,6 +122,14 @@ func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, bod
 func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query DeviceDEXTestGetParams, opts ...option.RequestOption) (res *SchemaHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dexTestID == "" {
+		err = errors.New("missing required dex_test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", query.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

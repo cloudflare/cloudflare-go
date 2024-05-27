@@ -4,6 +4,7 @@ package snippets
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -35,6 +36,14 @@ func NewContentService(opts ...option.RequestOption) (r *ContentService) {
 func (r *ContentService) Get(ctx context.Context, snippetName string, query ContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "multipart/form-data")}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if snippetName == "" {
+		err = errors.New("missing required snippet_name parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/snippets/%s/content", query.ZoneID, snippetName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

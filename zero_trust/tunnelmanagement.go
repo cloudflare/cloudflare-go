@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -40,6 +41,14 @@ func NewTunnelManagementService(opts ...option.RequestOption) (r *TunnelManageme
 func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, params TunnelManagementNewParams, opts ...option.RequestOption) (res *TunnelManagementNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelManagementNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/management", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

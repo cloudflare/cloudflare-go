@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -43,6 +44,10 @@ func NewGatewayListService(opts ...option.RequestOption) (r *GatewayListService)
 func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParams, opts ...option.RequestOption) (res *GatewayListNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -56,6 +61,14 @@ func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParam
 func (r *GatewayListService) Update(ctx context.Context, listID string, params GatewayListUpdateParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -92,6 +105,14 @@ func (r *GatewayListService) ListAutoPaging(ctx context.Context, query GatewayLi
 func (r *GatewayListService) Delete(ctx context.Context, listID string, body GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", body.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -105,6 +126,14 @@ func (r *GatewayListService) Delete(ctx context.Context, listID string, body Gat
 func (r *GatewayListService) Edit(ctx context.Context, listID string, params GatewayListEditParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -118,6 +147,14 @@ func (r *GatewayListService) Edit(ctx context.Context, listID string, params Gat
 func (r *GatewayListService) Get(ctx context.Context, listID string, query GatewayListGetParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", query.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

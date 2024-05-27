@@ -4,6 +4,7 @@ package logs
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -49,6 +50,10 @@ func NewReceivedService(opts ...option.RequestOption) (r *ReceivedService) {
 // will be handled properly.
 func (r *ReceivedService) Get(ctx context.Context, zoneIdentifier string, query ReceivedGetParams, opts ...option.RequestOption) (res *ReceivedGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/logs/received", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
