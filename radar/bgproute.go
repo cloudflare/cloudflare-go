@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -64,6 +65,20 @@ func (r *BGPRouteService) Stats(ctx context.Context, query BGPRouteStatsParams, 
 	opts = append(r.Options[:], opts...)
 	var env BGPRouteStatsResponseEnvelope
 	path := "radar/bgp/routes/stats"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Gets time-series data for the announced IP space count, represented as the
+// number of IPv4 /24s and IPv6 /48s, for a given ASN.
+func (r *BGPRouteService) Timeseries(ctx context.Context, query BGPRouteTimeseriesParams, opts ...option.RequestOption) (res *BGPRouteTimeseriesResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env BGPRouteTimeseriesResponseEnvelope
+	path := "radar/bgp/routes/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -346,6 +361,123 @@ func (r bgpRouteStatsResponseStatsJSON) RawJSON() string {
 	return r.raw
 }
 
+type BGPRouteTimeseriesResponse struct {
+	Meta          BGPRouteTimeseriesResponseMeta          `json:"meta,required"`
+	SerieIPV4_24s BGPRouteTimeseriesResponseSerieIPV4_24s `json:"serie_ipv4_24s,required"`
+	SerieIPV6_48s BGPRouteTimeseriesResponseSerieIPV6_48s `json:"serie_ipv6_48s,required"`
+	JSON          bgpRouteTimeseriesResponseJSON          `json:"-"`
+}
+
+// bgpRouteTimeseriesResponseJSON contains the JSON metadata for the struct
+// [BGPRouteTimeseriesResponse]
+type bgpRouteTimeseriesResponseJSON struct {
+	Meta          apijson.Field
+	SerieIPV4_24s apijson.Field
+	SerieIPV6_48s apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *BGPRouteTimeseriesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteTimeseriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteTimeseriesResponseMeta struct {
+	DateRange []BGPRouteTimeseriesResponseMetaDateRange `json:"dateRange,required"`
+	JSON      bgpRouteTimeseriesResponseMetaJSON        `json:"-"`
+}
+
+// bgpRouteTimeseriesResponseMetaJSON contains the JSON metadata for the struct
+// [BGPRouteTimeseriesResponseMeta]
+type bgpRouteTimeseriesResponseMetaJSON struct {
+	DateRange   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteTimeseriesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteTimeseriesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	JSON      bgpRouteTimeseriesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// bgpRouteTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [BGPRouteTimeseriesResponseMetaDateRange]
+type bgpRouteTimeseriesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteTimeseriesResponseSerieIPV4_24s struct {
+	Timestamps []time.Time                                 `json:"timestamps,required" format:"date-time"`
+	Values     []int64                                     `json:"values,required"`
+	JSON       bgpRouteTimeseriesResponseSerieIPV4_24sJSON `json:"-"`
+}
+
+// bgpRouteTimeseriesResponseSerieIPV4_24sJSON contains the JSON metadata for the
+// struct [BGPRouteTimeseriesResponseSerieIPV4_24s]
+type bgpRouteTimeseriesResponseSerieIPV4_24sJSON struct {
+	Timestamps  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteTimeseriesResponseSerieIPV4_24s) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteTimeseriesResponseSerieIPV4_24sJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteTimeseriesResponseSerieIPV6_48s struct {
+	Timestamps []time.Time                                 `json:"timestamps,required" format:"date-time"`
+	Values     []int64                                     `json:"values,required"`
+	JSON       bgpRouteTimeseriesResponseSerieIPV6_48sJSON `json:"-"`
+}
+
+// bgpRouteTimeseriesResponseSerieIPV6_48sJSON contains the JSON metadata for the
+// struct [BGPRouteTimeseriesResponseSerieIPV6_48s]
+type bgpRouteTimeseriesResponseSerieIPV6_48sJSON struct {
+	Timestamps  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteTimeseriesResponseSerieIPV6_48s) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteTimeseriesResponseSerieIPV6_48sJSON) RawJSON() string {
+	return r.raw
+}
+
 type BGPRouteMoasParams struct {
 	// Format results are returned in.
 	Format param.Field[BGPRouteMoasParamsFormat] `query:"format"`
@@ -535,5 +667,101 @@ func (r *BGPRouteStatsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpRouteStatsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteTimeseriesParams struct {
+	// Single ASN as integer.
+	ASN param.Field[int64] `query:"asn"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
+	// Shorthand date ranges for the last X days - use when you don't need specific
+	// start and end dates.
+	DateRange param.Field[BGPRouteTimeseriesParamsDateRange] `query:"dateRange"`
+	// Start of the date range (inclusive).
+	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[BGPRouteTimeseriesParamsFormat] `query:"format"`
+	// Include data delay meta information
+	IncludeDelay param.Field[bool] `query:"includeDelay"`
+	// Location Alpha2 code.
+	Location param.Field[string] `query:"location"`
+}
+
+// URLQuery serializes [BGPRouteTimeseriesParams]'s query parameters as
+// `url.Values`.
+func (r BGPRouteTimeseriesParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Shorthand date ranges for the last X days - use when you don't need specific
+// start and end dates.
+type BGPRouteTimeseriesParamsDateRange string
+
+const (
+	BGPRouteTimeseriesParamsDateRange1d         BGPRouteTimeseriesParamsDateRange = "1d"
+	BGPRouteTimeseriesParamsDateRange2d         BGPRouteTimeseriesParamsDateRange = "2d"
+	BGPRouteTimeseriesParamsDateRange7d         BGPRouteTimeseriesParamsDateRange = "7d"
+	BGPRouteTimeseriesParamsDateRange14d        BGPRouteTimeseriesParamsDateRange = "14d"
+	BGPRouteTimeseriesParamsDateRange28d        BGPRouteTimeseriesParamsDateRange = "28d"
+	BGPRouteTimeseriesParamsDateRange12w        BGPRouteTimeseriesParamsDateRange = "12w"
+	BGPRouteTimeseriesParamsDateRange24w        BGPRouteTimeseriesParamsDateRange = "24w"
+	BGPRouteTimeseriesParamsDateRange52w        BGPRouteTimeseriesParamsDateRange = "52w"
+	BGPRouteTimeseriesParamsDateRange1dControl  BGPRouteTimeseriesParamsDateRange = "1dControl"
+	BGPRouteTimeseriesParamsDateRange2dControl  BGPRouteTimeseriesParamsDateRange = "2dControl"
+	BGPRouteTimeseriesParamsDateRange7dControl  BGPRouteTimeseriesParamsDateRange = "7dControl"
+	BGPRouteTimeseriesParamsDateRange14dControl BGPRouteTimeseriesParamsDateRange = "14dControl"
+	BGPRouteTimeseriesParamsDateRange28dControl BGPRouteTimeseriesParamsDateRange = "28dControl"
+	BGPRouteTimeseriesParamsDateRange12wControl BGPRouteTimeseriesParamsDateRange = "12wControl"
+	BGPRouteTimeseriesParamsDateRange24wControl BGPRouteTimeseriesParamsDateRange = "24wControl"
+)
+
+func (r BGPRouteTimeseriesParamsDateRange) IsKnown() bool {
+	switch r {
+	case BGPRouteTimeseriesParamsDateRange1d, BGPRouteTimeseriesParamsDateRange2d, BGPRouteTimeseriesParamsDateRange7d, BGPRouteTimeseriesParamsDateRange14d, BGPRouteTimeseriesParamsDateRange28d, BGPRouteTimeseriesParamsDateRange12w, BGPRouteTimeseriesParamsDateRange24w, BGPRouteTimeseriesParamsDateRange52w, BGPRouteTimeseriesParamsDateRange1dControl, BGPRouteTimeseriesParamsDateRange2dControl, BGPRouteTimeseriesParamsDateRange7dControl, BGPRouteTimeseriesParamsDateRange14dControl, BGPRouteTimeseriesParamsDateRange28dControl, BGPRouteTimeseriesParamsDateRange12wControl, BGPRouteTimeseriesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
+// Format results are returned in.
+type BGPRouteTimeseriesParamsFormat string
+
+const (
+	BGPRouteTimeseriesParamsFormatJson BGPRouteTimeseriesParamsFormat = "JSON"
+	BGPRouteTimeseriesParamsFormatCsv  BGPRouteTimeseriesParamsFormat = "CSV"
+)
+
+func (r BGPRouteTimeseriesParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPRouteTimeseriesParamsFormatJson, BGPRouteTimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type BGPRouteTimeseriesResponseEnvelope struct {
+	Result  BGPRouteTimeseriesResponse             `json:"result,required"`
+	Success bool                                   `json:"success,required"`
+	JSON    bgpRouteTimeseriesResponseEnvelopeJSON `json:"-"`
+}
+
+// bgpRouteTimeseriesResponseEnvelopeJSON contains the JSON metadata for the struct
+// [BGPRouteTimeseriesResponseEnvelope]
+type bgpRouteTimeseriesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteTimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteTimeseriesResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
