@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestUUIDGet(t *testing.T) {
+func TestDCVDelegationGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,7 +27,7 @@ func TestUUIDGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DCVDelegation.UUID.Get(context.TODO(), dcv_delegation.UUIDGetParams{
+	_, err := client.DCVDelegation.Get(context.TODO(), dcv_delegation.DCVDelegationGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
