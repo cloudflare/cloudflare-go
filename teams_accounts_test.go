@@ -340,3 +340,60 @@ func TestTeamsAccountUpdateDeviceConfiguration(t *testing.T) {
 		})
 	}
 }
+
+func TestTeamsAccountGetConnectivityConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"icmp_proxy_enabled": false,"offramp_warp_enabled":false}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/zerotrust/connectivity_settings", handler)
+
+	actual, err := client.TeamsAccountConnectivityConfiguration(context.Background(), testAccountID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, TeamsConnectivitySettings{
+			ICMPProxyEnabled:   BoolPtr(false),
+			OfframpWARPEnabled: BoolPtr(false),
+		})
+	}
+}
+
+func TestTeamsAccountUpdateConnectivityConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"icmp_proxy_enabled": true,"offramp_warp_enabled":true}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/zerotrust/connectivity_settings", handler)
+
+	actual, err := client.TeamsAccountConnectivityUpdateConfiguration(context.Background(), testAccountID, TeamsConnectivitySettings{
+		ICMPProxyEnabled:   BoolPtr(true),
+		OfframpWARPEnabled: BoolPtr(true),
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, TeamsConnectivitySettings{
+			ICMPProxyEnabled:   BoolPtr(true),
+			OfframpWARPEnabled: BoolPtr(true),
+		})
+	}
+}
