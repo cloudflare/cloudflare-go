@@ -29,8 +29,8 @@ func TestCachePurgeWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Cache.Purge(context.TODO(), cache.CachePurgeParams{
 		ZoneID: cloudflare.F("string"),
-		Body: cache.CachePurgeParamsBodyCachePurgeTags{
-			Tags: cloudflare.F([]string{"some-tag", "another-tag"}),
+		Body: cache.CachePurgeParamsBodyCachePurgeFlexPurgeByTags{
+			Tags: cloudflare.F([]string{"a-cache-tag", "another-cache-tag"}),
 		},
 	})
 	if err != nil {
