@@ -31,7 +31,6 @@ func TestBucketNewWithOptionalParams(t *testing.T) {
 		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:         cloudflare.F("example-bucket"),
 		LocationHint: cloudflare.F(r2.BucketNewParamsLocationHintApac),
-		StorageClass: cloudflare.F(r2.BucketNewParamsStorageClassStandard),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

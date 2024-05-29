@@ -126,10 +126,8 @@ type Bucket struct {
 	// Location of the bucket
 	Location BucketLocation `json:"location"`
 	// Name of the bucket
-	Name string `json:"name"`
-	// Storage class for newly uploaded objects, unless specified otherwise.
-	StorageClass BucketStorageClass `json:"storage_class"`
-	JSON         bucketJSON         `json:"-"`
+	Name string     `json:"name"`
+	JSON bucketJSON `json:"-"`
 }
 
 // bucketJSON contains the JSON metadata for the struct [Bucket]
@@ -137,7 +135,6 @@ type bucketJSON struct {
 	CreationDate apijson.Field
 	Location     apijson.Field
 	Name         apijson.Field
-	StorageClass apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -169,22 +166,6 @@ func (r BucketLocation) IsKnown() bool {
 	return false
 }
 
-// Storage class for newly uploaded objects, unless specified otherwise.
-type BucketStorageClass string
-
-const (
-	BucketStorageClassStandard         BucketStorageClass = "Standard"
-	BucketStorageClassInfrequentAccess BucketStorageClass = "InfrequentAccess"
-)
-
-func (r BucketStorageClass) IsKnown() bool {
-	switch r {
-	case BucketStorageClassStandard, BucketStorageClassInfrequentAccess:
-		return true
-	}
-	return false
-}
-
 type BucketDeleteResponse = interface{}
 
 type BucketNewParams struct {
@@ -194,8 +175,6 @@ type BucketNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// Location of the bucket
 	LocationHint param.Field[BucketNewParamsLocationHint] `json:"locationHint"`
-	// Storage class for newly uploaded objects, unless specified otherwise.
-	StorageClass param.Field[BucketNewParamsStorageClass] `json:"storageClass"`
 }
 
 func (r BucketNewParams) MarshalJSON() (data []byte, err error) {
@@ -216,22 +195,6 @@ const (
 func (r BucketNewParamsLocationHint) IsKnown() bool {
 	switch r {
 	case BucketNewParamsLocationHintApac, BucketNewParamsLocationHintEeur, BucketNewParamsLocationHintEnam, BucketNewParamsLocationHintWeur, BucketNewParamsLocationHintWnam:
-		return true
-	}
-	return false
-}
-
-// Storage class for newly uploaded objects, unless specified otherwise.
-type BucketNewParamsStorageClass string
-
-const (
-	BucketNewParamsStorageClassStandard         BucketNewParamsStorageClass = "Standard"
-	BucketNewParamsStorageClassInfrequentAccess BucketNewParamsStorageClass = "InfrequentAccess"
-)
-
-func (r BucketNewParamsStorageClass) IsKnown() bool {
-	switch r {
-	case BucketNewParamsStorageClassStandard, BucketNewParamsStorageClassInfrequentAccess:
 		return true
 	}
 	return false
