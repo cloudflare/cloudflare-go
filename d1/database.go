@@ -121,7 +121,7 @@ func (r *DatabaseService) Get(ctx context.Context, databaseID string, query Data
 	return
 }
 
-// Returns the query result.
+// Returns the query result as an object.
 func (r *DatabaseService) Query(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) (res *[]QueryResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseQueryResponseEnvelope
