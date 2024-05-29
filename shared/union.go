@@ -26,7 +26,6 @@ func (UnionString) ImplementsZonesSubscriptionGetResponseUnion()                
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                 {}
 func (UnionString) ImplementsLoadBalancersRegionListResponseUnion()                    {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()                     {}
-func (UnionString) ImplementsCacheCachePurgeParamsBodyCachePurgeFilesFileUnion()       {}
 func (UnionString) ImplementsSSLAnalyzeNewResponseUnion()                              {}
 func (UnionString) ImplementsSSLCertificatePackGetResponseUnion()                      {}
 func (UnionString) ImplementsSubscriptionsSubscriptionNewResponseUnion()               {}
