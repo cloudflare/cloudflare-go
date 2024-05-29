@@ -27,6 +27,7 @@ type BGPService struct {
 	Top     *BGPTopService
 	Hijacks *BGPHijackService
 	Routes  *BGPRouteService
+	IPs     *BGPIPService
 }
 
 // NewBGPService generates a new service that applies the given options to each
@@ -39,6 +40,7 @@ func NewBGPService(opts ...option.RequestOption) (r *BGPService) {
 	r.Top = NewBGPTopService(opts...)
 	r.Hijacks = NewBGPHijackService(opts...)
 	r.Routes = NewBGPRouteService(opts...)
+	r.IPs = NewBGPIPService(opts...)
 	return
 }
 
