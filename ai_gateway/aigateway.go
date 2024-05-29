@@ -165,16 +165,16 @@ func (r aiGatewayNewResponseJSON) RawJSON() string {
 
 type AIGatewayNewResponseTask struct {
 	// gateway id
-	ID                      string                       `json:"id,required"`
-	CacheInvalidateOnUpdate bool                         `json:"cache_invalidate_on_update,required"`
-	CacheTTL                int64                        `json:"cache_ttl,required"`
-	CollectLogs             bool                         `json:"collect_logs,required"`
-	CreatedAt               time.Time                    `json:"created_at,required" format:"date-time"`
-	ModifiedAt              time.Time                    `json:"modified_at,required" format:"date-time"`
-	RateLimitingInterval    int64                        `json:"rate_limiting_interval"`
-	RateLimitingLimit       int64                        `json:"rate_limiting_limit"`
-	RateLimitingTechnique   string                       `json:"rate_limiting_technique"`
-	JSON                    aiGatewayNewResponseTaskJSON `json:"-"`
+	ID                      string                                        `json:"id,required"`
+	CacheInvalidateOnUpdate bool                                          `json:"cache_invalidate_on_update,required"`
+	CacheTTL                int64                                         `json:"cache_ttl,required,nullable"`
+	CollectLogs             bool                                          `json:"collect_logs,required"`
+	CreatedAt               time.Time                                     `json:"created_at,required" format:"date-time"`
+	ModifiedAt              time.Time                                     `json:"modified_at,required" format:"date-time"`
+	RateLimitingInterval    int64                                         `json:"rate_limiting_interval,required,nullable"`
+	RateLimitingLimit       int64                                         `json:"rate_limiting_limit,required,nullable"`
+	RateLimitingTechnique   AIGatewayNewResponseTaskRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	JSON                    aiGatewayNewResponseTaskJSON                  `json:"-"`
 }
 
 // aiGatewayNewResponseTaskJSON contains the JSON metadata for the struct
@@ -201,18 +201,33 @@ func (r aiGatewayNewResponseTaskJSON) RawJSON() string {
 	return r.raw
 }
 
+type AIGatewayNewResponseTaskRateLimitingTechnique string
+
+const (
+	AIGatewayNewResponseTaskRateLimitingTechniqueFixed   AIGatewayNewResponseTaskRateLimitingTechnique = "fixed"
+	AIGatewayNewResponseTaskRateLimitingTechniqueSliding AIGatewayNewResponseTaskRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayNewResponseTaskRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseTaskRateLimitingTechniqueFixed, AIGatewayNewResponseTaskRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayUpdateResponse struct {
 	// gateway id
-	ID                      string                      `json:"id,required"`
-	CacheInvalidateOnUpdate bool                        `json:"cache_invalidate_on_update,required"`
-	CacheTTL                int64                       `json:"cache_ttl,required"`
-	CollectLogs             bool                        `json:"collect_logs,required"`
-	CreatedAt               time.Time                   `json:"created_at,required" format:"date-time"`
-	ModifiedAt              time.Time                   `json:"modified_at,required" format:"date-time"`
-	RateLimitingInterval    int64                       `json:"rate_limiting_interval"`
-	RateLimitingLimit       int64                       `json:"rate_limiting_limit"`
-	RateLimitingTechnique   string                      `json:"rate_limiting_technique"`
-	JSON                    aiGatewayUpdateResponseJSON `json:"-"`
+	ID                      string                                       `json:"id,required"`
+	CacheInvalidateOnUpdate bool                                         `json:"cache_invalidate_on_update,required"`
+	CacheTTL                int64                                        `json:"cache_ttl,required,nullable"`
+	CollectLogs             bool                                         `json:"collect_logs,required"`
+	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
+	ModifiedAt              time.Time                                    `json:"modified_at,required" format:"date-time"`
+	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
+	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
+	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
 }
 
 // aiGatewayUpdateResponseJSON contains the JSON metadata for the struct
@@ -239,18 +254,33 @@ func (r aiGatewayUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type AIGatewayUpdateResponseRateLimitingTechnique string
+
+const (
+	AIGatewayUpdateResponseRateLimitingTechniqueFixed   AIGatewayUpdateResponseRateLimitingTechnique = "fixed"
+	AIGatewayUpdateResponseRateLimitingTechniqueSliding AIGatewayUpdateResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayUpdateResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseRateLimitingTechniqueFixed, AIGatewayUpdateResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayListResponse struct {
 	// gateway id
-	ID                      string                    `json:"id,required"`
-	CacheInvalidateOnUpdate bool                      `json:"cache_invalidate_on_update,required"`
-	CacheTTL                int64                     `json:"cache_ttl,required"`
-	CollectLogs             bool                      `json:"collect_logs,required"`
-	CreatedAt               time.Time                 `json:"created_at,required" format:"date-time"`
-	ModifiedAt              time.Time                 `json:"modified_at,required" format:"date-time"`
-	RateLimitingInterval    int64                     `json:"rate_limiting_interval"`
-	RateLimitingLimit       int64                     `json:"rate_limiting_limit"`
-	RateLimitingTechnique   string                    `json:"rate_limiting_technique"`
-	JSON                    aiGatewayListResponseJSON `json:"-"`
+	ID                      string                                     `json:"id,required"`
+	CacheInvalidateOnUpdate bool                                       `json:"cache_invalidate_on_update,required"`
+	CacheTTL                int64                                      `json:"cache_ttl,required,nullable"`
+	CollectLogs             bool                                       `json:"collect_logs,required"`
+	CreatedAt               time.Time                                  `json:"created_at,required" format:"date-time"`
+	ModifiedAt              time.Time                                  `json:"modified_at,required" format:"date-time"`
+	RateLimitingInterval    int64                                      `json:"rate_limiting_interval,required,nullable"`
+	RateLimitingLimit       int64                                      `json:"rate_limiting_limit,required,nullable"`
+	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	JSON                    aiGatewayListResponseJSON                  `json:"-"`
 }
 
 // aiGatewayListResponseJSON contains the JSON metadata for the struct
@@ -277,18 +307,33 @@ func (r aiGatewayListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type AIGatewayListResponseRateLimitingTechnique string
+
+const (
+	AIGatewayListResponseRateLimitingTechniqueFixed   AIGatewayListResponseRateLimitingTechnique = "fixed"
+	AIGatewayListResponseRateLimitingTechniqueSliding AIGatewayListResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayListResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseRateLimitingTechniqueFixed, AIGatewayListResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayDeleteResponse struct {
 	// gateway id
-	ID                      string                      `json:"id,required"`
-	CacheInvalidateOnUpdate bool                        `json:"cache_invalidate_on_update,required"`
-	CacheTTL                int64                       `json:"cache_ttl,required"`
-	CollectLogs             bool                        `json:"collect_logs,required"`
-	CreatedAt               time.Time                   `json:"created_at,required" format:"date-time"`
-	ModifiedAt              time.Time                   `json:"modified_at,required" format:"date-time"`
-	RateLimitingInterval    int64                       `json:"rate_limiting_interval"`
-	RateLimitingLimit       int64                       `json:"rate_limiting_limit"`
-	RateLimitingTechnique   string                      `json:"rate_limiting_technique"`
-	JSON                    aiGatewayDeleteResponseJSON `json:"-"`
+	ID                      string                                       `json:"id,required"`
+	CacheInvalidateOnUpdate bool                                         `json:"cache_invalidate_on_update,required"`
+	CacheTTL                int64                                        `json:"cache_ttl,required,nullable"`
+	CollectLogs             bool                                         `json:"collect_logs,required"`
+	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
+	ModifiedAt              time.Time                                    `json:"modified_at,required" format:"date-time"`
+	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
+	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
+	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
 }
 
 // aiGatewayDeleteResponseJSON contains the JSON metadata for the struct
@@ -315,18 +360,33 @@ func (r aiGatewayDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type AIGatewayDeleteResponseRateLimitingTechnique string
+
+const (
+	AIGatewayDeleteResponseRateLimitingTechniqueFixed   AIGatewayDeleteResponseRateLimitingTechnique = "fixed"
+	AIGatewayDeleteResponseRateLimitingTechniqueSliding AIGatewayDeleteResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayDeleteResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseRateLimitingTechniqueFixed, AIGatewayDeleteResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayGetResponse struct {
 	// gateway id
-	ID                      string                   `json:"id,required"`
-	CacheInvalidateOnUpdate bool                     `json:"cache_invalidate_on_update,required"`
-	CacheTTL                int64                    `json:"cache_ttl,required"`
-	CollectLogs             bool                     `json:"collect_logs,required"`
-	CreatedAt               time.Time                `json:"created_at,required" format:"date-time"`
-	ModifiedAt              time.Time                `json:"modified_at,required" format:"date-time"`
-	RateLimitingInterval    int64                    `json:"rate_limiting_interval"`
-	RateLimitingLimit       int64                    `json:"rate_limiting_limit"`
-	RateLimitingTechnique   string                   `json:"rate_limiting_technique"`
-	JSON                    aiGatewayGetResponseJSON `json:"-"`
+	ID                      string                                    `json:"id,required"`
+	CacheInvalidateOnUpdate bool                                      `json:"cache_invalidate_on_update,required"`
+	CacheTTL                int64                                     `json:"cache_ttl,required,nullable"`
+	CollectLogs             bool                                      `json:"collect_logs,required"`
+	CreatedAt               time.Time                                 `json:"created_at,required" format:"date-time"`
+	ModifiedAt              time.Time                                 `json:"modified_at,required" format:"date-time"`
+	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
+	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
+	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
 }
 
 // aiGatewayGetResponseJSON contains the JSON metadata for the struct
@@ -353,20 +413,50 @@ func (r aiGatewayGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type AIGatewayGetResponseRateLimitingTechnique string
+
+const (
+	AIGatewayGetResponseRateLimitingTechniqueFixed   AIGatewayGetResponseRateLimitingTechnique = "fixed"
+	AIGatewayGetResponseRateLimitingTechniqueSliding AIGatewayGetResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayGetResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseRateLimitingTechniqueFixed, AIGatewayGetResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// gateway id
-	ID                      param.Field[string] `json:"id,required"`
-	CacheInvalidateOnUpdate param.Field[bool]   `json:"cache_invalidate_on_update,required"`
-	CacheTTL                param.Field[int64]  `json:"cache_ttl,required"`
-	CollectLogs             param.Field[bool]   `json:"collect_logs,required"`
-	RateLimitingInterval    param.Field[int64]  `json:"rate_limiting_interval"`
-	RateLimitingLimit       param.Field[int64]  `json:"rate_limiting_limit"`
-	RateLimitingTechnique   param.Field[string] `json:"rate_limiting_technique"`
+	ID                      param.Field[string]                                  `json:"id,required"`
+	CacheInvalidateOnUpdate param.Field[bool]                                    `json:"cache_invalidate_on_update,required"`
+	CacheTTL                param.Field[int64]                                   `json:"cache_ttl,required"`
+	CollectLogs             param.Field[bool]                                    `json:"collect_logs,required"`
+	RateLimitingInterval    param.Field[int64]                                   `json:"rate_limiting_interval,required"`
+	RateLimitingLimit       param.Field[int64]                                   `json:"rate_limiting_limit,required"`
+	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 }
 
 func (r AIGatewayNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsRateLimitingTechnique string
+
+const (
+	AIGatewayNewParamsRateLimitingTechniqueFixed   AIGatewayNewParamsRateLimitingTechnique = "fixed"
+	AIGatewayNewParamsRateLimitingTechniqueSliding AIGatewayNewParamsRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayNewParamsRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsRateLimitingTechniqueFixed, AIGatewayNewParamsRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type AIGatewayNewResponseEnvelope struct {
@@ -393,17 +483,32 @@ func (r aiGatewayNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AIGatewayUpdateParams struct {
-	AccountID               param.Field[string] `path:"account_id,required"`
-	CacheInvalidateOnUpdate param.Field[bool]   `json:"cache_invalidate_on_update,required"`
-	CacheTTL                param.Field[int64]  `json:"cache_ttl,required"`
-	CollectLogs             param.Field[bool]   `json:"collect_logs,required"`
-	RateLimitingInterval    param.Field[int64]  `json:"rate_limiting_interval"`
-	RateLimitingLimit       param.Field[int64]  `json:"rate_limiting_limit"`
-	RateLimitingTechnique   param.Field[string] `json:"rate_limiting_technique"`
+	AccountID               param.Field[string]                                     `path:"account_id,required"`
+	CacheInvalidateOnUpdate param.Field[bool]                                       `json:"cache_invalidate_on_update,required"`
+	CacheTTL                param.Field[int64]                                      `json:"cache_ttl,required"`
+	CollectLogs             param.Field[bool]                                       `json:"collect_logs,required"`
+	RateLimitingInterval    param.Field[int64]                                      `json:"rate_limiting_interval,required"`
+	RateLimitingLimit       param.Field[int64]                                      `json:"rate_limiting_limit,required"`
+	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 }
 
 func (r AIGatewayUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayUpdateParamsRateLimitingTechnique string
+
+const (
+	AIGatewayUpdateParamsRateLimitingTechniqueFixed   AIGatewayUpdateParamsRateLimitingTechnique = "fixed"
+	AIGatewayUpdateParamsRateLimitingTechniqueSliding AIGatewayUpdateParamsRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayUpdateParamsRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsRateLimitingTechniqueFixed, AIGatewayUpdateParamsRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type AIGatewayUpdateResponseEnvelope struct {

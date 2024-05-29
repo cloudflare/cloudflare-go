@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestAIGatewayNewWithOptionalParams(t *testing.T) {
+func TestAIGatewayNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -35,7 +35,7 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		CollectLogs:             cloudflare.F(true),
 		RateLimitingInterval:    cloudflare.F(int64(0)),
 		RateLimitingLimit:       cloudflare.F(int64(0)),
-		RateLimitingTechnique:   cloudflare.F("string"),
+		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -46,7 +46,7 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
+func TestAIGatewayUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -69,7 +69,7 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			CollectLogs:             cloudflare.F(true),
 			RateLimitingInterval:    cloudflare.F(int64(0)),
 			RateLimitingLimit:       cloudflare.F(int64(0)),
-			RateLimitingTechnique:   cloudflare.F("string"),
+			RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
 		},
 	)
 	if err != nil {
@@ -125,7 +125,7 @@ func TestAIGatewayDelete(t *testing.T) {
 	)
 	_, err := client.AIGateway.Delete(
 		context.TODO(),
-		"my-gateway",
+		"string",
 		ai_gateway.AIGatewayDeleteParams{
 			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
 		},
