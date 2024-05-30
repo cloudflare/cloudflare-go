@@ -142,6 +142,28 @@ func (r *DatabaseService) Query(ctx context.Context, databaseID string, params D
 	return
 }
 
+// Returns the query result rows as arrays rather than objects. This is a
+// performance-optimized version of the /query endpoint.
+func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params DatabaseRawParams, opts ...option.RequestOption) (res *[]DatabaseRawResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DatabaseRawResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if databaseID == "" {
+		err = errors.New("missing required database_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/d1/database/%s/raw", params.AccountID, databaseID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type QueryResult struct {
 	Meta    QueryResultMeta `json:"meta"`
 	Results []interface{}   `json:"results"`
@@ -263,6 +285,108 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*DatabaseDeleteResponseUnion)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DatabaseRawResponse struct {
+	Meta    DatabaseRawResponseMeta    `json:"meta"`
+	Results DatabaseRawResponseResults `json:"results"`
+	Success bool                       `json:"success"`
+	JSON    databaseRawResponseJSON    `json:"-"`
+}
+
+// databaseRawResponseJSON contains the JSON metadata for the struct
+// [DatabaseRawResponse]
+type databaseRawResponseJSON struct {
+	Meta        apijson.Field
+	Results     apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DatabaseRawResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseRawResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type DatabaseRawResponseMeta struct {
+	ChangedDB   bool                        `json:"changed_db"`
+	Changes     float64                     `json:"changes"`
+	Duration    float64                     `json:"duration"`
+	LastRowID   float64                     `json:"last_row_id"`
+	RowsRead    float64                     `json:"rows_read"`
+	RowsWritten float64                     `json:"rows_written"`
+	SizeAfter   float64                     `json:"size_after"`
+	JSON        databaseRawResponseMetaJSON `json:"-"`
+}
+
+// databaseRawResponseMetaJSON contains the JSON metadata for the struct
+// [DatabaseRawResponseMeta]
+type databaseRawResponseMetaJSON struct {
+	ChangedDB   apijson.Field
+	Changes     apijson.Field
+	Duration    apijson.Field
+	LastRowID   apijson.Field
+	RowsRead    apijson.Field
+	RowsWritten apijson.Field
+	SizeAfter   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DatabaseRawResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseRawResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type DatabaseRawResponseResults struct {
+	Columns []string                                `json:"columns"`
+	Rows    [][]DatabaseRawResponseResultsRowsUnion `json:"rows"`
+	JSON    databaseRawResponseResultsJSON          `json:"-"`
+}
+
+// databaseRawResponseResultsJSON contains the JSON metadata for the struct
+// [DatabaseRawResponseResults]
+type databaseRawResponseResultsJSON struct {
+	Columns     apijson.Field
+	Rows        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DatabaseRawResponseResults) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseRawResponseResultsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Union satisfied by [shared.UnionFloat], [shared.UnionString] or
+// [d1.DatabaseRawResponseResultsRowsUnknown].
+type DatabaseRawResponseResultsRowsUnion interface {
+	ImplementsD1DatabaseRawResponseResultsRowsUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DatabaseRawResponseResultsRowsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
@@ -487,6 +611,60 @@ const (
 func (r DatabaseQueryResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DatabaseQueryResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DatabaseRawParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string]   `path:"account_id,required"`
+	Sql       param.Field[string]   `json:"sql,required"`
+	Params    param.Field[[]string] `json:"params"`
+}
+
+func (r DatabaseRawParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DatabaseRawResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []DatabaseRawResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success DatabaseRawResponseEnvelopeSuccess `json:"success,required"`
+	JSON    databaseRawResponseEnvelopeJSON    `json:"-"`
+}
+
+// databaseRawResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DatabaseRawResponseEnvelope]
+type databaseRawResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DatabaseRawResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseRawResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DatabaseRawResponseEnvelopeSuccess bool
+
+const (
+	DatabaseRawResponseEnvelopeSuccessTrue DatabaseRawResponseEnvelopeSuccess = true
+)
+
+func (r DatabaseRawResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatabaseRawResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
