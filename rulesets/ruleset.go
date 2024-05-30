@@ -419,10 +419,8 @@ func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 // [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.RulesetNewResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.RulesetNewResponseRulesRulesetsDDoSDynamicRule] or
-// [rulesets.RulesetNewResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule] or
+// [rulesets.RulesetNewResponseRulesRulesetsLogCustomFieldRule].
 type RulesetNewResponseRulesUnion interface {
 	implementsRulesetsRulesetNewResponseRule()
 }
@@ -510,16 +508,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(RulesetNewResponseRulesRulesetsLogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetNewResponseRulesRulesetsDDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetNewResponseRulesRulesetsForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -696,173 +684,31 @@ func (r rulesetNewResponseRulesRulesetsLogCustomFieldRuleActionParametersRespons
 	return r.raw
 }
 
-type RulesetNewResponseRulesRulesetsDDoSDynamicRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetNewResponseRulesRulesetsDDoSDynamicRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                             `json:"ref"`
-	JSON rulesetNewResponseRulesRulesetsDDoSDynamicRuleJSON `json:"-"`
-}
-
-// rulesetNewResponseRulesRulesetsDDoSDynamicRuleJSON contains the JSON metadata
-// for the struct [RulesetNewResponseRulesRulesetsDDoSDynamicRule]
-type rulesetNewResponseRulesRulesetsDDoSDynamicRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetNewResponseRulesRulesetsDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetNewResponseRulesRulesetsDDoSDynamicRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetNewResponseRulesRulesetsDDoSDynamicRule) implementsRulesetsRulesetNewResponseRule() {}
-
-// The action to perform when the rule matches.
-type RulesetNewResponseRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	RulesetNewResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic RulesetNewResponseRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r RulesetNewResponseRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetNewResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type RulesetNewResponseRulesRulesetsForceConnectionCloseRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetNewResponseRulesRulesetsForceConnectionCloseRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                      `json:"ref"`
-	JSON rulesetNewResponseRulesRulesetsForceConnectionCloseRuleJSON `json:"-"`
-}
-
-// rulesetNewResponseRulesRulesetsForceConnectionCloseRuleJSON contains the JSON
-// metadata for the struct
-// [RulesetNewResponseRulesRulesetsForceConnectionCloseRule]
-type rulesetNewResponseRulesRulesetsForceConnectionCloseRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetNewResponseRulesRulesetsForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetNewResponseRulesRulesetsForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetNewResponseRulesRulesetsForceConnectionCloseRule) implementsRulesetsRulesetNewResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type RulesetNewResponseRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	RulesetNewResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose RulesetNewResponseRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r RulesetNewResponseRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetNewResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type RulesetNewResponseRulesAction string
 
 const (
-	RulesetNewResponseRulesActionBlock                RulesetNewResponseRulesAction = "block"
-	RulesetNewResponseRulesActionChallenge            RulesetNewResponseRulesAction = "challenge"
-	RulesetNewResponseRulesActionCompressResponse     RulesetNewResponseRulesAction = "compress_response"
-	RulesetNewResponseRulesActionExecute              RulesetNewResponseRulesAction = "execute"
-	RulesetNewResponseRulesActionJSChallenge          RulesetNewResponseRulesAction = "js_challenge"
-	RulesetNewResponseRulesActionLog                  RulesetNewResponseRulesAction = "log"
-	RulesetNewResponseRulesActionManagedChallenge     RulesetNewResponseRulesAction = "managed_challenge"
-	RulesetNewResponseRulesActionRedirect             RulesetNewResponseRulesAction = "redirect"
-	RulesetNewResponseRulesActionRewrite              RulesetNewResponseRulesAction = "rewrite"
-	RulesetNewResponseRulesActionRoute                RulesetNewResponseRulesAction = "route"
-	RulesetNewResponseRulesActionScore                RulesetNewResponseRulesAction = "score"
-	RulesetNewResponseRulesActionServeError           RulesetNewResponseRulesAction = "serve_error"
-	RulesetNewResponseRulesActionSetConfig            RulesetNewResponseRulesAction = "set_config"
-	RulesetNewResponseRulesActionSkip                 RulesetNewResponseRulesAction = "skip"
-	RulesetNewResponseRulesActionSetCacheSettings     RulesetNewResponseRulesAction = "set_cache_settings"
-	RulesetNewResponseRulesActionLogCustomField       RulesetNewResponseRulesAction = "log_custom_field"
-	RulesetNewResponseRulesActionDDoSDynamic          RulesetNewResponseRulesAction = "ddos_dynamic"
-	RulesetNewResponseRulesActionForceConnectionClose RulesetNewResponseRulesAction = "force_connection_close"
+	RulesetNewResponseRulesActionBlock            RulesetNewResponseRulesAction = "block"
+	RulesetNewResponseRulesActionChallenge        RulesetNewResponseRulesAction = "challenge"
+	RulesetNewResponseRulesActionCompressResponse RulesetNewResponseRulesAction = "compress_response"
+	RulesetNewResponseRulesActionExecute          RulesetNewResponseRulesAction = "execute"
+	RulesetNewResponseRulesActionJSChallenge      RulesetNewResponseRulesAction = "js_challenge"
+	RulesetNewResponseRulesActionLog              RulesetNewResponseRulesAction = "log"
+	RulesetNewResponseRulesActionManagedChallenge RulesetNewResponseRulesAction = "managed_challenge"
+	RulesetNewResponseRulesActionRedirect         RulesetNewResponseRulesAction = "redirect"
+	RulesetNewResponseRulesActionRewrite          RulesetNewResponseRulesAction = "rewrite"
+	RulesetNewResponseRulesActionRoute            RulesetNewResponseRulesAction = "route"
+	RulesetNewResponseRulesActionScore            RulesetNewResponseRulesAction = "score"
+	RulesetNewResponseRulesActionServeError       RulesetNewResponseRulesAction = "serve_error"
+	RulesetNewResponseRulesActionSetConfig        RulesetNewResponseRulesAction = "set_config"
+	RulesetNewResponseRulesActionSkip             RulesetNewResponseRulesAction = "skip"
+	RulesetNewResponseRulesActionSetCacheSettings RulesetNewResponseRulesAction = "set_cache_settings"
+	RulesetNewResponseRulesActionLogCustomField   RulesetNewResponseRulesAction = "log_custom_field"
 )
 
 func (r RulesetNewResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetNewResponseRulesActionBlock, RulesetNewResponseRulesActionChallenge, RulesetNewResponseRulesActionCompressResponse, RulesetNewResponseRulesActionExecute, RulesetNewResponseRulesActionJSChallenge, RulesetNewResponseRulesActionLog, RulesetNewResponseRulesActionManagedChallenge, RulesetNewResponseRulesActionRedirect, RulesetNewResponseRulesActionRewrite, RulesetNewResponseRulesActionRoute, RulesetNewResponseRulesActionScore, RulesetNewResponseRulesActionServeError, RulesetNewResponseRulesActionSetConfig, RulesetNewResponseRulesActionSkip, RulesetNewResponseRulesActionSetCacheSettings, RulesetNewResponseRulesActionLogCustomField, RulesetNewResponseRulesActionDDoSDynamic, RulesetNewResponseRulesActionForceConnectionClose:
+	case RulesetNewResponseRulesActionBlock, RulesetNewResponseRulesActionChallenge, RulesetNewResponseRulesActionCompressResponse, RulesetNewResponseRulesActionExecute, RulesetNewResponseRulesActionJSChallenge, RulesetNewResponseRulesActionLog, RulesetNewResponseRulesActionManagedChallenge, RulesetNewResponseRulesActionRedirect, RulesetNewResponseRulesActionRewrite, RulesetNewResponseRulesActionRoute, RulesetNewResponseRulesActionScore, RulesetNewResponseRulesActionServeError, RulesetNewResponseRulesActionSetConfig, RulesetNewResponseRulesActionSkip, RulesetNewResponseRulesActionSetCacheSettings, RulesetNewResponseRulesActionLogCustomField:
 		return true
 	}
 	return false
@@ -976,10 +822,8 @@ func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 // [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.RulesetUpdateResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.RulesetUpdateResponseRulesRulesetsDDoSDynamicRule] or
-// [rulesets.RulesetUpdateResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule] or
+// [rulesets.RulesetUpdateResponseRulesRulesetsLogCustomFieldRule].
 type RulesetUpdateResponseRulesUnion interface {
 	implementsRulesetsRulesetUpdateResponseRule()
 }
@@ -1067,16 +911,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(RulesetUpdateResponseRulesRulesetsLogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetUpdateResponseRulesRulesetsDDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetUpdateResponseRulesRulesetsForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -1253,174 +1087,31 @@ func (r rulesetUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResp
 	return r.raw
 }
 
-type RulesetUpdateResponseRulesRulesetsDDoSDynamicRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetUpdateResponseRulesRulesetsDDoSDynamicRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                `json:"ref"`
-	JSON rulesetUpdateResponseRulesRulesetsDDoSDynamicRuleJSON `json:"-"`
-}
-
-// rulesetUpdateResponseRulesRulesetsDDoSDynamicRuleJSON contains the JSON metadata
-// for the struct [RulesetUpdateResponseRulesRulesetsDDoSDynamicRule]
-type rulesetUpdateResponseRulesRulesetsDDoSDynamicRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetUpdateResponseRulesRulesetsDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetUpdateResponseRulesRulesetsDDoSDynamicRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetUpdateResponseRulesRulesetsDDoSDynamicRule) implementsRulesetsRulesetUpdateResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type RulesetUpdateResponseRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	RulesetUpdateResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic RulesetUpdateResponseRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r RulesetUpdateResponseRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetUpdateResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type RulesetUpdateResponseRulesRulesetsForceConnectionCloseRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                         `json:"ref"`
-	JSON rulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON `json:"-"`
-}
-
-// rulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON contains the JSON
-// metadata for the struct
-// [RulesetUpdateResponseRulesRulesetsForceConnectionCloseRule]
-type rulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetUpdateResponseRulesRulesetsForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetUpdateResponseRulesRulesetsForceConnectionCloseRule) implementsRulesetsRulesetUpdateResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type RulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	RulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose RulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r RulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetUpdateResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type RulesetUpdateResponseRulesAction string
 
 const (
-	RulesetUpdateResponseRulesActionBlock                RulesetUpdateResponseRulesAction = "block"
-	RulesetUpdateResponseRulesActionChallenge            RulesetUpdateResponseRulesAction = "challenge"
-	RulesetUpdateResponseRulesActionCompressResponse     RulesetUpdateResponseRulesAction = "compress_response"
-	RulesetUpdateResponseRulesActionExecute              RulesetUpdateResponseRulesAction = "execute"
-	RulesetUpdateResponseRulesActionJSChallenge          RulesetUpdateResponseRulesAction = "js_challenge"
-	RulesetUpdateResponseRulesActionLog                  RulesetUpdateResponseRulesAction = "log"
-	RulesetUpdateResponseRulesActionManagedChallenge     RulesetUpdateResponseRulesAction = "managed_challenge"
-	RulesetUpdateResponseRulesActionRedirect             RulesetUpdateResponseRulesAction = "redirect"
-	RulesetUpdateResponseRulesActionRewrite              RulesetUpdateResponseRulesAction = "rewrite"
-	RulesetUpdateResponseRulesActionRoute                RulesetUpdateResponseRulesAction = "route"
-	RulesetUpdateResponseRulesActionScore                RulesetUpdateResponseRulesAction = "score"
-	RulesetUpdateResponseRulesActionServeError           RulesetUpdateResponseRulesAction = "serve_error"
-	RulesetUpdateResponseRulesActionSetConfig            RulesetUpdateResponseRulesAction = "set_config"
-	RulesetUpdateResponseRulesActionSkip                 RulesetUpdateResponseRulesAction = "skip"
-	RulesetUpdateResponseRulesActionSetCacheSettings     RulesetUpdateResponseRulesAction = "set_cache_settings"
-	RulesetUpdateResponseRulesActionLogCustomField       RulesetUpdateResponseRulesAction = "log_custom_field"
-	RulesetUpdateResponseRulesActionDDoSDynamic          RulesetUpdateResponseRulesAction = "ddos_dynamic"
-	RulesetUpdateResponseRulesActionForceConnectionClose RulesetUpdateResponseRulesAction = "force_connection_close"
+	RulesetUpdateResponseRulesActionBlock            RulesetUpdateResponseRulesAction = "block"
+	RulesetUpdateResponseRulesActionChallenge        RulesetUpdateResponseRulesAction = "challenge"
+	RulesetUpdateResponseRulesActionCompressResponse RulesetUpdateResponseRulesAction = "compress_response"
+	RulesetUpdateResponseRulesActionExecute          RulesetUpdateResponseRulesAction = "execute"
+	RulesetUpdateResponseRulesActionJSChallenge      RulesetUpdateResponseRulesAction = "js_challenge"
+	RulesetUpdateResponseRulesActionLog              RulesetUpdateResponseRulesAction = "log"
+	RulesetUpdateResponseRulesActionManagedChallenge RulesetUpdateResponseRulesAction = "managed_challenge"
+	RulesetUpdateResponseRulesActionRedirect         RulesetUpdateResponseRulesAction = "redirect"
+	RulesetUpdateResponseRulesActionRewrite          RulesetUpdateResponseRulesAction = "rewrite"
+	RulesetUpdateResponseRulesActionRoute            RulesetUpdateResponseRulesAction = "route"
+	RulesetUpdateResponseRulesActionScore            RulesetUpdateResponseRulesAction = "score"
+	RulesetUpdateResponseRulesActionServeError       RulesetUpdateResponseRulesAction = "serve_error"
+	RulesetUpdateResponseRulesActionSetConfig        RulesetUpdateResponseRulesAction = "set_config"
+	RulesetUpdateResponseRulesActionSkip             RulesetUpdateResponseRulesAction = "skip"
+	RulesetUpdateResponseRulesActionSetCacheSettings RulesetUpdateResponseRulesAction = "set_cache_settings"
+	RulesetUpdateResponseRulesActionLogCustomField   RulesetUpdateResponseRulesAction = "log_custom_field"
 )
 
 func (r RulesetUpdateResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetUpdateResponseRulesActionBlock, RulesetUpdateResponseRulesActionChallenge, RulesetUpdateResponseRulesActionCompressResponse, RulesetUpdateResponseRulesActionExecute, RulesetUpdateResponseRulesActionJSChallenge, RulesetUpdateResponseRulesActionLog, RulesetUpdateResponseRulesActionManagedChallenge, RulesetUpdateResponseRulesActionRedirect, RulesetUpdateResponseRulesActionRewrite, RulesetUpdateResponseRulesActionRoute, RulesetUpdateResponseRulesActionScore, RulesetUpdateResponseRulesActionServeError, RulesetUpdateResponseRulesActionSetConfig, RulesetUpdateResponseRulesActionSkip, RulesetUpdateResponseRulesActionSetCacheSettings, RulesetUpdateResponseRulesActionLogCustomField, RulesetUpdateResponseRulesActionDDoSDynamic, RulesetUpdateResponseRulesActionForceConnectionClose:
+	case RulesetUpdateResponseRulesActionBlock, RulesetUpdateResponseRulesActionChallenge, RulesetUpdateResponseRulesActionCompressResponse, RulesetUpdateResponseRulesActionExecute, RulesetUpdateResponseRulesActionJSChallenge, RulesetUpdateResponseRulesActionLog, RulesetUpdateResponseRulesActionManagedChallenge, RulesetUpdateResponseRulesActionRedirect, RulesetUpdateResponseRulesActionRewrite, RulesetUpdateResponseRulesActionRoute, RulesetUpdateResponseRulesActionScore, RulesetUpdateResponseRulesActionServeError, RulesetUpdateResponseRulesActionSetConfig, RulesetUpdateResponseRulesActionSkip, RulesetUpdateResponseRulesActionSetCacheSettings, RulesetUpdateResponseRulesActionLogCustomField:
 		return true
 	}
 	return false
@@ -1534,10 +1225,8 @@ func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 // [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.RulesetGetResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.RulesetGetResponseRulesRulesetsDDoSDynamicRule] or
-// [rulesets.RulesetGetResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule] or
+// [rulesets.RulesetGetResponseRulesRulesetsLogCustomFieldRule].
 type RulesetGetResponseRulesUnion interface {
 	implementsRulesetsRulesetGetResponseRule()
 }
@@ -1625,16 +1314,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(RulesetGetResponseRulesRulesetsLogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetGetResponseRulesRulesetsDDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetGetResponseRulesRulesetsForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -1811,173 +1490,31 @@ func (r rulesetGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRespons
 	return r.raw
 }
 
-type RulesetGetResponseRulesRulesetsDDoSDynamicRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetGetResponseRulesRulesetsDDoSDynamicRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                             `json:"ref"`
-	JSON rulesetGetResponseRulesRulesetsDDoSDynamicRuleJSON `json:"-"`
-}
-
-// rulesetGetResponseRulesRulesetsDDoSDynamicRuleJSON contains the JSON metadata
-// for the struct [RulesetGetResponseRulesRulesetsDDoSDynamicRule]
-type rulesetGetResponseRulesRulesetsDDoSDynamicRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetGetResponseRulesRulesetsDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetGetResponseRulesRulesetsDDoSDynamicRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetGetResponseRulesRulesetsDDoSDynamicRule) implementsRulesetsRulesetGetResponseRule() {}
-
-// The action to perform when the rule matches.
-type RulesetGetResponseRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	RulesetGetResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic RulesetGetResponseRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r RulesetGetResponseRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetGetResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type RulesetGetResponseRulesRulesetsForceConnectionCloseRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetGetResponseRulesRulesetsForceConnectionCloseRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                      `json:"ref"`
-	JSON rulesetGetResponseRulesRulesetsForceConnectionCloseRuleJSON `json:"-"`
-}
-
-// rulesetGetResponseRulesRulesetsForceConnectionCloseRuleJSON contains the JSON
-// metadata for the struct
-// [RulesetGetResponseRulesRulesetsForceConnectionCloseRule]
-type rulesetGetResponseRulesRulesetsForceConnectionCloseRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetGetResponseRulesRulesetsForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetGetResponseRulesRulesetsForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetGetResponseRulesRulesetsForceConnectionCloseRule) implementsRulesetsRulesetGetResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type RulesetGetResponseRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	RulesetGetResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose RulesetGetResponseRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r RulesetGetResponseRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetGetResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type RulesetGetResponseRulesAction string
 
 const (
-	RulesetGetResponseRulesActionBlock                RulesetGetResponseRulesAction = "block"
-	RulesetGetResponseRulesActionChallenge            RulesetGetResponseRulesAction = "challenge"
-	RulesetGetResponseRulesActionCompressResponse     RulesetGetResponseRulesAction = "compress_response"
-	RulesetGetResponseRulesActionExecute              RulesetGetResponseRulesAction = "execute"
-	RulesetGetResponseRulesActionJSChallenge          RulesetGetResponseRulesAction = "js_challenge"
-	RulesetGetResponseRulesActionLog                  RulesetGetResponseRulesAction = "log"
-	RulesetGetResponseRulesActionManagedChallenge     RulesetGetResponseRulesAction = "managed_challenge"
-	RulesetGetResponseRulesActionRedirect             RulesetGetResponseRulesAction = "redirect"
-	RulesetGetResponseRulesActionRewrite              RulesetGetResponseRulesAction = "rewrite"
-	RulesetGetResponseRulesActionRoute                RulesetGetResponseRulesAction = "route"
-	RulesetGetResponseRulesActionScore                RulesetGetResponseRulesAction = "score"
-	RulesetGetResponseRulesActionServeError           RulesetGetResponseRulesAction = "serve_error"
-	RulesetGetResponseRulesActionSetConfig            RulesetGetResponseRulesAction = "set_config"
-	RulesetGetResponseRulesActionSkip                 RulesetGetResponseRulesAction = "skip"
-	RulesetGetResponseRulesActionSetCacheSettings     RulesetGetResponseRulesAction = "set_cache_settings"
-	RulesetGetResponseRulesActionLogCustomField       RulesetGetResponseRulesAction = "log_custom_field"
-	RulesetGetResponseRulesActionDDoSDynamic          RulesetGetResponseRulesAction = "ddos_dynamic"
-	RulesetGetResponseRulesActionForceConnectionClose RulesetGetResponseRulesAction = "force_connection_close"
+	RulesetGetResponseRulesActionBlock            RulesetGetResponseRulesAction = "block"
+	RulesetGetResponseRulesActionChallenge        RulesetGetResponseRulesAction = "challenge"
+	RulesetGetResponseRulesActionCompressResponse RulesetGetResponseRulesAction = "compress_response"
+	RulesetGetResponseRulesActionExecute          RulesetGetResponseRulesAction = "execute"
+	RulesetGetResponseRulesActionJSChallenge      RulesetGetResponseRulesAction = "js_challenge"
+	RulesetGetResponseRulesActionLog              RulesetGetResponseRulesAction = "log"
+	RulesetGetResponseRulesActionManagedChallenge RulesetGetResponseRulesAction = "managed_challenge"
+	RulesetGetResponseRulesActionRedirect         RulesetGetResponseRulesAction = "redirect"
+	RulesetGetResponseRulesActionRewrite          RulesetGetResponseRulesAction = "rewrite"
+	RulesetGetResponseRulesActionRoute            RulesetGetResponseRulesAction = "route"
+	RulesetGetResponseRulesActionScore            RulesetGetResponseRulesAction = "score"
+	RulesetGetResponseRulesActionServeError       RulesetGetResponseRulesAction = "serve_error"
+	RulesetGetResponseRulesActionSetConfig        RulesetGetResponseRulesAction = "set_config"
+	RulesetGetResponseRulesActionSkip             RulesetGetResponseRulesAction = "skip"
+	RulesetGetResponseRulesActionSetCacheSettings RulesetGetResponseRulesAction = "set_cache_settings"
+	RulesetGetResponseRulesActionLogCustomField   RulesetGetResponseRulesAction = "log_custom_field"
 )
 
 func (r RulesetGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetGetResponseRulesActionBlock, RulesetGetResponseRulesActionChallenge, RulesetGetResponseRulesActionCompressResponse, RulesetGetResponseRulesActionExecute, RulesetGetResponseRulesActionJSChallenge, RulesetGetResponseRulesActionLog, RulesetGetResponseRulesActionManagedChallenge, RulesetGetResponseRulesActionRedirect, RulesetGetResponseRulesActionRewrite, RulesetGetResponseRulesActionRoute, RulesetGetResponseRulesActionScore, RulesetGetResponseRulesActionServeError, RulesetGetResponseRulesActionSetConfig, RulesetGetResponseRulesActionSkip, RulesetGetResponseRulesActionSetCacheSettings, RulesetGetResponseRulesActionLogCustomField, RulesetGetResponseRulesActionDDoSDynamic, RulesetGetResponseRulesActionForceConnectionClose:
+	case RulesetGetResponseRulesActionBlock, RulesetGetResponseRulesActionChallenge, RulesetGetResponseRulesActionCompressResponse, RulesetGetResponseRulesActionExecute, RulesetGetResponseRulesActionJSChallenge, RulesetGetResponseRulesActionLog, RulesetGetResponseRulesActionManagedChallenge, RulesetGetResponseRulesActionRedirect, RulesetGetResponseRulesActionRewrite, RulesetGetResponseRulesActionRoute, RulesetGetResponseRulesActionScore, RulesetGetResponseRulesActionServeError, RulesetGetResponseRulesActionSetConfig, RulesetGetResponseRulesActionSkip, RulesetGetResponseRulesActionSetCacheSettings, RulesetGetResponseRulesActionLogCustomField:
 		return true
 	}
 	return false
@@ -2038,8 +1575,6 @@ func (r RulesetNewParamsRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
 // [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
 // [rulesets.SetCacheSettingsRuleParam],
 // [rulesets.RulesetNewParamsRulesRulesetsLogCustomFieldRule],
-// [rulesets.RulesetNewParamsRulesRulesetsDDoSDynamicRule],
-// [rulesets.RulesetNewParamsRulesRulesetsForceConnectionCloseRule],
 // [RulesetNewParamsRule].
 type RulesetNewParamsRuleUnion interface {
 	implementsRulesetsRulesetNewParamsRuleUnion()
@@ -2130,114 +1665,31 @@ func (r RulesetNewParamsRulesRulesetsLogCustomFieldRuleActionParametersResponseF
 	return apijson.MarshalRoot(r)
 }
 
-type RulesetNewParamsRulesRulesetsDDoSDynamicRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetNewParamsRulesRulesetsDDoSDynamicRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetNewParamsRulesRulesetsDDoSDynamicRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetNewParamsRulesRulesetsDDoSDynamicRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
-
-// The action to perform when the rule matches.
-type RulesetNewParamsRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	RulesetNewParamsRulesRulesetsDDoSDynamicRuleActionDDoSDynamic RulesetNewParamsRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r RulesetNewParamsRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetNewParamsRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type RulesetNewParamsRulesRulesetsForceConnectionCloseRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetNewParamsRulesRulesetsForceConnectionCloseRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetNewParamsRulesRulesetsForceConnectionCloseRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetNewParamsRulesRulesetsForceConnectionCloseRule) implementsRulesetsRulesetNewParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type RulesetNewParamsRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	RulesetNewParamsRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose RulesetNewParamsRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r RulesetNewParamsRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetNewParamsRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type RulesetNewParamsRulesAction string
 
 const (
-	RulesetNewParamsRulesActionBlock                RulesetNewParamsRulesAction = "block"
-	RulesetNewParamsRulesActionChallenge            RulesetNewParamsRulesAction = "challenge"
-	RulesetNewParamsRulesActionCompressResponse     RulesetNewParamsRulesAction = "compress_response"
-	RulesetNewParamsRulesActionExecute              RulesetNewParamsRulesAction = "execute"
-	RulesetNewParamsRulesActionJSChallenge          RulesetNewParamsRulesAction = "js_challenge"
-	RulesetNewParamsRulesActionLog                  RulesetNewParamsRulesAction = "log"
-	RulesetNewParamsRulesActionManagedChallenge     RulesetNewParamsRulesAction = "managed_challenge"
-	RulesetNewParamsRulesActionRedirect             RulesetNewParamsRulesAction = "redirect"
-	RulesetNewParamsRulesActionRewrite              RulesetNewParamsRulesAction = "rewrite"
-	RulesetNewParamsRulesActionRoute                RulesetNewParamsRulesAction = "route"
-	RulesetNewParamsRulesActionScore                RulesetNewParamsRulesAction = "score"
-	RulesetNewParamsRulesActionServeError           RulesetNewParamsRulesAction = "serve_error"
-	RulesetNewParamsRulesActionSetConfig            RulesetNewParamsRulesAction = "set_config"
-	RulesetNewParamsRulesActionSkip                 RulesetNewParamsRulesAction = "skip"
-	RulesetNewParamsRulesActionSetCacheSettings     RulesetNewParamsRulesAction = "set_cache_settings"
-	RulesetNewParamsRulesActionLogCustomField       RulesetNewParamsRulesAction = "log_custom_field"
-	RulesetNewParamsRulesActionDDoSDynamic          RulesetNewParamsRulesAction = "ddos_dynamic"
-	RulesetNewParamsRulesActionForceConnectionClose RulesetNewParamsRulesAction = "force_connection_close"
+	RulesetNewParamsRulesActionBlock            RulesetNewParamsRulesAction = "block"
+	RulesetNewParamsRulesActionChallenge        RulesetNewParamsRulesAction = "challenge"
+	RulesetNewParamsRulesActionCompressResponse RulesetNewParamsRulesAction = "compress_response"
+	RulesetNewParamsRulesActionExecute          RulesetNewParamsRulesAction = "execute"
+	RulesetNewParamsRulesActionJSChallenge      RulesetNewParamsRulesAction = "js_challenge"
+	RulesetNewParamsRulesActionLog              RulesetNewParamsRulesAction = "log"
+	RulesetNewParamsRulesActionManagedChallenge RulesetNewParamsRulesAction = "managed_challenge"
+	RulesetNewParamsRulesActionRedirect         RulesetNewParamsRulesAction = "redirect"
+	RulesetNewParamsRulesActionRewrite          RulesetNewParamsRulesAction = "rewrite"
+	RulesetNewParamsRulesActionRoute            RulesetNewParamsRulesAction = "route"
+	RulesetNewParamsRulesActionScore            RulesetNewParamsRulesAction = "score"
+	RulesetNewParamsRulesActionServeError       RulesetNewParamsRulesAction = "serve_error"
+	RulesetNewParamsRulesActionSetConfig        RulesetNewParamsRulesAction = "set_config"
+	RulesetNewParamsRulesActionSkip             RulesetNewParamsRulesAction = "skip"
+	RulesetNewParamsRulesActionSetCacheSettings RulesetNewParamsRulesAction = "set_cache_settings"
+	RulesetNewParamsRulesActionLogCustomField   RulesetNewParamsRulesAction = "log_custom_field"
 )
 
 func (r RulesetNewParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetNewParamsRulesActionBlock, RulesetNewParamsRulesActionChallenge, RulesetNewParamsRulesActionCompressResponse, RulesetNewParamsRulesActionExecute, RulesetNewParamsRulesActionJSChallenge, RulesetNewParamsRulesActionLog, RulesetNewParamsRulesActionManagedChallenge, RulesetNewParamsRulesActionRedirect, RulesetNewParamsRulesActionRewrite, RulesetNewParamsRulesActionRoute, RulesetNewParamsRulesActionScore, RulesetNewParamsRulesActionServeError, RulesetNewParamsRulesActionSetConfig, RulesetNewParamsRulesActionSkip, RulesetNewParamsRulesActionSetCacheSettings, RulesetNewParamsRulesActionLogCustomField, RulesetNewParamsRulesActionDDoSDynamic, RulesetNewParamsRulesActionForceConnectionClose:
+	case RulesetNewParamsRulesActionBlock, RulesetNewParamsRulesActionChallenge, RulesetNewParamsRulesActionCompressResponse, RulesetNewParamsRulesActionExecute, RulesetNewParamsRulesActionJSChallenge, RulesetNewParamsRulesActionLog, RulesetNewParamsRulesActionManagedChallenge, RulesetNewParamsRulesActionRedirect, RulesetNewParamsRulesActionRewrite, RulesetNewParamsRulesActionRoute, RulesetNewParamsRulesActionScore, RulesetNewParamsRulesActionServeError, RulesetNewParamsRulesActionSetConfig, RulesetNewParamsRulesActionSkip, RulesetNewParamsRulesActionSetCacheSettings, RulesetNewParamsRulesActionLogCustomField:
 		return true
 	}
 	return false
@@ -2449,8 +1901,6 @@ func (r RulesetUpdateParamsRule) implementsRulesetsRulesetUpdateParamsRuleUnion(
 // [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
 // [rulesets.SetCacheSettingsRuleParam],
 // [rulesets.RulesetUpdateParamsRulesRulesetsLogCustomFieldRule],
-// [rulesets.RulesetUpdateParamsRulesRulesetsDDoSDynamicRule],
-// [rulesets.RulesetUpdateParamsRulesRulesetsForceConnectionCloseRule],
 // [RulesetUpdateParamsRule].
 type RulesetUpdateParamsRuleUnion interface {
 	implementsRulesetsRulesetUpdateParamsRuleUnion()
@@ -2541,115 +1991,31 @@ func (r RulesetUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersRespon
 	return apijson.MarshalRoot(r)
 }
 
-type RulesetUpdateParamsRulesRulesetsDDoSDynamicRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetUpdateParamsRulesRulesetsDDoSDynamicRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetUpdateParamsRulesRulesetsDDoSDynamicRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetUpdateParamsRulesRulesetsDDoSDynamicRule) implementsRulesetsRulesetUpdateParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type RulesetUpdateParamsRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	RulesetUpdateParamsRulesRulesetsDDoSDynamicRuleActionDDoSDynamic RulesetUpdateParamsRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r RulesetUpdateParamsRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetUpdateParamsRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type RulesetUpdateParamsRulesRulesetsForceConnectionCloseRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetUpdateParamsRulesRulesetsForceConnectionCloseRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetUpdateParamsRulesRulesetsForceConnectionCloseRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetUpdateParamsRulesRulesetsForceConnectionCloseRule) implementsRulesetsRulesetUpdateParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type RulesetUpdateParamsRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	RulesetUpdateParamsRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose RulesetUpdateParamsRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r RulesetUpdateParamsRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetUpdateParamsRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type RulesetUpdateParamsRulesAction string
 
 const (
-	RulesetUpdateParamsRulesActionBlock                RulesetUpdateParamsRulesAction = "block"
-	RulesetUpdateParamsRulesActionChallenge            RulesetUpdateParamsRulesAction = "challenge"
-	RulesetUpdateParamsRulesActionCompressResponse     RulesetUpdateParamsRulesAction = "compress_response"
-	RulesetUpdateParamsRulesActionExecute              RulesetUpdateParamsRulesAction = "execute"
-	RulesetUpdateParamsRulesActionJSChallenge          RulesetUpdateParamsRulesAction = "js_challenge"
-	RulesetUpdateParamsRulesActionLog                  RulesetUpdateParamsRulesAction = "log"
-	RulesetUpdateParamsRulesActionManagedChallenge     RulesetUpdateParamsRulesAction = "managed_challenge"
-	RulesetUpdateParamsRulesActionRedirect             RulesetUpdateParamsRulesAction = "redirect"
-	RulesetUpdateParamsRulesActionRewrite              RulesetUpdateParamsRulesAction = "rewrite"
-	RulesetUpdateParamsRulesActionRoute                RulesetUpdateParamsRulesAction = "route"
-	RulesetUpdateParamsRulesActionScore                RulesetUpdateParamsRulesAction = "score"
-	RulesetUpdateParamsRulesActionServeError           RulesetUpdateParamsRulesAction = "serve_error"
-	RulesetUpdateParamsRulesActionSetConfig            RulesetUpdateParamsRulesAction = "set_config"
-	RulesetUpdateParamsRulesActionSkip                 RulesetUpdateParamsRulesAction = "skip"
-	RulesetUpdateParamsRulesActionSetCacheSettings     RulesetUpdateParamsRulesAction = "set_cache_settings"
-	RulesetUpdateParamsRulesActionLogCustomField       RulesetUpdateParamsRulesAction = "log_custom_field"
-	RulesetUpdateParamsRulesActionDDoSDynamic          RulesetUpdateParamsRulesAction = "ddos_dynamic"
-	RulesetUpdateParamsRulesActionForceConnectionClose RulesetUpdateParamsRulesAction = "force_connection_close"
+	RulesetUpdateParamsRulesActionBlock            RulesetUpdateParamsRulesAction = "block"
+	RulesetUpdateParamsRulesActionChallenge        RulesetUpdateParamsRulesAction = "challenge"
+	RulesetUpdateParamsRulesActionCompressResponse RulesetUpdateParamsRulesAction = "compress_response"
+	RulesetUpdateParamsRulesActionExecute          RulesetUpdateParamsRulesAction = "execute"
+	RulesetUpdateParamsRulesActionJSChallenge      RulesetUpdateParamsRulesAction = "js_challenge"
+	RulesetUpdateParamsRulesActionLog              RulesetUpdateParamsRulesAction = "log"
+	RulesetUpdateParamsRulesActionManagedChallenge RulesetUpdateParamsRulesAction = "managed_challenge"
+	RulesetUpdateParamsRulesActionRedirect         RulesetUpdateParamsRulesAction = "redirect"
+	RulesetUpdateParamsRulesActionRewrite          RulesetUpdateParamsRulesAction = "rewrite"
+	RulesetUpdateParamsRulesActionRoute            RulesetUpdateParamsRulesAction = "route"
+	RulesetUpdateParamsRulesActionScore            RulesetUpdateParamsRulesAction = "score"
+	RulesetUpdateParamsRulesActionServeError       RulesetUpdateParamsRulesAction = "serve_error"
+	RulesetUpdateParamsRulesActionSetConfig        RulesetUpdateParamsRulesAction = "set_config"
+	RulesetUpdateParamsRulesActionSkip             RulesetUpdateParamsRulesAction = "skip"
+	RulesetUpdateParamsRulesActionSetCacheSettings RulesetUpdateParamsRulesAction = "set_cache_settings"
+	RulesetUpdateParamsRulesActionLogCustomField   RulesetUpdateParamsRulesAction = "log_custom_field"
 )
 
 func (r RulesetUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionJSChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip, RulesetUpdateParamsRulesActionSetCacheSettings, RulesetUpdateParamsRulesActionLogCustomField, RulesetUpdateParamsRulesActionDDoSDynamic, RulesetUpdateParamsRulesActionForceConnectionClose:
+	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionJSChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip, RulesetUpdateParamsRulesActionSetCacheSettings, RulesetUpdateParamsRulesActionLogCustomField:
 		return true
 	}
 	return false
