@@ -131,6 +131,27 @@ func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body 
 	return
 }
 
+// Get the namespace corresponding to the given ID.
+func (r *NamespaceService) Get(ctx context.Context, namespaceID string, query NamespaceGetParams, opts ...option.RequestOption) (res *Namespace, err error) {
+	opts = append(r.Options[:], opts...)
+	var env NamespaceGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", query.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type Namespace struct {
 	// Namespace identifier tag.
 	ID string `json:"id,required"`
@@ -395,6 +416,54 @@ const (
 func (r NamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case NamespaceDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type NamespaceGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type NamespaceGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Namespace             `json:"result,required"`
+	// Whether the API call was successful
+	Success NamespaceGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    namespaceGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// namespaceGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [NamespaceGetResponseEnvelope]
+type namespaceGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type NamespaceGetResponseEnvelopeSuccess bool
+
+const (
+	NamespaceGetResponseEnvelopeSuccessTrue NamespaceGetResponseEnvelopeSuccess = true
+)
+
+func (r NamespaceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

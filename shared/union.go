@@ -119,6 +119,7 @@ func (UnionString) ImplementsStreamDownloadGetResponseUnion()                   
 func (UnionString) ImplementsAlertingMechanismItemIDUnionParam()                                 {}
 func (UnionString) ImplementsAlertingMechanismItemIDUnion()                                      {}
 func (UnionString) ImplementsD1DatabaseDeleteResponseUnion()                                     {}
+func (UnionString) ImplementsD1DatabaseRawResponseResultsRowsUnion()                             {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}
 func (UnionString) ImplementsZeroTrustDeviceGetResponseUnion()                                   {}
 func (UnionString) ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnion()              {}
@@ -194,6 +195,7 @@ type UnionFloat float64
 func (UnionFloat) ImplementsDNSTTLUnionParam()                                {}
 func (UnionFloat) ImplementsDNSTTLUnion()                                     {}
 func (UnionFloat) ImplementsEmailRoutingDNSRecordTTLUnion()                   {}
+func (UnionFloat) ImplementsD1DatabaseRawResponseResultsRowsUnion()           {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                 {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnion()                      {}
