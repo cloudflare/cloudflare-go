@@ -138,10 +138,10 @@ func (r testStatOverTimeSlotJSON) RawJSON() string {
 
 type DEXHTTPTestPercentileGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// End time for aggregate metrics in ISO format
-	TimeEnd param.Field[string] `query:"timeEnd,required"`
 	// Start time for aggregate metrics in ISO format
-	TimeStart param.Field[string] `query:"timeStart,required"`
+	From param.Field[string] `query:"from,required"`
+	// End time for aggregate metrics in ISO format
+	To param.Field[string] `query:"to,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
