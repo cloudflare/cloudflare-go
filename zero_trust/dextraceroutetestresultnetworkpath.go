@@ -62,6 +62,8 @@ type DEXTracerouteTestResultNetworkPathGetResponse struct {
 	Hops []DEXTracerouteTestResultNetworkPathGetResponseHop `json:"hops,required"`
 	// API Resource UUID tag.
 	ResultID string `json:"resultId,required"`
+	// date time of this traceroute test
+	TimeStart string `json:"time_start,required"`
 	// name of the device associated with this network path response
 	DeviceName string `json:"deviceName"`
 	// API Resource UUID tag.
@@ -76,6 +78,7 @@ type DEXTracerouteTestResultNetworkPathGetResponse struct {
 type dexTracerouteTestResultNetworkPathGetResponseJSON struct {
 	Hops        apijson.Field
 	ResultID    apijson.Field
+	TimeStart   apijson.Field
 	DeviceName  apijson.Field
 	TestID      apijson.Field
 	TestName    apijson.Field

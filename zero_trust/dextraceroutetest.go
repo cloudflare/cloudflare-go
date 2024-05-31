@@ -453,12 +453,12 @@ func (r dexTracerouteTestPercentilesResponseJSON) RawJSON() string {
 
 type DEXTracerouteTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Start time for aggregate metrics in ISO ms
-	From param.Field[string] `query:"from,required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DEXTracerouteTestGetParamsInterval] `query:"interval,required"`
 	// End time for aggregate metrics in ISO ms
-	To param.Field[string] `query:"to,required"`
+	TimeEnd param.Field[string] `query:"timeEnd,required"`
+	// Start time for aggregate metrics in ISO ms
+	TimeStart param.Field[string] `query:"timeStart,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
@@ -539,12 +539,12 @@ type DEXTracerouteTestNetworkPathParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Device to filter tracroute result runs to
 	DeviceID param.Field[string] `query:"deviceId,required"`
-	// Start time for aggregate metrics in ISO ms
-	From param.Field[string] `query:"from,required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DEXTracerouteTestNetworkPathParamsInterval] `query:"interval,required"`
 	// End time for aggregate metrics in ISO ms
-	To param.Field[string] `query:"to,required"`
+	TimeEnd param.Field[string] `query:"timeEnd,required"`
+	// Start time for aggregate metrics in ISO ms
+	TimeStart param.Field[string] `query:"timeStart,required"`
 }
 
 // URLQuery serializes [DEXTracerouteTestNetworkPathParams]'s query parameters as
@@ -617,10 +617,10 @@ func (r DEXTracerouteTestNetworkPathResponseEnvelopeSuccess) IsKnown() bool {
 
 type DEXTracerouteTestPercentilesParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Start time for aggregate metrics in ISO format
-	From param.Field[string] `query:"from,required"`
 	// End time for aggregate metrics in ISO format
-	To param.Field[string] `query:"to,required"`
+	TimeEnd param.Field[string] `query:"timeEnd,required"`
+	// Start time for aggregate metrics in ISO format
+	TimeStart param.Field[string] `query:"timeStart,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
