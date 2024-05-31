@@ -64,10 +64,13 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
 			Type:                     cloudflare.F("self_hosted"),
 			Policies: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
 			}}),
 			ScimConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfig{
@@ -177,10 +180,13 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
 				Type:                     cloudflare.F("self_hosted"),
 				Policies: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
+					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),
 				}}),
 				ScimConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfig{

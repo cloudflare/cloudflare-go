@@ -3,7 +3,17 @@
 package zero_trust
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AccessLogAccessRequestService contains methods and other services that help with
@@ -23,4 +33,146 @@ func NewAccessLogAccessRequestService(opts ...option.RequestOption) (r *AccessLo
 	r = &AccessLogAccessRequestService{}
 	r.Options = opts
 	return
+}
+
+// Gets a list of Access authentication audit logs for an account.
+func (r *AccessLogAccessRequestService) List(ctx context.Context, query AccessLogAccessRequestListParams, opts ...option.RequestOption) (res *[]AccessRequests, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessLogAccessRequestListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/logs/access_requests", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type AccessRequests struct {
+	// The event that occurred, such as a login attempt.
+	Action string `json:"action"`
+	// The result of the authentication event.
+	Allowed bool `json:"allowed"`
+	// The URL of the Access application.
+	AppDomain string `json:"app_domain"`
+	// The unique identifier for the Access application.
+	AppUID string `json:"app_uid"`
+	// The IdP used to authenticate.
+	Connection string    `json:"connection"`
+	CreatedAt  time.Time `json:"created_at" format:"date-time"`
+	// The IP address of the authenticating user.
+	IPAddress string `json:"ip_address"`
+	// The unique identifier for the request to Cloudflare.
+	RayID string `json:"ray_id"`
+	// The email address of the authenticating user.
+	UserEmail string             `json:"user_email" format:"email"`
+	JSON      accessRequestsJSON `json:"-"`
+}
+
+// accessRequestsJSON contains the JSON metadata for the struct [AccessRequests]
+type accessRequestsJSON struct {
+	Action      apijson.Field
+	Allowed     apijson.Field
+	AppDomain   apijson.Field
+	AppUID      apijson.Field
+	Connection  apijson.Field
+	CreatedAt   apijson.Field
+	IPAddress   apijson.Field
+	RayID       apijson.Field
+	UserEmail   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRequests) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRequestsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessLogAccessRequestListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AccessLogAccessRequestListResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    AccessLogAccessRequestListResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []AccessRequests                                     `json:"result,nullable"`
+	ResultInfo AccessLogAccessRequestListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessLogAccessRequestListResponseEnvelopeJSON       `json:"-"`
+}
+
+// accessLogAccessRequestListResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AccessLogAccessRequestListResponseEnvelope]
+type accessLogAccessRequestListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessLogAccessRequestListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessLogAccessRequestListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AccessLogAccessRequestListResponseEnvelopeSuccess bool
+
+const (
+	AccessLogAccessRequestListResponseEnvelopeSuccessTrue AccessLogAccessRequestListResponseEnvelopeSuccess = true
+)
+
+func (r AccessLogAccessRequestListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type AccessLogAccessRequestListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                  `json:"total_count"`
+	JSON       accessLogAccessRequestListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// accessLogAccessRequestListResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct [AccessLogAccessRequestListResponseEnvelopeResultInfo]
+type accessLogAccessRequestListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessLogAccessRequestListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessLogAccessRequestListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

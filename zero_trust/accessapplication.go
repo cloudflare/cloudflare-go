@@ -942,7 +942,7 @@ func (r AccessApplicationNewResponseSelfHostedApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -1457,7 +1457,7 @@ func (r AccessApplicationNewResponseSaaSApplication) implementsZeroTrustAccessAp
 }
 
 type AccessApplicationNewResponseSaaSApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -2410,7 +2410,7 @@ func (r AccessApplicationNewResponseBrowserSSHApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -2981,7 +2981,7 @@ func (r AccessApplicationNewResponseBrowserVncApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationNewResponseBrowserVncApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -3490,7 +3490,7 @@ func (r AccessApplicationNewResponseAppLauncherApplication) implementsZeroTrustA
 }
 
 type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -4000,7 +4000,7 @@ func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication) impl
 }
 
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -4510,7 +4510,7 @@ func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplication) impl
 }
 
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -5691,7 +5691,7 @@ func (r AccessApplicationUpdateResponseSelfHostedApplication) implementsZeroTrus
 }
 
 type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -6206,7 +6206,7 @@ func (r AccessApplicationUpdateResponseSaaSApplication) implementsZeroTrustAcces
 }
 
 type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -7160,7 +7160,7 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplication) implementsZeroTrus
 }
 
 type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -7731,7 +7731,7 @@ func (r AccessApplicationUpdateResponseBrowserVncApplication) implementsZeroTrus
 }
 
 type AccessApplicationUpdateResponseBrowserVncApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -8240,7 +8240,7 @@ func (r AccessApplicationUpdateResponseAppLauncherApplication) implementsZeroTru
 }
 
 type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -8750,7 +8750,7 @@ func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication) i
 }
 
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -9260,7 +9260,7 @@ func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication) i
 }
 
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -10441,7 +10441,7 @@ func (r AccessApplicationListResponseSelfHostedApplication) implementsZeroTrustA
 }
 
 type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -10956,7 +10956,7 @@ func (r AccessApplicationListResponseSaaSApplication) implementsZeroTrustAccessA
 }
 
 type AccessApplicationListResponseSaaSApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -11909,7 +11909,7 @@ func (r AccessApplicationListResponseBrowserSSHApplication) implementsZeroTrustA
 }
 
 type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -12480,7 +12480,7 @@ func (r AccessApplicationListResponseBrowserVncApplication) implementsZeroTrustA
 }
 
 type AccessApplicationListResponseBrowserVncApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -12989,7 +12989,7 @@ func (r AccessApplicationListResponseAppLauncherApplication) implementsZeroTrust
 }
 
 type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -13499,7 +13499,7 @@ func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplication) imp
 }
 
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -14009,7 +14009,7 @@ func (r AccessApplicationListResponseBrowserIsolationPermissionsApplication) imp
 }
 
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -15212,7 +15212,7 @@ func (r AccessApplicationGetResponseSelfHostedApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -15727,7 +15727,7 @@ func (r AccessApplicationGetResponseSaaSApplication) implementsZeroTrustAccessAp
 }
 
 type AccessApplicationGetResponseSaaSApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -16680,7 +16680,7 @@ func (r AccessApplicationGetResponseBrowserSSHApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -17251,7 +17251,7 @@ func (r AccessApplicationGetResponseBrowserVncApplication) implementsZeroTrustAc
 }
 
 type AccessApplicationGetResponseBrowserVncApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -17760,7 +17760,7 @@ func (r AccessApplicationGetResponseAppLauncherApplication) implementsZeroTrustA
 }
 
 type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -18270,7 +18270,7 @@ func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication) impl
 }
 
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -18780,7 +18780,7 @@ func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplication) impl
 }
 
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy struct {
-	// UUID
+	// The UUID of the policy
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
@@ -19838,6 +19838,8 @@ func (r AccessApplicationNewParamsBodySelfHostedApplication) implementsZeroTrust
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -19886,6 +19888,8 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -19906,6 +19910,8 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -20210,6 +20216,8 @@ func (r AccessApplicationNewParamsBodySaaSApplication) implementsZeroTrustAccess
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -20258,6 +20266,8 @@ type AccessApplicationNewParamsBodySaaSApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -20278,6 +20288,8 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -20859,6 +20871,8 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplication) implementsZeroTrust
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -20907,6 +20921,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -20927,6 +20943,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -21273,6 +21291,8 @@ func (r AccessApplicationNewParamsBodyBrowserVncApplication) implementsZeroTrust
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserVncApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -21321,6 +21341,8 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -21341,6 +21363,8 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -21637,6 +21661,8 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplication) implementsZeroTrus
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -21685,6 +21711,8 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -21705,6 +21733,8 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -22001,6 +22031,8 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) im
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -22049,6 +22081,8 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyU
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -22069,6 +22103,8 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -22365,6 +22401,8 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) im
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -22413,6 +22451,8 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyU
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -22433,6 +22473,8 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -23173,6 +23215,8 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplication) implementsZeroTr
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -23221,6 +23265,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion interface
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -23241,6 +23287,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -23545,6 +23593,8 @@ func (r AccessApplicationUpdateParamsBodySaaSApplication) implementsZeroTrustAcc
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -23593,6 +23643,8 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion interface {
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -23613,6 +23665,8 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -24194,6 +24248,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) implementsZeroTr
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -24242,6 +24298,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion interface
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -24262,6 +24320,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -24608,6 +24668,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserVncApplication) implementsZeroTr
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -24656,6 +24718,8 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion interface
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -24676,6 +24740,8 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject struct
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -24972,6 +25038,8 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplication) implementsZeroT
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -25020,6 +25088,8 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion interfac
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -25040,6 +25110,8 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -25336,6 +25408,8 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication)
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -25384,6 +25458,8 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -25404,6 +25480,8 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -25700,6 +25778,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication)
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -25748,6 +25828,8 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -25768,6 +25850,8 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
