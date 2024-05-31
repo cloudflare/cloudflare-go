@@ -100,14 +100,20 @@ func (r dexFleetStatusDeviceListResponseJSON) RawJSON() string {
 
 type DEXFleetStatusDeviceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Timestamp in ISO format
+	From param.Field[string] `query:"from,required"`
 	// Page number of paginated results
 	Page param.Field[float64] `query:"page,required"`
 	// Number of items per page
 	PerPage param.Field[float64] `query:"per_page,required"`
+	// Source:
+	//
+	// - `hourly` - device details aggregated hourly, up to 7 days prior
+	// - `last_seen` - device details, up to 24 hours prior
+	// - `raw` - device details, up to 7 days prior
+	Source param.Field[DEXFleetStatusDeviceListParamsSource] `query:"source,required"`
 	// Timestamp in ISO format
-	TimeEnd param.Field[string] `query:"time_end,required"`
-	// Timestamp in ISO format
-	TimeStart param.Field[string] `query:"time_start,required"`
+	To param.Field[string] `query:"to,required"`
 	// Cloudflare colo
 	Colo param.Field[string] `query:"colo"`
 	// Device-specific ID, given as UUID v4
@@ -131,6 +137,27 @@ func (r DEXFleetStatusDeviceListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+// Source:
+//
+// - `hourly` - device details aggregated hourly, up to 7 days prior
+// - `last_seen` - device details, up to 24 hours prior
+// - `raw` - device details, up to 7 days prior
+type DEXFleetStatusDeviceListParamsSource string
+
+const (
+	DEXFleetStatusDeviceListParamsSourceLastSeen DEXFleetStatusDeviceListParamsSource = "last_seen"
+	DEXFleetStatusDeviceListParamsSourceHourly   DEXFleetStatusDeviceListParamsSource = "hourly"
+	DEXFleetStatusDeviceListParamsSourceRaw      DEXFleetStatusDeviceListParamsSource = "raw"
+)
+
+func (r DEXFleetStatusDeviceListParamsSource) IsKnown() bool {
+	switch r {
+	case DEXFleetStatusDeviceListParamsSourceLastSeen, DEXFleetStatusDeviceListParamsSourceHourly, DEXFleetStatusDeviceListParamsSourceRaw:
+		return true
+	}
+	return false
 }
 
 // Dimension to sort results by
