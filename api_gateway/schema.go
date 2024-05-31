@@ -38,7 +38,7 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 // Retrieve operations and features as OpenAPI schemas
 func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *SchemaListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env Schema
+	var env SchemaListResponseEnvelope
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -110,22 +110,23 @@ func (r SchemaListParamsFeature) IsKnown() bool {
 	return false
 }
 
-type Schema struct {
-	Result SchemaListResponse `json:"result,required"`
-	JSON   schemaJSON         `json:"-"`
+type SchemaListResponseEnvelope struct {
+	Result SchemaListResponse             `json:"result,required"`
+	JSON   schemaListResponseEnvelopeJSON `json:"-"`
 }
 
-// schemaJSON contains the JSON metadata for the struct [Schema]
-type schemaJSON struct {
+// schemaListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SchemaListResponseEnvelope]
+type schemaListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Schema) UnmarshalJSON(data []byte) (err error) {
+func (r *SchemaListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r schemaJSON) RawJSON() string {
+func (r schemaListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
