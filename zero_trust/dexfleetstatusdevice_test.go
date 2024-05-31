@@ -30,11 +30,10 @@ func TestDEXFleetStatusDeviceListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DEX.FleetStatus.Devices.List(context.TODO(), zero_trust.DEXFleetStatusDeviceListParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		From:      cloudflare.F("2023-10-11T00:00:00Z"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(10.000000),
-		Source:    cloudflare.F(zero_trust.DEXFleetStatusDeviceListParamsSourceLastSeen),
-		To:        cloudflare.F("2023-10-11T00:00:00Z"),
+		TimeEnd:   cloudflare.F("2023-10-11T00:00:00Z"),
+		TimeStart: cloudflare.F("2023-10-11T00:00:00Z"),
 		Colo:      cloudflare.F("SJC"),
 		DeviceID:  cloudflare.F("cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"),
 		Mode:      cloudflare.F("proxy"),
