@@ -151,6 +151,11 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnr
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
+func (UnionString) ImplementsZeroTrustAccessApplicationCANewResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustAccessApplicationCAGetResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustAccessKeyUpdateResponseUnion()             {}
+func (UnionString) ImplementsZeroTrustAccessKeyGetResponseUnion()                {}
+func (UnionString) ImplementsZeroTrustAccessKeyRotateResponseUnion()             {}
 func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()   {}
 func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()      {}
 func (UnionString) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()      {}
@@ -174,6 +179,9 @@ func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncrypt
 }
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                           {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                                {}
+func (UnionString) ImplementsCloudforceOneRequestDeleteResponseUnion()                   {}
+func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponseUnion()            {}
+func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponseUnion()           {}
 func (UnionString) ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion() {}
 
 type UnionInt int64

@@ -14,8 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestAccessApplicationCANewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestAccessTagNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,40 +27,9 @@ func TestAccessApplicationCANewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Applications.CAs.New(
-		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.AccessApplicationCANewParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccessApplicationCAListWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.ZeroTrust.Access.Applications.CAs.List(context.TODO(), zero_trust.AccessApplicationCAListParams{
-		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
+	_, err := client.ZeroTrust.Access.Tags.New(context.TODO(), zero_trust.AccessTagNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("engineers"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -72,8 +40,7 @@ func TestAccessApplicationCAListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationCADeleteWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestAccessTagUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -86,12 +53,12 @@ func TestAccessApplicationCADeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Applications.CAs.Delete(
+	_, err := client.ZeroTrust.Access.Tags.Update(
 		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.AccessApplicationCADeleteParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
+		"engineers",
+		zero_trust.AccessTagUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Name:      cloudflare.F("engineers"),
 		},
 	)
 	if err != nil {
@@ -103,8 +70,7 @@ func TestAccessApplicationCADeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationCAGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestAccessTagList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -117,12 +83,65 @@ func TestAccessApplicationCAGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Applications.CAs.Get(
+	_, err := client.ZeroTrust.Access.Tags.List(context.TODO(), zero_trust.AccessTagListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAccessTagDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.Access.Tags.Delete(
 		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.AccessApplicationCAGetParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
+		"engineers",
+		zero_trust.AccessTagDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAccessTagGet(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.Access.Tags.Get(
+		context.TODO(),
+		"engineers",
+		zero_trust.AccessTagGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
