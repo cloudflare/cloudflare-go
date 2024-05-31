@@ -173,10 +173,8 @@ func (r VersionByTagGetResponseRule) AsUnion() VersionByTagGetResponseRulesUnion
 // [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.VersionByTagGetResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.VersionByTagGetResponseRulesRulesetsDDoSDynamicRule] or
-// [rulesets.VersionByTagGetResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule] or
+// [rulesets.VersionByTagGetResponseRulesRulesetsLogCustomFieldRule].
 type VersionByTagGetResponseRulesUnion interface {
 	implementsRulesetsVersionByTagGetResponseRule()
 }
@@ -264,16 +262,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionByTagGetResponseRulesRulesetsLogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionByTagGetResponseRulesRulesetsDDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionByTagGetResponseRulesRulesetsForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -450,174 +438,31 @@ func (r versionByTagGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRe
 	return r.raw
 }
 
-type VersionByTagGetResponseRulesRulesetsDDoSDynamicRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action VersionByTagGetResponseRulesRulesetsDDoSDynamicRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                  `json:"ref"`
-	JSON versionByTagGetResponseRulesRulesetsDDoSDynamicRuleJSON `json:"-"`
-}
-
-// versionByTagGetResponseRulesRulesetsDDoSDynamicRuleJSON contains the JSON
-// metadata for the struct [VersionByTagGetResponseRulesRulesetsDDoSDynamicRule]
-type versionByTagGetResponseRulesRulesetsDDoSDynamicRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *VersionByTagGetResponseRulesRulesetsDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionByTagGetResponseRulesRulesetsDDoSDynamicRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionByTagGetResponseRulesRulesetsDDoSDynamicRule) implementsRulesetsVersionByTagGetResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type VersionByTagGetResponseRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	VersionByTagGetResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic VersionByTagGetResponseRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r VersionByTagGetResponseRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case VersionByTagGetResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type VersionByTagGetResponseRulesRulesetsForceConnectionCloseRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action VersionByTagGetResponseRulesRulesetsForceConnectionCloseRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                           `json:"ref"`
-	JSON versionByTagGetResponseRulesRulesetsForceConnectionCloseRuleJSON `json:"-"`
-}
-
-// versionByTagGetResponseRulesRulesetsForceConnectionCloseRuleJSON contains the
-// JSON metadata for the struct
-// [VersionByTagGetResponseRulesRulesetsForceConnectionCloseRule]
-type versionByTagGetResponseRulesRulesetsForceConnectionCloseRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *VersionByTagGetResponseRulesRulesetsForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionByTagGetResponseRulesRulesetsForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionByTagGetResponseRulesRulesetsForceConnectionCloseRule) implementsRulesetsVersionByTagGetResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type VersionByTagGetResponseRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	VersionByTagGetResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose VersionByTagGetResponseRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r VersionByTagGetResponseRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case VersionByTagGetResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type VersionByTagGetResponseRulesAction string
 
 const (
-	VersionByTagGetResponseRulesActionBlock                VersionByTagGetResponseRulesAction = "block"
-	VersionByTagGetResponseRulesActionChallenge            VersionByTagGetResponseRulesAction = "challenge"
-	VersionByTagGetResponseRulesActionCompressResponse     VersionByTagGetResponseRulesAction = "compress_response"
-	VersionByTagGetResponseRulesActionExecute              VersionByTagGetResponseRulesAction = "execute"
-	VersionByTagGetResponseRulesActionJSChallenge          VersionByTagGetResponseRulesAction = "js_challenge"
-	VersionByTagGetResponseRulesActionLog                  VersionByTagGetResponseRulesAction = "log"
-	VersionByTagGetResponseRulesActionManagedChallenge     VersionByTagGetResponseRulesAction = "managed_challenge"
-	VersionByTagGetResponseRulesActionRedirect             VersionByTagGetResponseRulesAction = "redirect"
-	VersionByTagGetResponseRulesActionRewrite              VersionByTagGetResponseRulesAction = "rewrite"
-	VersionByTagGetResponseRulesActionRoute                VersionByTagGetResponseRulesAction = "route"
-	VersionByTagGetResponseRulesActionScore                VersionByTagGetResponseRulesAction = "score"
-	VersionByTagGetResponseRulesActionServeError           VersionByTagGetResponseRulesAction = "serve_error"
-	VersionByTagGetResponseRulesActionSetConfig            VersionByTagGetResponseRulesAction = "set_config"
-	VersionByTagGetResponseRulesActionSkip                 VersionByTagGetResponseRulesAction = "skip"
-	VersionByTagGetResponseRulesActionSetCacheSettings     VersionByTagGetResponseRulesAction = "set_cache_settings"
-	VersionByTagGetResponseRulesActionLogCustomField       VersionByTagGetResponseRulesAction = "log_custom_field"
-	VersionByTagGetResponseRulesActionDDoSDynamic          VersionByTagGetResponseRulesAction = "ddos_dynamic"
-	VersionByTagGetResponseRulesActionForceConnectionClose VersionByTagGetResponseRulesAction = "force_connection_close"
+	VersionByTagGetResponseRulesActionBlock            VersionByTagGetResponseRulesAction = "block"
+	VersionByTagGetResponseRulesActionChallenge        VersionByTagGetResponseRulesAction = "challenge"
+	VersionByTagGetResponseRulesActionCompressResponse VersionByTagGetResponseRulesAction = "compress_response"
+	VersionByTagGetResponseRulesActionExecute          VersionByTagGetResponseRulesAction = "execute"
+	VersionByTagGetResponseRulesActionJSChallenge      VersionByTagGetResponseRulesAction = "js_challenge"
+	VersionByTagGetResponseRulesActionLog              VersionByTagGetResponseRulesAction = "log"
+	VersionByTagGetResponseRulesActionManagedChallenge VersionByTagGetResponseRulesAction = "managed_challenge"
+	VersionByTagGetResponseRulesActionRedirect         VersionByTagGetResponseRulesAction = "redirect"
+	VersionByTagGetResponseRulesActionRewrite          VersionByTagGetResponseRulesAction = "rewrite"
+	VersionByTagGetResponseRulesActionRoute            VersionByTagGetResponseRulesAction = "route"
+	VersionByTagGetResponseRulesActionScore            VersionByTagGetResponseRulesAction = "score"
+	VersionByTagGetResponseRulesActionServeError       VersionByTagGetResponseRulesAction = "serve_error"
+	VersionByTagGetResponseRulesActionSetConfig        VersionByTagGetResponseRulesAction = "set_config"
+	VersionByTagGetResponseRulesActionSkip             VersionByTagGetResponseRulesAction = "skip"
+	VersionByTagGetResponseRulesActionSetCacheSettings VersionByTagGetResponseRulesAction = "set_cache_settings"
+	VersionByTagGetResponseRulesActionLogCustomField   VersionByTagGetResponseRulesAction = "log_custom_field"
 )
 
 func (r VersionByTagGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case VersionByTagGetResponseRulesActionBlock, VersionByTagGetResponseRulesActionChallenge, VersionByTagGetResponseRulesActionCompressResponse, VersionByTagGetResponseRulesActionExecute, VersionByTagGetResponseRulesActionJSChallenge, VersionByTagGetResponseRulesActionLog, VersionByTagGetResponseRulesActionManagedChallenge, VersionByTagGetResponseRulesActionRedirect, VersionByTagGetResponseRulesActionRewrite, VersionByTagGetResponseRulesActionRoute, VersionByTagGetResponseRulesActionScore, VersionByTagGetResponseRulesActionServeError, VersionByTagGetResponseRulesActionSetConfig, VersionByTagGetResponseRulesActionSkip, VersionByTagGetResponseRulesActionSetCacheSettings, VersionByTagGetResponseRulesActionLogCustomField, VersionByTagGetResponseRulesActionDDoSDynamic, VersionByTagGetResponseRulesActionForceConnectionClose:
+	case VersionByTagGetResponseRulesActionBlock, VersionByTagGetResponseRulesActionChallenge, VersionByTagGetResponseRulesActionCompressResponse, VersionByTagGetResponseRulesActionExecute, VersionByTagGetResponseRulesActionJSChallenge, VersionByTagGetResponseRulesActionLog, VersionByTagGetResponseRulesActionManagedChallenge, VersionByTagGetResponseRulesActionRedirect, VersionByTagGetResponseRulesActionRewrite, VersionByTagGetResponseRulesActionRoute, VersionByTagGetResponseRulesActionScore, VersionByTagGetResponseRulesActionServeError, VersionByTagGetResponseRulesActionSetConfig, VersionByTagGetResponseRulesActionSkip, VersionByTagGetResponseRulesActionSetCacheSettings, VersionByTagGetResponseRulesActionLogCustomField:
 		return true
 	}
 	return false

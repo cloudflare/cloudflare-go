@@ -89,7 +89,7 @@ func (r *OperationService) ListAutoPaging(ctx context.Context, params OperationL
 // Delete an operation
 func (r *OperationService) Delete(ctx context.Context, operationID string, body OperationDeleteParams, opts ...option.RequestOption) (res *OperationDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
-	var env Schema
+	var env OperationDeleteResponseEnvelope
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -607,17 +607,18 @@ type OperationDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type Schema struct {
+type OperationDeleteResponseEnvelope struct {
 	Errors   Message                      `json:"errors,required"`
 	Messages Message                      `json:"messages,required"`
 	Result   OperationDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
-	Success bool       `json:"success,required"`
-	JSON    schemaJSON `json:"-"`
+	Success bool                                `json:"success,required"`
+	JSON    operationDeleteResponseEnvelopeJSON `json:"-"`
 }
 
-// schemaJSON contains the JSON metadata for the struct [Schema]
-type schemaJSON struct {
+// operationDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [OperationDeleteResponseEnvelope]
+type operationDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -626,11 +627,11 @@ type schemaJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Schema) UnmarshalJSON(data []byte) (err error) {
+func (r *OperationDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r schemaJSON) RawJSON() string {
+func (r operationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
