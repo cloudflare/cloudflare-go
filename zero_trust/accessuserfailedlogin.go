@@ -3,13 +3,6 @@
 package zero_trust
 
 import (
-	"context"
-	"fmt"
-	"net/http"
-
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -30,50 +23,4 @@ func NewAccessUserFailedLoginService(opts ...option.RequestOption) (r *AccessUse
 	r = &AccessUserFailedLoginService{}
 	r.Options = opts
 	return
-}
-
-// Get all failed login attempts for a single user.
-func (r *AccessUserFailedLoginService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserFailedLoginListResponse], err error) {
-	var raw *http.Response
-	opts = append(r.Options, opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/access/users/%s/failed_logins", identifier, id)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Get all failed login attempts for a single user.
-func (r *AccessUserFailedLoginService) ListAutoPaging(ctx context.Context, identifier string, id string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUserFailedLoginListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, id, opts...))
-}
-
-type AccessUserFailedLoginListResponse struct {
-	Expiration int64                                 `json:"expiration"`
-	Metadata   interface{}                           `json:"metadata"`
-	JSON       accessUserFailedLoginListResponseJSON `json:"-"`
-}
-
-// accessUserFailedLoginListResponseJSON contains the JSON metadata for the struct
-// [AccessUserFailedLoginListResponse]
-type accessUserFailedLoginListResponseJSON struct {
-	Expiration  apijson.Field
-	Metadata    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserFailedLoginListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessUserFailedLoginListResponseJSON) RawJSON() string {
-	return r.raw
 }

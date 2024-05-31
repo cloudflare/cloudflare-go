@@ -209,10 +209,8 @@ func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
 // [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsDDoSDynamicRule] or
-// [rulesets.PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule] or
+// [rulesets.PhaseUpdateResponseRulesRulesetsLogCustomFieldRule].
 type PhaseUpdateResponseRulesUnion interface {
 	implementsRulesetsPhaseUpdateResponseRule()
 }
@@ -300,16 +298,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(PhaseUpdateResponseRulesRulesetsLogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseUpdateResponseRulesRulesetsDDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -486,174 +474,31 @@ func (r phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRespon
 	return r.raw
 }
 
-type PhaseUpdateResponseRulesRulesetsDDoSDynamicRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                              `json:"ref"`
-	JSON phaseUpdateResponseRulesRulesetsDDoSDynamicRuleJSON `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsDDoSDynamicRuleJSON contains the JSON metadata
-// for the struct [PhaseUpdateResponseRulesRulesetsDDoSDynamicRule]
-type phaseUpdateResponseRulesRulesetsDDoSDynamicRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsDDoSDynamicRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseUpdateResponseRulesRulesetsDDoSDynamicRule) implementsRulesetsPhaseUpdateResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                       `json:"ref"`
-	JSON phaseUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON contains the JSON
-// metadata for the struct
-// [PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule]
-type phaseUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule) implementsRulesetsPhaseUpdateResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type PhaseUpdateResponseRulesAction string
 
 const (
-	PhaseUpdateResponseRulesActionBlock                PhaseUpdateResponseRulesAction = "block"
-	PhaseUpdateResponseRulesActionChallenge            PhaseUpdateResponseRulesAction = "challenge"
-	PhaseUpdateResponseRulesActionCompressResponse     PhaseUpdateResponseRulesAction = "compress_response"
-	PhaseUpdateResponseRulesActionExecute              PhaseUpdateResponseRulesAction = "execute"
-	PhaseUpdateResponseRulesActionJSChallenge          PhaseUpdateResponseRulesAction = "js_challenge"
-	PhaseUpdateResponseRulesActionLog                  PhaseUpdateResponseRulesAction = "log"
-	PhaseUpdateResponseRulesActionManagedChallenge     PhaseUpdateResponseRulesAction = "managed_challenge"
-	PhaseUpdateResponseRulesActionRedirect             PhaseUpdateResponseRulesAction = "redirect"
-	PhaseUpdateResponseRulesActionRewrite              PhaseUpdateResponseRulesAction = "rewrite"
-	PhaseUpdateResponseRulesActionRoute                PhaseUpdateResponseRulesAction = "route"
-	PhaseUpdateResponseRulesActionScore                PhaseUpdateResponseRulesAction = "score"
-	PhaseUpdateResponseRulesActionServeError           PhaseUpdateResponseRulesAction = "serve_error"
-	PhaseUpdateResponseRulesActionSetConfig            PhaseUpdateResponseRulesAction = "set_config"
-	PhaseUpdateResponseRulesActionSkip                 PhaseUpdateResponseRulesAction = "skip"
-	PhaseUpdateResponseRulesActionSetCacheSettings     PhaseUpdateResponseRulesAction = "set_cache_settings"
-	PhaseUpdateResponseRulesActionLogCustomField       PhaseUpdateResponseRulesAction = "log_custom_field"
-	PhaseUpdateResponseRulesActionDDoSDynamic          PhaseUpdateResponseRulesAction = "ddos_dynamic"
-	PhaseUpdateResponseRulesActionForceConnectionClose PhaseUpdateResponseRulesAction = "force_connection_close"
+	PhaseUpdateResponseRulesActionBlock            PhaseUpdateResponseRulesAction = "block"
+	PhaseUpdateResponseRulesActionChallenge        PhaseUpdateResponseRulesAction = "challenge"
+	PhaseUpdateResponseRulesActionCompressResponse PhaseUpdateResponseRulesAction = "compress_response"
+	PhaseUpdateResponseRulesActionExecute          PhaseUpdateResponseRulesAction = "execute"
+	PhaseUpdateResponseRulesActionJSChallenge      PhaseUpdateResponseRulesAction = "js_challenge"
+	PhaseUpdateResponseRulesActionLog              PhaseUpdateResponseRulesAction = "log"
+	PhaseUpdateResponseRulesActionManagedChallenge PhaseUpdateResponseRulesAction = "managed_challenge"
+	PhaseUpdateResponseRulesActionRedirect         PhaseUpdateResponseRulesAction = "redirect"
+	PhaseUpdateResponseRulesActionRewrite          PhaseUpdateResponseRulesAction = "rewrite"
+	PhaseUpdateResponseRulesActionRoute            PhaseUpdateResponseRulesAction = "route"
+	PhaseUpdateResponseRulesActionScore            PhaseUpdateResponseRulesAction = "score"
+	PhaseUpdateResponseRulesActionServeError       PhaseUpdateResponseRulesAction = "serve_error"
+	PhaseUpdateResponseRulesActionSetConfig        PhaseUpdateResponseRulesAction = "set_config"
+	PhaseUpdateResponseRulesActionSkip             PhaseUpdateResponseRulesAction = "skip"
+	PhaseUpdateResponseRulesActionSetCacheSettings PhaseUpdateResponseRulesAction = "set_cache_settings"
+	PhaseUpdateResponseRulesActionLogCustomField   PhaseUpdateResponseRulesAction = "log_custom_field"
 )
 
 func (r PhaseUpdateResponseRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseUpdateResponseRulesActionBlock, PhaseUpdateResponseRulesActionChallenge, PhaseUpdateResponseRulesActionCompressResponse, PhaseUpdateResponseRulesActionExecute, PhaseUpdateResponseRulesActionJSChallenge, PhaseUpdateResponseRulesActionLog, PhaseUpdateResponseRulesActionManagedChallenge, PhaseUpdateResponseRulesActionRedirect, PhaseUpdateResponseRulesActionRewrite, PhaseUpdateResponseRulesActionRoute, PhaseUpdateResponseRulesActionScore, PhaseUpdateResponseRulesActionServeError, PhaseUpdateResponseRulesActionSetConfig, PhaseUpdateResponseRulesActionSkip, PhaseUpdateResponseRulesActionSetCacheSettings, PhaseUpdateResponseRulesActionLogCustomField, PhaseUpdateResponseRulesActionDDoSDynamic, PhaseUpdateResponseRulesActionForceConnectionClose:
+	case PhaseUpdateResponseRulesActionBlock, PhaseUpdateResponseRulesActionChallenge, PhaseUpdateResponseRulesActionCompressResponse, PhaseUpdateResponseRulesActionExecute, PhaseUpdateResponseRulesActionJSChallenge, PhaseUpdateResponseRulesActionLog, PhaseUpdateResponseRulesActionManagedChallenge, PhaseUpdateResponseRulesActionRedirect, PhaseUpdateResponseRulesActionRewrite, PhaseUpdateResponseRulesActionRoute, PhaseUpdateResponseRulesActionScore, PhaseUpdateResponseRulesActionServeError, PhaseUpdateResponseRulesActionSetConfig, PhaseUpdateResponseRulesActionSkip, PhaseUpdateResponseRulesActionSetCacheSettings, PhaseUpdateResponseRulesActionLogCustomField:
 		return true
 	}
 	return false
@@ -767,10 +612,8 @@ func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
 // [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.PhaseGetResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.PhaseGetResponseRulesRulesetsDDoSDynamicRule] or
-// [rulesets.PhaseGetResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule] or
+// [rulesets.PhaseGetResponseRulesRulesetsLogCustomFieldRule].
 type PhaseGetResponseRulesUnion interface {
 	implementsRulesetsPhaseGetResponseRule()
 }
@@ -858,16 +701,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(PhaseGetResponseRulesRulesetsLogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseGetResponseRulesRulesetsDDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseGetResponseRulesRulesetsForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -1043,172 +876,31 @@ func (r phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseF
 	return r.raw
 }
 
-type PhaseGetResponseRulesRulesetsDDoSDynamicRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseGetResponseRulesRulesetsDDoSDynamicRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                           `json:"ref"`
-	JSON phaseGetResponseRulesRulesetsDDoSDynamicRuleJSON `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsDDoSDynamicRuleJSON contains the JSON metadata for
-// the struct [PhaseGetResponseRulesRulesetsDDoSDynamicRule]
-type phaseGetResponseRulesRulesetsDDoSDynamicRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsDDoSDynamicRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseGetResponseRulesRulesetsDDoSDynamicRule) implementsRulesetsPhaseGetResponseRule() {}
-
-// The action to perform when the rule matches.
-type PhaseGetResponseRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	PhaseGetResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic PhaseGetResponseRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r PhaseGetResponseRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseGetResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type PhaseGetResponseRulesRulesetsForceConnectionCloseRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseGetResponseRulesRulesetsForceConnectionCloseRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                    `json:"ref"`
-	JSON phaseGetResponseRulesRulesetsForceConnectionCloseRuleJSON `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsForceConnectionCloseRuleJSON contains the JSON
-// metadata for the struct [PhaseGetResponseRulesRulesetsForceConnectionCloseRule]
-type phaseGetResponseRulesRulesetsForceConnectionCloseRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseGetResponseRulesRulesetsForceConnectionCloseRule) implementsRulesetsPhaseGetResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type PhaseGetResponseRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	PhaseGetResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose PhaseGetResponseRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r PhaseGetResponseRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseGetResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type PhaseGetResponseRulesAction string
 
 const (
-	PhaseGetResponseRulesActionBlock                PhaseGetResponseRulesAction = "block"
-	PhaseGetResponseRulesActionChallenge            PhaseGetResponseRulesAction = "challenge"
-	PhaseGetResponseRulesActionCompressResponse     PhaseGetResponseRulesAction = "compress_response"
-	PhaseGetResponseRulesActionExecute              PhaseGetResponseRulesAction = "execute"
-	PhaseGetResponseRulesActionJSChallenge          PhaseGetResponseRulesAction = "js_challenge"
-	PhaseGetResponseRulesActionLog                  PhaseGetResponseRulesAction = "log"
-	PhaseGetResponseRulesActionManagedChallenge     PhaseGetResponseRulesAction = "managed_challenge"
-	PhaseGetResponseRulesActionRedirect             PhaseGetResponseRulesAction = "redirect"
-	PhaseGetResponseRulesActionRewrite              PhaseGetResponseRulesAction = "rewrite"
-	PhaseGetResponseRulesActionRoute                PhaseGetResponseRulesAction = "route"
-	PhaseGetResponseRulesActionScore                PhaseGetResponseRulesAction = "score"
-	PhaseGetResponseRulesActionServeError           PhaseGetResponseRulesAction = "serve_error"
-	PhaseGetResponseRulesActionSetConfig            PhaseGetResponseRulesAction = "set_config"
-	PhaseGetResponseRulesActionSkip                 PhaseGetResponseRulesAction = "skip"
-	PhaseGetResponseRulesActionSetCacheSettings     PhaseGetResponseRulesAction = "set_cache_settings"
-	PhaseGetResponseRulesActionLogCustomField       PhaseGetResponseRulesAction = "log_custom_field"
-	PhaseGetResponseRulesActionDDoSDynamic          PhaseGetResponseRulesAction = "ddos_dynamic"
-	PhaseGetResponseRulesActionForceConnectionClose PhaseGetResponseRulesAction = "force_connection_close"
+	PhaseGetResponseRulesActionBlock            PhaseGetResponseRulesAction = "block"
+	PhaseGetResponseRulesActionChallenge        PhaseGetResponseRulesAction = "challenge"
+	PhaseGetResponseRulesActionCompressResponse PhaseGetResponseRulesAction = "compress_response"
+	PhaseGetResponseRulesActionExecute          PhaseGetResponseRulesAction = "execute"
+	PhaseGetResponseRulesActionJSChallenge      PhaseGetResponseRulesAction = "js_challenge"
+	PhaseGetResponseRulesActionLog              PhaseGetResponseRulesAction = "log"
+	PhaseGetResponseRulesActionManagedChallenge PhaseGetResponseRulesAction = "managed_challenge"
+	PhaseGetResponseRulesActionRedirect         PhaseGetResponseRulesAction = "redirect"
+	PhaseGetResponseRulesActionRewrite          PhaseGetResponseRulesAction = "rewrite"
+	PhaseGetResponseRulesActionRoute            PhaseGetResponseRulesAction = "route"
+	PhaseGetResponseRulesActionScore            PhaseGetResponseRulesAction = "score"
+	PhaseGetResponseRulesActionServeError       PhaseGetResponseRulesAction = "serve_error"
+	PhaseGetResponseRulesActionSetConfig        PhaseGetResponseRulesAction = "set_config"
+	PhaseGetResponseRulesActionSkip             PhaseGetResponseRulesAction = "skip"
+	PhaseGetResponseRulesActionSetCacheSettings PhaseGetResponseRulesAction = "set_cache_settings"
+	PhaseGetResponseRulesActionLogCustomField   PhaseGetResponseRulesAction = "log_custom_field"
 )
 
 func (r PhaseGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseGetResponseRulesActionBlock, PhaseGetResponseRulesActionChallenge, PhaseGetResponseRulesActionCompressResponse, PhaseGetResponseRulesActionExecute, PhaseGetResponseRulesActionJSChallenge, PhaseGetResponseRulesActionLog, PhaseGetResponseRulesActionManagedChallenge, PhaseGetResponseRulesActionRedirect, PhaseGetResponseRulesActionRewrite, PhaseGetResponseRulesActionRoute, PhaseGetResponseRulesActionScore, PhaseGetResponseRulesActionServeError, PhaseGetResponseRulesActionSetConfig, PhaseGetResponseRulesActionSkip, PhaseGetResponseRulesActionSetCacheSettings, PhaseGetResponseRulesActionLogCustomField, PhaseGetResponseRulesActionDDoSDynamic, PhaseGetResponseRulesActionForceConnectionClose:
+	case PhaseGetResponseRulesActionBlock, PhaseGetResponseRulesActionChallenge, PhaseGetResponseRulesActionCompressResponse, PhaseGetResponseRulesActionExecute, PhaseGetResponseRulesActionJSChallenge, PhaseGetResponseRulesActionLog, PhaseGetResponseRulesActionManagedChallenge, PhaseGetResponseRulesActionRedirect, PhaseGetResponseRulesActionRewrite, PhaseGetResponseRulesActionRoute, PhaseGetResponseRulesActionScore, PhaseGetResponseRulesActionServeError, PhaseGetResponseRulesActionSetConfig, PhaseGetResponseRulesActionSkip, PhaseGetResponseRulesActionSetCacheSettings, PhaseGetResponseRulesActionLogCustomField:
 		return true
 	}
 	return false
@@ -1269,8 +961,6 @@ func (r PhaseUpdateParamsRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 // [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
 // [rulesets.SetCacheSettingsRuleParam],
 // [rulesets.PhaseUpdateParamsRulesRulesetsLogCustomFieldRule],
-// [rulesets.PhaseUpdateParamsRulesRulesetsDDoSDynamicRule],
-// [rulesets.PhaseUpdateParamsRulesRulesetsForceConnectionCloseRule],
 // [PhaseUpdateParamsRule].
 type PhaseUpdateParamsRuleUnion interface {
 	implementsRulesetsPhaseUpdateParamsRuleUnion()
@@ -1361,115 +1051,31 @@ func (r PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersResponse
 	return apijson.MarshalRoot(r)
 }
 
-type PhaseUpdateParamsRulesRulesetsDDoSDynamicRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsDDoSDynamicRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PhaseUpdateParamsRulesRulesetsDDoSDynamicRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleActionDDoSDynamic PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type PhaseUpdateParamsRulesRulesetsForceConnectionCloseRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsForceConnectionCloseRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PhaseUpdateParamsRulesRulesetsForceConnectionCloseRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
-}
-
 // The action to perform when the rule matches.
 type PhaseUpdateParamsRulesAction string
 
 const (
-	PhaseUpdateParamsRulesActionBlock                PhaseUpdateParamsRulesAction = "block"
-	PhaseUpdateParamsRulesActionChallenge            PhaseUpdateParamsRulesAction = "challenge"
-	PhaseUpdateParamsRulesActionCompressResponse     PhaseUpdateParamsRulesAction = "compress_response"
-	PhaseUpdateParamsRulesActionExecute              PhaseUpdateParamsRulesAction = "execute"
-	PhaseUpdateParamsRulesActionJSChallenge          PhaseUpdateParamsRulesAction = "js_challenge"
-	PhaseUpdateParamsRulesActionLog                  PhaseUpdateParamsRulesAction = "log"
-	PhaseUpdateParamsRulesActionManagedChallenge     PhaseUpdateParamsRulesAction = "managed_challenge"
-	PhaseUpdateParamsRulesActionRedirect             PhaseUpdateParamsRulesAction = "redirect"
-	PhaseUpdateParamsRulesActionRewrite              PhaseUpdateParamsRulesAction = "rewrite"
-	PhaseUpdateParamsRulesActionRoute                PhaseUpdateParamsRulesAction = "route"
-	PhaseUpdateParamsRulesActionScore                PhaseUpdateParamsRulesAction = "score"
-	PhaseUpdateParamsRulesActionServeError           PhaseUpdateParamsRulesAction = "serve_error"
-	PhaseUpdateParamsRulesActionSetConfig            PhaseUpdateParamsRulesAction = "set_config"
-	PhaseUpdateParamsRulesActionSkip                 PhaseUpdateParamsRulesAction = "skip"
-	PhaseUpdateParamsRulesActionSetCacheSettings     PhaseUpdateParamsRulesAction = "set_cache_settings"
-	PhaseUpdateParamsRulesActionLogCustomField       PhaseUpdateParamsRulesAction = "log_custom_field"
-	PhaseUpdateParamsRulesActionDDoSDynamic          PhaseUpdateParamsRulesAction = "ddos_dynamic"
-	PhaseUpdateParamsRulesActionForceConnectionClose PhaseUpdateParamsRulesAction = "force_connection_close"
+	PhaseUpdateParamsRulesActionBlock            PhaseUpdateParamsRulesAction = "block"
+	PhaseUpdateParamsRulesActionChallenge        PhaseUpdateParamsRulesAction = "challenge"
+	PhaseUpdateParamsRulesActionCompressResponse PhaseUpdateParamsRulesAction = "compress_response"
+	PhaseUpdateParamsRulesActionExecute          PhaseUpdateParamsRulesAction = "execute"
+	PhaseUpdateParamsRulesActionJSChallenge      PhaseUpdateParamsRulesAction = "js_challenge"
+	PhaseUpdateParamsRulesActionLog              PhaseUpdateParamsRulesAction = "log"
+	PhaseUpdateParamsRulesActionManagedChallenge PhaseUpdateParamsRulesAction = "managed_challenge"
+	PhaseUpdateParamsRulesActionRedirect         PhaseUpdateParamsRulesAction = "redirect"
+	PhaseUpdateParamsRulesActionRewrite          PhaseUpdateParamsRulesAction = "rewrite"
+	PhaseUpdateParamsRulesActionRoute            PhaseUpdateParamsRulesAction = "route"
+	PhaseUpdateParamsRulesActionScore            PhaseUpdateParamsRulesAction = "score"
+	PhaseUpdateParamsRulesActionServeError       PhaseUpdateParamsRulesAction = "serve_error"
+	PhaseUpdateParamsRulesActionSetConfig        PhaseUpdateParamsRulesAction = "set_config"
+	PhaseUpdateParamsRulesActionSkip             PhaseUpdateParamsRulesAction = "skip"
+	PhaseUpdateParamsRulesActionSetCacheSettings PhaseUpdateParamsRulesAction = "set_cache_settings"
+	PhaseUpdateParamsRulesActionLogCustomField   PhaseUpdateParamsRulesAction = "log_custom_field"
 )
 
 func (r PhaseUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseUpdateParamsRulesActionBlock, PhaseUpdateParamsRulesActionChallenge, PhaseUpdateParamsRulesActionCompressResponse, PhaseUpdateParamsRulesActionExecute, PhaseUpdateParamsRulesActionJSChallenge, PhaseUpdateParamsRulesActionLog, PhaseUpdateParamsRulesActionManagedChallenge, PhaseUpdateParamsRulesActionRedirect, PhaseUpdateParamsRulesActionRewrite, PhaseUpdateParamsRulesActionRoute, PhaseUpdateParamsRulesActionScore, PhaseUpdateParamsRulesActionServeError, PhaseUpdateParamsRulesActionSetConfig, PhaseUpdateParamsRulesActionSkip, PhaseUpdateParamsRulesActionSetCacheSettings, PhaseUpdateParamsRulesActionLogCustomField, PhaseUpdateParamsRulesActionDDoSDynamic, PhaseUpdateParamsRulesActionForceConnectionClose:
+	case PhaseUpdateParamsRulesActionBlock, PhaseUpdateParamsRulesActionChallenge, PhaseUpdateParamsRulesActionCompressResponse, PhaseUpdateParamsRulesActionExecute, PhaseUpdateParamsRulesActionJSChallenge, PhaseUpdateParamsRulesActionLog, PhaseUpdateParamsRulesActionManagedChallenge, PhaseUpdateParamsRulesActionRedirect, PhaseUpdateParamsRulesActionRewrite, PhaseUpdateParamsRulesActionRoute, PhaseUpdateParamsRulesActionScore, PhaseUpdateParamsRulesActionServeError, PhaseUpdateParamsRulesActionSetConfig, PhaseUpdateParamsRulesActionSkip, PhaseUpdateParamsRulesActionSetCacheSettings, PhaseUpdateParamsRulesActionLogCustomField:
 		return true
 	}
 	return false

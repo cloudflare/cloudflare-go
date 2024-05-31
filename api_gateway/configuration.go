@@ -41,7 +41,7 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 // Set configuration properties
 func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *ConfigurationUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
-	var env Schema
+	var env ConfigurationUpdateResponseEnvelope
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -361,17 +361,18 @@ func (r ConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Configuration)
 }
 
-type Schema struct {
+type ConfigurationUpdateResponseEnvelope struct {
 	Errors   Message                          `json:"errors,required"`
 	Messages Message                          `json:"messages,required"`
 	Result   ConfigurationUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
-	Success bool       `json:"success,required"`
-	JSON    schemaJSON `json:"-"`
+	Success bool                                    `json:"success,required"`
+	JSON    configurationUpdateResponseEnvelopeJSON `json:"-"`
 }
 
-// schemaJSON contains the JSON metadata for the struct [Schema]
-type schemaJSON struct {
+// configurationUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ConfigurationUpdateResponseEnvelope]
+type configurationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -380,11 +381,11 @@ type schemaJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Schema) UnmarshalJSON(data []byte) (err error) {
+func (r *ConfigurationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r schemaJSON) RawJSON() string {
+func (r configurationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
