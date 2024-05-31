@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // RequestMessageService contains methods and other services that help with
@@ -80,8 +82,9 @@ func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier st
 }
 
 // Delete a Request Message
-func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *RequestMessageDeleteResponse, err error) {
+func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *RequestMessageDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RequestMessageDeleteResponseEnvelope
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -91,7 +94,11 @@ func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier st
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", accountIdentifier, requestIdentifier, messageIdentifer)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -152,45 +159,30 @@ func (r messageJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestMessageDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success RequestMessageDeleteResponseSuccess `json:"success,required"`
-	JSON    requestMessageDeleteResponseJSON    `json:"-"`
+// Union satisfied by [cloudforce_one.RequestMessageDeleteResponseUnknown],
+// [cloudforce_one.RequestMessageDeleteResponseArray] or [shared.UnionString].
+type RequestMessageDeleteResponseUnion interface {
+	ImplementsCloudforceOneRequestMessageDeleteResponseUnion()
 }
 
-// requestMessageDeleteResponseJSON contains the JSON metadata for the struct
-// [RequestMessageDeleteResponse]
-type requestMessageDeleteResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RequestMessageDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RequestMessageDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
-func (r *RequestMessageDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+type RequestMessageDeleteResponseArray []interface{}
 
-func (r requestMessageDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RequestMessageDeleteResponseSuccess bool
-
-const (
-	RequestMessageDeleteResponseSuccessTrue RequestMessageDeleteResponseSuccess = true
-)
-
-func (r RequestMessageDeleteResponseSuccess) IsKnown() bool {
-	switch r {
-	case RequestMessageDeleteResponseSuccessTrue:
-		return true
-	}
-	return false
+func (r RequestMessageDeleteResponseArray) ImplementsCloudforceOneRequestMessageDeleteResponseUnion() {
 }
 
 type RequestMessageNewParams struct {
@@ -205,9 +197,9 @@ func (r RequestMessageNewParams) MarshalJSON() (data []byte, err error) {
 type RequestMessageNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Message               `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  Message                                  `json:"result"`
 	JSON    requestMessageNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -216,8 +208,8 @@ type RequestMessageNewResponseEnvelope struct {
 type requestMessageNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -284,9 +276,9 @@ func (r RequestMessageUpdateParamsTlp) IsKnown() bool {
 type RequestMessageUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Message               `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Message                                     `json:"result"`
 	JSON    requestMessageUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -295,8 +287,8 @@ type RequestMessageUpdateResponseEnvelope struct {
 type requestMessageUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -319,6 +311,49 @@ const (
 func (r RequestMessageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RequestMessageUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RequestMessageDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   RequestMessageDeleteResponseUnion `json:"result,required"`
+	// Whether the API call was successful
+	Success RequestMessageDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    requestMessageDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// requestMessageDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RequestMessageDeleteResponseEnvelope]
+type requestMessageDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestMessageDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestMessageDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RequestMessageDeleteResponseEnvelopeSuccess bool
+
+const (
+	RequestMessageDeleteResponseEnvelopeSuccessTrue RequestMessageDeleteResponseEnvelopeSuccess = true
+)
+
+func (r RequestMessageDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestMessageDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
@@ -362,9 +397,9 @@ func (r RequestMessageGetParamsSortOrder) IsKnown() bool {
 type RequestMessageGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []Message             `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []Message                                `json:"result"`
 	JSON    requestMessageGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -373,8 +408,8 @@ type RequestMessageGetResponseEnvelope struct {
 type requestMessageGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
