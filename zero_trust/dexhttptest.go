@@ -346,12 +346,12 @@ func (r HTTPDetailsKind) IsKnown() bool {
 
 type DEXHTTPTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Start time for aggregate metrics in ISO ms
-	From param.Field[string] `query:"from,required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DexhttpTestGetParamsInterval] `query:"interval,required"`
 	// End time for aggregate metrics in ISO ms
-	To param.Field[string] `query:"to,required"`
+	TimeEnd param.Field[string] `query:"timeEnd,required"`
+	// Start time for aggregate metrics in ISO ms
+	TimeStart param.Field[string] `query:"timeStart,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`

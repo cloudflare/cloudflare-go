@@ -205,9 +205,9 @@ func (r DEXFleetStatusLiveResponseEnvelopeSuccess) IsKnown() bool {
 type DEXFleetStatusOverTimeParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Timestamp in ISO format
-	From param.Field[string] `query:"from,required"`
+	TimeEnd param.Field[string] `query:"time_end,required"`
 	// Timestamp in ISO format
-	To param.Field[string] `query:"to,required"`
+	TimeStart param.Field[string] `query:"time_start,required"`
 	// Cloudflare colo
 	Colo param.Field[string] `query:"colo"`
 	// Device-specific ID, given as UUID v4
