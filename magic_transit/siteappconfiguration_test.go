@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestSiteSiteAppConfigurationNewWithOptionalParams(t *testing.T) {
+func TestSiteAppConfigurationNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestSiteSiteAppConfigurationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Sites.AppConfiguration.New(
+	_, err := client.MagicTransit.Sites.AppConfiguration.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteSiteAppConfigurationNewParams{
+		magic_transit.SiteAppConfigurationNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Breakout:  cloudflare.F(true),
 			Priority:  cloudflare.F(int64(0)),
@@ -45,7 +45,7 @@ func TestSiteSiteAppConfigurationNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSiteSiteAppConfigurationUpdateWithOptionalParams(t *testing.T) {
+func TestSiteAppConfigurationUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,11 +58,11 @@ func TestSiteSiteAppConfigurationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Sites.AppConfiguration.Update(
+	_, err := client.MagicTransit.Sites.AppConfiguration.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteSiteAppConfigurationUpdateParams{
+		magic_transit.SiteAppConfigurationUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Breakout:  cloudflare.F(true),
 			Priority:  cloudflare.F(int64(0)),
@@ -77,7 +77,7 @@ func TestSiteSiteAppConfigurationUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSiteSiteAppConfigurationList(t *testing.T) {
+func TestSiteAppConfigurationList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,10 +90,10 @@ func TestSiteSiteAppConfigurationList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Sites.AppConfiguration.List(
+	_, err := client.MagicTransit.Sites.AppConfiguration.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteSiteAppConfigurationListParams{
+		magic_transit.SiteAppConfigurationListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -106,7 +106,7 @@ func TestSiteSiteAppConfigurationList(t *testing.T) {
 	}
 }
 
-func TestSiteSiteAppConfigurationDelete(t *testing.T) {
+func TestSiteAppConfigurationDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -119,11 +119,11 @@ func TestSiteSiteAppConfigurationDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Sites.AppConfiguration.Delete(
+	_, err := client.MagicTransit.Sites.AppConfiguration.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteSiteAppConfigurationDeleteParams{
+		magic_transit.SiteAppConfigurationDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
