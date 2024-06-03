@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/goccy/go-json v0.10.3
 	github.com/google/go-querystring v1.1.0
-	github.com/hashicorp/go-retryablehttp v0.7.6
+	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/stretchr/testify v1.9.0
 	github.com/urfave/cli/v2 v2.27.2
