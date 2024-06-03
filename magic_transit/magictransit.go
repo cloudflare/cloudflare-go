@@ -16,6 +16,7 @@ import (
 // the [NewMagicTransitService] method instead.
 type MagicTransitService struct {
 	Options         []option.RequestOption
+	Apps            *AppService
 	CfInterconnects *CfInterconnectService
 	GRETunnels      *GRETunnelService
 	IPSECTunnels    *IPSECTunnelService
@@ -30,6 +31,7 @@ type MagicTransitService struct {
 func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitService) {
 	r = &MagicTransitService{}
 	r.Options = opts
+	r.Apps = NewAppService(opts...)
 	r.CfInterconnects = NewCfInterconnectService(opts...)
 	r.GRETunnels = NewGRETunnelService(opts...)
 	r.IPSECTunnels = NewIPSECTunnelService(opts...)
