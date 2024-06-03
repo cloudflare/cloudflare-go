@@ -202,6 +202,16 @@ func (t TypeB) IsKnown() bool {
 	return t == "b"
 }
 
+type UnmarshalStruct struct {
+	Foo  string `json:"foo"`
+	prop bool   `json:"-"`
+}
+
+func (r *UnmarshalStruct) UnmarshalJSON(json []byte) error {
+	r.prop = true
+	return UnmarshalRoot(json, r)
+}
+
 func (ComplexUnionTypeB) complexUnion() {}
 
 func init() {
@@ -431,6 +441,16 @@ var tests = map[string]struct {
 	"complex_union_type_b": {
 		`{"union":{"baz":12,"type":"b"}}`,
 		ComplexUnionStruct{Union: ComplexUnionTypeB{Baz: 12, Type: TypeB("b")}},
+	},
+
+	"unmarshal": {
+		`{"foo":"hello"}`,
+		&UnmarshalStruct{Foo: "hello", prop: true},
+	},
+
+	"array_of_unmarshal": {
+		`[{"foo":"hello"}]`,
+		[]UnmarshalStruct{{Foo: "hello", prop: true}},
 	},
 
 	"inline_coerce": {
