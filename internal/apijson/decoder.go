@@ -124,7 +124,14 @@ func (d *decoderBuilder) typeDecoder(t reflect.Type) decoderFunc {
 	return f
 }
 
+func indirectUnmarshalerDecoder(n gjson.Result, v reflect.Value, state *decoderState) error {
+	return v.Addr().Interface().(json.Unmarshaler).UnmarshalJSON([]byte(n.Raw))
+}
+
 func unmarshalerDecoder(n gjson.Result, v reflect.Value, state *decoderState) error {
+	if v.Kind() == reflect.Pointer && v.CanSet() {
+		v.Set(reflect.New(v.Type().Elem()))
+	}
 	return v.Interface().(json.Unmarshaler).UnmarshalJSON([]byte(n.Raw))
 }
 
@@ -134,6 +141,9 @@ func (d *decoderBuilder) newTypeDecoder(t reflect.Type) decoderFunc {
 	}
 	if !d.root && t.Implements(reflect.TypeOf((*json.Unmarshaler)(nil)).Elem()) {
 		return unmarshalerDecoder
+	}
+	if !d.root && reflect.PointerTo(t).Implements(reflect.TypeOf((*json.Unmarshaler)(nil)).Elem()) {
+		return indirectUnmarshalerDecoder
 	}
 	d.root = false
 
