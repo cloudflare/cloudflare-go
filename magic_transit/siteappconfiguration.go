@@ -16,29 +16,29 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
-// SiteSiteAppConfigurationService contains methods and other services that help
-// with interacting with the cloudflare API.
+// SiteAppConfigurationService contains methods and other services that help with
+// interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewSiteSiteAppConfigurationService] method instead.
-type SiteSiteAppConfigurationService struct {
+// the [NewSiteAppConfigurationService] method instead.
+type SiteAppConfigurationService struct {
 	Options []option.RequestOption
 }
 
-// NewSiteSiteAppConfigurationService generates a new service that applies the
-// given options to each request. These options are applied after the parent
-// client's options (if there is one), and before any request-specific options.
-func NewSiteSiteAppConfigurationService(opts ...option.RequestOption) (r *SiteSiteAppConfigurationService) {
-	r = &SiteSiteAppConfigurationService{}
+// NewSiteAppConfigurationService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewSiteAppConfigurationService(opts ...option.RequestOption) (r *SiteAppConfigurationService) {
+	r = &SiteAppConfigurationService{}
 	r.Options = opts
 	return
 }
 
 // Creates a new App Config for a site
-func (r *SiteSiteAppConfigurationService) New(ctx context.Context, siteID string, params SiteSiteAppConfigurationNewParams, opts ...option.RequestOption) (res *SiteSiteAppConfigurationNewResponse, err error) {
+func (r *SiteAppConfigurationService) New(ctx context.Context, siteID string, params SiteAppConfigurationNewParams, opts ...option.RequestOption) (res *SiteAppConfigurationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SiteSiteAppConfigurationNewResponseEnvelope
+	var env SiteAppConfigurationNewResponseEnvelope
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,9 +57,9 @@ func (r *SiteSiteAppConfigurationService) New(ctx context.Context, siteID string
 }
 
 // Updates an App Config for a site
-func (r *SiteSiteAppConfigurationService) Update(ctx context.Context, siteID string, appConfigID string, params SiteSiteAppConfigurationUpdateParams, opts ...option.RequestOption) (res *SiteSiteAppConfigurationUpdateResponse, err error) {
+func (r *SiteAppConfigurationService) Update(ctx context.Context, siteID string, appConfigID string, params SiteAppConfigurationUpdateParams, opts ...option.RequestOption) (res *SiteAppConfigurationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SiteSiteAppConfigurationUpdateResponseEnvelope
+	var env SiteAppConfigurationUpdateResponseEnvelope
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,7 +82,7 @@ func (r *SiteSiteAppConfigurationService) Update(ctx context.Context, siteID str
 }
 
 // Lists App Configs associated with a site.
-func (r *SiteSiteAppConfigurationService) List(ctx context.Context, siteID string, query SiteSiteAppConfigurationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SiteSiteAppConfigurationListResponse], err error) {
+func (r *SiteAppConfigurationService) List(ctx context.Context, siteID string, query SiteAppConfigurationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SiteAppConfigurationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -100,14 +100,14 @@ func (r *SiteSiteAppConfigurationService) List(ctx context.Context, siteID strin
 }
 
 // Lists App Configs associated with a site.
-func (r *SiteSiteAppConfigurationService) ListAutoPaging(ctx context.Context, siteID string, query SiteSiteAppConfigurationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SiteSiteAppConfigurationListResponse] {
+func (r *SiteAppConfigurationService) ListAutoPaging(ctx context.Context, siteID string, query SiteAppConfigurationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SiteAppConfigurationListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, siteID, query, opts...))
 }
 
 // Deletes specific App Config associated with a site.
-func (r *SiteSiteAppConfigurationService) Delete(ctx context.Context, siteID string, appConfigID string, body SiteSiteAppConfigurationDeleteParams, opts ...option.RequestOption) (res *SiteSiteAppConfigurationDeleteResponse, err error) {
+func (r *SiteAppConfigurationService) Delete(ctx context.Context, siteID string, appConfigID string, body SiteAppConfigurationDeleteParams, opts ...option.RequestOption) (res *SiteAppConfigurationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SiteSiteAppConfigurationDeleteResponseEnvelope
+	var env SiteAppConfigurationDeleteResponseEnvelope
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -130,7 +130,7 @@ func (r *SiteSiteAppConfigurationService) Delete(ctx context.Context, siteID str
 }
 
 // Traffic decision configuration for an app.
-type SiteSiteAppConfigurationNewResponse struct {
+type SiteAppConfigurationNewResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Identifier
@@ -140,13 +140,13 @@ type SiteSiteAppConfigurationNewResponse struct {
 	Breakout bool `json:"breakout"`
 	// Priority of traffic. 0 is default, anything greater is prioritized. (Currently
 	// only 0 and 1 are supported)
-	Priority int64                                   `json:"priority"`
-	JSON     siteSiteAppConfigurationNewResponseJSON `json:"-"`
+	Priority int64                               `json:"priority"`
+	JSON     siteAppConfigurationNewResponseJSON `json:"-"`
 }
 
-// siteSiteAppConfigurationNewResponseJSON contains the JSON metadata for the
-// struct [SiteSiteAppConfigurationNewResponse]
-type siteSiteAppConfigurationNewResponseJSON struct {
+// siteAppConfigurationNewResponseJSON contains the JSON metadata for the struct
+// [SiteAppConfigurationNewResponse]
+type siteAppConfigurationNewResponseJSON struct {
 	ID          apijson.Field
 	SiteID      apijson.Field
 	Breakout    apijson.Field
@@ -155,16 +155,16 @@ type siteSiteAppConfigurationNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteSiteAppConfigurationNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteAppConfigurationNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteSiteAppConfigurationNewResponseJSON) RawJSON() string {
+func (r siteAppConfigurationNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Traffic decision configuration for an app.
-type SiteSiteAppConfigurationUpdateResponse struct {
+type SiteAppConfigurationUpdateResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Identifier
@@ -174,13 +174,13 @@ type SiteSiteAppConfigurationUpdateResponse struct {
 	Breakout bool `json:"breakout"`
 	// Priority of traffic. 0 is default, anything greater is prioritized. (Currently
 	// only 0 and 1 are supported)
-	Priority int64                                      `json:"priority"`
-	JSON     siteSiteAppConfigurationUpdateResponseJSON `json:"-"`
+	Priority int64                                  `json:"priority"`
+	JSON     siteAppConfigurationUpdateResponseJSON `json:"-"`
 }
 
-// siteSiteAppConfigurationUpdateResponseJSON contains the JSON metadata for the
-// struct [SiteSiteAppConfigurationUpdateResponse]
-type siteSiteAppConfigurationUpdateResponseJSON struct {
+// siteAppConfigurationUpdateResponseJSON contains the JSON metadata for the struct
+// [SiteAppConfigurationUpdateResponse]
+type siteAppConfigurationUpdateResponseJSON struct {
 	ID          apijson.Field
 	SiteID      apijson.Field
 	Breakout    apijson.Field
@@ -189,16 +189,16 @@ type siteSiteAppConfigurationUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteSiteAppConfigurationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteAppConfigurationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteSiteAppConfigurationUpdateResponseJSON) RawJSON() string {
+func (r siteAppConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Traffic decision configuration for an app.
-type SiteSiteAppConfigurationListResponse struct {
+type SiteAppConfigurationListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Identifier
@@ -208,13 +208,13 @@ type SiteSiteAppConfigurationListResponse struct {
 	Breakout bool `json:"breakout"`
 	// Priority of traffic. 0 is default, anything greater is prioritized. (Currently
 	// only 0 and 1 are supported)
-	Priority int64                                    `json:"priority"`
-	JSON     siteSiteAppConfigurationListResponseJSON `json:"-"`
+	Priority int64                                `json:"priority"`
+	JSON     siteAppConfigurationListResponseJSON `json:"-"`
 }
 
-// siteSiteAppConfigurationListResponseJSON contains the JSON metadata for the
-// struct [SiteSiteAppConfigurationListResponse]
-type siteSiteAppConfigurationListResponseJSON struct {
+// siteAppConfigurationListResponseJSON contains the JSON metadata for the struct
+// [SiteAppConfigurationListResponse]
+type siteAppConfigurationListResponseJSON struct {
 	ID          apijson.Field
 	SiteID      apijson.Field
 	Breakout    apijson.Field
@@ -223,16 +223,16 @@ type siteSiteAppConfigurationListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteSiteAppConfigurationListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteAppConfigurationListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteSiteAppConfigurationListResponseJSON) RawJSON() string {
+func (r siteAppConfigurationListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Traffic decision configuration for an app.
-type SiteSiteAppConfigurationDeleteResponse struct {
+type SiteAppConfigurationDeleteResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Identifier
@@ -242,13 +242,13 @@ type SiteSiteAppConfigurationDeleteResponse struct {
 	Breakout bool `json:"breakout"`
 	// Priority of traffic. 0 is default, anything greater is prioritized. (Currently
 	// only 0 and 1 are supported)
-	Priority int64                                      `json:"priority"`
-	JSON     siteSiteAppConfigurationDeleteResponseJSON `json:"-"`
+	Priority int64                                  `json:"priority"`
+	JSON     siteAppConfigurationDeleteResponseJSON `json:"-"`
 }
 
-// siteSiteAppConfigurationDeleteResponseJSON contains the JSON metadata for the
-// struct [SiteSiteAppConfigurationDeleteResponse]
-type siteSiteAppConfigurationDeleteResponseJSON struct {
+// siteAppConfigurationDeleteResponseJSON contains the JSON metadata for the struct
+// [SiteAppConfigurationDeleteResponse]
+type siteAppConfigurationDeleteResponseJSON struct {
 	ID          apijson.Field
 	SiteID      apijson.Field
 	Breakout    apijson.Field
@@ -257,15 +257,15 @@ type siteSiteAppConfigurationDeleteResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteSiteAppConfigurationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteAppConfigurationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteSiteAppConfigurationDeleteResponseJSON) RawJSON() string {
+func (r siteAppConfigurationDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteSiteAppConfigurationNewParams struct {
+type SiteAppConfigurationNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether to breakout traffic to the app's endpoints directly. Null preserves
@@ -276,23 +276,23 @@ type SiteSiteAppConfigurationNewParams struct {
 	Priority param.Field[int64] `json:"priority"`
 }
 
-func (r SiteSiteAppConfigurationNewParams) MarshalJSON() (data []byte, err error) {
+func (r SiteAppConfigurationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteSiteAppConfigurationNewResponseEnvelope struct {
+type SiteAppConfigurationNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Traffic decision configuration for an app.
-	Result SiteSiteAppConfigurationNewResponse `json:"result,required,nullable"`
+	Result SiteAppConfigurationNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success SiteSiteAppConfigurationNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteSiteAppConfigurationNewResponseEnvelopeJSON    `json:"-"`
+	Success SiteAppConfigurationNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteAppConfigurationNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// siteSiteAppConfigurationNewResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SiteSiteAppConfigurationNewResponseEnvelope]
-type siteSiteAppConfigurationNewResponseEnvelopeJSON struct {
+// siteAppConfigurationNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SiteAppConfigurationNewResponseEnvelope]
+type siteAppConfigurationNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -301,30 +301,30 @@ type siteSiteAppConfigurationNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteSiteAppConfigurationNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteAppConfigurationNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteSiteAppConfigurationNewResponseEnvelopeJSON) RawJSON() string {
+func (r siteAppConfigurationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SiteSiteAppConfigurationNewResponseEnvelopeSuccess bool
+type SiteAppConfigurationNewResponseEnvelopeSuccess bool
 
 const (
-	SiteSiteAppConfigurationNewResponseEnvelopeSuccessTrue SiteSiteAppConfigurationNewResponseEnvelopeSuccess = true
+	SiteAppConfigurationNewResponseEnvelopeSuccessTrue SiteAppConfigurationNewResponseEnvelopeSuccess = true
 )
 
-func (r SiteSiteAppConfigurationNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r SiteAppConfigurationNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SiteSiteAppConfigurationNewResponseEnvelopeSuccessTrue:
+	case SiteAppConfigurationNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SiteSiteAppConfigurationUpdateParams struct {
+type SiteAppConfigurationUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether to breakout traffic to the app's endpoints directly. Null preserves
@@ -335,23 +335,23 @@ type SiteSiteAppConfigurationUpdateParams struct {
 	Priority param.Field[int64] `json:"priority"`
 }
 
-func (r SiteSiteAppConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SiteAppConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteSiteAppConfigurationUpdateResponseEnvelope struct {
+type SiteAppConfigurationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Traffic decision configuration for an app.
-	Result SiteSiteAppConfigurationUpdateResponse `json:"result,required,nullable"`
+	Result SiteAppConfigurationUpdateResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success SiteSiteAppConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteSiteAppConfigurationUpdateResponseEnvelopeJSON    `json:"-"`
+	Success SiteAppConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteAppConfigurationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// siteSiteAppConfigurationUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [SiteSiteAppConfigurationUpdateResponseEnvelope]
-type siteSiteAppConfigurationUpdateResponseEnvelopeJSON struct {
+// siteAppConfigurationUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SiteAppConfigurationUpdateResponseEnvelope]
+type siteAppConfigurationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -360,52 +360,52 @@ type siteSiteAppConfigurationUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteSiteAppConfigurationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteAppConfigurationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteSiteAppConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r siteAppConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SiteSiteAppConfigurationUpdateResponseEnvelopeSuccess bool
+type SiteAppConfigurationUpdateResponseEnvelopeSuccess bool
 
 const (
-	SiteSiteAppConfigurationUpdateResponseEnvelopeSuccessTrue SiteSiteAppConfigurationUpdateResponseEnvelopeSuccess = true
+	SiteAppConfigurationUpdateResponseEnvelopeSuccessTrue SiteAppConfigurationUpdateResponseEnvelopeSuccess = true
 )
 
-func (r SiteSiteAppConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r SiteAppConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SiteSiteAppConfigurationUpdateResponseEnvelopeSuccessTrue:
+	case SiteAppConfigurationUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SiteSiteAppConfigurationListParams struct {
+type SiteAppConfigurationListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SiteSiteAppConfigurationDeleteParams struct {
+type SiteAppConfigurationDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SiteSiteAppConfigurationDeleteResponseEnvelope struct {
+type SiteAppConfigurationDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Traffic decision configuration for an app.
-	Result SiteSiteAppConfigurationDeleteResponse `json:"result,required,nullable"`
+	Result SiteAppConfigurationDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success SiteSiteAppConfigurationDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteSiteAppConfigurationDeleteResponseEnvelopeJSON    `json:"-"`
+	Success SiteAppConfigurationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteAppConfigurationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// siteSiteAppConfigurationDeleteResponseEnvelopeJSON contains the JSON metadata
-// for the struct [SiteSiteAppConfigurationDeleteResponseEnvelope]
-type siteSiteAppConfigurationDeleteResponseEnvelopeJSON struct {
+// siteAppConfigurationDeleteResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SiteAppConfigurationDeleteResponseEnvelope]
+type siteAppConfigurationDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -414,24 +414,24 @@ type siteSiteAppConfigurationDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteSiteAppConfigurationDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteAppConfigurationDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteSiteAppConfigurationDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r siteAppConfigurationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SiteSiteAppConfigurationDeleteResponseEnvelopeSuccess bool
+type SiteAppConfigurationDeleteResponseEnvelopeSuccess bool
 
 const (
-	SiteSiteAppConfigurationDeleteResponseEnvelopeSuccessTrue SiteSiteAppConfigurationDeleteResponseEnvelopeSuccess = true
+	SiteAppConfigurationDeleteResponseEnvelopeSuccessTrue SiteAppConfigurationDeleteResponseEnvelopeSuccess = true
 )
 
-func (r SiteSiteAppConfigurationDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r SiteAppConfigurationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SiteSiteAppConfigurationDeleteResponseEnvelopeSuccessTrue:
+	case SiteAppConfigurationDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
