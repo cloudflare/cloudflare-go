@@ -15,6 +15,7 @@ import (
 )
 
 func TestAppNewWithOptionalParams(t *testing.T) {
+	t.Skip("prism errors - https://github.com/cloudflare/cloudflare-python/actions/runs/9360388260/job/25765690361?pr=482#step:5:7212")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -44,6 +45,7 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 }
 
 func TestAppUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("prism errors - https://github.com/cloudflare/cloudflare-python/actions/runs/9360388260/job/25765690361?pr=482#step:5:7212")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -77,6 +79,7 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestAppList(t *testing.T) {
+	t.Skip("prism errors - https://github.com/cloudflare/cloudflare-python/actions/runs/9360388260/job/25765690361?pr=482#step:5:7212")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
