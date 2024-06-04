@@ -110,7 +110,7 @@ func (r *RulesetService) Update(ctx context.Context, rulesetID string, params Ru
 }
 
 // Fetches all rulesets.
-func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Ruleset], err error) {
+func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RulesetListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -146,7 +146,7 @@ func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts
 }
 
 // Fetches all rulesets.
-func (r *RulesetService) ListAutoPaging(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Ruleset] {
+func (r *RulesetService) ListAutoPaging(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RulesetListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -269,46 +269,6 @@ func (r Phase) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// A ruleset object.
-type Ruleset struct {
-	// The unique ID of the ruleset.
-	ID string `json:"id,required"`
-	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the ruleset.
-	Version string `json:"version,required"`
-	// An informative description of the ruleset.
-	Description string `json:"description"`
-	// The kind of the ruleset.
-	Kind Kind `json:"kind"`
-	// The human-readable name of the ruleset.
-	Name string `json:"name"`
-	// The phase of the ruleset.
-	Phase Phase       `json:"phase"`
-	JSON  rulesetJSON `json:"-"`
-}
-
-// rulesetJSON contains the JSON metadata for the struct [Ruleset]
-type rulesetJSON struct {
-	ID          apijson.Field
-	LastUpdated apijson.Field
-	Version     apijson.Field
-	Description apijson.Field
-	Kind        apijson.Field
-	Name        apijson.Field
-	Phase       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Ruleset) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetJSON) RawJSON() string {
-	return r.raw
 }
 
 // A ruleset object.
@@ -1424,6 +1384,47 @@ func (r RulesetUpdateResponseRulesAction) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// A ruleset object.
+type RulesetListResponse struct {
+	// The unique ID of the ruleset.
+	ID string `json:"id,required"`
+	// The kind of the ruleset.
+	Kind Kind `json:"kind,required"`
+	// The timestamp of when the ruleset was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The human-readable name of the ruleset.
+	Name string `json:"name,required"`
+	// The phase of the ruleset.
+	Phase Phase `json:"phase,required"`
+	// The version of the ruleset.
+	Version string `json:"version,required"`
+	// An informative description of the ruleset.
+	Description string                  `json:"description"`
+	JSON        rulesetListResponseJSON `json:"-"`
+}
+
+// rulesetListResponseJSON contains the JSON metadata for the struct
+// [RulesetListResponse]
+type rulesetListResponseJSON struct {
+	ID          apijson.Field
+	Kind        apijson.Field
+	LastUpdated apijson.Field
+	Name        apijson.Field
+	Phase       apijson.Field
+	Version     apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // A ruleset object.
