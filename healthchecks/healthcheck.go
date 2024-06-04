@@ -306,7 +306,7 @@ type HTTPConfiguration struct {
 	FollowRedirects bool `json:"follow_redirects"`
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden.
-	Header interface{} `json:"header,nullable"`
+	Header map[string][]string `json:"header,nullable"`
 	// The HTTP method to use for the health check.
 	Method HTTPConfigurationMethod `json:"method"`
 	// The endpoint path to health check against.
@@ -370,7 +370,7 @@ type HTTPConfigurationParam struct {
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden.
-	Header param.Field[interface{}] `json:"header"`
+	Header param.Field[map[string][]string] `json:"header"`
 	// The HTTP method to use for the health check.
 	Method param.Field[HTTPConfigurationMethod] `json:"method"`
 	// The endpoint path to health check against.
