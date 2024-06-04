@@ -40,13 +40,9 @@ func TestPreviewNewWithOptionalParams(t *testing.T) {
 				ExpectedBody:    cloudflare.F("success"),
 				ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
 				FollowRedirects: cloudflare.F(true),
-				Header: cloudflare.F[any](map[string]interface{}{
-					"Host": map[string]interface{}{
-						"0": "example.com",
-					},
-					"X-App-ID": map[string]interface{}{
-						"0": "abc123",
-					},
+				Header: cloudflare.F(map[string][]string{
+					"Host":     {"example.com"},
+					"X-App-ID": {"abc123"},
 				}),
 				Method: cloudflare.F(healthchecks.HTTPConfigurationMethodGet),
 				Path:   cloudflare.F("/health"),
