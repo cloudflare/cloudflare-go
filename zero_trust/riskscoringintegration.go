@@ -158,8 +158,12 @@ type RiskScoringIntegrationNewResponse struct {
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com"
-	TenantURL string                                `json:"tenant_url,required"`
-	JSON      riskScoringIntegrationNewResponseJSON `json:"-"`
+	TenantURL string `json:"tenant_url,required"`
+	// The URL for the Shared Signals Framework configuration, e.g.
+	// "/.well-known/sse-configuration/{integration_uuid}/".
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	WellKnownURL string                                `json:"well_known_url,required"`
+	JSON         riskScoringIntegrationNewResponseJSON `json:"-"`
 }
 
 // riskScoringIntegrationNewResponseJSON contains the JSON metadata for the struct
@@ -172,6 +176,7 @@ type riskScoringIntegrationNewResponseJSON struct {
 	IntegrationType apijson.Field
 	ReferenceID     apijson.Field
 	TenantURL       apijson.Field
+	WellKnownURL    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -213,8 +218,12 @@ type RiskScoringIntegrationUpdateResponse struct {
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com"
-	TenantURL string                                   `json:"tenant_url,required"`
-	JSON      riskScoringIntegrationUpdateResponseJSON `json:"-"`
+	TenantURL string `json:"tenant_url,required"`
+	// The URL for the Shared Signals Framework configuration, e.g.
+	// "/.well-known/sse-configuration/{integration_uuid}/".
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	WellKnownURL string                                   `json:"well_known_url,required"`
+	JSON         riskScoringIntegrationUpdateResponseJSON `json:"-"`
 }
 
 // riskScoringIntegrationUpdateResponseJSON contains the JSON metadata for the
@@ -227,6 +236,7 @@ type riskScoringIntegrationUpdateResponseJSON struct {
 	IntegrationType apijson.Field
 	ReferenceID     apijson.Field
 	TenantURL       apijson.Field
+	WellKnownURL    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -268,8 +278,12 @@ type RiskScoringIntegrationListResponse struct {
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com"
-	TenantURL string                                 `json:"tenant_url,required"`
-	JSON      riskScoringIntegrationListResponseJSON `json:"-"`
+	TenantURL string `json:"tenant_url,required"`
+	// The URL for the Shared Signals Framework configuration, e.g.
+	// "/.well-known/sse-configuration/{integration_uuid}/".
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	WellKnownURL string                                 `json:"well_known_url,required"`
+	JSON         riskScoringIntegrationListResponseJSON `json:"-"`
 }
 
 // riskScoringIntegrationListResponseJSON contains the JSON metadata for the struct
@@ -282,6 +296,7 @@ type riskScoringIntegrationListResponseJSON struct {
 	IntegrationType apijson.Field
 	ReferenceID     apijson.Field
 	TenantURL       apijson.Field
+	WellKnownURL    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -325,8 +340,12 @@ type RiskScoringIntegrationGetResponse struct {
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com"
-	TenantURL string                                `json:"tenant_url,required"`
-	JSON      riskScoringIntegrationGetResponseJSON `json:"-"`
+	TenantURL string `json:"tenant_url,required"`
+	// The URL for the Shared Signals Framework configuration, e.g.
+	// "/.well-known/sse-configuration/{integration_uuid}/".
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	WellKnownURL string                                `json:"well_known_url,required"`
+	JSON         riskScoringIntegrationGetResponseJSON `json:"-"`
 }
 
 // riskScoringIntegrationGetResponseJSON contains the JSON metadata for the struct
@@ -339,6 +358,7 @@ type riskScoringIntegrationGetResponseJSON struct {
 	IntegrationType apijson.Field
 	ReferenceID     apijson.Field
 	TenantURL       apijson.Field
+	WellKnownURL    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
