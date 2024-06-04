@@ -1223,8 +1223,6 @@ type PhaseUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative description of the ruleset.
 	Description param.Field[string] `json:"description"`
-	// The kind of the ruleset.
-	Kind param.Field[Kind] `json:"kind"`
 	// The human-readable name of the ruleset.
 	Name param.Field[string] `json:"name"`
 	// The phase of the ruleset.

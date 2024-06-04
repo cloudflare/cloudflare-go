@@ -38,7 +38,7 @@ func NewPhaseVersionService(opts ...option.RequestOption) (r *PhaseVersionServic
 }
 
 // Fetches the versions of an account or zone entry point ruleset.
-func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase Phase, query PhaseVersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Ruleset], err error) {
+func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase Phase, query PhaseVersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PhaseVersionListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -74,7 +74,7 @@ func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase Phase, quer
 }
 
 // Fetches the versions of an account or zone entry point ruleset.
-func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase Phase, query PhaseVersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Ruleset] {
+func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase Phase, query PhaseVersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PhaseVersionListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, rulesetPhase, query, opts...))
 }
 
@@ -111,6 +111,47 @@ func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase Phase, rules
 	}
 	res = &env.Result
 	return
+}
+
+// A ruleset object.
+type PhaseVersionListResponse struct {
+	// The unique ID of the ruleset.
+	ID string `json:"id,required"`
+	// The kind of the ruleset.
+	Kind Kind `json:"kind,required"`
+	// The timestamp of when the ruleset was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The human-readable name of the ruleset.
+	Name string `json:"name,required"`
+	// The phase of the ruleset.
+	Phase Phase `json:"phase,required"`
+	// The version of the ruleset.
+	Version string `json:"version,required"`
+	// An informative description of the ruleset.
+	Description string                       `json:"description"`
+	JSON        phaseVersionListResponseJSON `json:"-"`
+}
+
+// phaseVersionListResponseJSON contains the JSON metadata for the struct
+// [PhaseVersionListResponse]
+type phaseVersionListResponseJSON struct {
+	ID          apijson.Field
+	Kind        apijson.Field
+	LastUpdated apijson.Field
+	Name        apijson.Field
+	Phase       apijson.Field
+	Version     apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PhaseVersionListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r phaseVersionListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // A ruleset object.
