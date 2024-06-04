@@ -71,8 +71,12 @@ type RiskScoringIntegrationReferenceGetResponse struct {
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com"
-	TenantURL string                                         `json:"tenant_url,required"`
-	JSON      riskScoringIntegrationReferenceGetResponseJSON `json:"-"`
+	TenantURL string `json:"tenant_url,required"`
+	// The URL for the Shared Signals Framework configuration, e.g.
+	// "/.well-known/sse-configuration/{integration_uuid}/".
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	WellKnownURL string                                         `json:"well_known_url,required"`
+	JSON         riskScoringIntegrationReferenceGetResponseJSON `json:"-"`
 }
 
 // riskScoringIntegrationReferenceGetResponseJSON contains the JSON metadata for
@@ -85,6 +89,7 @@ type riskScoringIntegrationReferenceGetResponseJSON struct {
 	IntegrationType apijson.Field
 	ReferenceID     apijson.Field
 	TenantURL       apijson.Field
+	WellKnownURL    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
