@@ -256,7 +256,7 @@ func (r HTTPLocationOSGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// IP version.
+// Operating system.
 type HTTPLocationOSGetParamsOS string
 
 const (
