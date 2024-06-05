@@ -33,6 +33,19 @@ func NewBGPRouteService(opts ...option.RequestOption) (r *BGPRouteService) {
 	return
 }
 
+// List all ASes on current global routing tables with routing statistics
+func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, opts ...option.RequestOption) (res *BGPRouteAsesResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env BGPRouteAsesResponseEnvelope
+	path := "radar/bgp/routes/ases"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // List all Multi-origin AS (MOAS) prefixes on the global routing tables.
 func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, opts ...option.RequestOption) (res *BGPRouteMoasResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -70,6 +83,105 @@ func (r *BGPRouteService) Stats(ctx context.Context, query BGPRouteStatsParams, 
 	}
 	res = &env.Result
 	return
+}
+
+type BGPRouteAsesResponse struct {
+	ASNs []BGPRouteAsesResponseASN `json:"asns,required"`
+	Meta BGPRouteAsesResponseMeta  `json:"meta,required"`
+	JSON bgpRouteAsesResponseJSON  `json:"-"`
+}
+
+// bgpRouteAsesResponseJSON contains the JSON metadata for the struct
+// [BGPRouteAsesResponse]
+type bgpRouteAsesResponseJSON struct {
+	ASNs        apijson.Field
+	Meta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteAsesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteAsesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteAsesResponseASN struct {
+	ASN int64 `json:"asn,required"`
+	// AS's customer cone size
+	ConeSize int64 `json:"coneSize,required"`
+	// 2-letter country code for the AS's registration country
+	Country string `json:"country,required"`
+	// number of IPv4 addresses originated by the AS
+	IPV4Count int64 `json:"ipv4Count,required"`
+	// number of IPv6 addresses originated by the AS
+	IPV6Count string `json:"ipv6Count,required"`
+	// name of the AS
+	Name string `json:"name,required"`
+	// number of total IP prefixes originated by the AS
+	PfxsCount int64 `json:"pfxsCount,required"`
+	// number of RPKI invalid prefixes originated by the AS
+	RPKIInvalid int64 `json:"rpkiInvalid,required"`
+	// number of RPKI unknown prefixes originated by the AS
+	RPKIUnknown int64 `json:"rpkiUnknown,required"`
+	// number of RPKI valid prefixes originated by the AS
+	RPKIValid int64                       `json:"rpkiValid,required"`
+	JSON      bgpRouteAsesResponseASNJSON `json:"-"`
+}
+
+// bgpRouteAsesResponseASNJSON contains the JSON metadata for the struct
+// [BGPRouteAsesResponseASN]
+type bgpRouteAsesResponseASNJSON struct {
+	ASN         apijson.Field
+	ConeSize    apijson.Field
+	Country     apijson.Field
+	IPV4Count   apijson.Field
+	IPV6Count   apijson.Field
+	Name        apijson.Field
+	PfxsCount   apijson.Field
+	RPKIInvalid apijson.Field
+	RPKIUnknown apijson.Field
+	RPKIValid   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteAsesResponseASN) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteAsesResponseASNJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteAsesResponseMeta struct {
+	// the timestamp of when the data is generated
+	DataTime string `json:"dataTime,required"`
+	// the timestamp of the query
+	QueryTime string `json:"queryTime,required"`
+	// total number of route collector peers used to generate this data
+	TotalPeers int64                        `json:"totalPeers,required"`
+	JSON       bgpRouteAsesResponseMetaJSON `json:"-"`
+}
+
+// bgpRouteAsesResponseMetaJSON contains the JSON metadata for the struct
+// [BGPRouteAsesResponseMeta]
+type bgpRouteAsesResponseMetaJSON struct {
+	DataTime    apijson.Field
+	QueryTime   apijson.Field
+	TotalPeers  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteAsesResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteAsesResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type BGPRouteMoasResponse struct {
@@ -343,6 +455,103 @@ func (r *BGPRouteStatsResponseStats) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpRouteStatsResponseStatsJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteAsesParams struct {
+	// Format results are returned in.
+	Format param.Field[BGPRouteAsesParamsFormat] `query:"format"`
+	// Limit the number of objects in the response.
+	Limit param.Field[int64] `query:"limit"`
+	// Location Alpha2 code.
+	Location param.Field[string] `query:"location"`
+	// Return order results by given type
+	SortBy param.Field[BGPRouteAsesParamsSortBy] `query:"sortBy"`
+	// Sort by value ascending or descending
+	SortOrder param.Field[BGPRouteAsesParamsSortOrder] `query:"sortOrder"`
+}
+
+// URLQuery serializes [BGPRouteAsesParams]'s query parameters as `url.Values`.
+func (r BGPRouteAsesParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Format results are returned in.
+type BGPRouteAsesParamsFormat string
+
+const (
+	BGPRouteAsesParamsFormatJson BGPRouteAsesParamsFormat = "JSON"
+	BGPRouteAsesParamsFormatCsv  BGPRouteAsesParamsFormat = "CSV"
+)
+
+func (r BGPRouteAsesParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPRouteAsesParamsFormatJson, BGPRouteAsesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Return order results by given type
+type BGPRouteAsesParamsSortBy string
+
+const (
+	BGPRouteAsesParamsSortByCone        BGPRouteAsesParamsSortBy = "cone"
+	BGPRouteAsesParamsSortByPfxs        BGPRouteAsesParamsSortBy = "pfxs"
+	BGPRouteAsesParamsSortByIPV4        BGPRouteAsesParamsSortBy = "ipv4"
+	BGPRouteAsesParamsSortByIPV6        BGPRouteAsesParamsSortBy = "ipv6"
+	BGPRouteAsesParamsSortByRPKIValid   BGPRouteAsesParamsSortBy = "rpki_valid"
+	BGPRouteAsesParamsSortByRPKIInvalid BGPRouteAsesParamsSortBy = "rpki_invalid"
+	BGPRouteAsesParamsSortByRPKIUnknown BGPRouteAsesParamsSortBy = "rpki_unknown"
+)
+
+func (r BGPRouteAsesParamsSortBy) IsKnown() bool {
+	switch r {
+	case BGPRouteAsesParamsSortByCone, BGPRouteAsesParamsSortByPfxs, BGPRouteAsesParamsSortByIPV4, BGPRouteAsesParamsSortByIPV6, BGPRouteAsesParamsSortByRPKIValid, BGPRouteAsesParamsSortByRPKIInvalid, BGPRouteAsesParamsSortByRPKIUnknown:
+		return true
+	}
+	return false
+}
+
+// Sort by value ascending or descending
+type BGPRouteAsesParamsSortOrder string
+
+const (
+	BGPRouteAsesParamsSortOrderAsc  BGPRouteAsesParamsSortOrder = "asc"
+	BGPRouteAsesParamsSortOrderDesc BGPRouteAsesParamsSortOrder = "desc"
+)
+
+func (r BGPRouteAsesParamsSortOrder) IsKnown() bool {
+	switch r {
+	case BGPRouteAsesParamsSortOrderAsc, BGPRouteAsesParamsSortOrderDesc:
+		return true
+	}
+	return false
+}
+
+type BGPRouteAsesResponseEnvelope struct {
+	Result  BGPRouteAsesResponse             `json:"result,required"`
+	Success bool                             `json:"success,required"`
+	JSON    bgpRouteAsesResponseEnvelopeJSON `json:"-"`
+}
+
+// bgpRouteAsesResponseEnvelopeJSON contains the JSON metadata for the struct
+// [BGPRouteAsesResponseEnvelope]
+type bgpRouteAsesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteAsesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteAsesResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
