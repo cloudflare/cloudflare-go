@@ -37,10 +37,10 @@ func TestDNSSettingEditWithOptionalParams(t *testing.T) {
 			}),
 			NSTTL:              cloudflare.F(86400.000000),
 			SecondaryOverrides: cloudflare.F(false),
-			Soa: cloudflare.F(zones.DNSSettingSoaParam{
+			SOA: cloudflare.F(zones.DNSSettingSOAParam{
 				Expire:  cloudflare.F(604800.000000),
 				MinTTL:  cloudflare.F(1800.000000),
-				Mname:   cloudflare.F("kristina.ns.cloudflare.com"),
+				MNAME:   cloudflare.F("kristina.ns.cloudflare.com"),
 				Refresh: cloudflare.F(10000.000000),
 				Retry:   cloudflare.F(2400.000000),
 				Rname:   cloudflare.F("admin.example.com"),
