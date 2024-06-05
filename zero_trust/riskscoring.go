@@ -119,7 +119,7 @@ func (r riskScoringGetResponseJSON) RawJSON() string {
 type RiskScoringGetResponseEvent struct {
 	ID           string                                `json:"id,required"`
 	Name         string                                `json:"name,required"`
-	RiskLevel    RiskScoringGetResponseEventsRiskLevel `json:"risk_level,required,nullable"`
+	RiskLevel    RiskScoringGetResponseEventsRiskLevel `json:"risk_level,required"`
 	Timestamp    time.Time                             `json:"timestamp,required" format:"date-time"`
 	EventDetails interface{}                           `json:"event_details"`
 	JSON         riskScoringGetResponseEventJSON       `json:"-"`

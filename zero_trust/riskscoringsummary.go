@@ -79,7 +79,7 @@ type RiskScoringSummaryGetResponseUser struct {
 	Email        string                                         `json:"email,required"`
 	EventCount   int64                                          `json:"event_count,required"`
 	LastEvent    time.Time                                      `json:"last_event,required" format:"date-time"`
-	MaxRiskLevel RiskScoringSummaryGetResponseUsersMaxRiskLevel `json:"max_risk_level,required,nullable"`
+	MaxRiskLevel RiskScoringSummaryGetResponseUsersMaxRiskLevel `json:"max_risk_level,required"`
 	Name         string                                         `json:"name,required"`
 	// The ID for a user
 	UserID string                                `json:"user_id,required"`

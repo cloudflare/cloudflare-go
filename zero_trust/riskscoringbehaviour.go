@@ -93,7 +93,7 @@ type RiskScoringBehaviourUpdateResponseBehavior struct {
 	Description string                                               `json:"description"`
 	Enabled     bool                                                 `json:"enabled"`
 	Name        string                                               `json:"name"`
-	RiskLevel   RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel `json:"risk_level,nullable"`
+	RiskLevel   RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel `json:"risk_level"`
 	JSON        riskScoringBehaviourUpdateResponseBehaviorJSON       `json:"-"`
 }
 
@@ -157,7 +157,7 @@ type RiskScoringBehaviourGetResponseBehavior struct {
 	Description string                                            `json:"description"`
 	Enabled     bool                                              `json:"enabled"`
 	Name        string                                            `json:"name"`
-	RiskLevel   RiskScoringBehaviourGetResponseBehaviorsRiskLevel `json:"risk_level,nullable"`
+	RiskLevel   RiskScoringBehaviourGetResponseBehaviorsRiskLevel `json:"risk_level"`
 	JSON        riskScoringBehaviourGetResponseBehaviorJSON       `json:"-"`
 }
 
