@@ -2469,6 +2469,18 @@ Methods:
 
 - <code title="post /accounts/{account_id}/ai/run/{model_name}">client.Workers.AI.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#AIService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, modelName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#AIRunParams">AIRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#AIRunResponseUnion">AIRunResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+### Models
+
+#### Schema
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#AIModelSchemaGetResponse">AIModelSchemaGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/ai/models/schema">client.Workers.AI.Models.Schema.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#AIModelSchemaService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#AIModelSchemaGetParams">AIModelSchemaGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#AIModelSchemaGetResponse">AIModelSchemaGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Scripts
 
 Params Types:
@@ -6031,12 +6043,14 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteAsesResponse">BGPRouteAsesResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteMoasResponse">BGPRouteMoasResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRoutePfx2asResponse">BGPRoutePfx2asResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteStatsResponse">BGPRouteStatsResponse</a>
 
 Methods:
 
+- <code title="get /radar/bgp/routes/ases">client.Radar.BGP.Routes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteService.Ases">Ases</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteAsesParams">BGPRouteAsesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteAsesResponse">BGPRouteAsesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/bgp/routes/moas">client.Radar.BGP.Routes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteService.Moas">Moas</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteMoasParams">BGPRouteMoasParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteMoasResponse">BGPRouteMoasResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/bgp/routes/pfx2as">client.Radar.BGP.Routes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteService.Pfx2as">Pfx2as</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRoutePfx2asParams">BGPRoutePfx2asParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRoutePfx2asResponse">BGPRoutePfx2asResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/bgp/routes/stats">client.Radar.BGP.Routes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteService.Stats">Stats</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteStatsParams">BGPRouteStatsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#BGPRouteStatsResponse">BGPRouteStatsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
@@ -6558,6 +6572,14 @@ Methods:
 - <code title="get /radar/entities/locations/{location}">client.Radar.Entities.Locations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#EntityLocationService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, location <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#EntityLocationGetParams">EntityLocationGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#EntityLocationGetResponse">EntityLocationGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## HTTP
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTimeseriesResponse">HTTPTimeseriesResponse</a>
+
+Methods:
+
+- <code title="get /radar/http/timeseries">client.Radar.HTTP.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTimeseriesParams">HTTPTimeseriesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTimeseriesResponse">HTTPTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Top
 
