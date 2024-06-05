@@ -35,7 +35,18 @@ func TestDNSSettingEditWithOptionalParams(t *testing.T) {
 			Nameservers: cloudflare.F(zones.NameserverParam{
 				Type: cloudflare.F(zones.NameserverTypeCloudflareStandard),
 			}),
+			NSTTL:              cloudflare.F(86400.000000),
 			SecondaryOverrides: cloudflare.F(false),
+			Soa: cloudflare.F(zones.DNSSettingSoaParam{
+				Expire:  cloudflare.F(604800.000000),
+				MinTTL:  cloudflare.F(1800.000000),
+				Mname:   cloudflare.F("kristina.ns.cloudflare.com"),
+				Refresh: cloudflare.F(10000.000000),
+				Retry:   cloudflare.F(2400.000000),
+				Rname:   cloudflare.F("admin.example.com"),
+				TTL:     cloudflare.F(3600.000000),
+			}),
+			ZoneMode: cloudflare.F(zones.DNSSettingZoneModeDNSOnly),
 		},
 	})
 	if err != nil {
