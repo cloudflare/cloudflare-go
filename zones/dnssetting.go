@@ -127,7 +127,7 @@ type DNSSettingSOA struct {
 	Retry float64 `json:"retry,required"`
 	// The email address of the zone administrator, with the first label representing
 	// the local part of the email address.
-	Rname string `json:"rname,required"`
+	RNAME string `json:"rname,required"`
 	// The time to live (TTL) of the SOA record itself.
 	TTL  float64           `json:"ttl,required"`
 	JSON dnsSettingSOAJSON `json:"-"`
@@ -140,7 +140,7 @@ type dnsSettingSOAJSON struct {
 	MNAME       apijson.Field
 	Refresh     apijson.Field
 	Retry       apijson.Field
-	Rname       apijson.Field
+	RNAME       apijson.Field
 	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -212,7 +212,7 @@ type DNSSettingSOAParam struct {
 	Retry param.Field[float64] `json:"retry,required"`
 	// The email address of the zone administrator, with the first label representing
 	// the local part of the email address.
-	Rname param.Field[string] `json:"rname,required"`
+	RNAME param.Field[string] `json:"rname,required"`
 	// The time to live (TTL) of the SOA record itself.
 	TTL param.Field[float64] `json:"ttl,required"`
 }

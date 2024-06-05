@@ -25,6 +25,7 @@ import (
 // the [NewAIService] method instead.
 type AIService struct {
 	Options []option.RequestOption
+	Models  *AIModelService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -33,6 +34,7 @@ type AIService struct {
 func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r = &AIService{}
 	r.Options = opts
+	r.Models = NewAIModelService(opts...)
 	return
 }
 
