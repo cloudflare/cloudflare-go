@@ -83,7 +83,7 @@ type DNSSetting struct {
 	// flattening at the zone apex.
 	SecondaryOverrides bool `json:"secondary_overrides"`
 	// Components of the zone's SOA record.
-	Soa DNSSettingSoa `json:"soa"`
+	SOA DNSSettingSOA `json:"soa"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
 	ZoneMode DNSSettingZoneMode `json:"zone_mode"`
 	JSON     dnsSettingJSON     `json:"-"`
@@ -96,7 +96,7 @@ type dnsSettingJSON struct {
 	Nameservers        apijson.Field
 	NSTTL              apijson.Field
 	SecondaryOverrides apijson.Field
-	Soa                apijson.Field
+	SOA                apijson.Field
 	ZoneMode           apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -111,14 +111,14 @@ func (r dnsSettingJSON) RawJSON() string {
 }
 
 // Components of the zone's SOA record.
-type DNSSettingSoa struct {
+type DNSSettingSOA struct {
 	// Time in seconds of being unable to query the primary server after which
 	// secondary servers should stop serving the zone.
 	Expire float64 `json:"expire,required"`
 	// The time to live (TTL) for negative caching of records within the zone.
 	MinTTL float64 `json:"min_ttl,required"`
 	// The primary nameserver, which may be used for outbound zone transfers.
-	Mname string `json:"mname,required"`
+	MNAME string `json:"mname,required"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
 	Refresh float64 `json:"refresh,required"`
@@ -130,14 +130,14 @@ type DNSSettingSoa struct {
 	Rname string `json:"rname,required"`
 	// The time to live (TTL) of the SOA record itself.
 	TTL  float64           `json:"ttl,required"`
-	JSON dnsSettingSoaJSON `json:"-"`
+	JSON dnsSettingSOAJSON `json:"-"`
 }
 
-// dnsSettingSoaJSON contains the JSON metadata for the struct [DNSSettingSoa]
-type dnsSettingSoaJSON struct {
+// dnsSettingSOAJSON contains the JSON metadata for the struct [DNSSettingSOA]
+type dnsSettingSOAJSON struct {
 	Expire      apijson.Field
 	MinTTL      apijson.Field
-	Mname       apijson.Field
+	MNAME       apijson.Field
 	Refresh     apijson.Field
 	Retry       apijson.Field
 	Rname       apijson.Field
@@ -146,11 +146,11 @@ type dnsSettingSoaJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingSoa) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSSettingSOA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsSettingSoaJSON) RawJSON() string {
+func (r dnsSettingSOAJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -186,7 +186,7 @@ type DNSSettingParam struct {
 	// flattening at the zone apex.
 	SecondaryOverrides param.Field[bool] `json:"secondary_overrides"`
 	// Components of the zone's SOA record.
-	Soa param.Field[DNSSettingSoaParam] `json:"soa"`
+	SOA param.Field[DNSSettingSOAParam] `json:"soa"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
 	ZoneMode param.Field[DNSSettingZoneMode] `json:"zone_mode"`
 }
@@ -196,14 +196,14 @@ func (r DNSSettingParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Components of the zone's SOA record.
-type DNSSettingSoaParam struct {
+type DNSSettingSOAParam struct {
 	// Time in seconds of being unable to query the primary server after which
 	// secondary servers should stop serving the zone.
 	Expire param.Field[float64] `json:"expire,required"`
 	// The time to live (TTL) for negative caching of records within the zone.
 	MinTTL param.Field[float64] `json:"min_ttl,required"`
 	// The primary nameserver, which may be used for outbound zone transfers.
-	Mname param.Field[string] `json:"mname,required"`
+	MNAME param.Field[string] `json:"mname,required"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
 	Refresh param.Field[float64] `json:"refresh,required"`
@@ -217,7 +217,7 @@ type DNSSettingSoaParam struct {
 	TTL param.Field[float64] `json:"ttl,required"`
 }
 
-func (r DNSSettingSoaParam) MarshalJSON() (data []byte, err error) {
+func (r DNSSettingSOAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

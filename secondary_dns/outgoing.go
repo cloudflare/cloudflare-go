@@ -173,7 +173,7 @@ type OutgoingNewResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                 `json:"soa_serial"`
+	SOASerial float64                 `json:"soa_serial"`
 	JSON      outgoingNewResponseJSON `json:"-"`
 }
 
@@ -186,7 +186,7 @@ type outgoingNewResponseJSON struct {
 	LastTransferredTime apijson.Field
 	Name                apijson.Field
 	Peers               apijson.Field
-	SoaSerial           apijson.Field
+	SOASerial           apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -212,7 +212,7 @@ type OutgoingUpdateResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                    `json:"soa_serial"`
+	SOASerial float64                    `json:"soa_serial"`
 	JSON      outgoingUpdateResponseJSON `json:"-"`
 }
 
@@ -225,7 +225,7 @@ type outgoingUpdateResponseJSON struct {
 	LastTransferredTime apijson.Field
 	Name                apijson.Field
 	Peers               apijson.Field
-	SoaSerial           apijson.Field
+	SOASerial           apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -272,7 +272,7 @@ type OutgoingGetResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                 `json:"soa_serial"`
+	SOASerial float64                 `json:"soa_serial"`
 	JSON      outgoingGetResponseJSON `json:"-"`
 }
 
@@ -285,7 +285,7 @@ type outgoingGetResponseJSON struct {
 	LastTransferredTime apijson.Field
 	Name                apijson.Field
 	Peers               apijson.Field
-	SoaSerial           apijson.Field
+	SOASerial           apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
