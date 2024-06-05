@@ -255,7 +255,7 @@ func (r HTTPAseOSGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// IP version.
+// Operating system.
 type HTTPAseOSGetParamsOS string
 
 const (
