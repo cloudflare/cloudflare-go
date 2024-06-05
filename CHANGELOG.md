@@ -1,5 +1,16 @@
 ## 0.97.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_application: Add support for Hybrid/Implicit flows and options ([#2131](https://github.com/cloudflare/cloudflare-go/issues/2131))
+* teams_account: Add Zero Trust connectivity settings ([#2165](https://github.com/cloudflare/cloudflare-go/issues/2165))
+* teams_accounts: Add `use_zt_virtual_ip` attribute ([#2126](https://github.com/cloudflare/cloudflare-go/issues/2126))
+
+DEPENDENCIES:
+
+* deps: bumps `github.com/goccy/go-json` from 0.10.2 to 0.10.3 ([#2107](https://github.com/cloudflare/cloudflare-go/issues/2107))
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.6 to 0.7.7 ([#2249](https://github.com/cloudflare/cloudflare-go/issues/2249))
+
 ## 0.96.0 (May 22nd, 2024)
 
 ENHANCEMENTS:
