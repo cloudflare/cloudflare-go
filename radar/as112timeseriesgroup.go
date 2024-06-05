@@ -324,7 +324,7 @@ type AS112TimeseriesGroupQueryTypeResponseSerie0 struct {
 	A    []string                                        `json:"A,required"`
 	AAAA []string                                        `json:"AAAA,required"`
 	PTR  []string                                        `json:"PTR,required"`
-	Soa  []string                                        `json:"SOA,required"`
+	SOA  []string                                        `json:"SOA,required"`
 	SRV  []string                                        `json:"SRV,required"`
 	JSON as112TimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
 }
@@ -335,7 +335,7 @@ type as112TimeseriesGroupQueryTypeResponseSerie0JSON struct {
 	A           apijson.Field
 	AAAA        apijson.Field
 	PTR         apijson.Field
-	Soa         apijson.Field
+	SOA         apijson.Field
 	SRV         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
