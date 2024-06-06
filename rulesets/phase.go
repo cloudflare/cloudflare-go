@@ -1225,8 +1225,6 @@ type PhaseUpdateParams struct {
 	Description param.Field[string] `json:"description"`
 	// The human-readable name of the ruleset.
 	Name param.Field[string] `json:"name"`
-	// The phase of the ruleset.
-	Phase param.Field[Phase] `json:"phase"`
 }
 
 func (r PhaseUpdateParams) MarshalJSON() (data []byte, err error) {
