@@ -88,7 +88,6 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
 			Name:        cloudflare.F("My ruleset"),
-			Phase:       cloudflare.F(rulesets.PhaseHTTPRequestFirewallCustom),
 		},
 	)
 	if err != nil {
