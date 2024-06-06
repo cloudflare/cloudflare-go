@@ -7,13 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -63,7 +61,7 @@ type DNSRecord struct {
 	Priority float64 `json:"priority"`
 	// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 	// for 'automatic'.
-	TTL DNSRecordTTLUnion `json:"ttl"`
+	TTL DNSRecordTTLNumber `json:"ttl"`
 	// DNS record type.
 	Type DNSRecordType `json:"type"`
 	JSON dnsRecordJSON `json:"-"`
@@ -86,29 +84,6 @@ func (r *DNSRecord) UnmarshalJSON(data []byte) (err error) {
 
 func (r dnsRecordJSON) RawJSON() string {
 	return r.raw
-}
-
-// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
-// for 'automatic'.
-//
-// Union satisfied by [shared.UnionFloat] or [email_routing.DNSRecordTTLNumber].
-type DNSRecordTTLUnion interface {
-	ImplementsEmailRoutingDNSRecordTTLUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordTTLUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(DNSRecordTTLNumber(0)),
-		},
-	)
 }
 
 type DNSRecordTTLNumber float64
