@@ -246,7 +246,7 @@ type TunnelListResponse struct {
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
+	Status TunnelListResponseStatus `json:"status"`
 	// The type of tunnel.
 	TunType TunnelListResponseTunType `json:"tun_type"`
 	JSON    tunnelListResponseJSON    `json:"-"`
@@ -338,7 +338,7 @@ type TunnelListResponseTunnelWARPConnectorTunnel struct {
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
+	Status TunnelListResponseTunnelWARPConnectorTunnelStatus `json:"status"`
 	// The type of tunnel.
 	TunType TunnelListResponseTunnelWARPConnectorTunnelTunType `json:"tun_type"`
 	JSON    tunnelListResponseTunnelWARPConnectorTunnelJSON    `json:"-"`
@@ -418,6 +418,27 @@ func (r tunnelListResponseTunnelWARPConnectorTunnelConnectionJSON) RawJSON() str
 	return r.raw
 }
 
+// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+type TunnelListResponseTunnelWARPConnectorTunnelStatus string
+
+const (
+	TunnelListResponseTunnelWARPConnectorTunnelStatusInactive TunnelListResponseTunnelWARPConnectorTunnelStatus = "inactive"
+	TunnelListResponseTunnelWARPConnectorTunnelStatusDegraded TunnelListResponseTunnelWARPConnectorTunnelStatus = "degraded"
+	TunnelListResponseTunnelWARPConnectorTunnelStatusHealthy  TunnelListResponseTunnelWARPConnectorTunnelStatus = "healthy"
+	TunnelListResponseTunnelWARPConnectorTunnelStatusDown     TunnelListResponseTunnelWARPConnectorTunnelStatus = "down"
+)
+
+func (r TunnelListResponseTunnelWARPConnectorTunnelStatus) IsKnown() bool {
+	switch r {
+	case TunnelListResponseTunnelWARPConnectorTunnelStatusInactive, TunnelListResponseTunnelWARPConnectorTunnelStatusDegraded, TunnelListResponseTunnelWARPConnectorTunnelStatusHealthy, TunnelListResponseTunnelWARPConnectorTunnelStatusDown:
+		return true
+	}
+	return false
+}
+
 // The type of tunnel.
 type TunnelListResponseTunnelWARPConnectorTunnelTunType string
 
@@ -432,6 +453,27 @@ const (
 func (r TunnelListResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
 	case TunnelListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelListResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelListResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelListResponseTunnelWARPConnectorTunnelTunTypeCNI:
+		return true
+	}
+	return false
+}
+
+// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+type TunnelListResponseStatus string
+
+const (
+	TunnelListResponseStatusInactive TunnelListResponseStatus = "inactive"
+	TunnelListResponseStatusDegraded TunnelListResponseStatus = "degraded"
+	TunnelListResponseStatusHealthy  TunnelListResponseStatus = "healthy"
+	TunnelListResponseStatusDown     TunnelListResponseStatus = "down"
+)
+
+func (r TunnelListResponseStatus) IsKnown() bool {
+	switch r {
+	case TunnelListResponseStatusInactive, TunnelListResponseStatusDegraded, TunnelListResponseStatusHealthy, TunnelListResponseStatusDown:
 		return true
 	}
 	return false
@@ -519,7 +561,7 @@ type TunnelEditResponse struct {
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
+	Status TunnelEditResponseStatus `json:"status"`
 	// The type of tunnel.
 	TunType TunnelEditResponseTunType `json:"tun_type"`
 	JSON    tunnelEditResponseJSON    `json:"-"`
@@ -611,7 +653,7 @@ type TunnelEditResponseTunnelWARPConnectorTunnel struct {
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
+	Status TunnelEditResponseTunnelWARPConnectorTunnelStatus `json:"status"`
 	// The type of tunnel.
 	TunType TunnelEditResponseTunnelWARPConnectorTunnelTunType `json:"tun_type"`
 	JSON    tunnelEditResponseTunnelWARPConnectorTunnelJSON    `json:"-"`
@@ -691,6 +733,27 @@ func (r tunnelEditResponseTunnelWARPConnectorTunnelConnectionJSON) RawJSON() str
 	return r.raw
 }
 
+// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+type TunnelEditResponseTunnelWARPConnectorTunnelStatus string
+
+const (
+	TunnelEditResponseTunnelWARPConnectorTunnelStatusInactive TunnelEditResponseTunnelWARPConnectorTunnelStatus = "inactive"
+	TunnelEditResponseTunnelWARPConnectorTunnelStatusDegraded TunnelEditResponseTunnelWARPConnectorTunnelStatus = "degraded"
+	TunnelEditResponseTunnelWARPConnectorTunnelStatusHealthy  TunnelEditResponseTunnelWARPConnectorTunnelStatus = "healthy"
+	TunnelEditResponseTunnelWARPConnectorTunnelStatusDown     TunnelEditResponseTunnelWARPConnectorTunnelStatus = "down"
+)
+
+func (r TunnelEditResponseTunnelWARPConnectorTunnelStatus) IsKnown() bool {
+	switch r {
+	case TunnelEditResponseTunnelWARPConnectorTunnelStatusInactive, TunnelEditResponseTunnelWARPConnectorTunnelStatusDegraded, TunnelEditResponseTunnelWARPConnectorTunnelStatusHealthy, TunnelEditResponseTunnelWARPConnectorTunnelStatusDown:
+		return true
+	}
+	return false
+}
+
 // The type of tunnel.
 type TunnelEditResponseTunnelWARPConnectorTunnelTunType string
 
@@ -705,6 +768,27 @@ const (
 func (r TunnelEditResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
 	case TunnelEditResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelEditResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelEditResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelEditResponseTunnelWARPConnectorTunnelTunTypeCNI:
+		return true
+	}
+	return false
+}
+
+// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+type TunnelEditResponseStatus string
+
+const (
+	TunnelEditResponseStatusInactive TunnelEditResponseStatus = "inactive"
+	TunnelEditResponseStatusDegraded TunnelEditResponseStatus = "degraded"
+	TunnelEditResponseStatusHealthy  TunnelEditResponseStatus = "healthy"
+	TunnelEditResponseStatusDown     TunnelEditResponseStatus = "down"
+)
+
+func (r TunnelEditResponseStatus) IsKnown() bool {
+	switch r {
+	case TunnelEditResponseStatusInactive, TunnelEditResponseStatusDegraded, TunnelEditResponseStatusHealthy, TunnelEditResponseStatusDown:
 		return true
 	}
 	return false
@@ -838,6 +922,11 @@ type TunnelListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Number of results to display.
 	PerPage param.Field[float64] `query:"per_page"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status param.Field[TunnelListParamsStatus] `query:"status"`
 	// The types of tunnels to filter separated by a comma.
 	TunTypes param.Field[string] `query:"tun_types"`
 	// UUID of the tunnel.
@@ -852,6 +941,27 @@ func (r TunnelListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+type TunnelListParamsStatus string
+
+const (
+	TunnelListParamsStatusInactive TunnelListParamsStatus = "inactive"
+	TunnelListParamsStatusDegraded TunnelListParamsStatus = "degraded"
+	TunnelListParamsStatusHealthy  TunnelListParamsStatus = "healthy"
+	TunnelListParamsStatusDown     TunnelListParamsStatus = "down"
+)
+
+func (r TunnelListParamsStatus) IsKnown() bool {
+	switch r {
+	case TunnelListParamsStatusInactive, TunnelListParamsStatusDegraded, TunnelListParamsStatusHealthy, TunnelListParamsStatusDown:
+		return true
+	}
+	return false
 }
 
 type TunnelDeleteParams struct {
