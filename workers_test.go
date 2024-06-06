@@ -145,6 +145,11 @@ const (
 				"name": "MY_DATABASE",
 				"type": "d1",
 				"database_id": "cef5331f-e5c7-4c8a-a415-7908ae45f92a"
+			},
+			{
+				"name": "MY_CERTIFICATE",
+				"type": "mtls_certificate",
+				"certificate_id": "e0eeaf74-279a-45e3-8d27-65f336b94161"
 			}
 		],
 		"success": true,
