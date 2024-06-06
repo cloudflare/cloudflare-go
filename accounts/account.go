@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,8 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // AccountService contains methods and other services that help with interacting
@@ -44,7 +41,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 }
 
 // Update an existing account.
-func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponseUnion, err error) {
+func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", params.AccountID)
@@ -80,7 +77,7 @@ func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListPa
 }
 
 // Get information about a specific account that you are a member of.
-func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponseUnion, err error) {
+func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", query.AccountID)
@@ -227,40 +224,11 @@ func (r AccountSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [accounts.AccountUpdateResponseUnknown] or
-// [shared.UnionString].
-type AccountUpdateResponseUnion interface {
-	ImplementsAccountsAccountUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccountUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type AccountUpdateResponse = interface{}
 
 type AccountListResponse = interface{}
 
-// Union satisfied by [accounts.AccountGetResponseUnknown] or [shared.UnionString].
-type AccountGetResponseUnion interface {
-	ImplementsAccountsAccountGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccountGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type AccountGetResponse = interface{}
 
 type AccountUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -272,21 +240,14 @@ func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   AccountUpdateResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
+	Result AccountUpdateResponse             `json:"result"`
+	JSON   accountUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // accountUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccountUpdateResponseEnvelope]
 type accountUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -297,21 +258,6 @@ func (r *AccountUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r accountUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type AccountUpdateResponseEnvelopeSuccess bool
-
-const (
-	AccountUpdateResponseEnvelopeSuccessTrue AccountUpdateResponseEnvelopeSuccess = true
-)
-
-func (r AccountUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccountUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type AccountListParams struct {
@@ -354,21 +300,14 @@ type AccountGetParams struct {
 }
 
 type AccountGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   AccountGetResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accountGetResponseEnvelopeJSON    `json:"-"`
+	Result AccountGetResponse             `json:"result"`
+	JSON   accountGetResponseEnvelopeJSON `json:"-"`
 }
 
 // accountGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccountGetResponseEnvelope]
 type accountGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -379,19 +318,4 @@ func (r *AccountGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r accountGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type AccountGetResponseEnvelopeSuccess bool
-
-const (
-	AccountGetResponseEnvelopeSuccessTrue AccountGetResponseEnvelopeSuccess = true
-)
-
-func (r AccountGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccountGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

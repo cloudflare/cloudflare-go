@@ -4,23 +4,11 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsAccountsAccountUpdateResponseUnion()                      {}
-func (UnionString) ImplementsAccountsAccountGetResponseUnion()                         {}
-func (UnionString) ImplementsAccountsRoleGetResponseUnion()                            {}
 func (UnionString) ImplementsOriginCACertificatesOriginCACertificateNewResponseUnion() {}
 func (UnionString) ImplementsOriginCACertificatesOriginCACertificateGetResponseUnion() {}
-func (UnionString) ImplementsMembershipsMembershipUpdateResponseUnion()                {}
-func (UnionString) ImplementsMembershipsMembershipGetResponseUnion()                   {}
-func (UnionString) ImplementsUserUserEditResponseUnion()                               {}
-func (UnionString) ImplementsUserUserGetResponseUnion()                                {}
 func (UnionString) ImplementsUserBillingProfileGetResponseUnion()                      {}
-func (UnionString) ImplementsUserInviteEditResponseUnion()                             {}
-func (UnionString) ImplementsUserInviteGetResponseUnion()                              {}
-func (UnionString) ImplementsUserOrganizationGetResponseUnion()                        {}
 func (UnionString) ImplementsUserSubscriptionUpdateResponseUnion()                     {}
 func (UnionString) ImplementsUserSubscriptionEditResponseUnion()                       {}
-func (UnionString) ImplementsUserTokenUpdateResponseUnion()                            {}
-func (UnionString) ImplementsUserTokenGetResponseUnion()                               {}
 func (UnionString) ImplementsZonesSubscriptionNewResponseUnion()                       {}
 func (UnionString) ImplementsZonesSubscriptionGetResponseUnion()                       {}
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                 {}
