@@ -241,7 +241,7 @@ type CloudflareTunnel struct {
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
+	Status CloudflareTunnelStatus `json:"status"`
 	// The type of tunnel.
 	TunType CloudflareTunnelTunType `json:"tun_type"`
 	JSON    cloudflareTunnelJSON    `json:"-"`
@@ -332,6 +332,27 @@ func (r *CloudflareTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 
 func (r cloudflareTunnelConnectionJSON) RawJSON() string {
 	return r.raw
+}
+
+// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+type CloudflareTunnelStatus string
+
+const (
+	CloudflareTunnelStatusInactive CloudflareTunnelStatus = "inactive"
+	CloudflareTunnelStatusDegraded CloudflareTunnelStatus = "degraded"
+	CloudflareTunnelStatusHealthy  CloudflareTunnelStatus = "healthy"
+	CloudflareTunnelStatusDown     CloudflareTunnelStatus = "down"
+)
+
+func (r CloudflareTunnelStatus) IsKnown() bool {
+	switch r {
+	case CloudflareTunnelStatusInactive, CloudflareTunnelStatusDegraded, CloudflareTunnelStatusHealthy, CloudflareTunnelStatusDown:
+		return true
+	}
+	return false
 }
 
 // The type of tunnel.
