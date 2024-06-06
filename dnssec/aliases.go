@@ -81,6 +81,26 @@ type CloudflareTunnel = shared.CloudflareTunnel
 // This is an alias to an internal type.
 type CloudflareTunnelConnection = shared.CloudflareTunnelConnection
 
+// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+//
+// This is an alias to an internal type.
+type CloudflareTunnelStatus = shared.CloudflareTunnelStatus
+
+// This is an alias to an internal value.
+const CloudflareTunnelStatusInactive = shared.CloudflareTunnelStatusInactive
+
+// This is an alias to an internal value.
+const CloudflareTunnelStatusDegraded = shared.CloudflareTunnelStatusDegraded
+
+// This is an alias to an internal value.
+const CloudflareTunnelStatusHealthy = shared.CloudflareTunnelStatusHealthy
+
+// This is an alias to an internal value.
+const CloudflareTunnelStatusDown = shared.CloudflareTunnelStatusDown
+
 // The type of tunnel.
 //
 // This is an alias to an internal type.
