@@ -63,19 +63,23 @@ func Port(from any, to any) error {
 		}
 		if value, ok := values[ptag.name]; ok {
 			delete(values, ptag.name)
-			switch value.Kind() {
-			case reflect.String:
-				toVal.Field(i).SetString(value.String())
-			case reflect.Bool:
-				toVal.Field(i).SetBool(value.Bool())
-			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-				toVal.Field(i).SetInt(value.Int())
-			case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-				toVal.Field(i).SetUint(value.Uint())
-			case reflect.Float32, reflect.Float64:
-				toVal.Field(i).SetFloat(value.Float())
-			default:
+			if field.Type.Kind() == reflect.Interface {
 				toVal.Field(i).Set(value)
+			} else {
+				switch value.Kind() {
+				case reflect.String:
+					toVal.Field(i).SetString(value.String())
+				case reflect.Bool:
+					toVal.Field(i).SetBool(value.Bool())
+				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+					toVal.Field(i).SetInt(value.Int())
+				case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+					toVal.Field(i).SetUint(value.Uint())
+				case reflect.Float32, reflect.Float64:
+					toVal.Field(i).SetFloat(value.Float())
+				default:
+					toVal.Field(i).Set(value)
+				}
 			}
 		}
 
