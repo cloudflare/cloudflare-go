@@ -30,9 +30,11 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.Members.New(context.TODO(), accounts.MemberNewParams{
 		AccountID: cloudflare.F("string"),
-		Email:     cloudflare.F("user@example.com"),
-		Roles:     cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb"}),
-		Status:    cloudflare.F(accounts.MemberNewParamsStatusAccepted),
+		Body: accounts.MemberNewParamsBodyIamCreateMemberWithRoles{
+			Email:  cloudflare.F("user@example.com"),
+			Roles:  cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb"}),
+			Status: cloudflare.F(accounts.MemberNewParamsBodyIamCreateMemberWithRolesStatusAccepted),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -43,7 +45,7 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMemberUpdate(t *testing.T) {
+func TestMemberUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -62,7 +64,7 @@ func TestMemberUpdate(t *testing.T) {
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberUpdateParams{
 			AccountID: cloudflare.F("string"),
-			Member: shared.MemberParam{
+			Body: shared.MemberParam{
 				Roles: cloudflare.F([]shared.MemberRoleParam{{
 					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				}, {

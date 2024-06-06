@@ -113,6 +113,19 @@ type MemberRole = shared.MemberRole
 // This is an alias to an internal type.
 type MemberRolesPermissions = shared.MemberRolesPermissions
 
+// A member's status in the account.
+//
+// This is an alias to an internal type.
+type MemberStatus = shared.MemberStatus
+
+// This is an alias to an internal value.
+const MemberStatusAccepted = shared.MemberStatusAccepted
+
+// This is an alias to an internal value.
+const MemberStatusPending = shared.MemberStatusPending
+
+// Details of the user associated to the membership.
+//
 // This is an alias to an internal type.
 type MemberUser = shared.MemberUser
 
@@ -125,6 +138,8 @@ type MemberRoleParam = shared.MemberRoleParam
 // This is an alias to an internal type.
 type MemberRolesPermissionsParam = shared.MemberRolesPermissionsParam
 
+// Details of the user associated to the membership.
+//
 // This is an alias to an internal type.
 type MemberUserParam = shared.MemberUserParam
 

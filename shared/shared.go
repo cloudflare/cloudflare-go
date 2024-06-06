@@ -377,12 +377,14 @@ func (r errorDataJSON) RawJSON() string {
 
 type Member struct {
 	// Membership identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id"`
 	// Roles assigned to this member.
-	Roles  []MemberRole `json:"roles,required"`
-	Status interface{}  `json:"status,required"`
-	User   MemberUser   `json:"user,required"`
-	JSON   memberJSON   `json:"-"`
+	Roles []MemberRole `json:"roles"`
+	// A member's status in the account.
+	Status MemberStatus `json:"status"`
+	// Details of the user associated to the membership.
+	User MemberUser `json:"user"`
+	JSON memberJSON `json:"-"`
 }
 
 // memberJSON contains the JSON metadata for the struct [Member]
@@ -475,6 +477,23 @@ func (r memberRolesPermissionsJSON) RawJSON() string {
 	return r.raw
 }
 
+// A member's status in the account.
+type MemberStatus string
+
+const (
+	MemberStatusAccepted MemberStatus = "accepted"
+	MemberStatusPending  MemberStatus = "pending"
+)
+
+func (r MemberStatus) IsKnown() bool {
+	switch r {
+	case MemberStatusAccepted, MemberStatusPending:
+		return true
+	}
+	return false
+}
+
+// Details of the user associated to the membership.
 type MemberUser struct {
 	// The contact email address of the user.
 	Email string `json:"email,required"`
@@ -511,12 +530,14 @@ func (r memberUserJSON) RawJSON() string {
 
 type MemberParam struct {
 	// Roles assigned to this member.
-	Roles param.Field[[]MemberRoleParam] `json:"roles,required"`
+	Roles param.Field[[]MemberRoleParam] `json:"roles"`
 }
 
 func (r MemberParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r MemberParam) ImplementsAccountsMemberUpdateParamsBodyUnion() {}
 
 type MemberRoleParam struct {
 	// Role identifier tag.
@@ -546,6 +567,7 @@ func (r MemberRolesPermissionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Details of the user associated to the membership.
 type MemberUserParam struct {
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`

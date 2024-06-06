@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // InviteService contains methods and other services that help with interacting
@@ -62,7 +60,7 @@ func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.Reque
 }
 
 // Responds to an invitation.
-func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponseUnion, err error) {
+func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteEditResponseEnvelope
 	if inviteID == "" {
@@ -79,7 +77,7 @@ func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEd
 }
 
 // Gets the details of an invitation.
-func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponseUnion, err error) {
+func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteGetResponseEnvelope
 	if inviteID == "" {
@@ -161,37 +159,9 @@ func (r InviteStatus) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [user.InviteEditResponseUnknown] or [shared.UnionString].
-type InviteEditResponseUnion interface {
-	ImplementsUserInviteEditResponseUnion()
-}
+type InviteEditResponse = interface{}
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*InviteEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [user.InviteGetResponseUnknown] or [shared.UnionString].
-type InviteGetResponseUnion interface {
-	ImplementsUserInviteGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*InviteGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type InviteGetResponse = interface{}
 
 type InviteEditParams struct {
 	// Status of your response to the invitation (rejected or accepted).
@@ -219,21 +189,14 @@ func (r InviteEditParamsStatus) IsKnown() bool {
 }
 
 type InviteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   InviteEditResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success InviteEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    inviteEditResponseEnvelopeJSON    `json:"-"`
+	Result InviteEditResponse             `json:"result"`
+	JSON   inviteEditResponseEnvelopeJSON `json:"-"`
 }
 
 // inviteEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [InviteEditResponseEnvelope]
 type inviteEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -246,37 +209,15 @@ func (r inviteEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type InviteEditResponseEnvelopeSuccess bool
-
-const (
-	InviteEditResponseEnvelopeSuccessTrue InviteEditResponseEnvelopeSuccess = true
-)
-
-func (r InviteEditResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case InviteEditResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type InviteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   InviteGetResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success InviteGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    inviteGetResponseEnvelopeJSON    `json:"-"`
+	Result InviteGetResponse             `json:"result"`
+	JSON   inviteGetResponseEnvelopeJSON `json:"-"`
 }
 
 // inviteGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [InviteGetResponseEnvelope]
 type inviteGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -287,19 +228,4 @@ func (r *InviteGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r inviteGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type InviteGetResponseEnvelopeSuccess bool
-
-const (
-	InviteGetResponseEnvelopeSuccessTrue InviteGetResponseEnvelopeSuccess = true
-)
-
-func (r InviteGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case InviteGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
