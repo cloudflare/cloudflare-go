@@ -191,9 +191,7 @@ func (UnionInt) ImplementsRulesListItemGetResponseUnion()   {}
 
 type UnionFloat float64
 
-func (UnionFloat) ImplementsDNSTTLUnionParam()                                {}
-func (UnionFloat) ImplementsDNSTTLUnion()                                     {}
-func (UnionFloat) ImplementsEmailRoutingDNSRecordTTLUnion()                   {}
+func (UnionFloat) ImplementsDNSTTLNumber()                                    {}
 func (UnionFloat) ImplementsD1DatabaseRawResponseResultsRowsUnion()           {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                 {}
