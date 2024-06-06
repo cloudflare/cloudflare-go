@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
@@ -14,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestAccessLogAccessRequestList(t *testing.T) {
+func TestAccessLogAccessRequestListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,6 +30,10 @@ func TestAccessLogAccessRequestList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Logs.AccessRequests.List(context.TODO(), zero_trust.AccessLogAccessRequestListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction: cloudflare.F(zero_trust.AccessLogAccessRequestListParamsDirectionDesc),
+		Limit:     cloudflare.F(int64(0)),
+		Since:     cloudflare.F(time.Now()),
+		Until:     cloudflare.F(time.Now()),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
