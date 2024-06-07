@@ -294,7 +294,7 @@ type AddressMapNewResponseMembership struct {
 	// Controls whether the membership can be deleted via the API or not.
 	CanDelete bool      `json:"can_delete"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Identifier
+	// The identifier for the membership (eg. a zone or account tag).
 	Identifier string `json:"identifier"`
 	// The type of the membership.
 	Kind Kind                                `json:"kind"`
@@ -406,7 +406,7 @@ type AddressMapGetResponseMembership struct {
 	// Controls whether the membership can be deleted via the API or not.
 	CanDelete bool      `json:"can_delete"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Identifier
+	// The identifier for the membership (eg. a zone or account tag).
 	Identifier string `json:"identifier"`
 	// The type of the membership.
 	Kind Kind                                `json:"kind"`
@@ -440,10 +440,25 @@ type AddressMapNewParams struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
 	// with IP addresses on an Address Map until the map is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled param.Field[bool]     `json:"enabled"`
+	IPs     param.Field[[]string] `json:"ips"`
+	// Zones and Accounts which will be assigned IPs on this Address Map. A zone
+	// membership will take priority over an account membership.
+	Memberships param.Field[[]AddressMapNewParamsMembership] `json:"memberships"`
 }
 
 func (r AddressMapNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AddressMapNewParamsMembership struct {
+	// The identifier for the membership (eg. a zone or account tag).
+	Identifier param.Field[string] `json:"identifier"`
+	// The type of the membership.
+	Kind param.Field[Kind] `json:"kind"`
+}
+
+func (r AddressMapNewParamsMembership) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

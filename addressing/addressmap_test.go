@@ -31,6 +31,17 @@ func TestAddressMapNewWithOptionalParams(t *testing.T) {
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Description: cloudflare.F("My Ecommerce zones"),
 		Enabled:     cloudflare.F(true),
+		IPs:         cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+		Memberships: cloudflare.F([]addressing.AddressMapNewParamsMembership{{
+			Identifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Kind:       cloudflare.F(addressing.KindZone),
+		}, {
+			Identifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Kind:       cloudflare.F(addressing.KindZone),
+		}, {
+			Identifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Kind:       cloudflare.F(addressing.KindZone),
+		}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
