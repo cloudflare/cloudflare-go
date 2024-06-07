@@ -558,8 +558,6 @@ func (r MemberParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MemberParam) ImplementsAccountsMemberUpdateParamsBodyUnion() {}
-
 type MemberRoleParam struct {
 	// Role identifier tag.
 	ID param.Field[string] `json:"id,required"`
