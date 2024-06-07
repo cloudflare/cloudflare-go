@@ -41,7 +41,7 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 				SupportGroups:            cloudflare.F(true),
 			}),
 			Name: cloudflare.F("Widget Corps IDP"),
-			ScimConfig: cloudflare.F(zero_trust.ScimConfigParam{
+			SCIMConfig: cloudflare.F(zero_trust.SCIMConfigParam{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
 				SeatDeprovision:        cloudflare.F(true),
@@ -92,7 +92,7 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 					SupportGroups:            cloudflare.F(true),
 				}),
 				Name: cloudflare.F("Widget Corps IDP"),
-				ScimConfig: cloudflare.F(zero_trust.ScimConfigParam{
+				SCIMConfig: cloudflare.F(zero_trust.SCIMConfigParam{
 					Enabled:                cloudflare.F(true),
 					GroupMemberDeprovision: cloudflare.F(true),
 					SeatDeprovision:        cloudflare.F(true),
