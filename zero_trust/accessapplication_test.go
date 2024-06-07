@@ -73,19 +73,19 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
 			}}),
-			ScimConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfig{
-				Authentication: cloudflare.F[zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationUnion](zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic{
+			SCIMConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig{
+				Authentication: cloudflare.F[zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic{
 					Password: cloudflare.F("string"),
-					Scheme:   cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic),
+					Scheme:   cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
 					User:     cloudflare.F("string"),
 				}),
 				DeactivateOnDelete: cloudflare.F(true),
 				Enabled:            cloudflare.F(true),
 				IdPUID:             cloudflare.F("string"),
-				Mappings: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMapping{{
+				Mappings: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMapping{{
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
@@ -95,7 +95,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				}, {
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
@@ -105,7 +105,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				}, {
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationScimConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
@@ -189,19 +189,19 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),
 				}}),
-				ScimConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfig{
-					Authentication: cloudflare.F[zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationUnion](zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasic{
+				SCIMConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig{
+					Authentication: cloudflare.F[zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic{
 						Password: cloudflare.F("string"),
-						Scheme:   cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigAuthenticationAccessScimConfigAuthenticationHTTPBasicSchemeHttpbasic),
+						Scheme:   cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
 						User:     cloudflare.F("string"),
 					}),
 					DeactivateOnDelete: cloudflare.F(true),
 					Enabled:            cloudflare.F(true),
 					IdPUID:             cloudflare.F("string"),
-					Mappings: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMapping{{
+					Mappings: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMapping{{
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
@@ -211,7 +211,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					}, {
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
@@ -221,7 +221,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					}, {
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationScimConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),

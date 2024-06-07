@@ -229,7 +229,7 @@ type AzureAD struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig  `json:"scim_config"`
+	SCIMConfig SCIMConfig  `json:"scim_config"`
 	JSON       azureADJSON `json:"-"`
 }
 
@@ -239,7 +239,7 @@ type azureADJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -345,7 +345,7 @@ type AzureADParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r AzureADParam) MarshalJSON() (data []byte, err error) {
@@ -431,7 +431,7 @@ type IdentityProvider struct {
 	Name string `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig `json:"scim_config"`
+	SCIMConfig SCIMConfig `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -446,7 +446,7 @@ type identityProviderJSON struct {
 	Config      apijson.Field
 	ID          apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -564,7 +564,7 @@ type IdentityProviderAccessCentrify struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                         `json:"scim_config"`
+	SCIMConfig SCIMConfig                         `json:"scim_config"`
 	JSON       identityProviderAccessCentrifyJSON `json:"-"`
 }
 
@@ -575,7 +575,7 @@ type identityProviderAccessCentrifyJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -645,7 +645,7 @@ type IdentityProviderAccessFacebook struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                         `json:"scim_config"`
+	SCIMConfig SCIMConfig                         `json:"scim_config"`
 	JSON       identityProviderAccessFacebookJSON `json:"-"`
 }
 
@@ -656,7 +656,7 @@ type identityProviderAccessFacebookJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -686,7 +686,7 @@ type IdentityProviderAccessGitHub struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                       `json:"scim_config"`
+	SCIMConfig SCIMConfig                       `json:"scim_config"`
 	JSON       identityProviderAccessGitHubJSON `json:"-"`
 }
 
@@ -697,7 +697,7 @@ type identityProviderAccessGitHubJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -727,7 +727,7 @@ type IdentityProviderAccessGoogle struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                       `json:"scim_config"`
+	SCIMConfig SCIMConfig                       `json:"scim_config"`
 	JSON       identityProviderAccessGoogleJSON `json:"-"`
 }
 
@@ -738,7 +738,7 @@ type identityProviderAccessGoogleJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -802,7 +802,7 @@ type IdentityProviderAccessGoogleApps struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                           `json:"scim_config"`
+	SCIMConfig SCIMConfig                           `json:"scim_config"`
 	JSON       identityProviderAccessGoogleAppsJSON `json:"-"`
 }
 
@@ -813,7 +813,7 @@ type identityProviderAccessGoogleAppsJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -880,7 +880,7 @@ type IdentityProviderAccessLinkedin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                         `json:"scim_config"`
+	SCIMConfig SCIMConfig                         `json:"scim_config"`
 	JSON       identityProviderAccessLinkedinJSON `json:"-"`
 }
 
@@ -891,7 +891,7 @@ type identityProviderAccessLinkedinJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -921,7 +921,7 @@ type IdentityProviderAccessOIDC struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                     `json:"scim_config"`
+	SCIMConfig SCIMConfig                     `json:"scim_config"`
 	JSON       identityProviderAccessOIDCJSON `json:"-"`
 }
 
@@ -932,7 +932,7 @@ type identityProviderAccessOIDCJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1008,7 +1008,7 @@ type IdentityProviderAccessOkta struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                     `json:"scim_config"`
+	SCIMConfig SCIMConfig                     `json:"scim_config"`
 	JSON       identityProviderAccessOktaJSON `json:"-"`
 }
 
@@ -1019,7 +1019,7 @@ type identityProviderAccessOktaJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1089,7 +1089,7 @@ type IdentityProviderAccessOnelogin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                         `json:"scim_config"`
+	SCIMConfig SCIMConfig                         `json:"scim_config"`
 	JSON       identityProviderAccessOneloginJSON `json:"-"`
 }
 
@@ -1100,7 +1100,7 @@ type identityProviderAccessOneloginJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1167,7 +1167,7 @@ type IdentityProviderAccessPingone struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                        `json:"scim_config"`
+	SCIMConfig SCIMConfig                        `json:"scim_config"`
 	JSON       identityProviderAccessPingoneJSON `json:"-"`
 }
 
@@ -1178,7 +1178,7 @@ type identityProviderAccessPingoneJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1245,7 +1245,7 @@ type IdentityProviderAccessSAML struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                     `json:"scim_config"`
+	SCIMConfig SCIMConfig                     `json:"scim_config"`
 	JSON       identityProviderAccessSAMLJSON `json:"-"`
 }
 
@@ -1256,7 +1256,7 @@ type identityProviderAccessSAMLJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1357,7 +1357,7 @@ type IdentityProviderAccessYandex struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                       `json:"scim_config"`
+	SCIMConfig SCIMConfig                       `json:"scim_config"`
 	JSON       identityProviderAccessYandexJSON `json:"-"`
 }
 
@@ -1368,7 +1368,7 @@ type identityProviderAccessYandexJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1398,7 +1398,7 @@ type IdentityProviderAccessOnetimepin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                           `json:"scim_config"`
+	SCIMConfig SCIMConfig                           `json:"scim_config"`
 	JSON       identityProviderAccessOnetimepinJSON `json:"-"`
 }
 
@@ -1409,7 +1409,7 @@ type identityProviderAccessOnetimepinJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1430,7 +1430,7 @@ type IdentityProviderParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -1474,7 +1474,7 @@ type IdentityProviderAccessCentrifyParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessCentrifyParam) MarshalJSON() (data []byte, err error) {
@@ -1518,7 +1518,7 @@ type IdentityProviderAccessFacebookParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessFacebookParam) MarshalJSON() (data []byte, err error) {
@@ -1540,7 +1540,7 @@ type IdentityProviderAccessGitHubParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGitHubParam) MarshalJSON() (data []byte, err error) {
@@ -1562,7 +1562,7 @@ type IdentityProviderAccessGoogleParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGoogleParam) MarshalJSON() (data []byte, err error) {
@@ -1602,7 +1602,7 @@ type IdentityProviderAccessGoogleAppsParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGoogleAppsParam) MarshalJSON() (data []byte, err error) {
@@ -1644,7 +1644,7 @@ type IdentityProviderAccessLinkedinParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessLinkedinParam) MarshalJSON() (data []byte, err error) {
@@ -1666,7 +1666,7 @@ type IdentityProviderAccessOIDCParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOIDCParam) MarshalJSON() (data []byte, err error) {
@@ -1714,7 +1714,7 @@ type IdentityProviderAccessOktaParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOktaParam) MarshalJSON() (data []byte, err error) {
@@ -1758,7 +1758,7 @@ type IdentityProviderAccessOneloginParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOneloginParam) MarshalJSON() (data []byte, err error) {
@@ -1800,7 +1800,7 @@ type IdentityProviderAccessPingoneParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessPingoneParam) MarshalJSON() (data []byte, err error) {
@@ -1842,7 +1842,7 @@ type IdentityProviderAccessSAMLParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessSAMLParam) MarshalJSON() (data []byte, err error) {
@@ -1902,7 +1902,7 @@ type IdentityProviderAccessYandexParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessYandexParam) MarshalJSON() (data []byte, err error) {
@@ -1924,7 +1924,7 @@ type IdentityProviderAccessOnetimepinParam struct {
 	Type param.Field[IdentityProviderType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[ScimConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOnetimepinParam) MarshalJSON() (data []byte, err error) {
@@ -1965,7 +1965,7 @@ func (r IdentityProviderType) IsKnown() bool {
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
-type ScimConfig struct {
+type SCIMConfig struct {
 	// A flag to enable or disable SCIM for the identity provider.
 	Enabled bool `json:"enabled"`
 	// A flag to revoke a user's session in Access and force a reauthentication on the
@@ -1986,7 +1986,7 @@ type ScimConfig struct {
 	JSON            scimConfigJSON `json:"-"`
 }
 
-// scimConfigJSON contains the JSON metadata for the struct [ScimConfig]
+// scimConfigJSON contains the JSON metadata for the struct [SCIMConfig]
 type scimConfigJSON struct {
 	Enabled                apijson.Field
 	GroupMemberDeprovision apijson.Field
@@ -1997,7 +1997,7 @@ type scimConfigJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *ScimConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *SCIMConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2007,7 +2007,7 @@ func (r scimConfigJSON) RawJSON() string {
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
-type ScimConfigParam struct {
+type SCIMConfigParam struct {
 	// A flag to enable or disable SCIM for the identity provider.
 	Enabled param.Field[bool] `json:"enabled"`
 	// A flag to revoke a user's session in Access and force a reauthentication on the
@@ -2027,7 +2027,7 @@ type ScimConfigParam struct {
 	UserDeprovision param.Field[bool] `json:"user_deprovision"`
 }
 
-func (r ScimConfigParam) MarshalJSON() (data []byte, err error) {
+func (r SCIMConfigParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2039,7 +2039,7 @@ type IdentityProviderListResponse struct {
 	Name string `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig `json:"scim_config"`
+	SCIMConfig SCIMConfig `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -2054,7 +2054,7 @@ type identityProviderListResponseJSON struct {
 	Config      apijson.Field
 	ID          apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2167,7 +2167,7 @@ type IdentityProviderListResponseAccessCentrify struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                     `json:"scim_config"`
+	SCIMConfig SCIMConfig                                     `json:"scim_config"`
 	JSON       identityProviderListResponseAccessCentrifyJSON `json:"-"`
 }
 
@@ -2178,7 +2178,7 @@ type identityProviderListResponseAccessCentrifyJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2249,7 +2249,7 @@ type IdentityProviderListResponseAccessFacebook struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                     `json:"scim_config"`
+	SCIMConfig SCIMConfig                                     `json:"scim_config"`
 	JSON       identityProviderListResponseAccessFacebookJSON `json:"-"`
 }
 
@@ -2260,7 +2260,7 @@ type identityProviderListResponseAccessFacebookJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2291,7 +2291,7 @@ type IdentityProviderListResponseAccessGitHub struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                   `json:"scim_config"`
+	SCIMConfig SCIMConfig                                   `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGitHubJSON `json:"-"`
 }
 
@@ -2302,7 +2302,7 @@ type identityProviderListResponseAccessGitHubJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2332,7 +2332,7 @@ type IdentityProviderListResponseAccessGoogle struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                   `json:"scim_config"`
+	SCIMConfig SCIMConfig                                   `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGoogleJSON `json:"-"`
 }
 
@@ -2343,7 +2343,7 @@ type identityProviderListResponseAccessGoogleJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2407,7 +2407,7 @@ type IdentityProviderListResponseAccessGoogleApps struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                       `json:"scim_config"`
+	SCIMConfig SCIMConfig                                       `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGoogleAppsJSON `json:"-"`
 }
 
@@ -2418,7 +2418,7 @@ type identityProviderListResponseAccessGoogleAppsJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2486,7 +2486,7 @@ type IdentityProviderListResponseAccessLinkedin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                     `json:"scim_config"`
+	SCIMConfig SCIMConfig                                     `json:"scim_config"`
 	JSON       identityProviderListResponseAccessLinkedinJSON `json:"-"`
 }
 
@@ -2497,7 +2497,7 @@ type identityProviderListResponseAccessLinkedinJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2528,7 +2528,7 @@ type IdentityProviderListResponseAccessOIDC struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                 `json:"scim_config"`
+	SCIMConfig SCIMConfig                                 `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOIDCJSON `json:"-"`
 }
 
@@ -2539,7 +2539,7 @@ type identityProviderListResponseAccessOIDCJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2615,7 +2615,7 @@ type IdentityProviderListResponseAccessOkta struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                 `json:"scim_config"`
+	SCIMConfig SCIMConfig                                 `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOktaJSON `json:"-"`
 }
 
@@ -2626,7 +2626,7 @@ type identityProviderListResponseAccessOktaJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2696,7 +2696,7 @@ type IdentityProviderListResponseAccessOnelogin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                     `json:"scim_config"`
+	SCIMConfig SCIMConfig                                     `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOneloginJSON `json:"-"`
 }
 
@@ -2707,7 +2707,7 @@ type identityProviderListResponseAccessOneloginJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2775,7 +2775,7 @@ type IdentityProviderListResponseAccessPingone struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                    `json:"scim_config"`
+	SCIMConfig SCIMConfig                                    `json:"scim_config"`
 	JSON       identityProviderListResponseAccessPingoneJSON `json:"-"`
 }
 
@@ -2786,7 +2786,7 @@ type identityProviderListResponseAccessPingoneJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2854,7 +2854,7 @@ type IdentityProviderListResponseAccessSAML struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                 `json:"scim_config"`
+	SCIMConfig SCIMConfig                                 `json:"scim_config"`
 	JSON       identityProviderListResponseAccessSAMLJSON `json:"-"`
 }
 
@@ -2865,7 +2865,7 @@ type identityProviderListResponseAccessSAMLJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2967,7 +2967,7 @@ type IdentityProviderListResponseAccessYandex struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig ScimConfig                                   `json:"scim_config"`
+	SCIMConfig SCIMConfig                                   `json:"scim_config"`
 	JSON       identityProviderListResponseAccessYandexJSON `json:"-"`
 }
 
@@ -2978,7 +2978,7 @@ type identityProviderListResponseAccessYandexJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ID          apijson.Field
-	ScimConfig  apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
