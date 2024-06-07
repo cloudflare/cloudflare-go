@@ -388,261 +388,40 @@ func (r memberGetResponseIamAPIResponseCommonJSON) RawJSON() string {
 func (r MemberGetResponseIamAPIResponseCommon) implementsAccountsMemberGetResponse() {}
 
 type MemberNewParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      MemberNewParamsBodyUnion `json:"body,required"`
-}
-
-func (r MemberNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type MemberNewParamsBody struct {
-	// The contact email address of the user.
-	Email    param.Field[string]                    `json:"email,required"`
-	Roles    param.Field[interface{}]               `json:"roles,required"`
-	Status   param.Field[MemberNewParamsBodyStatus] `json:"status"`
-	Policies param.Field[interface{}]               `json:"policies,required"`
-}
-
-func (r MemberNewParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r MemberNewParamsBody) implementsAccountsMemberNewParamsBodyUnion() {}
-
-// Satisfied by [accounts.MemberNewParamsBodyIamCreateMemberWithRoles],
-// [accounts.MemberNewParamsBodyIamCreateMemberWithPolicies],
-// [MemberNewParamsBody].
-type MemberNewParamsBodyUnion interface {
-	implementsAccountsMemberNewParamsBodyUnion()
-}
-
-type MemberNewParamsBodyIamCreateMemberWithRoles struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
 	// Array of roles associated with this member.
-	Roles  param.Field[[]string]                                          `json:"roles,required"`
-	Status param.Field[MemberNewParamsBodyIamCreateMemberWithRolesStatus] `json:"status"`
+	Roles  param.Field[[]string]              `json:"roles,required"`
+	Status param.Field[MemberNewParamsStatus] `json:"status"`
 }
 
-func (r MemberNewParamsBodyIamCreateMemberWithRoles) MarshalJSON() (data []byte, err error) {
+func (r MemberNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MemberNewParamsBodyIamCreateMemberWithRoles) implementsAccountsMemberNewParamsBodyUnion() {}
-
-type MemberNewParamsBodyIamCreateMemberWithRolesStatus string
+type MemberNewParamsStatus string
 
 const (
-	MemberNewParamsBodyIamCreateMemberWithRolesStatusAccepted MemberNewParamsBodyIamCreateMemberWithRolesStatus = "accepted"
-	MemberNewParamsBodyIamCreateMemberWithRolesStatusPending  MemberNewParamsBodyIamCreateMemberWithRolesStatus = "pending"
+	MemberNewParamsStatusAccepted MemberNewParamsStatus = "accepted"
+	MemberNewParamsStatusPending  MemberNewParamsStatus = "pending"
 )
 
-func (r MemberNewParamsBodyIamCreateMemberWithRolesStatus) IsKnown() bool {
+func (r MemberNewParamsStatus) IsKnown() bool {
 	switch r {
-	case MemberNewParamsBodyIamCreateMemberWithRolesStatusAccepted, MemberNewParamsBodyIamCreateMemberWithRolesStatusPending:
-		return true
-	}
-	return false
-}
-
-type MemberNewParamsBodyIamCreateMemberWithPolicies struct {
-	// The contact email address of the user.
-	Email param.Field[string] `json:"email,required"`
-	// Array of policies associated with this member.
-	Policies param.Field[[]MemberNewParamsBodyIamCreateMemberWithPoliciesPolicy] `json:"policies,required"`
-	Status   param.Field[MemberNewParamsBodyIamCreateMemberWithPoliciesStatus]   `json:"status"`
-}
-
-func (r MemberNewParamsBodyIamCreateMemberWithPolicies) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r MemberNewParamsBodyIamCreateMemberWithPolicies) implementsAccountsMemberNewParamsBodyUnion() {
-}
-
-type MemberNewParamsBodyIamCreateMemberWithPoliciesPolicy struct {
-	// Allow or deny operations against the resources.
-	Access param.Field[MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccess] `json:"access,required"`
-	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesPermissionGroup] `json:"permission_groups,required"`
-	// A list of resource groups that the policy applies to.
-	ResourceGroups param.Field[[]MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesResourceGroup] `json:"resource_groups,required"`
-}
-
-func (r MemberNewParamsBodyIamCreateMemberWithPoliciesPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Allow or deny operations against the resources.
-type MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccess string
-
-const (
-	MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccessAllow MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccess = "allow"
-	MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccessDeny  MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccess = "deny"
-)
-
-func (r MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccess) IsKnown() bool {
-	switch r {
-	case MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccessAllow, MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesAccessDeny:
-		return true
-	}
-	return false
-}
-
-// A group of permissions.
-type MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesPermissionGroup struct {
-	// Identifier of the group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A group of scoped resources.
-type MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesResourceGroup struct {
-	// Identifier of the group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r MemberNewParamsBodyIamCreateMemberWithPoliciesPoliciesResourceGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MemberNewParamsBodyIamCreateMemberWithPoliciesStatus string
-
-const (
-	MemberNewParamsBodyIamCreateMemberWithPoliciesStatusAccepted MemberNewParamsBodyIamCreateMemberWithPoliciesStatus = "accepted"
-	MemberNewParamsBodyIamCreateMemberWithPoliciesStatusPending  MemberNewParamsBodyIamCreateMemberWithPoliciesStatus = "pending"
-)
-
-func (r MemberNewParamsBodyIamCreateMemberWithPoliciesStatus) IsKnown() bool {
-	switch r {
-	case MemberNewParamsBodyIamCreateMemberWithPoliciesStatusAccepted, MemberNewParamsBodyIamCreateMemberWithPoliciesStatusPending:
-		return true
-	}
-	return false
-}
-
-type MemberNewParamsBodyStatus string
-
-const (
-	MemberNewParamsBodyStatusAccepted MemberNewParamsBodyStatus = "accepted"
-	MemberNewParamsBodyStatusPending  MemberNewParamsBodyStatus = "pending"
-)
-
-func (r MemberNewParamsBodyStatus) IsKnown() bool {
-	switch r {
-	case MemberNewParamsBodyStatusAccepted, MemberNewParamsBodyStatusPending:
+	case MemberNewParamsStatusAccepted, MemberNewParamsStatusPending:
 		return true
 	}
 	return false
 }
 
 type MemberUpdateParams struct {
-	AccountID param.Field[string]         `path:"account_id,required"`
-	Body      MemberUpdateParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Member    shared.MemberParam  `json:"member,required"`
 }
 
 func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type MemberUpdateParamsBody struct {
-	Roles    param.Field[interface{}] `json:"roles,required"`
-	User     param.Field[interface{}] `json:"user,required"`
-	Policies param.Field[interface{}] `json:"policies,required"`
-}
-
-func (r MemberUpdateParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r MemberUpdateParamsBody) ImplementsAccountsMemberUpdateParamsBodyUnion() {}
-
-// Satisfied by [shared.MemberParam],
-// [accounts.MemberUpdateParamsBodyIamUpdateMemberWithPolicies],
-// [MemberUpdateParamsBody].
-type MemberUpdateParamsBodyUnion interface {
-	ImplementsAccountsMemberUpdateParamsBodyUnion()
-}
-
-type MemberUpdateParamsBodyIamUpdateMemberWithPolicies struct {
-	// Array of policies associated with this member.
-	Policies param.Field[[]MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPolicy] `json:"policies,required"`
-}
-
-func (r MemberUpdateParamsBodyIamUpdateMemberWithPolicies) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r MemberUpdateParamsBodyIamUpdateMemberWithPolicies) ImplementsAccountsMemberUpdateParamsBodyUnion() {
-}
-
-type MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPolicy struct {
-	// Allow or deny operations against the resources.
-	Access param.Field[MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccess] `json:"access,required"`
-	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesPermissionGroup] `json:"permission_groups,required"`
-	// A list of resource groups that the policy applies to.
-	ResourceGroups param.Field[[]MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesResourceGroup] `json:"resource_groups,required"`
-}
-
-func (r MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Allow or deny operations against the resources.
-type MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccess string
-
-const (
-	MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccessAllow MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccess = "allow"
-	MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccessDeny  MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccess = "deny"
-)
-
-func (r MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccess) IsKnown() bool {
-	switch r {
-	case MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccessAllow, MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesAccessDeny:
-		return true
-	}
-	return false
-}
-
-// A group of permissions.
-type MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesPermissionGroup struct {
-	// Identifier of the group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A group of scoped resources.
-type MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesResourceGroup struct {
-	// Identifier of the group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r MemberUpdateParamsBodyIamUpdateMemberWithPoliciesPoliciesResourceGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A member's status in the account.
-type MemberUpdateParamsBodyStatus string
-
-const (
-	MemberUpdateParamsBodyStatusAccepted MemberUpdateParamsBodyStatus = "accepted"
-	MemberUpdateParamsBodyStatusPending  MemberUpdateParamsBodyStatus = "pending"
-)
-
-func (r MemberUpdateParamsBodyStatus) IsKnown() bool {
-	switch r {
-	case MemberUpdateParamsBodyStatusAccepted, MemberUpdateParamsBodyStatusPending:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.Member)
 }
 
 type MemberListParams struct {
