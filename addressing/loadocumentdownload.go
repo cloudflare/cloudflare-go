@@ -33,8 +33,9 @@ func NewLOADocumentDownloadService(opts ...option.RequestOption) (r *LOADocument
 }
 
 // Download specified LOA document under the account.
-func (r *LOADocumentDownloadService) Get(ctx context.Context, loaDocumentID string, query LOADocumentDownloadGetParams, opts ...option.RequestOption) (res *LOADocumentDownloadGetResponse, err error) {
+func (r *LOADocumentDownloadService) Get(ctx context.Context, loaDocumentID string, query LOADocumentDownloadGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/pdf")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -47,8 +48,6 @@ func (r *LOADocumentDownloadService) Get(ctx context.Context, loaDocumentID stri
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
-
-type LOADocumentDownloadGetResponse = interface{}
 
 type LOADocumentDownloadGetParams struct {
 	// Identifier
