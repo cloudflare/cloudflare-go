@@ -166,7 +166,7 @@ func (r dlpDatasetUploadNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type DLPDatasetUploadEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	Body      string              `json:"body,required"`
 }
 
 func (r DLPDatasetUploadEditParams) MarshalJSON() (data []byte, err error) {
