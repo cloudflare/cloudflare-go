@@ -1557,6 +1557,9 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string    `json:"sso_endpoint"`
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
@@ -1594,6 +1597,7 @@ type accessApplicationNewResponseSaaSApplicationSaaSAppJSON struct {
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
+	AccessTokenLifetime           apijson.Field
 	AllowPKCEWithoutClientSecret  apijson.Field
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
@@ -1647,6 +1651,9 @@ func init() {
 }
 
 type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
@@ -1683,6 +1690,7 @@ type AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct 
 // the JSON metadata for the struct
 // [AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp]
 type accessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
+	AccessTokenLifetime          apijson.Field
 	AllowPKCEWithoutClientSecret apijson.Field
 	AppLauncherURL               apijson.Field
 	AuthType                     apijson.Field
@@ -6306,6 +6314,9 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string    `json:"sso_endpoint"`
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
@@ -6343,6 +6354,7 @@ type accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON struct {
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
+	AccessTokenLifetime           apijson.Field
 	AllowPKCEWithoutClientSecret  apijson.Field
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
@@ -6396,6 +6408,9 @@ func init() {
 }
 
 type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
@@ -6432,6 +6447,7 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp stru
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp]
 type accessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
+	AccessTokenLifetime          apijson.Field
 	AllowPKCEWithoutClientSecret apijson.Field
 	AppLauncherURL               apijson.Field
 	AuthType                     apijson.Field
@@ -11056,6 +11072,9 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string    `json:"sso_endpoint"`
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
@@ -11093,6 +11112,7 @@ type accessApplicationListResponseSaaSApplicationSaaSAppJSON struct {
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
+	AccessTokenLifetime           apijson.Field
 	AllowPKCEWithoutClientSecret  apijson.Field
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
@@ -11146,6 +11166,9 @@ func init() {
 }
 
 type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
@@ -11182,6 +11205,7 @@ type AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp]
 type accessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
+	AccessTokenLifetime          apijson.Field
 	AllowPKCEWithoutClientSecret apijson.Field
 	AppLauncherURL               apijson.Field
 	AuthType                     apijson.Field
@@ -15827,6 +15851,9 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string    `json:"sso_endpoint"`
 	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
@@ -15864,6 +15891,7 @@ type accessApplicationGetResponseSaaSApplicationSaaSAppJSON struct {
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
+	AccessTokenLifetime           apijson.Field
 	AllowPKCEWithoutClientSecret  apijson.Field
 	AppLauncherURL                apijson.Field
 	ClientID                      apijson.Field
@@ -15917,6 +15945,9 @@ func init() {
 }
 
 type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
@@ -15953,6 +15984,7 @@ type AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp struct 
 // the JSON metadata for the struct
 // [AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp]
 type accessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppJSON struct {
+	AccessTokenLifetime          apijson.Field
 	AllowPKCEWithoutClientSecret apijson.Field
 	AppLauncherURL               apijson.Field
 	AuthType                     apijson.Field
@@ -20357,6 +20389,9 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
@@ -20391,6 +20426,9 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSAppUnion interface {
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
@@ -23734,6 +23772,9 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
@@ -23768,6 +23809,9 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion interface {
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
 	// If client secret should be required on the token endpoint when
 	// authorization_code_with_pkce grant is used.
 	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
