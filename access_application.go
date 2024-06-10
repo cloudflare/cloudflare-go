@@ -246,6 +246,7 @@ type SaasApplication struct {
 	AllowPKCEWithoutClientSecret *bool                                      `json:"allow_pkce_without_client_secret,omitempty"`
 	RefreshTokenOptions          *RefreshTokenOptions                       `json:"refresh_token_options,omitempty"`
 	HybridAndImplicitOptions     *AccessApplicationHybridAndImplicitOptions `json:"hybrid_and_implicit_options,omitempty"`
+	AccessTokenLifetime          string                                     `json:"access_token_lifetime,omitempty"`
 }
 
 type AccessAppLauncherCustomization struct {
