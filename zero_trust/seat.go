@@ -59,7 +59,7 @@ type Seat struct {
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`
 	// True if the seat is part of Gateway.
 	GatewaySeat bool `json:"gateway_seat"`
-	// Identifier
+	// The unique API identifier for the Zero Trust seat.
 	SeatUID   string    `json:"seat_uid"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	JSON      seatJSON  `json:"-"`
@@ -99,6 +99,8 @@ type SeatEditParamsBody struct {
 	AccessSeat param.Field[bool] `json:"access_seat,required"`
 	// True if the seat is part of Gateway.
 	GatewaySeat param.Field[bool] `json:"gateway_seat,required"`
+	// The unique API identifier for the Zero Trust seat.
+	SeatUID param.Field[string] `json:"seat_uid,required"`
 }
 
 func (r SeatEditParamsBody) MarshalJSON() (data []byte, err error) {
