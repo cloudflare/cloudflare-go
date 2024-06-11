@@ -1130,7 +1130,8 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 					"hybrid_and_implicit_options": {
 						"return_id_token_from_authorization_endpoint": true,
 						"return_access_token_from_authorization_endpoint": true
-					}
+					},
+					"access_token_lifetime": "1m"
 				}
 			}
 		}
@@ -1177,6 +1178,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 				ReturnIDTokenFromAuthorizationEndpoint:     BoolPtr(true),
 				ReturnAccessTokenFromAuthorizationEndpoint: BoolPtr(true),
 			},
+			AccessTokenLifetime: "1m",
 		},
 		CreatedAt:                &createdAt,
 		UpdatedAt:                &updatedAt,
@@ -1207,6 +1209,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 				ReturnIDTokenFromAuthorizationEndpoint:     BoolPtr(true),
 				ReturnAccessTokenFromAuthorizationEndpoint: BoolPtr(true),
 			},
+			AccessTokenLifetime: "1m",
 		},
 		SessionDuration: "24h",
 	})
@@ -1238,6 +1241,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 				ReturnIDTokenFromAuthorizationEndpoint:     BoolPtr(true),
 				ReturnAccessTokenFromAuthorizationEndpoint: BoolPtr(true),
 			},
+			AccessTokenLifetime: "1m",
 		},
 		SessionDuration: "24h",
 	})
