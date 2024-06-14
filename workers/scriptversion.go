@@ -10,9 +10,12 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -60,24 +63,26 @@ func (r *ScriptVersionService) New(ctx context.Context, scriptName string, param
 }
 
 // List of Worker Versions. The first version in the list is the latest version.
-func (r *ScriptVersionService) List(ctx context.Context, scriptName string, query ScriptVersionListParams, opts ...option.RequestOption) (res *ScriptVersionListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ScriptVersionListResponseEnvelope
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if scriptName == "" {
-		err = errors.New("missing required script_name parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/versions", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+func (r *ScriptVersionService) List(ctx context.Context, scriptName string, params ScriptVersionListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[ScriptVersionListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/versions", params.AccountID, scriptName)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List of Worker Versions. The first version in the list is the latest version.
+func (r *ScriptVersionService) ListAutoPaging(ctx context.Context, scriptName string, params ScriptVersionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[ScriptVersionListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, scriptName, params, opts...))
 }
 
 // Get Version Detail
@@ -133,14 +138,18 @@ func (r scriptVersionNewResponseJSON) RawJSON() string {
 }
 
 type ScriptVersionListResponse struct {
-	Items []ScriptVersionListResponseItem `json:"items"`
-	JSON  scriptVersionListResponseJSON   `json:"-"`
+	ID       string                        `json:"id"`
+	Metadata interface{}                   `json:"metadata"`
+	Number   float64                       `json:"number"`
+	JSON     scriptVersionListResponseJSON `json:"-"`
 }
 
 // scriptVersionListResponseJSON contains the JSON metadata for the struct
 // [ScriptVersionListResponse]
 type scriptVersionListResponseJSON struct {
-	Items       apijson.Field
+	ID          apijson.Field
+	Metadata    apijson.Field
+	Number      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -150,31 +159,6 @@ func (r *ScriptVersionListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptVersionListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptVersionListResponseItem struct {
-	ID       string                            `json:"id"`
-	Metadata interface{}                       `json:"metadata"`
-	Number   float64                           `json:"number"`
-	JSON     scriptVersionListResponseItemJSON `json:"-"`
-}
-
-// scriptVersionListResponseItemJSON contains the JSON metadata for the struct
-// [ScriptVersionListResponseItem]
-type scriptVersionListResponseItemJSON struct {
-	ID          apijson.Field
-	Metadata    apijson.Field
-	Number      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptVersionListResponseItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptVersionListResponseItemJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -328,49 +312,21 @@ func (r ScriptVersionNewResponseEnvelopeSuccess) IsKnown() bool {
 type ScriptVersionListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Only return versions that can be used in a deployment. Ignores pagination.
+	Deployable param.Field[bool] `query:"deployable"`
+	// Current page.
+	Page param.Field[int64] `query:"page"`
+	// Items per-page.
+	PerPage param.Field[int64] `query:"per_page"`
 }
 
-type ScriptVersionListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success ScriptVersionListResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptVersionListResponse                `json:"result"`
-	JSON    scriptVersionListResponseEnvelopeJSON    `json:"-"`
-}
-
-// scriptVersionListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ScriptVersionListResponseEnvelope]
-type scriptVersionListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptVersionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptVersionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ScriptVersionListResponseEnvelopeSuccess bool
-
-const (
-	ScriptVersionListResponseEnvelopeSuccessTrue ScriptVersionListResponseEnvelopeSuccess = true
-)
-
-func (r ScriptVersionListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ScriptVersionListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+// URLQuery serializes [ScriptVersionListParams]'s query parameters as
+// `url.Values`.
+func (r ScriptVersionListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type ScriptVersionGetParams struct {

@@ -125,13 +125,13 @@ const CloudflareTunnelTunTypeCNI = shared.CloudflareTunnelTunTypeCNI
 type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
-type Member = shared.Member
+type MemberParam = shared.MemberParam
 
 // This is an alias to an internal type.
-type MemberRole = shared.MemberRole
+type MemberRoleParam = shared.MemberRoleParam
 
 // This is an alias to an internal type.
-type MemberRolesPermissions = shared.MemberRolesPermissions
+type MemberRolesPermissionsParam = shared.MemberRolesPermissionsParam
 
 // A member's status in the account.
 //
@@ -143,20 +143,6 @@ const MemberStatusAccepted = shared.MemberStatusAccepted
 
 // This is an alias to an internal value.
 const MemberStatusPending = shared.MemberStatusPending
-
-// Details of the user associated to the membership.
-//
-// This is an alias to an internal type.
-type MemberUser = shared.MemberUser
-
-// This is an alias to an internal type.
-type MemberParam = shared.MemberParam
-
-// This is an alias to an internal type.
-type MemberRoleParam = shared.MemberRoleParam
-
-// This is an alias to an internal type.
-type MemberRolesPermissionsParam = shared.MemberRolesPermissionsParam
 
 // Details of the user associated to the membership.
 //

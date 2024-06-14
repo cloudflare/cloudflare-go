@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // NamespaceValueService contains methods and other services that help with
@@ -42,7 +40,7 @@ func NewNamespaceValueService(opts ...option.RequestOption) (r *NamespaceValueSe
 // Existing values, expirations, and metadata will be overwritten. If neither
 // `expiration` nor `expiration_ttl` is specified, the key-value pair will never
 // expire. If both are set, `expiration_ttl` is used and `expiration` is ignored.
-func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params NamespaceValueUpdateParams, opts ...option.RequestOption) (res *NamespaceValueUpdateResponseUnion, err error) {
+func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params NamespaceValueUpdateParams, opts ...option.RequestOption) (res *NamespaceValueUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceValueUpdateResponseEnvelope
 	if params.AccountID.Value == "" {
@@ -68,7 +66,7 @@ func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, 
 
 // Remove a KV pair from the namespace. Use URL-encoding to use special characters
 // (for example, `:`, `!`, `%`) in the key name.
-func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, keyName string, body NamespaceValueDeleteParams, opts ...option.RequestOption) (res *NamespaceValueDeleteResponseUnion, err error) {
+func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, keyName string, body NamespaceValueDeleteParams, opts ...option.RequestOption) (res *NamespaceValueDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceValueDeleteResponseEnvelope
 	if body.AccountID.Value == "" {
@@ -97,8 +95,9 @@ func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, 
 // name. If the KV-pair is set to expire at some point, the expiration time as
 // measured in seconds since the UNIX epoch will be returned in the `expiration`
 // response header.
-func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceValueGetParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceValueGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -116,38 +115,42 @@ func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, key
 	return
 }
 
-// Union satisfied by [kv.NamespaceValueUpdateResponseUnknown] or
-// [shared.UnionString].
-type NamespaceValueUpdateResponseUnion interface {
-	ImplementsKVNamespaceValueUpdateResponseUnion()
+type NamespaceValueUpdateResponse struct {
+	JSON namespaceValueUpdateResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceValueUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// namespaceValueUpdateResponseJSON contains the JSON metadata for the struct
+// [NamespaceValueUpdateResponse]
+type namespaceValueUpdateResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-// Union satisfied by [kv.NamespaceValueDeleteResponseUnknown] or
-// [shared.UnionString].
-type NamespaceValueDeleteResponseUnion interface {
-	ImplementsKVNamespaceValueDeleteResponseUnion()
+func (r *NamespaceValueUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceValueDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r namespaceValueUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceValueDeleteResponse struct {
+	JSON namespaceValueDeleteResponseJSON `json:"-"`
+}
+
+// namespaceValueDeleteResponseJSON contains the JSON metadata for the struct
+// [NamespaceValueDeleteResponse]
+type namespaceValueDeleteResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceValueDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceValueDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type NamespaceValueUpdateParams struct {
@@ -164,11 +167,11 @@ func (r NamespaceValueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceValueUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   NamespaceValueUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceValueUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  NamespaceValueUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceValueUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -177,8 +180,8 @@ type NamespaceValueUpdateResponseEnvelope struct {
 type namespaceValueUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -212,11 +215,11 @@ type NamespaceValueDeleteParams struct {
 }
 
 type NamespaceValueDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   NamespaceValueDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceValueDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  NamespaceValueDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceValueDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -225,8 +228,8 @@ type NamespaceValueDeleteResponseEnvelope struct {
 type namespaceValueDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -397,11 +397,11 @@ func (r AnalyticsListParamsQueryMetric) IsKnown() bool {
 type AnalyticsListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Metrics on Workers KV requests.
-	Result Schema `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    analyticsListResponseEnvelopeJSON    `json:"-"`
+	// Metrics on Workers KV requests.
+	Result Schema                            `json:"result"`
+	JSON   analyticsListResponseEnvelopeJSON `json:"-"`
 }
 
 // analyticsListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -409,8 +409,8 @@ type AnalyticsListResponseEnvelope struct {
 type analyticsListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -529,11 +529,11 @@ func (r AnalyticsStoredParamsQueryMetric) IsKnown() bool {
 type AnalyticsStoredResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Metrics on Workers KV requests.
-	Result Components `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsStoredResponseEnvelopeSuccess `json:"success,required"`
-	JSON    analyticsStoredResponseEnvelopeJSON    `json:"-"`
+	// Metrics on Workers KV requests.
+	Result Components                          `json:"result"`
+	JSON   analyticsStoredResponseEnvelopeJSON `json:"-"`
 }
 
 // analyticsStoredResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -541,8 +541,8 @@ type AnalyticsStoredResponseEnvelope struct {
 type analyticsStoredResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

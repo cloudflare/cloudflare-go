@@ -37,8 +37,8 @@ func TestNamespaceBulkUpdate(t *testing.T) {
 				Expiration:    cloudflare.F(1578435000.000000),
 				ExpirationTTL: cloudflare.F(300.000000),
 				Key:           cloudflare.F("My-Key"),
-				Metadata: cloudflare.F[any](map[string]interface{}{
-					"someMetadataKey": "someMetadataValue",
+				Metadata: cloudflare.F(map[string]interface{}{
+					"someMetadataKey": "bar",
 				}),
 				Value: cloudflare.F("Some string"),
 			}, {
@@ -46,8 +46,8 @@ func TestNamespaceBulkUpdate(t *testing.T) {
 				Expiration:    cloudflare.F(1578435000.000000),
 				ExpirationTTL: cloudflare.F(300.000000),
 				Key:           cloudflare.F("My-Key"),
-				Metadata: cloudflare.F[any](map[string]interface{}{
-					"someMetadataKey": "someMetadataValue",
+				Metadata: cloudflare.F(map[string]interface{}{
+					"someMetadataKey": "bar",
 				}),
 				Value: cloudflare.F("Some string"),
 			}, {
@@ -55,8 +55,8 @@ func TestNamespaceBulkUpdate(t *testing.T) {
 				Expiration:    cloudflare.F(1578435000.000000),
 				ExpirationTTL: cloudflare.F(300.000000),
 				Key:           cloudflare.F("My-Key"),
-				Metadata: cloudflare.F[any](map[string]interface{}{
-					"someMetadataKey": "someMetadataValue",
+				Metadata: cloudflare.F(map[string]interface{}{
+					"someMetadataKey": "bar",
 				}),
 				Value: cloudflare.F("Some string"),
 			}},
