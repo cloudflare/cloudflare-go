@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/page_shield"
 )
 
-func TestPolicyNewWithOptionalParams(t *testing.T) {
+func TestPolicyNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,7 +59,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.PageShield.Policies.Update(
 		context.TODO(),
-		"c9ef84a6bf5e47138c75d95e2f933e8f",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		page_shield.PolicyUpdateParams{
 			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Action:      cloudflare.F(page_shield.PolicyUpdateParamsActionAllow),
@@ -118,7 +118,7 @@ func TestPolicyDelete(t *testing.T) {
 	)
 	err := client.PageShield.Policies.Delete(
 		context.TODO(),
-		"c9ef84a6bf5e47138c75d95e2f933e8f",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		page_shield.PolicyDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -147,7 +147,7 @@ func TestPolicyGet(t *testing.T) {
 	)
 	_, err := client.PageShield.Policies.Get(
 		context.TODO(),
-		"c9ef84a6bf5e47138c75d95e2f933e8f",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		page_shield.PolicyGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
