@@ -254,13 +254,21 @@ type IndicatorFeedGetResponse struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The description of the example test
 	Description string `json:"description"`
+	// Whether the indicator feed can be attributed to a provider
+	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed is exposed to customers
+	IsPublic bool `json:"is_public"`
 	// Status of the latest snapshot uploaded
 	LatestUploadStatus IndicatorFeedGetResponseLatestUploadStatus `json:"latest_upload_status"`
 	// The date and time when the data entry was last modified
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The name of the indicator feed
-	Name string                       `json:"name"`
-	JSON indicatorFeedGetResponseJSON `json:"-"`
+	Name string `json:"name"`
+	// The unique identifier for the provider
+	ProviderID string `json:"provider_id"`
+	// The provider of the indicator feed
+	ProviderName string                       `json:"provider_name"`
+	JSON         indicatorFeedGetResponseJSON `json:"-"`
 }
 
 // indicatorFeedGetResponseJSON contains the JSON metadata for the struct
@@ -269,9 +277,13 @@ type indicatorFeedGetResponseJSON struct {
 	ID                 apijson.Field
 	CreatedOn          apijson.Field
 	Description        apijson.Field
+	IsAttributable     apijson.Field
+	IsPublic           apijson.Field
 	LatestUploadStatus apijson.Field
 	ModifiedOn         apijson.Field
 	Name               apijson.Field
+	ProviderID         apijson.Field
+	ProviderName       apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -369,6 +381,8 @@ type IndicatorFeedUpdateParams struct {
 	IsAttributable param.Field[bool] `json:"is_attributable"`
 	// The new is_public value of the feed
 	IsPublic param.Field[bool] `json:"is_public"`
+	// The new name of the feed
+	Name param.Field[string] `json:"name"`
 }
 
 func (r IndicatorFeedUpdateParams) MarshalJSON() (data []byte, err error) {
