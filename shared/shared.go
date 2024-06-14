@@ -396,159 +396,6 @@ func (r errorDataJSON) RawJSON() string {
 	return r.raw
 }
 
-type Member struct {
-	// Membership identifier tag.
-	ID string `json:"id"`
-	// Roles assigned to this member.
-	Roles []MemberRole `json:"roles"`
-	// A member's status in the account.
-	Status MemberStatus `json:"status"`
-	// Details of the user associated to the membership.
-	User MemberUser `json:"user"`
-	JSON memberJSON `json:"-"`
-}
-
-// memberJSON contains the JSON metadata for the struct [Member]
-type memberJSON struct {
-	ID          apijson.Field
-	Roles       apijson.Field
-	Status      apijson.Field
-	User        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Member) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberRole struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role name.
-	Name        string                 `json:"name,required"`
-	Permissions MemberRolesPermissions `json:"permissions,required"`
-	JSON        memberRoleJSON         `json:"-"`
-}
-
-// memberRoleJSON contains the JSON metadata for the struct [MemberRole]
-type memberRoleJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MemberRole) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberRoleJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberRolesPermissions struct {
-	Analytics    PermissionGrant            `json:"analytics"`
-	Billing      PermissionGrant            `json:"billing"`
-	CachePurge   PermissionGrant            `json:"cache_purge"`
-	DNS          PermissionGrant            `json:"dns"`
-	DNSRecords   PermissionGrant            `json:"dns_records"`
-	LB           PermissionGrant            `json:"lb"`
-	Logs         PermissionGrant            `json:"logs"`
-	Organization PermissionGrant            `json:"organization"`
-	SSL          PermissionGrant            `json:"ssl"`
-	WAF          PermissionGrant            `json:"waf"`
-	ZoneSettings PermissionGrant            `json:"zone_settings"`
-	Zones        PermissionGrant            `json:"zones"`
-	JSON         memberRolesPermissionsJSON `json:"-"`
-}
-
-// memberRolesPermissionsJSON contains the JSON metadata for the struct
-// [MemberRolesPermissions]
-type memberRolesPermissionsJSON struct {
-	Analytics    apijson.Field
-	Billing      apijson.Field
-	CachePurge   apijson.Field
-	DNS          apijson.Field
-	DNSRecords   apijson.Field
-	LB           apijson.Field
-	Logs         apijson.Field
-	Organization apijson.Field
-	SSL          apijson.Field
-	WAF          apijson.Field
-	ZoneSettings apijson.Field
-	Zones        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *MemberRolesPermissions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberRolesPermissionsJSON) RawJSON() string {
-	return r.raw
-}
-
-// A member's status in the account.
-type MemberStatus string
-
-const (
-	MemberStatusAccepted MemberStatus = "accepted"
-	MemberStatusPending  MemberStatus = "pending"
-)
-
-func (r MemberStatus) IsKnown() bool {
-	switch r {
-	case MemberStatusAccepted, MemberStatusPending:
-		return true
-	}
-	return false
-}
-
-// Details of the user associated to the membership.
-type MemberUser struct {
-	// The contact email address of the user.
-	Email string `json:"email,required"`
-	// Identifier
-	ID string `json:"id"`
-	// User's first name
-	FirstName string `json:"first_name,nullable"`
-	// User's last name
-	LastName string `json:"last_name,nullable"`
-	// Indicates whether two-factor authentication is enabled for the user account.
-	// Does not apply to API authentication.
-	TwoFactorAuthenticationEnabled bool           `json:"two_factor_authentication_enabled"`
-	JSON                           memberUserJSON `json:"-"`
-}
-
-// memberUserJSON contains the JSON metadata for the struct [MemberUser]
-type memberUserJSON struct {
-	Email                          apijson.Field
-	ID                             apijson.Field
-	FirstName                      apijson.Field
-	LastName                       apijson.Field
-	TwoFactorAuthenticationEnabled apijson.Field
-	raw                            string
-	ExtraFields                    map[string]apijson.Field
-}
-
-func (r *MemberUser) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberUserJSON) RawJSON() string {
-	return r.raw
-}
-
 type MemberParam struct {
 	// Roles assigned to this member.
 	Roles param.Field[[]MemberRoleParam] `json:"roles"`
@@ -557,6 +404,8 @@ type MemberParam struct {
 func (r MemberParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r MemberParam) ImplementsAccountsMemberUpdateParamsBodyUnion() {}
 
 type MemberRoleParam struct {
 	// Role identifier tag.
@@ -584,6 +433,22 @@ type MemberRolesPermissionsParam struct {
 
 func (r MemberRolesPermissionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// A member's status in the account.
+type MemberStatus string
+
+const (
+	MemberStatusAccepted MemberStatus = "accepted"
+	MemberStatusPending  MemberStatus = "pending"
+)
+
+func (r MemberStatus) IsKnown() bool {
+	switch r {
+	case MemberStatusAccepted, MemberStatusPending:
+		return true
+	}
+	return false
 }
 
 // Details of the user associated to the membership.

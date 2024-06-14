@@ -29,10 +29,12 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.New(context.TODO(), accounts.MemberNewParams{
-		AccountID: cloudflare.F("string"),
-		Email:     cloudflare.F("user@example.com"),
-		Roles:     cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb"}),
-		Status:    cloudflare.F(accounts.MemberNewParamsStatusAccepted),
+		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		Body: accounts.MemberNewParamsBodyIamCreateMemberWithRoles{
+			Email:  cloudflare.F("user@example.com"),
+			Roles:  cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb"}),
+			Status: cloudflare.F(accounts.MemberNewParamsBodyIamCreateMemberWithRolesStatusAccepted),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,8 +63,8 @@ func TestMemberUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberUpdateParams{
-			AccountID: cloudflare.F("string"),
-			Member: shared.MemberParam{
+			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			Body: shared.MemberParam{
 				Roles: cloudflare.F([]shared.MemberRoleParam{{
 					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				}, {
@@ -96,7 +98,7 @@ func TestMemberListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.List(context.TODO(), accounts.MemberListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		Direction: cloudflare.F(accounts.MemberListParamsDirectionDesc),
 		Order:     cloudflare.F(accounts.MemberListParamsOrderStatus),
 		Page:      cloudflare.F(1.000000),
@@ -129,7 +131,7 @@ func TestMemberDelete(t *testing.T) {
 		context.TODO(),
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},
 	)
 	if err != nil {
@@ -158,7 +160,7 @@ func TestMemberGet(t *testing.T) {
 		context.TODO(),
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},
 	)
 	if err != nil {

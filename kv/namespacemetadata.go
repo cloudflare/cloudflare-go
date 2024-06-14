@@ -61,7 +61,7 @@ func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, 
 	return
 }
 
-type NamespaceMetadataGetResponse = interface{}
+type NamespaceMetadataGetResponse map[string]interface{}
 
 type NamespaceMetadataGetParams struct {
 	// Identifier
@@ -71,11 +71,11 @@ type NamespaceMetadataGetParams struct {
 type NamespaceMetadataGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Arbitrary JSON that is associated with a key.
-	Result NamespaceMetadataGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    namespaceMetadataGetResponseEnvelopeJSON    `json:"-"`
+	// Arbitrary JSON that is associated with a key.
+	Result NamespaceMetadataGetResponse             `json:"result"`
+	JSON   namespaceMetadataGetResponseEnvelopeJSON `json:"-"`
 }
 
 // namespaceMetadataGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -83,8 +83,8 @@ type NamespaceMetadataGetResponseEnvelope struct {
 type namespaceMetadataGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

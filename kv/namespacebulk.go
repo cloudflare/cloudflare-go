@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // NamespaceBulkService contains methods and other services that help with
@@ -42,7 +40,7 @@ func NewNamespaceBulkService(opts ...option.RequestOption) (r *NamespaceBulkServ
 // `expiration_ttl` is specified, the key-value pair will never expire. If both are
 // set, `expiration_ttl` is used and `expiration` is ignored. The entire request
 // size must be 100 megabytes or less.
-func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponseUnion, err error) {
+func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkUpdateResponseEnvelope
 	if params.AccountID.Value == "" {
@@ -64,7 +62,7 @@ func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, p
 
 // Remove multiple KV pairs from the namespace. Body should be an array of up to
 // 10,000 keys to be removed.
-func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, body NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponseUnion, err error) {
+func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, body NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkDeleteResponseEnvelope
 	if body.AccountID.Value == "" {
@@ -84,38 +82,42 @@ func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, b
 	return
 }
 
-// Union satisfied by [kv.NamespaceBulkUpdateResponseUnknown] or
-// [shared.UnionString].
-type NamespaceBulkUpdateResponseUnion interface {
-	ImplementsKVNamespaceBulkUpdateResponseUnion()
+type NamespaceBulkUpdateResponse struct {
+	JSON namespaceBulkUpdateResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceBulkUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// namespaceBulkUpdateResponseJSON contains the JSON metadata for the struct
+// [NamespaceBulkUpdateResponse]
+type namespaceBulkUpdateResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-// Union satisfied by [kv.NamespaceBulkDeleteResponseUnknown] or
-// [shared.UnionString].
-type NamespaceBulkDeleteResponseUnion interface {
-	ImplementsKVNamespaceBulkDeleteResponseUnion()
+func (r *NamespaceBulkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceBulkDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r namespaceBulkUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceBulkDeleteResponse struct {
+	JSON namespaceBulkDeleteResponseJSON `json:"-"`
+}
+
+// namespaceBulkDeleteResponseJSON contains the JSON metadata for the struct
+// [NamespaceBulkDeleteResponse]
+type namespaceBulkDeleteResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceBulkDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type NamespaceBulkUpdateParams struct {
@@ -143,7 +145,7 @@ type NamespaceBulkUpdateParamsBody struct {
 	// characters are valid.
 	Key param.Field[string] `json:"key"`
 	// Arbitrary JSON that is associated with a key.
-	Metadata param.Field[interface{}] `json:"metadata"`
+	Metadata param.Field[map[string]interface{}] `json:"metadata"`
 	// A UTF-8 encoded string to be stored, up to 25 MiB in length.
 	Value param.Field[string] `json:"value"`
 }
@@ -153,11 +155,11 @@ func (r NamespaceBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   NamespaceBulkUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  NamespaceBulkUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceBulkUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -166,8 +168,8 @@ type NamespaceBulkUpdateResponseEnvelope struct {
 type namespaceBulkUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -201,11 +203,11 @@ type NamespaceBulkDeleteParams struct {
 }
 
 type NamespaceBulkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   NamespaceBulkDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  NamespaceBulkDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceBulkDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -214,8 +216,8 @@ type NamespaceBulkDeleteResponseEnvelope struct {
 type namespaceBulkDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
