@@ -31,9 +31,9 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.User.Tokens.New(context.TODO(), user.TokenNewParams{
 		Name: cloudflare.F("readonly token"),
-		Policies: cloudflare.F([]user.TokenNewParamsPolicy{{
-			Effect: cloudflare.F(user.TokenNewParamsPoliciesEffectAllow),
-			PermissionGroups: cloudflare.F([]user.TokenNewParamsPoliciesPermissionGroup{{
+		Policies: cloudflare.F([]user.PolicyParam{{
+			Effect: cloudflare.F(user.PolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
 				Meta: cloudflare.F[any](map[string]interface{}{
 					"label":  "load_balancer_admin",
 					"scopes": "com.cloudflare.api.account",
@@ -49,8 +49,8 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 			}),
 		}, {
-			Effect: cloudflare.F(user.TokenNewParamsPoliciesEffectAllow),
-			PermissionGroups: cloudflare.F([]user.TokenNewParamsPoliciesPermissionGroup{{
+			Effect: cloudflare.F(user.PolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
 				Meta: cloudflare.F[any](map[string]interface{}{
 					"label":  "load_balancer_admin",
 					"scopes": "com.cloudflare.api.account",
@@ -66,8 +66,8 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 			}),
 		}, {
-			Effect: cloudflare.F(user.TokenNewParamsPoliciesEffectAllow),
-			PermissionGroups: cloudflare.F([]user.TokenNewParamsPoliciesPermissionGroup{{
+			Effect: cloudflare.F(user.PolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
 				Meta: cloudflare.F[any](map[string]interface{}{
 					"label":  "load_balancer_admin",
 					"scopes": "com.cloudflare.api.account",
@@ -129,9 +129,9 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 				ExpiresOn: cloudflare.F(time.Now()),
 				Name:      cloudflare.F("readonly token"),
 				NotBefore: cloudflare.F(time.Now()),
-				Policies: cloudflare.F([]user.TokenPolicyParam{{
-					Effect: cloudflare.F(user.TokenPoliciesEffectAllow),
-					PermissionGroups: cloudflare.F([]user.TokenPoliciesPermissionGroupParam{{
+				Policies: cloudflare.F([]user.PolicyParam{{
+					Effect: cloudflare.F(user.PolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
 						Meta: cloudflare.F[any](map[string]interface{}{
 							"label":  "load_balancer_admin",
 							"scopes": "com.cloudflare.api.account",
@@ -147,8 +147,8 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 					}),
 				}, {
-					Effect: cloudflare.F(user.TokenPoliciesEffectAllow),
-					PermissionGroups: cloudflare.F([]user.TokenPoliciesPermissionGroupParam{{
+					Effect: cloudflare.F(user.PolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
 						Meta: cloudflare.F[any](map[string]interface{}{
 							"label":  "load_balancer_admin",
 							"scopes": "com.cloudflare.api.account",
@@ -164,8 +164,8 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 					}),
 				}, {
-					Effect: cloudflare.F(user.TokenPoliciesEffectAllow),
-					PermissionGroups: cloudflare.F([]user.TokenPoliciesPermissionGroupParam{{
+					Effect: cloudflare.F(user.PolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
 						Meta: cloudflare.F[any](map[string]interface{}{
 							"label":  "load_balancer_admin",
 							"scopes": "com.cloudflare.api.account",
