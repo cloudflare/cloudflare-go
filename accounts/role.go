@@ -78,10 +78,12 @@ func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGet
 type RoleGetResponse = interface{}
 
 type RoleListParams struct {
+	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RoleGetParams struct {
+	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

@@ -63,7 +63,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestScriptVersionList(t *testing.T) {
+func TestScriptVersionListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -80,7 +80,10 @@ func TestScriptVersionList(t *testing.T) {
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptVersionListParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Deployable: cloudflare.F(true),
+			Page:       cloudflare.F(int64(0)),
+			PerPage:    cloudflare.F(int64(0)),
 		},
 	)
 	if err != nil {

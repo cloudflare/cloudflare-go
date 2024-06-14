@@ -182,6 +182,8 @@ func (r TokenPoliciesEffect) IsKnown() bool {
 // A named group of permissions that map to a group of operations against
 // resources.
 type TokenPoliciesPermissionGroupParam struct {
+	// Attributes associated to the permission group.
+	Meta param.Field[interface{}] `json:"meta"`
 }
 
 func (r TokenPoliciesPermissionGroupParam) MarshalJSON() (data []byte, err error) {
@@ -374,6 +376,8 @@ func (r TokenNewParamsPoliciesEffect) IsKnown() bool {
 // A named group of permissions that map to a group of operations against
 // resources.
 type TokenNewParamsPoliciesPermissionGroup struct {
+	// Attributes associated to the permission group.
+	Meta param.Field[interface{}] `json:"meta"`
 }
 
 func (r TokenNewParamsPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {

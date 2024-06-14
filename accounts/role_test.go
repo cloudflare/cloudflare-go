@@ -28,7 +28,7 @@ func TestRoleList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Roles.List(context.TODO(), accounts.RoleListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -56,7 +56,7 @@ func TestRoleGet(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		accounts.RoleGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},
 	)
 	if err != nil {
