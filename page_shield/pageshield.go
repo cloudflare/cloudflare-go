@@ -76,14 +76,14 @@ func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, 
 
 type Setting struct {
 	// When true, indicates that Page Shield is enabled.
-	Enabled bool `json:"enabled"`
+	Enabled bool `json:"enabled,required"`
 	// The timestamp of when Page Shield was last updated.
-	UpdatedAt string `json:"updated_at"`
+	UpdatedAt string `json:"updated_at,required"`
 	// When true, CSP reports will be sent to
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
-	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
+	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint,required"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool        `json:"use_connection_url_path"`
+	UseConnectionURLPath bool        `json:"use_connection_url_path,required"`
 	JSON                 settingJSON `json:"-"`
 }
 
@@ -107,14 +107,14 @@ func (r settingJSON) RawJSON() string {
 
 type PageShieldUpdateResponse struct {
 	// When true, indicates that Page Shield is enabled.
-	Enabled bool `json:"enabled"`
+	Enabled bool `json:"enabled,required"`
 	// The timestamp of when Page Shield was last updated.
-	UpdatedAt string `json:"updated_at"`
+	UpdatedAt string `json:"updated_at,required"`
 	// When true, CSP reports will be sent to
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
-	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
+	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint,required"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool                         `json:"use_connection_url_path"`
+	UseConnectionURLPath bool                         `json:"use_connection_url_path,required"`
 	JSON                 pageShieldUpdateResponseJSON `json:"-"`
 }
 
@@ -154,21 +154,21 @@ func (r PageShieldUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PageShieldUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   PageShieldUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageShieldUpdateResponseEnvelopeJSON    `json:"-"`
+	Success  PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []shared.ResponseInfo                   `json:"errors"`
+	Messages []shared.ResponseInfo                   `json:"messages"`
+	Result   PageShieldUpdateResponse                `json:"result"`
+	JSON     pageShieldUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // pageShieldUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageShieldUpdateResponseEnvelope]
 type pageShieldUpdateResponseEnvelopeJSON struct {
+	Success     apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -202,21 +202,21 @@ type PageShieldGetParams struct {
 }
 
 type PageShieldGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Setting               `json:"result,required"`
 	// Whether the API call was successful
-	Success PageShieldGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageShieldGetResponseEnvelopeJSON    `json:"-"`
+	Success  PageShieldGetResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []shared.ResponseInfo                `json:"errors"`
+	Messages []shared.ResponseInfo                `json:"messages"`
+	Result   Setting                              `json:"result,nullable"`
+	JSON     pageShieldGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // pageShieldGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageShieldGetResponseEnvelope]
 type pageShieldGetResponseEnvelopeJSON struct {
+	Success     apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
