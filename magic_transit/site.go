@@ -25,11 +25,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewSiteService] method instead.
 type SiteService struct {
-	Options          []option.RequestOption
-	AppConfiguration *SiteAppConfigurationService
-	ACLs             *SiteACLService
-	LANs             *SiteLANService
-	WANs             *SiteWANService
+	Options []option.RequestOption
+	ACLs    *SiteACLService
+	LANs    *SiteLANService
+	WANs    *SiteWANService
 }
 
 // NewSiteService generates a new service that applies the given options to each
@@ -38,7 +37,6 @@ type SiteService struct {
 func NewSiteService(opts ...option.RequestOption) (r *SiteService) {
 	r = &SiteService{}
 	r.Options = opts
-	r.AppConfiguration = NewSiteAppConfigurationService(opts...)
 	r.ACLs = NewSiteACLService(opts...)
 	r.LANs = NewSiteLANService(opts...)
 	r.WANs = NewSiteWANService(opts...)
