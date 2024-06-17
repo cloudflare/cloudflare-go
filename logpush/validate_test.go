@@ -31,7 +31,6 @@ func TestValidateDestinationWithOptionalParams(t *testing.T) {
 	_, err := client.Logpush.Validate.Destination(context.TODO(), logpush.ValidateDestinationParams{
 		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 		AccountID:       cloudflare.F("string"),
-		ZoneID:          cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -59,7 +58,6 @@ func TestValidateOriginWithOptionalParams(t *testing.T) {
 	_, err := client.Logpush.Validate.Origin(context.TODO(), logpush.ValidateOriginParams{
 		LogpullOptions: cloudflare.F("fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339"),
 		AccountID:      cloudflare.F("string"),
-		ZoneID:         cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

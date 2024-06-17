@@ -32,7 +32,6 @@ func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
 		Certificate:         cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10\nDrUtmu/B\n-----END CERTIFICATE-----"),
 		Name:                cloudflare.F("Allow devs"),
 		AccountID:           cloudflare.F("string"),
-		ZoneID:              cloudflare.F("string"),
 		AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com", "admin.example.com", "admin.example.com"}),
 	})
 	if err != nil {
@@ -64,7 +63,6 @@ func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.AccessCertificateUpdateParams{
 			AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com", "admin.example.com", "admin.example.com"}),
 			AccountID:           cloudflare.F("string"),
-			ZoneID:              cloudflare.F("string"),
 			Name:                cloudflare.F("Allow devs"),
 		},
 	)
@@ -93,7 +91,6 @@ func TestAccessCertificateListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Certificates.List(context.TODO(), zero_trust.AccessCertificateListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -123,7 +120,6 @@ func TestAccessCertificateDeleteWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessCertificateDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -154,7 +150,6 @@ func TestAccessCertificateGetWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessCertificateGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

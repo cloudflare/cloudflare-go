@@ -51,7 +51,6 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 			Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 		},
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -102,7 +101,6 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 			},
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -130,7 +128,6 @@ func TestIdentityProviderListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.IdentityProviders.List(context.TODO(), zero_trust.IdentityProviderListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -160,7 +157,6 @@ func TestIdentityProviderDeleteWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.IdentityProviderDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -191,7 +187,6 @@ func TestIdentityProviderGetWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.IdentityProviderGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

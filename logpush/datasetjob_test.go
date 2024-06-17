@@ -33,7 +33,6 @@ func TestDatasetJobGetWithOptionalParams(t *testing.T) {
 		"http_requests",
 		logpush.DatasetJobGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
