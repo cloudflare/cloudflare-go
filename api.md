@@ -2905,8 +2905,13 @@ Methods:
 
 ## Policies
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PolicyParam">PolicyParam</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#Policy">Policy</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PolicyNewResponse">PolicyNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PolicyUpdateResponse">PolicyUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PolicyListResponse">PolicyListResponse</a>
@@ -2942,6 +2947,18 @@ Methods:
 
 - <code title="get /zones/{zone_id}/page_shield/scripts">client.PageShield.Scripts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#ScriptService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#ScriptListParams">ScriptListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#Script">Script</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/page_shield/scripts/{script_id}">client.PageShield.Scripts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#ScriptService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#ScriptGetParams">ScriptGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#ScriptGetResponse">ScriptGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Cookies
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#CookieListResponse">CookieListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#CookieGetResponse">CookieGetResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/page_shield/cookies">client.PageShield.Cookies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#CookieService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#CookieListParams">CookieListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#CookieListResponse">CookieListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/page_shield/cookies/{cookie_id}">client.PageShield.Cookies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#CookieService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, cookieID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#CookieGetParams">CookieGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#CookieGetResponse">CookieGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Rulesets
 
@@ -4427,6 +4444,7 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#MechanismParam">MechanismParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#PolicyParam">PolicyParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#PolicyFilterParam">PolicyFilterParam</a>
 
 Response Types:
@@ -7231,3 +7249,35 @@ Response Types:
 Methods:
 
 - <code title="get /accounts/{account_id}/ai-gateway/gateways/{id}/logs">client.AIGateway.Logs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogGetParams">LogGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogGetResponse">LogGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+# Iam
+
+## PermissionGroups
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamPermissionGroupListResponse">IamPermissionGroupListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamPermissionGroupGetResponse">IamPermissionGroupGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/iam/permission_groups">client.Iam.PermissionGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamPermissionGroupService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamPermissionGroupListParams">IamPermissionGroupListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamPermissionGroupListResponse">IamPermissionGroupListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/iam/permission_groups/{permission_group_id}">client.Iam.PermissionGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamPermissionGroupService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, permissionGroupID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamPermissionGroupGetParams">IamPermissionGroupGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamPermissionGroupGetResponse">IamPermissionGroupGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## ResourceGroups
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupNewResponse">IamResourceGroupNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupUpdateResponse">IamResourceGroupUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupListResponse">IamResourceGroupListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupDeleteResponse">IamResourceGroupDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupGetResponse">IamResourceGroupGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/iam/resource_groups">client.Iam.ResourceGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupNewParams">IamResourceGroupNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupNewResponse">IamResourceGroupNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /accounts/{account_id}/iam/resource_groups/{resource_group_id}">client.Iam.ResourceGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, resourceGroupID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupUpdateParams">IamResourceGroupUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupUpdateResponse">IamResourceGroupUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/iam/resource_groups">client.Iam.ResourceGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupListParams">IamResourceGroupListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupListResponse">IamResourceGroupListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/iam/resource_groups/{resource_group_id}">client.Iam.ResourceGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, resourceGroupID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupDeleteParams">IamResourceGroupDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupDeleteResponse">IamResourceGroupDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/iam/resource_groups/{resource_group_id}">client.Iam.ResourceGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, resourceGroupID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupGetParams">IamResourceGroupGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#IamResourceGroupGetResponse">IamResourceGroupGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
