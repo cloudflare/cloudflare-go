@@ -121,8 +121,6 @@ func (r accountJSON) RawJSON() string {
 
 // Account settings
 type AccountSettings struct {
-	// Sets an abuse contact email to notify for abuse reports.
-	AbuseContactEmail string `json:"abuse_contact_email"`
 	// Specifies the default nameservers to be used for new zones added to this
 	// account.
 	//
@@ -147,7 +145,6 @@ type AccountSettings struct {
 
 // accountSettingsJSON contains the JSON metadata for the struct [AccountSettings]
 type accountSettingsJSON struct {
-	AbuseContactEmail           apijson.Field
 	DefaultNameservers          apijson.Field
 	EnforceTwofactor            apijson.Field
 	UseAccountCustomNSByDefault apijson.Field
@@ -202,8 +199,6 @@ func (r AccountParam) MarshalJSON() (data []byte, err error) {
 
 // Account settings
 type AccountSettingsParam struct {
-	// Sets an abuse contact email to notify for abuse reports.
-	AbuseContactEmail param.Field[string] `json:"abuse_contact_email"`
 	// Specifies the default nameservers to be used for new zones added to this
 	// account.
 	//
