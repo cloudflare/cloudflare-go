@@ -43,7 +43,6 @@ func TestAccessCertificateSettingUpdateWithOptionalParams(t *testing.T) {
 			Hostname:                    cloudflare.F("admin.example.com"),
 		}}),
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -70,7 +69,6 @@ func TestAccessCertificateSettingGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Certificates.Settings.Get(context.TODO(), zero_trust.AccessCertificateSettingGetParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

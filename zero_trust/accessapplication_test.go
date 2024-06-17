@@ -117,7 +117,6 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			}),
 		},
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -233,7 +232,6 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				}),
 			},
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -261,7 +259,6 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.List(context.TODO(), zero_trust.AccessApplicationListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -291,7 +288,6 @@ func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -322,7 +318,6 @@ func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -353,7 +348,6 @@ func TestAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) {
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationRevokeTokensParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

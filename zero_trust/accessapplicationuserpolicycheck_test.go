@@ -34,7 +34,6 @@ func TestAccessApplicationUserPolicyCheckListWithOptionalParams(t *testing.T) {
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationUserPolicyCheckListParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
