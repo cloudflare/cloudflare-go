@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package page_shield_test
+package cloudflare_test
 
 import (
 	"context"
@@ -11,10 +11,9 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/page_shield"
 )
 
-func TestPolicyNew(t *testing.T) {
+func TestIamResourceGroupNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,15 +26,21 @@ func TestPolicyNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PageShield.Policies.New(context.TODO(), page_shield.PolicyNewParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Policy: page_shield.PolicyParam{
-			Action:      cloudflare.F(page_shield.PolicyActionAllow),
-			Description: cloudflare.F("Checkout page CSP policy"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ends_with(http.request.uri.path, \"/checkout\")"),
-			Value:       cloudflare.F("script-src 'none';"),
-		},
+	_, err := client.Iam.ResourceGroups.New(context.TODO(), cloudflare.IamResourceGroupNewParams{
+		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		Scope: cloudflare.F(cloudflare.IamResourceGroupNewParamsScope{
+			Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
+			Objects: cloudflare.F([]cloudflare.IamResourceGroupNewParamsScopeObject{{
+				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
+			}, {
+				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
+			}, {
+				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
+			}}),
+		}),
+		Meta: cloudflare.F[any](map[string]interface{}{
+			"editable": "false",
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -46,7 +51,7 @@ func TestPolicyNew(t *testing.T) {
 	}
 }
 
-func TestPolicyUpdateWithOptionalParams(t *testing.T) {
+func TestIamResourceGroupUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,16 +64,24 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PageShield.Policies.Update(
+	_, err := client.Iam.ResourceGroups.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		page_shield.PolicyUpdateParams{
-			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Action:      cloudflare.F(page_shield.PolicyUpdateParamsActionAllow),
-			Description: cloudflare.F("Checkout page CSP policy"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ends_with(http.request.uri.path, \"/checkout\")"),
-			Value:       cloudflare.F("script-src 'none';"),
+		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
+		cloudflare.IamResourceGroupUpdateParams{
+			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			Scope: cloudflare.F(cloudflare.IamResourceGroupUpdateParamsScope{
+				Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
+				Objects: cloudflare.F([]cloudflare.IamResourceGroupUpdateParamsScopeObject{{
+					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
+				}, {
+					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
+				}, {
+					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
+				}}),
+			}),
+			Meta: cloudflare.F[any](map[string]interface{}{
+				"editable": "false",
+			}),
 		},
 	)
 	if err != nil {
@@ -80,7 +93,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPolicyList(t *testing.T) {
+func TestIamResourceGroupListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -93,8 +106,12 @@ func TestPolicyList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PageShield.Policies.List(context.TODO(), page_shield.PolicyListParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	_, err := client.Iam.ResourceGroups.List(context.TODO(), cloudflare.IamResourceGroupListParams{
+		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		ID:        cloudflare.F("6d7f2f5f5b1d4a0e9081fdc98d432fd1"),
+		Name:      cloudflare.F("NameOfTheResourceGroup"),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -105,7 +122,7 @@ func TestPolicyList(t *testing.T) {
 	}
 }
 
-func TestPolicyDelete(t *testing.T) {
+func TestIamResourceGroupDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,11 +135,11 @@ func TestPolicyDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.PageShield.Policies.Delete(
+	_, err := client.Iam.ResourceGroups.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		page_shield.PolicyDeleteParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
+		cloudflare.IamResourceGroupDeleteParams{
+			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},
 	)
 	if err != nil {
@@ -134,7 +151,7 @@ func TestPolicyDelete(t *testing.T) {
 	}
 }
 
-func TestPolicyGet(t *testing.T) {
+func TestIamResourceGroupGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -147,11 +164,11 @@ func TestPolicyGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PageShield.Policies.Get(
+	_, err := client.Iam.ResourceGroups.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		page_shield.PolicyGetParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
+		cloudflare.IamResourceGroupGetParams{
+			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},
 	)
 	if err != nil {

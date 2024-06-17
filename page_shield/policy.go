@@ -134,6 +134,74 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
+type Policy struct {
+	// The action to take if the expression matches
+	Action PolicyAction `json:"action,required"`
+	// A description for the policy
+	Description string `json:"description,required"`
+	// Whether the policy is enabled
+	Enabled bool `json:"enabled,required"`
+	// The expression which must match for the policy to be applied, using the
+	// Cloudflare Firewall rule expression syntax
+	Expression string `json:"expression,required"`
+	// The policy which will be applied
+	Value string     `json:"value,required"`
+	JSON  policyJSON `json:"-"`
+}
+
+// policyJSON contains the JSON metadata for the struct [Policy]
+type policyJSON struct {
+	Action      apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Policy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to take if the expression matches
+type PolicyAction string
+
+const (
+	PolicyActionAllow PolicyAction = "allow"
+	PolicyActionLog   PolicyAction = "log"
+)
+
+func (r PolicyAction) IsKnown() bool {
+	switch r {
+	case PolicyActionAllow, PolicyActionLog:
+		return true
+	}
+	return false
+}
+
+type PolicyParam struct {
+	// The action to take if the expression matches
+	Action param.Field[PolicyAction] `json:"action,required"`
+	// A description for the policy
+	Description param.Field[string] `json:"description,required"`
+	// Whether the policy is enabled
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// The expression which must match for the policy to be applied, using the
+	// Cloudflare Firewall rule expression syntax
+	Expression param.Field[string] `json:"expression,required"`
+	// The policy which will be applied
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r PolicyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type PolicyNewResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -353,37 +421,11 @@ func (r PolicyGetResponseAction) IsKnown() bool {
 type PolicyNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The action to take if the expression matches
-	Action param.Field[PolicyNewParamsAction] `json:"action,required"`
-	// A description for the policy
-	Description param.Field[string] `json:"description,required"`
-	// Whether the policy is enabled
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// The expression which must match for the policy to be applied, using the
-	// Cloudflare Firewall rule expression syntax
-	Expression param.Field[string] `json:"expression,required"`
-	// The policy which will be applied
-	Value param.Field[string] `json:"value,required"`
+	Policy PolicyParam         `json:"policy,required"`
 }
 
 func (r PolicyNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The action to take if the expression matches
-type PolicyNewParamsAction string
-
-const (
-	PolicyNewParamsActionAllow PolicyNewParamsAction = "allow"
-	PolicyNewParamsActionLog   PolicyNewParamsAction = "log"
-)
-
-func (r PolicyNewParamsAction) IsKnown() bool {
-	switch r {
-	case PolicyNewParamsActionAllow, PolicyNewParamsActionLog:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.Policy)
 }
 
 type PolicyNewResponseEnvelope struct {
