@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestIamResourceGroupNewWithOptionalParams(t *testing.T) {
+func TestIAMResourceGroupNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,11 +26,11 @@ func TestIamResourceGroupNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Iam.ResourceGroups.New(context.TODO(), cloudflare.IamResourceGroupNewParams{
+	_, err := client.IAM.ResourceGroups.New(context.TODO(), cloudflare.IAMResourceGroupNewParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-		Scope: cloudflare.F(cloudflare.IamResourceGroupNewParamsScope{
+		Scope: cloudflare.F(cloudflare.IAMResourceGroupNewParamsScope{
 			Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
-			Objects: cloudflare.F([]cloudflare.IamResourceGroupNewParamsScopeObject{{
+			Objects: cloudflare.F([]cloudflare.IAMResourceGroupNewParamsScopeObject{{
 				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
 			}, {
 				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
@@ -51,7 +51,7 @@ func TestIamResourceGroupNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestIamResourceGroupUpdateWithOptionalParams(t *testing.T) {
+func TestIAMResourceGroupUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -64,14 +64,14 @@ func TestIamResourceGroupUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Iam.ResourceGroups.Update(
+	_, err := client.IAM.ResourceGroups.Update(
 		context.TODO(),
 		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
-		cloudflare.IamResourceGroupUpdateParams{
+		cloudflare.IAMResourceGroupUpdateParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-			Scope: cloudflare.F(cloudflare.IamResourceGroupUpdateParamsScope{
+			Scope: cloudflare.F(cloudflare.IAMResourceGroupUpdateParamsScope{
 				Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
-				Objects: cloudflare.F([]cloudflare.IamResourceGroupUpdateParamsScopeObject{{
+				Objects: cloudflare.F([]cloudflare.IAMResourceGroupUpdateParamsScopeObject{{
 					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
 				}, {
 					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
@@ -93,7 +93,7 @@ func TestIamResourceGroupUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestIamResourceGroupListWithOptionalParams(t *testing.T) {
+func TestIAMResourceGroupListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -106,7 +106,7 @@ func TestIamResourceGroupListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Iam.ResourceGroups.List(context.TODO(), cloudflare.IamResourceGroupListParams{
+	_, err := client.IAM.ResourceGroups.List(context.TODO(), cloudflare.IAMResourceGroupListParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		ID:        cloudflare.F("6d7f2f5f5b1d4a0e9081fdc98d432fd1"),
 		Name:      cloudflare.F("NameOfTheResourceGroup"),
@@ -122,7 +122,7 @@ func TestIamResourceGroupListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestIamResourceGroupDelete(t *testing.T) {
+func TestIAMResourceGroupDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -135,10 +135,10 @@ func TestIamResourceGroupDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Iam.ResourceGroups.Delete(
+	_, err := client.IAM.ResourceGroups.Delete(
 		context.TODO(),
 		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
-		cloudflare.IamResourceGroupDeleteParams{
+		cloudflare.IAMResourceGroupDeleteParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},
 	)
@@ -151,7 +151,7 @@ func TestIamResourceGroupDelete(t *testing.T) {
 	}
 }
 
-func TestIamResourceGroupGet(t *testing.T) {
+func TestIAMResourceGroupGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -164,10 +164,10 @@ func TestIamResourceGroupGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Iam.ResourceGroups.Get(
+	_, err := client.IAM.ResourceGroups.Get(
 		context.TODO(),
 		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
-		cloudflare.IamResourceGroupGetParams{
+		cloudflare.IAMResourceGroupGetParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},
 	)
