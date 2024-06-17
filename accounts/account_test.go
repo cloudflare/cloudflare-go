@@ -32,6 +32,7 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 		Account: accounts.AccountParam{
 			Name: cloudflare.F("Demo Account"),
 			Settings: cloudflare.F(accounts.AccountSettingsParam{
+				AbuseContactEmail:           cloudflare.F("string"),
 				DefaultNameservers:          cloudflare.F(accounts.AccountSettingsDefaultNameserversCloudflareStandard),
 				EnforceTwofactor:            cloudflare.F(true),
 				UseAccountCustomNSByDefault: cloudflare.F(true),
