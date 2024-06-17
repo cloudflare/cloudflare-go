@@ -30,10 +30,10 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.Members.New(context.TODO(), accounts.MemberNewParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-		Body: accounts.MemberNewParamsBodyIamCreateMemberWithRoles{
+		Body: accounts.MemberNewParamsBodyIAMCreateMemberWithRoles{
 			Email:  cloudflare.F("user@example.com"),
 			Roles:  cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb"}),
-			Status: cloudflare.F(accounts.MemberNewParamsBodyIamCreateMemberWithRolesStatusAccepted),
+			Status: cloudflare.F(accounts.MemberNewParamsBodyIAMCreateMemberWithRolesStatusAccepted),
 		},
 	})
 	if err != nil {

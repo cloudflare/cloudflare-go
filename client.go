@@ -182,7 +182,7 @@ type Client struct {
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	EventNotifications          *event_notifications.EventNotificationService
 	AIGateway                   *ai_gateway.AIGatewayService
-	Iam                         *IamService
+	IAM                         *IAMService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -291,7 +291,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.EventNotifications = event_notifications.NewEventNotificationService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
-	r.Iam = NewIamService(opts...)
+	r.IAM = NewIAMService(opts...)
 
 	return
 }
