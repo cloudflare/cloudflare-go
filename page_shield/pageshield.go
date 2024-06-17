@@ -26,6 +26,7 @@ type PageShieldService struct {
 	Policies    *PolicyService
 	Connections *ConnectionService
 	Scripts     *ScriptService
+	Cookies     *CookieService
 }
 
 // NewPageShieldService generates a new service that applies the given options to
@@ -37,6 +38,7 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 	r.Policies = NewPolicyService(opts...)
 	r.Connections = NewConnectionService(opts...)
 	r.Scripts = NewScriptService(opts...)
+	r.Cookies = NewCookieService(opts...)
 	return
 }
 
