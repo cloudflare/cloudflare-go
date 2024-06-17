@@ -229,14 +229,16 @@ type AIRunResponseObjectDetection []AIRunResponseObjectDetection
 func (r AIRunResponseObjectDetection) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseObject struct {
-	Response string                  `json:"response"`
-	JSON     aiRunResponseObjectJSON `json:"-"`
+	Response  string                        `json:"response"`
+	ToolCalls []AIRunResponseObjectToolCall `json:"tool_calls"`
+	JSON      aiRunResponseObjectJSON       `json:"-"`
 }
 
 // aiRunResponseObjectJSON contains the JSON metadata for the struct
 // [AIRunResponseObject]
 type aiRunResponseObjectJSON struct {
 	Response    apijson.Field
+	ToolCalls   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -250,6 +252,29 @@ func (r aiRunResponseObjectJSON) RawJSON() string {
 }
 
 func (r AIRunResponseObject) ImplementsWorkersAIRunResponseUnion() {}
+
+type AIRunResponseObjectToolCall struct {
+	Arguments interface{}                     `json:"arguments"`
+	Name      string                          `json:"name"`
+	JSON      aiRunResponseObjectToolCallJSON `json:"-"`
+}
+
+// aiRunResponseObjectToolCallJSON contains the JSON metadata for the struct
+// [AIRunResponseObjectToolCall]
+type aiRunResponseObjectToolCallJSON struct {
+	Arguments   apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseObjectToolCall) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseObjectToolCallJSON) RawJSON() string {
+	return r.raw
+}
 
 type AIRunResponseTranslation struct {
 	TranslatedText string                       `json:"translated_text"`
