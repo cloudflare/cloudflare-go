@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestIamPermissionGroupListWithOptionalParams(t *testing.T) {
+func TestIAMPermissionGroupListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,7 +26,7 @@ func TestIamPermissionGroupListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Iam.PermissionGroups.List(context.TODO(), cloudflare.IamPermissionGroupListParams{
+	_, err := client.IAM.PermissionGroups.List(context.TODO(), cloudflare.IAMPermissionGroupListParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		ID:        cloudflare.F("6d7f2f5f5b1d4a0e9081fdc98d432fd1"),
 		Label:     cloudflare.F("labelOfThePermissionGroup"),
@@ -43,7 +43,7 @@ func TestIamPermissionGroupListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestIamPermissionGroupGet(t *testing.T) {
+func TestIAMPermissionGroupGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -56,10 +56,10 @@ func TestIamPermissionGroupGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Iam.PermissionGroups.Get(
+	_, err := client.IAM.PermissionGroups.Get(
 		context.TODO(),
 		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
-		cloudflare.IamPermissionGroupGetParams{
+		cloudflare.IAMPermissionGroupGetParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},
 	)
