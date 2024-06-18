@@ -64,7 +64,7 @@ func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadPar
 // Get the csv content of a given dataset by alias or id. When getting the content
 // by alias the latest dataset is returned, optionally filtered by the latest
 // available at a given date.
-func (r *DatasetService) Get(ctx context.Context, alias string, query DatasetGetParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *DatasetService) Get(ctx context.Context, alias string, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
 	if alias == "" {
@@ -72,7 +72,7 @@ func (r *DatasetService) Get(ctx context.Context, alias string, query DatasetGet
 		return
 	}
 	path := fmt.Sprintf("radar/datasets/%s", alias)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -279,16 +279,14 @@ func (r DatasetDownloadParamsFormat) IsKnown() bool {
 }
 
 type DatasetDownloadResponseEnvelope struct {
-	Result  DatasetDownloadResponse             `json:"result,required"`
-	Success bool                                `json:"success,required"`
-	JSON    datasetDownloadResponseEnvelopeJSON `json:"-"`
+	Result DatasetDownloadResponse             `json:"result,required"`
+	JSON   datasetDownloadResponseEnvelopeJSON `json:"-"`
 }
 
 // datasetDownloadResponseEnvelopeJSON contains the JSON metadata for the struct
 // [DatasetDownloadResponseEnvelope]
 type datasetDownloadResponseEnvelopeJSON struct {
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -299,17 +297,4 @@ func (r *DatasetDownloadResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 
 func (r datasetDownloadResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-type DatasetGetParams struct {
-	// Filter dataset alias by date
-	Date param.Field[string] `query:"date"`
-}
-
-// URLQuery serializes [DatasetGetParams]'s query parameters as `url.Values`.
-func (r DatasetGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
 }
