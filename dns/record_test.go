@@ -37,8 +37,10 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 			Proxied: cloudflare.F(false),
 			Type:    cloudflare.F(dns.ARecordTypeA),
 			Comment: cloudflare.F("Domain verification record"),
+			ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 			TTL:     cloudflare.F(dns.TTLNumber(3600.000000)),
+			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	})
 	if err != nil {
@@ -75,8 +77,10 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 				Proxied: cloudflare.F(false),
 				Type:    cloudflare.F(dns.ARecordTypeA),
 				Comment: cloudflare.F("Domain verification record"),
+				ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 				TTL:     cloudflare.F(dns.TTLNumber(3600.000000)),
+				ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			},
 		},
 	)
@@ -195,8 +199,10 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 				Proxied: cloudflare.F(false),
 				Type:    cloudflare.F(dns.ARecordTypeA),
 				Comment: cloudflare.F("Domain verification record"),
+				ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 				TTL:     cloudflare.F(dns.TTLNumber(3600.000000)),
+				ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			},
 		},
 	)
