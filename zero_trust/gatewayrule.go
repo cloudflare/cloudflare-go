@@ -477,26 +477,26 @@ func (r ruleSettingAuditSSHJSON) RawJSON() string {
 // Configure how browser isolation behaves.
 type RuleSettingBisoAdminControls struct {
 	// Set to false to enable copy-pasting.
-	Dcp bool `json:"dcp"`
+	DCP bool `json:"dcp"`
 	// Set to false to enable downloading.
-	Dd bool `json:"dd"`
+	DD bool `json:"dd"`
 	// Set to false to enable keyboard usage.
-	Dk bool `json:"dk"`
+	DK bool `json:"dk"`
 	// Set to false to enable printing.
-	Dp bool `json:"dp"`
+	DP bool `json:"dp"`
 	// Set to false to enable uploading.
-	Du   bool                             `json:"du"`
+	DU   bool                             `json:"du"`
 	JSON ruleSettingBisoAdminControlsJSON `json:"-"`
 }
 
 // ruleSettingBisoAdminControlsJSON contains the JSON metadata for the struct
 // [RuleSettingBisoAdminControls]
 type ruleSettingBisoAdminControlsJSON struct {
-	Dcp         apijson.Field
-	Dd          apijson.Field
-	Dk          apijson.Field
-	Dp          apijson.Field
-	Du          apijson.Field
+	DCP         apijson.Field
+	DD          apijson.Field
+	DK          apijson.Field
+	DP          apijson.Field
+	DU          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -794,15 +794,15 @@ func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 // Configure how browser isolation behaves.
 type RuleSettingBisoAdminControlsParam struct {
 	// Set to false to enable copy-pasting.
-	Dcp param.Field[bool] `json:"dcp"`
+	DCP param.Field[bool] `json:"dcp"`
 	// Set to false to enable downloading.
-	Dd param.Field[bool] `json:"dd"`
+	DD param.Field[bool] `json:"dd"`
 	// Set to false to enable keyboard usage.
-	Dk param.Field[bool] `json:"dk"`
+	DK param.Field[bool] `json:"dk"`
 	// Set to false to enable printing.
-	Dp param.Field[bool] `json:"dp"`
+	DP param.Field[bool] `json:"dp"`
 	// Set to false to enable uploading.
-	Du param.Field[bool] `json:"du"`
+	DU param.Field[bool] `json:"du"`
 }
 
 func (r RuleSettingBisoAdminControlsParam) MarshalJSON() (data []byte, err error) {
