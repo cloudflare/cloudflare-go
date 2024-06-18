@@ -178,7 +178,7 @@ type AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -333,7 +333,7 @@ type AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -463,7 +463,7 @@ type AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -525,6 +525,9 @@ type AttackLayer3TopAttacksParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer3TopAttacksParamsNormalization] `query:"normalization"`
 	// Array of L3/4 attack types.
 	Protocol param.Field[[]AttackLayer3TopAttacksParamsProtocol] `query:"protocol"`
 }
@@ -610,6 +613,23 @@ const (
 func (r AttackLayer3TopAttacksParamsLimitDirection) IsKnown() bool {
 	switch r {
 	case AttackLayer3TopAttacksParamsLimitDirectionOrigin, AttackLayer3TopAttacksParamsLimitDirectionTarget:
+		return true
+	}
+	return false
+}
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer3TopAttacksParamsNormalization string
+
+const (
+	AttackLayer3TopAttacksParamsNormalizationPercentage AttackLayer3TopAttacksParamsNormalization = "PERCENTAGE"
+	AttackLayer3TopAttacksParamsNormalizationMinMax     AttackLayer3TopAttacksParamsNormalization = "MIN_MAX"
+)
+
+func (r AttackLayer3TopAttacksParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksParamsNormalizationPercentage, AttackLayer3TopAttacksParamsNormalizationMinMax:
 		return true
 	}
 	return false

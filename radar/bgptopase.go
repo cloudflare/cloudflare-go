@@ -312,8 +312,9 @@ func (r BGPTopAseGetParamsFormat) IsKnown() bool {
 }
 
 type BGPTopAseGetParamsPrefix struct {
-	Location param.Field[string] `query:"location,required"`
-	Name     param.Field[string] `query:"name,required"`
+	In   param.Field[string]  `query:"in,required"`
+	Name param.Field[string]  `query:"name,required"`
+	Test param.Field[float64] `query:"test,required"`
 	// Network prefix, IPv4 or IPv6.
 	Type param.Field[string] `query:"type"`
 }

@@ -41,6 +41,7 @@ func TestAttackLayer7TopAttacksWithOptionalParams(t *testing.T) {
 		Location:         cloudflare.F([]string{"string", "string", "string"}),
 		Magnitude:        cloudflare.F(radar.AttackLayer7TopAttacksParamsMagnitudeMitigatedRequests),
 		Name:             cloudflare.F([]string{"string", "string", "string"}),
+		Normalization:    cloudflare.F(radar.AttackLayer7TopAttacksParamsNormalizationPercentage),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

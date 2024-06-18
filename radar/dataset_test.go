@@ -68,7 +68,7 @@ func TestDatasetDownloadWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDatasetGetWithOptionalParams(t *testing.T) {
+func TestDatasetGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,13 +81,7 @@ func TestDatasetGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Datasets.Get(
-		context.TODO(),
-		"ranking_top_1000",
-		radar.DatasetGetParams{
-			Date: cloudflare.F("string"),
-		},
-	)
+	_, err := client.Radar.Datasets.Get(context.TODO(), "ranking_top_1000")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

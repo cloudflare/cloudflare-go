@@ -214,7 +214,7 @@ type AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                     `json:"dataSource,required"`
 	Description     string                                                     `json:"description,required"`
 	EventType       string                                                     `json:"eventType,required"`
-	IsInstantaneous interface{}                                                `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                     `json:"linkedUrl"`
 	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
@@ -368,7 +368,7 @@ type AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                   `json:"dataSource,required"`
 	Description     string                                                   `json:"description,required"`
 	EventType       string                                                   `json:"eventType,required"`
-	IsInstantaneous interface{}                                              `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                     `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                   `json:"linkedUrl"`
 	StartTime       time.Time                                                `json:"startTime" format:"date-time"`
@@ -522,7 +522,7 @@ type AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                        `json:"dataSource,required"`
 	Description     string                                                        `json:"description,required"`
 	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous interface{}                                                   `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                        `json:"linkedUrl"`
 	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
@@ -677,7 +677,7 @@ type AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                       `json:"dataSource,required"`
 	Description     string                                                       `json:"description,required"`
 	EventType       string                                                       `json:"eventType,required"`
-	IsInstantaneous interface{}                                                  `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                    `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                       `json:"linkedUrl"`
 	StartTime       time.Time                                                    `json:"startTime" format:"date-time"`
@@ -832,7 +832,7 @@ type AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                        `json:"dataSource,required"`
 	Description     string                                                        `json:"description,required"`
 	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous interface{}                                                   `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                        `json:"linkedUrl"`
 	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
@@ -993,7 +993,7 @@ type AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`

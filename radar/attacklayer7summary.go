@@ -210,7 +210,7 @@ type AttackLayer7SummaryGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -376,7 +376,7 @@ type AttackLayer7SummaryHTTPMethodResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                                `json:"dataSource,required"`
 	Description     string                                                                `json:"description,required"`
 	EventType       string                                                                `json:"eventType,required"`
-	IsInstantaneous interface{}                                                           `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                             `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                `json:"linkedUrl"`
 	StartTime       time.Time                                                             `json:"startTime" format:"date-time"`
@@ -532,7 +532,7 @@ type AttackLayer7SummaryHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                                 `json:"dataSource,required"`
 	Description     string                                                                 `json:"description,required"`
 	EventType       string                                                                 `json:"eventType,required"`
-	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                 `json:"linkedUrl"`
 	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
@@ -689,7 +689,7 @@ type AttackLayer7SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                               `json:"dataSource,required"`
 	Description     string                                                               `json:"description,required"`
 	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                               `json:"linkedUrl"`
 	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
@@ -845,7 +845,7 @@ type AttackLayer7SummaryManagedRulesResponseMetaConfidenceInfoAnnotation struct 
 	DataSource      string                                                                  `json:"dataSource,required"`
 	Description     string                                                                  `json:"description,required"`
 	EventType       string                                                                  `json:"eventType,required"`
-	IsInstantaneous interface{}                                                             `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                               `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                  `json:"linkedUrl"`
 	StartTime       time.Time                                                               `json:"startTime" format:"date-time"`
@@ -1002,7 +1002,7 @@ type AttackLayer7SummaryMitigationProductResponseMetaConfidenceInfoAnnotation st
 	DataSource      string                                                                       `json:"dataSource,required"`
 	Description     string                                                                       `json:"description,required"`
 	EventType       string                                                                       `json:"eventType,required"`
-	IsInstantaneous interface{}                                                                  `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                         `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                                    `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                       `json:"linkedUrl"`
 	StartTime       time.Time                                                                    `json:"startTime" format:"date-time"`
