@@ -7,12 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -81,12 +79,12 @@ func (r *GatewayListService) Update(ctx context.Context, listID string, params G
 }
 
 // Fetches all Zero Trust lists for an account.
-func (r *GatewayListService) List(ctx context.Context, params GatewayListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayList], err error) {
+func (r *GatewayListService) List(ctx context.Context, query GatewayListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayList], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/gateway/lists", params.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/lists", query.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,8 +97,8 @@ func (r *GatewayListService) List(ctx context.Context, params GatewayListListPar
 }
 
 // Fetches all Zero Trust lists for an account.
-func (r *GatewayListService) ListAutoPaging(ctx context.Context, params GatewayListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayList] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *GatewayListService) ListAutoPaging(ctx context.Context, query GatewayListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayList] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a Zero Trust list.
@@ -190,7 +188,6 @@ func (r gatewayItemJSON) RawJSON() string {
 }
 
 type GatewayItemParam struct {
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
 	// The value of the item in a list.
 	Value param.Field[string] `json:"value"`
 }
@@ -464,35 +461,6 @@ func (r GatewayListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayListListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The type of list.
-	Type param.Field[GatewayListListParamsType] `query:"type"`
-}
-
-// URLQuery serializes [GatewayListListParams]'s query parameters as `url.Values`.
-func (r GatewayListListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-// The type of list.
-type GatewayListListParamsType string
-
-const (
-	GatewayListListParamsTypeSerial GatewayListListParamsType = "SERIAL"
-	GatewayListListParamsTypeURL    GatewayListListParamsType = "URL"
-	GatewayListListParamsTypeDomain GatewayListListParamsType = "DOMAIN"
-	GatewayListListParamsTypeEmail  GatewayListListParamsType = "EMAIL"
-	GatewayListListParamsTypeIP     GatewayListListParamsType = "IP"
-)
-
-func (r GatewayListListParamsType) IsKnown() bool {
-	switch r {
-	case GatewayListListParamsTypeSerial, GatewayListListParamsTypeURL, GatewayListListParamsTypeDomain, GatewayListListParamsTypeEmail, GatewayListListParamsTypeIP:
-		return true
-	}
-	return false
 }
 
 type GatewayListDeleteParams struct {

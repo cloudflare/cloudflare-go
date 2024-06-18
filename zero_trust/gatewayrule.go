@@ -384,10 +384,6 @@ type RuleSetting struct {
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
 	Egress RuleSettingEgress `json:"egress"`
-	// Set to true, to ignore the category matches at CNAME domains in a response. If
-	// unchecked, the categories in this rule will be checked against all the CNAME
-	// domain categories in a response.
-	IgnoreCNAMECategoryMatches bool `json:"ignore_cname_category_matches"`
 	// INSECURE - disable DNSSEC validation (for Allow actions).
 	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 	// Set to true to enable IPs in DNS resolver category blocks. By default categories
@@ -428,7 +424,6 @@ type ruleSettingJSON struct {
 	CheckSession                    apijson.Field
 	DNSResolvers                    apijson.Field
 	Egress                          apijson.Field
-	IgnoreCNAMECategoryMatches      apijson.Field
 	InsecureDisableDNSSECValidation apijson.Field
 	IPCategories                    apijson.Field
 	IPIndicatorFeeds                apijson.Field
@@ -476,15 +471,15 @@ func (r ruleSettingAuditSSHJSON) RawJSON() string {
 
 // Configure how browser isolation behaves.
 type RuleSettingBisoAdminControls struct {
-	// Set to false to enable copy-pasting.
+	// Set to true to enable copy-pasting.
 	Dcp bool `json:"dcp"`
-	// Set to false to enable downloading.
+	// Set to true to enable downloading.
 	Dd bool `json:"dd"`
-	// Set to false to enable keyboard usage.
+	// Set to true to enable keyboard usage.
 	Dk bool `json:"dk"`
-	// Set to false to enable printing.
+	// Set to true to enable printing.
 	Dp bool `json:"dp"`
-	// Set to false to enable uploading.
+	// Set to true to enable uploading.
 	Du   bool                             `json:"du"`
 	JSON ruleSettingBisoAdminControlsJSON `json:"-"`
 }
@@ -746,10 +741,6 @@ type RuleSettingParam struct {
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
 	Egress param.Field[RuleSettingEgressParam] `json:"egress"`
-	// Set to true, to ignore the category matches at CNAME domains in a response. If
-	// unchecked, the categories in this rule will be checked against all the CNAME
-	// domain categories in a response.
-	IgnoreCNAMECategoryMatches param.Field[bool] `json:"ignore_cname_category_matches"`
 	// INSECURE - disable DNSSEC validation (for Allow actions).
 	InsecureDisableDNSSECValidation param.Field[bool] `json:"insecure_disable_dnssec_validation"`
 	// Set to true to enable IPs in DNS resolver category blocks. By default categories
@@ -793,15 +784,15 @@ func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 
 // Configure how browser isolation behaves.
 type RuleSettingBisoAdminControlsParam struct {
-	// Set to false to enable copy-pasting.
+	// Set to true to enable copy-pasting.
 	Dcp param.Field[bool] `json:"dcp"`
-	// Set to false to enable downloading.
+	// Set to true to enable downloading.
 	Dd param.Field[bool] `json:"dd"`
-	// Set to false to enable keyboard usage.
+	// Set to true to enable keyboard usage.
 	Dk param.Field[bool] `json:"dk"`
-	// Set to false to enable printing.
+	// Set to true to enable printing.
 	Dp param.Field[bool] `json:"dp"`
-	// Set to false to enable uploading.
+	// Set to true to enable uploading.
 	Du param.Field[bool] `json:"du"`
 }
 

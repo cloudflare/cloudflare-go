@@ -61,9 +61,6 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				NonIdentityEnabled:         cloudflare.F(true),
 				URLBrowserIsolationEnabled: cloudflare.F(true),
 			}),
-			Certificate: cloudflare.F(zero_trust.GatewayConfigurationSettingsCertificateParam{
-				ID: cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
-			}),
 			CustomCertificate: cloudflare.F(zero_trust.CustomCertificateSettingsParam{
 				Enabled: cloudflare.F(true),
 				ID:      cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
@@ -137,9 +134,6 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
 				URLBrowserIsolationEnabled: cloudflare.F(true),
-			}),
-			Certificate: cloudflare.F(zero_trust.GatewayConfigurationSettingsCertificateParam{
-				ID: cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
 			}),
 			CustomCertificate: cloudflare.F(zero_trust.CustomCertificateSettingsParam{
 				Enabled: cloudflare.F(true),

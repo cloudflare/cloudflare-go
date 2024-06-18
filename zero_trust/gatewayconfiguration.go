@@ -55,8 +55,8 @@ func (r *GatewayConfigurationService) Update(ctx context.Context, params Gateway
 // Patches the current Zero Trust account configuration. This endpoint can update a
 // single subcollection of settings such as `antivirus`, `tls_decrypt`,
 // `activity_log`, `block_page`, `browser_isolation`, `fips`, `body_scanning`, or
-// `certificate`, without updating the entire configuration object. Returns an
-// error if any collection of settings is not properly configured.
+// `custom_certificate`, without updating the entire configuration object. Returns
+// an error if any collection of settings is not properly configured.
 func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayConfigurationEditParams, opts ...option.RequestOption) (res *GatewayConfigurationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationEditResponseEnvelope
@@ -317,8 +317,7 @@ func (r BrowserIsolationSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-// `certificate`)
+// Custom certificate settings for BYO-PKI.
 type CustomCertificateSettings struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled bool `json:"enabled,required"`
@@ -349,8 +348,7 @@ func (r customCertificateSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-// `certificate`)
+// Custom certificate settings for BYO-PKI.
 type CustomCertificateSettingsParam struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled param.Field[bool] `json:"enabled,required"`
@@ -441,11 +439,7 @@ type GatewayConfigurationSettings struct {
 	BodyScanning BodyScanningSettings `json:"body_scanning"`
 	// Browser isolation settings.
 	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation"`
-	// Certificate settings for Gateway TLS interception. If not specified, the
-	// Cloudflare Root CA will be used.
-	Certificate GatewayConfigurationSettingsCertificate `json:"certificate"`
-	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-	// `certificate`)
+	// Custom certificate settings for BYO-PKI.
 	CustomCertificate CustomCertificateSettings `json:"custom_certificate"`
 	// Extended e-mail matching settings.
 	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
@@ -466,7 +460,6 @@ type gatewayConfigurationSettingsJSON struct {
 	BlockPage             apijson.Field
 	BodyScanning          apijson.Field
 	BrowserIsolation      apijson.Field
-	Certificate           apijson.Field
 	CustomCertificate     apijson.Field
 	ExtendedEmailMatching apijson.Field
 	Fips                  apijson.Field
@@ -484,30 +477,6 @@ func (r gatewayConfigurationSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate settings for Gateway TLS interception. If not specified, the
-// Cloudflare Root CA will be used.
-type GatewayConfigurationSettingsCertificate struct {
-	// UUID of certificate to be used for interception.
-	ID   string                                      `json:"id,required"`
-	JSON gatewayConfigurationSettingsCertificateJSON `json:"-"`
-}
-
-// gatewayConfigurationSettingsCertificateJSON contains the JSON metadata for the
-// struct [GatewayConfigurationSettingsCertificate]
-type gatewayConfigurationSettingsCertificateJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayConfigurationSettingsCertificate) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayConfigurationSettingsCertificateJSON) RawJSON() string {
-	return r.raw
-}
-
 // account settings.
 type GatewayConfigurationSettingsParam struct {
 	// Activity log settings.
@@ -520,11 +489,7 @@ type GatewayConfigurationSettingsParam struct {
 	BodyScanning param.Field[BodyScanningSettingsParam] `json:"body_scanning"`
 	// Browser isolation settings.
 	BrowserIsolation param.Field[BrowserIsolationSettingsParam] `json:"browser_isolation"`
-	// Certificate settings for Gateway TLS interception. If not specified, the
-	// Cloudflare Root CA will be used.
-	Certificate param.Field[GatewayConfigurationSettingsCertificateParam] `json:"certificate"`
-	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-	// `certificate`)
+	// Custom certificate settings for BYO-PKI.
 	CustomCertificate param.Field[CustomCertificateSettingsParam] `json:"custom_certificate"`
 	// Extended e-mail matching settings.
 	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`
@@ -537,17 +502,6 @@ type GatewayConfigurationSettingsParam struct {
 }
 
 func (r GatewayConfigurationSettingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Certificate settings for Gateway TLS interception. If not specified, the
-// Cloudflare Root CA will be used.
-type GatewayConfigurationSettingsCertificateParam struct {
-	// UUID of certificate to be used for interception.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r GatewayConfigurationSettingsCertificateParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
