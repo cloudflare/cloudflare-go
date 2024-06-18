@@ -215,7 +215,7 @@ type AttackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                             `json:"dataSource,required"`
 	Description     string                                                             `json:"description,required"`
 	EventType       string                                                             `json:"eventType,required"`
-	IsInstantaneous interface{}                                                        `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                          `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                             `json:"linkedUrl"`
 	StartTime       time.Time                                                          `json:"startTime" format:"date-time"`
@@ -376,7 +376,7 @@ type AttackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                              `json:"dataSource,required"`
 	Description     string                                                              `json:"description,required"`
 	EventType       string                                                              `json:"eventType,required"`
-	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                              `json:"linkedUrl"`
 	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
@@ -535,7 +535,7 @@ type AttackLayer3SummaryGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -694,7 +694,7 @@ type AttackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                               `json:"dataSource,required"`
 	Description     string                                                               `json:"description,required"`
 	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                               `json:"linkedUrl"`
 	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
@@ -849,7 +849,7 @@ type AttackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                              `json:"dataSource,required"`
 	Description     string                                                              `json:"description,required"`
 	EventType       string                                                              `json:"eventType,required"`
-	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                              `json:"linkedUrl"`
 	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
@@ -1008,7 +1008,7 @@ type AttackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`

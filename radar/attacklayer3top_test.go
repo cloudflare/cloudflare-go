@@ -40,6 +40,7 @@ func TestAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
 		LimitPerLocation: cloudflare.F(int64(10)),
 		Location:         cloudflare.F([]string{"string", "string", "string"}),
 		Name:             cloudflare.F([]string{"string", "string", "string"}),
+		Normalization:    cloudflare.F(radar.AttackLayer3TopAttacksParamsNormalizationPercentage),
 		Protocol:         cloudflare.F([]radar.AttackLayer3TopAttacksParamsProtocol{radar.AttackLayer3TopAttacksParamsProtocolUdp, radar.AttackLayer3TopAttacksParamsProtocolTCP, radar.AttackLayer3TopAttacksParamsProtocolIcmp}),
 	})
 	if err != nil {
