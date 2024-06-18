@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,9 +17,11 @@ import (
 )
 
 // SeatService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewSeatService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSeatService] method instead.
 type SeatService struct {
 	Options []option.RequestOption
 }
@@ -34,11 +37,15 @@ func NewSeatService(opts ...option.RequestOption) (r *SeatService) {
 
 // Removes a user from a Zero Trust seat when both `access_seat` and `gateway_seat`
 // are set to false.
-func (r *SeatService) Edit(ctx context.Context, identifier string, body SeatEditParams, opts ...option.RequestOption) (res *[]Seat, err error) {
+func (r *SeatService) Edit(ctx context.Context, params SeatEditParams, opts ...option.RequestOption) (res *[]Seat, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SeatEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/seats", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/seats", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,7 +59,7 @@ type Seat struct {
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`
 	// True if the seat is part of Gateway.
 	GatewaySeat bool `json:"gateway_seat"`
-	// Identifier
+	// The unique API identifier for the Zero Trust seat.
 	SeatUID   string    `json:"seat_uid"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	JSON      seatJSON  `json:"-"`
@@ -78,7 +85,9 @@ func (r seatJSON) RawJSON() string {
 }
 
 type SeatEditParams struct {
-	Body []SeatEditParamsBody `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]  `path:"account_id,required"`
+	Body      []SeatEditParamsBody `json:"body,required"`
 }
 
 func (r SeatEditParams) MarshalJSON() (data []byte, err error) {
@@ -90,6 +99,8 @@ type SeatEditParamsBody struct {
 	AccessSeat param.Field[bool] `json:"access_seat,required"`
 	// True if the seat is part of Gateway.
 	GatewaySeat param.Field[bool] `json:"gateway_seat,required"`
+	// The unique API identifier for the Zero Trust seat.
+	SeatUID param.Field[string] `json:"seat_uid,required"`
 }
 
 func (r SeatEditParamsBody) MarshalJSON() (data []byte, err error) {

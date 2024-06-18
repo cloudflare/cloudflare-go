@@ -29,10 +29,10 @@ func TestAccessBookmarkNew(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.New(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessBookmarkNewParams{
-			Body: map[string]interface{}{},
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -59,10 +59,10 @@ func TestAccessBookmarkUpdate(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.Update(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessBookmarkUpdateParams{
-			Body: map[string]interface{}{},
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -87,7 +87,9 @@ func TestAccessBookmarkList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Bookmarks.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.ZeroTrust.Access.Bookmarks.List(context.TODO(), zero_trust.AccessBookmarkListParams{
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -112,8 +114,10 @@ func TestAccessBookmarkDelete(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.AccessBookmarkDeleteParams{
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -139,8 +143,10 @@ func TestAccessBookmarkGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.Get(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.AccessBookmarkGetParams{
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

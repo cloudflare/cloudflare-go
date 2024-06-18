@@ -4,6 +4,7 @@ package r2
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,9 +19,11 @@ import (
 )
 
 // BucketService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewBucketService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewBucketService] method instead.
 type BucketService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,10 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BucketNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -74,6 +81,14 @@ func (r *BucketService) ListAutoPaging(ctx context.Context, params BucketListPar
 func (r *BucketService) Delete(ctx context.Context, bucketName string, body BucketDeleteParams, opts ...option.RequestOption) (res *BucketDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BucketDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", body.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -87,6 +102,14 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, body Buck
 func (r *BucketService) Get(ctx context.Context, bucketName string, query BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BucketGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", query.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -103,8 +126,10 @@ type Bucket struct {
 	// Location of the bucket
 	Location BucketLocation `json:"location"`
 	// Name of the bucket
-	Name string     `json:"name"`
-	JSON bucketJSON `json:"-"`
+	Name string `json:"name"`
+	// Storage class for newly uploaded objects, unless specified otherwise.
+	StorageClass BucketStorageClass `json:"storage_class"`
+	JSON         bucketJSON         `json:"-"`
 }
 
 // bucketJSON contains the JSON metadata for the struct [Bucket]
@@ -112,6 +137,7 @@ type bucketJSON struct {
 	CreationDate apijson.Field
 	Location     apijson.Field
 	Name         apijson.Field
+	StorageClass apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -143,6 +169,22 @@ func (r BucketLocation) IsKnown() bool {
 	return false
 }
 
+// Storage class for newly uploaded objects, unless specified otherwise.
+type BucketStorageClass string
+
+const (
+	BucketStorageClassStandard         BucketStorageClass = "Standard"
+	BucketStorageClassInfrequentAccess BucketStorageClass = "InfrequentAccess"
+)
+
+func (r BucketStorageClass) IsKnown() bool {
+	switch r {
+	case BucketStorageClassStandard, BucketStorageClassInfrequentAccess:
+		return true
+	}
+	return false
+}
+
 type BucketDeleteResponse = interface{}
 
 type BucketNewParams struct {
@@ -152,6 +194,8 @@ type BucketNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// Location of the bucket
 	LocationHint param.Field[BucketNewParamsLocationHint] `json:"locationHint"`
+	// Storage class for newly uploaded objects, unless specified otherwise.
+	StorageClass param.Field[BucketNewParamsStorageClass] `json:"storageClass"`
 }
 
 func (r BucketNewParams) MarshalJSON() (data []byte, err error) {
@@ -172,6 +216,22 @@ const (
 func (r BucketNewParamsLocationHint) IsKnown() bool {
 	switch r {
 	case BucketNewParamsLocationHintApac, BucketNewParamsLocationHintEeur, BucketNewParamsLocationHintEnam, BucketNewParamsLocationHintWeur, BucketNewParamsLocationHintWnam:
+		return true
+	}
+	return false
+}
+
+// Storage class for newly uploaded objects, unless specified otherwise.
+type BucketNewParamsStorageClass string
+
+const (
+	BucketNewParamsStorageClassStandard         BucketNewParamsStorageClass = "Standard"
+	BucketNewParamsStorageClassInfrequentAccess BucketNewParamsStorageClass = "InfrequentAccess"
+)
+
+func (r BucketNewParamsStorageClass) IsKnown() bool {
+	switch r {
+	case BucketNewParamsStorageClassStandard, BucketNewParamsStorageClassInfrequentAccess:
 		return true
 	}
 	return false

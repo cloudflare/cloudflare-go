@@ -4,5 +4,5 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-gofmt ./...
-
+echo "==> Running gofmt -s -w"
+gofmt -s -w .

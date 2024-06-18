@@ -4,6 +4,7 @@ package firewall
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -20,10 +21,11 @@ import (
 )
 
 // WAFPackageGroupService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewWAFPackageGroupService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewWAFPackageGroupService] method instead.
 type WAFPackageGroupService struct {
 	Options []option.RequestOption
 }
@@ -74,6 +76,18 @@ func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID s
 func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params WAFPackageGroupEditParams, opts ...option.RequestOption) (res *WAFPackageGroupEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if packageID == "" {
+		err = errors.New("missing required package_id parameter")
+		return
+	}
+	if groupID == "" {
+		err = errors.New("missing required group_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", params.ZoneID, packageID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -90,6 +104,18 @@ func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, gro
 func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query WAFPackageGroupGetParams, opts ...option.RequestOption) (res *WAFPackageGroupGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if packageID == "" {
+		err = errors.New("missing required package_id parameter")
+		return
+	}
+	if groupID == "" {
+		err = errors.New("missing required group_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", query.ZoneID, packageID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

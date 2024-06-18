@@ -85,11 +85,8 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				Ref: cloudflare.F("my_ref"),
 			}}),
 			AccountID:   cloudflare.F("string"),
-			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
-			Kind:        cloudflare.F(rulesets.KindRoot),
 			Name:        cloudflare.F("My ruleset"),
-			Phase:       cloudflare.F(rulesets.PhaseHTTPRequestFirewallCustom),
 		},
 	)
 	if err != nil {
@@ -120,7 +117,6 @@ func TestPhaseGetWithOptionalParams(t *testing.T) {
 		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // DLPDatasetUploadService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDLPDatasetUploadService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDLPDatasetUploadService] method instead.
 type DLPDatasetUploadService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,14 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *NewVersion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadNewResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if datasetID == "" {
+		err = errors.New("missing required dataset_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload", body.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
@@ -49,6 +59,14 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if datasetID == "" {
+		err = errors.New("missing required dataset_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", params.AccountID, datasetID, version)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -148,7 +166,7 @@ func (r dlpDatasetUploadNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type DLPDatasetUploadEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	Body      string              `json:"body,required"`
 }
 
 func (r DLPDatasetUploadEditParams) MarshalJSON() (data []byte, err error) {

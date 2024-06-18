@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,9 +18,11 @@ import (
 )
 
 // MonitorService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewMonitorService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewMonitorService] method instead.
 type MonitorService struct {
 	Options    []option.RequestOption
 	Previews   *MonitorPreviewService
@@ -41,6 +44,10 @@ func NewMonitorService(opts ...option.RequestOption) (r *MonitorService) {
 func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +61,14 @@ func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts 
 func (r *MonitorService) Update(ctx context.Context, monitorID string, params MonitorUpdateParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if monitorID == "" {
+		err = errors.New("missing required monitor_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -90,6 +105,14 @@ func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListPa
 func (r *MonitorService) Delete(ctx context.Context, monitorID string, body MonitorDeleteParams, opts ...option.RequestOption) (res *MonitorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if monitorID == "" {
+		err = errors.New("missing required monitor_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", body.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -103,6 +126,14 @@ func (r *MonitorService) Delete(ctx context.Context, monitorID string, body Moni
 func (r *MonitorService) Edit(ctx context.Context, monitorID string, params MonitorEditParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if monitorID == "" {
+		err = errors.New("missing required monitor_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -116,6 +147,14 @@ func (r *MonitorService) Edit(ctx context.Context, monitorID string, params Moni
 func (r *MonitorService) Get(ctx context.Context, monitorID string, query MonitorGetParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if monitorID == "" {
+		err = errors.New("missing required monitor_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", query.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

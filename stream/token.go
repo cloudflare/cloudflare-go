@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // TokenService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewTokenService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewTokenService] method instead.
 type TokenService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +39,14 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 func (r *TokenService) New(ctx context.Context, identifier string, params TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/token", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

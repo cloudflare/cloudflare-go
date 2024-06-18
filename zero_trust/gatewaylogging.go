@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // GatewayLoggingService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewGatewayLoggingService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewGatewayLoggingService] method instead.
 type GatewayLoggingService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,10 @@ func NewGatewayLoggingService(opts ...option.RequestOption) (r *GatewayLoggingSe
 func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggingUpdateParams, opts ...option.RequestOption) (res *LoggingSetting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/logging", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -49,6 +55,10 @@ func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggin
 func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGetParams, opts ...option.RequestOption) (res *LoggingSetting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/logging", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

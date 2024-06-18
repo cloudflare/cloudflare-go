@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -19,9 +20,11 @@ import (
 )
 
 // IPService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewIPService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewIPService] method instead.
 type IPService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +42,10 @@ func NewIPService(opts ...option.RequestOption) (r *IPService) {
 func (r *IPService) Get(ctx context.Context, params IPGetParams, opts ...option.RequestOption) (res *[]IP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/ip", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

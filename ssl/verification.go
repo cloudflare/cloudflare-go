@@ -4,6 +4,7 @@ package ssl
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,10 +18,11 @@ import (
 )
 
 // VerificationService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewVerificationService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewVerificationService] method instead.
 type VerificationService struct {
 	Options []option.RequestOption
 }
@@ -41,6 +43,14 @@ func NewVerificationService(opts ...option.RequestOption) (r *VerificationServic
 func (r *VerificationService) Edit(ctx context.Context, certificatePackID string, params VerificationEditParams, opts ...option.RequestOption) (res *VerificationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VerificationEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if certificatePackID == "" {
+		err = errors.New("missing required certificate_pack_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/verification/%s", params.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +64,10 @@ func (r *VerificationService) Edit(ctx context.Context, certificatePackID string
 func (r *VerificationService) Get(ctx context.Context, params VerificationGetParams, opts ...option.RequestOption) (res *[]Verification, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VerificationGetResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/verification", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

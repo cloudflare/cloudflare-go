@@ -4,6 +4,7 @@ package event_notifications
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -17,10 +18,11 @@ import (
 )
 
 // R2ConfigurationQueueService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewR2ConfigurationQueueService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewR2ConfigurationQueueService] method instead.
 type R2ConfigurationQueueService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,18 @@ func NewR2ConfigurationQueueService(opts ...option.RequestOption) (r *R2Configur
 func (r *R2ConfigurationQueueService) Update(ctx context.Context, bucketName string, queueID string, params R2ConfigurationQueueUpdateParams, opts ...option.RequestOption) (res *R2ConfigurationQueueUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2ConfigurationQueueUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", params.AccountID, bucketName, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +67,18 @@ func (r *R2ConfigurationQueueService) Update(ctx context.Context, bucketName str
 func (r *R2ConfigurationQueueService) Delete(ctx context.Context, bucketName string, queueID string, body R2ConfigurationQueueDeleteParams, opts ...option.RequestOption) (res *R2ConfigurationQueueDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2ConfigurationQueueDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", body.AccountID, bucketName, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {

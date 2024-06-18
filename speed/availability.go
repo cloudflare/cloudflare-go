@@ -4,6 +4,7 @@ package speed
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -14,10 +15,11 @@ import (
 )
 
 // AvailabilityService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAvailabilityService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAvailabilityService] method instead.
 type AvailabilityService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +37,10 @@ func NewAvailabilityService(opts ...option.RequestOption) (r *AvailabilityServic
 func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListParams, opts ...option.RequestOption) (res *Availability, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailabilityListResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/speed_api/availabilities", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

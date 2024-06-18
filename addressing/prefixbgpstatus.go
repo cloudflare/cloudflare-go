@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // PrefixBGPStatusService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewPrefixBGPStatusService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewPrefixBGPStatusService] method instead.
 type PrefixBGPStatusService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +39,14 @@ func NewPrefixBGPStatusService(opts ...option.RequestOption) (r *PrefixBGPStatus
 func (r *PrefixBGPStatusService) Edit(ctx context.Context, prefixID string, params PrefixBGPStatusEditParams, opts ...option.RequestOption) (res *PrefixBGPStatusEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPStatusEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", params.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +60,14 @@ func (r *PrefixBGPStatusService) Edit(ctx context.Context, prefixID string, para
 func (r *PrefixBGPStatusService) Get(ctx context.Context, prefixID string, query PrefixBGPStatusGetParams, opts ...option.RequestOption) (res *PrefixBGPStatusGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPStatusGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", query.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

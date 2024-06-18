@@ -4,6 +4,7 @@ package calls
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,11 +18,14 @@ import (
 )
 
 // CallService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewCallService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewCallService] method instead.
 type CallService struct {
 	Options []option.RequestOption
+	TURN    *TURNService
 }
 
 // NewCallService generates a new service that applies the given options to each
@@ -30,6 +34,7 @@ type CallService struct {
 func NewCallService(opts ...option.RequestOption) (r *CallService) {
 	r = &CallService{}
 	r.Options = opts
+	r.TURN = NewTURNService(opts...)
 	return
 }
 
@@ -38,6 +43,10 @@ func NewCallService(opts ...option.RequestOption) (r *CallService) {
 func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...option.RequestOption) (res *CallsAppWithSecret, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +60,14 @@ func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...opt
 func (r *CallService) Update(ctx context.Context, appID string, params CallUpdateParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -61,7 +78,7 @@ func (r *CallService) Update(ctx context.Context, appID string, params CallUpdat
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CallsApp], err error) {
+func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +96,7 @@ func (r *CallService) List(ctx context.Context, query CallListParams, opts ...op
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CallsApp] {
+func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -87,6 +104,14 @@ func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, 
 func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", body.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -100,6 +125,14 @@ func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteP
 func (r *CallService) Get(ctx context.Context, appID string, query CallGetParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", query.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -146,7 +179,7 @@ type CallsAppWithSecret struct {
 	Modified time.Time `json:"modified" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
 	Name string `json:"name"`
-	// Bearer token to use the Calls API.
+	// Bearer token
 	Secret string `json:"secret"`
 	// A Cloudflare-generated unique identifier for a item.
 	UID  string                 `json:"uid"`

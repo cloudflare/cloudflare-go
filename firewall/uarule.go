@@ -4,6 +4,7 @@ package firewall
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -20,9 +21,11 @@ import (
 )
 
 // UARuleService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewUARuleService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewUARuleService] method instead.
 type UARuleService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +43,10 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *UARuleNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -53,6 +60,14 @@ func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UAR
 func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *UARuleUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleUpdateResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -91,6 +106,14 @@ func (r *UARuleService) ListAutoPaging(ctx context.Context, zoneIdentifier strin
 func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleDeleteResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -104,6 +127,14 @@ func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id st
 func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

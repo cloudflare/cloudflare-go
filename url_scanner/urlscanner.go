@@ -4,6 +4,7 @@ package url_scanner
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,9 +18,11 @@ import (
 )
 
 // URLScannerService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewURLScannerService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewURLScannerService] method instead.
 type URLScannerService struct {
 	Options []option.RequestOption
 	Scans   *ScanService
@@ -44,6 +47,10 @@ func NewURLScannerService(opts ...option.RequestOption) (r *URLScannerService) {
 func (r *URLScannerService) Scan(ctx context.Context, accountID string, query URLScannerScanParams, opts ...option.RequestOption) (res *URLScannerScanResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env URLScannerScanResponseEnvelope
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

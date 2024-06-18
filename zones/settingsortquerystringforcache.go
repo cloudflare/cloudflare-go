@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // SettingSortQueryStringForCacheService contains methods and other services that
-// help with interacting with the cloudflare API. Note, unlike clients, this
-// service does not read variables from the environment automatically. You should
-// not instantiate this service directly, and instead use the
-// [NewSettingSortQueryStringForCacheService] method instead.
+// help with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingSortQueryStringForCacheService] method instead.
 type SettingSortQueryStringForCacheService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,10 @@ func NewSettingSortQueryStringForCacheService(opts ...option.RequestOption) (r *
 func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, params SettingSortQueryStringForCacheEditParams, opts ...option.RequestOption) (res *SortQueryStringForCache, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSortQueryStringForCacheEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +60,10 @@ func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, params
 func (r *SettingSortQueryStringForCacheService) Get(ctx context.Context, query SettingSortQueryStringForCacheGetParams, opts ...option.RequestOption) (res *SortQueryStringForCache, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSortQueryStringForCacheGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

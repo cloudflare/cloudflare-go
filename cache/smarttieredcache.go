@@ -4,23 +4,24 @@ package cache
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // SmartTieredCacheService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewSmartTieredCacheService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSmartTieredCacheService] method instead.
 type SmartTieredCacheService struct {
 	Options []option.RequestOption
 }
@@ -35,9 +36,13 @@ func NewSmartTieredCacheService(opts ...option.RequestOption) (r *SmartTieredCac
 }
 
 // Remvoves enablement of Smart Tiered Cache
-func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCacheDeleteParams, opts ...option.RequestOption) (res *SmartTieredCacheDeleteResponseUnion, err error) {
+func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCacheDeleteParams, opts ...option.RequestOption) (res *SmartTieredCacheDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -48,9 +53,13 @@ func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCa
 }
 
 // Updates enablement of Tiered Cache
-func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCacheEditParams, opts ...option.RequestOption) (res *SmartTieredCacheEditResponseUnion, err error) {
+func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCacheEditParams, opts ...option.RequestOption) (res *SmartTieredCacheEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -61,9 +70,13 @@ func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCa
 }
 
 // Get Smart Tiered Cache setting
-func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCacheGetParams, opts ...option.RequestOption) (res *SmartTieredCacheGetResponseUnion, err error) {
+func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCacheGetParams, opts ...option.RequestOption) (res *SmartTieredCacheGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -73,55 +86,145 @@ func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCach
 	return
 }
 
-// Union satisfied by [cache.SmartTieredCacheDeleteResponseUnknown] or
-// [shared.UnionString].
-type SmartTieredCacheDeleteResponseUnion interface {
-	ImplementsCacheSmartTieredCacheDeleteResponseUnion()
+type SmartTieredCacheDeleteResponse struct {
+	// The identifier of the caching setting
+	ID string `json:"id,required"`
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The time when the setting was last modified
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The status of the feature being on / off
+	Value SmartTieredCacheDeleteResponseValue `json:"value,required"`
+	JSON  smartTieredCacheDeleteResponseJSON  `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SmartTieredCacheDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// smartTieredCacheDeleteResponseJSON contains the JSON metadata for the struct
+// [SmartTieredCacheDeleteResponse]
+type smartTieredCacheDeleteResponseJSON struct {
+	ID          apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-// Union satisfied by [cache.SmartTieredCacheEditResponseUnknown] or
-// [shared.UnionString].
-type SmartTieredCacheEditResponseUnion interface {
-	ImplementsCacheSmartTieredCacheEditResponseUnion()
+func (r *SmartTieredCacheDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SmartTieredCacheEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r smartTieredCacheDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
-// Union satisfied by [cache.SmartTieredCacheGetResponseUnknown] or
-// [shared.UnionString].
-type SmartTieredCacheGetResponseUnion interface {
-	ImplementsCacheSmartTieredCacheGetResponseUnion()
+// The status of the feature being on / off
+type SmartTieredCacheDeleteResponseValue string
+
+const (
+	SmartTieredCacheDeleteResponseValueOn  SmartTieredCacheDeleteResponseValue = "on"
+	SmartTieredCacheDeleteResponseValueOff SmartTieredCacheDeleteResponseValue = "off"
+)
+
+func (r SmartTieredCacheDeleteResponseValue) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheDeleteResponseValueOn, SmartTieredCacheDeleteResponseValueOff:
+		return true
+	}
+	return false
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SmartTieredCacheGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+type SmartTieredCacheEditResponse struct {
+	// The identifier of the caching setting
+	ID string `json:"id,required"`
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The time when the setting was last modified
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The status of the feature being on / off
+	Value SmartTieredCacheEditResponseValue `json:"value,required"`
+	JSON  smartTieredCacheEditResponseJSON  `json:"-"`
+}
+
+// smartTieredCacheEditResponseJSON contains the JSON metadata for the struct
+// [SmartTieredCacheEditResponse]
+type smartTieredCacheEditResponseJSON struct {
+	ID          apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SmartTieredCacheEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r smartTieredCacheEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The status of the feature being on / off
+type SmartTieredCacheEditResponseValue string
+
+const (
+	SmartTieredCacheEditResponseValueOn  SmartTieredCacheEditResponseValue = "on"
+	SmartTieredCacheEditResponseValueOff SmartTieredCacheEditResponseValue = "off"
+)
+
+func (r SmartTieredCacheEditResponseValue) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheEditResponseValueOn, SmartTieredCacheEditResponseValueOff:
+		return true
+	}
+	return false
+}
+
+type SmartTieredCacheGetResponse struct {
+	// The identifier of the caching setting
+	ID string `json:"id,required"`
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The time when the setting was last modified
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The status of the feature being on / off
+	Value SmartTieredCacheGetResponseValue `json:"value,required"`
+	JSON  smartTieredCacheGetResponseJSON  `json:"-"`
+}
+
+// smartTieredCacheGetResponseJSON contains the JSON metadata for the struct
+// [SmartTieredCacheGetResponse]
+type smartTieredCacheGetResponseJSON struct {
+	ID          apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SmartTieredCacheGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r smartTieredCacheGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The status of the feature being on / off
+type SmartTieredCacheGetResponseValue string
+
+const (
+	SmartTieredCacheGetResponseValueOn  SmartTieredCacheGetResponseValue = "on"
+	SmartTieredCacheGetResponseValueOff SmartTieredCacheGetResponseValue = "off"
+)
+
+func (r SmartTieredCacheGetResponseValue) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheGetResponseValueOn, SmartTieredCacheGetResponseValueOff:
+		return true
+	}
+	return false
 }
 
 type SmartTieredCacheDeleteParams struct {
@@ -130,9 +233,9 @@ type SmartTieredCacheDeleteParams struct {
 }
 
 type SmartTieredCacheDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   SmartTieredCacheDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   SmartTieredCacheDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartTieredCacheDeleteResponseEnvelopeJSON    `json:"-"`
@@ -175,7 +278,7 @@ func (r SmartTieredCacheDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type SmartTieredCacheEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Enables Tiered Cache.
+	// Enable or disable the Smart Tiered Cache
 	Value param.Field[SmartTieredCacheEditParamsValue] `json:"value,required"`
 }
 
@@ -183,7 +286,7 @@ func (r SmartTieredCacheEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Enables Tiered Cache.
+// Enable or disable the Smart Tiered Cache
 type SmartTieredCacheEditParamsValue string
 
 const (
@@ -200,9 +303,9 @@ func (r SmartTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type SmartTieredCacheEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   SmartTieredCacheEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   SmartTieredCacheEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartTieredCacheEditResponseEnvelopeJSON    `json:"-"`
@@ -248,9 +351,9 @@ type SmartTieredCacheGetParams struct {
 }
 
 type SmartTieredCacheGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   SmartTieredCacheGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   SmartTieredCacheGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartTieredCacheGetResponseEnvelopeJSON    `json:"-"`

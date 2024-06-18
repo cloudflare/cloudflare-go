@@ -4,6 +4,7 @@ package dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,10 +19,11 @@ import (
 )
 
 // AnalyticsReportBytimeService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAnalyticsReportBytimeService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAnalyticsReportBytimeService] method instead.
 type AnalyticsReportBytimeService struct {
 	Options []option.RequestOption
 }
@@ -43,6 +45,10 @@ func NewAnalyticsReportBytimeService(opts ...option.RequestOption) (r *Analytics
 func (r *AnalyticsReportBytimeService) Get(ctx context.Context, params AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *ByTime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsReportBytimeGetResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_analytics/report/bytime", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

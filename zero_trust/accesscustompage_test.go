@@ -27,18 +27,15 @@ func TestAccessCustomPageNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.CustomPages.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		zero_trust.AccessCustomPageNewParams{
-			CustomPage: zero_trust.CustomPageParam{
-				AppCount:   cloudflare.F(int64(0)),
-				CustomHTML: cloudflare.F("<html><body><h1>Access Denied</h1></body></html>"),
-				Name:       cloudflare.F("string"),
-				Type:       cloudflare.F(zero_trust.CustomPageTypeIdentityDenied),
-			},
+	_, err := client.ZeroTrust.Access.CustomPages.New(context.TODO(), zero_trust.AccessCustomPageNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		CustomPage: zero_trust.CustomPageParam{
+			AppCount:   cloudflare.F(int64(0)),
+			CustomHTML: cloudflare.F("<html><body><h1>Access Denied</h1></body></html>"),
+			Name:       cloudflare.F("string"),
+			Type:       cloudflare.F(zero_trust.CustomPageTypeIdentityDenied),
 		},
-	)
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,9 +60,9 @@ func TestAccessCustomPageUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.CustomPages.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessCustomPageUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CustomPage: zero_trust.CustomPageParam{
 				AppCount:   cloudflare.F(int64(0)),
 				CustomHTML: cloudflare.F("<html><body><h1>Access Denied</h1></body></html>"),
@@ -96,7 +93,9 @@ func TestAccessCustomPageList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.CustomPages.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.ZeroTrust.Access.CustomPages.List(context.TODO(), zero_trust.AccessCustomPageListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -121,8 +120,10 @@ func TestAccessCustomPageDelete(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.CustomPages.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.AccessCustomPageDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -148,8 +149,10 @@ func TestAccessCustomPageGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.CustomPages.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.AccessCustomPageGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

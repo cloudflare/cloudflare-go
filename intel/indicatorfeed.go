@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,10 +18,11 @@ import (
 )
 
 // IndicatorFeedService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewIndicatorFeedService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewIndicatorFeedService] method instead.
 type IndicatorFeedService struct {
 	Options     []option.RequestOption
 	Snapshots   *IndicatorFeedSnapshotService
@@ -42,6 +44,10 @@ func NewIndicatorFeedService(opts ...option.RequestOption) (r *IndicatorFeedServ
 func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewParams, opts ...option.RequestOption) (res *IndicatorFeedNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -55,6 +61,10 @@ func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewP
 func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params IndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", params.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -91,6 +101,10 @@ func (r *IndicatorFeedService) ListAutoPaging(ctx context.Context, query Indicat
 func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query IndicatorFeedDataParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/data", query.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
@@ -100,6 +114,10 @@ func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query Ind
 func (r *IndicatorFeedService) Get(ctx context.Context, feedID int64, query IndicatorFeedGetParams, opts ...option.RequestOption) (res *IndicatorFeedGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", query.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -236,13 +254,21 @@ type IndicatorFeedGetResponse struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The description of the example test
 	Description string `json:"description"`
+	// Whether the indicator feed can be attributed to a provider
+	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed is exposed to customers
+	IsPublic bool `json:"is_public"`
 	// Status of the latest snapshot uploaded
 	LatestUploadStatus IndicatorFeedGetResponseLatestUploadStatus `json:"latest_upload_status"`
 	// The date and time when the data entry was last modified
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The name of the indicator feed
-	Name string                       `json:"name"`
-	JSON indicatorFeedGetResponseJSON `json:"-"`
+	Name string `json:"name"`
+	// The unique identifier for the provider
+	ProviderID string `json:"provider_id"`
+	// The provider of the indicator feed
+	ProviderName string                       `json:"provider_name"`
+	JSON         indicatorFeedGetResponseJSON `json:"-"`
 }
 
 // indicatorFeedGetResponseJSON contains the JSON metadata for the struct
@@ -251,9 +277,13 @@ type indicatorFeedGetResponseJSON struct {
 	ID                 apijson.Field
 	CreatedOn          apijson.Field
 	Description        apijson.Field
+	IsAttributable     apijson.Field
+	IsPublic           apijson.Field
 	LatestUploadStatus apijson.Field
 	ModifiedOn         apijson.Field
 	Name               apijson.Field
+	ProviderID         apijson.Field
+	ProviderName       apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -346,11 +376,13 @@ type IndicatorFeedUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The new description of the feed
-	FeedDescription param.Field[string] `json:"feed_description"`
+	Description param.Field[string] `json:"description"`
 	// The new is_attributable value of the feed
 	IsAttributable param.Field[bool] `json:"is_attributable"`
 	// The new is_public value of the feed
 	IsPublic param.Field[bool] `json:"is_public"`
+	// The new name of the feed
+	Name param.Field[string] `json:"name"`
 }
 
 func (r IndicatorFeedUpdateParams) MarshalJSON() (data []byte, err error) {

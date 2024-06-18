@@ -4,6 +4,7 @@ package firewall
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -22,9 +23,11 @@ import (
 )
 
 // RuleService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewRuleService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRuleService] method instead.
 type RuleService struct {
 	Options []option.RequestOption
 }
@@ -39,9 +42,18 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 }
 
 // Create one or more firewall rules.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -52,9 +64,22 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 }
 
 // Updates an existing firewall rule.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id string, body RuleUpdateParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -66,6 +91,11 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id stri
 
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -85,14 +115,32 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query Rul
 
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallRule] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing firewall rule.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -103,9 +151,22 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id stri
 }
 
 // Updates the priority of an existing firewall rule.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body RuleEditParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -116,9 +177,22 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string
 }
 
 // Fetches the details of a firewall rule.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
+	if params.PathID.Value == "" {
+		err = errors.New("missing required path_id parameter")
+		return
+	}
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, params.PathID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -142,8 +216,8 @@ type FirewallRule struct {
 	// The priority of the rule. Optional value used to define the processing order. A
 	// lower number indicates a higher priority. If not provided, rules with a defined
 	// priority will be processed before rules without a priority.
-	Priority float64    `json:"priority"`
-	Products []Products `json:"products"`
+	Priority float64   `json:"priority"`
+	Products []Product `json:"products"`
 	// A short reference tag. Allows you to select related firewall rules.
 	Ref  string           `json:"ref"`
 	JSON firewallRuleJSON `json:"-"`
@@ -239,21 +313,21 @@ func init() {
 }
 
 // A list of products to bypass for a request when using the `bypass` action.
-type Products string
+type Product string
 
 const (
-	ProductsZoneLockdown  Products = "zoneLockdown"
-	ProductsUABlock       Products = "uaBlock"
-	ProductsBic           Products = "bic"
-	ProductsHot           Products = "hot"
-	ProductsSecurityLevel Products = "securityLevel"
-	ProductsRateLimit     Products = "rateLimit"
-	ProductsWAF           Products = "waf"
+	ProductZoneLockdown  Product = "zoneLockdown"
+	ProductUABlock       Product = "uaBlock"
+	ProductBic           Product = "bic"
+	ProductHot           Product = "hot"
+	ProductSecurityLevel Product = "securityLevel"
+	ProductRateLimit     Product = "rateLimit"
+	ProductWAF           Product = "waf"
 )
 
-func (r Products) IsKnown() bool {
+func (r Product) IsKnown() bool {
 	switch r {
-	case ProductsZoneLockdown, ProductsUABlock, ProductsBic, ProductsHot, ProductsSecurityLevel, ProductsRateLimit, ProductsWAF:
+	case ProductZoneLockdown, ProductUABlock, ProductBic, ProductHot, ProductSecurityLevel, ProductRateLimit, ProductWAF:
 		return true
 	}
 	return false

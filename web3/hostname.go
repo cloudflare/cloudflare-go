@@ -4,6 +4,7 @@ package web3
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,9 +18,11 @@ import (
 )
 
 // HostnameService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewHostnameService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHostnameService] method instead.
 type HostnameService struct {
 	Options            []option.RequestOption
 	IPFSUniversalPaths *HostnameIPFSUniversalPathService
@@ -39,6 +42,10 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body HostnameNewParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -75,6 +82,14 @@ func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier str
 func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameDeleteResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -88,6 +103,14 @@ func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, ide
 func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body HostnameEditParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameEditResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -101,6 +124,14 @@ func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, ident
 func (r *HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

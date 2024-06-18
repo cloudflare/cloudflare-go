@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // SettingBrowserCheckService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewSettingBrowserCheckService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingBrowserCheckService] method instead.
 type SettingBrowserCheckService struct {
 	Options []option.RequestOption
 }
@@ -41,6 +43,10 @@ func NewSettingBrowserCheckService(opts ...option.RequestOption) (r *SettingBrow
 func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBrowserCheckEditParams, opts ...option.RequestOption) (res *BrowserCheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCheckEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/browser_check", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -58,6 +64,10 @@ func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBro
 func (r *SettingBrowserCheckService) Get(ctx context.Context, query SettingBrowserCheckGetParams, opts ...option.RequestOption) (res *BrowserCheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCheckGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/browser_check", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

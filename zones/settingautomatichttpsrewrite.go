@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // SettingAutomaticHTTPSRewriteService contains methods and other services that
-// help with interacting with the cloudflare API. Note, unlike clients, this
-// service does not read variables from the environment automatically. You should
-// not instantiate this service directly, and instead use the
-// [NewSettingAutomaticHTTPSRewriteService] method instead.
+// help with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingAutomaticHTTPSRewriteService] method instead.
 type SettingAutomaticHTTPSRewriteService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +39,10 @@ func NewSettingAutomaticHTTPSRewriteService(opts ...option.RequestOption) (r *Se
 func (r *SettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, params SettingAutomaticHTTPSRewriteEditParams, opts ...option.RequestOption) (res *AutomaticHTTPSRewrites, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticHTTPSRewriteEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +56,10 @@ func (r *SettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, params S
 func (r *SettingAutomaticHTTPSRewriteService) Get(ctx context.Context, query SettingAutomaticHTTPSRewriteGetParams, opts ...option.RequestOption) (res *AutomaticHTTPSRewrites, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticHTTPSRewriteGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

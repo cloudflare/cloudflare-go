@@ -4,6 +4,7 @@ package magic_network_monitoring
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // ConfigFullService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewConfigFullService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewConfigFullService] method instead.
 type ConfigFullService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigFullGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/mnm/config/full", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

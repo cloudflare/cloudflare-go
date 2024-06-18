@@ -4,6 +4,7 @@ package logpush
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // DatasetFieldService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDatasetFieldService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDatasetFieldService] method instead.
 type DatasetFieldService struct {
 	Options []option.RequestOption
 }
@@ -39,12 +41,25 @@ func (r *DatasetFieldService) Get(ctx context.Context, datasetID string, query D
 	var env DatasetFieldGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
+	}
+	if datasetID == "" {
+		err = errors.New("missing required dataset_id parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/fields", accountOrZone, accountOrZoneID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)

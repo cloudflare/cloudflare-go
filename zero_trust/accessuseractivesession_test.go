@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
 func TestAccessUserActiveSessionList(t *testing.T) {
@@ -28,8 +29,10 @@ func TestAccessUserActiveSessionList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Users.ActiveSessions.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.AccessUserActiveSessionListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -55,9 +58,11 @@ func TestAccessUserActiveSessionGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Users.ActiveSessions.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"X1aXj1lFVcqqyoXF",
+		zero_trust.AccessUserActiveSessionGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // DEXTracerouteTestResultNetworkPathService contains methods and other services
-// that help with interacting with the cloudflare API. Note, unlike clients, this
-// service does not read variables from the environment automatically. You should
-// not instantiate this service directly, and instead use the
-// [NewDEXTracerouteTestResultNetworkPathService] method instead.
+// that help with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDEXTracerouteTestResultNetworkPathService] method instead.
 type DEXTracerouteTestResultNetworkPathService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +40,14 @@ func NewDEXTracerouteTestResultNetworkPathService(opts ...option.RequestOption) 
 func (r *DEXTracerouteTestResultNetworkPathService) Get(ctx context.Context, testResultID string, query DEXTracerouteTestResultNetworkPathGetParams, opts ...option.RequestOption) (res *DEXTracerouteTestResultNetworkPathGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestResultNetworkPathGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if testResultID == "" {
+		err = errors.New("missing required test_result_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-test-results/%s/network-path", query.AccountID, testResultID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -52,8 +62,6 @@ type DEXTracerouteTestResultNetworkPathGetResponse struct {
 	Hops []DEXTracerouteTestResultNetworkPathGetResponseHop `json:"hops,required"`
 	// API Resource UUID tag.
 	ResultID string `json:"resultId,required"`
-	// date time of this traceroute test
-	TimeStart string `json:"time_start,required"`
 	// name of the device associated with this network path response
 	DeviceName string `json:"deviceName"`
 	// API Resource UUID tag.
@@ -68,7 +76,6 @@ type DEXTracerouteTestResultNetworkPathGetResponse struct {
 type dexTracerouteTestResultNetworkPathGetResponseJSON struct {
 	Hops        apijson.Field
 	ResultID    apijson.Field
-	TimeStart   apijson.Field
 	DeviceName  apijson.Field
 	TestID      apijson.Field
 	TestName    apijson.Field

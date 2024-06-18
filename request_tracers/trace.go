@@ -4,6 +4,7 @@ package request_tracers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // TraceService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewTraceService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewTraceService] method instead.
 type TraceService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewTraceService(opts ...option.RequestOption) (r *TraceService) {
 func (r *TraceService) New(ctx context.Context, params TraceNewParams, opts ...option.RequestOption) (res *TraceNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TraceNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/request-tracer/trace", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package pages
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,10 +19,11 @@ import (
 )
 
 // ProjectDeploymentService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewProjectDeploymentService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewProjectDeploymentService] method instead.
 type ProjectDeploymentService struct {
 	Options []option.RequestOption
 	History *ProjectDeploymentHistoryService
@@ -42,6 +44,14 @@ func NewProjectDeploymentService(opts ...option.RequestOption) (r *ProjectDeploy
 func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, params ProjectDeploymentNewParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", params.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -77,6 +87,18 @@ func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectNa
 // Delete a deployment.
 func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
+	if deploymentID == "" {
+		err = errors.New("missing required deployment_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", body.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -86,6 +108,18 @@ func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName strin
 func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentGetParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
+	if deploymentID == "" {
+		err = errors.New("missing required deployment_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", query.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -99,6 +133,18 @@ func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, 
 func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentRetryParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentRetryResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
+	if deploymentID == "" {
+		err = errors.New("missing required deployment_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", params.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -113,6 +159,18 @@ func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string
 func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentRollbackParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentRollbackResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
+	if deploymentID == "" {
+		err = errors.New("missing required deployment_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", params.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

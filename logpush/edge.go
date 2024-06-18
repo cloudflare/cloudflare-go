@@ -4,6 +4,7 @@ package logpush
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // EdgeService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewEdgeService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewEdgeService] method instead.
 type EdgeService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewEdgeService(opts ...option.RequestOption) (r *EdgeService) {
 func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...option.RequestOption) (res *InstantLogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EdgeNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/logpush/edge", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -48,6 +55,10 @@ func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...opt
 func (r *EdgeService) Get(ctx context.Context, query EdgeGetParams, opts ...option.RequestOption) (res *[]InstantLogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EdgeGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/logpush/edge", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

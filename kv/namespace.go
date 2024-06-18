@@ -4,10 +4,10 @@ package kv
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,13 +16,14 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // NamespaceService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewNamespaceService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewNamespaceService] method instead.
 type NamespaceService struct {
 	Options  []option.RequestOption
 	Bulk     *NamespaceBulkService
@@ -50,6 +51,10 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -60,9 +65,17 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 }
 
 // Modifies a namespace's title.
-func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponseUnion, err error) {
+func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", params.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -96,11 +109,40 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceL
 }
 
 // Deletes the namespace corresponding to the given ID.
-func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponseUnion, err error) {
+func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", body.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get the namespace corresponding to the given ID.
+func (r *NamespaceService) Get(ctx context.Context, namespaceID string, query NamespaceGetParams, opts ...option.RequestOption) (res *Namespace, err error) {
+	opts = append(r.Options[:], opts...)
+	var env NamespaceGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", query.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -136,36 +178,42 @@ func (r namespaceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [kv.NamespaceUpdateResponseUnknown] or [shared.UnionString].
-type NamespaceUpdateResponseUnion interface {
-	ImplementsKVNamespaceUpdateResponseUnion()
+type NamespaceUpdateResponse struct {
+	JSON namespaceUpdateResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// namespaceUpdateResponseJSON contains the JSON metadata for the struct
+// [NamespaceUpdateResponse]
+type namespaceUpdateResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-// Union satisfied by [kv.NamespaceDeleteResponseUnknown] or [shared.UnionString].
-type NamespaceDeleteResponseUnion interface {
-	ImplementsKVNamespaceDeleteResponseUnion()
+func (r *NamespaceUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r namespaceUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceDeleteResponse struct {
+	JSON namespaceDeleteResponseJSON `json:"-"`
+}
+
+// namespaceDeleteResponseJSON contains the JSON metadata for the struct
+// [NamespaceDeleteResponse]
+type namespaceDeleteResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type NamespaceNewParams struct {
@@ -182,9 +230,9 @@ func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
 type NamespaceNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Namespace             `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Namespace                           `json:"result"`
 	JSON    namespaceNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -193,8 +241,8 @@ type NamespaceNewResponseEnvelope struct {
 type namespaceNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -234,11 +282,11 @@ func (r NamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   NamespaceUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  NamespaceUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -247,8 +295,8 @@ type NamespaceUpdateResponseEnvelope struct {
 type namespaceUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -335,11 +383,11 @@ type NamespaceDeleteParams struct {
 }
 
 type NamespaceDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   NamespaceDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  NamespaceDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -348,8 +396,8 @@ type NamespaceDeleteResponseEnvelope struct {
 type namespaceDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -372,6 +420,54 @@ const (
 func (r NamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case NamespaceDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type NamespaceGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type NamespaceGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success NamespaceGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Namespace                           `json:"result"`
+	JSON    namespaceGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// namespaceGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [NamespaceGetResponseEnvelope]
+type namespaceGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type NamespaceGetResponseEnvelopeSuccess bool
+
+const (
+	NamespaceGetResponseEnvelopeSuccessTrue NamespaceGetResponseEnvelopeSuccess = true
+)
+
+func (r NamespaceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

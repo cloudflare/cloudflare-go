@@ -4,6 +4,7 @@ package url_normalization
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -14,10 +15,11 @@ import (
 )
 
 // URLNormalizationService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewURLNormalizationService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewURLNormalizationService] method instead.
 type URLNormalizationService struct {
 	Options []option.RequestOption
 }
@@ -34,6 +36,10 @@ func NewURLNormalizationService(opts ...option.RequestOption) (r *URLNormalizati
 // Updates the URL normalization settings.
 func (r *URLNormalizationService) Update(ctx context.Context, params URLNormalizationUpdateParams, opts ...option.RequestOption) (res *URLNormalizationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/url_normalization", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
@@ -42,6 +48,10 @@ func (r *URLNormalizationService) Update(ctx context.Context, params URLNormaliz
 // Fetches the current URL normalization settings.
 func (r *URLNormalizationService) Get(ctx context.Context, query URLNormalizationGetParams, opts ...option.RequestOption) (res *URLNormalizationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/url_normalization", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

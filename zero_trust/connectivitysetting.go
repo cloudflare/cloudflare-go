@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // ConnectivitySettingService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewConnectivitySettingService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewConnectivitySettingService] method instead.
 type ConnectivitySettingService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,10 @@ func NewConnectivitySettingService(opts ...option.RequestOption) (r *Connectivit
 func (r *ConnectivitySettingService) Edit(ctx context.Context, params ConnectivitySettingEditParams, opts ...option.RequestOption) (res *ConnectivitySettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectivitySettingEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -49,6 +55,10 @@ func (r *ConnectivitySettingService) Edit(ctx context.Context, params Connectivi
 func (r *ConnectivitySettingService) Get(ctx context.Context, query ConnectivitySettingGetParams, opts ...option.RequestOption) (res *ConnectivitySettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectivitySettingGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

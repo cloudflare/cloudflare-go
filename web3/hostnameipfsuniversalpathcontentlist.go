@@ -4,6 +4,7 @@ package web3
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // HostnameIPFSUniversalPathContentListService contains methods and other services
-// that help with interacting with the cloudflare API. Note, unlike clients, this
-// service does not read variables from the environment automatically. You should
-// not instantiate this service directly, and instead use the
-// [NewHostnameIPFSUniversalPathContentListService] method instead.
+// that help with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHostnameIPFSUniversalPathContentListService] method instead.
 type HostnameIPFSUniversalPathContentListService struct {
 	Options []option.RequestOption
 	Entries *HostnameIPFSUniversalPathContentListEntryService
@@ -39,6 +41,14 @@ func NewHostnameIPFSUniversalPathContentListService(opts ...option.RequestOption
 func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListUpdateParams, opts ...option.RequestOption) (res *ContentList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListUpdateResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -52,6 +62,14 @@ func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context
 func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ContentList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

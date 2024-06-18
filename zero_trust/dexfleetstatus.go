@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,10 +18,11 @@ import (
 )
 
 // DEXFleetStatusService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDEXFleetStatusService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDEXFleetStatusService] method instead.
 type DEXFleetStatusService struct {
 	Options []option.RequestOption
 	Devices *DEXFleetStatusDeviceService
@@ -40,6 +42,10 @@ func NewDEXFleetStatusService(opts ...option.RequestOption) (r *DEXFleetStatusSe
 func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusLiveParams, opts ...option.RequestOption) (res *DEXFleetStatusLiveResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXFleetStatusLiveResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/live", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +59,10 @@ func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusL
 func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetStatusOverTimeParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/over-time", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, nil, opts...)
 	return
@@ -195,9 +205,9 @@ func (r DEXFleetStatusLiveResponseEnvelopeSuccess) IsKnown() bool {
 type DEXFleetStatusOverTimeParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Timestamp in ISO format
-	TimeEnd param.Field[string] `query:"time_end,required"`
+	From param.Field[string] `query:"from,required"`
 	// Timestamp in ISO format
-	TimeStart param.Field[string] `query:"time_start,required"`
+	To param.Field[string] `query:"to,required"`
 	// Cloudflare colo
 	Colo param.Field[string] `query:"colo"`
 	// Device-specific ID, given as UUID v4

@@ -4,6 +4,7 @@ package pcaps
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // OwnershipService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewOwnershipService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewOwnershipService] method instead.
 type OwnershipService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewOwnershipService(opts ...option.RequestOption) (r *OwnershipService) {
 func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, opts ...option.RequestOption) (res *Ownership, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OwnershipNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -48,6 +55,14 @@ func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, o
 func (r *OwnershipService) Delete(ctx context.Context, ownershipID string, body OwnershipDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ownershipID == "" {
+		err = errors.New("missing required ownership_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/%s", body.AccountID, ownershipID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
@@ -57,6 +72,10 @@ func (r *OwnershipService) Delete(ctx context.Context, ownershipID string, body 
 func (r *OwnershipService) Get(ctx context.Context, query OwnershipGetParams, opts ...option.RequestOption) (res *[]Ownership, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OwnershipGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -70,6 +89,10 @@ func (r *OwnershipService) Get(ctx context.Context, query OwnershipGetParams, op
 func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *Ownership, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OwnershipValidateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/validate", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

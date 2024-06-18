@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,10 +18,11 @@ import (
 )
 
 // AccessGroupService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAccessGroupService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessGroupService] method instead.
 type AccessGroupService struct {
 	Options []option.RequestOption
 }
@@ -40,10 +42,19 @@ func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParam
 	var env AccessGroupNewResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
@@ -57,19 +68,32 @@ func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParam
 }
 
 // Updates a configured Access group.
-func (r *AccessGroupService) Update(ctx context.Context, uuid string, params AccessGroupUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
+func (r *AccessGroupService) Update(ctx context.Context, groupID string, params AccessGroupUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessGroupUpdateResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, uuid)
+	if groupID == "" {
+		err = errors.New("missing required group_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -85,10 +109,19 @@ func (r *AccessGroupService) List(ctx context.Context, query AccessGroupListPara
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
@@ -111,19 +144,32 @@ func (r *AccessGroupService) ListAutoPaging(ctx context.Context, query AccessGro
 }
 
 // Deletes an Access group.
-func (r *AccessGroupService) Delete(ctx context.Context, uuid string, body AccessGroupDeleteParams, opts ...option.RequestOption) (res *AccessGroupDeleteResponse, err error) {
+func (r *AccessGroupService) Delete(ctx context.Context, groupID string, body AccessGroupDeleteParams, opts ...option.RequestOption) (res *AccessGroupDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessGroupDeleteResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = body.AccountID
-	} else {
+	}
+	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, uuid)
+	if groupID == "" {
+		err = errors.New("missing required group_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -133,19 +179,32 @@ func (r *AccessGroupService) Delete(ctx context.Context, uuid string, body Acces
 }
 
 // Fetches a single Access group.
-func (r *AccessGroupService) Get(ctx context.Context, uuid string, query AccessGroupGetParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
+func (r *AccessGroupService) Get(ctx context.Context, groupID string, query AccessGroupGetParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessGroupGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, uuid)
+	if groupID == "" {
+		err = errors.New("missing required group_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

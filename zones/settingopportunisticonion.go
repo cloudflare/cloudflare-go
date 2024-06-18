@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // SettingOpportunisticOnionService contains methods and other services that help
-// with interacting with the cloudflare API. Note, unlike clients, this service
-// does not read variables from the environment automatically. You should not
-// instantiate this service directly, and instead use the
-// [NewSettingOpportunisticOnionService] method instead.
+// with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingOpportunisticOnionService] method instead.
 type SettingOpportunisticOnionService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +40,10 @@ func NewSettingOpportunisticOnionService(opts ...option.RequestOption) (r *Setti
 func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, params SettingOpportunisticOnionEditParams, opts ...option.RequestOption) (res *OpportunisticOnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticOnionEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +58,10 @@ func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, params Sett
 func (r *SettingOpportunisticOnionService) Get(ctx context.Context, query SettingOpportunisticOnionGetParams, opts ...option.RequestOption) (res *OpportunisticOnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticOnionGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

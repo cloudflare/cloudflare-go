@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,9 +17,11 @@ import (
 )
 
 // SiteLANService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewSiteLANService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSiteLANService] method instead.
 type SiteLANService struct {
 	Options []option.RequestOption
 }
@@ -32,11 +35,19 @@ func NewSiteLANService(opts ...option.RequestOption) (r *SiteLANService) {
 	return
 }
 
-// Creates a new LAN. If the site is in high availability mode, static_addressing
-// is required along with secondary and virtual address.
+// Creates a new Site LAN. If the site is in high availability mode,
+// static_addressing is required along with secondary and virtual address.
 func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANNewParams, opts ...option.RequestOption) (res *[]LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -46,10 +57,22 @@ func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANN
 	return
 }
 
-// Update a specific LAN.
+// Update a specific Site LAN.
 func (r *SiteLANService) Update(ctx context.Context, siteID string, lanID string, params SiteLANUpdateParams, opts ...option.RequestOption) (res *LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if lanID == "" {
+		err = errors.New("missing required lan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", params.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -59,7 +82,7 @@ func (r *SiteLANService) Update(ctx context.Context, siteID string, lanID string
 	return
 }
 
-// Lists LANs associated with an account and site.
+// Lists Site LANs associated with an account.
 func (r *SiteLANService) List(ctx context.Context, siteID string, query SiteLANListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LAN], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -77,15 +100,27 @@ func (r *SiteLANService) List(ctx context.Context, siteID string, query SiteLANL
 	return res, nil
 }
 
-// Lists LANs associated with an account and site.
+// Lists Site LANs associated with an account.
 func (r *SiteLANService) ListAutoPaging(ctx context.Context, siteID string, query SiteLANListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LAN] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, siteID, query, opts...))
 }
 
-// Remove a specific LAN.
+// Remove a specific Site LAN.
 func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string, body SiteLANDeleteParams, opts ...option.RequestOption) (res *LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if lanID == "" {
+		err = errors.New("missing required lan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", body.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -95,10 +130,47 @@ func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string
 	return
 }
 
-// Get a specific LAN.
+// Patch a specific Site LAN.
+func (r *SiteLANService) Edit(ctx context.Context, siteID string, lanID string, params SiteLANEditParams, opts ...option.RequestOption) (res *LAN, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SiteLANEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if lanID == "" {
+		err = errors.New("missing required lan_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", params.AccountID, siteID, lanID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get a specific Site LAN.
 func (r *SiteLANService) Get(ctx context.Context, siteID string, lanID string, query SiteLANGetParams, opts ...option.RequestOption) (res *LAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if lanID == "" {
+		err = errors.New("missing required lan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", query.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -523,6 +595,68 @@ const (
 func (r SiteLANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SiteLANDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteLANEditParams struct {
+	// Identifier
+	AccountID     param.Field[string]              `path:"account_id,required"`
+	Name          param.Field[string]              `json:"name"`
+	Nat           param.Field[NatParam]            `json:"nat"`
+	Physport      param.Field[int64]               `json:"physport"`
+	RoutedSubnets param.Field[[]RoutedSubnetParam] `json:"routed_subnets"`
+	// If the site is not configured in high availability mode, this configuration is
+	// optional (if omitted, use DHCP). However, if in high availability mode,
+	// static_address is required along with secondary and virtual address.
+	StaticAddressing param.Field[LANStaticAddressingParam] `json:"static_addressing"`
+	// VLAN port number.
+	VlanTag param.Field[int64] `json:"vlan_tag"`
+}
+
+func (r SiteLANEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SiteLANEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LAN                   `json:"result,required"`
+	// Whether the API call was successful
+	Success SiteLANEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteLANEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// siteLANEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteLANEditResponseEnvelope]
+type siteLANEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SiteLANEditResponseEnvelopeSuccess bool
+
+const (
+	SiteLANEditResponseEnvelopeSuccessTrue SiteLANEditResponseEnvelopeSuccess = true
+)
+
+func (r SiteLANEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLANEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/addressing"
 	"github.com/cloudflare/cloudflare-go/v2/ai_gateway"
 	"github.com/cloudflare/cloudflare-go/v2/alerting"
+	"github.com/cloudflare/cloudflare-go/v2/api_gateway"
 	"github.com/cloudflare/cloudflare-go/v2/argo"
 	"github.com/cloudflare/cloudflare-go/v2/audit_logs"
 	"github.com/cloudflare/cloudflare-go/v2/billing"
@@ -136,6 +137,7 @@ type Client struct {
 	KV                          *kv.KVService
 	DurableObjects              *durable_objects.DurableObjectService
 	Queues                      *queues.QueueService
+	APIGateway                  *api_gateway.APIGatewayService
 	ManagedHeaders              *managed_headers.ManagedHeaderService
 	PageShield                  *page_shield.PageShieldService
 	Rulesets                    *rulesets.RulesetService
@@ -180,6 +182,7 @@ type Client struct {
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	EventNotifications          *event_notifications.EventNotificationService
 	AIGateway                   *ai_gateway.AIGatewayService
+	IAM                         *IAMService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -243,6 +246,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.KV = kv.NewKVService(opts...)
 	r.DurableObjects = durable_objects.NewDurableObjectService(opts...)
 	r.Queues = queues.NewQueueService(opts...)
+	r.APIGateway = api_gateway.NewAPIGatewayService(opts...)
 	r.ManagedHeaders = managed_headers.NewManagedHeaderService(opts...)
 	r.PageShield = page_shield.NewPageShieldService(opts...)
 	r.Rulesets = rulesets.NewRulesetService(opts...)
@@ -287,6 +291,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.EventNotifications = event_notifications.NewEventNotificationService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
+	r.IAM = NewIAMService(opts...)
 
 	return
 }

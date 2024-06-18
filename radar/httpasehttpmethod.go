@@ -17,10 +17,11 @@ import (
 )
 
 // HTTPAseHTTPMethodService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewHTTPAseHTTPMethodService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHTTPAseHTTPMethodService] method instead.
 type HTTPAseHTTPMethodService struct {
 	Options []option.RequestOption
 }
@@ -211,6 +212,8 @@ type HTTPAseHTTPMethodGetParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPAseHTTPMethodGetParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPAseHTTPMethodGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -281,6 +284,23 @@ const (
 func (r HTTPAseHTTPMethodGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPAseHTTPMethodGetParamsBotClassLikelyAutomated, HTTPAseHTTPMethodGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPAseHTTPMethodGetParamsBrowserFamily string
+
+const (
+	HTTPAseHTTPMethodGetParamsBrowserFamilyChrome  HTTPAseHTTPMethodGetParamsBrowserFamily = "CHROME"
+	HTTPAseHTTPMethodGetParamsBrowserFamilyEdge    HTTPAseHTTPMethodGetParamsBrowserFamily = "EDGE"
+	HTTPAseHTTPMethodGetParamsBrowserFamilyFirefox HTTPAseHTTPMethodGetParamsBrowserFamily = "FIREFOX"
+	HTTPAseHTTPMethodGetParamsBrowserFamilySafari  HTTPAseHTTPMethodGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPAseHTTPMethodGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPAseHTTPMethodGetParamsBrowserFamilyChrome, HTTPAseHTTPMethodGetParamsBrowserFamilyEdge, HTTPAseHTTPMethodGetParamsBrowserFamilyFirefox, HTTPAseHTTPMethodGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false

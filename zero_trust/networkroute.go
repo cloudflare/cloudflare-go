@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -19,10 +20,11 @@ import (
 )
 
 // NetworkRouteService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewNetworkRouteService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewNetworkRouteService] method instead.
 type NetworkRouteService struct {
 	Options  []option.RequestOption
 	IPs      *NetworkRouteIPService
@@ -44,6 +46,10 @@ func NewNetworkRouteService(opts ...option.RequestOption) (r *NetworkRouteServic
 func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -80,6 +86,14 @@ func (r *NetworkRouteService) ListAutoPaging(ctx context.Context, params Network
 func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body NetworkRouteDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeID == "" {
+		err = errors.New("missing required route_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", body.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -94,6 +108,14 @@ func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body N
 func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params NetworkRouteEditParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeID == "" {
+		err = errors.New("missing required route_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", params.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {

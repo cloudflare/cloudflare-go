@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -17,9 +18,11 @@ import (
 )
 
 // PoolHealthService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewPoolHealthService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewPoolHealthService] method instead.
 type PoolHealthService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,14 @@ func NewPoolHealthService(opts ...option.RequestOption) (r *PoolHealthService) {
 func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolHealthNewParams, opts ...option.RequestOption) (res *PoolHealthNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolHealthNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if poolID == "" {
+		err = errors.New("missing required pool_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/preview", params.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +62,14 @@ func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolH
 func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHealthGetParams, opts ...option.RequestOption) (res *PoolHealthGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolHealthGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if poolID == "" {
+		err = errors.New("missing required pool_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/health", query.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

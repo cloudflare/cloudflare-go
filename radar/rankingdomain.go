@@ -4,6 +4,7 @@ package radar
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -16,10 +17,11 @@ import (
 )
 
 // RankingDomainService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRankingDomainService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRankingDomainService] method instead.
 type RankingDomainService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +42,10 @@ func NewRankingDomainService(opts ...option.RequestOption) (r *RankingDomainServ
 func (r *RankingDomainService) Get(ctx context.Context, domain string, query RankingDomainGetParams, opts ...option.RequestOption) (res *RankingDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RankingDomainGetResponseEnvelope
+	if domain == "" {
+		err = errors.New("missing required domain parameter")
+		return
+	}
 	path := fmt.Sprintf("radar/ranking/domain/%s", domain)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package cloudforce_one
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // RequestPriorityService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRequestPriorityService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRequestPriorityService] method instead.
 type RequestPriorityService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +39,10 @@ func NewRequestPriorityService(opts ...option.RequestOption) (r *RequestPriority
 func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier string, body RequestPriorityNewParams, opts ...option.RequestOption) (res *Priority, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityNewResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/new", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -50,6 +56,14 @@ func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier stri
 func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier string, priorityIdentifer string, body RequestPriorityUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityUpdateResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if priorityIdentifer == "" {
+		err = errors.New("missing required priority_identifer parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", accountIdentifier, priorityIdentifer)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -62,6 +76,14 @@ func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier s
 // Delete a Priority Intelligence Report
 func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *RequestPriorityDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if priorityIdentifer == "" {
+		err = errors.New("missing required priority_identifer parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", accountIdentifier, priorityIdentifer)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -71,6 +93,14 @@ func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier s
 func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if priorityIdentifer == "" {
+		err = errors.New("missing required priority_identifer parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", accountIdentifier, priorityIdentifer)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -84,6 +114,10 @@ func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier stri
 func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *Quota, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityQuotaResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/quota", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

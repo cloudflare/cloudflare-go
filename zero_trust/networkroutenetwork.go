@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,10 +18,11 @@ import (
 )
 
 // NetworkRouteNetworkService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewNetworkRouteNetworkService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewNetworkRouteNetworkService] method instead.
 type NetworkRouteNetworkService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,14 @@ func NewNetworkRouteNetworkService(opts ...option.RequestOption) (r *NetworkRout
 func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkNewParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ipNetworkEncoded == "" {
+		err = errors.New("missing required ip_network_encoded parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", params.AccountID, ipNetworkEncoded)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -58,6 +68,14 @@ func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded s
 func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkDeleteResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ipNetworkEncoded == "" {
+		err = errors.New("missing required ip_network_encoded parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", params.AccountID, ipNetworkEncoded)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
@@ -72,6 +90,14 @@ func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncode
 func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body NetworkRouteNetworkEditParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkEditResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ipNetworkEncoded == "" {
+		err = errors.New("missing required ip_network_encoded parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", body.AccountID, ipNetworkEncoded)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {

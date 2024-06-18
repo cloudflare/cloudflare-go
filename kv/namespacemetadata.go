@@ -4,6 +4,7 @@ package kv
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // NamespaceMetadataService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewNamespaceMetadataService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewNamespaceMetadataService] method instead.
 type NamespaceMetadataService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +40,18 @@ func NewNamespaceMetadataService(opts ...option.RequestOption) (r *NamespaceMeta
 func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceMetadataGetParams, opts ...option.RequestOption) (res *NamespaceMetadataGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceMetadataGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
+	if keyName == "" {
+		err = errors.New("missing required key_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/metadata/%s", query.AccountID, namespaceID, keyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -47,7 +61,7 @@ func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, 
 	return
 }
 
-type NamespaceMetadataGetResponse = interface{}
+type NamespaceMetadataGetResponse map[string]interface{}
 
 type NamespaceMetadataGetParams struct {
 	// Identifier
@@ -57,11 +71,11 @@ type NamespaceMetadataGetParams struct {
 type NamespaceMetadataGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Arbitrary JSON that is associated with a key.
-	Result NamespaceMetadataGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    namespaceMetadataGetResponseEnvelopeJSON    `json:"-"`
+	// Arbitrary JSON that is associated with a key.
+	Result NamespaceMetadataGetResponse             `json:"result"`
+	JSON   namespaceMetadataGetResponseEnvelopeJSON `json:"-"`
 }
 
 // namespaceMetadataGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -69,8 +83,8 @@ type NamespaceMetadataGetResponseEnvelope struct {
 type namespaceMetadataGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

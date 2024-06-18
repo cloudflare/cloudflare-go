@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -17,13 +16,14 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // TokenService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewTokenService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewTokenService] method instead.
 type TokenService struct {
 	Options          []option.RequestOption
 	PermissionGroups *TokenPermissionGroupService
@@ -55,7 +55,7 @@ func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...opt
 }
 
 // Update an existing token.
-func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponseUnion, err error) {
+func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenUpdateResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
@@ -104,7 +104,7 @@ func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, opts ...
 }
 
 // Get information about a specific token.
-func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenGetResponseUnion, err error) {
+func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenGetResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
@@ -163,6 +163,8 @@ func (r PolicyEffect) IsKnown() bool {
 // A named group of permissions that map to a group of operations against
 // resources.
 type PolicyPermissionGroupParam struct {
+	// Attributes associated to the permission group.
+	Meta param.Field[interface{}] `json:"meta"`
 }
 
 func (r PolicyPermissionGroupParam) MarshalJSON() (data []byte, err error) {
@@ -248,21 +250,7 @@ func (r tokenNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [user.TokenUpdateResponseUnknown] or [shared.UnionString].
-type TokenUpdateResponseUnion interface {
-	ImplementsUserTokenUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TokenUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type TokenUpdateResponse = interface{}
 
 type TokenListResponse = interface{}
 
@@ -288,21 +276,7 @@ func (r tokenDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [user.TokenGetResponseUnknown] or [shared.UnionString].
-type TokenGetResponseUnion interface {
-	ImplementsUserTokenGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TokenGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type TokenGetResponse = interface{}
 
 type TokenVerifyResponse struct {
 	// Token identifier tag.
@@ -392,21 +366,14 @@ func (r TokenNewParamsConditionRequestIP) MarshalJSON() (data []byte, err error)
 }
 
 type TokenNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TokenNewResponse      `json:"result,required"`
-	// Whether the API call was successful
-	Success TokenNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tokenNewResponseEnvelopeJSON    `json:"-"`
+	Result TokenNewResponse             `json:"result"`
+	JSON   tokenNewResponseEnvelopeJSON `json:"-"`
 }
 
 // tokenNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenNewResponseEnvelope]
 type tokenNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -419,21 +386,6 @@ func (r tokenNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type TokenNewResponseEnvelopeSuccess bool
-
-const (
-	TokenNewResponseEnvelopeSuccessTrue TokenNewResponseEnvelopeSuccess = true
-)
-
-func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TokenNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type TokenUpdateParams struct {
 	Token TokenParam `json:"token,required"`
 }
@@ -443,21 +395,14 @@ func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   TokenUpdateResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tokenUpdateResponseEnvelopeJSON    `json:"-"`
+	Result TokenUpdateResponse             `json:"result"`
+	JSON   tokenUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // tokenUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenUpdateResponseEnvelope]
 type tokenUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -468,21 +413,6 @@ func (r *TokenUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r tokenUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type TokenUpdateResponseEnvelopeSuccess bool
-
-const (
-	TokenUpdateResponseEnvelopeSuccessTrue TokenUpdateResponseEnvelopeSuccess = true
-)
-
-func (r TokenUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TokenUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type TokenListParams struct {
@@ -521,9 +451,9 @@ func (r TokenListParamsDirection) IsKnown() bool {
 type TokenDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TokenDeleteResponse   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success TokenDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  TokenDeleteResponse                `json:"result,nullable"`
 	JSON    tokenDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -532,8 +462,8 @@ type TokenDeleteResponseEnvelope struct {
 type tokenDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -562,21 +492,14 @@ func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TokenGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TokenGetResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tokenGetResponseEnvelopeJSON    `json:"-"`
+	Result TokenGetResponse             `json:"result"`
+	JSON   tokenGetResponseEnvelopeJSON `json:"-"`
 }
 
 // tokenGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenGetResponseEnvelope]
 type tokenGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -589,37 +512,15 @@ func (r tokenGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type TokenGetResponseEnvelopeSuccess bool
-
-const (
-	TokenGetResponseEnvelopeSuccessTrue TokenGetResponseEnvelopeSuccess = true
-)
-
-func (r TokenGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TokenGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type TokenVerifyResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TokenVerifyResponse   `json:"result,required"`
-	// Whether the API call was successful
-	Success TokenVerifyResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tokenVerifyResponseEnvelopeJSON    `json:"-"`
+	Result TokenVerifyResponse             `json:"result"`
+	JSON   tokenVerifyResponseEnvelopeJSON `json:"-"`
 }
 
 // tokenVerifyResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenVerifyResponseEnvelope]
 type tokenVerifyResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -630,19 +531,4 @@ func (r *TokenVerifyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r tokenVerifyResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type TokenVerifyResponseEnvelopeSuccess bool
-
-const (
-	TokenVerifyResponseEnvelopeSuccessTrue TokenVerifyResponseEnvelopeSuccess = true
-)
-
-func (r TokenVerifyResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TokenVerifyResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

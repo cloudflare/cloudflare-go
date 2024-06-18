@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // DLPProfilePredefinedService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDLPProfilePredefinedService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDLPProfilePredefinedService] method instead.
 type DLPProfilePredefinedService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +37,14 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 // Updates a DLP predefined profile. Only supports enabling/disabling entries.
 func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *PredefinedProfile, err error) {
 	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if profileID == "" {
+		err = errors.New("missing required profile_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
@@ -44,6 +54,14 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *PredefinedProfile, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfilePredefinedGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if profileID == "" {
+		err = errors.New("missing required profile_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

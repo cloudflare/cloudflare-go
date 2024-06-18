@@ -4,6 +4,7 @@ package ai_gateway
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,9 +18,11 @@ import (
 )
 
 // LogService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewLogService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewLogService] method instead.
 type LogService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +40,14 @@ func NewLogService(opts ...option.RequestOption) (r *LogService) {
 func (r *LogService) Get(ctx context.Context, id string, params LogGetParams, opts ...option.RequestOption) (res *[]LogGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -47,37 +58,49 @@ func (r *LogService) Get(ctx context.Context, id string, params LogGetParams, op
 }
 
 type LogGetResponse struct {
-	ID        string             `json:"id,required" format:"uuid"`
-	Cached    bool               `json:"cached,required"`
-	CreatedAt time.Time          `json:"created_at,required" format:"date-time"`
-	Duration  int64              `json:"duration,required"`
-	Model     string             `json:"model,required"`
-	Path      string             `json:"path,required"`
-	Provider  string             `json:"provider,required"`
-	Request   string             `json:"request,required"`
-	Response  string             `json:"response,required"`
-	Success   bool               `json:"success,required"`
-	TokensIn  int64              `json:"tokens_in,required"`
-	TokensOut int64              `json:"tokens_out,required"`
-	JSON      logGetResponseJSON `json:"-"`
+	ID                  string             `json:"id,required" format:"uuid"`
+	Cached              bool               `json:"cached,required"`
+	CreatedAt           time.Time          `json:"created_at,required" format:"date-time"`
+	Duration            int64              `json:"duration,required"`
+	Model               string             `json:"model,required"`
+	Path                string             `json:"path,required"`
+	Provider            string             `json:"provider,required"`
+	Request             string             `json:"request,required"`
+	Response            string             `json:"response,required"`
+	Success             bool               `json:"success,required"`
+	TokensIn            int64              `json:"tokens_in,required"`
+	TokensOut           int64              `json:"tokens_out,required"`
+	Metadata            string             `json:"metadata"`
+	RequestContentType  string             `json:"request_content_type"`
+	RequestType         string             `json:"request_type"`
+	ResponseContentType string             `json:"response_content_type"`
+	StatusCode          int64              `json:"status_code"`
+	Step                int64              `json:"step"`
+	JSON                logGetResponseJSON `json:"-"`
 }
 
 // logGetResponseJSON contains the JSON metadata for the struct [LogGetResponse]
 type logGetResponseJSON struct {
-	ID          apijson.Field
-	Cached      apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Model       apijson.Field
-	Path        apijson.Field
-	Provider    apijson.Field
-	Request     apijson.Field
-	Response    apijson.Field
-	Success     apijson.Field
-	TokensIn    apijson.Field
-	TokensOut   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                  apijson.Field
+	Cached              apijson.Field
+	CreatedAt           apijson.Field
+	Duration            apijson.Field
+	Model               apijson.Field
+	Path                apijson.Field
+	Provider            apijson.Field
+	Request             apijson.Field
+	Response            apijson.Field
+	Success             apijson.Field
+	TokensIn            apijson.Field
+	TokensOut           apijson.Field
+	Metadata            apijson.Field
+	RequestContentType  apijson.Field
+	RequestType         apijson.Field
+	ResponseContentType apijson.Field
+	StatusCode          apijson.Field
+	Step                apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *LogGetResponse) UnmarshalJSON(data []byte) (err error) {

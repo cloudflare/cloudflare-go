@@ -4,6 +4,7 @@ package snippets
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -13,9 +14,11 @@ import (
 )
 
 // ContentService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewContentService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewContentService] method instead.
 type ContentService struct {
 	Options []option.RequestOption
 }
@@ -33,6 +36,14 @@ func NewContentService(opts ...option.RequestOption) (r *ContentService) {
 func (r *ContentService) Get(ctx context.Context, snippetName string, query ContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "multipart/form-data")}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if snippetName == "" {
+		err = errors.New("missing required snippet_name parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/snippets/%s/content", query.ZoneID, snippetName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

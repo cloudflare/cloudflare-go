@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // IPSECTunnelService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewIPSECTunnelService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewIPSECTunnelService] method instead.
 type IPSECTunnelService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,10 @@ func NewIPSECTunnelService(opts ...option.RequestOption) (r *IPSECTunnelService)
 func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParams, opts ...option.RequestOption) (res *IPSECTunnelNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +60,14 @@ func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParam
 func (r *IPSECTunnelService) Update(ctx context.Context, tunnelIdentifier string, params IPSECTunnelUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelIdentifier == "" {
+		err = errors.New("missing required tunnel_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -67,6 +81,10 @@ func (r *IPSECTunnelService) Update(ctx context.Context, tunnelIdentifier string
 func (r *IPSECTunnelService) List(ctx context.Context, query IPSECTunnelListParams, opts ...option.RequestOption) (res *IPSECTunnelListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -82,6 +100,14 @@ func (r *IPSECTunnelService) List(ctx context.Context, query IPSECTunnelListPara
 func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, body IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelIdentifier == "" {
+		err = errors.New("missing required tunnel_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", body.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -95,6 +121,14 @@ func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string
 func (r *IPSECTunnelService) Get(ctx context.Context, tunnelIdentifier string, query IPSECTunnelGetParams, opts ...option.RequestOption) (res *IPSECTunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelIdentifier == "" {
+		err = errors.New("missing required tunnel_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", query.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -112,6 +146,14 @@ func (r *IPSECTunnelService) Get(ctx context.Context, tunnelIdentifier string, q
 func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, tunnelIdentifier string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelPSKGenerateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelIdentifier == "" {
+		err = errors.New("missing required tunnel_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

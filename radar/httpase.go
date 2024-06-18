@@ -16,18 +16,21 @@ import (
 )
 
 // HTTPAseService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewHTTPAseService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHTTPAseService] method instead.
 type HTTPAseService struct {
-	Options      []option.RequestOption
-	BotClass     *HTTPAseBotClassService
-	DeviceType   *HTTPAseDeviceTypeService
-	HTTPProtocol *HTTPAseHTTPProtocolService
-	HTTPMethod   *HTTPAseHTTPMethodService
-	IPVersion    *HTTPAseIPVersionService
-	OS           *HTTPAseOSService
-	TLSVersion   *HTTPAseTLSVersionService
+	Options       []option.RequestOption
+	BotClass      *HTTPAseBotClassService
+	DeviceType    *HTTPAseDeviceTypeService
+	HTTPProtocol  *HTTPAseHTTPProtocolService
+	HTTPMethod    *HTTPAseHTTPMethodService
+	IPVersion     *HTTPAseIPVersionService
+	OS            *HTTPAseOSService
+	TLSVersion    *HTTPAseTLSVersionService
+	BrowserFamily *HTTPAseBrowserFamilyService
 }
 
 // NewHTTPAseService generates a new service that applies the given options to each
@@ -43,6 +46,7 @@ func NewHTTPAseService(opts ...option.RequestOption) (r *HTTPAseService) {
 	r.IPVersion = NewHTTPAseIPVersionService(opts...)
 	r.OS = NewHTTPAseOSService(opts...)
 	r.TLSVersion = NewHTTPAseTLSVersionService(opts...)
+	r.BrowserFamily = NewHTTPAseBrowserFamilyService(opts...)
 	return
 }
 
@@ -222,6 +226,8 @@ type HTTPAseGetParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPAseGetParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPAseGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -276,6 +282,23 @@ const (
 func (r HTTPAseGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPAseGetParamsBotClassLikelyAutomated, HTTPAseGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPAseGetParamsBrowserFamily string
+
+const (
+	HTTPAseGetParamsBrowserFamilyChrome  HTTPAseGetParamsBrowserFamily = "CHROME"
+	HTTPAseGetParamsBrowserFamilyEdge    HTTPAseGetParamsBrowserFamily = "EDGE"
+	HTTPAseGetParamsBrowserFamilyFirefox HTTPAseGetParamsBrowserFamily = "FIREFOX"
+	HTTPAseGetParamsBrowserFamilySafari  HTTPAseGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPAseGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsBrowserFamilyChrome, HTTPAseGetParamsBrowserFamilyEdge, HTTPAseGetParamsBrowserFamilyFirefox, HTTPAseGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false

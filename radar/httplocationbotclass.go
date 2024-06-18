@@ -17,10 +17,11 @@ import (
 )
 
 // HTTPLocationBotClassService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewHTTPLocationBotClassService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHTTPLocationBotClassService] method instead.
 type HTTPLocationBotClassService struct {
 	Options []option.RequestOption
 }
@@ -210,6 +211,8 @@ type HTTPLocationBotClassGetParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPLocationBotClassGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -266,6 +269,23 @@ const (
 func (r HTTPLocationBotClassGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPLocationBotClassGetParamsBotClassLikelyAutomated, HTTPLocationBotClassGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPLocationBotClassGetParamsBrowserFamily string
+
+const (
+	HTTPLocationBotClassGetParamsBrowserFamilyChrome  HTTPLocationBotClassGetParamsBrowserFamily = "CHROME"
+	HTTPLocationBotClassGetParamsBrowserFamilyEdge    HTTPLocationBotClassGetParamsBrowserFamily = "EDGE"
+	HTTPLocationBotClassGetParamsBrowserFamilyFirefox HTTPLocationBotClassGetParamsBrowserFamily = "FIREFOX"
+	HTTPLocationBotClassGetParamsBrowserFamilySafari  HTTPLocationBotClassGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPLocationBotClassGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsBrowserFamilyChrome, HTTPLocationBotClassGetParamsBrowserFamilyEdge, HTTPLocationBotClassGetParamsBrowserFamilyFirefox, HTTPLocationBotClassGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false

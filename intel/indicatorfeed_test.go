@@ -58,10 +58,11 @@ func TestIndicatorFeedUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		int64(12),
 		intel.IndicatorFeedUpdateParams{
-			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			FeedDescription: cloudflare.F("This is an example description"),
-			IsAttributable:  cloudflare.F(true),
-			IsPublic:        cloudflare.F(true),
+			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Description:    cloudflare.F("This is an example description"),
+			IsAttributable: cloudflare.F(true),
+			IsPublic:       cloudflare.F(true),
+			Name:           cloudflare.F("indicator_list"),
 		},
 	)
 	if err != nil {

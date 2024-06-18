@@ -4,6 +4,7 @@ package queues
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // MessageService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewMessageService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewMessageService] method instead.
 type MessageService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,14 @@ func NewMessageService(opts ...option.RequestOption) (r *MessageService) {
 func (r *MessageService) Ack(ctx context.Context, queueID string, params MessageAckParams, opts ...option.RequestOption) (res *MessageAckResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MessageAckResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/ack", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -48,6 +59,14 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *[]MessagePullResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MessagePullResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/pull", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

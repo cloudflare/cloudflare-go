@@ -67,7 +67,7 @@ func TestScriptGet(t *testing.T) {
 	)
 	_, err := client.PageShield.Scripts.Get(
 		context.TODO(),
-		"c9ef84a6bf5e47138c75d95e2f933e8f",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		page_shield.ScriptGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

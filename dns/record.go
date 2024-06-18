@@ -4,6 +4,7 @@ package dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -21,9 +22,11 @@ import (
 )
 
 // RecordService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewRecordService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRecordService] method instead.
 type RecordService struct {
 	Options []option.RequestOption
 }
@@ -48,6 +51,10 @@ func NewRecordService(opts ...option.RequestOption) (r *RecordService) {
 func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ...option.RequestOption) (res *Record, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -66,6 +73,14 @@ func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ..
 func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params RecordUpdateParams, opts ...option.RequestOption) (res *Record, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if dnsRecordID == "" {
+		err = errors.New("missing required dns_record_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -102,6 +117,14 @@ func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListPar
 func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if dnsRecordID == "" {
+		err = errors.New("missing required dns_record_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", body.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -120,6 +143,14 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params RecordEditParams, opts ...option.RequestOption) (res *Record, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if dnsRecordID == "" {
+		err = errors.New("missing required dns_record_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -139,6 +170,10 @@ func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params Rec
 func (r *RecordService) Export(ctx context.Context, query RecordExportParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/export", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
@@ -148,6 +183,14 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query RecordGetParams, opts ...option.RequestOption) (res *Record, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if dnsRecordID == "" {
+		err = errors.New("missing required dns_record_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", query.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -168,6 +211,10 @@ func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query Recor
 func (r *RecordService) Import(ctx context.Context, params RecordImportParams, opts ...option.RequestOption) (res *RecordImportResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordImportResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/import", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -182,6 +229,10 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordScanResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records/scan", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -222,7 +273,7 @@ type ARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -294,7 +345,7 @@ type ARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r ARecordParam) MarshalJSON() (data []byte, err error) {
@@ -334,7 +385,7 @@ type AAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -406,7 +457,7 @@ type AAAARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
@@ -445,7 +496,7 @@ type CAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -542,7 +593,7 @@ type CAARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r CAARecordParam) MarshalJSON() (data []byte, err error) {
@@ -595,7 +646,7 @@ type CERTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -695,7 +746,7 @@ type CERTRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r CERTRecordParam) MarshalJSON() (data []byte, err error) {
@@ -751,7 +802,7 @@ type CNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -823,7 +874,7 @@ type CNAMERecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
@@ -862,7 +913,7 @@ type DNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -963,7 +1014,7 @@ type DNSKEYRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r DNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1018,7 +1069,7 @@ type DSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -1118,7 +1169,7 @@ type DSRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r DSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1173,7 +1224,7 @@ type HTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -1270,7 +1321,7 @@ type HTTPSRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r HTTPSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1323,7 +1374,7 @@ type LOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -1479,7 +1530,7 @@ type LOCRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r LOCRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1551,7 +1602,7 @@ type MXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -1623,7 +1674,7 @@ type MXRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1662,7 +1713,7 @@ type NAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -1768,7 +1819,7 @@ type NAPTRRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r NAPTRRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1825,7 +1876,7 @@ type NSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -1893,7 +1944,7 @@ type NSRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1930,7 +1981,7 @@ type PTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -1998,7 +2049,7 @@ type PTRRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2036,7 +2087,7 @@ type Record struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -2255,8 +2306,8 @@ type RecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL  param.Field[TTLUnionParam] `json:"ttl"`
-	Data param.Field[interface{}]   `json:"data,required"`
+	TTL  param.Field[TTLNumber]   `json:"ttl"`
+	Data param.Field[interface{}] `json:"data,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
@@ -2380,7 +2431,7 @@ type SMIMEARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -2481,7 +2532,7 @@ type SMIMEARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r SMIMEARecordParam) MarshalJSON() (data []byte, err error) {
@@ -2539,7 +2590,7 @@ type SRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -2657,7 +2708,7 @@ type SRVRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r SRVRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2725,7 +2776,7 @@ type SSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -2822,7 +2873,7 @@ type SSHFPRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r SSHFPRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2875,7 +2926,7 @@ type SVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -2972,7 +3023,7 @@ type SVCBRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r SVCBRecordParam) MarshalJSON() (data []byte, err error) {
@@ -3025,7 +3076,7 @@ type TLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -3125,7 +3176,7 @@ type TLSARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r TLSARecordParam) MarshalJSON() (data []byte, err error) {
@@ -3150,30 +3201,6 @@ func (r TLSARecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-// Value must be between 60 and 86400, with the minimum reduced to 30 for
-// Enterprise zones.
-//
-// Union satisfied by [shared.UnionFloat] or [dns.TTLNumber].
-type TTLUnion interface {
-	ImplementsDNSTTLUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TTLUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(TTLNumber(0)),
-		},
-	)
-}
-
 type TTLNumber float64
 
 const (
@@ -3186,15 +3213,6 @@ func (r TTLNumber) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-// Value must be between 60 and 86400, with the minimum reduced to 30 for
-// Enterprise zones.
-//
-// Satisfied by [shared.UnionFloat], [dns.TTLNumber].
-type TTLUnionParam interface {
-	ImplementsDNSTTLUnionParam()
 }
 
 type TXTRecord struct {
@@ -3225,7 +3243,7 @@ type TXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -3293,7 +3311,7 @@ type TXTRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
@@ -3335,7 +3353,7 @@ type URIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLUnion `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
@@ -3433,7 +3451,7 @@ type URIRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLUnionParam] `json:"ttl"`
+	TTL param.Field[TTLNumber] `json:"ttl"`
 }
 
 func (r URIRecordParam) MarshalJSON() (data []byte, err error) {

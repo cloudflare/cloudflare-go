@@ -4,21 +4,26 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AccessLogAccessRequestService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAccessLogAccessRequestService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessLogAccessRequestService] method instead.
 type AccessLogAccessRequestService struct {
 	Options []option.RequestOption
 }
@@ -33,11 +38,15 @@ func NewAccessLogAccessRequestService(opts ...option.RequestOption) (r *AccessLo
 }
 
 // Gets a list of Access authentication audit logs for an account.
-func (r *AccessLogAccessRequestService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessRequests, err error) {
+func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessLogAccessRequestListParams, opts ...option.RequestOption) (res *[]AccessRequests, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessLogAccessRequestListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/logs/access_requests", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/logs/access_requests", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,14 +98,51 @@ func (r accessRequestsJSON) RawJSON() string {
 	return r.raw
 }
 
+type AccessLogAccessRequestListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The chronological sorting order for the logs.
+	Direction param.Field[AccessLogAccessRequestListParamsDirection] `query:"direction"`
+	// The maximum number of log entries to retrieve.
+	Limit param.Field[int64] `query:"limit"`
+	// The earliest event timestamp to query.
+	Since param.Field[time.Time] `query:"since" format:"date-time"`
+	// The latest event timestamp to query.
+	Until param.Field[time.Time] `query:"until" format:"date-time"`
+}
+
+// URLQuery serializes [AccessLogAccessRequestListParams]'s query parameters as
+// `url.Values`.
+func (r AccessLogAccessRequestListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// The chronological sorting order for the logs.
+type AccessLogAccessRequestListParamsDirection string
+
+const (
+	AccessLogAccessRequestListParamsDirectionDesc AccessLogAccessRequestListParamsDirection = "desc"
+	AccessLogAccessRequestListParamsDirectionAsc  AccessLogAccessRequestListParamsDirection = "asc"
+)
+
+func (r AccessLogAccessRequestListParamsDirection) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsDirectionDesc, AccessLogAccessRequestListParamsDirectionAsc:
+		return true
+	}
+	return false
+}
+
 type AccessLogAccessRequestListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success    AccessLogAccessRequestListResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []AccessRequests                                     `json:"result,nullable"`
-	ResultInfo AccessLogAccessRequestListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessLogAccessRequestListResponseEnvelopeJSON       `json:"-"`
+	Success AccessLogAccessRequestListResponseEnvelopeSuccess `json:"success,required"`
+	Result  []AccessRequests                                  `json:"result"`
+	JSON    accessLogAccessRequestListResponseEnvelopeJSON    `json:"-"`
 }
 
 // accessLogAccessRequestListResponseEnvelopeJSON contains the JSON metadata for
@@ -106,7 +152,6 @@ type accessLogAccessRequestListResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -132,35 +177,4 @@ func (r AccessLogAccessRequestListResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type AccessLogAccessRequestListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                  `json:"total_count"`
-	JSON       accessLogAccessRequestListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessLogAccessRequestListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [AccessLogAccessRequestListResponseEnvelopeResultInfo]
-type accessLogAccessRequestListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessLogAccessRequestListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessLogAccessRequestListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

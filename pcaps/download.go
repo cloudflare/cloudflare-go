@@ -4,6 +4,7 @@ package pcaps
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -13,9 +14,11 @@ import (
 )
 
 // DownloadService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDownloadService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDownloadService] method instead.
 type DownloadService struct {
 	Options []option.RequestOption
 }
@@ -33,6 +36,14 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 func (r *DownloadService) Get(ctx context.Context, pcapID string, query DownloadGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/vnd.tcpdump.pcap")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if pcapID == "" {
+		err = errors.New("missing required pcap_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pcaps/%s/download", query.AccountID, pcapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

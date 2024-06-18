@@ -4,6 +4,7 @@ package logs
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // ControlCmbConfigService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewControlCmbConfigService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewControlCmbConfigService] method instead.
 type ControlCmbConfigService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,10 @@ func NewControlCmbConfigService(opts ...option.RequestOption) (r *ControlCmbConf
 func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConfigNewParams, opts ...option.RequestOption) (res *CmbConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -49,6 +55,10 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -62,6 +72,10 @@ func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbCon
 func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfigGetParams, opts ...option.RequestOption) (res *CmbConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

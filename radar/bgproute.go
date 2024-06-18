@@ -6,7 +6,6 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,9 +15,11 @@ import (
 )
 
 // BGPRouteService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewBGPRouteService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewBGPRouteService] method instead.
 type BGPRouteService struct {
 	Options []option.RequestOption
 }
@@ -29,6 +30,19 @@ type BGPRouteService struct {
 func NewBGPRouteService(opts ...option.RequestOption) (r *BGPRouteService) {
 	r = &BGPRouteService{}
 	r.Options = opts
+	return
+}
+
+// List all ASes on current global routing tables with routing statistics
+func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, opts ...option.RequestOption) (res *BGPRouteAsesResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env BGPRouteAsesResponseEnvelope
+	path := "radar/bgp/routes/ases"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -71,18 +85,103 @@ func (r *BGPRouteService) Stats(ctx context.Context, query BGPRouteStatsParams, 
 	return
 }
 
-// Gets time-series data for the announced IP space count, represented as the
-// number of IPv4 /24s and IPv6 /48s, for a given ASN.
-func (r *BGPRouteService) Timeseries(ctx context.Context, query BGPRouteTimeseriesParams, opts ...option.RequestOption) (res *BGPRouteTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env BGPRouteTimeseriesResponseEnvelope
-	path := "radar/bgp/routes/timeseries"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type BGPRouteAsesResponse struct {
+	ASNs []BGPRouteAsesResponseASN `json:"asns,required"`
+	Meta BGPRouteAsesResponseMeta  `json:"meta,required"`
+	JSON bgpRouteAsesResponseJSON  `json:"-"`
+}
+
+// bgpRouteAsesResponseJSON contains the JSON metadata for the struct
+// [BGPRouteAsesResponse]
+type bgpRouteAsesResponseJSON struct {
+	ASNs        apijson.Field
+	Meta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteAsesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteAsesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteAsesResponseASN struct {
+	ASN int64 `json:"asn,required"`
+	// AS's customer cone size
+	ConeSize int64 `json:"coneSize,required"`
+	// 2-letter country code for the AS's registration country
+	Country string `json:"country,required"`
+	// number of IPv4 addresses originated by the AS
+	IPV4Count int64 `json:"ipv4Count,required"`
+	// number of IPv6 addresses originated by the AS
+	IPV6Count string `json:"ipv6Count,required"`
+	// name of the AS
+	Name string `json:"name,required"`
+	// number of total IP prefixes originated by the AS
+	PfxsCount int64 `json:"pfxsCount,required"`
+	// number of RPKI invalid prefixes originated by the AS
+	RPKIInvalid int64 `json:"rpkiInvalid,required"`
+	// number of RPKI unknown prefixes originated by the AS
+	RPKIUnknown int64 `json:"rpkiUnknown,required"`
+	// number of RPKI valid prefixes originated by the AS
+	RPKIValid int64                       `json:"rpkiValid,required"`
+	JSON      bgpRouteAsesResponseASNJSON `json:"-"`
+}
+
+// bgpRouteAsesResponseASNJSON contains the JSON metadata for the struct
+// [BGPRouteAsesResponseASN]
+type bgpRouteAsesResponseASNJSON struct {
+	ASN         apijson.Field
+	ConeSize    apijson.Field
+	Country     apijson.Field
+	IPV4Count   apijson.Field
+	IPV6Count   apijson.Field
+	Name        apijson.Field
+	PfxsCount   apijson.Field
+	RPKIInvalid apijson.Field
+	RPKIUnknown apijson.Field
+	RPKIValid   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteAsesResponseASN) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteAsesResponseASNJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteAsesResponseMeta struct {
+	// the timestamp of when the data is generated
+	DataTime string `json:"dataTime,required"`
+	// the timestamp of the query
+	QueryTime string `json:"queryTime,required"`
+	// total number of route collector peers used to generate this data
+	TotalPeers int64                        `json:"totalPeers,required"`
+	JSON       bgpRouteAsesResponseMetaJSON `json:"-"`
+}
+
+// bgpRouteAsesResponseMetaJSON contains the JSON metadata for the struct
+// [BGPRouteAsesResponseMeta]
+type bgpRouteAsesResponseMetaJSON struct {
+	DataTime    apijson.Field
+	QueryTime   apijson.Field
+	TotalPeers  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteAsesResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteAsesResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type BGPRouteMoasResponse struct {
@@ -359,120 +458,100 @@ func (r bgpRouteStatsResponseStatsJSON) RawJSON() string {
 	return r.raw
 }
 
-type BGPRouteTimeseriesResponse struct {
-	Meta          BGPRouteTimeseriesResponseMeta          `json:"meta,required"`
-	SerieIPV4_24s BGPRouteTimeseriesResponseSerieIPV4_24s `json:"serie_ipv4_24s,required"`
-	SerieIPV6_48s BGPRouteTimeseriesResponseSerieIPV6_48s `json:"serie_ipv6_48s,required"`
-	JSON          bgpRouteTimeseriesResponseJSON          `json:"-"`
+type BGPRouteAsesParams struct {
+	// Format results are returned in.
+	Format param.Field[BGPRouteAsesParamsFormat] `query:"format"`
+	// Limit the number of objects in the response.
+	Limit param.Field[int64] `query:"limit"`
+	// Location Alpha2 code.
+	Location param.Field[string] `query:"location"`
+	// Return order results by given type
+	SortBy param.Field[BGPRouteAsesParamsSortBy] `query:"sortBy"`
+	// Sort by value ascending or descending
+	SortOrder param.Field[BGPRouteAsesParamsSortOrder] `query:"sortOrder"`
 }
 
-// bgpRouteTimeseriesResponseJSON contains the JSON metadata for the struct
-// [BGPRouteTimeseriesResponse]
-type bgpRouteTimeseriesResponseJSON struct {
-	Meta          apijson.Field
-	SerieIPV4_24s apijson.Field
-	SerieIPV6_48s apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+// URLQuery serializes [BGPRouteAsesParams]'s query parameters as `url.Values`.
+func (r BGPRouteAsesParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
-func (r *BGPRouteTimeseriesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+// Format results are returned in.
+type BGPRouteAsesParamsFormat string
+
+const (
+	BGPRouteAsesParamsFormatJson BGPRouteAsesParamsFormat = "JSON"
+	BGPRouteAsesParamsFormatCsv  BGPRouteAsesParamsFormat = "CSV"
+)
+
+func (r BGPRouteAsesParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPRouteAsesParamsFormatJson, BGPRouteAsesParamsFormatCsv:
+		return true
+	}
+	return false
 }
 
-func (r bgpRouteTimeseriesResponseJSON) RawJSON() string {
-	return r.raw
+// Return order results by given type
+type BGPRouteAsesParamsSortBy string
+
+const (
+	BGPRouteAsesParamsSortByCone        BGPRouteAsesParamsSortBy = "cone"
+	BGPRouteAsesParamsSortByPfxs        BGPRouteAsesParamsSortBy = "pfxs"
+	BGPRouteAsesParamsSortByIPV4        BGPRouteAsesParamsSortBy = "ipv4"
+	BGPRouteAsesParamsSortByIPV6        BGPRouteAsesParamsSortBy = "ipv6"
+	BGPRouteAsesParamsSortByRPKIValid   BGPRouteAsesParamsSortBy = "rpki_valid"
+	BGPRouteAsesParamsSortByRPKIInvalid BGPRouteAsesParamsSortBy = "rpki_invalid"
+	BGPRouteAsesParamsSortByRPKIUnknown BGPRouteAsesParamsSortBy = "rpki_unknown"
+)
+
+func (r BGPRouteAsesParamsSortBy) IsKnown() bool {
+	switch r {
+	case BGPRouteAsesParamsSortByCone, BGPRouteAsesParamsSortByPfxs, BGPRouteAsesParamsSortByIPV4, BGPRouteAsesParamsSortByIPV6, BGPRouteAsesParamsSortByRPKIValid, BGPRouteAsesParamsSortByRPKIInvalid, BGPRouteAsesParamsSortByRPKIUnknown:
+		return true
+	}
+	return false
 }
 
-type BGPRouteTimeseriesResponseMeta struct {
-	DateRange []BGPRouteTimeseriesResponseMetaDateRange `json:"dateRange,required"`
-	JSON      bgpRouteTimeseriesResponseMetaJSON        `json:"-"`
+// Sort by value ascending or descending
+type BGPRouteAsesParamsSortOrder string
+
+const (
+	BGPRouteAsesParamsSortOrderAsc  BGPRouteAsesParamsSortOrder = "asc"
+	BGPRouteAsesParamsSortOrderDesc BGPRouteAsesParamsSortOrder = "desc"
+)
+
+func (r BGPRouteAsesParamsSortOrder) IsKnown() bool {
+	switch r {
+	case BGPRouteAsesParamsSortOrderAsc, BGPRouteAsesParamsSortOrderDesc:
+		return true
+	}
+	return false
 }
 
-// bgpRouteTimeseriesResponseMetaJSON contains the JSON metadata for the struct
-// [BGPRouteTimeseriesResponseMeta]
-type bgpRouteTimeseriesResponseMetaJSON struct {
-	DateRange   apijson.Field
+type BGPRouteAsesResponseEnvelope struct {
+	Result  BGPRouteAsesResponse             `json:"result,required"`
+	Success bool                             `json:"success,required"`
+	JSON    bgpRouteAsesResponseEnvelopeJSON `json:"-"`
+}
+
+// bgpRouteAsesResponseEnvelopeJSON contains the JSON metadata for the struct
+// [BGPRouteAsesResponseEnvelope]
+type bgpRouteAsesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BGPRouteTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *BGPRouteAsesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpRouteTimeseriesResponseMetaJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPRouteTimeseriesResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
-	JSON      bgpRouteTimeseriesResponseMetaDateRangeJSON `json:"-"`
-}
-
-// bgpRouteTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [BGPRouteTimeseriesResponseMetaDateRange]
-type bgpRouteTimeseriesResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPRouteTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpRouteTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPRouteTimeseriesResponseSerieIPV4_24s struct {
-	Timestamps []time.Time                                 `json:"timestamps,required" format:"date-time"`
-	Values     []int64                                     `json:"values,required"`
-	JSON       bgpRouteTimeseriesResponseSerieIPV4_24sJSON `json:"-"`
-}
-
-// bgpRouteTimeseriesResponseSerieIPV4_24sJSON contains the JSON metadata for the
-// struct [BGPRouteTimeseriesResponseSerieIPV4_24s]
-type bgpRouteTimeseriesResponseSerieIPV4_24sJSON struct {
-	Timestamps  apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPRouteTimeseriesResponseSerieIPV4_24s) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpRouteTimeseriesResponseSerieIPV4_24sJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPRouteTimeseriesResponseSerieIPV6_48s struct {
-	Timestamps []time.Time                                 `json:"timestamps,required" format:"date-time"`
-	Values     []int64                                     `json:"values,required"`
-	JSON       bgpRouteTimeseriesResponseSerieIPV6_48sJSON `json:"-"`
-}
-
-// bgpRouteTimeseriesResponseSerieIPV6_48sJSON contains the JSON metadata for the
-// struct [BGPRouteTimeseriesResponseSerieIPV6_48s]
-type bgpRouteTimeseriesResponseSerieIPV6_48sJSON struct {
-	Timestamps  apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPRouteTimeseriesResponseSerieIPV6_48s) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpRouteTimeseriesResponseSerieIPV6_48sJSON) RawJSON() string {
+func (r bgpRouteAsesResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -483,7 +562,7 @@ type BGPRouteMoasParams struct {
 	InvalidOnly param.Field[bool] `query:"invalid_only"`
 	// Lookup MOASes originated by the given ASN
 	Origin param.Field[int64] `query:"origin"`
-	// Lookup MOASes by prefix
+	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
 }
 
@@ -542,7 +621,7 @@ type BGPRoutePfx2asParams struct {
 	LongestPrefixMatch param.Field[bool] `query:"longestPrefixMatch"`
 	// Lookup prefixes originated by the given ASN
 	Origin param.Field[int64] `query:"origin"`
-	// Lookup origin ASNs of the given prefix
+	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
 	// Return only results with matching rpki status: valid, invalid or unknown
 	RPKIStatus param.Field[BGPRoutePfx2asParamsRPKIStatus] `query:"rpkiStatus"`
@@ -665,101 +744,5 @@ func (r *BGPRouteStatsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpRouteStatsResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPRouteTimeseriesParams struct {
-	// Single ASN as integer.
-	ASN param.Field[int64] `query:"asn"`
-	// End of the date range (inclusive).
-	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
-	// Shorthand date ranges for the last X days - use when you don't need specific
-	// start and end dates.
-	DateRange param.Field[BGPRouteTimeseriesParamsDateRange] `query:"dateRange"`
-	// Start of the date range (inclusive).
-	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
-	Format param.Field[BGPRouteTimeseriesParamsFormat] `query:"format"`
-	// Include data delay meta information
-	IncludeDelay param.Field[bool] `query:"includeDelay"`
-	// Location Alpha2 code.
-	Location param.Field[string] `query:"location"`
-}
-
-// URLQuery serializes [BGPRouteTimeseriesParams]'s query parameters as
-// `url.Values`.
-func (r BGPRouteTimeseriesParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type BGPRouteTimeseriesParamsDateRange string
-
-const (
-	BGPRouteTimeseriesParamsDateRange1d         BGPRouteTimeseriesParamsDateRange = "1d"
-	BGPRouteTimeseriesParamsDateRange2d         BGPRouteTimeseriesParamsDateRange = "2d"
-	BGPRouteTimeseriesParamsDateRange7d         BGPRouteTimeseriesParamsDateRange = "7d"
-	BGPRouteTimeseriesParamsDateRange14d        BGPRouteTimeseriesParamsDateRange = "14d"
-	BGPRouteTimeseriesParamsDateRange28d        BGPRouteTimeseriesParamsDateRange = "28d"
-	BGPRouteTimeseriesParamsDateRange12w        BGPRouteTimeseriesParamsDateRange = "12w"
-	BGPRouteTimeseriesParamsDateRange24w        BGPRouteTimeseriesParamsDateRange = "24w"
-	BGPRouteTimeseriesParamsDateRange52w        BGPRouteTimeseriesParamsDateRange = "52w"
-	BGPRouteTimeseriesParamsDateRange1dControl  BGPRouteTimeseriesParamsDateRange = "1dControl"
-	BGPRouteTimeseriesParamsDateRange2dControl  BGPRouteTimeseriesParamsDateRange = "2dControl"
-	BGPRouteTimeseriesParamsDateRange7dControl  BGPRouteTimeseriesParamsDateRange = "7dControl"
-	BGPRouteTimeseriesParamsDateRange14dControl BGPRouteTimeseriesParamsDateRange = "14dControl"
-	BGPRouteTimeseriesParamsDateRange28dControl BGPRouteTimeseriesParamsDateRange = "28dControl"
-	BGPRouteTimeseriesParamsDateRange12wControl BGPRouteTimeseriesParamsDateRange = "12wControl"
-	BGPRouteTimeseriesParamsDateRange24wControl BGPRouteTimeseriesParamsDateRange = "24wControl"
-)
-
-func (r BGPRouteTimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case BGPRouteTimeseriesParamsDateRange1d, BGPRouteTimeseriesParamsDateRange2d, BGPRouteTimeseriesParamsDateRange7d, BGPRouteTimeseriesParamsDateRange14d, BGPRouteTimeseriesParamsDateRange28d, BGPRouteTimeseriesParamsDateRange12w, BGPRouteTimeseriesParamsDateRange24w, BGPRouteTimeseriesParamsDateRange52w, BGPRouteTimeseriesParamsDateRange1dControl, BGPRouteTimeseriesParamsDateRange2dControl, BGPRouteTimeseriesParamsDateRange7dControl, BGPRouteTimeseriesParamsDateRange14dControl, BGPRouteTimeseriesParamsDateRange28dControl, BGPRouteTimeseriesParamsDateRange12wControl, BGPRouteTimeseriesParamsDateRange24wControl:
-		return true
-	}
-	return false
-}
-
-// Format results are returned in.
-type BGPRouteTimeseriesParamsFormat string
-
-const (
-	BGPRouteTimeseriesParamsFormatJson BGPRouteTimeseriesParamsFormat = "JSON"
-	BGPRouteTimeseriesParamsFormatCsv  BGPRouteTimeseriesParamsFormat = "CSV"
-)
-
-func (r BGPRouteTimeseriesParamsFormat) IsKnown() bool {
-	switch r {
-	case BGPRouteTimeseriesParamsFormatJson, BGPRouteTimeseriesParamsFormatCsv:
-		return true
-	}
-	return false
-}
-
-type BGPRouteTimeseriesResponseEnvelope struct {
-	Result  BGPRouteTimeseriesResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
-	JSON    bgpRouteTimeseriesResponseEnvelopeJSON `json:"-"`
-}
-
-// bgpRouteTimeseriesResponseEnvelopeJSON contains the JSON metadata for the struct
-// [BGPRouteTimeseriesResponseEnvelope]
-type bgpRouteTimeseriesResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPRouteTimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpRouteTimeseriesResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

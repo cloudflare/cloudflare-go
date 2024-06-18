@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // SettingWebsocketService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewSettingWebsocketService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingWebsocketService] method instead.
 type SettingWebsocketService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,10 @@ func NewSettingWebsocketService(opts ...option.RequestOption) (r *SettingWebsock
 func (r *SettingWebsocketService) Edit(ctx context.Context, params SettingWebsocketEditParams, opts ...option.RequestOption) (res *Websocket, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebsocketEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/websockets", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +59,10 @@ func (r *SettingWebsocketService) Edit(ctx context.Context, params SettingWebsoc
 func (r *SettingWebsocketService) Get(ctx context.Context, query SettingWebsocketGetParams, opts ...option.RequestOption) (res *Websocket, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebsocketGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/websockets", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

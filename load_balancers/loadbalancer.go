@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,10 +18,11 @@ import (
 )
 
 // LoadBalancerService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewLoadBalancerService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewLoadBalancerService] method instead.
 type LoadBalancerService struct {
 	Options  []option.RequestOption
 	Monitors *MonitorService
@@ -48,6 +50,10 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/load_balancers", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -61,6 +67,14 @@ func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewPar
 func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string, params LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if loadBalancerID == "" {
+		err = errors.New("missing required load_balancer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -97,6 +111,14 @@ func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBala
 func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if loadBalancerID == "" {
+		err = errors.New("missing required load_balancer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", body.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -110,6 +132,14 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, params LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if loadBalancerID == "" {
+		err = errors.New("missing required load_balancer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -123,6 +153,14 @@ func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, p
 func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, query LoadBalancerGetParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if loadBalancerID == "" {
+		err = errors.New("missing required load_balancer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", query.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

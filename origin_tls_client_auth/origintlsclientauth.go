@@ -4,6 +4,7 @@ package origin_tls_client_auth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -19,10 +20,11 @@ import (
 )
 
 // OriginTLSClientAuthService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewOriginTLSClientAuthService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewOriginTLSClientAuthService] method instead.
 type OriginTLSClientAuthService struct {
 	Options   []option.RequestOption
 	Hostnames *HostnameService
@@ -48,6 +50,10 @@ func NewOriginTLSClientAuthService(opts ...option.RequestOption) (r *OriginTLSCl
 func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSClientAuthNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -84,6 +90,14 @@ func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query O
 func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, body OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", body.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -97,6 +111,14 @@ func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID s
 func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID string, query OriginTLSClientAuthGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", query.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

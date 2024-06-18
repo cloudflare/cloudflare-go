@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // IndicatorFeedSnapshotService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewIndicatorFeedSnapshotService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewIndicatorFeedSnapshotService] method instead.
 type IndicatorFeedSnapshotService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,10 @@ func NewIndicatorFeedSnapshotService(opts ...option.RequestOption) (r *Indicator
 func (r *IndicatorFeedSnapshotService) Update(ctx context.Context, feedID int64, params IndicatorFeedSnapshotUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedSnapshotUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedSnapshotUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/snapshot", params.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {

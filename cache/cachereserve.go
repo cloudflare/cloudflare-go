@@ -4,6 +4,7 @@ package cache
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // CacheReserveService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewCacheReserveService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewCacheReserveService] method instead.
 type CacheReserveService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +42,10 @@ func NewCacheReserveService(opts ...option.RequestOption) (r *CacheReserveServic
 func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveClearResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -58,6 +64,10 @@ func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClea
 func (r *CacheReserveService) Edit(ctx context.Context, params CacheReserveEditParams, opts ...option.RequestOption) (res *CacheReserveEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -76,6 +86,10 @@ func (r *CacheReserveService) Edit(ctx context.Context, params CacheReserveEditP
 func (r *CacheReserveService) Get(ctx context.Context, query CacheReserveGetParams, opts ...option.RequestOption) (res *CacheReserveGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -92,6 +106,10 @@ func (r *CacheReserveService) Get(ctx context.Context, query CacheReserveGetPara
 func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStatusParams, opts ...option.RequestOption) (res *CacheReserveStatusResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveStatusResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

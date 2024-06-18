@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // ActivationCheckService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewActivationCheckService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewActivationCheckService] method instead.
 type ActivationCheckService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +39,10 @@ func NewActivationCheckService(opts ...option.RequestOption) (r *ActivationCheck
 func (r *ActivationCheckService) Trigger(ctx context.Context, body ActivationCheckTriggerParams, opts ...option.RequestOption) (res *ActivationCheckTriggerResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ActivationCheckTriggerResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/activation_check", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {

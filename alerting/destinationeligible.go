@@ -4,23 +4,23 @@ package alerting
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // DestinationEligibleService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDestinationEligibleService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDestinationEligibleService] method instead.
 type DestinationEligibleService struct {
 	Options []option.RequestOption
 }
@@ -35,9 +35,13 @@ func NewDestinationEligibleService(opts ...option.RequestOption) (r *Destination
 }
 
 // Get a list of all delivery mechanism types for which an account is eligible.
-func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationEligibleGetParams, opts ...option.RequestOption) (res *DestinationEligibleGetResponseUnion, err error) {
+func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationEligibleGetParams, opts ...option.RequestOption) (res *DestinationEligibleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationEligibleGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -47,30 +51,52 @@ func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationE
 	return
 }
 
-// Union satisfied by [alerting.DestinationEligibleGetResponseUnknown],
-// [alerting.DestinationEligibleGetResponseArray] or [shared.UnionString].
-type DestinationEligibleGetResponseUnion interface {
-	ImplementsAlertingDestinationEligibleGetResponseUnion()
+type DestinationEligibleGetResponse map[string][]DestinationEligibleGetResponseItem
+
+type DestinationEligibleGetResponseItem struct {
+	// Determines whether or not the account is eligible for the delivery mechanism.
+	Eligible bool `json:"eligible"`
+	// Beta flag. Users can create a policy with a mechanism that is not ready, but we
+	// cannot guarantee successful delivery of notifications.
+	Ready bool `json:"ready"`
+	// Determines type of delivery mechanism.
+	Type DestinationEligibleGetResponseItemType `json:"type"`
+	JSON destinationEligibleGetResponseItemJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DestinationEligibleGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DestinationEligibleGetResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// destinationEligibleGetResponseItemJSON contains the JSON metadata for the struct
+// [DestinationEligibleGetResponseItem]
+type destinationEligibleGetResponseItemJSON struct {
+	Eligible    apijson.Field
+	Ready       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-type DestinationEligibleGetResponseArray []interface{}
+func (r *DestinationEligibleGetResponseItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r DestinationEligibleGetResponseArray) ImplementsAlertingDestinationEligibleGetResponseUnion() {
+func (r destinationEligibleGetResponseItemJSON) RawJSON() string {
+	return r.raw
+}
+
+// Determines type of delivery mechanism.
+type DestinationEligibleGetResponseItemType string
+
+const (
+	DestinationEligibleGetResponseItemTypeEmail     DestinationEligibleGetResponseItemType = "email"
+	DestinationEligibleGetResponseItemTypePagerduty DestinationEligibleGetResponseItemType = "pagerduty"
+	DestinationEligibleGetResponseItemTypeWebhook   DestinationEligibleGetResponseItemType = "webhook"
+)
+
+func (r DestinationEligibleGetResponseItemType) IsKnown() bool {
+	switch r {
+	case DestinationEligibleGetResponseItemTypeEmail, DestinationEligibleGetResponseItemTypePagerduty, DestinationEligibleGetResponseItemTypeWebhook:
+		return true
+	}
+	return false
 }
 
 type DestinationEligibleGetParams struct {
@@ -79,11 +105,11 @@ type DestinationEligibleGetParams struct {
 }
 
 type DestinationEligibleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   DestinationEligibleGetResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    DestinationEligibleGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     DestinationEligibleGetResponse                   `json:"result"`
 	ResultInfo DestinationEligibleGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       destinationEligibleGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -93,8 +119,8 @@ type DestinationEligibleGetResponseEnvelope struct {
 type destinationEligibleGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

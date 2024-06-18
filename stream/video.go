@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,9 +18,11 @@ import (
 )
 
 // VideoService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewVideoService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewVideoService] method instead.
 type VideoService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +40,10 @@ func NewVideoService(opts ...option.RequestOption) (r *VideoService) {
 func (r *VideoService) StorageUsage(ctx context.Context, params VideoStorageUsageParams, opts ...option.RequestOption) (res *VideoStorageUsageResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VideoStorageUsageResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/storage-usage", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

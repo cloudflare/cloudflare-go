@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -18,9 +19,11 @@ import (
 )
 
 // SiteACLService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewSiteACLService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSiteACLService] method instead.
 type SiteACLService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,14 @@ func NewSiteACLService(opts ...option.RequestOption) (r *SiteACLService) {
 func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +62,18 @@ func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLN
 func (r *SiteACLService) Update(ctx context.Context, siteID string, aclIdentifier string, params SiteACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if aclIdentifier == "" {
+		err = errors.New("missing required acl_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -87,8 +110,45 @@ func (r *SiteACLService) ListAutoPaging(ctx context.Context, siteID string, quer
 func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, body SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if aclIdentifier == "" {
+		err = errors.New("missing required acl_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", body.AccountID, siteID, aclIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Patch a specific Site ACL.
+func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclIdentifier string, params SiteACLEditParams, opts ...option.RequestOption) (res *ACL, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SiteACLEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if aclIdentifier == "" {
+		err = errors.New("missing required acl_identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,6 +160,18 @@ func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifie
 func (r *SiteACLService) Get(ctx context.Context, siteID string, aclIdentifier string, query SiteACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if aclIdentifier == "" {
+		err = errors.New("missing required acl_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", query.AccountID, siteID, aclIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -117,8 +189,8 @@ type ACL struct {
 	Description string `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
+	// traffic locally on the Magic Connector. If not included in request, will default
+	// to false.
 	ForwardLocally bool             `json:"forward_locally"`
 	LAN1           ACLConfiguration `json:"lan_1"`
 	LAN2           ACLConfiguration `json:"lan_2"`
@@ -257,8 +329,8 @@ type SiteACLNewParams struct {
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
+	// traffic locally on the Magic Connector. If not included in request, will default
+	// to false.
 	ForwardLocally param.Field[bool]              `json:"forward_locally"`
 	Protocols      param.Field[[]AllowedProtocol] `json:"protocols"`
 }
@@ -318,8 +390,8 @@ type SiteACLUpdateParams struct {
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
-	// traffic locally on the Magic WAN Connector. If not included in request, will
-	// default to false.
+	// traffic locally on the Magic Connector. If not included in request, will default
+	// to false.
 	ForwardLocally param.Field[bool]                  `json:"forward_locally"`
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
@@ -425,6 +497,71 @@ const (
 func (r SiteACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SiteACLDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteACLEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Description for the ACL.
+	Description param.Field[string] `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic Connector. If not included in request, will default
+	// to false.
+	ForwardLocally param.Field[bool]                  `json:"forward_locally"`
+	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
+	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
+	// The name of the ACL.
+	Name      param.Field[string]            `json:"name"`
+	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
+}
+
+func (r SiteACLEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SiteACLEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Bidirectional ACL policy for network traffic within a site.
+	Result ACL `json:"result,required"`
+	// Whether the API call was successful
+	Success SiteACLEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteACLEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// siteACLEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteACLEditResponseEnvelope]
+type siteACLEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteACLEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteACLEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SiteACLEditResponseEnvelopeSuccess bool
+
+const (
+	SiteACLEditResponseEnvelopeSuccessTrue SiteACLEditResponseEnvelopeSuccess = true
+)
+
+func (r SiteACLEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

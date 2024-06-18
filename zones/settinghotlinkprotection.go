@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // SettingHotlinkProtectionService contains methods and other services that help
-// with interacting with the cloudflare API. Note, unlike clients, this service
-// does not read variables from the environment automatically. You should not
-// instantiate this service directly, and instead use the
-// [NewSettingHotlinkProtectionService] method instead.
+// with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingHotlinkProtectionService] method instead.
 type SettingHotlinkProtectionService struct {
 	Options []option.RequestOption
 }
@@ -43,6 +45,10 @@ func NewSettingHotlinkProtectionService(opts ...option.RequestOption) (r *Settin
 func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, params SettingHotlinkProtectionEditParams, opts ...option.RequestOption) (res *HotlinkProtection, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHotlinkProtectionEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -62,6 +68,10 @@ func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, params Setti
 func (r *SettingHotlinkProtectionService) Get(ctx context.Context, query SettingHotlinkProtectionGetParams, opts ...option.RequestOption) (res *HotlinkProtection, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHotlinkProtectionGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

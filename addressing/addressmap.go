@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,9 +18,11 @@ import (
 )
 
 // AddressMapService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewAddressMapService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAddressMapService] method instead.
 type AddressMapService struct {
 	Options  []option.RequestOption
 	Accounts *AddressMapAccountService
@@ -43,6 +46,10 @@ func NewAddressMapService(opts ...option.RequestOption) (r *AddressMapService) {
 func (r *AddressMapService) New(ctx context.Context, params AddressMapNewParams, opts ...option.RequestOption) (res *AddressMapNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -80,6 +87,14 @@ func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMap
 func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, body AddressMapDeleteParams, opts ...option.RequestOption) (res *[]AddressMapDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", body.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -93,6 +108,14 @@ func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, bod
 func (r *AddressMapService) Edit(ctx context.Context, addressMapID string, params AddressMapEditParams, opts ...option.RequestOption) (res *AddressMap, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -106,6 +129,14 @@ func (r *AddressMapService) Edit(ctx context.Context, addressMapID string, param
 func (r *AddressMapService) Get(ctx context.Context, addressMapID string, query AddressMapGetParams, opts ...option.RequestOption) (res *AddressMapGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", query.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -263,7 +294,7 @@ type AddressMapNewResponseMembership struct {
 	// Controls whether the membership can be deleted via the API or not.
 	CanDelete bool      `json:"can_delete"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Identifier
+	// The identifier for the membership (eg. a zone or account tag).
 	Identifier string `json:"identifier"`
 	// The type of the membership.
 	Kind Kind                                `json:"kind"`
@@ -375,7 +406,7 @@ type AddressMapGetResponseMembership struct {
 	// Controls whether the membership can be deleted via the API or not.
 	CanDelete bool      `json:"can_delete"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Identifier
+	// The identifier for the membership (eg. a zone or account tag).
 	Identifier string `json:"identifier"`
 	// The type of the membership.
 	Kind Kind                                `json:"kind"`
@@ -409,10 +440,26 @@ type AddressMapNewParams struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
 	// with IP addresses on an Address Map until the map is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled param.Field[bool]     `json:"enabled"`
+	IPs     param.Field[[]string] `json:"ips"`
+	// Zones and Accounts which will be assigned IPs on this Address Map. A zone
+	// membership will take priority over an account membership.
+	Memberships param.Field[[]AddressMapNewParamsMembership] `json:"memberships"`
 }
 
 func (r AddressMapNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AddressMapNewParamsMembership struct {
+	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
+	// The identifier for the membership (eg. a zone or account tag).
+	Identifier param.Field[string] `json:"identifier"`
+	// The type of the membership.
+	Kind param.Field[Kind] `json:"kind"`
+}
+
+func (r AddressMapNewParamsMembership) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

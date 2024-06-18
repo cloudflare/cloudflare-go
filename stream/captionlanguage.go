@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // CaptionLanguageService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewCaptionLanguageService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewCaptionLanguageService] method instead.
 type CaptionLanguageService struct {
 	Options []option.RequestOption
 	Vtt     *CaptionLanguageVttService
@@ -39,6 +41,18 @@ func NewCaptionLanguageService(opts ...option.RequestOption) (r *CaptionLanguage
 func (r *CaptionLanguageService) Update(ctx context.Context, identifier string, language string, params CaptionLanguageUpdateParams, opts ...option.RequestOption) (res *Caption, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionLanguageUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if language == "" {
+		err = errors.New("missing required language parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +66,18 @@ func (r *CaptionLanguageService) Update(ctx context.Context, identifier string, 
 func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, language string, body CaptionLanguageDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionLanguageDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if language == "" {
+		err = errors.New("missing required language parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", body.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -65,6 +91,18 @@ func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, 
 func (r *CaptionLanguageService) Get(ctx context.Context, identifier string, language string, query CaptionLanguageGetParams, opts ...option.RequestOption) (res *Caption, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionLanguageGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if language == "" {
+		err = errors.New("missing required language parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", query.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

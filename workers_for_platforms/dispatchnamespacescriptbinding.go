@@ -4,6 +4,7 @@ package workers_for_platforms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,10 +17,11 @@ import (
 )
 
 // DispatchNamespaceScriptBindingService contains methods and other services that
-// help with interacting with the cloudflare API. Note, unlike clients, this
-// service does not read variables from the environment automatically. You should
-// not instantiate this service directly, and instead use the
-// [NewDispatchNamespaceScriptBindingService] method instead.
+// help with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDispatchNamespaceScriptBindingService] method instead.
 type DispatchNamespaceScriptBindingService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +40,18 @@ func NewDispatchNamespaceScriptBindingService(opts ...option.RequestOption) (r *
 func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *[]workers.Binding, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptBindingGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/bindings", query.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

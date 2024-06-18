@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,10 +19,11 @@ import (
 )
 
 // RiskScoringSummaryService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRiskScoringSummaryService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRiskScoringSummaryService] method instead.
 type RiskScoringSummaryService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,10 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 func (r *RiskScoringSummaryService) Get(ctx context.Context, accountIdentifier string, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringSummaryGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/summary", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -73,7 +79,7 @@ type RiskScoringSummaryGetResponseUser struct {
 	Email        string                                         `json:"email,required"`
 	EventCount   int64                                          `json:"event_count,required"`
 	LastEvent    time.Time                                      `json:"last_event,required" format:"date-time"`
-	MaxRiskLevel RiskScoringSummaryGetResponseUsersMaxRiskLevel `json:"max_risk_level,required,nullable"`
+	MaxRiskLevel RiskScoringSummaryGetResponseUsersMaxRiskLevel `json:"max_risk_level,required"`
 	Name         string                                         `json:"name,required"`
 	// The ID for a user
 	UserID string                                `json:"user_id,required"`

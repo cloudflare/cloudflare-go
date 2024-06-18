@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // ASNService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewASNService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewASNService] method instead.
 type ASNService struct {
 	Options []option.RequestOption
 	Subnets *ASNSubnetService
@@ -37,6 +40,10 @@ func NewASNService(opts ...option.RequestOption) (r *ASNService) {
 func (r *ASNService) Get(ctx context.Context, asn shared.ASNParam, query ASNGetParams, opts ...option.RequestOption) (res *shared.ASN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ASNGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v", query.AccountID, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

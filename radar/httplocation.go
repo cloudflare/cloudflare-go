@@ -16,19 +16,21 @@ import (
 )
 
 // HTTPLocationService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewHTTPLocationService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHTTPLocationService] method instead.
 type HTTPLocationService struct {
-	Options      []option.RequestOption
-	BotClass     *HTTPLocationBotClassService
-	DeviceType   *HTTPLocationDeviceTypeService
-	HTTPProtocol *HTTPLocationHTTPProtocolService
-	HTTPMethod   *HTTPLocationHTTPMethodService
-	IPVersion    *HTTPLocationIPVersionService
-	OS           *HTTPLocationOSService
-	TLSVersion   *HTTPLocationTLSVersionService
+	Options       []option.RequestOption
+	BotClass      *HTTPLocationBotClassService
+	DeviceType    *HTTPLocationDeviceTypeService
+	HTTPProtocol  *HTTPLocationHTTPProtocolService
+	HTTPMethod    *HTTPLocationHTTPMethodService
+	IPVersion     *HTTPLocationIPVersionService
+	OS            *HTTPLocationOSService
+	TLSVersion    *HTTPLocationTLSVersionService
+	BrowserFamily *HTTPLocationBrowserFamilyService
 }
 
 // NewHTTPLocationService generates a new service that applies the given options to
@@ -44,6 +46,7 @@ func NewHTTPLocationService(opts ...option.RequestOption) (r *HTTPLocationServic
 	r.IPVersion = NewHTTPLocationIPVersionService(opts...)
 	r.OS = NewHTTPLocationOSService(opts...)
 	r.TLSVersion = NewHTTPLocationTLSVersionService(opts...)
+	r.BrowserFamily = NewHTTPLocationBrowserFamilyService(opts...)
 	return
 }
 
@@ -223,6 +226,8 @@ type HTTPLocationGetParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPLocationGetParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPLocationGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -277,6 +282,23 @@ const (
 func (r HTTPLocationGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPLocationGetParamsBotClassLikelyAutomated, HTTPLocationGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPLocationGetParamsBrowserFamily string
+
+const (
+	HTTPLocationGetParamsBrowserFamilyChrome  HTTPLocationGetParamsBrowserFamily = "CHROME"
+	HTTPLocationGetParamsBrowserFamilyEdge    HTTPLocationGetParamsBrowserFamily = "EDGE"
+	HTTPLocationGetParamsBrowserFamilyFirefox HTTPLocationGetParamsBrowserFamily = "FIREFOX"
+	HTTPLocationGetParamsBrowserFamilySafari  HTTPLocationGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPLocationGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPLocationGetParamsBrowserFamilyChrome, HTTPLocationGetParamsBrowserFamilyEdge, HTTPLocationGetParamsBrowserFamilyFirefox, HTTPLocationGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false

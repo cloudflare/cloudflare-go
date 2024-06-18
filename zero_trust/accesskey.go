@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -18,9 +19,11 @@ import (
 )
 
 // AccessKeyService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewAccessKeyService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessKeyService] method instead.
 type AccessKeyService struct {
 	Options []option.RequestOption
 }
@@ -35,11 +38,15 @@ func NewAccessKeyService(opts ...option.RequestOption) (r *AccessKeyService) {
 }
 
 // Updates the Access key rotation settings for an account.
-func (r *AccessKeyService) Update(ctx context.Context, identifier string, body AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponseUnion, err error) {
+func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/keys", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,10 +55,14 @@ func (r *AccessKeyService) Update(ctx context.Context, identifier string, body A
 }
 
 // Gets the Access key rotation settings for an account.
-func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyGetResponseUnion, err error) {
+func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, opts ...option.RequestOption) (res *AccessKeyGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/keys", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -61,10 +72,14 @@ func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...o
 }
 
 // Perfoms a key rotation for an account.
-func (r *AccessKeyService) Rotate(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyRotateResponseUnion, err error) {
+func (r *AccessKeyService) Rotate(ctx context.Context, body AccessKeyRotateParams, opts ...option.RequestOption) (res *AccessKeyRotateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyRotateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/keys/rotate", identifier)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/keys/rotate", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -125,6 +140,8 @@ func init() {
 }
 
 type AccessKeyUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The number of days between key rotations.
 	KeyRotationIntervalDays param.Field[float64] `json:"key_rotation_interval_days,required"`
 }
@@ -185,6 +202,11 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type AccessKeyGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AccessKeyGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
@@ -235,6 +257,11 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AccessKeyRotateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessKeyRotateResponseEnvelope struct {

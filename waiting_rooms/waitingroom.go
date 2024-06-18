@@ -4,6 +4,7 @@ package waiting_rooms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,10 +19,11 @@ import (
 )
 
 // WaitingRoomService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewWaitingRoomService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewWaitingRoomService] method instead.
 type WaitingRoomService struct {
 	Options  []option.RequestOption
 	Page     *PageService
@@ -49,6 +51,10 @@ func NewWaitingRoomService(opts ...option.RequestOption) (r *WaitingRoomService)
 func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -62,6 +68,14 @@ func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParam
 func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, params WaitingRoomUpdateParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -98,6 +112,14 @@ func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingR
 func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, body WaitingRoomDeleteParams, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", body.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -111,6 +133,14 @@ func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, b
 func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, params WaitingRoomEditParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -124,6 +154,14 @@ func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, par
 func (r *WaitingRoomService) Get(ctx context.Context, waitingRoomID string, query WaitingRoomGetParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", query.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

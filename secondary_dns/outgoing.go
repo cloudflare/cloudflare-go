@@ -4,6 +4,7 @@ package secondary_dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // OutgoingService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewOutgoingService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewOutgoingService] method instead.
 type OutgoingService struct {
 	Options []option.RequestOption
 	Status  *OutgoingStatusService
@@ -37,6 +40,10 @@ func NewOutgoingService(opts ...option.RequestOption) (r *OutgoingService) {
 func (r *OutgoingService) New(ctx context.Context, params OutgoingNewParams, opts ...option.RequestOption) (res *OutgoingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +57,10 @@ func (r *OutgoingService) New(ctx context.Context, params OutgoingNewParams, opt
 func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParams, opts ...option.RequestOption) (res *OutgoingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -63,6 +74,10 @@ func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParam
 func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -77,6 +92,10 @@ func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams,
 func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisableParams, opts ...option.RequestOption) (res *DisableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/disable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -90,6 +109,10 @@ func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisablePar
 func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/enable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -103,6 +126,10 @@ func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParam
 func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/force_notify", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -116,6 +143,10 @@ func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceN
 func (r *OutgoingService) Get(ctx context.Context, query OutgoingGetParams, opts ...option.RequestOption) (res *OutgoingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -142,7 +173,7 @@ type OutgoingNewResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                 `json:"soa_serial"`
+	SOASerial float64                 `json:"soa_serial"`
 	JSON      outgoingNewResponseJSON `json:"-"`
 }
 
@@ -155,7 +186,7 @@ type outgoingNewResponseJSON struct {
 	LastTransferredTime apijson.Field
 	Name                apijson.Field
 	Peers               apijson.Field
-	SoaSerial           apijson.Field
+	SOASerial           apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -181,7 +212,7 @@ type OutgoingUpdateResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                    `json:"soa_serial"`
+	SOASerial float64                    `json:"soa_serial"`
 	JSON      outgoingUpdateResponseJSON `json:"-"`
 }
 
@@ -194,7 +225,7 @@ type outgoingUpdateResponseJSON struct {
 	LastTransferredTime apijson.Field
 	Name                apijson.Field
 	Peers               apijson.Field
-	SoaSerial           apijson.Field
+	SOASerial           apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -241,7 +272,7 @@ type OutgoingGetResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                 `json:"soa_serial"`
+	SOASerial float64                 `json:"soa_serial"`
 	JSON      outgoingGetResponseJSON `json:"-"`
 }
 
@@ -254,7 +285,7 @@ type outgoingGetResponseJSON struct {
 	LastTransferredTime apijson.Field
 	Name                apijson.Field
 	Peers               apijson.Field
-	SoaSerial           apijson.Field
+	SOASerial           apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }

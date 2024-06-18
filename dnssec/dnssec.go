@@ -4,6 +4,7 @@ package dnssec
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -18,9 +19,11 @@ import (
 )
 
 // DNSSECService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDNSSECService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDNSSECService] method instead.
 type DNSSECService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,10 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opts ...option.RequestOption) (res *DNSSECDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dnssec", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -51,6 +58,10 @@ func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opt
 func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts ...option.RequestOption) (res *DNSSEC, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dnssec", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -64,6 +75,10 @@ func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts 
 func (r *DNSSECService) Get(ctx context.Context, query DNSSECGetParams, opts ...option.RequestOption) (res *DNSSEC, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dnssec", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

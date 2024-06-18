@@ -17,10 +17,11 @@ import (
 )
 
 // NamespaceKeyService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewNamespaceKeyService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewNamespaceKeyService] method instead.
 type NamespaceKeyService struct {
 	Options []option.RequestOption
 }
@@ -67,8 +68,8 @@ type Key struct {
 	// will expire. This property is omitted for keys that will not expire.
 	Expiration float64 `json:"expiration"`
 	// Arbitrary JSON that is associated with a key.
-	Metadata interface{} `json:"metadata"`
-	JSON     keyJSON     `json:"-"`
+	Metadata map[string]interface{} `json:"metadata"`
+	JSON     keyJSON                `json:"-"`
 }
 
 // keyJSON contains the JSON metadata for the struct [Key]

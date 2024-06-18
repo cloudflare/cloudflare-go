@@ -4,6 +4,7 @@ package snippets
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,9 +17,11 @@ import (
 )
 
 // SnippetService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewSnippetService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSnippetService] method instead.
 type SnippetService struct {
 	Options []option.RequestOption
 	Content *ContentService
@@ -40,6 +43,14 @@ func NewSnippetService(opts ...option.RequestOption) (r *SnippetService) {
 func (r *SnippetService) Update(ctx context.Context, snippetName string, params SnippetUpdateParams, opts ...option.RequestOption) (res *Snippet, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if snippetName == "" {
+		err = errors.New("missing required snippet_name parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/snippets/%s", params.ZoneID, snippetName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -75,6 +86,14 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, query SnippetListPa
 // Delete Snippet
 func (r *SnippetService) Delete(ctx context.Context, snippetName string, body SnippetDeleteParams, opts ...option.RequestOption) (res *SnippetDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if snippetName == "" {
+		err = errors.New("missing required snippet_name parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/snippets/%s", body.ZoneID, snippetName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -84,6 +103,14 @@ func (r *SnippetService) Delete(ctx context.Context, snippetName string, body Sn
 func (r *SnippetService) Get(ctx context.Context, snippetName string, query SnippetGetParams, opts ...option.RequestOption) (res *Snippet, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if snippetName == "" {
+		err = errors.New("missing required snippet_name parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/snippets/%s", query.ZoneID, snippetName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

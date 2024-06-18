@@ -4,6 +4,7 @@ package secondary_dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // IncomingService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewIncomingService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewIncomingService] method instead.
 type IncomingService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewIncomingService(opts ...option.RequestOption) (r *IncomingService) {
 func (r *IncomingService) New(ctx context.Context, params IncomingNewParams, opts ...option.RequestOption) (res *IncomingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -48,6 +55,10 @@ func (r *IncomingService) New(ctx context.Context, params IncomingNewParams, opt
 func (r *IncomingService) Update(ctx context.Context, params IncomingUpdateParams, opts ...option.RequestOption) (res *IncomingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -61,6 +72,10 @@ func (r *IncomingService) Update(ctx context.Context, params IncomingUpdateParam
 func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams, opts ...option.RequestOption) (res *IncomingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -74,6 +89,10 @@ func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams,
 func (r *IncomingService) Get(ctx context.Context, query IncomingGetParams, opts ...option.RequestOption) (res *IncomingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -99,7 +118,7 @@ type IncomingNewResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                 `json:"soa_serial"`
+	SOASerial float64                 `json:"soa_serial"`
 	JSON      incomingNewResponseJSON `json:"-"`
 }
 
@@ -113,7 +132,7 @@ type incomingNewResponseJSON struct {
 	ModifiedTime       apijson.Field
 	Name               apijson.Field
 	Peers              apijson.Field
-	SoaSerial          apijson.Field
+	SOASerial          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -142,7 +161,7 @@ type IncomingUpdateResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                    `json:"soa_serial"`
+	SOASerial float64                    `json:"soa_serial"`
 	JSON      incomingUpdateResponseJSON `json:"-"`
 }
 
@@ -156,7 +175,7 @@ type incomingUpdateResponseJSON struct {
 	ModifiedTime       apijson.Field
 	Name               apijson.Field
 	Peers              apijson.Field
-	SoaSerial          apijson.Field
+	SOASerial          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -206,7 +225,7 @@ type IncomingGetResponse struct {
 	// A list of peer tags.
 	Peers []interface{} `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SoaSerial float64                 `json:"soa_serial"`
+	SOASerial float64                 `json:"soa_serial"`
 	JSON      incomingGetResponseJSON `json:"-"`
 }
 
@@ -220,7 +239,7 @@ type incomingGetResponseJSON struct {
 	ModifiedTime       apijson.Field
 	Name               apijson.Field
 	Peers              apijson.Field
-	SoaSerial          apijson.Field
+	SOASerial          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }

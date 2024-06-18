@@ -4,6 +4,7 @@ package url_scanner
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,9 +19,11 @@ import (
 )
 
 // ScanService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewScanService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewScanService] method instead.
 type ScanService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +43,10 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScanNewResponseEnvelope
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -53,6 +60,14 @@ func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewPar
 func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScanGetResponseEnvelope
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
+		return
+	}
+	if scanID == "" {
+		err = errors.New("missing required scanId parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s", accountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -67,6 +82,14 @@ func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, 
 func (r *ScanService) Har(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *ScanHarResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScanHarResponseEnvelope
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
+		return
+	}
+	if scanID == "" {
+		err = errors.New("missing required scanId parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s/har", accountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -80,6 +103,14 @@ func (r *ScanService) Har(ctx context.Context, accountID string, scanID string, 
 func (r *ScanService) Screenshot(ctx context.Context, accountID string, scanID string, query ScanScreenshotParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/png")}, opts...)
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
+		return
+	}
+	if scanID == "" {
+		err = errors.New("missing required scanId parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s/screenshot", accountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return

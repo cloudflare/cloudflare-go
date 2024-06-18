@@ -4,6 +4,7 @@ package hostnames
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -18,9 +19,11 @@ import (
 )
 
 // SettingTLSService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewSettingTLSService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingTLSService] method instead.
 type SettingTLSService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,14 @@ func NewSettingTLSService(opts ...option.RequestOption) (r *SettingTLSService) {
 func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpdateParamsSettingID, hostname string, params SettingTLSUpdateParams, opts ...option.RequestOption) (res *Setting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if hostname == "" {
+		err = errors.New("missing required hostname parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", params.ZoneID, settingID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +62,14 @@ func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpda
 func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDeleteParamsSettingID, hostname string, body SettingTLSDeleteParams, opts ...option.RequestOption) (res *SettingTLSDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if hostname == "" {
+		err = errors.New("missing required hostname parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", body.ZoneID, settingID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -64,6 +83,10 @@ func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDele
 func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetParamsSettingID, query SettingTLSGetParams, opts ...option.RequestOption) (res *[]SettingTLSGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", query.ZoneID, settingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

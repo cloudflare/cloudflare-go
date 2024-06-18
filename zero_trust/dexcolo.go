@@ -16,9 +16,11 @@ import (
 )
 
 // DEXColoService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDEXColoService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDEXColoService] method instead.
 type DEXColoService struct {
 	Options []option.RequestOption
 }
@@ -63,10 +65,10 @@ type DEXColoListResponse = interface{}
 
 type DEXColoListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// End time for connection period in RFC3339 (ISO 8601) format.
-	TimeEnd param.Field[string] `query:"timeEnd,required"`
 	// Start time for connection period in RFC3339 (ISO 8601) format.
-	TimeStart param.Field[string] `query:"timeStart,required"`
+	From param.Field[string] `query:"from,required"`
+	// End time for connection period in RFC3339 (ISO 8601) format.
+	To param.Field[string] `query:"to,required"`
 	// Type of usage that colos should be sorted by. If unspecified, returns all
 	// Cloudflare colos sorted alphabetically.
 	SortBy param.Field[DEXColoListParamsSortBy] `query:"sortBy"`

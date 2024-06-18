@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,10 +18,11 @@ import (
 )
 
 // AccessServiceTokenService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAccessServiceTokenService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessServiceTokenService] method instead.
 type AccessServiceTokenService struct {
 	Options []option.RequestOption
 }
@@ -42,10 +44,19 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 	var env AccessServiceTokenNewResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
@@ -59,19 +70,32 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 }
 
 // Updates a configured service token.
-func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
+func (r *AccessServiceTokenService) Update(ctx context.Context, serviceTokenID string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenUpdateResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, uuid)
+	if serviceTokenID == "" {
+		err = errors.New("missing required service_token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -87,10 +111,19 @@ func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServic
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
@@ -113,19 +146,32 @@ func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, query Ac
 }
 
 // Deletes a service token.
-func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
+func (r *AccessServiceTokenService) Delete(ctx context.Context, serviceTokenID string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenDeleteResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = body.AccountID
-	} else {
+	}
+	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, uuid)
+	if serviceTokenID == "" {
+		err = errors.New("missing required service_token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -134,11 +180,54 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, bod
 	return
 }
 
+// Fetches a single service token.
+func (r *AccessServiceTokenService) Get(ctx context.Context, serviceTokenID string, query AccessServiceTokenGetParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessServiceTokenGetResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	}
+	if query.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
+	if serviceTokenID == "" {
+		err = errors.New("missing required service_token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, serviceTokenID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Refreshes the expiration of a service token.
-func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ServiceToken, err error) {
+func (r *AccessServiceTokenService) Refresh(ctx context.Context, serviceTokenID string, body AccessServiceTokenRefreshParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenRefreshResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", identifier, uuid)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if serviceTokenID == "" {
+		err = errors.New("missing required service_token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", body.AccountID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -148,10 +237,18 @@ func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier stri
 }
 
 // Generates a new Client Secret for a service token and revokes the old one.
-func (r *AccessServiceTokenService) Rotate(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessServiceTokenRotateResponse, err error) {
+func (r *AccessServiceTokenService) Rotate(ctx context.Context, serviceTokenID string, body AccessServiceTokenRotateParams, opts ...option.RequestOption) (res *AccessServiceTokenRotateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenRotateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/rotate", identifier, uuid)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if serviceTokenID == "" {
+		err = errors.New("missing required service_token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/rotate", body.AccountID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -162,7 +259,7 @@ func (r *AccessServiceTokenService) Rotate(ctx context.Context, identifier strin
 
 type ServiceToken struct {
 	// The ID of the service token.
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
 	// `CF-Access-Client-ID` request header.
 	ClientID  string    `json:"client_id"`
@@ -458,6 +555,61 @@ func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type AccessServiceTokenGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
+}
+
+type AccessServiceTokenGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AccessServiceTokenGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceToken                                 `json:"result"`
+	JSON    accessServiceTokenGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessServiceTokenGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AccessServiceTokenGetResponseEnvelope]
+type accessServiceTokenGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessServiceTokenGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AccessServiceTokenGetResponseEnvelopeSuccess bool
+
+const (
+	AccessServiceTokenGetResponseEnvelopeSuccessTrue AccessServiceTokenGetResponseEnvelopeSuccess = true
+)
+
+func (r AccessServiceTokenGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessServiceTokenGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type AccessServiceTokenRefreshParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AccessServiceTokenRefreshResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
@@ -499,6 +651,11 @@ func (r AccessServiceTokenRefreshResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AccessServiceTokenRotateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessServiceTokenRotateResponseEnvelope struct {

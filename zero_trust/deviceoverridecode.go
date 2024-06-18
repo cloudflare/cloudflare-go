@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // DeviceOverrideCodeService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDeviceOverrideCodeService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDeviceOverrideCodeService] method instead.
 type DeviceOverrideCodeService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +39,14 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *DeviceOverrideCodeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceOverrideCodeListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if deviceID == "" {
+		err = errors.New("missing required device_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/%s/override_codes", query.AccountID, deviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

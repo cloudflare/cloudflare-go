@@ -16,9 +16,11 @@ import (
 )
 
 // QualityIQIService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewQualityIQIService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewQualityIQIService] method instead.
 type QualityIQIService struct {
 	Options []option.RequestOption
 }

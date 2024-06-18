@@ -27,13 +27,10 @@ func TestAccessKeyUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Keys.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		zero_trust.AccessKeyUpdateParams{
-			KeyRotationIntervalDays: cloudflare.F(30.000000),
-		},
-	)
+	_, err := client.ZeroTrust.Access.Keys.Update(context.TODO(), zero_trust.AccessKeyUpdateParams{
+		AccountID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		KeyRotationIntervalDays: cloudflare.F(30.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -56,7 +53,9 @@ func TestAccessKeyGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Keys.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.ZeroTrust.Access.Keys.Get(context.TODO(), zero_trust.AccessKeyGetParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -79,7 +78,9 @@ func TestAccessKeyRotate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Keys.Rotate(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.ZeroTrust.Access.Keys.Rotate(context.TODO(), zero_trust.AccessKeyRotateParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

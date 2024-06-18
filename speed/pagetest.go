@@ -4,6 +4,7 @@ package speed
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,9 +19,11 @@ import (
 )
 
 // PageTestService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewPageTestService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewPageTestService] method instead.
 type PageTestService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,14 @@ func NewPageTestService(opts ...option.RequestOption) (r *PageTestService) {
 func (r *PageTestService) New(ctx context.Context, url string, params PageTestNewParams, opts ...option.RequestOption) (res *Test, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageTestNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if url == "" {
+		err = errors.New("missing required url parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -50,6 +61,14 @@ func (r *PageTestService) New(ctx context.Context, url string, params PageTestNe
 // Test history (list of tests) for a specific webpage.
 func (r *PageTestService) List(ctx context.Context, url string, params PageTestListParams, opts ...option.RequestOption) (res *PageTestListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if url == "" {
+		err = errors.New("missing required url parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
@@ -60,6 +79,14 @@ func (r *PageTestService) List(ctx context.Context, url string, params PageTestL
 func (r *PageTestService) Delete(ctx context.Context, url string, params PageTestDeleteParams, opts ...option.RequestOption) (res *PageTestDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageTestDeleteResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if url == "" {
+		err = errors.New("missing required url parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
@@ -73,6 +100,18 @@ func (r *PageTestService) Delete(ctx context.Context, url string, params PageTes
 func (r *PageTestService) Get(ctx context.Context, url string, testID string, query PageTestGetParams, opts ...option.RequestOption) (res *Test, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageTestGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if url == "" {
+		err = errors.New("missing required url parameter")
+		return
+	}
+	if testID == "" {
+		err = errors.New("missing required test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", query.ZoneID, url, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

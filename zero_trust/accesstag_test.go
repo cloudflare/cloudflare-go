@@ -27,13 +27,10 @@ func TestAccessTagNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Tags.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		zero_trust.AccessTagNewParams{
-			Name: cloudflare.F("engineers"),
-		},
-	)
+	_, err := client.ZeroTrust.Access.Tags.New(context.TODO(), zero_trust.AccessTagNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("engineers"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -58,10 +55,10 @@ func TestAccessTagUpdate(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Tags.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"engineers",
 		zero_trust.AccessTagUpdateParams{
-			Name: cloudflare.F("engineers"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Name:      cloudflare.F("engineers"),
 		},
 	)
 	if err != nil {
@@ -86,7 +83,9 @@ func TestAccessTagList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Tags.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.ZeroTrust.Access.Tags.List(context.TODO(), zero_trust.AccessTagListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -111,8 +110,10 @@ func TestAccessTagDelete(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Tags.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"engineers",
+		zero_trust.AccessTagDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -138,8 +139,10 @@ func TestAccessTagGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Tags.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"engineers",
+		zero_trust.AccessTagGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

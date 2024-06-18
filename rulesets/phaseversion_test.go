@@ -33,7 +33,6 @@ func TestPhaseVersionListWithOptionalParams(t *testing.T) {
 		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseVersionListParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -65,7 +64,6 @@ func TestPhaseVersionGetWithOptionalParams(t *testing.T) {
 		"1",
 		rulesets.PhaseVersionGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

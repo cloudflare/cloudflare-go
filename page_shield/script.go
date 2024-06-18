@@ -4,9 +4,11 @@ package page_shield
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -14,12 +16,15 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // ScriptService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewScriptService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewScriptService] method instead.
 type ScriptService struct {
 	Options []option.RequestOption
 }
@@ -59,49 +64,74 @@ func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListPar
 // Fetches a script detected by Page Shield by script ID.
 func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGetParams, opts ...option.RequestOption) (res *ScriptGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env ScriptGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if scriptID == "" {
+		err = errors.New("missing required script_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield/scripts/%s", query.ZoneID, scriptID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type Script struct {
-	ID                      string     `json:"id"`
-	AddedAt                 string     `json:"added_at"`
-	DataflowScore           float64    `json:"dataflow_score"`
-	DomainReportedMalicious bool       `json:"domain_reported_malicious"`
-	FetchedAt               string     `json:"fetched_at"`
-	FirstPageURL            string     `json:"first_page_url"`
-	FirstSeenAt             string     `json:"first_seen_at"`
-	Hash                    string     `json:"hash"`
-	Host                    string     `json:"host"`
-	JSIntegrityScore        float64    `json:"js_integrity_score"`
-	LastSeenAt              string     `json:"last_seen_at"`
-	ObfuscationScore        float64    `json:"obfuscation_score"`
-	PageURLs                []string   `json:"page_urls"`
-	URL                     string     `json:"url"`
-	URLContainsCDNCGIPath   bool       `json:"url_contains_cdn_cgi_path"`
-	JSON                    scriptJSON `json:"-"`
+	// Identifier
+	ID                    string    `json:"id,required"`
+	AddedAt               time.Time `json:"added_at,required" format:"date-time"`
+	FirstSeenAt           time.Time `json:"first_seen_at,required" format:"date-time"`
+	Host                  string    `json:"host,required"`
+	LastSeenAt            time.Time `json:"last_seen_at,required" format:"date-time"`
+	URL                   string    `json:"url,required"`
+	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path,required"`
+	// The dataflow score of the JavaScript content.
+	DataflowScore           int64 `json:"dataflow_score,nullable"`
+	DomainReportedMalicious bool  `json:"domain_reported_malicious"`
+	// The timestamp of when the script was last fetched.
+	FetchedAt    string `json:"fetched_at,nullable"`
+	FirstPageURL string `json:"first_page_url"`
+	// The computed hash of the analyzed script.
+	Hash string `json:"hash,nullable"`
+	// The integrity score of the JavaScript content.
+	JSIntegrityScore          int64    `json:"js_integrity_score,nullable"`
+	MaliciousDomainCategories []string `json:"malicious_domain_categories"`
+	MaliciousURLCategories    []string `json:"malicious_url_categories"`
+	// The obfuscation score of the JavaScript content.
+	ObfuscationScore     int64      `json:"obfuscation_score,nullable"`
+	PageURLs             []string   `json:"page_urls"`
+	URLReportedMalicious bool       `json:"url_reported_malicious"`
+	JSON                 scriptJSON `json:"-"`
 }
 
 // scriptJSON contains the JSON metadata for the struct [Script]
 type scriptJSON struct {
-	ID                      apijson.Field
-	AddedAt                 apijson.Field
-	DataflowScore           apijson.Field
-	DomainReportedMalicious apijson.Field
-	FetchedAt               apijson.Field
-	FirstPageURL            apijson.Field
-	FirstSeenAt             apijson.Field
-	Hash                    apijson.Field
-	Host                    apijson.Field
-	JSIntegrityScore        apijson.Field
-	LastSeenAt              apijson.Field
-	ObfuscationScore        apijson.Field
-	PageURLs                apijson.Field
-	URL                     apijson.Field
-	URLContainsCDNCGIPath   apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	ID                        apijson.Field
+	AddedAt                   apijson.Field
+	FirstSeenAt               apijson.Field
+	Host                      apijson.Field
+	LastSeenAt                apijson.Field
+	URL                       apijson.Field
+	URLContainsCDNCGIPath     apijson.Field
+	DataflowScore             apijson.Field
+	DomainReportedMalicious   apijson.Field
+	FetchedAt                 apijson.Field
+	FirstPageURL              apijson.Field
+	Hash                      apijson.Field
+	JSIntegrityScore          apijson.Field
+	MaliciousDomainCategories apijson.Field
+	MaliciousURLCategories    apijson.Field
+	ObfuscationScore          apijson.Field
+	PageURLs                  apijson.Field
+	URLReportedMalicious      apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *Script) UnmarshalJSON(data []byte) (err error) {
@@ -113,46 +143,58 @@ func (r scriptJSON) RawJSON() string {
 }
 
 type ScriptGetResponse struct {
-	ID                      string                     `json:"id"`
-	AddedAt                 string                     `json:"added_at"`
-	DataflowScore           float64                    `json:"dataflow_score"`
-	DomainReportedMalicious bool                       `json:"domain_reported_malicious"`
-	FetchedAt               string                     `json:"fetched_at"`
-	FirstPageURL            string                     `json:"first_page_url"`
-	FirstSeenAt             string                     `json:"first_seen_at"`
-	Hash                    string                     `json:"hash"`
-	Host                    string                     `json:"host"`
-	JSIntegrityScore        float64                    `json:"js_integrity_score"`
-	LastSeenAt              string                     `json:"last_seen_at"`
-	ObfuscationScore        float64                    `json:"obfuscation_score"`
-	PageURLs                []string                   `json:"page_urls"`
-	URL                     string                     `json:"url"`
-	URLContainsCDNCGIPath   bool                       `json:"url_contains_cdn_cgi_path"`
-	Versions                []ScriptGetResponseVersion `json:"versions,nullable"`
-	JSON                    scriptGetResponseJSON      `json:"-"`
+	// Identifier
+	ID                    string    `json:"id,required"`
+	AddedAt               time.Time `json:"added_at,required" format:"date-time"`
+	FirstSeenAt           time.Time `json:"first_seen_at,required" format:"date-time"`
+	Host                  string    `json:"host,required"`
+	LastSeenAt            time.Time `json:"last_seen_at,required" format:"date-time"`
+	URL                   string    `json:"url,required"`
+	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path,required"`
+	// The dataflow score of the JavaScript content.
+	DataflowScore           int64 `json:"dataflow_score,nullable"`
+	DomainReportedMalicious bool  `json:"domain_reported_malicious"`
+	// The timestamp of when the script was last fetched.
+	FetchedAt    string `json:"fetched_at,nullable"`
+	FirstPageURL string `json:"first_page_url"`
+	// The computed hash of the analyzed script.
+	Hash string `json:"hash,nullable"`
+	// The integrity score of the JavaScript content.
+	JSIntegrityScore          int64    `json:"js_integrity_score,nullable"`
+	MaliciousDomainCategories []string `json:"malicious_domain_categories"`
+	MaliciousURLCategories    []string `json:"malicious_url_categories"`
+	// The obfuscation score of the JavaScript content.
+	ObfuscationScore     int64                      `json:"obfuscation_score,nullable"`
+	PageURLs             []string                   `json:"page_urls"`
+	URLReportedMalicious bool                       `json:"url_reported_malicious"`
+	Versions             []ScriptGetResponseVersion `json:"versions,nullable"`
+	JSON                 scriptGetResponseJSON      `json:"-"`
 }
 
 // scriptGetResponseJSON contains the JSON metadata for the struct
 // [ScriptGetResponse]
 type scriptGetResponseJSON struct {
-	ID                      apijson.Field
-	AddedAt                 apijson.Field
-	DataflowScore           apijson.Field
-	DomainReportedMalicious apijson.Field
-	FetchedAt               apijson.Field
-	FirstPageURL            apijson.Field
-	FirstSeenAt             apijson.Field
-	Hash                    apijson.Field
-	Host                    apijson.Field
-	JSIntegrityScore        apijson.Field
-	LastSeenAt              apijson.Field
-	ObfuscationScore        apijson.Field
-	PageURLs                apijson.Field
-	URL                     apijson.Field
-	URLContainsCDNCGIPath   apijson.Field
-	Versions                apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	ID                        apijson.Field
+	AddedAt                   apijson.Field
+	FirstSeenAt               apijson.Field
+	Host                      apijson.Field
+	LastSeenAt                apijson.Field
+	URL                       apijson.Field
+	URLContainsCDNCGIPath     apijson.Field
+	DataflowScore             apijson.Field
+	DomainReportedMalicious   apijson.Field
+	FetchedAt                 apijson.Field
+	FirstPageURL              apijson.Field
+	Hash                      apijson.Field
+	JSIntegrityScore          apijson.Field
+	MaliciousDomainCategories apijson.Field
+	MaliciousURLCategories    apijson.Field
+	ObfuscationScore          apijson.Field
+	PageURLs                  apijson.Field
+	URLReportedMalicious      apijson.Field
+	Versions                  apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *ScriptGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -313,4 +355,47 @@ func (r ScriptListParamsOrderBy) IsKnown() bool {
 type ScriptGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type ScriptGetResponseEnvelope struct {
+	Result ScriptGetResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success  ScriptGetResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []shared.ResponseInfo            `json:"errors"`
+	Messages []shared.ResponseInfo            `json:"messages"`
+	JSON     scriptGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// scriptGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScriptGetResponseEnvelope]
+type scriptGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type ScriptGetResponseEnvelopeSuccess bool
+
+const (
+	ScriptGetResponseEnvelopeSuccessTrue ScriptGetResponseEnvelopeSuccess = true
+)
+
+func (r ScriptGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

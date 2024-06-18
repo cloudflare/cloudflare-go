@@ -4,6 +4,7 @@ package load_balancers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // MonitorPreviewService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewMonitorPreviewService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewMonitorPreviewService] method instead.
 type MonitorPreviewService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +39,14 @@ func NewMonitorPreviewService(opts ...option.RequestOption) (r *MonitorPreviewSe
 func (r *MonitorPreviewService) New(ctx context.Context, monitorID string, params MonitorPreviewNewParams, opts ...option.RequestOption) (res *MonitorPreviewNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorPreviewNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if monitorID == "" {
+		err = errors.New("missing required monitor_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/preview", params.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

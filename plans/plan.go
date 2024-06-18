@@ -4,6 +4,7 @@ package plans
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // PlanService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewPlanService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewPlanService] method instead.
 type PlanService struct {
 	Options []option.RequestOption
 }
@@ -58,6 +61,14 @@ func (r *PlanService) ListAutoPaging(ctx context.Context, zoneIdentifier string,
 func (r *PlanService) Get(ctx context.Context, zoneIdentifier string, planIdentifier string, opts ...option.RequestOption) (res *AvailableRatePlan, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PlanGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if planIdentifier == "" {
+		err = errors.New("missing required plan_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/available_plans/%s", zoneIdentifier, planIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

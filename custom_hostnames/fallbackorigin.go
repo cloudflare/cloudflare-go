@@ -4,6 +4,7 @@ package custom_hostnames
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -17,10 +18,11 @@ import (
 )
 
 // FallbackOriginService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewFallbackOriginService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewFallbackOriginService] method instead.
 type FallbackOriginService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +40,10 @@ func NewFallbackOriginService(opts ...option.RequestOption) (r *FallbackOriginSe
 func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +57,10 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -64,6 +74,10 @@ func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginD
 func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

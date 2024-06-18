@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,10 +17,11 @@ import (
 )
 
 // DevicePolicyService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDevicePolicyService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDevicePolicyService] method instead.
 type DevicePolicyService struct {
 	Options         []option.RequestOption
 	DefaultPolicy   *DevicePolicyDefaultPolicyService
@@ -46,6 +48,10 @@ func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyServic
 func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -83,6 +89,14 @@ func (r *DevicePolicyService) ListAutoPaging(ctx context.Context, query DevicePo
 func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]SettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s", body.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -96,6 +110,14 @@ func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body 
 func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params DevicePolicyEditParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s", params.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -109,6 +131,14 @@ func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params 
 func (r *DevicePolicyService) Get(ctx context.Context, policyID string, query DevicePolicyGetParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

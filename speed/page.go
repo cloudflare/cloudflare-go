@@ -4,6 +4,7 @@ package speed
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,9 +19,11 @@ import (
 )
 
 // PageService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewPageService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewPageService] method instead.
 type PageService struct {
 	Options []option.RequestOption
 	Tests   *PageTestService
@@ -63,6 +66,14 @@ func (r *PageService) ListAutoPaging(ctx context.Context, query PageListParams, 
 func (r *PageService) Trend(ctx context.Context, url string, params PageTrendParams, opts ...option.RequestOption) (res *Trend, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageTrendResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if url == "" {
+		err = errors.New("missing required url parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", params.ZoneID, url)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

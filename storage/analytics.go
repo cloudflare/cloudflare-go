@@ -4,6 +4,7 @@ package storage
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,9 +19,11 @@ import (
 )
 
 // AnalyticsService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewAnalyticsService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAnalyticsService] method instead.
 type AnalyticsService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,10 @@ func NewAnalyticsService(opts ...option.RequestOption) (r *AnalyticsService) {
 func (r *AnalyticsService) List(ctx context.Context, params AnalyticsListParams, opts ...option.RequestOption) (res *Schema, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsListResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/analytics", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -51,6 +58,10 @@ func (r *AnalyticsService) List(ctx context.Context, params AnalyticsListParams,
 func (r *AnalyticsService) Stored(ctx context.Context, params AnalyticsStoredParams, opts ...option.RequestOption) (res *Components, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsStoredResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/analytics/stored", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -386,11 +397,11 @@ func (r AnalyticsListParamsQueryMetric) IsKnown() bool {
 type AnalyticsListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Metrics on Workers KV requests.
-	Result Schema `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    analyticsListResponseEnvelopeJSON    `json:"-"`
+	// Metrics on Workers KV requests.
+	Result Schema                            `json:"result"`
+	JSON   analyticsListResponseEnvelopeJSON `json:"-"`
 }
 
 // analyticsListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -398,8 +409,8 @@ type AnalyticsListResponseEnvelope struct {
 type analyticsListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -518,11 +529,11 @@ func (r AnalyticsStoredParamsQueryMetric) IsKnown() bool {
 type AnalyticsStoredResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Metrics on Workers KV requests.
-	Result Components `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsStoredResponseEnvelopeSuccess `json:"success,required"`
-	JSON    analyticsStoredResponseEnvelopeJSON    `json:"-"`
+	// Metrics on Workers KV requests.
+	Result Components                          `json:"result"`
+	JSON   analyticsStoredResponseEnvelopeJSON `json:"-"`
 }
 
 // analyticsStoredResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -530,8 +541,8 @@ type AnalyticsStoredResponseEnvelope struct {
 type analyticsStoredResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -4,6 +4,7 @@ package dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,10 +19,11 @@ import (
 )
 
 // FirewallAnalyticsReportService contains methods and other services that help
-// with interacting with the cloudflare API. Note, unlike clients, this service
-// does not read variables from the environment automatically. You should not
-// instantiate this service directly, and instead use the
-// [NewFirewallAnalyticsReportService] method instead.
+// with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewFirewallAnalyticsReportService] method instead.
 type FirewallAnalyticsReportService struct {
 	Options []option.RequestOption
 	Bytimes *FirewallAnalyticsReportBytimeService
@@ -45,6 +47,14 @@ func NewFirewallAnalyticsReportService(opts ...option.RequestOption) (r *Firewal
 func (r *FirewallAnalyticsReportService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *Report, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAnalyticsReportGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dnsFirewallID == "" {
+		err = errors.New("missing required dns_firewall_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report", params.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

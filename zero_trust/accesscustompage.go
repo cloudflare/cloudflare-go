@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,10 +18,11 @@ import (
 )
 
 // AccessCustomPageService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAccessCustomPageService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessCustomPageService] method instead.
 type AccessCustomPageService struct {
 	Options []option.RequestOption
 }
@@ -35,11 +37,15 @@ func NewAccessCustomPageService(opts ...option.RequestOption) (r *AccessCustomPa
 }
 
 // Create a custom page
-func (r *AccessCustomPageService) New(ctx context.Context, identifier string, body AccessCustomPageNewParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
+func (r *AccessCustomPageService) New(ctx context.Context, params AccessCustomPageNewParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCustomPageNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/custom_pages", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/custom_pages", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +54,19 @@ func (r *AccessCustomPageService) New(ctx context.Context, identifier string, bo
 }
 
 // Update a custom page
-func (r *AccessCustomPageService) Update(ctx context.Context, identifier string, uuid string, body AccessCustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
+func (r *AccessCustomPageService) Update(ctx context.Context, customPageID string, params AccessCustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCustomPageUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if customPageID == "" {
+		err = errors.New("missing required custom_page_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", params.AccountID, customPageID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +75,11 @@ func (r *AccessCustomPageService) Update(ctx context.Context, identifier string,
 }
 
 // List custom pages
-func (r *AccessCustomPageService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[CustomPageWithoutHTML], err error) {
+func (r *AccessCustomPageService) List(ctx context.Context, query AccessCustomPageListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CustomPageWithoutHTML], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/access/custom_pages", identifier)
+	path := fmt.Sprintf("accounts/%s/access/custom_pages", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -79,15 +93,23 @@ func (r *AccessCustomPageService) List(ctx context.Context, identifier string, o
 }
 
 // List custom pages
-func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CustomPageWithoutHTML] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
+func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, query AccessCustomPageListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CustomPageWithoutHTML] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a custom page
-func (r *AccessCustomPageService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessCustomPageDeleteResponse, err error) {
+func (r *AccessCustomPageService) Delete(ctx context.Context, customPageID string, body AccessCustomPageDeleteParams, opts ...option.RequestOption) (res *AccessCustomPageDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCustomPageDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", identifier, uuid)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if customPageID == "" {
+		err = errors.New("missing required custom_page_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", body.AccountID, customPageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -97,10 +119,18 @@ func (r *AccessCustomPageService) Delete(ctx context.Context, identifier string,
 }
 
 // Fetches a custom page and also returns its HTML.
-func (r *AccessCustomPageService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *CustomPage, err error) {
+func (r *AccessCustomPageService) Get(ctx context.Context, customPageID string, query AccessCustomPageGetParams, opts ...option.RequestOption) (res *CustomPage, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCustomPageGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", identifier, uuid)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if customPageID == "" {
+		err = errors.New("missing required custom_page_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", query.AccountID, customPageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -251,7 +281,9 @@ func (r accessCustomPageDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessCustomPageNewParams struct {
-	CustomPage CustomPageParam `json:"custom_page,required"`
+	// Identifier
+	AccountID  param.Field[string] `path:"account_id,required"`
+	CustomPage CustomPageParam     `json:"custom_page,required"`
 }
 
 func (r AccessCustomPageNewParams) MarshalJSON() (data []byte, err error) {
@@ -302,7 +334,9 @@ func (r AccessCustomPageNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageUpdateParams struct {
-	CustomPage CustomPageParam `json:"custom_page,required"`
+	// Identifier
+	AccountID  param.Field[string] `path:"account_id,required"`
+	CustomPage CustomPageParam     `json:"custom_page,required"`
 }
 
 func (r AccessCustomPageUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -352,6 +386,16 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type AccessCustomPageListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AccessCustomPageDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AccessCustomPageDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
@@ -393,6 +437,11 @@ func (r AccessCustomPageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AccessCustomPageGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessCustomPageGetResponseEnvelope struct {

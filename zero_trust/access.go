@@ -12,9 +12,11 @@ import (
 )
 
 // AccessService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewAccessService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessService] method instead.
 type AccessService struct {
 	Options       []option.RequestOption
 	Applications  *AccessApplicationService
@@ -27,6 +29,7 @@ type AccessService struct {
 	Users         *AccessUserService
 	CustomPages   *AccessCustomPageService
 	Tags          *AccessTagService
+	Policies      *AccessPolicyService
 }
 
 // NewAccessService generates a new service that applies the given options to each
@@ -45,6 +48,7 @@ func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	r.Users = NewAccessUserService(opts...)
 	r.CustomPages = NewAccessCustomPageService(opts...)
 	r.Tags = NewAccessTagService(opts...)
+	r.Policies = NewAccessPolicyService(opts...)
 	return
 }
 

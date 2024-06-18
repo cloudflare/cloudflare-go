@@ -4,6 +4,7 @@ package cloudforce_one
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,9 +18,11 @@ import (
 )
 
 // RequestService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewRequestService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRequestService] method instead.
 type RequestService struct {
 	Options  []option.RequestOption
 	Message  *RequestMessageService
@@ -43,6 +46,10 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestNewResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/new", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -58,6 +65,14 @@ func (r *RequestService) New(ctx context.Context, accountIdentifier string, body
 func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestUpdateResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if requestIdentifier == "" {
+		err = errors.New("missing required request_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -93,6 +108,14 @@ func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier s
 // Delete a Request
 func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *RequestDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if requestIdentifier == "" {
+		err = errors.New("missing required request_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -102,6 +125,10 @@ func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, r
 func (r *RequestService) Constants(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestConstants, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestConstantsResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/constants", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -115,6 +142,14 @@ func (r *RequestService) Constants(ctx context.Context, accountIdentifier string
 func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if requestIdentifier == "" {
+		err = errors.New("missing required request_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -128,6 +163,10 @@ func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requ
 func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *Quota, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestQuotaResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/quota", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -141,6 +180,10 @@ func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, op
 func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestTypes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestTypesResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/types", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

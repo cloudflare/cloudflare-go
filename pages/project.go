@@ -4,6 +4,7 @@ package pages
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -19,9 +20,11 @@ import (
 )
 
 // ProjectService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewProjectService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewProjectService] method instead.
 type ProjectService struct {
 	Options     []option.RequestOption
 	Deployments *ProjectDeploymentService
@@ -43,6 +46,10 @@ func NewProjectService(opts ...option.RequestOption) (r *ProjectService) {
 func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts ...option.RequestOption) (res *ProjectNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -78,6 +85,14 @@ func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListPa
 // Delete a project by name.
 func (r *ProjectService) Delete(ctx context.Context, projectName string, body ProjectDeleteParams, opts ...option.RequestOption) (res *ProjectDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", body.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -88,6 +103,14 @@ func (r *ProjectService) Delete(ctx context.Context, projectName string, body Pr
 func (r *ProjectService) Edit(ctx context.Context, projectName string, params ProjectEditParams, opts ...option.RequestOption) (res *ProjectEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", params.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -101,6 +124,14 @@ func (r *ProjectService) Edit(ctx context.Context, projectName string, params Pr
 func (r *ProjectService) Get(ctx context.Context, projectName string, query ProjectGetParams, opts ...option.RequestOption) (res *Project, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", query.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -113,6 +144,14 @@ func (r *ProjectService) Get(ctx context.Context, projectName string, query Proj
 // Purge all cached build artifacts for a Pages project
 func (r *ProjectService) PurgeBuildCache(ctx context.Context, projectName string, body ProjectPurgeBuildCacheParams, opts ...option.RequestOption) (res *ProjectPurgeBuildCacheResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/purge_build_cache", body.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
@@ -947,6 +986,8 @@ func (r projectDeploymentConfigsPreviewR2BucketsJSON) RawJSON() string {
 
 // R2 binding.
 type ProjectDeploymentConfigsPreviewR2BucketsR2Binding struct {
+	// Jurisdiction of the R2 bucket.
+	Jurisdiction string `json:"jurisdiction,nullable"`
 	// Name of the R2 bucket.
 	Name string                                                `json:"name"`
 	JSON projectDeploymentConfigsPreviewR2BucketsR2BindingJSON `json:"-"`
@@ -955,9 +996,10 @@ type ProjectDeploymentConfigsPreviewR2BucketsR2Binding struct {
 // projectDeploymentConfigsPreviewR2BucketsR2BindingJSON contains the JSON metadata
 // for the struct [ProjectDeploymentConfigsPreviewR2BucketsR2Binding]
 type projectDeploymentConfigsPreviewR2BucketsR2BindingJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Jurisdiction apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProjectDeploymentConfigsPreviewR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
@@ -1643,6 +1685,8 @@ func (r projectDeploymentConfigsProductionR2BucketsJSON) RawJSON() string {
 
 // R2 binding.
 type ProjectDeploymentConfigsProductionR2BucketsR2Binding struct {
+	// Jurisdiction of the R2 bucket.
+	Jurisdiction string `json:"jurisdiction,nullable"`
 	// Name of the R2 bucket.
 	Name string                                                   `json:"name"`
 	JSON projectDeploymentConfigsProductionR2BucketsR2BindingJSON `json:"-"`
@@ -1651,9 +1695,10 @@ type ProjectDeploymentConfigsProductionR2BucketsR2Binding struct {
 // projectDeploymentConfigsProductionR2BucketsR2BindingJSON contains the JSON
 // metadata for the struct [ProjectDeploymentConfigsProductionR2BucketsR2Binding]
 type projectDeploymentConfigsProductionR2BucketsR2BindingJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Jurisdiction apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProjectDeploymentConfigsProductionR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
@@ -2063,6 +2108,8 @@ func (r ProjectDeploymentConfigsPreviewR2BucketsParam) MarshalJSON() (data []byt
 
 // R2 binding.
 type ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam struct {
+	// Jurisdiction of the R2 bucket.
+	Jurisdiction param.Field[string] `json:"jurisdiction"`
 	// Name of the R2 bucket.
 	Name param.Field[string] `json:"name"`
 }
@@ -2365,6 +2412,8 @@ func (r ProjectDeploymentConfigsProductionR2BucketsParam) MarshalJSON() (data []
 
 // R2 binding.
 type ProjectDeploymentConfigsProductionR2BucketsR2BindingParam struct {
+	// Jurisdiction of the R2 bucket.
+	Jurisdiction param.Field[string] `json:"jurisdiction"`
 	// Name of the R2 bucket.
 	Name param.Field[string] `json:"name"`
 }

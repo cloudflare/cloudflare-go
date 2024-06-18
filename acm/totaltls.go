@@ -4,6 +4,7 @@ package acm
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // TotalTLSService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewTotalTLSService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewTotalTLSService] method instead.
 type TotalTLSService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewTotalTLSService(opts ...option.RequestOption) (r *TotalTLSService) {
 func (r *TotalTLSService) New(ctx context.Context, params TotalTLSNewParams, opts ...option.RequestOption) (res *TotalTLSNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TotalTLSNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/acm/total_tls", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -48,6 +55,10 @@ func (r *TotalTLSService) New(ctx context.Context, params TotalTLSNewParams, opt
 func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts ...option.RequestOption) (res *TotalTLSGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TotalTLSGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/acm/total_tls", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

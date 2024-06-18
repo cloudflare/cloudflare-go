@@ -4,6 +4,7 @@ package workers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,9 +19,11 @@ import (
 )
 
 // DomainService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDomainService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDomainService] method instead.
 type DomainService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,10 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/domains", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -74,6 +81,14 @@ func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListPar
 func (r *DomainService) Delete(ctx context.Context, domainID string, body DomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if domainID == "" {
+		err = errors.New("missing required domain_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/domains/%s", body.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
@@ -83,6 +98,14 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, body Domain
 func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if domainID == "" {
+		err = errors.New("missing required domain_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/domains/%s", query.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -10,14 +10,17 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // AccessUserService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewAccessUserService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessUserService] method instead.
 type AccessUserService struct {
 	Options          []option.RequestOption
 	ActiveSessions   *AccessUserActiveSessionService
@@ -38,11 +41,11 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUser], err error) {
+func (r *AccessUserService) List(ctx context.Context, query AccessUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUser], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/access/users", identifier)
+	path := fmt.Sprintf("accounts/%s/access/users", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -56,8 +59,8 @@ func (r *AccessUserService) List(ctx context.Context, identifier string, opts ..
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUser] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
+func (r *AccessUserService) ListAutoPaging(ctx context.Context, query AccessUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUser] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type AccessUser struct {
@@ -107,4 +110,9 @@ func (r *AccessUser) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessUserJSON) RawJSON() string {
 	return r.raw
+}
+
+type AccessUserListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }

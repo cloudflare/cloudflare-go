@@ -16,9 +16,11 @@ import (
 )
 
 // BGPTopAseService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewBGPTopAseService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewBGPTopAseService] method instead.
 type BGPTopAseService struct {
 	Options []option.RequestOption
 }
@@ -252,7 +254,7 @@ type BGPTopAseGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Array of BGP network prefixes.
-	Prefix param.Field[[]string] `query:"prefix"`
+	Prefix param.Field[[]BGPTopAseGetParamsPrefix] `query:"prefix"`
 	// Array of BGP update types.
 	UpdateType param.Field[[]BGPTopAseGetParamsUpdateType] `query:"updateType"`
 }
@@ -307,6 +309,22 @@ func (r BGPTopAseGetParamsFormat) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type BGPTopAseGetParamsPrefix struct {
+	Location param.Field[string] `query:"location,required"`
+	Name     param.Field[string] `query:"name,required"`
+	// Network prefix, IPv4 or IPv6.
+	Type param.Field[string] `query:"type"`
+}
+
+// URLQuery serializes [BGPTopAseGetParamsPrefix]'s query parameters as
+// `url.Values`.
+func (r BGPTopAseGetParamsPrefix) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type BGPTopAseGetParamsUpdateType string

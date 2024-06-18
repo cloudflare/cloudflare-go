@@ -4,6 +4,7 @@ package radar
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -16,9 +17,11 @@ import (
 )
 
 // DatasetService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDatasetService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDatasetService] method instead.
 type DatasetService struct {
 	Options []option.RequestOption
 }
@@ -64,6 +67,10 @@ func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadPar
 func (r *DatasetService) Get(ctx context.Context, alias string, query DatasetGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
+	if alias == "" {
+		err = errors.New("missing required alias parameter")
+		return
+	}
 	path := fmt.Sprintf("radar/datasets/%s", alias)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return

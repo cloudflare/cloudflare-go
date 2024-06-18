@@ -4,9 +4,9 @@ package alerting
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,14 +15,14 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // DestinationWebhookService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDestinationWebhookService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDestinationWebhookService] method instead.
 type DestinationWebhookService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +40,10 @@ func NewDestinationWebhookService(opts ...option.RequestOption) (r *DestinationW
 func (r *DestinationWebhookService) New(ctx context.Context, params DestinationWebhookNewParams, opts ...option.RequestOption) (res *DestinationWebhookNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +57,14 @@ func (r *DestinationWebhookService) New(ctx context.Context, params DestinationW
 func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string, params DestinationWebhookUpdateParams, opts ...option.RequestOption) (res *DestinationWebhookUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if webhookID == "" {
+		err = errors.New("missing required webhook_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", params.AccountID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -86,15 +98,18 @@ func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query De
 }
 
 // Delete a configured webhook destination.
-func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *DestinationWebhookDeleteResponseUnion, err error) {
+func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *DestinationWebhookDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DestinationWebhookDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", body.AccountID, webhookID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	res = &env.Result
+	if webhookID == "" {
+		err = errors.New("missing required webhook_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", body.AccountID, webhookID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -102,6 +117,14 @@ func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string
 func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, query DestinationWebhookGetParams, opts ...option.RequestOption) (res *Webhooks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if webhookID == "" {
+		err = errors.New("missing required webhook_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", query.AccountID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -219,30 +242,78 @@ func (r destinationWebhookUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [alerting.DestinationWebhookDeleteResponseUnknown],
-// [alerting.DestinationWebhookDeleteResponseArray] or [shared.UnionString].
-type DestinationWebhookDeleteResponseUnion interface {
-	ImplementsAlertingDestinationWebhookDeleteResponseUnion()
+type DestinationWebhookDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    DestinationWebhookDeleteResponseSuccess    `json:"success,required"`
+	ResultInfo DestinationWebhookDeleteResponseResultInfo `json:"result_info"`
+	JSON       destinationWebhookDeleteResponseJSON       `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DestinationWebhookDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DestinationWebhookDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// destinationWebhookDeleteResponseJSON contains the JSON metadata for the struct
+// [DestinationWebhookDeleteResponse]
+type destinationWebhookDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-type DestinationWebhookDeleteResponseArray []interface{}
+func (r *DestinationWebhookDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r DestinationWebhookDeleteResponseArray) ImplementsAlertingDestinationWebhookDeleteResponseUnion() {
+func (r destinationWebhookDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DestinationWebhookDeleteResponseSuccess bool
+
+const (
+	DestinationWebhookDeleteResponseSuccessTrue DestinationWebhookDeleteResponseSuccess = true
+)
+
+func (r DestinationWebhookDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case DestinationWebhookDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DestinationWebhookDeleteResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                        `json:"total_count"`
+	JSON       destinationWebhookDeleteResponseResultInfoJSON `json:"-"`
+}
+
+// destinationWebhookDeleteResponseResultInfoJSON contains the JSON metadata for
+// the struct [DestinationWebhookDeleteResponseResultInfo]
+type destinationWebhookDeleteResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DestinationWebhookDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r destinationWebhookDeleteResponseResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type DestinationWebhookNewParams struct {
@@ -264,21 +335,14 @@ func (r DestinationWebhookNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   DestinationWebhookNewResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success DestinationWebhookNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    destinationWebhookNewResponseEnvelopeJSON    `json:"-"`
+	Result DestinationWebhookNewResponse             `json:"result"`
+	JSON   destinationWebhookNewResponseEnvelopeJSON `json:"-"`
 }
 
 // destinationWebhookNewResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationWebhookNewResponseEnvelope]
 type destinationWebhookNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -289,21 +353,6 @@ func (r *DestinationWebhookNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 
 func (r destinationWebhookNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type DestinationWebhookNewResponseEnvelopeSuccess bool
-
-const (
-	DestinationWebhookNewResponseEnvelopeSuccessTrue DestinationWebhookNewResponseEnvelopeSuccess = true
-)
-
-func (r DestinationWebhookNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DestinationWebhookNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type DestinationWebhookUpdateParams struct {
@@ -325,21 +374,14 @@ func (r DestinationWebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   DestinationWebhookUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success DestinationWebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    destinationWebhookUpdateResponseEnvelopeJSON    `json:"-"`
+	Result DestinationWebhookUpdateResponse             `json:"result"`
+	JSON   destinationWebhookUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // destinationWebhookUpdateResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationWebhookUpdateResponseEnvelope]
 type destinationWebhookUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -352,21 +394,6 @@ func (r destinationWebhookUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type DestinationWebhookUpdateResponseEnvelopeSuccess bool
-
-const (
-	DestinationWebhookUpdateResponseEnvelopeSuccessTrue DestinationWebhookUpdateResponseEnvelopeSuccess = true
-)
-
-func (r DestinationWebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DestinationWebhookUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type DestinationWebhookListParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -377,103 +404,20 @@ type DestinationWebhookDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type DestinationWebhookDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   DestinationWebhookDeleteResponseUnion `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    DestinationWebhookDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DestinationWebhookDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       destinationWebhookDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// destinationWebhookDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DestinationWebhookDeleteResponseEnvelope]
-type destinationWebhookDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationWebhookDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationWebhookDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DestinationWebhookDeleteResponseEnvelopeSuccess bool
-
-const (
-	DestinationWebhookDeleteResponseEnvelopeSuccessTrue DestinationWebhookDeleteResponseEnvelopeSuccess = true
-)
-
-func (r DestinationWebhookDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DestinationWebhookDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DestinationWebhookDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                `json:"total_count"`
-	JSON       destinationWebhookDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// destinationWebhookDeleteResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [DestinationWebhookDeleteResponseEnvelopeResultInfo]
-type destinationWebhookDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationWebhookDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationWebhookDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type DestinationWebhookGetParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DestinationWebhookGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Webhooks              `json:"result,required"`
-	// Whether the API call was successful
-	Success DestinationWebhookGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    destinationWebhookGetResponseEnvelopeJSON    `json:"-"`
+	Result Webhooks                                  `json:"result"`
+	JSON   destinationWebhookGetResponseEnvelopeJSON `json:"-"`
 }
 
 // destinationWebhookGetResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationWebhookGetResponseEnvelope]
 type destinationWebhookGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -484,19 +428,4 @@ func (r *DestinationWebhookGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 
 func (r destinationWebhookGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type DestinationWebhookGetResponseEnvelopeSuccess bool
-
-const (
-	DestinationWebhookGetResponseEnvelopeSuccessTrue DestinationWebhookGetResponseEnvelopeSuccess = true
-)
-
-func (r DestinationWebhookGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DestinationWebhookGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

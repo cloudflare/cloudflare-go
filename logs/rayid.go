@@ -4,6 +4,7 @@ package logs
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -19,9 +20,11 @@ import (
 )
 
 // RayIDService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewRayIDService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRayIDService] method instead.
 type RayIDService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +42,14 @@ func NewRayIDService(opts ...option.RequestOption) (r *RayIDService) {
 // return zero, one, or more records (ray ids are not unique).
 func (r *RayIDService) Get(ctx context.Context, zoneIdentifier string, rayIdentifier string, query RayIDGetParams, opts ...option.RequestOption) (res *RayIDGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if rayIdentifier == "" {
+		err = errors.New("missing required ray_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/logs/rayids/%s", zoneIdentifier, rayIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return

@@ -4,20 +4,23 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AccessUserLastSeenIdentityService contains methods and other services that help
-// with interacting with the cloudflare API. Note, unlike clients, this service
-// does not read variables from the environment automatically. You should not
-// instantiate this service directly, and instead use the
-// [NewAccessUserLastSeenIdentityService] method instead.
+// with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessUserLastSeenIdentityService] method instead.
 type AccessUserLastSeenIdentityService struct {
 	Options []option.RequestOption
 }
@@ -32,10 +35,18 @@ func NewAccessUserLastSeenIdentityService(opts ...option.RequestOption) (r *Acce
 }
 
 // Get last seen identity for a single user.
-func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *Identity, err error) {
+func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, userID string, query AccessUserLastSeenIdentityGetParams, opts ...option.RequestOption) (res *Identity, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessUserLastSeenIdentityGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/users/%s/last_seen_identity", identifier, id)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if userID == "" {
+		err = errors.New("missing required user_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/users/%s/last_seen_identity", query.AccountID, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -228,6 +239,11 @@ func (r *IdentityMTLSAuth) UnmarshalJSON(data []byte) (err error) {
 
 func (r identityMTLSAuthJSON) RawJSON() string {
 	return r.raw
+}
+
+type AccessUserLastSeenIdentityGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessUserLastSeenIdentityGetResponseEnvelope struct {

@@ -4,6 +4,7 @@ package ssl
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // CertificatePackQuotaService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewCertificatePackQuotaService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewCertificatePackQuotaService] method instead.
 type CertificatePackQuotaService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,10 @@ func NewCertificatePackQuotaService(opts ...option.RequestOption) (r *Certificat
 func (r *CertificatePackQuotaService) Get(ctx context.Context, query CertificatePackQuotaGetParams, opts ...option.RequestOption) (res *CertificatePackQuotaGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackQuotaGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/quota", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

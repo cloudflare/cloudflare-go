@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,10 +18,11 @@ import (
 )
 
 // DEXTestUniqueDeviceService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDEXTestUniqueDeviceService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDEXTestUniqueDeviceService] method instead.
 type DEXTestUniqueDeviceService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,10 @@ func NewDEXTestUniqueDeviceService(opts ...option.RequestOption) (r *DEXTestUniq
 func (r *DEXTestUniqueDeviceService) List(ctx context.Context, params DEXTestUniqueDeviceListParams, opts ...option.RequestOption) (res *UniqueDevices, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTestUniqueDeviceListResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/tests/unique-devices", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

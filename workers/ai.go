@@ -4,6 +4,7 @@ package workers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -17,11 +18,14 @@ import (
 )
 
 // AIService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewAIService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAIService] method instead.
 type AIService struct {
 	Options []option.RequestOption
+	Models  *AIModelService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -30,6 +34,7 @@ type AIService struct {
 func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r = &AIService{}
 	r.Options = opts
+	r.Models = NewAIModelService(opts...)
 	return
 }
 
@@ -45,6 +50,14 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParams, opts ...option.RequestOption) (res *AIRunResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AIRunResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if modelName == "" {
+		err = errors.New("missing required model_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/ai/run/%s", params.AccountID, modelName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -216,14 +229,16 @@ type AIRunResponseObjectDetection []AIRunResponseObjectDetection
 func (r AIRunResponseObjectDetection) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseObject struct {
-	Response string                  `json:"response"`
-	JSON     aiRunResponseObjectJSON `json:"-"`
+	Response  string                        `json:"response"`
+	ToolCalls []AIRunResponseObjectToolCall `json:"tool_calls"`
+	JSON      aiRunResponseObjectJSON       `json:"-"`
 }
 
 // aiRunResponseObjectJSON contains the JSON metadata for the struct
 // [AIRunResponseObject]
 type aiRunResponseObjectJSON struct {
 	Response    apijson.Field
+	ToolCalls   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -237,6 +252,29 @@ func (r aiRunResponseObjectJSON) RawJSON() string {
 }
 
 func (r AIRunResponseObject) ImplementsWorkersAIRunResponseUnion() {}
+
+type AIRunResponseObjectToolCall struct {
+	Arguments interface{}                     `json:"arguments"`
+	Name      string                          `json:"name"`
+	JSON      aiRunResponseObjectToolCallJSON `json:"-"`
+}
+
+// aiRunResponseObjectToolCallJSON contains the JSON metadata for the struct
+// [AIRunResponseObjectToolCall]
+type aiRunResponseObjectToolCallJSON struct {
+	Arguments   apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseObjectToolCall) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseObjectToolCallJSON) RawJSON() string {
+	return r.raw
+}
 
 type AIRunResponseTranslation struct {
 	TranslatedText string                       `json:"translated_text"`

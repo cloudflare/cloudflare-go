@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,10 +18,11 @@ import (
 )
 
 // DEXHTTPTestPercentileService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDEXHTTPTestPercentileService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDEXHTTPTestPercentileService] method instead.
 type DEXHTTPTestPercentileService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,14 @@ func NewDEXHTTPTestPercentileService(opts ...option.RequestOption) (r *DEXHTTPTe
 func (r *DEXHTTPTestPercentileService) Get(ctx context.Context, testID string, params DEXHTTPTestPercentileGetParams, opts ...option.RequestOption) (res *HTTPDetailsPercentiles, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DexhttpTestPercentileGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if testID == "" {
+		err = errors.New("missing required test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s/percentiles", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -128,10 +138,10 @@ func (r testStatOverTimeSlotJSON) RawJSON() string {
 
 type DEXHTTPTestPercentileGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// End time for aggregate metrics in ISO format
-	TimeEnd param.Field[string] `query:"timeEnd,required"`
 	// Start time for aggregate metrics in ISO format
-	TimeStart param.Field[string] `query:"timeStart,required"`
+	From param.Field[string] `query:"from,required"`
+	// End time for aggregate metrics in ISO format
+	To param.Field[string] `query:"to,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`

@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // AddressMapIPService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAddressMapIPService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAddressMapIPService] method instead.
 type AddressMapIPService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,18 @@ func NewAddressMapIPService(opts ...option.RequestOption) (r *AddressMapIPServic
 func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPUpdateParams, opts ...option.RequestOption) (res *[]AddressMapIPUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return
+	}
+	if ipAddress == "" {
+		err = errors.New("missing required ip_address parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -49,6 +63,18 @@ func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, i
 func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, body AddressMapIPDeleteParams, opts ...option.RequestOption) (res *[]AddressMapIPDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return
+	}
+	if ipAddress == "" {
+		err = errors.New("missing required ip_address parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {

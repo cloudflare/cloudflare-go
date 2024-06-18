@@ -32,22 +32,52 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 	_, err := client.User.Tokens.New(context.TODO(), user.TokenNewParams{
 		Name: cloudflare.F("readonly token"),
 		Policies: cloudflare.F([]user.PolicyParam{{
-			Effect:           cloudflare.F(user.PolicyEffectAllow),
-			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{}, {}}),
+			Effect: cloudflare.F(user.PolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+				Meta: cloudflare.F[any](map[string]interface{}{
+					"label":  "load_balancer_admin",
+					"scopes": "com.cloudflare.api.account",
+				}),
+			}, {
+				Meta: cloudflare.F[any](map[string]interface{}{
+					"label":  "fbm_user",
+					"scopes": "com.cloudflare.api.account",
+				}),
+			}}),
 			Resources: cloudflare.F[any](map[string]interface{}{
 				"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 			}),
 		}, {
-			Effect:           cloudflare.F(user.PolicyEffectAllow),
-			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{}, {}}),
+			Effect: cloudflare.F(user.PolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+				Meta: cloudflare.F[any](map[string]interface{}{
+					"label":  "load_balancer_admin",
+					"scopes": "com.cloudflare.api.account",
+				}),
+			}, {
+				Meta: cloudflare.F[any](map[string]interface{}{
+					"label":  "fbm_user",
+					"scopes": "com.cloudflare.api.account",
+				}),
+			}}),
 			Resources: cloudflare.F[any](map[string]interface{}{
 				"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 			}),
 		}, {
-			Effect:           cloudflare.F(user.PolicyEffectAllow),
-			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{}, {}}),
+			Effect: cloudflare.F(user.PolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+				Meta: cloudflare.F[any](map[string]interface{}{
+					"label":  "load_balancer_admin",
+					"scopes": "com.cloudflare.api.account",
+				}),
+			}, {
+				Meta: cloudflare.F[any](map[string]interface{}{
+					"label":  "fbm_user",
+					"scopes": "com.cloudflare.api.account",
+				}),
+			}}),
 			Resources: cloudflare.F[any](map[string]interface{}{
 				"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
@@ -100,22 +130,52 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 				Name:      cloudflare.F("readonly token"),
 				NotBefore: cloudflare.F(time.Now()),
 				Policies: cloudflare.F([]user.PolicyParam{{
-					Effect:           cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{}, {}}),
+					Effect: cloudflare.F(user.PolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+						Meta: cloudflare.F[any](map[string]interface{}{
+							"label":  "load_balancer_admin",
+							"scopes": "com.cloudflare.api.account",
+						}),
+					}, {
+						Meta: cloudflare.F[any](map[string]interface{}{
+							"label":  "fbm_user",
+							"scopes": "com.cloudflare.api.account",
+						}),
+					}}),
 					Resources: cloudflare.F[any](map[string]interface{}{
 						"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 					}),
 				}, {
-					Effect:           cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{}, {}}),
+					Effect: cloudflare.F(user.PolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+						Meta: cloudflare.F[any](map[string]interface{}{
+							"label":  "load_balancer_admin",
+							"scopes": "com.cloudflare.api.account",
+						}),
+					}, {
+						Meta: cloudflare.F[any](map[string]interface{}{
+							"label":  "fbm_user",
+							"scopes": "com.cloudflare.api.account",
+						}),
+					}}),
 					Resources: cloudflare.F[any](map[string]interface{}{
 						"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 					}),
 				}, {
-					Effect:           cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{}, {}}),
+					Effect: cloudflare.F(user.PolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+						Meta: cloudflare.F[any](map[string]interface{}{
+							"label":  "load_balancer_admin",
+							"scopes": "com.cloudflare.api.account",
+						}),
+					}, {
+						Meta: cloudflare.F[any](map[string]interface{}{
+							"label":  "fbm_user",
+							"scopes": "com.cloudflare.api.account",
+						}),
+					}}),
 					Resources: cloudflare.F[any](map[string]interface{}{
 						"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",

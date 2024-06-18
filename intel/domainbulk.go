@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,9 +18,11 @@ import (
 )
 
 // DomainBulkService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDomainBulkService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDomainBulkService] method instead.
 type DomainBulkService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +40,10 @@ func NewDomainBulkService(opts ...option.RequestOption) (r *DomainBulkService) {
 func (r *DomainBulkService) Get(ctx context.Context, params DomainBulkGetParams, opts ...option.RequestOption) (res *[]DomainBulkGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainBulkGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/domain/bulk", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {

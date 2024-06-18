@@ -4,6 +4,7 @@ package magic_transit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,9 +17,11 @@ import (
 )
 
 // SiteWANService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewSiteWANService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSiteWANService] method instead.
 type SiteWANService struct {
 	Options []option.RequestOption
 }
@@ -32,10 +35,18 @@ func NewSiteWANService(opts ...option.RequestOption) (r *SiteWANService) {
 	return
 }
 
-// Creates a new WAN.
+// Creates a new Site WAN.
 func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANNewParams, opts ...option.RequestOption) (res *[]WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -45,10 +56,22 @@ func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANN
 	return
 }
 
-// Update a specific WAN.
+// Update a specific Site WAN.
 func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string, params SiteWANUpdateParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if wanID == "" {
+		err = errors.New("missing required wan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -58,7 +81,7 @@ func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string
 	return
 }
 
-// Lists WANs associated with an account and site.
+// Lists Site WANs associated with an account.
 func (r *SiteWANService) List(ctx context.Context, siteID string, query SiteWANListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WAN], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -76,15 +99,27 @@ func (r *SiteWANService) List(ctx context.Context, siteID string, query SiteWANL
 	return res, nil
 }
 
-// Lists WANs associated with an account and site.
+// Lists Site WANs associated with an account.
 func (r *SiteWANService) ListAutoPaging(ctx context.Context, siteID string, query SiteWANListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WAN] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, siteID, query, opts...))
 }
 
-// Remove a specific WAN.
+// Remove a specific Site WAN.
 func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string, body SiteWANDeleteParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if wanID == "" {
+		err = errors.New("missing required wan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", body.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -94,10 +129,47 @@ func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string
 	return
 }
 
-// Get a specific WAN.
+// Patch a specific Site WAN.
+func (r *SiteWANService) Edit(ctx context.Context, siteID string, wanID string, params SiteWANEditParams, opts ...option.RequestOption) (res *WAN, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SiteWANEditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if wanID == "" {
+		err = errors.New("missing required wan_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get a specific Site WAN.
 func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, query SiteWANGetParams, opts ...option.RequestOption) (res *WAN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
+	if wanID == "" {
+		err = errors.New("missing required wan_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", query.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -358,6 +430,66 @@ const (
 func (r SiteWANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SiteWANDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteWANEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	Name      param.Field[string] `json:"name"`
+	Physport  param.Field[int64]  `json:"physport"`
+	Priority  param.Field[int64]  `json:"priority"`
+	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
+	// availability mode.
+	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
+	// VLAN port number.
+	VlanTag param.Field[int64] `json:"vlan_tag"`
+}
+
+func (r SiteWANEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SiteWANEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WAN                   `json:"result,required"`
+	// Whether the API call was successful
+	Success SiteWANEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteWANEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// siteWANEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteWANEditResponseEnvelope]
+type siteWANEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteWANEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteWANEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SiteWANEditResponseEnvelopeSuccess bool
+
+const (
+	SiteWANEditResponseEnvelopeSuccessTrue SiteWANEditResponseEnvelopeSuccess = true
+)
+
+func (r SiteWANEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWANEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

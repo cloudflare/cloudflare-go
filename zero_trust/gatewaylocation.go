@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -19,10 +20,11 @@ import (
 )
 
 // GatewayLocationService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewGatewayLocationService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewGatewayLocationService] method instead.
 type GatewayLocationService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +42,10 @@ func NewGatewayLocationService(opts ...option.RequestOption) (r *GatewayLocation
 func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocationNewParams, opts ...option.RequestOption) (res *Location, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/locations", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +59,14 @@ func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocation
 func (r *GatewayLocationService) Update(ctx context.Context, locationID string, params GatewayLocationUpdateParams, opts ...option.RequestOption) (res *Location, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if locationID == "" {
+		err = errors.New("missing required location_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", params.AccountID, locationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -89,6 +103,14 @@ func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query Gatew
 func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if locationID == "" {
+		err = errors.New("missing required location_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", body.AccountID, locationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -102,6 +124,14 @@ func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, 
 func (r *GatewayLocationService) Get(ctx context.Context, locationID string, query GatewayLocationGetParams, opts ...option.RequestOption) (res *Location, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if locationID == "" {
+		err = errors.New("missing required location_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", query.AccountID, locationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

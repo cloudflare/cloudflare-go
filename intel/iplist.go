@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // IPListService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewIPListService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewIPListService] method instead.
 type IPListService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewIPListService(opts ...option.RequestOption) (r *IPListService) {
 func (r *IPListService) Get(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) (res *[]IPList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPListGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/ip-list", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

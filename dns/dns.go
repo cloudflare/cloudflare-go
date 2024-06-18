@@ -10,12 +10,15 @@ import (
 )
 
 // DNSService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewDNSService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDNSService] method instead.
 type DNSService struct {
 	Options   []option.RequestOption
 	Records   *RecordService
+	Settings  *SettingService
 	Analytics *AnalyticsService
 	Firewall  *FirewallService
 }
@@ -27,6 +30,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	r = &DNSService{}
 	r.Options = opts
 	r.Records = NewRecordService(opts...)
+	r.Settings = NewSettingService(opts...)
 	r.Analytics = NewAnalyticsService(opts...)
 	r.Firewall = NewFirewallService(opts...)
 	return

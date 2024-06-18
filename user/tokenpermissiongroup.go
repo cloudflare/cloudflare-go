@@ -12,10 +12,11 @@ import (
 )
 
 // TokenPermissionGroupService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewTokenPermissionGroupService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewTokenPermissionGroupService] method instead.
 type TokenPermissionGroupService struct {
 	Options []option.RequestOption
 }
@@ -29,7 +30,7 @@ func NewTokenPermissionGroupService(opts ...option.RequestOption) (r *TokenPermi
 	return
 }
 
-// Find all available permission groups.
+// Find all available permission groups for API Tokens
 func (r *TokenPermissionGroupService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[TokenPermissionGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -47,7 +48,7 @@ func (r *TokenPermissionGroupService) List(ctx context.Context, opts ...option.R
 	return res, nil
 }
 
-// Find all available permission groups.
+// Find all available permission groups for API Tokens
 func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenPermissionGroupListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }

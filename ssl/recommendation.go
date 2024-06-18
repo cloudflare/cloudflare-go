@@ -4,6 +4,7 @@ package ssl
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -15,10 +16,11 @@ import (
 )
 
 // RecommendationService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRecommendationService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRecommendationService] method instead.
 type RecommendationService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,10 @@ func NewRecommendationService(opts ...option.RequestOption) (r *RecommendationSe
 func (r *RecommendationService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *RecommendationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecommendationGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/ssl/recommendation", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

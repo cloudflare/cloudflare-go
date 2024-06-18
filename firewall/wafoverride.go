@@ -4,6 +4,7 @@ package firewall
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,10 +19,11 @@ import (
 )
 
 // WAFOverrideService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewWAFOverrideService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewWAFOverrideService] method instead.
 type WAFOverrideService struct {
 	Options []option.RequestOption
 }
@@ -42,6 +44,10 @@ func NewWAFOverrideService(opts ...option.RequestOption) (r *WAFOverrideService)
 func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, body WAFOverrideNewParams, opts ...option.RequestOption) (res *Override, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -58,6 +64,14 @@ func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, bod
 func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, id string, body WAFOverrideUpdateParams, opts ...option.RequestOption) (res *Override, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideUpdateResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -103,6 +117,14 @@ func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier 
 func (r *WAFOverrideService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideDeleteResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -119,6 +141,14 @@ func (r *WAFOverrideService) Delete(ctx context.Context, zoneIdentifier string, 
 func (r *WAFOverrideService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *Override, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

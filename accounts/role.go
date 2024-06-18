@@ -4,9 +4,9 @@ package accounts
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -14,13 +14,14 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // RoleService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewRoleService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRoleService] method instead.
 type RoleService struct {
 	Options []option.RequestOption
 }
@@ -58,9 +59,13 @@ func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, 
 }
 
 // Get information about a specific role for an account.
-func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponseUnion, err error) {
+func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoleGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/roles/%v", query.AccountID, roleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -70,46 +75,27 @@ func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGet
 	return
 }
 
-// Union satisfied by [accounts.RoleGetResponseUnknown] or [shared.UnionString].
-type RoleGetResponseUnion interface {
-	ImplementsAccountsRoleGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RoleGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type RoleGetResponse = interface{}
 
 type RoleListParams struct {
+	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RoleGetParams struct {
+	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RoleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RoleGetResponseUnion  `json:"result,required"`
-	// Whether the API call was successful
-	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    roleGetResponseEnvelopeJSON    `json:"-"`
+	Result RoleGetResponse             `json:"result"`
+	JSON   roleGetResponseEnvelopeJSON `json:"-"`
 }
 
 // roleGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RoleGetResponseEnvelope]
 type roleGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -120,19 +106,4 @@ func (r *RoleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r roleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type RoleGetResponseEnvelopeSuccess bool
-
-const (
-	RoleGetResponseEnvelopeSuccessTrue RoleGetResponseEnvelopeSuccess = true
-)
-
-func (r RoleGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RoleGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

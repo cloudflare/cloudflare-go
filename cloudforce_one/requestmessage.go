@@ -4,6 +4,7 @@ package cloudforce_one
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // RequestMessageService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRequestMessageService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRequestMessageService] method instead.
 type RequestMessageService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,14 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *Message, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageNewResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if requestIdentifier == "" {
+		err = errors.New("missing required request_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/new", accountIdentifier, requestIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -52,6 +62,14 @@ func (r *RequestMessageService) New(ctx context.Context, accountIdentifier strin
 func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, body RequestMessageUpdateParams, opts ...option.RequestOption) (res *Message, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageUpdateResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if requestIdentifier == "" {
+		err = errors.New("missing required request_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", accountIdentifier, requestIdentifier, messageIdentifer)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -64,6 +82,14 @@ func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier st
 // Delete a Request Message
 func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *RequestMessageDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if requestIdentifier == "" {
+		err = errors.New("missing required request_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", accountIdentifier, requestIdentifier, messageIdentifer)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
@@ -73,6 +99,14 @@ func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier st
 func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]Message, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if requestIdentifier == "" {
+		err = errors.New("missing required request_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message", accountIdentifier, requestIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {

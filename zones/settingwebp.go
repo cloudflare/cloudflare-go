@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // SettingWebPService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewSettingWebPService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSettingWebPService] method instead.
 type SettingWebPService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,10 @@ func NewSettingWebPService(opts ...option.RequestOption) (r *SettingWebPService)
 func (r *SettingWebPService) Edit(ctx context.Context, params SettingWebPEditParams, opts ...option.RequestOption) (res *WebP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebPEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/webp", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +60,10 @@ func (r *SettingWebPService) Edit(ctx context.Context, params SettingWebPEditPar
 func (r *SettingWebPService) Get(ctx context.Context, query SettingWebPGetParams, opts ...option.RequestOption) (res *WebP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebPGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/settings/webp", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

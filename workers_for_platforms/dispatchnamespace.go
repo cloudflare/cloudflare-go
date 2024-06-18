@@ -4,6 +4,7 @@ package workers_for_platforms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,10 +18,11 @@ import (
 )
 
 // DispatchNamespaceService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDispatchNamespaceService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDispatchNamespaceService] method instead.
 type DispatchNamespaceService struct {
 	Options []option.RequestOption
 	Scripts *DispatchNamespaceScriptService
@@ -40,6 +42,10 @@ func NewDispatchNamespaceService(opts ...option.RequestOption) (r *DispatchNames
 func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNamespaceNewParams, opts ...option.RequestOption) (res *DispatchNamespaceNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -76,6 +82,14 @@ func (r *DispatchNamespaceService) ListAutoPaging(ctx context.Context, query Dis
 func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace string, body DispatchNamespaceDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s", body.AccountID, dispatchNamespace)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -89,6 +103,14 @@ func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace
 func (r *DispatchNamespaceService) Get(ctx context.Context, dispatchNamespace string, query DispatchNamespaceGetParams, opts ...option.RequestOption) (res *DispatchNamespaceGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s", query.AccountID, dispatchNamespace)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

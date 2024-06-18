@@ -17,10 +17,11 @@ import (
 )
 
 // HTTPLocationOSService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewHTTPLocationOSService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHTTPLocationOSService] method instead.
 type HTTPLocationOSService struct {
 	Options []option.RequestOption
 }
@@ -210,6 +211,8 @@ type HTTPLocationOSGetParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPLocationOSGetParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPLocationOSGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -253,7 +256,7 @@ func (r HTTPLocationOSGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// IP version.
+// Operating system.
 type HTTPLocationOSGetParamsOS string
 
 const (
@@ -284,6 +287,23 @@ const (
 func (r HTTPLocationOSGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPLocationOSGetParamsBotClassLikelyAutomated, HTTPLocationOSGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPLocationOSGetParamsBrowserFamily string
+
+const (
+	HTTPLocationOSGetParamsBrowserFamilyChrome  HTTPLocationOSGetParamsBrowserFamily = "CHROME"
+	HTTPLocationOSGetParamsBrowserFamilyEdge    HTTPLocationOSGetParamsBrowserFamily = "EDGE"
+	HTTPLocationOSGetParamsBrowserFamilyFirefox HTTPLocationOSGetParamsBrowserFamily = "FIREFOX"
+	HTTPLocationOSGetParamsBrowserFamilySafari  HTTPLocationOSGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPLocationOSGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsBrowserFamilyChrome, HTTPLocationOSGetParamsBrowserFamilyEdge, HTTPLocationOSGetParamsBrowserFamilyFirefox, HTTPLocationOSGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false

@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // TunnelConnectorService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewTunnelConnectorService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewTunnelConnectorService] method instead.
 type TunnelConnectorService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,18 @@ func NewTunnelConnectorService(opts ...option.RequestOption) (r *TunnelConnector
 func (r *TunnelConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelConnectorGetParams, opts ...option.RequestOption) (res *Client, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectorGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
+	if connectorID == "" {
+		err = errors.New("missing required connector_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connectors/%s", query.AccountID, tunnelID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

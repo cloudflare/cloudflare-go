@@ -4,21 +4,24 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AccessUserActiveSessionService contains methods and other services that help
-// with interacting with the cloudflare API. Note, unlike clients, this service
-// does not read variables from the environment automatically. You should not
-// instantiate this service directly, and instead use the
-// [NewAccessUserActiveSessionService] method instead.
+// with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessUserActiveSessionService] method instead.
 type AccessUserActiveSessionService struct {
 	Options []option.RequestOption
 }
@@ -33,11 +36,11 @@ func NewAccessUserActiveSessionService(opts ...option.RequestOption) (r *AccessU
 }
 
 // Get active sessions for a single user.
-func (r *AccessUserActiveSessionService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserActiveSessionListResponse], err error) {
+func (r *AccessUserActiveSessionService) List(ctx context.Context, userID string, query AccessUserActiveSessionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserActiveSessionListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions", identifier, id)
+	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions", query.AccountID, userID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -51,15 +54,27 @@ func (r *AccessUserActiveSessionService) List(ctx context.Context, identifier st
 }
 
 // Get active sessions for a single user.
-func (r *AccessUserActiveSessionService) ListAutoPaging(ctx context.Context, identifier string, id string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUserActiveSessionListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, id, opts...))
+func (r *AccessUserActiveSessionService) ListAutoPaging(ctx context.Context, userID string, query AccessUserActiveSessionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUserActiveSessionListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, userID, query, opts...))
 }
 
 // Get an active session for a single user.
-func (r *AccessUserActiveSessionService) Get(ctx context.Context, identifier string, id string, nonce string, opts ...option.RequestOption) (res *AccessUserActiveSessionGetResponse, err error) {
+func (r *AccessUserActiveSessionService) Get(ctx context.Context, userID string, nonce string, query AccessUserActiveSessionGetParams, opts ...option.RequestOption) (res *AccessUserActiveSessionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessUserActiveSessionGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions/%s", identifier, id, nonce)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if userID == "" {
+		err = errors.New("missing required user_id parameter")
+		return
+	}
+	if nonce == "" {
+		err = errors.New("missing required nonce parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions/%s", query.AccountID, userID, nonce)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -337,6 +352,16 @@ func (r *AccessUserActiveSessionGetResponseMTLSAuth) UnmarshalJSON(data []byte) 
 
 func (r accessUserActiveSessionGetResponseMTLSAuthJSON) RawJSON() string {
 	return r.raw
+}
+
+type AccessUserActiveSessionListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AccessUserActiveSessionGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessUserActiveSessionGetResponseEnvelope struct {

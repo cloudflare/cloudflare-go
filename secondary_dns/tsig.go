@@ -4,6 +4,7 @@ package secondary_dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,9 +17,11 @@ import (
 )
 
 // TSIGService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewTSIGService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewTSIGService] method instead.
 type TSIGService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +39,10 @@ func NewTSIGService(opts ...option.RequestOption) (r *TSIGService) {
 func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -49,6 +56,14 @@ func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...opt
 func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpdateParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tsigID == "" {
+		err = errors.New("missing required tsig_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", params.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -85,6 +100,14 @@ func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, 
 func (r *TSIGService) Delete(ctx context.Context, tsigID string, body TSIGDeleteParams, opts ...option.RequestOption) (res *TSIGDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tsigID == "" {
+		err = errors.New("missing required tsig_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", body.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -98,6 +121,14 @@ func (r *TSIGService) Delete(ctx context.Context, tsigID string, body TSIGDelete
 func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tsigID == "" {
+		err = errors.New("missing required tsig_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", query.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

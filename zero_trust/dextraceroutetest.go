@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,10 +18,11 @@ import (
 )
 
 // DEXTracerouteTestService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDEXTracerouteTestService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDEXTracerouteTestService] method instead.
 type DEXTracerouteTestService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,14 @@ func NewDEXTracerouteTestService(opts ...option.RequestOption) (r *DEXTraceroute
 func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, params DEXTracerouteTestGetParams, opts ...option.RequestOption) (res *Traceroute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if testID == "" {
+		err = errors.New("missing required test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +62,14 @@ func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, param
 func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *NetworkPathResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestNetworkPathResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if testID == "" {
+		err = errors.New("missing required test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/network-path", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -66,6 +84,14 @@ func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID strin
 func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID string, params DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *DEXTracerouteTestPercentilesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestPercentilesResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if testID == "" {
+		err = errors.New("missing required test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/percentiles", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -427,12 +453,12 @@ func (r dexTracerouteTestPercentilesResponseJSON) RawJSON() string {
 
 type DEXTracerouteTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Start time for aggregate metrics in ISO ms
+	From param.Field[string] `query:"from,required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DEXTracerouteTestGetParamsInterval] `query:"interval,required"`
 	// End time for aggregate metrics in ISO ms
-	TimeEnd param.Field[string] `query:"timeEnd,required"`
-	// Start time for aggregate metrics in ISO ms
-	TimeStart param.Field[string] `query:"timeStart,required"`
+	To param.Field[string] `query:"to,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
@@ -513,12 +539,12 @@ type DEXTracerouteTestNetworkPathParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Device to filter tracroute result runs to
 	DeviceID param.Field[string] `query:"deviceId,required"`
+	// Start time for aggregate metrics in ISO ms
+	From param.Field[string] `query:"from,required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DEXTracerouteTestNetworkPathParamsInterval] `query:"interval,required"`
 	// End time for aggregate metrics in ISO ms
-	TimeEnd param.Field[string] `query:"timeEnd,required"`
-	// Start time for aggregate metrics in ISO ms
-	TimeStart param.Field[string] `query:"timeStart,required"`
+	To param.Field[string] `query:"to,required"`
 }
 
 // URLQuery serializes [DEXTracerouteTestNetworkPathParams]'s query parameters as
@@ -591,10 +617,10 @@ func (r DEXTracerouteTestNetworkPathResponseEnvelopeSuccess) IsKnown() bool {
 
 type DEXTracerouteTestPercentilesParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// End time for aggregate metrics in ISO format
-	TimeEnd param.Field[string] `query:"timeEnd,required"`
 	// Start time for aggregate metrics in ISO format
-	TimeStart param.Field[string] `query:"timeStart,required"`
+	From param.Field[string] `query:"from,required"`
+	// End time for aggregate metrics in ISO format
+	To param.Field[string] `query:"to,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`

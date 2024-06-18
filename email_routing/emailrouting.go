@@ -4,6 +4,7 @@ package email_routing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -15,10 +16,11 @@ import (
 )
 
 // EmailRoutingService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewEmailRoutingService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewEmailRoutingService] method instead.
 type EmailRoutingService struct {
 	Options   []option.RequestOption
 	DNS       *DNSService
@@ -43,6 +45,10 @@ func NewEmailRoutingService(opts ...option.RequestOption) (r *EmailRoutingServic
 func (r *EmailRoutingService) Disable(ctx context.Context, zoneIdentifier string, body EmailRoutingDisableParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EmailRoutingDisableResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/email/routing/disable", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -56,6 +62,10 @@ func (r *EmailRoutingService) Disable(ctx context.Context, zoneIdentifier string
 func (r *EmailRoutingService) Enable(ctx context.Context, zoneIdentifier string, body EmailRoutingEnableParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EmailRoutingEnableResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/email/routing/enable", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -69,6 +79,10 @@ func (r *EmailRoutingService) Enable(ctx context.Context, zoneIdentifier string,
 func (r *EmailRoutingService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EmailRoutingGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/email/routing", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

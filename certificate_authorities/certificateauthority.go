@@ -7,10 +7,11 @@ import (
 )
 
 // CertificateAuthorityService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewCertificateAuthorityService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewCertificateAuthorityService] method instead.
 type CertificateAuthorityService struct {
 	Options              []option.RequestOption
 	HostnameAssociations *HostnameAssociationService

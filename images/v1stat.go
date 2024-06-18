@@ -4,6 +4,7 @@ package images
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // V1StatService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewV1StatService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewV1StatService] method instead.
 type V1StatService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewV1StatService(opts ...option.RequestOption) (r *V1StatService) {
 func (r *V1StatService) Get(ctx context.Context, query V1StatGetParams, opts ...option.RequestOption) (res *Stat, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1StatGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1/stats", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

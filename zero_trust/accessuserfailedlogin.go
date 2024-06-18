@@ -9,15 +9,17 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // AccessUserFailedLoginService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAccessUserFailedLoginService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessUserFailedLoginService] method instead.
 type AccessUserFailedLoginService struct {
 	Options []option.RequestOption
 }
@@ -32,11 +34,11 @@ func NewAccessUserFailedLoginService(opts ...option.RequestOption) (r *AccessUse
 }
 
 // Get all failed login attempts for a single user.
-func (r *AccessUserFailedLoginService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserFailedLoginListResponse], err error) {
+func (r *AccessUserFailedLoginService) List(ctx context.Context, userID string, query AccessUserFailedLoginListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserFailedLoginListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/access/users/%s/failed_logins", identifier, id)
+	path := fmt.Sprintf("accounts/%s/access/users/%s/failed_logins", query.AccountID, userID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -50,8 +52,8 @@ func (r *AccessUserFailedLoginService) List(ctx context.Context, identifier stri
 }
 
 // Get all failed login attempts for a single user.
-func (r *AccessUserFailedLoginService) ListAutoPaging(ctx context.Context, identifier string, id string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUserFailedLoginListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, id, opts...))
+func (r *AccessUserFailedLoginService) ListAutoPaging(ctx context.Context, userID string, query AccessUserFailedLoginListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUserFailedLoginListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, userID, query, opts...))
 }
 
 type AccessUserFailedLoginListResponse struct {
@@ -75,4 +77,9 @@ func (r *AccessUserFailedLoginListResponse) UnmarshalJSON(data []byte) (err erro
 
 func (r accessUserFailedLoginListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type AccessUserFailedLoginListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }

@@ -7,15 +7,18 @@ import (
 )
 
 // AddressingService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewAddressingService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAddressingService] method instead.
 type AddressingService struct {
-	Options      []option.RequestOption
-	Services     *ServiceService
-	AddressMaps  *AddressMapService
-	LOADocuments *LOADocumentService
-	Prefixes     *PrefixService
+	Options           []option.RequestOption
+	RegionalHostnames *RegionalHostnameService
+	Services          *ServiceService
+	AddressMaps       *AddressMapService
+	LOADocuments      *LOADocumentService
+	Prefixes          *PrefixService
 }
 
 // NewAddressingService generates a new service that applies the given options to
@@ -24,6 +27,7 @@ type AddressingService struct {
 func NewAddressingService(opts ...option.RequestOption) (r *AddressingService) {
 	r = &AddressingService{}
 	r.Options = opts
+	r.RegionalHostnames = NewRegionalHostnameService(opts...)
 	r.Services = NewServiceService(opts...)
 	r.AddressMaps = NewAddressMapService(opts...)
 	r.LOADocuments = NewLOADocumentService(opts...)

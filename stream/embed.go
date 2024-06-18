@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -13,9 +14,11 @@ import (
 )
 
 // EmbedService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewEmbedService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewEmbedService] method instead.
 type EmbedService struct {
 	Options []option.RequestOption
 }
@@ -34,6 +37,14 @@ func NewEmbedService(opts ...option.RequestOption) (r *EmbedService) {
 // a video. On failure, returns a JSON response body.
 func (r *EmbedService) Get(ctx context.Context, identifier string, query EmbedGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/embed", query.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

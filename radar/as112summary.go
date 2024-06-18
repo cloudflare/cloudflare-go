@@ -16,10 +16,11 @@ import (
 )
 
 // AS112SummaryService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAS112SummaryService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAS112SummaryService] method instead.
 type AS112SummaryService struct {
 	Options []option.RequestOption
 }
@@ -865,7 +866,7 @@ type AS112SummaryQueryTypeResponseSummary0 struct {
 	A    string                                    `json:"A,required"`
 	AAAA string                                    `json:"AAAA,required"`
 	PTR  string                                    `json:"PTR,required"`
-	Soa  string                                    `json:"SOA,required"`
+	SOA  string                                    `json:"SOA,required"`
 	SRV  string                                    `json:"SRV,required"`
 	JSON as112SummaryQueryTypeResponseSummary0JSON `json:"-"`
 }
@@ -876,7 +877,7 @@ type as112SummaryQueryTypeResponseSummary0JSON struct {
 	A           apijson.Field
 	AAAA        apijson.Field
 	PTR         apijson.Field
-	Soa         apijson.Field
+	SOA         apijson.Field
 	SRV         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

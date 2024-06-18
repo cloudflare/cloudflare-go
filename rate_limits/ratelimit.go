@@ -4,6 +4,7 @@ package rate_limits
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -20,9 +21,11 @@ import (
 )
 
 // RateLimitService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewRateLimitService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRateLimitService] method instead.
 type RateLimitService struct {
 	Options []option.RequestOption
 }
@@ -38,9 +41,18 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 
 // Creates a new rate limit for a zone. Refer to the object definition for a list
 // of required attributes.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body RateLimitNewParams, opts ...option.RequestOption) (res *RateLimitNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -51,6 +63,11 @@ func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body 
 }
 
 // Fetches the rate limits for a zone.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RateLimit], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -69,14 +86,32 @@ func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, quer
 }
 
 // Fetches the rate limits for a zone.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RateLimit] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing rate limit.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitDeleteResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -87,9 +122,22 @@ func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id
 }
 
 // Updates an existing rate limit.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id string, body RateLimitEditParams, opts ...option.RequestOption) (res *RateLimitEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitEditResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -100,9 +148,22 @@ func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id s
 }
 
 // Fetches the details of a rate limit.
+//
+// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+// for full details.
 func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

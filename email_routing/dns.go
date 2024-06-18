@@ -4,21 +4,22 @@ package email_routing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // DNSService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewDNSService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDNSService] method instead.
 type DNSService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +37,10 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -56,7 +61,7 @@ type DNSRecord struct {
 	Priority float64 `json:"priority"`
 	// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 	// for 'automatic'.
-	TTL DNSRecordTTLUnion `json:"ttl"`
+	TTL DNSRecordTTLNumber `json:"ttl"`
 	// DNS record type.
 	Type DNSRecordType `json:"type"`
 	JSON dnsRecordJSON `json:"-"`
@@ -79,29 +84,6 @@ func (r *DNSRecord) UnmarshalJSON(data []byte) (err error) {
 
 func (r dnsRecordJSON) RawJSON() string {
 	return r.raw
-}
-
-// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
-// for 'automatic'.
-//
-// Union satisfied by [shared.UnionFloat] or [email_routing.DNSRecordTTLNumber].
-type DNSRecordTTLUnion interface {
-	ImplementsEmailRoutingDNSRecordTTLUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordTTLUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(DNSRecordTTLNumber(0)),
-		},
-	)
 }
 
 type DNSRecordTTLNumber float64

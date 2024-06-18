@@ -5,20 +5,19 @@ package user
 import (
 	"context"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // UserService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewUserService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewUserService] method instead.
 type UserService struct {
 	Options       []option.RequestOption
 	AuditLogs     *AuditLogService
@@ -45,7 +44,7 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 }
 
 // Edit part of your user details.
-func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...option.RequestOption) (res *UserEditResponseUnion, err error) {
+func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...option.RequestOption) (res *UserEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UserEditResponseEnvelope
 	path := "user"
@@ -58,7 +57,7 @@ func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...opt
 }
 
 // User Details
-func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (res *UserGetResponseUnion, err error) {
+func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (res *UserGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UserGetResponseEnvelope
 	path := "user"
@@ -70,37 +69,9 @@ func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (re
 	return
 }
 
-// Union satisfied by [user.UserEditResponseUnknown] or [shared.UnionString].
-type UserEditResponseUnion interface {
-	ImplementsUserUserEditResponseUnion()
-}
+type UserEditResponse = interface{}
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UserEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [user.UserGetResponseUnknown] or [shared.UnionString].
-type UserGetResponseUnion interface {
-	ImplementsUserUserGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UserGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type UserGetResponse = interface{}
 
 type UserEditParams struct {
 	// The country in which the user lives.
@@ -120,21 +91,14 @@ func (r UserEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UserEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UserEditResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success UserEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userEditResponseEnvelopeJSON    `json:"-"`
+	Result UserEditResponse             `json:"result"`
+	JSON   userEditResponseEnvelopeJSON `json:"-"`
 }
 
 // userEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [UserEditResponseEnvelope]
 type userEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,37 +111,15 @@ func (r userEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type UserEditResponseEnvelopeSuccess bool
-
-const (
-	UserEditResponseEnvelopeSuccessTrue UserEditResponseEnvelopeSuccess = true
-)
-
-func (r UserEditResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case UserEditResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type UserGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UserGetResponseUnion  `json:"result,required"`
-	// Whether the API call was successful
-	Success UserGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userGetResponseEnvelopeJSON    `json:"-"`
+	Result UserGetResponse             `json:"result"`
+	JSON   userGetResponseEnvelopeJSON `json:"-"`
 }
 
 // userGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [UserGetResponseEnvelope]
 type userGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -188,19 +130,4 @@ func (r *UserGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r userGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type UserGetResponseEnvelopeSuccess bool
-
-const (
-	UserGetResponseEnvelopeSuccessTrue UserGetResponseEnvelopeSuccess = true
-)
-
-func (r UserGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case UserGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

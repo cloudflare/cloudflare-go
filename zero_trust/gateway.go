@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // GatewayService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewGatewayService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewGatewayService] method instead.
 type GatewayService struct {
 	Options          []option.RequestOption
 	AuditSSHSettings *GatewayAuditSSHSettingService
@@ -53,6 +56,10 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ...option.RequestOption) (res *GatewayNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayNewResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
@@ -66,6 +73,10 @@ func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ..
 func (r *GatewayService) List(ctx context.Context, query GatewayListParams, opts ...option.RequestOption) (res *GatewayListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

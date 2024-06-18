@@ -4,6 +4,7 @@ package radar
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -16,10 +17,11 @@ import (
 )
 
 // EntityLocationService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewEntityLocationService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewEntityLocationService] method instead.
 type EntityLocationService struct {
 	Options []option.RequestOption
 }
@@ -52,6 +54,10 @@ func (r *EntityLocationService) List(ctx context.Context, query EntityLocationLi
 func (r *EntityLocationService) Get(ctx context.Context, location string, query EntityLocationGetParams, opts ...option.RequestOption) (res *EntityLocationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EntityLocationGetResponseEnvelope
+	if location == "" {
+		err = errors.New("missing required location parameter")
+		return
+	}
 	path := fmt.Sprintf("radar/entities/locations/%s", location)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

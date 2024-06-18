@@ -4,6 +4,7 @@ package workers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // SubdomainService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewSubdomainService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewSubdomainService] method instead.
 type SubdomainService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,10 @@ func NewSubdomainService(opts ...option.RequestOption) (r *SubdomainService) {
 func (r *SubdomainService) Update(ctx context.Context, params SubdomainUpdateParams, opts ...option.RequestOption) (res *SubdomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubdomainUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/subdomain", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -48,6 +55,10 @@ func (r *SubdomainService) Update(ctx context.Context, params SubdomainUpdatePar
 func (r *SubdomainService) Get(ctx context.Context, query SubdomainGetParams, opts ...option.RequestOption) (res *SubdomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubdomainGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/subdomain", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

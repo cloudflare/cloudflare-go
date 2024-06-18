@@ -17,10 +17,11 @@ import (
 )
 
 // BGPHijackEventService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewBGPHijackEventService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewBGPHijackEventService] method instead.
 type BGPHijackEventService struct {
 	Options []option.RequestOption
 }
@@ -263,7 +264,7 @@ type BGPHijackEventListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// Number of entries per page
 	PerPage param.Field[int64] `query:"per_page"`
-	// The prefix hijacked during a BGP hijack event
+	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
 	// Sort events by field
 	SortBy param.Field[BGPHijackEventListParamsSortBy] `query:"sortBy"`

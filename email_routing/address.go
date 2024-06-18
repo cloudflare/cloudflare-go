@@ -4,6 +4,7 @@ package email_routing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -19,9 +20,11 @@ import (
 )
 
 // AddressService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewAddressService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAddressService] method instead.
 type AddressService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +43,10 @@ func NewAddressService(opts ...option.RequestOption) (r *AddressService) {
 func (r *AddressService) New(ctx context.Context, accountIdentifier string, body AddressNewParams, opts ...option.RequestOption) (res *Address, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressNewResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -76,6 +83,14 @@ func (r *AddressService) ListAutoPaging(ctx context.Context, accountIdentifier s
 func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *Address, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressDeleteResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if destinationAddressIdentifier == "" {
+		err = errors.New("missing required destination_address_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", accountIdentifier, destinationAddressIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -89,6 +104,14 @@ func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, d
 func (r *AddressService) Get(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *Address, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if destinationAddressIdentifier == "" {
+		err = errors.New("missing required destination_address_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", accountIdentifier, destinationAddressIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

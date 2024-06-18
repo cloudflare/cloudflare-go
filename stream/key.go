@@ -4,6 +4,7 @@ package stream
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -18,9 +19,11 @@ import (
 )
 
 // KeyService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewKeyService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewKeyService] method instead.
 type KeyService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +43,10 @@ func NewKeyService(opts ...option.RequestOption) (r *KeyService) {
 func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...option.RequestOption) (res *Keys, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -53,6 +60,14 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -66,6 +81,10 @@ func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDele
 func (r *KeyService) Get(ctx context.Context, query KeyGetParams, opts ...option.RequestOption) (res *[]KeyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/keys", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

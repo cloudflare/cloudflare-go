@@ -4,6 +4,7 @@ package client_certificates
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -19,10 +20,11 @@ import (
 )
 
 // ClientCertificateService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewClientCertificateService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewClientCertificateService] method instead.
 type ClientCertificateService struct {
 	Options []option.RequestOption
 }
@@ -40,6 +42,10 @@ func NewClientCertificateService(opts ...option.RequestOption) (r *ClientCertifi
 func (r *ClientCertificateService) New(ctx context.Context, params ClientCertificateNewParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/client_certificates", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -79,6 +85,14 @@ func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params Cl
 func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificateID string, body ClientCertificateDeleteParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if clientCertificateID == "" {
+		err = errors.New("missing required client_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -93,6 +107,14 @@ func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificate
 func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, body ClientCertificateEditParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateEditResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if clientCertificateID == "" {
+		err = errors.New("missing required client_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
@@ -106,6 +128,14 @@ func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID
 func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID string, query ClientCertificateGetParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if clientCertificateID == "" {
+		err = errors.New("missing required client_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", query.ZoneID, clientCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

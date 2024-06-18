@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -20,14 +21,16 @@ import (
 )
 
 // RiskScoringService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRiskScoringService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRiskScoringService] method instead.
 type RiskScoringService struct {
-	Options    []option.RequestOption
-	Behaviours *RiskScoringBehaviourService
-	Summary    *RiskScoringSummaryService
+	Options      []option.RequestOption
+	Behaviours   *RiskScoringBehaviourService
+	Summary      *RiskScoringSummaryService
+	Integrations *RiskScoringIntegrationService
 }
 
 // NewRiskScoringService generates a new service that applies the given options to
@@ -38,6 +41,7 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 	r.Options = opts
 	r.Behaviours = NewRiskScoringBehaviourService(opts...)
 	r.Summary = NewRiskScoringSummaryService(opts...)
+	r.Integrations = NewRiskScoringIntegrationService(opts...)
 	return
 }
 
@@ -45,6 +49,14 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 func (r *RiskScoringService) Get(ctx context.Context, accountIdentifier string, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringGetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if userID == "" {
+		err = errors.New("missing required user_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s", accountIdentifier, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -58,6 +70,14 @@ func (r *RiskScoringService) Get(ctx context.Context, accountIdentifier string, 
 func (r *RiskScoringService) Reset(ctx context.Context, accountIdentifier string, userID string, opts ...option.RequestOption) (res *RiskScoringResetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RiskScoringResetResponseEnvelope
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
+	if userID == "" {
+		err = errors.New("missing required user_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s/reset", accountIdentifier, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
@@ -99,7 +119,7 @@ func (r riskScoringGetResponseJSON) RawJSON() string {
 type RiskScoringGetResponseEvent struct {
 	ID           string                                `json:"id,required"`
 	Name         string                                `json:"name,required"`
-	RiskLevel    RiskScoringGetResponseEventsRiskLevel `json:"risk_level,required,nullable"`
+	RiskLevel    RiskScoringGetResponseEventsRiskLevel `json:"risk_level,required"`
 	Timestamp    time.Time                             `json:"timestamp,required" format:"date-time"`
 	EventDetails interface{}                           `json:"event_details"`
 	JSON         riskScoringGetResponseEventJSON       `json:"-"`

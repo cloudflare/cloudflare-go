@@ -16,15 +16,18 @@ import (
 )
 
 // BGPService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewBGPService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewBGPService] method instead.
 type BGPService struct {
 	Options []option.RequestOption
 	Leaks   *BGPLeakService
 	Top     *BGPTopService
 	Hijacks *BGPHijackService
 	Routes  *BGPRouteService
+	IPs     *BGPIPService
 }
 
 // NewBGPService generates a new service that applies the given options to each
@@ -37,6 +40,7 @@ func NewBGPService(opts ...option.RequestOption) (r *BGPService) {
 	r.Top = NewBGPTopService(opts...)
 	r.Hijacks = NewBGPHijackService(opts...)
 	r.Routes = NewBGPRouteService(opts...)
+	r.IPs = NewBGPIPService(opts...)
 	return
 }
 
@@ -231,7 +235,7 @@ type BGPTimeseriesParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Array of BGP network prefixes.
-	Prefix param.Field[[]string] `query:"prefix"`
+	Prefix param.Field[[]BGPTimeseriesParamsPrefix] `query:"prefix"`
 	// Array of BGP update types.
 	UpdateType param.Field[[]BGPTimeseriesParamsUpdateType] `query:"updateType"`
 }
@@ -306,6 +310,22 @@ func (r BGPTimeseriesParamsFormat) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type BGPTimeseriesParamsPrefix struct {
+	Location param.Field[string] `query:"location,required"`
+	Name     param.Field[string] `query:"name,required"`
+	// Network prefix, IPv4 or IPv6.
+	Type param.Field[string] `query:"type"`
+}
+
+// URLQuery serializes [BGPTimeseriesParamsPrefix]'s query parameters as
+// `url.Values`.
+func (r BGPTimeseriesParamsPrefix) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type BGPTimeseriesParamsUpdateType string

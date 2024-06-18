@@ -4,6 +4,7 @@ package cache
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,10 +17,11 @@ import (
 )
 
 // RegionalTieredCacheService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRegionalTieredCacheService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRegionalTieredCacheService] method instead.
 type RegionalTieredCacheService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,10 @@ func NewRegionalTieredCacheService(opts ...option.RequestOption) (r *RegionalTie
 func (r *RegionalTieredCacheService) Edit(ctx context.Context, params RegionalTieredCacheEditParams, opts ...option.RequestOption) (res *RegionalTieredCacheEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegionalTieredCacheEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +60,10 @@ func (r *RegionalTieredCacheService) Edit(ctx context.Context, params RegionalTi
 func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTieredCacheGetParams, opts ...option.RequestOption) (res *RegionalTieredCacheGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegionalTieredCacheGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -19,9 +20,11 @@ import (
 )
 
 // DLPProfileService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDLPProfileService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDLPProfileService] method instead.
 type DLPProfileService struct {
 	Options    []option.RequestOption
 	Custom     *DLPProfileCustomService
@@ -66,6 +69,14 @@ func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfile
 func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *DLPProfileGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if profileID == "" {
+		err = errors.New("missing required profile_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/%s", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

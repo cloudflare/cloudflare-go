@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,10 +18,11 @@ import (
 )
 
 // AccessCertificateService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAccessCertificateService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessCertificateService] method instead.
 type AccessCertificateService struct {
 	Options  []option.RequestOption
 	Settings *AccessCertificateSettingService
@@ -42,10 +44,19 @@ func (r *AccessCertificateService) New(ctx context.Context, params AccessCertifi
 	var env AccessCertificateNewResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
@@ -59,19 +70,32 @@ func (r *AccessCertificateService) New(ctx context.Context, params AccessCertifi
 }
 
 // Updates a configured mTLS certificate.
-func (r *AccessCertificateService) Update(ctx context.Context, uuid string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *Certificate, err error) {
+func (r *AccessCertificateService) Update(ctx context.Context, certificateID string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateUpdateResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if params.AccountID.Present {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = params.AccountID
-	} else {
+	}
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, uuid)
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -87,10 +111,19 @@ func (r *AccessCertificateService) List(ctx context.Context, query AccessCertifi
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
@@ -113,19 +146,32 @@ func (r *AccessCertificateService) ListAutoPaging(ctx context.Context, query Acc
 }
 
 // Deletes an mTLS certificate.
-func (r *AccessCertificateService) Delete(ctx context.Context, uuid string, body AccessCertificateDeleteParams, opts ...option.RequestOption) (res *AccessCertificateDeleteResponse, err error) {
+func (r *AccessCertificateService) Delete(ctx context.Context, certificateID string, body AccessCertificateDeleteParams, opts ...option.RequestOption) (res *AccessCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateDeleteResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = body.AccountID
-	} else {
+	}
+	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, uuid)
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -135,19 +181,32 @@ func (r *AccessCertificateService) Delete(ctx context.Context, uuid string, body
 }
 
 // Fetches a single mTLS certificate.
-func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *Certificate, err error) {
+func (r *AccessCertificateService) Get(ctx context.Context, certificateID string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, uuid)
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -18,10 +19,11 @@ import (
 )
 
 // AccessApplicationCAService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAccessApplicationCAService]
-// method instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessApplicationCAService] method instead.
 type AccessApplicationCAService struct {
 	Options []option.RequestOption
 }
@@ -36,19 +38,32 @@ func NewAccessApplicationCAService(opts ...option.RequestOption) (r *AccessAppli
 }
 
 // Generates a new short-lived certificate CA and public key.
-func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponseUnion, err error) {
+func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCANewResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = body.AccountID
-	} else {
+	}
+	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -64,10 +79,19 @@ func (r *AccessApplicationCAService) List(ctx context.Context, query AccessAppli
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
@@ -90,19 +114,32 @@ func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, query A
 }
 
 // Deletes a short-lived certificate CA.
-func (r *AccessApplicationCAService) Delete(ctx context.Context, uuid string, body AccessApplicationCADeleteParams, opts ...option.RequestOption) (res *AccessApplicationCADeleteResponse, err error) {
+func (r *AccessApplicationCAService) Delete(ctx context.Context, appID string, body AccessApplicationCADeleteParams, opts ...option.RequestOption) (res *AccessApplicationCADeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCADeleteResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = body.AccountID
-	} else {
+	}
+	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -112,19 +149,32 @@ func (r *AccessApplicationCAService) Delete(ctx context.Context, uuid string, bo
 }
 
 // Fetches a short-lived certificate CA and its public key.
-func (r *AccessApplicationCAService) Get(ctx context.Context, uuid string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponseUnion, err error) {
+func (r *AccessApplicationCAService) Get(ctx context.Context, appID string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCAGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
 		accountOrZone = "accounts"
 		accountOrZoneID = query.AccountID
-	} else {
+	}
+	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

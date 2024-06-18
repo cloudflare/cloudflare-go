@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,9 +18,11 @@ import (
 )
 
 // AccessTagService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewAccessTagService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAccessTagService] method instead.
 type AccessTagService struct {
 	Options []option.RequestOption
 }
@@ -34,11 +37,15 @@ func NewAccessTagService(opts ...option.RequestOption) (r *AccessTagService) {
 }
 
 // Create a tag
-func (r *AccessTagService) New(ctx context.Context, identifier string, body AccessTagNewParams, opts ...option.RequestOption) (res *Tag, err error) {
+func (r *AccessTagService) New(ctx context.Context, params AccessTagNewParams, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/tags", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/tags", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +54,19 @@ func (r *AccessTagService) New(ctx context.Context, identifier string, body Acce
 }
 
 // Update a tag
-func (r *AccessTagService) Update(ctx context.Context, identifier string, tagName string, body AccessTagUpdateParams, opts ...option.RequestOption) (res *Tag, err error) {
+func (r *AccessTagService) Update(ctx context.Context, tagName string, params AccessTagUpdateParams, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, tagName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tagName == "" {
+		err = errors.New("missing required tag_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/tags/%s", params.AccountID, tagName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +75,11 @@ func (r *AccessTagService) Update(ctx context.Context, identifier string, tagNam
 }
 
 // List tags
-func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[Tag], err error) {
+func (r *AccessTagService) List(ctx context.Context, query AccessTagListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Tag], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/access/tags", identifier)
+	path := fmt.Sprintf("accounts/%s/access/tags", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -78,15 +93,23 @@ func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...
 }
 
 // List tags
-func (r *AccessTagService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Tag] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
+func (r *AccessTagService) ListAutoPaging(ctx context.Context, query AccessTagListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Tag] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a tag
-func (r *AccessTagService) Delete(ctx context.Context, identifier string, name string, opts ...option.RequestOption) (res *AccessTagDeleteResponse, err error) {
+func (r *AccessTagService) Delete(ctx context.Context, tagName string, body AccessTagDeleteParams, opts ...option.RequestOption) (res *AccessTagDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, name)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tagName == "" {
+		err = errors.New("missing required tag_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/tags/%s", body.AccountID, tagName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -96,10 +119,18 @@ func (r *AccessTagService) Delete(ctx context.Context, identifier string, name s
 }
 
 // Get a tag
-func (r *AccessTagService) Get(ctx context.Context, identifier string, name string, opts ...option.RequestOption) (res *Tag, err error) {
+func (r *AccessTagService) Get(ctx context.Context, tagName string, query AccessTagGetParams, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, name)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tagName == "" {
+		err = errors.New("missing required tag_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/access/tags/%s", query.AccountID, tagName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -160,6 +191,8 @@ func (r accessTagDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessTagNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
 	Name param.Field[string] `json:"name,required"`
 }
@@ -213,6 +246,8 @@ func (r AccessTagNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessTagUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
 	Name param.Field[string] `json:"name,required"`
 }
@@ -265,6 +300,16 @@ func (r AccessTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type AccessTagListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AccessTagDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AccessTagDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
@@ -306,6 +351,11 @@ func (r AccessTagDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AccessTagGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessTagGetResponseEnvelope struct {

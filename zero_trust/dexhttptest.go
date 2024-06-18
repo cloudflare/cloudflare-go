@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,10 +18,11 @@ import (
 )
 
 // DEXHTTPTestService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDEXHTTPTestService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDEXHTTPTestService] method instead.
 type DEXHTTPTestService struct {
 	Options     []option.RequestOption
 	Percentiles *DEXHTTPTestPercentileService
@@ -41,6 +43,14 @@ func NewDEXHTTPTestService(opts ...option.RequestOption) (r *DEXHTTPTestService)
 func (r *DEXHTTPTestService) Get(ctx context.Context, testID string, params DEXHTTPTestGetParams, opts ...option.RequestOption) (res *HTTPDetails, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DexhttpTestGetResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if testID == "" {
+		err = errors.New("missing required test_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -336,12 +346,12 @@ func (r HTTPDetailsKind) IsKnown() bool {
 
 type DEXHTTPTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Start time for aggregate metrics in ISO ms
+	From param.Field[string] `query:"from,required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DexhttpTestGetParamsInterval] `query:"interval,required"`
 	// End time for aggregate metrics in ISO ms
-	TimeEnd param.Field[string] `query:"timeEnd,required"`
-	// Start time for aggregate metrics in ISO ms
-	TimeStart param.Field[string] `query:"timeStart,required"`
+	To param.Field[string] `query:"to,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`

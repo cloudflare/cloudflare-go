@@ -4,6 +4,7 @@ package filters
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -18,9 +19,11 @@ import (
 )
 
 // FilterService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewFilterService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewFilterService] method instead.
 type FilterService struct {
 	Options []option.RequestOption
 }
@@ -35,9 +38,18 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 }
 
 // Creates one or more filters.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterNewResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/filters", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -48,9 +60,22 @@ func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body Fil
 }
 
 // Updates an existing filter.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterUpdateResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -62,6 +87,11 @@ func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallFilter], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -81,14 +111,32 @@ func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query F
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallFilter] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing filter.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -99,9 +147,22 @@ func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a filter.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterGetResponseEnvelope
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

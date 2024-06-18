@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,9 +18,11 @@ import (
 )
 
 // DLPDatasetService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDLPDatasetService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDLPDatasetService] method instead.
 type DLPDatasetService struct {
 	Options []option.RequestOption
 	Upload  *DLPDatasetUploadService
@@ -39,6 +42,10 @@ func NewDLPDatasetService(opts ...option.RequestOption) (r *DLPDatasetService) {
 func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams, opts ...option.RequestOption) (res *DatasetCreation, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +59,14 @@ func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams,
 func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params DLPDatasetUpdateParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if datasetID == "" {
+		err = errors.New("missing required dataset_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", params.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -90,6 +105,14 @@ func (r *DLPDatasetService) ListAutoPaging(ctx context.Context, query DLPDataset
 func (r *DLPDatasetService) Delete(ctx context.Context, datasetID string, body DLPDatasetDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if datasetID == "" {
+		err = errors.New("missing required dataset_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", body.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
@@ -99,6 +122,14 @@ func (r *DLPDatasetService) Delete(ctx context.Context, datasetID string, body D
 func (r *DLPDatasetService) Get(ctx context.Context, datasetID string, query DLPDatasetGetParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if datasetID == "" {
+		err = errors.New("missing required dataset_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", query.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

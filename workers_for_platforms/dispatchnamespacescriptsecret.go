@@ -4,6 +4,7 @@ package workers_for_platforms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,10 +17,11 @@ import (
 )
 
 // DispatchNamespaceScriptSecretService contains methods and other services that
-// help with interacting with the cloudflare API. Note, unlike clients, this
-// service does not read variables from the environment automatically. You should
-// not instantiate this service directly, and instead use the
-// [NewDispatchNamespaceScriptSecretService] method instead.
+// help with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDispatchNamespaceScriptSecretService] method instead.
 type DispatchNamespaceScriptSecretService struct {
 	Options []option.RequestOption
 }
@@ -37,6 +39,18 @@ func NewDispatchNamespaceScriptSecretService(opts ...option.RequestOption) (r *D
 func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSecretUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptSecretUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets", params.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {

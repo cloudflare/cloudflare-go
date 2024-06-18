@@ -4,6 +4,7 @@ package page_shield
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,14 +16,17 @@ import (
 )
 
 // PageShieldService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewPageShieldService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewPageShieldService] method instead.
 type PageShieldService struct {
 	Options     []option.RequestOption
 	Policies    *PolicyService
 	Connections *ConnectionService
 	Scripts     *ScriptService
+	Cookies     *CookieService
 }
 
 // NewPageShieldService generates a new service that applies the given options to
@@ -34,6 +38,7 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 	r.Policies = NewPolicyService(opts...)
 	r.Connections = NewConnectionService(opts...)
 	r.Scripts = NewScriptService(opts...)
+	r.Cookies = NewCookieService(opts...)
 	return
 }
 
@@ -41,6 +46,10 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -54,6 +63,10 @@ func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateP
 func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, opts ...option.RequestOption) (res *Setting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -65,14 +78,14 @@ func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, 
 
 type Setting struct {
 	// When true, indicates that Page Shield is enabled.
-	Enabled bool `json:"enabled"`
+	Enabled bool `json:"enabled,required"`
 	// The timestamp of when Page Shield was last updated.
-	UpdatedAt string `json:"updated_at"`
+	UpdatedAt string `json:"updated_at,required"`
 	// When true, CSP reports will be sent to
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
-	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
+	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint,required"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool        `json:"use_connection_url_path"`
+	UseConnectionURLPath bool        `json:"use_connection_url_path,required"`
 	JSON                 settingJSON `json:"-"`
 }
 
@@ -96,14 +109,14 @@ func (r settingJSON) RawJSON() string {
 
 type PageShieldUpdateResponse struct {
 	// When true, indicates that Page Shield is enabled.
-	Enabled bool `json:"enabled"`
+	Enabled bool `json:"enabled,required"`
 	// The timestamp of when Page Shield was last updated.
-	UpdatedAt string `json:"updated_at"`
+	UpdatedAt string `json:"updated_at,required"`
 	// When true, CSP reports will be sent to
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
-	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
+	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint,required"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool                         `json:"use_connection_url_path"`
+	UseConnectionURLPath bool                         `json:"use_connection_url_path,required"`
 	JSON                 pageShieldUpdateResponseJSON `json:"-"`
 }
 
@@ -143,21 +156,21 @@ func (r PageShieldUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PageShieldUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   PageShieldUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageShieldUpdateResponseEnvelopeJSON    `json:"-"`
+	Success  PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []shared.ResponseInfo                   `json:"errors"`
+	Messages []shared.ResponseInfo                   `json:"messages"`
+	Result   PageShieldUpdateResponse                `json:"result"`
+	JSON     pageShieldUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // pageShieldUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageShieldUpdateResponseEnvelope]
 type pageShieldUpdateResponseEnvelopeJSON struct {
+	Success     apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -191,21 +204,21 @@ type PageShieldGetParams struct {
 }
 
 type PageShieldGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Setting               `json:"result,required"`
 	// Whether the API call was successful
-	Success PageShieldGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageShieldGetResponseEnvelopeJSON    `json:"-"`
+	Success  PageShieldGetResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []shared.ResponseInfo                `json:"errors"`
+	Messages []shared.ResponseInfo                `json:"messages"`
+	Result   Setting                              `json:"result,nullable"`
+	JSON     pageShieldGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // pageShieldGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageShieldGetResponseEnvelope]
 type pageShieldGetResponseEnvelopeJSON struct {
+	Success     apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

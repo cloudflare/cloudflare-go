@@ -16,9 +16,11 @@ import (
 )
 
 // HTTPTopService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewHTTPTopService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHTTPTopService] method instead.
 type HTTPTopService struct {
 	Options []option.RequestOption
 }
@@ -349,6 +351,8 @@ type HTTPTopBrowserFamiliesParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTopBrowserFamiliesParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPTopBrowserFamiliesParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -404,6 +408,23 @@ const (
 func (r HTTPTopBrowserFamiliesParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTopBrowserFamiliesParamsBotClassLikelyAutomated, HTTPTopBrowserFamiliesParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPTopBrowserFamiliesParamsBrowserFamily string
+
+const (
+	HTTPTopBrowserFamiliesParamsBrowserFamilyChrome  HTTPTopBrowserFamiliesParamsBrowserFamily = "CHROME"
+	HTTPTopBrowserFamiliesParamsBrowserFamilyEdge    HTTPTopBrowserFamiliesParamsBrowserFamily = "EDGE"
+	HTTPTopBrowserFamiliesParamsBrowserFamilyFirefox HTTPTopBrowserFamiliesParamsBrowserFamily = "FIREFOX"
+	HTTPTopBrowserFamiliesParamsBrowserFamilySafari  HTTPTopBrowserFamiliesParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPTopBrowserFamiliesParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsBrowserFamilyChrome, HTTPTopBrowserFamiliesParamsBrowserFamilyEdge, HTTPTopBrowserFamiliesParamsBrowserFamilyFirefox, HTTPTopBrowserFamiliesParamsBrowserFamilySafari:
 		return true
 	}
 	return false
@@ -584,6 +605,8 @@ type HTTPTopBrowsersParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTopBrowsersParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPTopBrowsersParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -638,6 +661,23 @@ const (
 func (r HTTPTopBrowsersParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTopBrowsersParamsBotClassLikelyAutomated, HTTPTopBrowsersParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPTopBrowsersParamsBrowserFamily string
+
+const (
+	HTTPTopBrowsersParamsBrowserFamilyChrome  HTTPTopBrowsersParamsBrowserFamily = "CHROME"
+	HTTPTopBrowsersParamsBrowserFamilyEdge    HTTPTopBrowsersParamsBrowserFamily = "EDGE"
+	HTTPTopBrowsersParamsBrowserFamilyFirefox HTTPTopBrowsersParamsBrowserFamily = "FIREFOX"
+	HTTPTopBrowsersParamsBrowserFamilySafari  HTTPTopBrowsersParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPTopBrowsersParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsBrowserFamilyChrome, HTTPTopBrowsersParamsBrowserFamilyEdge, HTTPTopBrowsersParamsBrowserFamilyFirefox, HTTPTopBrowsersParamsBrowserFamilySafari:
 		return true
 	}
 	return false

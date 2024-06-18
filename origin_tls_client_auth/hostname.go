@@ -4,6 +4,7 @@ package origin_tls_client_auth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,9 +17,11 @@ import (
 )
 
 // HostnameService contains methods and other services that help with interacting
-// with the cloudflare API. Note, unlike clients, this service does not read
-// variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewHostnameService] method instead.
+// with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHostnameService] method instead.
 type HostnameService struct {
 	Options      []option.RequestOption
 	Certificates *HostnameCertificateService
@@ -42,6 +45,10 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]AuthenticatedOriginPull, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -55,6 +62,14 @@ func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParam
 func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *AuthenticatedOriginPull, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if hostname == "" {
+		err = errors.New("missing required hostname parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", query.ZoneID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

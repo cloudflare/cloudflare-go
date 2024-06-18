@@ -4,6 +4,7 @@ package mtls_certificates
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,10 +16,11 @@ import (
 )
 
 // AssociationService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAssociationService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewAssociationService] method instead.
 type AssociationService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +38,14 @@ func NewAssociationService(opts ...option.RequestOption) (r *AssociationService)
 func (r *AssociationService) Get(ctx context.Context, mtlsCertificateID string, query AssociationGetParams, opts ...option.RequestOption) (res *[]CertificateAsssociation, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AssociationGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if mtlsCertificateID == "" {
+		err = errors.New("missing required mtls_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", query.AccountID, mtlsCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

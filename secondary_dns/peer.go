@@ -4,6 +4,7 @@ package secondary_dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,9 +17,11 @@ import (
 )
 
 // PeerService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewPeerService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewPeerService] method instead.
 type PeerService struct {
 	Options []option.RequestOption
 }
@@ -36,6 +39,10 @@ func NewPeerService(opts ...option.RequestOption) (r *PeerService) {
 func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -49,6 +56,14 @@ func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...opt
 func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpdateParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if peerID == "" {
+		err = errors.New("missing required peer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", params.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -85,6 +100,14 @@ func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, 
 func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if peerID == "" {
+		err = errors.New("missing required peer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", body.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -98,6 +121,14 @@ func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDelete
 func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if peerID == "" {
+		err = errors.New("missing required peer_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", query.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

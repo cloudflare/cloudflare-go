@@ -4,6 +4,7 @@ package mtls_certificates
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,10 +18,11 @@ import (
 )
 
 // MTLSCertificateService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewMTLSCertificateService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewMTLSCertificateService] method instead.
 type MTLSCertificateService struct {
 	Options      []option.RequestOption
 	Associations *AssociationService
@@ -40,6 +42,10 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateNewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -77,6 +83,14 @@ func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSC
 func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if mtlsCertificateID == "" {
+		err = errors.New("missing required mtls_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", body.AccountID, mtlsCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -90,6 +104,14 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if mtlsCertificateID == "" {
+		err = errors.New("missing required mtls_certificate_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", query.AccountID, mtlsCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

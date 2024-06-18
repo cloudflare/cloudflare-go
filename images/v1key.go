@@ -4,6 +4,7 @@ package images
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,9 +16,11 @@ import (
 )
 
 // V1KeyService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewV1KeyService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewV1KeyService] method instead.
 type V1KeyService struct {
 	Options []option.RequestOption
 }
@@ -35,6 +38,14 @@ func NewV1KeyService(opts ...option.RequestOption) (r *V1KeyService) {
 func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V1KeyUpdateParams, opts ...option.RequestOption) (res *V1KeyUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyUpdateResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if signingKeyName == "" {
+		err = errors.New("missing required signing_key_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1/keys/%s", body.AccountID, signingKeyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
@@ -48,6 +59,10 @@ func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V
 func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...option.RequestOption) (res *V1KeyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyListResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1/keys", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -62,6 +77,14 @@ func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...
 func (r *V1KeyService) Delete(ctx context.Context, signingKeyName string, body V1KeyDeleteParams, opts ...option.RequestOption) (res *V1KeyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if signingKeyName == "" {
+		err = errors.New("missing required signing_key_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1/keys/%s", body.AccountID, signingKeyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {

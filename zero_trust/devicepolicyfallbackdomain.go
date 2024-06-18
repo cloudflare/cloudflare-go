@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,10 +17,11 @@ import (
 )
 
 // DevicePolicyFallbackDomainService contains methods and other services that help
-// with interacting with the cloudflare API. Note, unlike clients, this service
-// does not read variables from the environment automatically. You should not
-// instantiate this service directly, and instead use the
-// [NewDevicePolicyFallbackDomainService] method instead.
+// with interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewDevicePolicyFallbackDomainService] method instead.
 type DevicePolicyFallbackDomainService struct {
 	Options []option.RequestOption
 }
@@ -39,6 +41,14 @@ func NewDevicePolicyFallbackDomainService(opts ...option.RequestOption) (r *Devi
 func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID string, params DevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]FallbackDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", params.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -79,6 +89,14 @@ func (r *DevicePolicyFallbackDomainService) ListAutoPaging(ctx context.Context, 
 func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, policyID string, query DevicePolicyFallbackDomainGetParams, opts ...option.RequestOption) (res *[]FallbackDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if policyID == "" {
+		err = errors.New("missing required policy_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

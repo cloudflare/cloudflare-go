@@ -4,6 +4,7 @@ package waiting_rooms
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,9 +18,11 @@ import (
 )
 
 // RuleService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewRuleService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewRuleService] method instead.
 type RuleService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,14 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) New(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +63,14 @@ func (r *RuleService) New(ctx context.Context, waitingRoomID string, params Rule
 func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -88,6 +107,18 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, waitingRoomID string, 
 func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", body.ZoneID, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -101,6 +132,18 @@ func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID s
 func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", params.ZoneID, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -198,9 +241,9 @@ func (r RuleNewParamsAction) IsKnown() bool {
 type RuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []WaitingRoomRule                 `json:"result,nullable"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -210,8 +253,8 @@ type RuleNewResponseEnvelope struct {
 type ruleNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -314,9 +357,9 @@ func (r RuleUpdateParamsBodyAction) IsKnown() bool {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []WaitingRoomRule                    `json:"result,nullable"`
 	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -326,8 +369,8 @@ type RuleUpdateResponseEnvelope struct {
 type ruleUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -400,9 +443,9 @@ type RuleDeleteParams struct {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []WaitingRoomRule                    `json:"result,nullable"`
 	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -412,8 +455,8 @@ type RuleDeleteResponseEnvelope struct {
 type ruleDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -554,9 +597,9 @@ func (r RuleEditParamsPositionObject) implementsWaitingRoomsRuleEditParamsPositi
 type RuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WaitingRoomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []WaitingRoomRule                  `json:"result,nullable"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleEditResponseEnvelopeJSON       `json:"-"`
 }
@@ -566,8 +609,8 @@ type RuleEditResponseEnvelope struct {
 type ruleEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

@@ -4,6 +4,7 @@ package zones
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,9 +18,11 @@ import (
 )
 
 // HoldService contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewHoldService] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHoldService] method instead.
 type HoldService struct {
 	Options []option.RequestOption
 }
@@ -38,6 +41,10 @@ func NewHoldService(opts ...option.RequestOption) (r *HoldService) {
 func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HoldNewResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -52,6 +59,10 @@ func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...opt
 func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HoldDeleteResponseEnvelope
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
@@ -66,6 +77,10 @@ func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts 
 func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HoldGetResponseEnvelope
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/hold", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

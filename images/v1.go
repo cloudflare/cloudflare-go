@@ -4,6 +4,7 @@ package images
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -21,9 +22,11 @@ import (
 )
 
 // V1Service contains methods and other services that help with interacting with
-// the cloudflare API. Note, unlike clients, this service does not read variables
-// from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewV1Service] method instead.
+// the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewV1Service] method instead.
 type V1Service struct {
 	Options  []option.RequestOption
 	Keys     *V1KeyService
@@ -51,6 +54,10 @@ func NewV1Service(opts ...option.RequestOption) (r *V1Service) {
 func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *Image, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1NewResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -90,6 +97,14 @@ func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opt
 func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1DeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if imageID == "" {
+		err = errors.New("missing required image_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", body.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -104,6 +119,14 @@ func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeletePar
 func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParams, opts ...option.RequestOption) (res *Image, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1EditResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if imageID == "" {
+		err = errors.New("missing required image_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", params.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -117,6 +140,14 @@ func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParam
 func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, opts ...option.RequestOption) (res *Image, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1GetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if imageID == "" {
+		err = errors.New("missing required image_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", query.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

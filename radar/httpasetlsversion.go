@@ -17,10 +17,11 @@ import (
 )
 
 // HTTPAseTLSVersionService contains methods and other services that help with
-// interacting with the cloudflare API. Note, unlike clients, this service does not
-// read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewHTTPAseTLSVersionService] method
-// instead.
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewHTTPAseTLSVersionService] method instead.
 type HTTPAseTLSVersionService struct {
 	Options []option.RequestOption
 }
@@ -211,6 +212,8 @@ type HTTPAseTLSVersionGetParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPAseTLSVersionGetParamsBotClass] `query:"botClass"`
+	// Filter for browser family.
+	BrowserFamily param.Field[[]HTTPAseTLSVersionGetParamsBrowserFamily] `query:"browserFamily"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -283,6 +286,23 @@ const (
 func (r HTTPAseTLSVersionGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPAseTLSVersionGetParamsBotClassLikelyAutomated, HTTPAseTLSVersionGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPAseTLSVersionGetParamsBrowserFamily string
+
+const (
+	HTTPAseTLSVersionGetParamsBrowserFamilyChrome  HTTPAseTLSVersionGetParamsBrowserFamily = "CHROME"
+	HTTPAseTLSVersionGetParamsBrowserFamilyEdge    HTTPAseTLSVersionGetParamsBrowserFamily = "EDGE"
+	HTTPAseTLSVersionGetParamsBrowserFamilyFirefox HTTPAseTLSVersionGetParamsBrowserFamily = "FIREFOX"
+	HTTPAseTLSVersionGetParamsBrowserFamilySafari  HTTPAseTLSVersionGetParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPAseTLSVersionGetParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsBrowserFamilyChrome, HTTPAseTLSVersionGetParamsBrowserFamilyEdge, HTTPAseTLSVersionGetParamsBrowserFamilyFirefox, HTTPAseTLSVersionGetParamsBrowserFamilySafari:
 		return true
 	}
 	return false

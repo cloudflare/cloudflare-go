@@ -3,8 +3,10 @@
 package vectorize_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -237,7 +239,7 @@ func TestIndexInsert(t *testing.T) {
 		"example-index",
 		vectorize.IndexInsertParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
+			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		},
 	)
 	if err != nil {
@@ -307,7 +309,7 @@ func TestIndexUpsert(t *testing.T) {
 		"example-index",
 		vectorize.IndexUpsertParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
+			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		},
 	)
 	if err != nil {

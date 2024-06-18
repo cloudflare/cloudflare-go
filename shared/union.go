@@ -4,33 +4,16 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsAccountsAccountUpdateResponseUnion()                      {}
-func (UnionString) ImplementsAccountsAccountGetResponseUnion()                         {}
-func (UnionString) ImplementsAccountsRoleGetResponseUnion()                            {}
 func (UnionString) ImplementsOriginCACertificatesOriginCACertificateNewResponseUnion() {}
 func (UnionString) ImplementsOriginCACertificatesOriginCACertificateGetResponseUnion() {}
-func (UnionString) ImplementsMembershipsMembershipUpdateResponseUnion()                {}
-func (UnionString) ImplementsMembershipsMembershipGetResponseUnion()                   {}
-func (UnionString) ImplementsUserUserEditResponseUnion()                               {}
-func (UnionString) ImplementsUserUserGetResponseUnion()                                {}
-func (UnionString) ImplementsUserAuditLogListResponse()                                {}
 func (UnionString) ImplementsUserBillingProfileGetResponseUnion()                      {}
-func (UnionString) ImplementsUserInviteEditResponseUnion()                             {}
-func (UnionString) ImplementsUserInviteGetResponseUnion()                              {}
-func (UnionString) ImplementsUserOrganizationGetResponseUnion()                        {}
 func (UnionString) ImplementsUserSubscriptionUpdateResponseUnion()                     {}
 func (UnionString) ImplementsUserSubscriptionEditResponseUnion()                       {}
-func (UnionString) ImplementsUserTokenUpdateResponseUnion()                            {}
-func (UnionString) ImplementsUserTokenGetResponseUnion()                               {}
 func (UnionString) ImplementsZonesSubscriptionNewResponseUnion()                       {}
 func (UnionString) ImplementsZonesSubscriptionGetResponseUnion()                       {}
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                 {}
 func (UnionString) ImplementsLoadBalancersRegionListResponseUnion()                    {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()                     {}
-func (UnionString) ImplementsCacheCachePurgeParamsBodyCachePurgeFilesFileUnion()       {}
-func (UnionString) ImplementsCacheSmartTieredCacheDeleteResponseUnion()                {}
-func (UnionString) ImplementsCacheSmartTieredCacheEditResponseUnion()                  {}
-func (UnionString) ImplementsCacheSmartTieredCacheGetResponseUnion()                   {}
 func (UnionString) ImplementsSSLAnalyzeNewResponseUnion()                              {}
 func (UnionString) ImplementsSSLCertificatePackGetResponseUnion()                      {}
 func (UnionString) ImplementsSubscriptionsSubscriptionNewResponseUnion()               {}
@@ -38,8 +21,6 @@ func (UnionString) ImplementsSubscriptionsSubscriptionUpdateResponseUnion()     
 func (UnionString) ImplementsSubscriptionsSubscriptionGetResponseUnion()               {}
 func (UnionString) ImplementsArgoSmartRoutingEditResponseUnion()                       {}
 func (UnionString) ImplementsArgoSmartRoutingGetResponseUnion()                        {}
-func (UnionString) ImplementsArgoTieredCachingEditResponseUnion()                      {}
-func (UnionString) ImplementsArgoTieredCachingGetResponseUnion()                       {}
 func (UnionString) ImplementsCustomCertificatesCustomCertificateNewResponseUnion()     {}
 func (UnionString) ImplementsCustomCertificatesCustomCertificateEditResponseUnion()    {}
 func (UnionString) ImplementsCustomCertificatesCustomCertificateGetResponseUnion()     {}
@@ -79,20 +60,16 @@ func (UnionString) ImplementsRateLimitsRateLimitEditResponseUnion()             
 func (UnionString) ImplementsRateLimitsRateLimitGetResponseUnion()                               {}
 func (UnionString) ImplementsWorkersAIRunResponseUnion()                                         {}
 func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                     {}
-func (UnionString) ImplementsKVNamespaceUpdateResponseUnion()                                    {}
-func (UnionString) ImplementsKVNamespaceDeleteResponseUnion()                                    {}
-func (UnionString) ImplementsKVNamespaceBulkUpdateResponseUnion()                                {}
-func (UnionString) ImplementsKVNamespaceBulkDeleteResponseUnion()                                {}
-func (UnionString) ImplementsKVNamespaceValueUpdateResponseUnion()                               {}
-func (UnionString) ImplementsKVNamespaceValueDeleteResponseUnion()                               {}
 func (UnionString) ImplementsQueuesQueueDeleteResponseUnion()                                    {}
 func (UnionString) ImplementsQueuesConsumerDeleteResponseUnion()                                 {}
+func (UnionString) ImplementsAPIGatewayConfigurationUpdateResponseUnion()                        {}
+func (UnionString) ImplementsAPIGatewayOperationDeleteResponseUnion()                            {}
+func (UnionString) ImplementsAPIGatewayUserSchemaDeleteResponseUnion()                           {}
 func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                      {}
 func (UnionString) ImplementsSpectrumOriginPortUnion()                                           {}
 func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()                      {}
 func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()                     {}
 func (UnionString) ImplementsSpectrumAppGetResponseUnion()                                       {}
-func (UnionString) ImplementsAuditLogsAuditLogListResponse()                                     {}
 func (UnionString) ImplementsBillingProfileGetResponseUnion()                                    {}
 func (UnionString) ImplementsImagesImageVariantsUnion()                                          {}
 func (UnionString) ImplementsImagesV1DeleteResponseUnion()                                       {}
@@ -120,42 +97,64 @@ func (UnionString) ImplementsStreamWebhookGetResponseUnion()                    
 func (UnionString) ImplementsStreamDownloadNewResponseUnion()                                    {}
 func (UnionString) ImplementsStreamDownloadDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsStreamDownloadGetResponseUnion()                                    {}
-func (UnionString) ImplementsAlertingAvailableAlertListResponseUnion()                           {}
-func (UnionString) ImplementsAlertingDestinationEligibleGetResponseUnion()                       {}
-func (UnionString) ImplementsAlertingDestinationPagerdutyDeleteResponseUnion()                   {}
-func (UnionString) ImplementsAlertingDestinationWebhookDeleteResponseUnion()                     {}
 func (UnionString) ImplementsAlertingMechanismItemIDUnionParam()                                 {}
 func (UnionString) ImplementsAlertingMechanismItemIDUnion()                                      {}
-func (UnionString) ImplementsAlertingPolicyDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsD1DatabaseDeleteResponseUnion()                                     {}
+func (UnionString) ImplementsD1DatabaseRawResponseResultsRowsUnion()                             {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}
 func (UnionString) ImplementsZeroTrustDeviceGetResponseUnion()                                   {}
 func (UnionString) ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnion()              {}
 func (UnionString) ImplementsZeroTrustDeviceRevokeNewResponseUnion()                             {}
 func (UnionString) ImplementsZeroTrustDeviceUnrevokeNewResponseUnion()                           {}
 func (UnionString) ImplementsZeroTrustAppIDUnionParam()                                          {}
-func (UnionString) ImplementsZeroTrustAccessApplicationCANewResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustAccessApplicationCAGetResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustAccessKeyUpdateResponseUnion()                             {}
-func (UnionString) ImplementsZeroTrustAccessKeyGetResponseUnion()                                {}
-func (UnionString) ImplementsZeroTrustAccessKeyRotateResponseUnion()                             {}
-func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()                   {}
-func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()                              {}
-func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()                         {}
-func (UnionString) ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustGatewayListDeleteResponseUnion()                           {}
-func (UnionString) ImplementsZeroTrustGatewayLocationDeleteResponseUnion()                       {}
-func (UnionString) ImplementsZeroTrustGatewayProxyEndpointDeleteResponseUnion()                  {}
-func (UnionString) ImplementsZeroTrustGatewayRuleDeleteResponseUnion()                           {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion()                    {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion()                 {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion()                   {}
-func (UnionString) ImplementsZeroTrustRiskScoringResetResponseUnion()                            {}
-func (UnionString) ImplementsHyperdriveConfigDeleteResponseUnion()                               {}
-func (UnionString) ImplementsVectorizeIndexDeleteResponseUnion()                                 {}
-func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()                   {}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationCANewResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustAccessApplicationCAGetResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustAccessKeyUpdateResponseUnion()             {}
+func (UnionString) ImplementsZeroTrustAccessKeyGetResponseUnion()                {}
+func (UnionString) ImplementsZeroTrustAccessKeyRotateResponseUnion()             {}
+func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()   {}
+func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()              {}
+func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()         {}
+func (UnionString) ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()      {}
+func (UnionString) ImplementsZeroTrustGatewayListDeleteResponseUnion()           {}
+func (UnionString) ImplementsZeroTrustGatewayLocationDeleteResponseUnion()       {}
+func (UnionString) ImplementsZeroTrustGatewayProxyEndpointDeleteResponseUnion()  {}
+func (UnionString) ImplementsZeroTrustGatewayRuleDeleteResponseUnion()           {}
+func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion()    {}
+func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion() {}
+func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion()   {}
+func (UnionString) ImplementsZeroTrustRiskScoringResetResponseUnion()            {}
+func (UnionString) ImplementsHyperdriveConfigDeleteResponseUnion()               {}
+func (UnionString) ImplementsVectorizeIndexDeleteResponseUnion()                 {}
+func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()   {}
 func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionUpdateResponseUnion() {
 }
 func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionGetResponseUnion() {
@@ -174,9 +173,8 @@ func (UnionInt) ImplementsRulesListItemGetResponseUnion()   {}
 
 type UnionFloat float64
 
-func (UnionFloat) ImplementsDNSTTLUnionParam()                                {}
-func (UnionFloat) ImplementsDNSTTLUnion()                                     {}
-func (UnionFloat) ImplementsEmailRoutingDNSRecordTTLUnion()                   {}
+func (UnionFloat) ImplementsDNSTTLNumber()                                    {}
+func (UnionFloat) ImplementsD1DatabaseRawResponseResultsRowsUnion()           {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                 {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnion()                      {}
