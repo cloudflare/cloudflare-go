@@ -24,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v2@v2.2.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v2@v2.3.0'
 ```
 
 <!-- x-release-please-end -->
