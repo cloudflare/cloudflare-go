@@ -77,7 +77,7 @@ func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatew
 	return
 }
 
-// List Gateway's
+// List Gateways
 func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AIGatewayListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
@@ -95,7 +95,7 @@ func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams,
 	return res, nil
 }
 
-// List Gateway's
+// List Gateways
 func (r *AIGatewayService) ListAutoPaging(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AIGatewayListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
