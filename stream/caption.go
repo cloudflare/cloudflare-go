@@ -58,17 +58,23 @@ func (r *CaptionService) Get(ctx context.Context, identifier string, query Capti
 }
 
 type Caption struct {
+	// Whether the caption was generated via AI.
+	Generated bool `json:"generated"`
 	// The language label displayed in the native language to users.
 	Label string `json:"label"`
 	// The language tag in BCP 47 format.
-	Language string      `json:"language"`
-	JSON     captionJSON `json:"-"`
+	Language string `json:"language"`
+	// The status of a generated caption.
+	Status CaptionStatus `json:"status"`
+	JSON   captionJSON   `json:"-"`
 }
 
 // captionJSON contains the JSON metadata for the struct [Caption]
 type captionJSON struct {
+	Generated   apijson.Field
 	Label       apijson.Field
 	Language    apijson.Field
+	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -79,6 +85,23 @@ func (r *Caption) UnmarshalJSON(data []byte) (err error) {
 
 func (r captionJSON) RawJSON() string {
 	return r.raw
+}
+
+// The status of a generated caption.
+type CaptionStatus string
+
+const (
+	CaptionStatusReady      CaptionStatus = "ready"
+	CaptionStatusInprogress CaptionStatus = "inprogress"
+	CaptionStatusError      CaptionStatus = "error"
+)
+
+func (r CaptionStatus) IsKnown() bool {
+	switch r {
+	case CaptionStatusReady, CaptionStatusInprogress, CaptionStatusError:
+		return true
+	}
+	return false
 }
 
 type CaptionGetParams struct {
