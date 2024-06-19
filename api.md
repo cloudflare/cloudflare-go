@@ -2830,15 +2830,16 @@ Methods:
 
 ## Settings
 
-### SchemaValidation
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#Settings">Settings</a>
 
+### SchemaValidation
+
 Methods:
 
 - <code title="put /zones/{zone_id}/api_gateway/settings/schema_validation">client.APIGateway.Settings.SchemaValidation.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#SettingSchemaValidationService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#SettingSchemaValidationUpdateParams">SettingSchemaValidationUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#Settings">Settings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /zones/{zone_id}/api_gateway/settings/schema_validation">client.APIGateway.Settings.SchemaValidation.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#SettingSchemaValidationService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#SettingSchemaValidationEditParams">SettingSchemaValidationEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#Settings">Settings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/api_gateway/settings/schema_validation">client.APIGateway.Settings.SchemaValidation.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#SettingSchemaValidationService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#SettingSchemaValidationGetParams">SettingSchemaValidationGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#Settings">Settings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## UserSchemas
@@ -2867,12 +2868,6 @@ Response Types:
 Methods:
 
 - <code title="get /zones/{zone_id}/api_gateway/user_schemas/{schema_id}/operations">client.APIGateway.UserSchemas.Operations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#UserSchemaOperationService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, schemaID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#UserSchemaOperationListParams">UserSchemaOperationListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#UserSchemaOperationListResponse">UserSchemaOperationListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-## SchemaValidation
-
-Methods:
-
-- <code title="patch /zones/{zone_id}/api_gateway/settings/schema_validation">client.APIGateway.SchemaValidation.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#SchemaValidationService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#SchemaValidationEditParams">SchemaValidationEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/api_gateway#Settings">Settings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # ManagedHeaders
 
