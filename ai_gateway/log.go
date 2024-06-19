@@ -58,7 +58,7 @@ func (r *LogService) Get(ctx context.Context, id string, params LogGetParams, op
 }
 
 type LogGetResponse struct {
-	ID                  string             `json:"id,required" format:"uuid"`
+	ID                  string             `json:"id,required"`
 	Cached              bool               `json:"cached,required"`
 	CreatedAt           time.Time          `json:"created_at,required" format:"date-time"`
 	Duration            int64              `json:"duration,required"`
