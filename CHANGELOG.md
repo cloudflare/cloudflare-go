@@ -1,5 +1,14 @@
 ## 0.98.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_application: Add support for SaaS OIDC Access Token Lifetime ([#2455](https://github.com/cloudflare/cloudflare-go/issues/2455))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.25.0 to 0.26.0 ([#2364](https://github.com/cloudflare/cloudflare-go/issues/2364))
+* deps: bumps goreleaser/goreleaser-action from 5.1.0 to 6.0.0 ([#2365](https://github.com/cloudflare/cloudflare-go/issues/2365))
+
 ## 0.97.0 (June 5th, 2024)
 
 ENHANCEMENTS:
