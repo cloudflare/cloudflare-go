@@ -1,0 +1,4 @@
+```release-note:enhancement
+teams: Added ZT rule settings ignore_cname_category_matches
+teams: Added description to ZT list item
+```

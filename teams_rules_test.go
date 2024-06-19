@@ -54,6 +54,7 @@ func TestTeamsRules(t *testing.T) {
 					"untrusted_cert": {
 						"action": "error"
 					},
+					"ignore_cname_category_matches": true,
 					"dns_resolvers": {
 						"ipv4": [
 							{"ip": "10.0.0.2", "port": 5053},

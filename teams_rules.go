@@ -49,6 +49,9 @@ type TeamsRuleSettings struct {
 	// Turns on ip category based filter on dns if the rule contains dns category checks
 	IPCategories bool `json:"ip_categories"`
 
+	// Turns on for explicitly ignoring cname domain category matches
+	IgnoreCnameCategoryMatches `json:"ignore_cname_category_matches"`
+
 	// Allow parent MSP accounts to enable bypass their children's rules. Do not set them for non MSP accounts.
 	AllowChildBypass *bool `json:"allow_child_bypass,omitempty"`
 
