@@ -3291,6 +3291,8 @@ func (r TTLNumber) IsKnown() bool {
 	return false
 }
 
+func (r TTLNumber) ImplementsDNSTTLNumber() {}
+
 type TXTRecord struct {
 	// Text content for the record.
 	Content string `json:"content,required"`
