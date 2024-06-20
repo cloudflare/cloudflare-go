@@ -53,6 +53,28 @@ func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, o
 	return
 }
 
+// Updates a specific GRE tunnel. Use `?validate_only=true` as an optional query
+// parameter to only run validation without persisting changes.
+func (r *GRETunnelService) Update(ctx context.Context, greTunnelID string, params GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env GRETunnelUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if greTunnelID == "" {
+		err = errors.New("missing required gre_tunnel_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, greTunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists GRE tunnels associated with an account.
 func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, opts ...option.RequestOption) (res *GRETunnelListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -62,6 +84,49 @@ func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, 
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Disables and removes a specific static GRE tunnel. Use `?validate_only=true` as
+// an optional query parameter to only run validation without persisting changes.
+func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, body GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env GRETunnelDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if greTunnelID == "" {
+		err = errors.New("missing required gre_tunnel_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", body.AccountID, greTunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Lists informtion for a specific GRE tunnel.
+func (r *GRETunnelService) Get(ctx context.Context, greTunnelID string, query GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env GRETunnelGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if greTunnelID == "" {
+		err = errors.New("missing required gre_tunnel_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", query.AccountID, greTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -146,6 +211,29 @@ func (r greTunnelNewResponseGRETunnelJSON) RawJSON() string {
 	return r.raw
 }
 
+type GRETunnelUpdateResponse struct {
+	Modified          bool                        `json:"modified"`
+	ModifiedGRETunnel interface{}                 `json:"modified_gre_tunnel"`
+	JSON              greTunnelUpdateResponseJSON `json:"-"`
+}
+
+// greTunnelUpdateResponseJSON contains the JSON metadata for the struct
+// [GRETunnelUpdateResponse]
+type greTunnelUpdateResponseJSON struct {
+	Modified          apijson.Field
+	ModifiedGRETunnel apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *GRETunnelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type GRETunnelListResponse struct {
 	GRETunnels []GRETunnelListResponseGRETunnel `json:"gre_tunnels"`
 	JSON       greTunnelListResponseJSON        `json:"-"`
@@ -222,6 +310,50 @@ func (r greTunnelListResponseGRETunnelJSON) RawJSON() string {
 	return r.raw
 }
 
+type GRETunnelDeleteResponse struct {
+	Deleted          bool                        `json:"deleted"`
+	DeletedGRETunnel interface{}                 `json:"deleted_gre_tunnel"`
+	JSON             greTunnelDeleteResponseJSON `json:"-"`
+}
+
+// greTunnelDeleteResponseJSON contains the JSON metadata for the struct
+// [GRETunnelDeleteResponse]
+type greTunnelDeleteResponseJSON struct {
+	Deleted          apijson.Field
+	DeletedGRETunnel apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *GRETunnelDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelGetResponse struct {
+	GRETunnel interface{}              `json:"gre_tunnel"`
+	JSON      greTunnelGetResponseJSON `json:"-"`
+}
+
+// greTunnelGetResponseJSON contains the JSON metadata for the struct
+// [GRETunnelGetResponse]
+type greTunnelGetResponseJSON struct {
+	GRETunnel   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GRETunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type GRETunnelNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -275,6 +407,77 @@ func (r GRETunnelNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type GRETunnelUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The IP address assigned to the Cloudflare side of the GRE tunnel.
+	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint,required"`
+	// The IP address assigned to the customer side of the GRE tunnel.
+	CustomerGREEndpoint param.Field[string] `json:"customer_gre_endpoint,required"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress param.Field[string] `json:"interface_address,required"`
+	// The name of the tunnel. The name cannot contain spaces or special characters,
+	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
+	Name param.Field[string] `json:"name,required"`
+	// An optional description of the GRE tunnel.
+	Description param.Field[string]           `json:"description"`
+	HealthCheck param.Field[HealthCheckParam] `json:"health_check"`
+	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
+	// is 576.
+	Mtu param.Field[int64] `json:"mtu"`
+	// Time To Live (TTL) in number of hops of the GRE tunnel.
+	TTL param.Field[int64] `json:"ttl"`
+}
+
+func (r GRETunnelUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type GRETunnelUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   GRETunnelUpdateResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success GRETunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    greTunnelUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// greTunnelUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GRETunnelUpdateResponseEnvelope]
+type greTunnelUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GRETunnelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type GRETunnelUpdateResponseEnvelopeSuccess bool
+
+const (
+	GRETunnelUpdateResponseEnvelopeSuccessTrue GRETunnelUpdateResponseEnvelopeSuccess = true
+)
+
+func (r GRETunnelUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GRETunnelListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -318,6 +521,102 @@ const (
 func (r GRETunnelListResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case GRETunnelListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GRETunnelDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type GRETunnelDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   GRETunnelDeleteResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success GRETunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    greTunnelDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// greTunnelDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GRETunnelDeleteResponseEnvelope]
+type greTunnelDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GRETunnelDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type GRETunnelDeleteResponseEnvelopeSuccess bool
+
+const (
+	GRETunnelDeleteResponseEnvelopeSuccessTrue GRETunnelDeleteResponseEnvelopeSuccess = true
+)
+
+func (r GRETunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GRETunnelGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type GRETunnelGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   GRETunnelGetResponse  `json:"result,required"`
+	// Whether the API call was successful
+	Success GRETunnelGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    greTunnelGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// greTunnelGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GRETunnelGetResponseEnvelope]
+type greTunnelGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GRETunnelGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type GRETunnelGetResponseEnvelopeSuccess bool
+
+const (
+	GRETunnelGetResponseEnvelopeSuccessTrue GRETunnelGetResponseEnvelopeSuccess = true
+)
+
+func (r GRETunnelGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
