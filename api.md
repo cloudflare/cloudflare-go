@@ -7241,32 +7241,14 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogListResponse">LogListResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogGetResponse">LogGetResponse</a>
 
 Methods:
 
 - <code title="get /accounts/{account_id}/ai-gateway/gateways/{id}/logs">client.AIGateway.Logs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogListParams">LogListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogListResponse">LogListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/ai-gateway/gateways/{id}/logs/{logId}">client.AIGateway.Logs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>, logID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogGetParams">LogGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogGetResponse">LogGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Request
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogRequestGetResponse">LogRequestGetResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/ai-gateway/gateways/{id}/logs/{logId}/request">client.AIGateway.Logs.Request.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogRequestService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>, logID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogRequestGetParams">LogRequestGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogRequestGetResponse">LogRequestGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Response
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogResponseGetResponse">LogResponseGetResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/ai-gateway/gateways/{id}/logs/{logId}/response">client.AIGateway.Logs.Response.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogResponseService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>, logID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogResponseGetParams">LogResponseGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogResponseGetResponse">LogResponseGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # IAM
 
