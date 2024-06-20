@@ -168,6 +168,8 @@ func (r *GatewayListService) Get(ctx context.Context, listID string, query Gatew
 
 type GatewayItem struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The description of the list item, if present
+	Description string `json:"description"`
 	// The value of the item in a list.
 	Value string          `json:"value"`
 	JSON  gatewayItemJSON `json:"-"`
@@ -176,6 +178,7 @@ type GatewayItem struct {
 // gatewayItemJSON contains the JSON metadata for the struct [GatewayItem]
 type gatewayItemJSON struct {
 	CreatedAt   apijson.Field
+	Description apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -191,6 +194,8 @@ func (r gatewayItemJSON) RawJSON() string {
 
 type GatewayItemParam struct {
 	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
+	// The description of the list item, if present
+	Description param.Field[string] `json:"description"`
 	// The value of the item in a list.
 	Value param.Field[string] `json:"value"`
 }
