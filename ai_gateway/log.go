@@ -4,7 +4,6 @@ package ai_gateway
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -64,31 +63,6 @@ func (r *LogService) ListAutoPaging(ctx context.Context, id string, params LogLi
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, id, params, opts...))
 }
 
-// Get Gateway Log Detail
-func (r *LogService) Get(ctx context.Context, id string, logID string, query LogGetParams, opts ...option.RequestOption) (res *LogGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env LogGetResponseEnvelope
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
-		return
-	}
-	if logID == "" {
-		err = errors.New("missing required logId parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s", query.AccountID, id, logID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type LogListResponse struct {
 	ID                  string              `json:"id,required"`
 	Cached              bool                `json:"cached,required"`
@@ -143,60 +117,6 @@ func (r logListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type LogGetResponse struct {
-	ID                  string             `json:"id,required"`
-	Cached              bool               `json:"cached,required"`
-	CreatedAt           time.Time          `json:"created_at,required" format:"date-time"`
-	Duration            int64              `json:"duration,required"`
-	Model               string             `json:"model,required"`
-	Path                string             `json:"path,required"`
-	Provider            string             `json:"provider,required"`
-	Request             string             `json:"request,required"`
-	Response            string             `json:"response,required"`
-	Success             bool               `json:"success,required"`
-	TokensIn            int64              `json:"tokens_in,required"`
-	TokensOut           int64              `json:"tokens_out,required"`
-	Metadata            string             `json:"metadata"`
-	RequestContentType  string             `json:"request_content_type"`
-	RequestType         string             `json:"request_type"`
-	ResponseContentType string             `json:"response_content_type"`
-	StatusCode          int64              `json:"status_code"`
-	Step                int64              `json:"step"`
-	JSON                logGetResponseJSON `json:"-"`
-}
-
-// logGetResponseJSON contains the JSON metadata for the struct [LogGetResponse]
-type logGetResponseJSON struct {
-	ID                  apijson.Field
-	Cached              apijson.Field
-	CreatedAt           apijson.Field
-	Duration            apijson.Field
-	Model               apijson.Field
-	Path                apijson.Field
-	Provider            apijson.Field
-	Request             apijson.Field
-	Response            apijson.Field
-	Success             apijson.Field
-	TokensIn            apijson.Field
-	TokensOut           apijson.Field
-	Metadata            apijson.Field
-	RequestContentType  apijson.Field
-	RequestType         apijson.Field
-	ResponseContentType apijson.Field
-	StatusCode          apijson.Field
-	Step                apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *LogGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r logGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type LogListParams struct {
 	AccountID param.Field[string]                 `path:"account_id,required"`
 	Cached    param.Field[bool]                   `query:"cached"`
@@ -246,31 +166,4 @@ func (r LogListParamsOrderBy) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type LogGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type LogGetResponseEnvelope struct {
-	Result  LogGetResponse             `json:"result,required"`
-	Success bool                       `json:"success,required"`
-	JSON    logGetResponseEnvelopeJSON `json:"-"`
-}
-
-// logGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [LogGetResponseEnvelope]
-type logGetResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LogGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r logGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
