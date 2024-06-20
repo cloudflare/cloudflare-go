@@ -35,29 +35,6 @@ func NewCfInterconnectService(opts ...option.RequestOption) (r *CfInterconnectSe
 	return
 }
 
-// Updates a specific interconnect associated with an account. Use
-// `?validate_only=true` as an optional query parameter to only run validation
-// without persisting changes.
-func (r *CfInterconnectService) Update(ctx context.Context, tunnelIdentifier string, params CfInterconnectUpdateParams, opts ...option.RequestOption) (res *CfInterconnectUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CfInterconnectUpdateResponseEnvelope
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", params.AccountID, tunnelIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Lists interconnects associated with an account.
 func (r *CfInterconnectService) List(ctx context.Context, query CfInterconnectListParams, opts ...option.RequestOption) (res *CfInterconnectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -73,50 +50,6 @@ func (r *CfInterconnectService) List(ctx context.Context, query CfInterconnectLi
 	}
 	res = &env.Result
 	return
-}
-
-// Lists details for a specific interconnect.
-func (r *CfInterconnectService) Get(ctx context.Context, tunnelIdentifier string, query CfInterconnectGetParams, opts ...option.RequestOption) (res *CfInterconnectGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CfInterconnectGetResponseEnvelope
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", query.AccountID, tunnelIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-type CfInterconnectUpdateResponse struct {
-	Modified             bool                             `json:"modified"`
-	ModifiedInterconnect interface{}                      `json:"modified_interconnect"`
-	JSON                 cfInterconnectUpdateResponseJSON `json:"-"`
-}
-
-// cfInterconnectUpdateResponseJSON contains the JSON metadata for the struct
-// [CfInterconnectUpdateResponse]
-type cfInterconnectUpdateResponseJSON struct {
-	Modified             apijson.Field
-	ModifiedInterconnect apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *CfInterconnectUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectUpdateResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type CfInterconnectListResponse struct {
@@ -248,119 +181,6 @@ func (r cfInterconnectListResponseInterconnectsHealthCheckJSON) RawJSON() string
 	return r.raw
 }
 
-type CfInterconnectGetResponse struct {
-	Interconnect interface{}                   `json:"interconnect"`
-	JSON         cfInterconnectGetResponseJSON `json:"-"`
-}
-
-// cfInterconnectGetResponseJSON contains the JSON metadata for the struct
-// [CfInterconnectGetResponse]
-type cfInterconnectGetResponseJSON struct {
-	Interconnect apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *CfInterconnectGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CfInterconnectUpdateParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	// An optional description of the interconnect.
-	Description param.Field[string] `json:"description"`
-	// The configuration specific to GRE interconnects.
-	GRE         param.Field[CfInterconnectUpdateParamsGRE]         `json:"gre"`
-	HealthCheck param.Field[CfInterconnectUpdateParamsHealthCheck] `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress param.Field[string] `json:"interface_address"`
-	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
-	// value is 576.
-	Mtu param.Field[int64] `json:"mtu"`
-}
-
-func (r CfInterconnectUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The configuration specific to GRE interconnects.
-type CfInterconnectUpdateParamsGRE struct {
-	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
-	// of the Interconnect.
-	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint"`
-}
-
-func (r CfInterconnectUpdateParamsGRE) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CfInterconnectUpdateParamsHealthCheck struct {
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[HealthCheckRate] `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`.
-	Target param.Field[string] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[HealthCheckType] `json:"type"`
-}
-
-func (r CfInterconnectUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CfInterconnectUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   CfInterconnectUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CfInterconnectUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cfInterconnectUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// cfInterconnectUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [CfInterconnectUpdateResponseEnvelope]
-type cfInterconnectUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CfInterconnectUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type CfInterconnectUpdateResponseEnvelopeSuccess bool
-
-const (
-	CfInterconnectUpdateResponseEnvelopeSuccessTrue CfInterconnectUpdateResponseEnvelopeSuccess = true
-)
-
-func (r CfInterconnectUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case CfInterconnectUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type CfInterconnectListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -404,54 +224,6 @@ const (
 func (r CfInterconnectListResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case CfInterconnectListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type CfInterconnectGetParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type CfInterconnectGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CfInterconnectGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CfInterconnectGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cfInterconnectGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// cfInterconnectGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CfInterconnectGetResponseEnvelope]
-type cfInterconnectGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CfInterconnectGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cfInterconnectGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type CfInterconnectGetResponseEnvelopeSuccess bool
-
-const (
-	CfInterconnectGetResponseEnvelopeSuccessTrue CfInterconnectGetResponseEnvelopeSuccess = true
-)
-
-func (r CfInterconnectGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case CfInterconnectGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
