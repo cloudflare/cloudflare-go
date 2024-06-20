@@ -53,6 +53,28 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 	return
 }
 
+// Update a specific Magic static route. Use `?validate_only=true` as an optional
+// query parameter to run validation only without persisting changes.
+func (r *RouteService) Update(ctx context.Context, routeID string, params RouteUpdateParams, opts ...option.RequestOption) (res *RouteUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RouteUpdateResponseEnvelope
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeID == "" {
+		err = errors.New("missing required route_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/routes/%s", params.AccountID, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // List all Magic static routes.
 func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *RouteListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -70,6 +92,27 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 	return
 }
 
+// Disable and remove a specific Magic static route.
+func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RouteDeleteResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeID == "" {
+		err = errors.New("missing required route_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/routes/%s", body.AccountID, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Delete multiple Magic static routes.
 func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ...option.RequestOption) (res *RouteEmptyResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -80,6 +123,27 @@ func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ..
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get a specific Magic static route.
+func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetParams, opts ...option.RequestOption) (res *RouteGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RouteGetResponseEnvelope
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeID == "" {
+		err = errors.New("missing required route_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/routes/%s", query.AccountID, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -110,6 +174,18 @@ func (r *Scope) UnmarshalJSON(data []byte) (err error) {
 
 func (r scopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Used only for ECMP routes.
+type ScopeParam struct {
+	// List of colo names for the ECMP scope.
+	ColoNames param.Field[[]string] `json:"colo_names"`
+	// List of colo regions for the ECMP scope.
+	ColoRegions param.Field[[]string] `json:"colo_regions"`
+}
+
+func (r ScopeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RouteNewResponse struct {
@@ -176,6 +252,29 @@ func (r *RouteNewResponseRoute) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r routeNewResponseRouteJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteUpdateResponse struct {
+	Modified      bool                    `json:"modified"`
+	ModifiedRoute interface{}             `json:"modified_route"`
+	JSON          routeUpdateResponseJSON `json:"-"`
+}
+
+// routeUpdateResponseJSON contains the JSON metadata for the struct
+// [RouteUpdateResponse]
+type routeUpdateResponseJSON struct {
+	Modified      apijson.Field
+	ModifiedRoute apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *RouteUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -246,6 +345,29 @@ func (r routeListResponseRouteJSON) RawJSON() string {
 	return r.raw
 }
 
+type RouteDeleteResponse struct {
+	Deleted      bool                    `json:"deleted"`
+	DeletedRoute interface{}             `json:"deleted_route"`
+	JSON         routeDeleteResponseJSON `json:"-"`
+}
+
+// routeDeleteResponseJSON contains the JSON metadata for the struct
+// [RouteDeleteResponse]
+type routeDeleteResponseJSON struct {
+	Deleted      apijson.Field
+	DeletedRoute apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RouteEmptyResponse struct {
 	Deleted       bool                   `json:"deleted"`
 	DeletedRoutes interface{}            `json:"deleted_routes"`
@@ -266,6 +388,27 @@ func (r *RouteEmptyResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r routeEmptyResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteGetResponse struct {
+	Route interface{}          `json:"route"`
+	JSON  routeGetResponseJSON `json:"-"`
+}
+
+// routeGetResponseJSON contains the JSON metadata for the struct
+// [RouteGetResponse]
+type routeGetResponseJSON struct {
+	Route       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -322,6 +465,70 @@ func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type RouteUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The next-hop IP Address for the static route.
+	Nexthop param.Field[string] `json:"nexthop,required"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Prefix param.Field[string] `json:"prefix,required"`
+	// Priority of the static route.
+	Priority param.Field[int64] `json:"priority,required"`
+	// An optional human provided description of the static route.
+	Description param.Field[string] `json:"description"`
+	// Used only for ECMP routes.
+	Scope param.Field[ScopeParam] `json:"scope"`
+	// Optional weight of the ECMP scope - if provided.
+	Weight param.Field[int64] `json:"weight"`
+}
+
+func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RouteUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RouteUpdateResponse   `json:"result,required"`
+	// Whether the API call was successful
+	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// routeUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RouteUpdateResponseEnvelope]
+type routeUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RouteUpdateResponseEnvelopeSuccess bool
+
+const (
+	RouteUpdateResponseEnvelopeSuccessTrue RouteUpdateResponseEnvelopeSuccess = true
+)
+
+func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -370,6 +577,54 @@ func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type RouteDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type RouteDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RouteDeleteResponse   `json:"result,required"`
+	// Whether the API call was successful
+	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// routeDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RouteDeleteResponseEnvelope]
+type routeDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RouteDeleteResponseEnvelopeSuccess bool
+
+const (
+	RouteDeleteResponseEnvelopeSuccessTrue RouteDeleteResponseEnvelopeSuccess = true
+)
+
+func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteEmptyParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -413,6 +668,54 @@ const (
 func (r RouteEmptyResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RouteEmptyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RouteGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type RouteGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RouteGetResponse      `json:"result,required"`
+	// Whether the API call was successful
+	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    routeGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// routeGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RouteGetResponseEnvelope]
+type routeGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RouteGetResponseEnvelopeSuccess bool
+
+const (
+	RouteGetResponseEnvelopeSuccessTrue RouteGetResponseEnvelopeSuccess = true
+)
+
+func (r RouteGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
