@@ -143,6 +143,7 @@ func TestTeamsRules(t *testing.T) {
 			UntrustedCertSettings: &UntrustedCertSettings{
 				Action: UntrustedCertError,
 			},
+			IgnoreCNAMECategoryMatches: BoolPtr(true),
 			DnsResolverSettings: &TeamsDnsResolverSettings{
 				V4Resolvers: []TeamsDnsResolverAddressV4{
 					{
