@@ -57,7 +57,7 @@ func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewPar
 }
 
 // Get URL scan by uuid
-func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
+func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, query ScanGetParams, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScanGetResponseEnvelope
 	if accountID == "" {
@@ -69,7 +69,7 @@ func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, 
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s", accountID, scanID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1745,6 +1745,19 @@ func (r *ScanNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error)
 
 func (r scanNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
+}
+
+type ScanGetParams struct {
+	// Whether to return full report (scan summary and network log).
+	Full param.Field[bool] `query:"full"`
+}
+
+// URLQuery serializes [ScanGetParams]'s query parameters as `url.Values`.
+func (r ScanGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type ScanGetResponseEnvelope struct {
