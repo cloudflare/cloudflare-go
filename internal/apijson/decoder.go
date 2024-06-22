@@ -493,7 +493,7 @@ func (d *decoderBuilder) newStructTypeDecoder(t reflect.Type) decoderFunc {
 			state.exactness = extras
 		}
 
-		if metadata := getSubField(value, []int{-1}, "Extras"); metadata.IsValid() && len(untypedExtraFields) > 0 {
+		if metadata := getSubField(value, []int{-1}, "ExtraFields"); metadata.IsValid() && len(untypedExtraFields) > 0 {
 			metadata.Set(reflect.ValueOf(untypedExtraFields))
 		}
 		return nil
