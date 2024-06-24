@@ -273,12 +273,8 @@ type ARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string      `json:"zone_name" format:"hostname"`
-	JSON     aRecordJSON `json:"-"`
+	TTL  TTLNumber   `json:"ttl"`
+	JSON aRecordJSON `json:"-"`
 }
 
 // aRecordJSON contains the JSON metadata for the struct [ARecord]
@@ -296,8 +292,6 @@ type aRecordJSON struct {
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -348,8 +342,6 @@ type ARecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r ARecordParam) MarshalJSON() (data []byte, err error) {
@@ -389,12 +381,8 @@ type AAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     aaaaRecordJSON `json:"-"`
+	TTL  TTLNumber      `json:"ttl"`
+	JSON aaaaRecordJSON `json:"-"`
 }
 
 // aaaaRecordJSON contains the JSON metadata for the struct [AAAARecord]
@@ -412,8 +400,6 @@ type aaaaRecordJSON struct {
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -464,8 +450,6 @@ type AAAARecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
@@ -504,12 +488,8 @@ type CAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     caaRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON caaRecordJSON `json:"-"`
 }
 
 // caaRecordJSON contains the JSON metadata for the struct [CAARecord]
@@ -527,8 +507,6 @@ type caaRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -604,8 +582,6 @@ type CAARecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r CAARecordParam) MarshalJSON() (data []byte, err error) {
@@ -658,12 +634,8 @@ type CERTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     certRecordJSON `json:"-"`
+	TTL  TTLNumber      `json:"ttl"`
+	JSON certRecordJSON `json:"-"`
 }
 
 // certRecordJSON contains the JSON metadata for the struct [CERTRecord]
@@ -681,8 +653,6 @@ type certRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -761,8 +731,6 @@ type CERTRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r CERTRecordParam) MarshalJSON() (data []byte, err error) {
@@ -818,12 +786,8 @@ type CNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     cnameRecordJSON `json:"-"`
+	TTL  TTLNumber       `json:"ttl"`
+	JSON cnameRecordJSON `json:"-"`
 }
 
 // cnameRecordJSON contains the JSON metadata for the struct [CNAMERecord]
@@ -841,8 +805,6 @@ type cnameRecordJSON struct {
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -893,8 +855,6 @@ type CNAMERecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
@@ -933,12 +893,8 @@ type DNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string           `json:"zone_name" format:"hostname"`
-	JSON     dnskeyRecordJSON `json:"-"`
+	TTL  TTLNumber        `json:"ttl"`
+	JSON dnskeyRecordJSON `json:"-"`
 }
 
 // dnskeyRecordJSON contains the JSON metadata for the struct [DNSKEYRecord]
@@ -956,8 +912,6 @@ type dnskeyRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1037,8 +991,6 @@ type DNSKEYRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r DNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1093,12 +1045,8 @@ type DSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     dsRecordJSON `json:"-"`
+	TTL  TTLNumber    `json:"ttl"`
+	JSON dsRecordJSON `json:"-"`
 }
 
 // dsRecordJSON contains the JSON metadata for the struct [DSRecord]
@@ -1116,8 +1064,6 @@ type dsRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1196,8 +1142,6 @@ type DSRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r DSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1252,12 +1196,8 @@ type HTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     httpsRecordJSON `json:"-"`
+	TTL  TTLNumber       `json:"ttl"`
+	JSON httpsRecordJSON `json:"-"`
 }
 
 // httpsRecordJSON contains the JSON metadata for the struct [HTTPSRecord]
@@ -1275,8 +1215,6 @@ type httpsRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1352,8 +1290,6 @@ type HTTPSRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r HTTPSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1406,12 +1342,8 @@ type LOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     locRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON locRecordJSON `json:"-"`
 }
 
 // locRecordJSON contains the JSON metadata for the struct [LOCRecord]
@@ -1429,8 +1361,6 @@ type locRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1565,8 +1495,6 @@ type LOCRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r LOCRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1638,12 +1566,8 @@ type MXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     mxRecordJSON `json:"-"`
+	TTL  TTLNumber    `json:"ttl"`
+	JSON mxRecordJSON `json:"-"`
 }
 
 // mxRecordJSON contains the JSON metadata for the struct [MXRecord]
@@ -1661,8 +1585,6 @@ type mxRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1713,8 +1635,6 @@ type MXRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1753,12 +1673,8 @@ type NAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     naptrRecordJSON `json:"-"`
+	TTL  TTLNumber       `json:"ttl"`
+	JSON naptrRecordJSON `json:"-"`
 }
 
 // naptrRecordJSON contains the JSON metadata for the struct [NAPTRRecord]
@@ -1776,8 +1692,6 @@ type naptrRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1862,8 +1776,6 @@ type NAPTRRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r NAPTRRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1920,12 +1832,8 @@ type NSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     nsRecordJSON `json:"-"`
+	TTL  TTLNumber    `json:"ttl"`
+	JSON nsRecordJSON `json:"-"`
 }
 
 // nsRecordJSON contains the JSON metadata for the struct [NSRecord]
@@ -1942,8 +1850,6 @@ type nsRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1991,8 +1897,6 @@ type NSRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2029,12 +1933,8 @@ type PTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     ptrRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON ptrRecordJSON `json:"-"`
 }
 
 // ptrRecordJSON contains the JSON metadata for the struct [PTRRecord]
@@ -2051,8 +1951,6 @@ type ptrRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2100,8 +1998,6 @@ type PTRRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2139,12 +2035,8 @@ type Record struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string      `json:"zone_name" format:"hostname"`
-	Data     interface{} `json:"data,required"`
+	TTL  TTLNumber   `json:"ttl"`
+	Data interface{} `json:"data,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64    `json:"priority"`
@@ -2167,8 +2059,6 @@ type recordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	Data        apijson.Field
 	Priority    apijson.Field
 	raw         string
@@ -2360,10 +2250,8 @@ type RecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string]      `json:"zone_id"`
-	Data   param.Field[interface{}] `json:"data,required"`
+	TTL  param.Field[TTLNumber]   `json:"ttl"`
+	Data param.Field[interface{}] `json:"data,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
@@ -2487,12 +2375,8 @@ type SMIMEARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string           `json:"zone_name" format:"hostname"`
-	JSON     smimeaRecordJSON `json:"-"`
+	TTL  TTLNumber        `json:"ttl"`
+	JSON smimeaRecordJSON `json:"-"`
 }
 
 // smimeaRecordJSON contains the JSON metadata for the struct [SMIMEARecord]
@@ -2510,8 +2394,6 @@ type smimeaRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2591,8 +2473,6 @@ type SMIMEARecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r SMIMEARecordParam) MarshalJSON() (data []byte, err error) {
@@ -2650,12 +2530,8 @@ type SRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     srvRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON srvRecordJSON `json:"-"`
 }
 
 // srvRecordJSON contains the JSON metadata for the struct [SRVRecord]
@@ -2673,8 +2549,6 @@ type srvRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2771,8 +2645,6 @@ type SRVRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r SRVRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2840,12 +2712,8 @@ type SSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     sshfpRecordJSON `json:"-"`
+	TTL  TTLNumber       `json:"ttl"`
+	JSON sshfpRecordJSON `json:"-"`
 }
 
 // sshfpRecordJSON contains the JSON metadata for the struct [SSHFPRecord]
@@ -2863,8 +2731,6 @@ type sshfpRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2940,8 +2806,6 @@ type SSHFPRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r SSHFPRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2994,12 +2858,8 @@ type SVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     svcbRecordJSON `json:"-"`
+	TTL  TTLNumber      `json:"ttl"`
+	JSON svcbRecordJSON `json:"-"`
 }
 
 // svcbRecordJSON contains the JSON metadata for the struct [SVCBRecord]
@@ -3017,8 +2877,6 @@ type svcbRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3094,8 +2952,6 @@ type SVCBRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r SVCBRecordParam) MarshalJSON() (data []byte, err error) {
@@ -3148,12 +3004,8 @@ type TLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     tlsaRecordJSON `json:"-"`
+	TTL  TTLNumber      `json:"ttl"`
+	JSON tlsaRecordJSON `json:"-"`
 }
 
 // tlsaRecordJSON contains the JSON metadata for the struct [TLSARecord]
@@ -3171,8 +3023,6 @@ type tlsaRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3251,8 +3101,6 @@ type TLSARecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r TLSARecordParam) MarshalJSON() (data []byte, err error) {
@@ -3321,12 +3169,8 @@ type TXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     txtRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON txtRecordJSON `json:"-"`
 }
 
 // txtRecordJSON contains the JSON metadata for the struct [TXTRecord]
@@ -3343,8 +3187,6 @@ type txtRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3392,8 +3234,6 @@ type TXTRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
@@ -3435,12 +3275,8 @@ type URIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     uriRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON uriRecordJSON `json:"-"`
 }
 
 // uriRecordJSON contains the JSON metadata for the struct [URIRecord]
@@ -3459,8 +3295,6 @@ type uriRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3536,8 +3370,6 @@ type URIRecordParam struct {
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTLNumber] `json:"ttl"`
-	// Identifier
-	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r URIRecordParam) MarshalJSON() (data []byte, err error) {
