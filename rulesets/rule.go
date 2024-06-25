@@ -3346,6 +3346,11 @@ type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHeader struct {
 	// Checks for the presence of these header names. The presence of these headers is
 	// used in building the cache key.
 	CheckPresence []string `json:"check_presence"`
+	// For each header name and list of values combination, check if the request header
+	// contains any of the values provided. The presence of the request header and
+	// whether any of the values provided are contained in the request header value is
+	// used in building the cache key.
+	Contains map[string][]string `json:"contains"`
 	// Whether or not to include the origin header. A value of true will exclude the
 	// origin header in the cache key.
 	ExcludeOrigin bool `json:"exclude_origin"`
@@ -3359,6 +3364,7 @@ type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHeader struct {
 // [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHeader]
 type setCacheSettingsRuleActionParametersCacheKeyCustomKeyHeaderJSON struct {
 	CheckPresence apijson.Field
+	Contains      apijson.Field
 	ExcludeOrigin apijson.Field
 	Include       apijson.Field
 	raw           string
@@ -3824,6 +3830,11 @@ type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHeaderParam struct {
 	// Checks for the presence of these header names. The presence of these headers is
 	// used in building the cache key.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
+	// For each header name and list of values combination, check if the request header
+	// contains any of the values provided. The presence of the request header and
+	// whether any of the values provided are contained in the request header value is
+	// used in building the cache key.
+	Contains param.Field[map[string][]string] `json:"contains"`
 	// Whether or not to include the origin header. A value of true will exclude the
 	// origin header in the cache key.
 	ExcludeOrigin param.Field[bool] `json:"exclude_origin"`
