@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zones"
 )
 
-func TestSettingOriginMaxHTTPVersionEdit(t *testing.T) {
+func TestSettingEdit(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,13 @@ func TestSettingOriginMaxHTTPVersionEdit(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Zones.Settings.OriginMaxHTTPVersion.Edit(context.TODO(), zones.SettingOriginMaxHTTPVersionEditParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value:  cloudflare.F(zones.SettingOriginMaxHTTPVersionEditParamsValue2),
-	})
+	_, err := client.Zones.Settings.Edit(
+		context.TODO(),
+		"always_online",
+		zones.SettingEditParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -40,7 +43,7 @@ func TestSettingOriginMaxHTTPVersionEdit(t *testing.T) {
 	}
 }
 
-func TestSettingOriginMaxHTTPVersionGet(t *testing.T) {
+func TestSettingGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,9 +56,13 @@ func TestSettingOriginMaxHTTPVersionGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Zones.Settings.OriginMaxHTTPVersion.Get(context.TODO(), zones.SettingOriginMaxHTTPVersionGetParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-	})
+	_, err := client.Zones.Settings.Get(
+		context.TODO(),
+		"always_online",
+		zones.SettingGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
