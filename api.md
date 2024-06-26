@@ -284,127 +284,64 @@ Methods:
 
 ## Settings
 
-### ZeroRTT
-
-### AdvancedDDoS
-
-### AlwaysOnline
-
-### AlwaysUseHTTPS
-
-### AutomaticHTTPSRewrites
-
-### AutomaticPlatformOptimization
-
-### Brotli
-
-### BrowserCacheTTL
-
-### BrowserCheck
-
-### CacheLevel
-
-### ChallengeTTL
-
-### Ciphers
-
-### DevelopmentMode
-
-### EarlyHints
-
-### EmailObfuscation
-
-### H2Prioritization
-
-### HotlinkProtection
-
-### HTTP2
-
-### HTTP3
-
-### ImageResizing
-
-### IPGeolocation
-
-### IPV6
-
-### MinTLSVersion
-
-### Minify
-
-### Mirage
-
-### MobileRedirect
-
-### NEL
-
-### OpportunisticEncryption
-
-### OpportunisticOnion
-
-### OrangeToOrange
-
-### OriginErrorPagePassThru
-
-### OriginMaxHTTPVersion
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#OriginMaxHTTPVersion">OriginMaxHTTPVersion</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOriginMaxHTTPVersionEditResponse">SettingOriginMaxHTTPVersionEditResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOriginMaxHTTPVersionGetResponse">SettingOriginMaxHTTPVersionGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#AdvancedDDoS">AdvancedDDoS</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#AlwaysOnline">AlwaysOnline</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#AlwaysUseHTTPS">AlwaysUseHTTPS</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#AutomaticHTTPSRewrites">AutomaticHTTPSRewrites</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#AutomaticPlatformOptimization">AutomaticPlatformOptimization</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#Brotli">Brotli</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#BrowserCacheTTL">BrowserCacheTTL</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#BrowserCheck">BrowserCheck</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#CacheLevel">CacheLevel</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ChallengeTTL">ChallengeTTL</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#Ciphers">Ciphers</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#DevelopmentMode">DevelopmentMode</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#EarlyHints">EarlyHints</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#EmailObfuscation">EmailObfuscation</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#H2Prioritization">H2Prioritization</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#HotlinkProtection">HotlinkProtection</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#HTTP2">HTTP2</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#HTTP3">HTTP3</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ImageResizing">ImageResizing</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#IPGeolocation">IPGeolocation</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#IPV6">IPV6</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#MinTLSVersion">MinTLSVersion</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#Minify">Minify</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#Mirage">Mirage</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#MobileRedirect">MobileRedirect</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#NEL">NEL</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#OpportunisticEncryption">OpportunisticEncryption</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#OpportunisticOnion">OpportunisticOnion</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#OrangeToOrange">OrangeToOrange</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#OriginErrorPagePassThru">OriginErrorPagePassThru</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#Polish">Polish</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#PrefetchPreload">PrefetchPreload</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ProxyReadTimeout">ProxyReadTimeout</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#PseudoIPV4">PseudoIPV4</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ResponseBuffering">ResponseBuffering</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#RocketLoader">RocketLoader</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SecurityHeaders">SecurityHeaders</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SecurityLevel">SecurityLevel</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ServerSideExcludes">ServerSideExcludes</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SortQueryStringForCache">SortQueryStringForCache</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SSL">SSL</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SSLRecommender">SSLRecommender</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#TLS1_3">TLS1_3</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#TLSClientAuth">TLSClientAuth</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#TrueClientIPHeader">TrueClientIPHeader</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#WAF">WAF</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#WebP">WebP</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#Websocket">Websocket</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZeroRTT">ZeroRTT</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingEditResponse">SettingEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingGetResponse">SettingGetResponse</a>
 
 Methods:
 
-- <code title="patch /zones/{zone_id}/settings/origin_max_http_version">client.Zones.Settings.OriginMaxHTTPVersion.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOriginMaxHTTPVersionService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOriginMaxHTTPVersionEditParams">SettingOriginMaxHTTPVersionEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOriginMaxHTTPVersionEditResponse">SettingOriginMaxHTTPVersionEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_id}/settings/origin_max_http_version">client.Zones.Settings.OriginMaxHTTPVersion.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOriginMaxHTTPVersionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOriginMaxHTTPVersionGetParams">SettingOriginMaxHTTPVersionGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOriginMaxHTTPVersionGetResponse">SettingOriginMaxHTTPVersionGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-### Polish
-
-### PrefetchPreload
-
-### ProxyReadTimeout
-
-### PseudoIPV4
-
-### ResponseBuffering
-
-### RocketLoader
-
-### SecurityHeaders
-
-### SecurityLevel
-
-### ServerSideExcludes
-
-### SortQueryStringForCache
-
-### SSL
-
-### SSLRecommender
-
-### TLS1_3
-
-### TLSClientAuth
-
-### TrueClientIPHeader
-
-### WAF
-
-### WebP
-
-### Websocket
-
-### FontSettings
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#FontSettings">FontSettings</a>
-
-Methods:
-
-- <code title="patch /zones/{zone_id}/settings/fonts">client.Zones.Settings.FontSettings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingFontSettingService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingFontSettingEditParams">SettingFontSettingEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#FontSettings">FontSettings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_id}/settings/fonts">client.Zones.Settings.FontSettings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingFontSettingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingFontSettingGetParams">SettingFontSettingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#FontSettings">FontSettings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /zones/{zone_id}/settings/{setting_id}">client.Zones.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, settingID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingEditParams">SettingEditParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingEditResponse">SettingEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/settings/{setting_id}">client.Zones.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, settingID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingGetParams">SettingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingGetResponse">SettingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## CustomNameservers
 
