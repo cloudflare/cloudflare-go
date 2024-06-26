@@ -3,11 +3,14 @@
 package stream
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -192,8 +195,19 @@ type CaptionLanguageUpdateParams struct {
 	File param.Field[string] `json:"file,required"`
 }
 
-func (r CaptionLanguageUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r CaptionLanguageUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 type CaptionLanguageUpdateResponseEnvelope struct {
