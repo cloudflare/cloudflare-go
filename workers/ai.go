@@ -67,8 +67,8 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 	return
 }
 
-// Union satisfied by [workers.AIRunResponseTextClassification],
-// [shared.UnionString], [workers.AIRunResponseSentenceSimilarity],
+// Union satisfied by [workers.AIRunResponseDumbPipe],
+// [workers.AIRunResponseTextClassification], [shared.UnionString],
 // [workers.AIRunResponseTextEmbeddings], [workers.AIRunResponseSpeechRecognition],
 // [workers.AIRunResponseImageClassification],
 // [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
@@ -89,10 +89,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AIRunResponseSentenceSimilarity{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -136,10 +132,6 @@ func init() {
 type AIRunResponseTextClassification []AIRunResponseTextClassification
 
 func (r AIRunResponseTextClassification) ImplementsWorkersAIRunResponseUnion() {}
-
-type AIRunResponseSentenceSimilarity []float64
-
-func (r AIRunResponseSentenceSimilarity) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseTextEmbeddings struct {
 	Data  [][]float64                     `json:"data"`
@@ -362,8 +354,6 @@ type AIRunParamsBody struct {
 	NumSteps    param.Field[int64]       `json:"num_steps"`
 	Prompt      param.Field[string]      `json:"prompt"`
 	Strength    param.Field[float64]     `json:"strength"`
-	Sentences   param.Field[interface{}] `json:"sentences,required"`
-	Source      param.Field[string]      `json:"source"`
 	Audio       param.Field[interface{}] `json:"audio,required"`
 	Lora        param.Field[string]      `json:"lora"`
 	MaxTokens   param.Field[int64]       `json:"max_tokens"`
@@ -383,10 +373,9 @@ func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r AIRunParamsBody) implementsWorkersAIRunParamsBodyUnion() {}
 
-// Satisfied by [workers.AIRunParamsBodyTextClassification],
-// [workers.AIRunParamsBodyTextToImage],
-// [workers.AIRunParamsBodySentenceSimilarity],
-// [workers.AIRunParamsBodyTextEmbeddings],
+// Satisfied by [workers.AIRunParamsBodyDumbPipe],
+// [workers.AIRunParamsBodyTextClassification],
+// [workers.AIRunParamsBodyTextToImage], [workers.AIRunParamsBodyTextEmbeddings],
 // [workers.AIRunParamsBodySpeechRecognition],
 // [workers.AIRunParamsBodyImageClassification],
 // [workers.AIRunParamsBodyObjectDetection],
@@ -421,17 +410,6 @@ func (r AIRunParamsBodyTextToImage) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AIRunParamsBodyTextToImage) implementsWorkersAIRunParamsBodyUnion() {}
-
-type AIRunParamsBodySentenceSimilarity struct {
-	Sentences param.Field[[]string] `json:"sentences,required"`
-	Source    param.Field[string]   `json:"source,required"`
-}
-
-func (r AIRunParamsBodySentenceSimilarity) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AIRunParamsBodySentenceSimilarity) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextEmbeddings struct {
 	Text param.Field[AIRunParamsBodyTextEmbeddingsTextUnion] `json:"text,required"`
