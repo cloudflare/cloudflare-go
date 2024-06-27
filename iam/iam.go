@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare
+package iam
 
 import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -14,8 +14,8 @@ import (
 // the [NewIAMService] method instead.
 type IAMService struct {
 	Options          []option.RequestOption
-	PermissionGroups *IAMPermissionGroupService
-	ResourceGroups   *IAMResourceGroupService
+	PermissionGroups *PermissionGroupService
+	ResourceGroups   *ResourceGroupService
 }
 
 // NewIAMService generates a new service that applies the given options to each
@@ -24,7 +24,7 @@ type IAMService struct {
 func NewIAMService(opts ...option.RequestOption) (r *IAMService) {
 	r = &IAMService{}
 	r.Options = opts
-	r.PermissionGroups = NewIAMPermissionGroupService(opts...)
-	r.ResourceGroups = NewIAMResourceGroupService(opts...)
+	r.PermissionGroups = NewPermissionGroupService(opts...)
+	r.ResourceGroups = NewResourceGroupService(opts...)
 	return
 }
