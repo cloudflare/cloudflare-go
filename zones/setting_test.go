@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zones"
 )
 
-func TestSettingEdit(t *testing.T) {
+func TestSettingEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -32,6 +32,10 @@ func TestSettingEdit(t *testing.T) {
 		"always_online",
 		zones.SettingEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body: zones.ZeroRTTParam{
+				ID:    cloudflare.F(zones.ZeroRTTID0rtt),
+				Value: cloudflare.F(zones.ZeroRTTValueOn),
+			},
 		},
 	)
 	if err != nil {
