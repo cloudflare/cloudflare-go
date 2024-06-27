@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare
+package iam
 
 import (
 	"context"
@@ -18,27 +18,27 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
-// IAMResourceGroupService contains methods and other services that help with
+// ResourceGroupService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewIAMResourceGroupService] method instead.
-type IAMResourceGroupService struct {
+// the [NewResourceGroupService] method instead.
+type ResourceGroupService struct {
 	Options []option.RequestOption
 }
 
-// NewIAMResourceGroupService generates a new service that applies the given
-// options to each request. These options are applied after the parent client's
-// options (if there is one), and before any request-specific options.
-func NewIAMResourceGroupService(opts ...option.RequestOption) (r *IAMResourceGroupService) {
-	r = &IAMResourceGroupService{}
+// NewResourceGroupService generates a new service that applies the given options
+// to each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewResourceGroupService(opts ...option.RequestOption) (r *ResourceGroupService) {
+	r = &ResourceGroupService{}
 	r.Options = opts
 	return
 }
 
 // Create a new Resource Group under the specified account.
-func (r *IAMResourceGroupService) New(ctx context.Context, params IAMResourceGroupNewParams, opts ...option.RequestOption) (res *IAMResourceGroupNewResponse, err error) {
+func (r *ResourceGroupService) New(ctx context.Context, params ResourceGroupNewParams, opts ...option.RequestOption) (res *ResourceGroupNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -50,7 +50,7 @@ func (r *IAMResourceGroupService) New(ctx context.Context, params IAMResourceGro
 }
 
 // Modify an existing resource group.
-func (r *IAMResourceGroupService) Update(ctx context.Context, resourceGroupID string, params IAMResourceGroupUpdateParams, opts ...option.RequestOption) (res *IAMResourceGroupUpdateResponse, err error) {
+func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID string, params ResourceGroupUpdateParams, opts ...option.RequestOption) (res *ResourceGroupUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -66,7 +66,7 @@ func (r *IAMResourceGroupService) Update(ctx context.Context, resourceGroupID st
 }
 
 // List all the resource groups for an account.
-func (r *IAMResourceGroupService) List(ctx context.Context, params IAMResourceGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[IAMResourceGroupListResponse], err error) {
+func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ResourceGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -84,14 +84,14 @@ func (r *IAMResourceGroupService) List(ctx context.Context, params IAMResourceGr
 }
 
 // List all the resource groups for an account.
-func (r *IAMResourceGroupService) ListAutoPaging(ctx context.Context, params IAMResourceGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[IAMResourceGroupListResponse] {
+func (r *ResourceGroupService) ListAutoPaging(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ResourceGroupListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Remove a resource group from an account.
-func (r *IAMResourceGroupService) Delete(ctx context.Context, resourceGroupID string, body IAMResourceGroupDeleteParams, opts ...option.RequestOption) (res *IAMResourceGroupDeleteResponse, err error) {
+func (r *ResourceGroupService) Delete(ctx context.Context, resourceGroupID string, body ResourceGroupDeleteParams, opts ...option.RequestOption) (res *ResourceGroupDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env IAMResourceGroupDeleteResponseEnvelope
+	var env ResourceGroupDeleteResponseEnvelope
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -110,7 +110,7 @@ func (r *IAMResourceGroupService) Delete(ctx context.Context, resourceGroupID st
 }
 
 // Get information about a specific resource group in an account.
-func (r *IAMResourceGroupService) Get(ctx context.Context, resourceGroupID string, query IAMResourceGroupGetParams, opts ...option.RequestOption) (res *IAMResourceGroupGetResponse, err error) {
+func (r *ResourceGroupService) Get(ctx context.Context, resourceGroupID string, query ResourceGroupGetParams, opts ...option.RequestOption) (res *ResourceGroupGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -126,19 +126,19 @@ func (r *IAMResourceGroupService) Get(ctx context.Context, resourceGroupID strin
 }
 
 // A group of scoped resources.
-type IAMResourceGroupNewResponse struct {
+type ResourceGroupNewResponse struct {
 	// Identifier of the group.
 	ID string `json:"id"`
 	// Attributes associated to the resource group.
 	Meta interface{} `json:"meta"`
 	// A scope is a combination of scope objects which provides additional context.
-	Scope IAMResourceGroupNewResponseScope `json:"scope"`
-	JSON  iamResourceGroupNewResponseJSON  `json:"-"`
+	Scope ResourceGroupNewResponseScope `json:"scope"`
+	JSON  resourceGroupNewResponseJSON  `json:"-"`
 }
 
-// iamResourceGroupNewResponseJSON contains the JSON metadata for the struct
-// [IAMResourceGroupNewResponse]
-type iamResourceGroupNewResponseJSON struct {
+// resourceGroupNewResponseJSON contains the JSON metadata for the struct
+// [ResourceGroupNewResponse]
+type resourceGroupNewResponseJSON struct {
 	ID          apijson.Field
 	Meta        apijson.Field
 	Scope       apijson.Field
@@ -146,191 +146,83 @@ type iamResourceGroupNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IAMResourceGroupNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ResourceGroupNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamResourceGroupNewResponseJSON) RawJSON() string {
+func (r resourceGroupNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // A scope is a combination of scope objects which provides additional context.
-type IAMResourceGroupNewResponseScope struct {
+type ResourceGroupNewResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
 	Key string `json:"key,required"`
 	// A list of scope objects for additional context. The number of Scope objects
 	// should not be zero.
-	Objects []IAMResourceGroupNewResponseScopeObject `json:"objects,required"`
-	JSON    iamResourceGroupNewResponseScopeJSON     `json:"-"`
+	Objects []ResourceGroupNewResponseScopeObject `json:"objects,required"`
+	JSON    resourceGroupNewResponseScopeJSON     `json:"-"`
 }
 
-// iamResourceGroupNewResponseScopeJSON contains the JSON metadata for the struct
-// [IAMResourceGroupNewResponseScope]
-type iamResourceGroupNewResponseScopeJSON struct {
+// resourceGroupNewResponseScopeJSON contains the JSON metadata for the struct
+// [ResourceGroupNewResponseScope]
+type resourceGroupNewResponseScopeJSON struct {
 	Key         apijson.Field
 	Objects     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IAMResourceGroupNewResponseScope) UnmarshalJSON(data []byte) (err error) {
+func (r *ResourceGroupNewResponseScope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamResourceGroupNewResponseScopeJSON) RawJSON() string {
+func (r resourceGroupNewResponseScopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // A scope object represents any resource that can have actions applied against
 // invite.
-type IAMResourceGroupNewResponseScopeObject struct {
+type ResourceGroupNewResponseScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                     `json:"key,required"`
-	JSON iamResourceGroupNewResponseScopeObjectJSON `json:"-"`
+	Key  string                                  `json:"key,required"`
+	JSON resourceGroupNewResponseScopeObjectJSON `json:"-"`
 }
 
-// iamResourceGroupNewResponseScopeObjectJSON contains the JSON metadata for the
-// struct [IAMResourceGroupNewResponseScopeObject]
-type iamResourceGroupNewResponseScopeObjectJSON struct {
+// resourceGroupNewResponseScopeObjectJSON contains the JSON metadata for the
+// struct [ResourceGroupNewResponseScopeObject]
+type resourceGroupNewResponseScopeObjectJSON struct {
 	Key         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IAMResourceGroupNewResponseScopeObject) UnmarshalJSON(data []byte) (err error) {
+func (r *ResourceGroupNewResponseScopeObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamResourceGroupNewResponseScopeObjectJSON) RawJSON() string {
+func (r resourceGroupNewResponseScopeObjectJSON) RawJSON() string {
 	return r.raw
 }
 
 // A group of scoped resources.
-type IAMResourceGroupUpdateResponse struct {
+type ResourceGroupUpdateResponse struct {
 	// Identifier of the group.
 	ID string `json:"id,required"`
 	// The scope associated to the resource group
-	Scope []IAMResourceGroupUpdateResponseScope `json:"scope,required"`
-	// Attributes associated to the resource group.
-	Meta interface{} `json:"meta"`
-	// Name of the resource group.
-	Name string                             `json:"name"`
-	JSON iamResourceGroupUpdateResponseJSON `json:"-"`
-}
-
-// iamResourceGroupUpdateResponseJSON contains the JSON metadata for the struct
-// [IAMResourceGroupUpdateResponse]
-type iamResourceGroupUpdateResponseJSON struct {
-	ID          apijson.Field
-	Scope       apijson.Field
-	Meta        apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IAMResourceGroupUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r iamResourceGroupUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// A scope is a combination of scope objects which provides additional context.
-type IAMResourceGroupUpdateResponseScope struct {
-	// This is a combination of pre-defined resource name and identifier (like Account
-	// ID etc.)
-	Key string `json:"key,required"`
-	// A list of scope objects for additional context.
-	Objects []IAMResourceGroupUpdateResponseScopeObject `json:"objects,required"`
-	JSON    iamResourceGroupUpdateResponseScopeJSON     `json:"-"`
-}
-
-// iamResourceGroupUpdateResponseScopeJSON contains the JSON metadata for the
-// struct [IAMResourceGroupUpdateResponseScope]
-type iamResourceGroupUpdateResponseScopeJSON struct {
-	Key         apijson.Field
-	Objects     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IAMResourceGroupUpdateResponseScope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r iamResourceGroupUpdateResponseScopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// A scope object represents any resource that can have actions applied against
-// invite.
-type IAMResourceGroupUpdateResponseScopeObject struct {
-	// This is a combination of pre-defined resource name and identifier (like Zone ID
-	// etc.)
-	Key  string                                        `json:"key,required"`
-	JSON iamResourceGroupUpdateResponseScopeObjectJSON `json:"-"`
-}
-
-// iamResourceGroupUpdateResponseScopeObjectJSON contains the JSON metadata for the
-// struct [IAMResourceGroupUpdateResponseScopeObject]
-type iamResourceGroupUpdateResponseScopeObjectJSON struct {
-	Key         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IAMResourceGroupUpdateResponseScopeObject) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r iamResourceGroupUpdateResponseScopeObjectJSON) RawJSON() string {
-	return r.raw
-}
-
-type IAMResourceGroupListResponse = interface{}
-
-type IAMResourceGroupDeleteResponse struct {
-	// Identifier
-	ID   string                             `json:"id,required"`
-	JSON iamResourceGroupDeleteResponseJSON `json:"-"`
-}
-
-// iamResourceGroupDeleteResponseJSON contains the JSON metadata for the struct
-// [IAMResourceGroupDeleteResponse]
-type iamResourceGroupDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IAMResourceGroupDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r iamResourceGroupDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// A group of scoped resources.
-type IAMResourceGroupGetResponse struct {
-	// Identifier of the group.
-	ID string `json:"id,required"`
-	// The scope associated to the resource group
-	Scope []IAMResourceGroupGetResponseScope `json:"scope,required"`
+	Scope []ResourceGroupUpdateResponseScope `json:"scope,required"`
 	// Attributes associated to the resource group.
 	Meta interface{} `json:"meta"`
 	// Name of the resource group.
 	Name string                          `json:"name"`
-	JSON iamResourceGroupGetResponseJSON `json:"-"`
+	JSON resourceGroupUpdateResponseJSON `json:"-"`
 }
 
-// iamResourceGroupGetResponseJSON contains the JSON metadata for the struct
-// [IAMResourceGroupGetResponse]
-type iamResourceGroupGetResponseJSON struct {
+// resourceGroupUpdateResponseJSON contains the JSON metadata for the struct
+// [ResourceGroupUpdateResponse]
+type resourceGroupUpdateResponseJSON struct {
 	ID          apijson.Field
 	Scope       apijson.Field
 	Meta        apijson.Field
@@ -339,145 +231,253 @@ type iamResourceGroupGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IAMResourceGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ResourceGroupUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamResourceGroupGetResponseJSON) RawJSON() string {
+func (r resourceGroupUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // A scope is a combination of scope objects which provides additional context.
-type IAMResourceGroupGetResponseScope struct {
+type ResourceGroupUpdateResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
 	Key string `json:"key,required"`
 	// A list of scope objects for additional context.
-	Objects []IAMResourceGroupGetResponseScopeObject `json:"objects,required"`
-	JSON    iamResourceGroupGetResponseScopeJSON     `json:"-"`
+	Objects []ResourceGroupUpdateResponseScopeObject `json:"objects,required"`
+	JSON    resourceGroupUpdateResponseScopeJSON     `json:"-"`
 }
 
-// iamResourceGroupGetResponseScopeJSON contains the JSON metadata for the struct
-// [IAMResourceGroupGetResponseScope]
-type iamResourceGroupGetResponseScopeJSON struct {
+// resourceGroupUpdateResponseScopeJSON contains the JSON metadata for the struct
+// [ResourceGroupUpdateResponseScope]
+type resourceGroupUpdateResponseScopeJSON struct {
 	Key         apijson.Field
 	Objects     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IAMResourceGroupGetResponseScope) UnmarshalJSON(data []byte) (err error) {
+func (r *ResourceGroupUpdateResponseScope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamResourceGroupGetResponseScopeJSON) RawJSON() string {
+func (r resourceGroupUpdateResponseScopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // A scope object represents any resource that can have actions applied against
 // invite.
-type IAMResourceGroupGetResponseScopeObject struct {
+type ResourceGroupUpdateResponseScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
 	Key  string                                     `json:"key,required"`
-	JSON iamResourceGroupGetResponseScopeObjectJSON `json:"-"`
+	JSON resourceGroupUpdateResponseScopeObjectJSON `json:"-"`
 }
 
-// iamResourceGroupGetResponseScopeObjectJSON contains the JSON metadata for the
-// struct [IAMResourceGroupGetResponseScopeObject]
-type iamResourceGroupGetResponseScopeObjectJSON struct {
+// resourceGroupUpdateResponseScopeObjectJSON contains the JSON metadata for the
+// struct [ResourceGroupUpdateResponseScopeObject]
+type resourceGroupUpdateResponseScopeObjectJSON struct {
 	Key         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IAMResourceGroupGetResponseScopeObject) UnmarshalJSON(data []byte) (err error) {
+func (r *ResourceGroupUpdateResponseScopeObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamResourceGroupGetResponseScopeObjectJSON) RawJSON() string {
+func (r resourceGroupUpdateResponseScopeObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-type IAMResourceGroupNewParams struct {
+type ResourceGroupListResponse = interface{}
+
+type ResourceGroupDeleteResponse struct {
+	// Identifier
+	ID   string                          `json:"id,required"`
+	JSON resourceGroupDeleteResponseJSON `json:"-"`
+}
+
+// resourceGroupDeleteResponseJSON contains the JSON metadata for the struct
+// [ResourceGroupDeleteResponse]
+type resourceGroupDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// A group of scoped resources.
+type ResourceGroupGetResponse struct {
+	// Identifier of the group.
+	ID string `json:"id,required"`
+	// The scope associated to the resource group
+	Scope []ResourceGroupGetResponseScope `json:"scope,required"`
+	// Attributes associated to the resource group.
+	Meta interface{} `json:"meta"`
+	// Name of the resource group.
+	Name string                       `json:"name"`
+	JSON resourceGroupGetResponseJSON `json:"-"`
+}
+
+// resourceGroupGetResponseJSON contains the JSON metadata for the struct
+// [ResourceGroupGetResponse]
+type resourceGroupGetResponseJSON struct {
+	ID          apijson.Field
+	Scope       apijson.Field
+	Meta        apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// A scope is a combination of scope objects which provides additional context.
+type ResourceGroupGetResponseScope struct {
+	// This is a combination of pre-defined resource name and identifier (like Account
+	// ID etc.)
+	Key string `json:"key,required"`
+	// A list of scope objects for additional context.
+	Objects []ResourceGroupGetResponseScopeObject `json:"objects,required"`
+	JSON    resourceGroupGetResponseScopeJSON     `json:"-"`
+}
+
+// resourceGroupGetResponseScopeJSON contains the JSON metadata for the struct
+// [ResourceGroupGetResponseScope]
+type resourceGroupGetResponseScopeJSON struct {
+	Key         apijson.Field
+	Objects     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponseScope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseScopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// A scope object represents any resource that can have actions applied against
+// invite.
+type ResourceGroupGetResponseScopeObject struct {
+	// This is a combination of pre-defined resource name and identifier (like Zone ID
+	// etc.)
+	Key  string                                  `json:"key,required"`
+	JSON resourceGroupGetResponseScopeObjectJSON `json:"-"`
+}
+
+// resourceGroupGetResponseScopeObjectJSON contains the JSON metadata for the
+// struct [ResourceGroupGetResponseScopeObject]
+type resourceGroupGetResponseScopeObjectJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponseScopeObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseScopeObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A scope is a combination of scope objects which provides additional context.
-	Scope param.Field[IAMResourceGroupNewParamsScope] `json:"scope,required"`
+	Scope param.Field[ResourceGroupNewParamsScope] `json:"scope,required"`
 	// Attributes associated to the resource group.
 	Meta param.Field[interface{}] `json:"meta"`
 }
 
-func (r IAMResourceGroupNewParams) MarshalJSON() (data []byte, err error) {
+func (r ResourceGroupNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A scope is a combination of scope objects which provides additional context.
-type IAMResourceGroupNewParamsScope struct {
+type ResourceGroupNewParamsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
 	Key param.Field[string] `json:"key,required"`
 	// A list of scope objects for additional context. The number of Scope objects
 	// should not be zero.
-	Objects param.Field[[]IAMResourceGroupNewParamsScopeObject] `json:"objects,required"`
+	Objects param.Field[[]ResourceGroupNewParamsScopeObject] `json:"objects,required"`
 }
 
-func (r IAMResourceGroupNewParamsScope) MarshalJSON() (data []byte, err error) {
+func (r ResourceGroupNewParamsScope) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A scope object represents any resource that can have actions applied against
 // invite.
-type IAMResourceGroupNewParamsScopeObject struct {
+type ResourceGroupNewParamsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
 	Key param.Field[string] `json:"key,required"`
 }
 
-func (r IAMResourceGroupNewParamsScopeObject) MarshalJSON() (data []byte, err error) {
+func (r ResourceGroupNewParamsScopeObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IAMResourceGroupUpdateParams struct {
+type ResourceGroupUpdateParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A scope is a combination of scope objects which provides additional context.
-	Scope param.Field[IAMResourceGroupUpdateParamsScope] `json:"scope,required"`
+	Scope param.Field[ResourceGroupUpdateParamsScope] `json:"scope,required"`
 	// Attributes associated to the resource group.
 	Meta param.Field[interface{}] `json:"meta"`
 }
 
-func (r IAMResourceGroupUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ResourceGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A scope is a combination of scope objects which provides additional context.
-type IAMResourceGroupUpdateParamsScope struct {
+type ResourceGroupUpdateParamsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
 	Key param.Field[string] `json:"key,required"`
 	// A list of scope objects for additional context. The number of Scope objects
 	// should not be zero.
-	Objects param.Field[[]IAMResourceGroupUpdateParamsScopeObject] `json:"objects,required"`
+	Objects param.Field[[]ResourceGroupUpdateParamsScopeObject] `json:"objects,required"`
 }
 
-func (r IAMResourceGroupUpdateParamsScope) MarshalJSON() (data []byte, err error) {
+func (r ResourceGroupUpdateParamsScope) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A scope object represents any resource that can have actions applied against
 // invite.
-type IAMResourceGroupUpdateParamsScopeObject struct {
+type ResourceGroupUpdateParamsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
 	Key param.Field[string] `json:"key,required"`
 }
 
-func (r IAMResourceGroupUpdateParamsScopeObject) MarshalJSON() (data []byte, err error) {
+func (r ResourceGroupUpdateParamsScopeObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IAMResourceGroupListParams struct {
+type ResourceGroupListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// ID of the resource group to be fetched.
@@ -490,32 +490,32 @@ type IAMResourceGroupListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
-// URLQuery serializes [IAMResourceGroupListParams]'s query parameters as
+// URLQuery serializes [ResourceGroupListParams]'s query parameters as
 // `url.Values`.
-func (r IAMResourceGroupListParams) URLQuery() (v url.Values) {
+func (r ResourceGroupListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type IAMResourceGroupDeleteParams struct {
+type ResourceGroupDeleteParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type IAMResourceGroupDeleteResponseEnvelope struct {
+type ResourceGroupDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success IAMResourceGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  IAMResourceGroupDeleteResponse                `json:"result,nullable"`
-	JSON    iamResourceGroupDeleteResponseEnvelopeJSON    `json:"-"`
+	Success ResourceGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ResourceGroupDeleteResponse                `json:"result,nullable"`
+	JSON    resourceGroupDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// iamResourceGroupDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [IAMResourceGroupDeleteResponseEnvelope]
-type iamResourceGroupDeleteResponseEnvelopeJSON struct {
+// resourceGroupDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ResourceGroupDeleteResponseEnvelope]
+type resourceGroupDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -524,30 +524,30 @@ type iamResourceGroupDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IAMResourceGroupDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ResourceGroupDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamResourceGroupDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r resourceGroupDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type IAMResourceGroupDeleteResponseEnvelopeSuccess bool
+type ResourceGroupDeleteResponseEnvelopeSuccess bool
 
 const (
-	IAMResourceGroupDeleteResponseEnvelopeSuccessTrue IAMResourceGroupDeleteResponseEnvelopeSuccess = true
+	ResourceGroupDeleteResponseEnvelopeSuccessTrue ResourceGroupDeleteResponseEnvelopeSuccess = true
 )
 
-func (r IAMResourceGroupDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r ResourceGroupDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case IAMResourceGroupDeleteResponseEnvelopeSuccessTrue:
+	case ResourceGroupDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type IAMResourceGroupGetParams struct {
+type ResourceGroupGetParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

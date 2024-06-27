@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare
+package iam
 
 import (
 	"context"
@@ -17,27 +17,27 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-// IAMPermissionGroupService contains methods and other services that help with
+// PermissionGroupService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewIAMPermissionGroupService] method instead.
-type IAMPermissionGroupService struct {
+// the [NewPermissionGroupService] method instead.
+type PermissionGroupService struct {
 	Options []option.RequestOption
 }
 
-// NewIAMPermissionGroupService generates a new service that applies the given
-// options to each request. These options are applied after the parent client's
-// options (if there is one), and before any request-specific options.
-func NewIAMPermissionGroupService(opts ...option.RequestOption) (r *IAMPermissionGroupService) {
-	r = &IAMPermissionGroupService{}
+// NewPermissionGroupService generates a new service that applies the given options
+// to each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewPermissionGroupService(opts ...option.RequestOption) (r *PermissionGroupService) {
+	r = &PermissionGroupService{}
 	r.Options = opts
 	return
 }
 
 // List all the permissions groups for an account.
-func (r *IAMPermissionGroupService) List(ctx context.Context, params IAMPermissionGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[IAMPermissionGroupListResponse], err error) {
+func (r *PermissionGroupService) List(ctx context.Context, params PermissionGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PermissionGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -55,12 +55,12 @@ func (r *IAMPermissionGroupService) List(ctx context.Context, params IAMPermissi
 }
 
 // List all the permissions groups for an account.
-func (r *IAMPermissionGroupService) ListAutoPaging(ctx context.Context, params IAMPermissionGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[IAMPermissionGroupListResponse] {
+func (r *PermissionGroupService) ListAutoPaging(ctx context.Context, params PermissionGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PermissionGroupListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Get information about a specific permission group in an account.
-func (r *IAMPermissionGroupService) Get(ctx context.Context, permissionGroupID string, query IAMPermissionGroupGetParams, opts ...option.RequestOption) (res *IAMPermissionGroupGetResponse, err error) {
+func (r *PermissionGroupService) Get(ctx context.Context, permissionGroupID string, query PermissionGroupGetParams, opts ...option.RequestOption) (res *PermissionGroupGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -75,23 +75,23 @@ func (r *IAMPermissionGroupService) Get(ctx context.Context, permissionGroupID s
 	return
 }
 
-type IAMPermissionGroupListResponse = interface{}
+type PermissionGroupListResponse = interface{}
 
 // A named group of permissions that map to a group of operations against
 // resources.
-type IAMPermissionGroupGetResponse struct {
+type PermissionGroupGetResponse struct {
 	// Identifier of the group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta interface{} `json:"meta"`
 	// Name of the group.
-	Name string                            `json:"name"`
-	JSON iamPermissionGroupGetResponseJSON `json:"-"`
+	Name string                         `json:"name"`
+	JSON permissionGroupGetResponseJSON `json:"-"`
 }
 
-// iamPermissionGroupGetResponseJSON contains the JSON metadata for the struct
-// [IAMPermissionGroupGetResponse]
-type iamPermissionGroupGetResponseJSON struct {
+// permissionGroupGetResponseJSON contains the JSON metadata for the struct
+// [PermissionGroupGetResponse]
+type permissionGroupGetResponseJSON struct {
 	ID          apijson.Field
 	Meta        apijson.Field
 	Name        apijson.Field
@@ -99,15 +99,15 @@ type iamPermissionGroupGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IAMPermissionGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PermissionGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamPermissionGroupGetResponseJSON) RawJSON() string {
+func (r permissionGroupGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type IAMPermissionGroupListParams struct {
+type PermissionGroupListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// ID of the permission group to be fetched.
@@ -122,16 +122,16 @@ type IAMPermissionGroupListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
-// URLQuery serializes [IAMPermissionGroupListParams]'s query parameters as
+// URLQuery serializes [PermissionGroupListParams]'s query parameters as
 // `url.Values`.
-func (r IAMPermissionGroupListParams) URLQuery() (v url.Values) {
+func (r PermissionGroupListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type IAMPermissionGroupGetParams struct {
+type PermissionGroupGetParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
