@@ -302,7 +302,7 @@ type QualityIQISummaryParams struct {
 func (r QualityIQISummaryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -430,7 +430,7 @@ type QualityIQITimeseriesGroupsParams struct {
 func (r QualityIQITimeseriesGroupsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

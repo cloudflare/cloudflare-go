@@ -417,7 +417,7 @@ func (r WidgetNewParams) MarshalJSON() (data []byte, err error) {
 func (r WidgetNewParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -675,7 +675,7 @@ type WidgetListParams struct {
 func (r WidgetListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

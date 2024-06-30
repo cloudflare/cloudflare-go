@@ -67,7 +67,7 @@ type SearchGetParams struct {
 func (r SearchGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -83,7 +83,7 @@ type SearchGetParamsSearchParams struct {
 func (r SearchGetParamsSearchParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
