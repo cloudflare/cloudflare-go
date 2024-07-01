@@ -167,14 +167,21 @@ type DispatchNamespaceScriptSettingEditResponseMigrations struct {
 	NewTag string `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
-	OldTag             string                                                   `json:"old_tag"`
-	DeletedClasses     interface{}                                              `json:"deleted_classes,required"`
-	NewClasses         interface{}                                              `json:"new_classes,required"`
-	RenamedClasses     interface{}                                              `json:"renamed_classes,required"`
-	TransferredClasses interface{}                                              `json:"transferred_classes,required"`
-	Steps              interface{}                                              `json:"steps,required"`
-	JSON               dispatchNamespaceScriptSettingEditResponseMigrationsJSON `json:"-"`
-	union              DispatchNamespaceScriptSettingEditResponseMigrationsUnion
+	OldTag string `json:"old_tag"`
+	// This field can have the runtime type of [[]string].
+	DeletedClasses interface{} `json:"deleted_classes,required"`
+	// This field can have the runtime type of [[]string].
+	NewClasses interface{} `json:"new_classes,required"`
+	// This field can have the runtime type of
+	// [[]workers.SingleStepMigrationRenamedClass].
+	RenamedClasses interface{} `json:"renamed_classes,required"`
+	// This field can have the runtime type of
+	// [[]workers.SingleStepMigrationTransferredClass].
+	TransferredClasses interface{} `json:"transferred_classes,required"`
+	// This field can have the runtime type of [[]workers.MigrationStep].
+	Steps interface{}                                              `json:"steps,required"`
+	JSON  dispatchNamespaceScriptSettingEditResponseMigrationsJSON `json:"-"`
+	union DispatchNamespaceScriptSettingEditResponseMigrationsUnion
 }
 
 // dispatchNamespaceScriptSettingEditResponseMigrationsJSON contains the JSON
@@ -203,6 +210,11 @@ func (r *DispatchNamespaceScriptSettingEditResponseMigrations) UnmarshalJSON(dat
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [DispatchNamespaceScriptSettingEditResponseMigrationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [workers.SingleStepMigration],
+// [workers.SteppedMigration].
 func (r DispatchNamespaceScriptSettingEditResponseMigrations) AsUnion() DispatchNamespaceScriptSettingEditResponseMigrationsUnion {
 	return r.union
 }
@@ -306,14 +318,21 @@ type DispatchNamespaceScriptSettingGetResponseMigrations struct {
 	NewTag string `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
-	OldTag             string                                                  `json:"old_tag"`
-	DeletedClasses     interface{}                                             `json:"deleted_classes,required"`
-	NewClasses         interface{}                                             `json:"new_classes,required"`
-	RenamedClasses     interface{}                                             `json:"renamed_classes,required"`
-	TransferredClasses interface{}                                             `json:"transferred_classes,required"`
-	Steps              interface{}                                             `json:"steps,required"`
-	JSON               dispatchNamespaceScriptSettingGetResponseMigrationsJSON `json:"-"`
-	union              DispatchNamespaceScriptSettingGetResponseMigrationsUnion
+	OldTag string `json:"old_tag"`
+	// This field can have the runtime type of [[]string].
+	DeletedClasses interface{} `json:"deleted_classes,required"`
+	// This field can have the runtime type of [[]string].
+	NewClasses interface{} `json:"new_classes,required"`
+	// This field can have the runtime type of
+	// [[]workers.SingleStepMigrationRenamedClass].
+	RenamedClasses interface{} `json:"renamed_classes,required"`
+	// This field can have the runtime type of
+	// [[]workers.SingleStepMigrationTransferredClass].
+	TransferredClasses interface{} `json:"transferred_classes,required"`
+	// This field can have the runtime type of [[]workers.MigrationStep].
+	Steps interface{}                                             `json:"steps,required"`
+	JSON  dispatchNamespaceScriptSettingGetResponseMigrationsJSON `json:"-"`
+	union DispatchNamespaceScriptSettingGetResponseMigrationsUnion
 }
 
 // dispatchNamespaceScriptSettingGetResponseMigrationsJSON contains the JSON
@@ -342,6 +361,11 @@ func (r *DispatchNamespaceScriptSettingGetResponseMigrations) UnmarshalJSON(data
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [DispatchNamespaceScriptSettingGetResponseMigrationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [workers.SingleStepMigration],
+// [workers.SteppedMigration].
 func (r DispatchNamespaceScriptSettingGetResponseMigrations) AsUnion() DispatchNamespaceScriptSettingGetResponseMigrationsUnion {
 	return r.union
 }

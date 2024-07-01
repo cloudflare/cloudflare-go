@@ -111,9 +111,18 @@ func (r versionByTagGetResponseJSON) RawJSON() string {
 
 type VersionByTagGetResponseRule struct {
 	// The action to perform when the rule matches.
-	Action           VersionByTagGetResponseRulesAction `json:"action"`
-	ActionParameters interface{}                        `json:"action_parameters,required"`
-	Categories       interface{}                        `json:"categories,required"`
+	Action VersionByTagGetResponseRulesAction `json:"action"`
+	// This field can have the runtime type of [BlockRuleActionParameters],
+	// [interface{}], [CompressResponseRuleActionParameters],
+	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
+	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
+	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [VersionByTagGetResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	ActionParameters interface{} `json:"action_parameters,required"`
+	// This field can have the runtime type of [[]string].
+	Categories interface{} `json:"categories,required"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Whether the rule should be executed.
@@ -164,6 +173,19 @@ func (r *VersionByTagGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [VersionByTagGetResponseRulesUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [rulesets.BlockRule],
+// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
+// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule],
+// [rulesets.VersionByTagGetResponseRulesRulesetsLogCustomFieldRule],
+// [rulesets.VersionByTagGetResponseRulesRulesetsDDoSDynamicRule],
+// [rulesets.VersionByTagGetResponseRulesRulesetsForceConnectionCloseRule].
 func (r VersionByTagGetResponseRule) AsUnion() VersionByTagGetResponseRulesUnion {
 	return r.union
 }

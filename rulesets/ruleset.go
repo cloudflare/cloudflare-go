@@ -317,9 +317,18 @@ func (r rulesetNewResponseJSON) RawJSON() string {
 
 type RulesetNewResponseRule struct {
 	// The action to perform when the rule matches.
-	Action           RulesetNewResponseRulesAction `json:"action"`
-	ActionParameters interface{}                   `json:"action_parameters,required"`
-	Categories       interface{}                   `json:"categories,required"`
+	Action RulesetNewResponseRulesAction `json:"action"`
+	// This field can have the runtime type of [BlockRuleActionParameters],
+	// [interface{}], [CompressResponseRuleActionParameters],
+	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
+	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
+	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [RulesetNewResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	ActionParameters interface{} `json:"action_parameters,required"`
+	// This field can have the runtime type of [[]string].
+	Categories interface{} `json:"categories,required"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Whether the rule should be executed.
@@ -370,6 +379,19 @@ func (r *RulesetNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [RulesetNewResponseRulesUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [rulesets.BlockRule],
+// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
+// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule],
+// [rulesets.RulesetNewResponseRulesRulesetsLogCustomFieldRule],
+// [rulesets.RulesetNewResponseRulesRulesetsDDoSDynamicRule],
+// [rulesets.RulesetNewResponseRulesRulesetsForceConnectionCloseRule].
 func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 	return r.union
 }
@@ -874,9 +896,18 @@ func (r rulesetUpdateResponseJSON) RawJSON() string {
 
 type RulesetUpdateResponseRule struct {
 	// The action to perform when the rule matches.
-	Action           RulesetUpdateResponseRulesAction `json:"action"`
-	ActionParameters interface{}                      `json:"action_parameters,required"`
-	Categories       interface{}                      `json:"categories,required"`
+	Action RulesetUpdateResponseRulesAction `json:"action"`
+	// This field can have the runtime type of [BlockRuleActionParameters],
+	// [interface{}], [CompressResponseRuleActionParameters],
+	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
+	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
+	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [RulesetUpdateResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	ActionParameters interface{} `json:"action_parameters,required"`
+	// This field can have the runtime type of [[]string].
+	Categories interface{} `json:"categories,required"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Whether the rule should be executed.
@@ -927,6 +958,19 @@ func (r *RulesetUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [RulesetUpdateResponseRulesUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [rulesets.BlockRule],
+// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
+// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule],
+// [rulesets.RulesetUpdateResponseRulesRulesetsLogCustomFieldRule],
+// [rulesets.RulesetUpdateResponseRulesRulesetsDDoSDynamicRule],
+// [rulesets.RulesetUpdateResponseRulesRulesetsForceConnectionCloseRule].
 func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 	return r.union
 }
@@ -1473,9 +1517,18 @@ func (r rulesetGetResponseJSON) RawJSON() string {
 
 type RulesetGetResponseRule struct {
 	// The action to perform when the rule matches.
-	Action           RulesetGetResponseRulesAction `json:"action"`
-	ActionParameters interface{}                   `json:"action_parameters,required"`
-	Categories       interface{}                   `json:"categories,required"`
+	Action RulesetGetResponseRulesAction `json:"action"`
+	// This field can have the runtime type of [BlockRuleActionParameters],
+	// [interface{}], [CompressResponseRuleActionParameters],
+	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
+	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
+	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [RulesetGetResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	ActionParameters interface{} `json:"action_parameters,required"`
+	// This field can have the runtime type of [[]string].
+	Categories interface{} `json:"categories,required"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Whether the rule should be executed.
@@ -1526,6 +1579,19 @@ func (r *RulesetGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [RulesetGetResponseRulesUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [rulesets.BlockRule],
+// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
+// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule],
+// [rulesets.RulesetGetResponseRulesRulesetsLogCustomFieldRule],
+// [rulesets.RulesetGetResponseRulesRulesetsDDoSDynamicRule],
+// [rulesets.RulesetGetResponseRulesRulesetsForceConnectionCloseRule].
 func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 	return r.union
 }

@@ -424,6 +424,12 @@ func (r GenericOAuthConfigParam) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProvider struct {
+	// This field can have the runtime type of [AzureADConfig],
+	// [IdentityProviderAccessCentrifyConfig], [GenericOAuthConfig],
+	// [IdentityProviderAccessGoogleConfig], [IdentityProviderAccessGoogleAppsConfig],
+	// [IdentityProviderAccessOIDCConfig], [IdentityProviderAccessOktaConfig],
+	// [IdentityProviderAccessOneloginConfig], [IdentityProviderAccessPingoneConfig],
+	// [IdentityProviderAccessSAMLConfig], [interface{}].
 	Config interface{} `json:"config"`
 	// UUID
 	ID string `json:"id"`
@@ -464,6 +470,23 @@ func (r *IdentityProvider) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [IdentityProviderUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.AzureAD],
+// [zero_trust.IdentityProviderAccessCentrify],
+// [zero_trust.IdentityProviderAccessFacebook],
+// [zero_trust.IdentityProviderAccessGitHub],
+// [zero_trust.IdentityProviderAccessGoogle],
+// [zero_trust.IdentityProviderAccessGoogleApps],
+// [zero_trust.IdentityProviderAccessLinkedin],
+// [zero_trust.IdentityProviderAccessOIDC],
+// [zero_trust.IdentityProviderAccessOkta],
+// [zero_trust.IdentityProviderAccessOnelogin],
+// [zero_trust.IdentityProviderAccessPingone],
+// [zero_trust.IdentityProviderAccessSAML],
+// [zero_trust.IdentityProviderAccessYandex],
+// [zero_trust.IdentityProviderAccessOnetimepin].
 func (r IdentityProvider) AsUnion() IdentityProviderUnion {
 	return r.union
 }
@@ -2032,6 +2055,15 @@ func (r SCIMConfigParam) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProviderListResponse struct {
+	// This field can have the runtime type of [AzureADConfig],
+	// [IdentityProviderListResponseAccessCentrifyConfig], [GenericOAuthConfig],
+	// [IdentityProviderListResponseAccessGoogleConfig],
+	// [IdentityProviderListResponseAccessGoogleAppsConfig],
+	// [IdentityProviderListResponseAccessOIDCConfig],
+	// [IdentityProviderListResponseAccessOktaConfig],
+	// [IdentityProviderListResponseAccessOneloginConfig],
+	// [IdentityProviderListResponseAccessPingoneConfig],
+	// [IdentityProviderListResponseAccessSAMLConfig].
 	Config interface{} `json:"config"`
 	// UUID
 	ID string `json:"id"`
@@ -2072,6 +2104,22 @@ func (r *IdentityProviderListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [IdentityProviderListResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.AzureAD],
+// [zero_trust.IdentityProviderListResponseAccessCentrify],
+// [zero_trust.IdentityProviderListResponseAccessFacebook],
+// [zero_trust.IdentityProviderListResponseAccessGitHub],
+// [zero_trust.IdentityProviderListResponseAccessGoogle],
+// [zero_trust.IdentityProviderListResponseAccessGoogleApps],
+// [zero_trust.IdentityProviderListResponseAccessLinkedin],
+// [zero_trust.IdentityProviderListResponseAccessOIDC],
+// [zero_trust.IdentityProviderListResponseAccessOkta],
+// [zero_trust.IdentityProviderListResponseAccessOnelogin],
+// [zero_trust.IdentityProviderListResponseAccessPingone],
+// [zero_trust.IdentityProviderListResponseAccessSAML],
+// [zero_trust.IdentityProviderListResponseAccessYandex].
 func (r IdentityProviderListResponse) AsUnion() IdentityProviderListResponseUnion {
 	return r.union
 }
