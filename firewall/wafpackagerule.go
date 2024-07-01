@@ -180,7 +180,10 @@ type WAFPackageRuleListResponse struct {
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
-	Priority     string      `json:"priority,required"`
+	Priority string `json:"priority,required"`
+	// This field can have the runtime type of [[]AllowedModesAnomaly],
+	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
+	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
 	AllowedModes interface{} `json:"allowed_modes"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
@@ -218,6 +221,13 @@ func (r *WAFPackageRuleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WAFPackageRuleListResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [firewall.WAFPackageRuleListResponseWAFManagedRulesAnomalyRule],
+// [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule],
+// [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule].
 func (r WAFPackageRuleListResponse) AsUnion() WAFPackageRuleListResponseUnion {
 	return r.union
 }
@@ -527,7 +537,10 @@ type WAFPackageRuleEditResponse struct {
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
-	Priority     string      `json:"priority,required"`
+	Priority string `json:"priority,required"`
+	// This field can have the runtime type of [[]AllowedModesAnomaly],
+	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
+	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
 	AllowedModes interface{} `json:"allowed_modes"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
@@ -565,6 +578,13 @@ func (r *WAFPackageRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WAFPackageRuleEditResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [firewall.WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule],
+// [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule],
+// [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule].
 func (r WAFPackageRuleEditResponse) AsUnion() WAFPackageRuleEditResponseUnion {
 	return r.union
 }

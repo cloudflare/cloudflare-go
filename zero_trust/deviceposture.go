@@ -344,7 +344,8 @@ type DeviceInput struct {
 	// Version of OS
 	Version string `json:"version"`
 	// Enabled
-	Enabled    bool        `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// This field can have the runtime type of [[]CarbonblackInput].
 	CheckDisks interface{} `json:"checkDisks,required"`
 	// Whether to check all disks for encryption.
 	RequireAll bool `json:"requireAll"`
@@ -445,6 +446,20 @@ func (r *DeviceInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [DeviceInputUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.FileInput],
+// [zero_trust.UniqueClientIDInput], [zero_trust.DomainJoinedInput],
+// [zero_trust.OSVersionInput], [zero_trust.FirewallInput],
+// [zero_trust.SentineloneInput],
+// [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequest],
+// [zero_trust.DiskEncryptionInput],
+// [zero_trust.DeviceInputTeamsDevicesApplicationInputRequest],
+// [zero_trust.ClientCertificateInput], [zero_trust.WorkspaceOneInput],
+// [zero_trust.CrowdstrikeInput], [zero_trust.IntuneInput],
+// [zero_trust.KolideInput], [zero_trust.TaniumInput],
+// [zero_trust.SentineloneS2sInput].
 func (r DeviceInput) AsUnion() DeviceInputUnion {
 	return r.union
 }

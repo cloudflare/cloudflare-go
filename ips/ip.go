@@ -115,9 +115,12 @@ func (r JDCloudIPs) implementsIPsIPListResponse() {}
 
 type IPListResponse struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
-	Etag         string             `json:"etag"`
-	IPV4CIDRs    interface{}        `json:"ipv4_cidrs,required"`
-	IPV6CIDRs    interface{}        `json:"ipv6_cidrs,required"`
+	Etag string `json:"etag"`
+	// This field can have the runtime type of [[]string].
+	IPV4CIDRs interface{} `json:"ipv4_cidrs,required"`
+	// This field can have the runtime type of [[]string].
+	IPV6CIDRs interface{} `json:"ipv6_cidrs,required"`
+	// This field can have the runtime type of [[]string].
 	JDCloudCIDRs interface{}        `json:"jdcloud_cidrs,required"`
 	JSON         ipListResponseJSON `json:"-"`
 	union        IPListResponseUnion
@@ -145,6 +148,10 @@ func (r *IPListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [IPListResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [ips.IPs], [ips.JDCloudIPs].
 func (r IPListResponse) AsUnion() IPListResponseUnion {
 	return r.union
 }

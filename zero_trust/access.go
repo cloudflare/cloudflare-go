@@ -120,27 +120,48 @@ func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, e
 
 // Matches a specific email.
 type AccessRule struct {
-	Email                interface{}    `json:"email,required"`
-	EmailList            interface{}    `json:"email_list,required"`
-	EmailDomain          interface{}    `json:"email_domain,required"`
-	Everyone             interface{}    `json:"everyone,required"`
-	IP                   interface{}    `json:"ip,required"`
-	IPList               interface{}    `json:"ip_list,required"`
-	Certificate          interface{}    `json:"certificate,required"`
-	Group                interface{}    `json:"group,required"`
-	AzureAD              interface{}    `json:"azureAD,required"`
-	GitHubOrganization   interface{}    `json:"github-organization,required"`
-	GSuite               interface{}    `json:"gsuite,required"`
-	Okta                 interface{}    `json:"okta,required"`
-	SAML                 interface{}    `json:"saml,required"`
-	ServiceToken         interface{}    `json:"service_token,required"`
-	AnyValidServiceToken interface{}    `json:"any_valid_service_token,required"`
-	ExternalEvaluation   interface{}    `json:"external_evaluation,required"`
-	Geo                  interface{}    `json:"geo,required"`
-	AuthMethod           interface{}    `json:"auth_method,required"`
-	DevicePosture        interface{}    `json:"device_posture,required"`
-	JSON                 accessRuleJSON `json:"-"`
-	union                AccessRuleUnion
+	// This field can have the runtime type of [EmailRuleEmail].
+	Email interface{} `json:"email,required"`
+	// This field can have the runtime type of [EmailListRuleEmailList].
+	EmailList interface{} `json:"email_list,required"`
+	// This field can have the runtime type of [DomainRuleEmailDomain].
+	EmailDomain interface{} `json:"email_domain,required"`
+	// This field can have the runtime type of [interface{}].
+	Everyone interface{} `json:"everyone,required"`
+	// This field can have the runtime type of [IPRuleIP].
+	IP interface{} `json:"ip,required"`
+	// This field can have the runtime type of [IPListRuleIPList].
+	IPList interface{} `json:"ip_list,required"`
+	// This field can have the runtime type of [interface{}].
+	Certificate interface{} `json:"certificate,required"`
+	// This field can have the runtime type of [GroupRuleGroup].
+	Group interface{} `json:"group,required"`
+	// This field can have the runtime type of [AzureGroupRuleAzureAD].
+	AzureAD interface{} `json:"azureAD,required"`
+	// This field can have the runtime type of
+	// [GitHubOrganizationRuleGitHubOrganization].
+	GitHubOrganization interface{} `json:"github-organization,required"`
+	// This field can have the runtime type of [GSuiteGroupRuleGSuite].
+	GSuite interface{} `json:"gsuite,required"`
+	// This field can have the runtime type of [OktaGroupRuleOkta].
+	Okta interface{} `json:"okta,required"`
+	// This field can have the runtime type of [SAMLGroupRuleSAML].
+	SAML interface{} `json:"saml,required"`
+	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
+	ServiceToken interface{} `json:"service_token,required"`
+	// This field can have the runtime type of [interface{}].
+	AnyValidServiceToken interface{} `json:"any_valid_service_token,required"`
+	// This field can have the runtime type of
+	// [ExternalEvaluationRuleExternalEvaluation].
+	ExternalEvaluation interface{} `json:"external_evaluation,required"`
+	// This field can have the runtime type of [CountryRuleGeo].
+	Geo interface{} `json:"geo,required"`
+	// This field can have the runtime type of [AuthenticationMethodRuleAuthMethod].
+	AuthMethod interface{} `json:"auth_method,required"`
+	// This field can have the runtime type of [AccessDevicePostureRuleDevicePosture].
+	DevicePosture interface{}    `json:"device_posture,required"`
+	JSON          accessRuleJSON `json:"-"`
+	union         AccessRuleUnion
 }
 
 // accessRuleJSON contains the JSON metadata for the struct [AccessRule]
@@ -180,6 +201,18 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessRuleUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.EmailRule],
+// [zero_trust.EmailListRule], [zero_trust.DomainRule], [zero_trust.EveryoneRule],
+// [zero_trust.IPRule], [zero_trust.IPListRule], [zero_trust.CertificateRule],
+// [zero_trust.GroupRule], [zero_trust.AzureGroupRule],
+// [zero_trust.GitHubOrganizationRule], [zero_trust.GSuiteGroupRule],
+// [zero_trust.OktaGroupRule], [zero_trust.SAMLGroupRule],
+// [zero_trust.ServiceTokenRule], [zero_trust.AnyValidServiceTokenRule],
+// [zero_trust.ExternalEvaluationRule], [zero_trust.CountryRule],
+// [zero_trust.AuthenticationMethodRule], [zero_trust.AccessDevicePostureRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }

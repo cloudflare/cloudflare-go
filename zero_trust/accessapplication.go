@@ -648,15 +648,25 @@ type AccessApplicationNewResponse struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
-	ID         string      `json:"id"`
+	ID string `json:"id"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfig],
+	// [AccessApplicationNewResponseSaaSApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBrowserVncApplicationSCIMConfig],
+	// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfig],
+	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBookmarkApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config,required"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWARP bool        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              interface{} `json:"allowed_idps,required"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// This field can have the runtime type of [[]AllowedIdPs].
+	AllowedIdPs interface{} `json:"allowed_idps,required"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -671,8 +681,9 @@ type AccessApplicationNewResponse struct {
 	CustomDenyURL string `json:"custom_deny_url"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL string      `json:"custom_non_identity_deny_url"`
-	CustomPages              interface{} `json:"custom_pages,required"`
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// This field can have the runtime type of [[]string].
+	CustomPages interface{} `json:"custom_pages,required"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
@@ -694,8 +705,9 @@ type AccessApplicationNewResponse struct {
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
-	SameSiteCookieAttribute string      `json:"same_site_cookie_attribute"`
-	SelfHostedDomains       interface{} `json:"self_hosted_domains,required"`
+	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// This field can have the runtime type of [[]SelfHostedDomains].
+	SelfHostedDomains interface{} `json:"self_hosted_domains,required"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -703,14 +715,25 @@ type AccessApplicationNewResponse struct {
 	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
-	SkipInterstitial bool        `json:"skip_interstitial"`
-	Tags             interface{} `json:"tags,required"`
+	SkipInterstitial bool `json:"skip_interstitial"`
+	// This field can have the runtime type of [[]string].
+	Tags interface{} `json:"tags,required"`
 	// The application type.
-	Type     string                           `json:"type"`
-	Policies interface{}                      `json:"policies,required"`
-	SaaSApp  interface{}                      `json:"saas_app,required"`
-	JSON     accessApplicationNewResponseJSON `json:"-"`
-	union    AccessApplicationNewResponseUnion
+	Type string `json:"type"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseSelfHostedApplicationPolicy],
+	// [[]AccessApplicationNewResponseSaaSApplicationPolicy],
+	// [[]AccessApplicationNewResponseBrowserSSHApplicationPolicy],
+	// [[]AccessApplicationNewResponseBrowserVncApplicationPolicy],
+	// [[]AccessApplicationNewResponseAppLauncherApplicationPolicy],
+	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy],
+	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy].
+	Policies interface{} `json:"policies,required"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseSaaSApplicationSaaSApp].
+	SaaSApp interface{}                      `json:"saas_app,required"`
+	JSON    accessApplicationNewResponseJSON `json:"-"`
+	union   AccessApplicationNewResponseUnion
 }
 
 // accessApplicationNewResponseJSON contains the JSON metadata for the struct
@@ -762,6 +785,18 @@ func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessApplicationNewResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseSelfHostedApplication],
+// [zero_trust.AccessApplicationNewResponseSaaSApplication],
+// [zero_trust.AccessApplicationNewResponseBrowserSSHApplication],
+// [zero_trust.AccessApplicationNewResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
+// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
+// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationNewResponseBookmarkApplication].
 func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnion {
 	return r.union
 }
@@ -1072,8 +1107,9 @@ type AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthentication s
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                        `json:"token_url"`
@@ -1110,6 +1146,14 @@ func (r *AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticati
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -1529,9 +1573,10 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	AuthType AccessApplicationNewResponseSaaSApplicationSaaSAppAuthType `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string      `json:"consumer_service_url"`
-	CreatedAt          time.Time   `json:"created_at" format:"date-time"`
-	CustomAttributes   interface{} `json:"custom_attributes,required"`
+	ConsumerServiceURL string    `json:"consumer_service_url"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	// This field can have the runtime type of [SAMLSaaSAppCustomAttributes].
+	CustomAttributes interface{} `json:"custom_attributes,required"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
@@ -1568,17 +1613,28 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret string      `json:"client_secret"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims].
 	CustomClaims interface{} `json:"custom_claims,required"`
-	GrantTypes   interface{} `json:"grant_types,required"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType].
+	GrantTypes interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex         string                                                 `json:"group_filter_regex"`
-	HybridAndImplicitOptions interface{}                                            `json:"hybrid_and_implicit_options,required"`
-	RedirectURIs             interface{}                                            `json:"redirect_uris,required"`
-	RefreshTokenOptions      interface{}                                            `json:"refresh_token_options,required"`
-	Scopes                   interface{}                                            `json:"scopes,required"`
-	JSON                     accessApplicationNewResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union                    AccessApplicationNewResponseSaaSApplicationSaaSAppUnion
+	GroupFilterRegex string `json:"group_filter_regex"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions].
+	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options,required"`
+	// This field can have the runtime type of [[]string].
+	RedirectURIs interface{} `json:"redirect_uris,required"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions].
+	RefreshTokenOptions interface{} `json:"refresh_token_options,required"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppScope].
+	Scopes interface{}                                            `json:"scopes,required"`
+	JSON   accessApplicationNewResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union  AccessApplicationNewResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationNewResponseSaaSApplicationSaaSAppJSON contains the JSON
@@ -1625,6 +1681,11 @@ func (r *AccessApplicationNewResponseSaaSApplicationSaaSApp) UnmarshalJSON(data 
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessApplicationNewResponseSaaSApplicationSaaSAppUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.SAMLSaaSApp],
+// [zero_trust.AccessApplicationNewResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp].
 func (r AccessApplicationNewResponseSaaSApplicationSaaSApp) AsUnion() AccessApplicationNewResponseSaaSApplicationSaaSAppUnion {
 	return r.union
 }
@@ -1977,8 +2038,9 @@ type AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthentication struct 
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                  `json:"token_url"`
@@ -2015,6 +2077,14 @@ func (r *AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthentication) Un
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -2548,8 +2618,9 @@ type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication s
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                        `json:"token_url"`
@@ -2586,6 +2657,14 @@ func (r *AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticati
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -3119,8 +3198,9 @@ type AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication s
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                        `json:"token_url"`
@@ -3157,6 +3237,14 @@ func (r *AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticati
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -3628,8 +3716,9 @@ type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication 
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                         `json:"token_url"`
@@ -3666,6 +3755,14 @@ func (r *AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticat
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -4138,8 +4235,9 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfi
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                                         `json:"token_url"`
@@ -4176,6 +4274,14 @@ func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMC
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -4648,8 +4754,9 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfi
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                                         `json:"token_url"`
@@ -4686,6 +4793,14 @@ func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMC
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -5083,8 +5198,9 @@ type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication str
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                      `json:"token_url"`
@@ -5121,6 +5237,14 @@ func (r *AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -5405,15 +5529,25 @@ type AccessApplicationUpdateResponse struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
-	ID         string      `json:"id"`
+	ID string `json:"id"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config,required"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWARP bool        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              interface{} `json:"allowed_idps,required"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// This field can have the runtime type of [[]AllowedIdPs].
+	AllowedIdPs interface{} `json:"allowed_idps,required"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -5428,8 +5562,9 @@ type AccessApplicationUpdateResponse struct {
 	CustomDenyURL string `json:"custom_deny_url"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL string      `json:"custom_non_identity_deny_url"`
-	CustomPages              interface{} `json:"custom_pages,required"`
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// This field can have the runtime type of [[]string].
+	CustomPages interface{} `json:"custom_pages,required"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
@@ -5451,8 +5586,9 @@ type AccessApplicationUpdateResponse struct {
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
-	SameSiteCookieAttribute string      `json:"same_site_cookie_attribute"`
-	SelfHostedDomains       interface{} `json:"self_hosted_domains,required"`
+	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// This field can have the runtime type of [[]SelfHostedDomains].
+	SelfHostedDomains interface{} `json:"self_hosted_domains,required"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -5460,14 +5596,25 @@ type AccessApplicationUpdateResponse struct {
 	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
-	SkipInterstitial bool        `json:"skip_interstitial"`
-	Tags             interface{} `json:"tags,required"`
+	SkipInterstitial bool `json:"skip_interstitial"`
+	// This field can have the runtime type of [[]string].
+	Tags interface{} `json:"tags,required"`
 	// The application type.
-	Type     string                              `json:"type"`
-	Policies interface{}                         `json:"policies,required"`
-	SaaSApp  interface{}                         `json:"saas_app,required"`
-	JSON     accessApplicationUpdateResponseJSON `json:"-"`
-	union    AccessApplicationUpdateResponseUnion
+	Type string `json:"type"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseSelfHostedApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseSaaSApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseBrowserVncApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseAppLauncherApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy].
+	Policies interface{} `json:"policies,required"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseSaaSApplicationSaaSApp].
+	SaaSApp interface{}                         `json:"saas_app,required"`
+	JSON    accessApplicationUpdateResponseJSON `json:"-"`
+	union   AccessApplicationUpdateResponseUnion
 }
 
 // accessApplicationUpdateResponseJSON contains the JSON metadata for the struct
@@ -5519,6 +5666,18 @@ func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessApplicationUpdateResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplication],
+// [zero_trust.AccessApplicationUpdateResponseSaaSApplication],
+// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplication],
+// [zero_trust.AccessApplicationUpdateResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
+// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
+// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication].
 func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateResponseUnion {
 	return r.union
 }
@@ -5829,8 +5988,9 @@ type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticatio
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                           `json:"token_url"`
@@ -5867,6 +6027,14 @@ func (r *AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentic
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -6286,9 +6454,10 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	AuthType AccessApplicationUpdateResponseSaaSApplicationSaaSAppAuthType `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string      `json:"consumer_service_url"`
-	CreatedAt          time.Time   `json:"created_at" format:"date-time"`
-	CustomAttributes   interface{} `json:"custom_attributes,required"`
+	ConsumerServiceURL string    `json:"consumer_service_url"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	// This field can have the runtime type of [SAMLSaaSAppCustomAttributes].
+	CustomAttributes interface{} `json:"custom_attributes,required"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
@@ -6325,17 +6494,28 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret string      `json:"client_secret"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims].
 	CustomClaims interface{} `json:"custom_claims,required"`
-	GrantTypes   interface{} `json:"grant_types,required"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType].
+	GrantTypes interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex         string                                                    `json:"group_filter_regex"`
-	HybridAndImplicitOptions interface{}                                               `json:"hybrid_and_implicit_options,required"`
-	RedirectURIs             interface{}                                               `json:"redirect_uris,required"`
-	RefreshTokenOptions      interface{}                                               `json:"refresh_token_options,required"`
-	Scopes                   interface{}                                               `json:"scopes,required"`
-	JSON                     accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union                    AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion
+	GroupFilterRegex string `json:"group_filter_regex"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions].
+	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options,required"`
+	// This field can have the runtime type of [[]string].
+	RedirectURIs interface{} `json:"redirect_uris,required"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions].
+	RefreshTokenOptions interface{} `json:"refresh_token_options,required"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppScope].
+	Scopes interface{}                                               `json:"scopes,required"`
+	JSON   accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union  AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON contains the JSON
@@ -6382,6 +6562,11 @@ func (r *AccessApplicationUpdateResponseSaaSApplicationSaaSApp) UnmarshalJSON(da
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.SAMLSaaSApp],
+// [zero_trust.AccessApplicationUpdateResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp].
 func (r AccessApplicationUpdateResponseSaaSApplicationSaaSApp) AsUnion() AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion {
 	return r.union
 }
@@ -6735,8 +6920,9 @@ type AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthentication stru
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                     `json:"token_url"`
@@ -6773,6 +6959,14 @@ func (r *AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthentication)
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -7306,8 +7500,9 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                           `json:"token_url"`
@@ -7344,6 +7539,14 @@ func (r *AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentic
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -7877,8 +8080,9 @@ type AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticatio
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                           `json:"token_url"`
@@ -7915,6 +8119,14 @@ func (r *AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentic
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -8386,8 +8598,9 @@ type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticati
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                            `json:"token_url"`
@@ -8424,6 +8637,14 @@ func (r *AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenti
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -8896,8 +9117,9 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                                            `json:"token_url"`
@@ -8934,6 +9156,14 @@ func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSC
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -9406,8 +9636,9 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMCo
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                                            `json:"token_url"`
@@ -9444,6 +9675,14 @@ func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSC
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -9841,8 +10080,9 @@ type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication 
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                         `json:"token_url"`
@@ -9879,6 +10119,14 @@ func (r *AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticat
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -10163,15 +10411,25 @@ type AccessApplicationListResponse struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
-	ID         string      `json:"id"`
+	ID string `json:"id"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseSelfHostedApplicationSCIMConfig],
+	// [AccessApplicationListResponseSaaSApplicationSCIMConfig],
+	// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfig],
+	// [AccessApplicationListResponseBrowserVncApplicationSCIMConfig],
+	// [AccessApplicationListResponseAppLauncherApplicationSCIMConfig],
+	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
+	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig],
+	// [AccessApplicationListResponseBookmarkApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config,required"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWARP bool        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              interface{} `json:"allowed_idps,required"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// This field can have the runtime type of [[]AllowedIdPs].
+	AllowedIdPs interface{} `json:"allowed_idps,required"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -10186,8 +10444,9 @@ type AccessApplicationListResponse struct {
 	CustomDenyURL string `json:"custom_deny_url"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL string      `json:"custom_non_identity_deny_url"`
-	CustomPages              interface{} `json:"custom_pages,required"`
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// This field can have the runtime type of [[]string].
+	CustomPages interface{} `json:"custom_pages,required"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
@@ -10209,8 +10468,9 @@ type AccessApplicationListResponse struct {
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
-	SameSiteCookieAttribute string      `json:"same_site_cookie_attribute"`
-	SelfHostedDomains       interface{} `json:"self_hosted_domains,required"`
+	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// This field can have the runtime type of [[]SelfHostedDomains].
+	SelfHostedDomains interface{} `json:"self_hosted_domains,required"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -10218,14 +10478,25 @@ type AccessApplicationListResponse struct {
 	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
-	SkipInterstitial bool        `json:"skip_interstitial"`
-	Tags             interface{} `json:"tags,required"`
+	SkipInterstitial bool `json:"skip_interstitial"`
+	// This field can have the runtime type of [[]string].
+	Tags interface{} `json:"tags,required"`
 	// The application type.
-	Type     string                            `json:"type"`
-	Policies interface{}                       `json:"policies,required"`
-	SaaSApp  interface{}                       `json:"saas_app,required"`
-	JSON     accessApplicationListResponseJSON `json:"-"`
-	union    AccessApplicationListResponseUnion
+	Type string `json:"type"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseSelfHostedApplicationPolicy],
+	// [[]AccessApplicationListResponseSaaSApplicationPolicy],
+	// [[]AccessApplicationListResponseBrowserSSHApplicationPolicy],
+	// [[]AccessApplicationListResponseBrowserVncApplicationPolicy],
+	// [[]AccessApplicationListResponseAppLauncherApplicationPolicy],
+	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy],
+	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy].
+	Policies interface{} `json:"policies,required"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseSaaSApplicationSaaSApp].
+	SaaSApp interface{}                       `json:"saas_app,required"`
+	JSON    accessApplicationListResponseJSON `json:"-"`
+	union   AccessApplicationListResponseUnion
 }
 
 // accessApplicationListResponseJSON contains the JSON metadata for the struct
@@ -10277,6 +10548,18 @@ func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessApplicationListResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseSelfHostedApplication],
+// [zero_trust.AccessApplicationListResponseSaaSApplication],
+// [zero_trust.AccessApplicationListResponseBrowserSSHApplication],
+// [zero_trust.AccessApplicationListResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationListResponseAppLauncherApplication],
+// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
+// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationListResponseBookmarkApplication].
 func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUnion {
 	return r.union
 }
@@ -10587,8 +10870,9 @@ type AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication 
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                         `json:"token_url"`
@@ -10625,6 +10909,14 @@ func (r *AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticat
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -11044,9 +11336,10 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	AuthType AccessApplicationListResponseSaaSApplicationSaaSAppAuthType `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string      `json:"consumer_service_url"`
-	CreatedAt          time.Time   `json:"created_at" format:"date-time"`
-	CustomAttributes   interface{} `json:"custom_attributes,required"`
+	ConsumerServiceURL string    `json:"consumer_service_url"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	// This field can have the runtime type of [SAMLSaaSAppCustomAttributes].
+	CustomAttributes interface{} `json:"custom_attributes,required"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
@@ -11083,17 +11376,28 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret string      `json:"client_secret"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims].
 	CustomClaims interface{} `json:"custom_claims,required"`
-	GrantTypes   interface{} `json:"grant_types,required"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType].
+	GrantTypes interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex         string                                                  `json:"group_filter_regex"`
-	HybridAndImplicitOptions interface{}                                             `json:"hybrid_and_implicit_options,required"`
-	RedirectURIs             interface{}                                             `json:"redirect_uris,required"`
-	RefreshTokenOptions      interface{}                                             `json:"refresh_token_options,required"`
-	Scopes                   interface{}                                             `json:"scopes,required"`
-	JSON                     accessApplicationListResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union                    AccessApplicationListResponseSaaSApplicationSaaSAppUnion
+	GroupFilterRegex string `json:"group_filter_regex"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions].
+	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options,required"`
+	// This field can have the runtime type of [[]string].
+	RedirectURIs interface{} `json:"redirect_uris,required"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions].
+	RefreshTokenOptions interface{} `json:"refresh_token_options,required"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppScope].
+	Scopes interface{}                                             `json:"scopes,required"`
+	JSON   accessApplicationListResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union  AccessApplicationListResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationListResponseSaaSApplicationSaaSAppJSON contains the JSON
@@ -11140,6 +11444,11 @@ func (r *AccessApplicationListResponseSaaSApplicationSaaSApp) UnmarshalJSON(data
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessApplicationListResponseSaaSApplicationSaaSAppUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.SAMLSaaSApp],
+// [zero_trust.AccessApplicationListResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp].
 func (r AccessApplicationListResponseSaaSApplicationSaaSApp) AsUnion() AccessApplicationListResponseSaaSApplicationSaaSAppUnion {
 	return r.union
 }
@@ -11492,8 +11801,9 @@ type AccessApplicationListResponseSaaSApplicationSCIMConfigAuthentication struct
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                   `json:"token_url"`
@@ -11530,6 +11840,14 @@ func (r *AccessApplicationListResponseSaaSApplicationSCIMConfigAuthentication) U
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationListResponseSaaSApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -12063,8 +12381,9 @@ type AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication 
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                         `json:"token_url"`
@@ -12101,6 +12420,14 @@ func (r *AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticat
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -12634,8 +12961,9 @@ type AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication 
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                         `json:"token_url"`
@@ -12672,6 +13000,14 @@ func (r *AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticat
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -13143,8 +13479,9 @@ type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                          `json:"token_url"`
@@ -13181,6 +13518,14 @@ func (r *AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentica
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -13653,8 +13998,9 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConf
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                                          `json:"token_url"`
@@ -13691,6 +14037,14 @@ func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIM
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -14163,8 +14517,9 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConf
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                                          `json:"token_url"`
@@ -14201,6 +14556,14 @@ func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIM
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -14598,8 +14961,9 @@ type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication st
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                       `json:"token_url"`
@@ -14636,6 +15000,14 @@ func (r *AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticatio
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -14942,15 +15314,25 @@ type AccessApplicationGetResponse struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
-	ID         string      `json:"id"`
+	ID string `json:"id"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfig],
+	// [AccessApplicationGetResponseSaaSApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBrowserVncApplicationSCIMConfig],
+	// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfig],
+	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBookmarkApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config,required"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWARP bool        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              interface{} `json:"allowed_idps,required"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// This field can have the runtime type of [[]AllowedIdPs].
+	AllowedIdPs interface{} `json:"allowed_idps,required"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -14965,8 +15347,9 @@ type AccessApplicationGetResponse struct {
 	CustomDenyURL string `json:"custom_deny_url"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL string      `json:"custom_non_identity_deny_url"`
-	CustomPages              interface{} `json:"custom_pages,required"`
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// This field can have the runtime type of [[]string].
+	CustomPages interface{} `json:"custom_pages,required"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
@@ -14988,8 +15371,9 @@ type AccessApplicationGetResponse struct {
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
-	SameSiteCookieAttribute string      `json:"same_site_cookie_attribute"`
-	SelfHostedDomains       interface{} `json:"self_hosted_domains,required"`
+	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// This field can have the runtime type of [[]SelfHostedDomains].
+	SelfHostedDomains interface{} `json:"self_hosted_domains,required"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
@@ -14997,14 +15381,25 @@ type AccessApplicationGetResponse struct {
 	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
-	SkipInterstitial bool        `json:"skip_interstitial"`
-	Tags             interface{} `json:"tags,required"`
+	SkipInterstitial bool `json:"skip_interstitial"`
+	// This field can have the runtime type of [[]string].
+	Tags interface{} `json:"tags,required"`
 	// The application type.
-	Type     string                           `json:"type"`
-	Policies interface{}                      `json:"policies,required"`
-	SaaSApp  interface{}                      `json:"saas_app,required"`
-	JSON     accessApplicationGetResponseJSON `json:"-"`
-	union    AccessApplicationGetResponseUnion
+	Type string `json:"type"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseSelfHostedApplicationPolicy],
+	// [[]AccessApplicationGetResponseSaaSApplicationPolicy],
+	// [[]AccessApplicationGetResponseBrowserSSHApplicationPolicy],
+	// [[]AccessApplicationGetResponseBrowserVncApplicationPolicy],
+	// [[]AccessApplicationGetResponseAppLauncherApplicationPolicy],
+	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy],
+	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy].
+	Policies interface{} `json:"policies,required"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseSaaSApplicationSaaSApp].
+	SaaSApp interface{}                      `json:"saas_app,required"`
+	JSON    accessApplicationGetResponseJSON `json:"-"`
+	union   AccessApplicationGetResponseUnion
 }
 
 // accessApplicationGetResponseJSON contains the JSON metadata for the struct
@@ -15056,6 +15451,18 @@ func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessApplicationGetResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseSelfHostedApplication],
+// [zero_trust.AccessApplicationGetResponseSaaSApplication],
+// [zero_trust.AccessApplicationGetResponseBrowserSSHApplication],
+// [zero_trust.AccessApplicationGetResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
+// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
+// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationGetResponseBookmarkApplication].
 func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnion {
 	return r.union
 }
@@ -15366,8 +15773,9 @@ type AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication s
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                        `json:"token_url"`
@@ -15404,6 +15812,14 @@ func (r *AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticati
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -15823,9 +16239,10 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	AuthType AccessApplicationGetResponseSaaSApplicationSaaSAppAuthType `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string      `json:"consumer_service_url"`
-	CreatedAt          time.Time   `json:"created_at" format:"date-time"`
-	CustomAttributes   interface{} `json:"custom_attributes,required"`
+	ConsumerServiceURL string    `json:"consumer_service_url"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	// This field can have the runtime type of [SAMLSaaSAppCustomAttributes].
+	CustomAttributes interface{} `json:"custom_attributes,required"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
@@ -15862,17 +16279,28 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret string      `json:"client_secret"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims].
 	CustomClaims interface{} `json:"custom_claims,required"`
-	GrantTypes   interface{} `json:"grant_types,required"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType].
+	GrantTypes interface{} `json:"grant_types,required"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex         string                                                 `json:"group_filter_regex"`
-	HybridAndImplicitOptions interface{}                                            `json:"hybrid_and_implicit_options,required"`
-	RedirectURIs             interface{}                                            `json:"redirect_uris,required"`
-	RefreshTokenOptions      interface{}                                            `json:"refresh_token_options,required"`
-	Scopes                   interface{}                                            `json:"scopes,required"`
-	JSON                     accessApplicationGetResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union                    AccessApplicationGetResponseSaaSApplicationSaaSAppUnion
+	GroupFilterRegex string `json:"group_filter_regex"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppHybridAndImplicitOptions].
+	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options,required"`
+	// This field can have the runtime type of [[]string].
+	RedirectURIs interface{} `json:"redirect_uris,required"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions].
+	RefreshTokenOptions interface{} `json:"refresh_token_options,required"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSAppScope].
+	Scopes interface{}                                            `json:"scopes,required"`
+	JSON   accessApplicationGetResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union  AccessApplicationGetResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationGetResponseSaaSApplicationSaaSAppJSON contains the JSON
@@ -15919,6 +16347,11 @@ func (r *AccessApplicationGetResponseSaaSApplicationSaaSApp) UnmarshalJSON(data 
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AccessApplicationGetResponseSaaSApplicationSaaSAppUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.SAMLSaaSApp],
+// [zero_trust.AccessApplicationGetResponseSaaSApplicationSaaSAppAccessOIDCSaaSApp].
 func (r AccessApplicationGetResponseSaaSApplicationSaaSApp) AsUnion() AccessApplicationGetResponseSaaSApplicationSaaSAppUnion {
 	return r.union
 }
@@ -16271,8 +16704,9 @@ type AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthentication struct 
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                  `json:"token_url"`
@@ -16309,6 +16743,14 @@ func (r *AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthentication) Un
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -16842,8 +17284,9 @@ type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication s
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                        `json:"token_url"`
@@ -16880,6 +17323,14 @@ func (r *AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticati
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -17413,8 +17864,9 @@ type AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication s
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                        `json:"token_url"`
@@ -17451,6 +17903,14 @@ func (r *AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticati
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -17922,8 +18382,9 @@ type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication 
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                         `json:"token_url"`
@@ -17960,6 +18421,14 @@ func (r *AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticat
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -18432,8 +18901,9 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfi
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                                         `json:"token_url"`
@@ -18470,6 +18940,14 @@ func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMC
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -18942,8 +19420,9 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfi
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                                         `json:"token_url"`
@@ -18980,6 +19459,14 @@ func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMC
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
@@ -19377,8 +19864,9 @@ type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication str
 	ClientID string `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string      `json:"client_secret"`
-	Scopes       interface{} `json:"scopes,required"`
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                      `json:"token_url"`
@@ -19415,6 +19903,14 @@ func (r *AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a
+// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationOauth2].
 func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }

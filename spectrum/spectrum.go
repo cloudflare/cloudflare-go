@@ -95,7 +95,8 @@ type EdgeIPs struct {
 	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
 	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 	// with CNAME DNS names.
-	Type  EdgeIPsType `json:"type"`
+	Type EdgeIPsType `json:"type"`
+	// This field can have the runtime type of [[]string].
 	IPs   interface{} `json:"ips,required"`
 	JSON  edgeIPsJSON `json:"-"`
 	union EdgeIPsUnion
@@ -122,6 +123,11 @@ func (r *EdgeIPs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [EdgeIPsUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [spectrum.EdgeIPsObject],
+// [spectrum.EdgeIPsObject].
 func (r EdgeIPs) AsUnion() EdgeIPsUnion {
 	return r.union
 }
