@@ -147,9 +147,18 @@ func (r phaseUpdateResponseJSON) RawJSON() string {
 
 type PhaseUpdateResponseRule struct {
 	// The action to perform when the rule matches.
-	Action           PhaseUpdateResponseRulesAction `json:"action"`
-	ActionParameters interface{}                    `json:"action_parameters,required"`
-	Categories       interface{}                    `json:"categories,required"`
+	Action PhaseUpdateResponseRulesAction `json:"action"`
+	// This field can have the runtime type of [BlockRuleActionParameters],
+	// [interface{}], [CompressResponseRuleActionParameters],
+	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
+	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
+	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	ActionParameters interface{} `json:"action_parameters,required"`
+	// This field can have the runtime type of [[]string].
+	Categories interface{} `json:"categories,required"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Whether the rule should be executed.
@@ -200,6 +209,19 @@ func (r *PhaseUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [PhaseUpdateResponseRulesUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [rulesets.BlockRule],
+// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
+// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule],
+// [rulesets.PhaseUpdateResponseRulesRulesetsLogCustomFieldRule],
+// [rulesets.PhaseUpdateResponseRulesRulesetsDDoSDynamicRule],
+// [rulesets.PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule].
 func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
 	return r.union
 }
@@ -705,9 +727,18 @@ func (r phaseGetResponseJSON) RawJSON() string {
 
 type PhaseGetResponseRule struct {
 	// The action to perform when the rule matches.
-	Action           PhaseGetResponseRulesAction `json:"action"`
-	ActionParameters interface{}                 `json:"action_parameters,required"`
-	Categories       interface{}                 `json:"categories,required"`
+	Action PhaseGetResponseRulesAction `json:"action"`
+	// This field can have the runtime type of [BlockRuleActionParameters],
+	// [interface{}], [CompressResponseRuleActionParameters],
+	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
+	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
+	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	ActionParameters interface{} `json:"action_parameters,required"`
+	// This field can have the runtime type of [[]string].
+	Categories interface{} `json:"categories,required"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Whether the rule should be executed.
@@ -758,6 +789,19 @@ func (r *PhaseGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [PhaseGetResponseRulesUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [rulesets.BlockRule],
+// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
+// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule],
+// [rulesets.PhaseGetResponseRulesRulesetsLogCustomFieldRule],
+// [rulesets.PhaseGetResponseRulesRulesetsDDoSDynamicRule],
+// [rulesets.PhaseGetResponseRulesRulesetsForceConnectionCloseRule].
 func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
 	return r.union
 }

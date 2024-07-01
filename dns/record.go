@@ -2010,6 +2010,7 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
 
 type Record struct {
+	// This field can have the runtime type of [string], [interface{}].
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
@@ -2033,12 +2034,17 @@ type Record struct {
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool        `json:"proxiable"`
-	Tags      interface{} `json:"tags,required"`
+	Proxiable bool `json:"proxiable"`
+	// This field can have the runtime type of [[]RecordTags].
+	Tags interface{} `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL  TTLNumber   `json:"ttl"`
+	TTL TTLNumber `json:"ttl"`
+	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
+	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
+	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
+	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
@@ -2080,6 +2086,15 @@ func (r *Record) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [RecordUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
+// [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
+// [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.PTRRecord], [dns.SMIMEARecord],
+// [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord], [dns.TLSARecord],
+// [dns.TXTRecord], [dns.URIRecord].
 func (r Record) AsUnion() RecordUnion {
 	return r.union
 }

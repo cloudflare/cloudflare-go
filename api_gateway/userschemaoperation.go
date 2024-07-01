@@ -72,9 +72,10 @@ type UserSchemaOperationListResponse struct {
 	// RFC3986-compliant host.
 	Host string `json:"host,required" format:"hostname"`
 	// The HTTP method used to access the endpoint.
-	Method      UserSchemaOperationListResponseMethod `json:"method,required"`
-	Features    interface{}                           `json:"features,required"`
-	LastUpdated time.Time                             `json:"last_updated" format:"date-time"`
+	Method UserSchemaOperationListResponseMethod `json:"method,required"`
+	// This field can have the runtime type of [APIShieldFeatures].
+	Features    interface{} `json:"features,required"`
+	LastUpdated time.Time   `json:"last_updated" format:"date-time"`
 	// UUID identifier
 	OperationID string                              `json:"operation_id" format:"uuid"`
 	JSON        userSchemaOperationListResponseJSON `json:"-"`
@@ -106,6 +107,11 @@ func (r *UserSchemaOperationListResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [UserSchemaOperationListResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [api_gateway.APIShield],
+// [api_gateway.UserSchemaOperationListResponseAPIShieldBasicOperation].
 func (r UserSchemaOperationListResponse) AsUnion() UserSchemaOperationListResponseUnion {
 	return r.union
 }

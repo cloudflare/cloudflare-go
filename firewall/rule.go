@@ -288,6 +288,11 @@ func (r *FirewallRuleFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [FirewallRuleFilterUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [filters.FirewallFilter],
+// [firewall.DeletedFilter].
 func (r FirewallRuleFilter) AsUnion() FirewallRuleFilterUnion {
 	return r.union
 }

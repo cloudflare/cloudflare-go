@@ -5322,8 +5322,28 @@ type SettingEditResponse struct {
 	// ID of the zone setting.
 	ID SettingEditResponseID `json:"id"`
 	// last time this setting was modified.
-	ModifiedOn time.Time   `json:"modified_on,nullable" format:"date-time"`
-	Value      interface{} `json:"value,required"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
+	// [AlwaysOnlineValue], [AlwaysUseHTTPSValue], [AutomaticHTTPSRewritesValue],
+	// [BrotliValue], [BrowserCacheTTLValue], [BrowserCheckValue], [CacheLevelValue],
+	// [ChallengeTTLValue], [[]string], [SettingEditResponseZonesCNAMEFlatteningValue],
+	// [DevelopmentModeValue], [EarlyHintsValue],
+	// [SettingEditResponseZonesEdgeCacheTTLValue], [EmailObfuscationValue],
+	// [H2PrioritizationValue], [HotlinkProtectionValue], [HTTP2Value], [HTTP3Value],
+	// [ImageResizingValue], [IPGeolocationValue], [IPV6Value],
+	// [SettingEditResponseZonesMaxUploadValue], [MinTLSVersionValue], [MinifyValue],
+	// [MirageValue], [MobileRedirectValue], [NELValue],
+	// [OpportunisticEncryptionValue], [OpportunisticOnionValue],
+	// [OrangeToOrangeValue], [OriginErrorPagePassThruValue], [PolishValue],
+	// [PrefetchPreloadValue], [float64], [PseudoIPV4Value],
+	// [SettingEditResponseZonesReplaceInsecureJSValue], [ResponseBufferingValue],
+	// [RocketLoaderValue], [AutomaticPlatformOptimization], [SecurityHeadersValue],
+	// [SecurityLevelValue], [ServerSideExcludesValue],
+	// [SettingEditResponseZonesSha1SupportValue], [SortQueryStringForCacheValue],
+	// [SSLValue], [SettingEditResponseZonesTLS1_2OnlyValue], [TLS1_3Value],
+	// [TLSClientAuthValue], [TrueClientIPHeaderValue], [WAFValue], [WebPValue],
+	// [WebsocketValue].
+	Value interface{} `json:"value,required"`
 	// Value of the zone setting. Notes: The interval (in seconds) from when
 	// development mode expires (positive integer) or last expired (negative integer)
 	// for the domain. If development mode has never been enabled, this value is false.
@@ -5359,6 +5379,30 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [SettingEditResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [zones.ZeroRTT], [zones.AdvancedDDoS],
+// [zones.AlwaysOnline], [zones.AlwaysUseHTTPS], [zones.AutomaticHTTPSRewrites],
+// [zones.Brotli], [zones.BrowserCacheTTL], [zones.BrowserCheck],
+// [zones.CacheLevel], [zones.ChallengeTTL], [zones.Ciphers],
+// [zones.SettingEditResponseZonesCNAMEFlattening], [zones.DevelopmentMode],
+// [zones.EarlyHints], [zones.SettingEditResponseZonesEdgeCacheTTL],
+// [zones.EmailObfuscation], [zones.H2Prioritization], [zones.HotlinkProtection],
+// [zones.HTTP2], [zones.HTTP3], [zones.ImageResizing], [zones.IPGeolocation],
+// [zones.IPV6], [zones.SettingEditResponseZonesMaxUpload], [zones.MinTLSVersion],
+// [zones.Minify], [zones.Mirage], [zones.MobileRedirect], [zones.NEL],
+// [zones.OpportunisticEncryption], [zones.OpportunisticOnion],
+// [zones.OrangeToOrange], [zones.OriginErrorPagePassThru], [zones.Polish],
+// [zones.PrefetchPreload], [zones.ProxyReadTimeout], [zones.PseudoIPV4],
+// [zones.SettingEditResponseZonesReplaceInsecureJS], [zones.ResponseBuffering],
+// [zones.RocketLoader],
+// [zones.SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
+// [zones.SecurityHeaders], [zones.SecurityLevel], [zones.ServerSideExcludes],
+// [zones.SettingEditResponseZonesSha1Support], [zones.SortQueryStringForCache],
+// [zones.SSL], [zones.SSLRecommender], [zones.SettingEditResponseZonesTLS1_2Only],
+// [zones.TLS1_3], [zones.TLSClientAuth], [zones.TrueClientIPHeader], [zones.WAF],
+// [zones.WebP], [zones.Websocket].
 func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 	return r.union
 }
@@ -6303,8 +6347,28 @@ type SettingGetResponse struct {
 	// ID of the zone setting.
 	ID SettingGetResponseID `json:"id"`
 	// last time this setting was modified.
-	ModifiedOn time.Time   `json:"modified_on,nullable" format:"date-time"`
-	Value      interface{} `json:"value,required"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
+	// [AlwaysOnlineValue], [AlwaysUseHTTPSValue], [AutomaticHTTPSRewritesValue],
+	// [BrotliValue], [BrowserCacheTTLValue], [BrowserCheckValue], [CacheLevelValue],
+	// [ChallengeTTLValue], [[]string], [SettingGetResponseZonesCNAMEFlatteningValue],
+	// [DevelopmentModeValue], [EarlyHintsValue],
+	// [SettingGetResponseZonesEdgeCacheTTLValue], [EmailObfuscationValue],
+	// [H2PrioritizationValue], [HotlinkProtectionValue], [HTTP2Value], [HTTP3Value],
+	// [ImageResizingValue], [IPGeolocationValue], [IPV6Value],
+	// [SettingGetResponseZonesMaxUploadValue], [MinTLSVersionValue], [MinifyValue],
+	// [MirageValue], [MobileRedirectValue], [NELValue],
+	// [OpportunisticEncryptionValue], [OpportunisticOnionValue],
+	// [OrangeToOrangeValue], [OriginErrorPagePassThruValue], [PolishValue],
+	// [PrefetchPreloadValue], [float64], [PseudoIPV4Value],
+	// [SettingGetResponseZonesReplaceInsecureJSValue], [ResponseBufferingValue],
+	// [RocketLoaderValue], [AutomaticPlatformOptimization], [SecurityHeadersValue],
+	// [SecurityLevelValue], [ServerSideExcludesValue],
+	// [SettingGetResponseZonesSha1SupportValue], [SortQueryStringForCacheValue],
+	// [SSLValue], [SettingGetResponseZonesTLS1_2OnlyValue], [TLS1_3Value],
+	// [TLSClientAuthValue], [TrueClientIPHeaderValue], [WAFValue], [WebPValue],
+	// [WebsocketValue].
+	Value interface{} `json:"value,required"`
 	// Value of the zone setting. Notes: The interval (in seconds) from when
 	// development mode expires (positive integer) or last expired (negative integer)
 	// for the domain. If development mode has never been enabled, this value is false.
@@ -6340,6 +6404,30 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [SettingGetResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [zones.ZeroRTT], [zones.AdvancedDDoS],
+// [zones.AlwaysOnline], [zones.AlwaysUseHTTPS], [zones.AutomaticHTTPSRewrites],
+// [zones.Brotli], [zones.BrowserCacheTTL], [zones.BrowserCheck],
+// [zones.CacheLevel], [zones.ChallengeTTL], [zones.Ciphers],
+// [zones.SettingGetResponseZonesCNAMEFlattening], [zones.DevelopmentMode],
+// [zones.EarlyHints], [zones.SettingGetResponseZonesEdgeCacheTTL],
+// [zones.EmailObfuscation], [zones.H2Prioritization], [zones.HotlinkProtection],
+// [zones.HTTP2], [zones.HTTP3], [zones.ImageResizing], [zones.IPGeolocation],
+// [zones.IPV6], [zones.SettingGetResponseZonesMaxUpload], [zones.MinTLSVersion],
+// [zones.Minify], [zones.Mirage], [zones.MobileRedirect], [zones.NEL],
+// [zones.OpportunisticEncryption], [zones.OpportunisticOnion],
+// [zones.OrangeToOrange], [zones.OriginErrorPagePassThru], [zones.Polish],
+// [zones.PrefetchPreload], [zones.ProxyReadTimeout], [zones.PseudoIPV4],
+// [zones.SettingGetResponseZonesReplaceInsecureJS], [zones.ResponseBuffering],
+// [zones.RocketLoader],
+// [zones.SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
+// [zones.SecurityHeaders], [zones.SecurityLevel], [zones.ServerSideExcludes],
+// [zones.SettingGetResponseZonesSha1Support], [zones.SortQueryStringForCache],
+// [zones.SSL], [zones.SSLRecommender], [zones.SettingGetResponseZonesTLS1_2Only],
+// [zones.TLS1_3], [zones.TLSClientAuth], [zones.TrueClientIPHeader], [zones.WAF],
+// [zones.WebP], [zones.Websocket].
 func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 	return r.union
 }
