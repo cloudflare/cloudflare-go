@@ -222,7 +222,7 @@ type Organization struct {
 	CustomPages            OrganizationCustomPages `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly bool        `json:"is_ui_read_only"`
+	IsUIReadOnly bool        `json:"is_ui_read_only"`
 	LoginDesign  LoginDesign `json:"login_design"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
@@ -231,7 +231,7 @@ type Organization struct {
 	// h.
 	SessionDuration string `json:"session_duration"`
 	// A description of the reason why the UI read only field is being toggled.
-	UiReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
+	UIReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
 	UpdatedAt              time.Time `json:"updated_at" format:"date-time"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
@@ -251,11 +251,11 @@ type organizationJSON struct {
 	AutoRedirectToIdentity         apijson.Field
 	CreatedAt                      apijson.Field
 	CustomPages                    apijson.Field
-	IsUiReadOnly                   apijson.Field
+	IsUIReadOnly                   apijson.Field
 	LoginDesign                    apijson.Field
 	Name                           apijson.Field
 	SessionDuration                apijson.Field
-	UiReadOnlyToggleReason         apijson.Field
+	UIReadOnlyToggleReason         apijson.Field
 	UpdatedAt                      apijson.Field
 	UserSeatExpirationInactiveTime apijson.Field
 	WARPAuthSessionDuration        apijson.Field
@@ -329,14 +329,14 @@ type OrganizationNewParams struct {
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly param.Field[bool]             `json:"is_ui_read_only"`
+	IsUIReadOnly param.Field[bool]             `json:"is_ui_read_only"`
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// A description of the reason why the UI read only field is being toggled.
-	UiReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
+	UIReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
 	// longer counts against your Teams seat count. Must be in the format `300ms` or
@@ -410,7 +410,7 @@ type OrganizationUpdateParams struct {
 	CustomPages            param.Field[OrganizationUpdateParamsCustomPages] `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly param.Field[bool]             `json:"is_ui_read_only"`
+	IsUIReadOnly param.Field[bool]             `json:"is_ui_read_only"`
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
@@ -419,7 +419,7 @@ type OrganizationUpdateParams struct {
 	// h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// A description of the reason why the UI read only field is being toggled.
-	UiReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
+	UIReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
 	// longer counts against your Teams seat count. Must be in the format `300ms` or
