@@ -34,7 +34,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		AccountID:                cloudflare.F("string"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AutoRedirectToIdentity:   cloudflare.F(true),
-		IsUiReadOnly:             cloudflare.F(true),
+		IsUIReadOnly:             cloudflare.F(true),
 		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
@@ -43,7 +43,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 			TextColor:       cloudflare.F("#c5ed1b"),
 		}),
 		SessionDuration:                cloudflare.F("24h"),
-		UiReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
+		UIReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
 		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
 		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
@@ -79,7 +79,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 			Forbidden:      cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			IdentityDenied: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		}),
-		IsUiReadOnly: cloudflare.F(true),
+		IsUIReadOnly: cloudflare.F(true),
 		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
@@ -89,7 +89,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 		}),
 		Name:                           cloudflare.F("Widget Corps Internal Applications"),
 		SessionDuration:                cloudflare.F("24h"),
-		UiReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
+		UIReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
 		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
 		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})

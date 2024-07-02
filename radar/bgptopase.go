@@ -263,7 +263,7 @@ type BGPTopAseGetParams struct {
 func (r BGPTopAseGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -312,8 +312,9 @@ func (r BGPTopAseGetParamsFormat) IsKnown() bool {
 }
 
 type BGPTopAseGetParamsPrefix struct {
-	Location param.Field[string] `query:"location,required"`
-	Name     param.Field[string] `query:"name,required"`
+	In   param.Field[string]  `query:"in,required"`
+	Name param.Field[string]  `query:"name,required"`
+	Test param.Field[float64] `query:"test,required"`
 	// Network prefix, IPv4 or IPv6.
 	Type param.Field[string] `query:"type"`
 }
@@ -323,7 +324,7 @@ type BGPTopAseGetParamsPrefix struct {
 func (r BGPTopAseGetParamsPrefix) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -379,7 +380,7 @@ type BGPTopAsePrefixesParams struct {
 func (r BGPTopAsePrefixesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

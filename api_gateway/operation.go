@@ -191,7 +191,11 @@ func (r APIShieldMethod) IsKnown() bool {
 }
 
 type APIShieldFeatures struct {
-	Thresholds       interface{}           `json:"thresholds,required"`
+	// This field can have the runtime type of
+	// [APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds].
+	Thresholds interface{} `json:"thresholds,required"`
+	// This field can have the runtime type of
+	// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
 	ParameterSchemas interface{}           `json:"parameter_schemas,required"`
 	JSON             apiShieldFeaturesJSON `json:"-"`
 	union            APIShieldFeaturesUnion
@@ -218,6 +222,12 @@ func (r *APIShieldFeatures) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [APIShieldFeaturesUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureThresholds],
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureParameterSchemas].
 func (r APIShieldFeatures) AsUnion() APIShieldFeaturesUnion {
 	return r.union
 }
@@ -547,7 +557,7 @@ type OperationListParams struct {
 func (r OperationListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -648,7 +658,7 @@ type OperationGetParams struct {
 func (r OperationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

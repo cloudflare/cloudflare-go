@@ -249,7 +249,7 @@ type HTTPSummaryBotClassResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                      `json:"dataSource,required"`
 	Description     string                                                      `json:"description,required"`
 	EventType       string                                                      `json:"eventType,required"`
-	IsInstantaneous interface{}                                                 `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                      `json:"linkedUrl"`
 	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
@@ -404,7 +404,7 @@ type HTTPSummaryDeviceTypeResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                        `json:"dataSource,required"`
 	Description     string                                                        `json:"description,required"`
 	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous interface{}                                                   `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                        `json:"linkedUrl"`
 	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
@@ -561,7 +561,7 @@ type HTTPSummaryHTTPProtocolResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -716,7 +716,7 @@ type HTTPSummaryHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -873,7 +873,7 @@ type HTTPSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                       `json:"dataSource,required"`
 	Description     string                                                       `json:"description,required"`
 	EventType       string                                                       `json:"eventType,required"`
-	IsInstantaneous interface{}                                                  `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                    `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                       `json:"linkedUrl"`
 	StartTime       time.Time                                                    `json:"startTime" format:"date-time"`
@@ -1028,7 +1028,7 @@ type HTTPSummaryOSResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                `json:"dataSource,required"`
 	Description     string                                                `json:"description,required"`
 	EventType       string                                                `json:"eventType,required"`
-	IsInstantaneous interface{}                                           `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
 	EndTime         time.Time                                             `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                `json:"linkedUrl"`
 	StartTime       time.Time                                             `json:"startTime" format:"date-time"`
@@ -1182,7 +1182,7 @@ type HTTPSummaryPostQuantumResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -1337,7 +1337,7 @@ type HTTPSummaryTLSVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                        `json:"dataSource,required"`
 	Description     string                                                        `json:"description,required"`
 	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous interface{}                                                   `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                        `json:"linkedUrl"`
 	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
@@ -1440,7 +1440,7 @@ type HTTPSummaryBotClassParams struct {
 func (r HTTPSummaryBotClassParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1656,7 +1656,7 @@ type HTTPSummaryDeviceTypeParams struct {
 func (r HTTPSummaryDeviceTypeParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1871,7 +1871,7 @@ type HTTPSummaryHTTPProtocolParams struct {
 func (r HTTPSummaryHTTPProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2087,7 +2087,7 @@ type HTTPSummaryHTTPVersionParams struct {
 func (r HTTPSummaryHTTPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2302,7 +2302,7 @@ type HTTPSummaryIPVersionParams struct {
 func (r HTTPSummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2517,7 +2517,7 @@ type HTTPSummaryOSParams struct {
 func (r HTTPSummaryOSParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2730,7 +2730,7 @@ type HTTPSummaryPostQuantumParams struct {
 func (r HTTPSummaryPostQuantumParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2961,7 +2961,7 @@ type HTTPSummaryTLSVersionParams struct {
 func (r HTTPSummaryTLSVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

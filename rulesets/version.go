@@ -241,9 +241,18 @@ func (r versionGetResponseJSON) RawJSON() string {
 
 type VersionGetResponseRule struct {
 	// The action to perform when the rule matches.
-	Action           VersionGetResponseRulesAction `json:"action"`
-	ActionParameters interface{}                   `json:"action_parameters,required"`
-	Categories       interface{}                   `json:"categories,required"`
+	Action VersionGetResponseRulesAction `json:"action"`
+	// This field can have the runtime type of [BlockRuleActionParameters],
+	// [interface{}], [CompressResponseRuleActionParameters],
+	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
+	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
+	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [VersionGetResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	ActionParameters interface{} `json:"action_parameters,required"`
+	// This field can have the runtime type of [[]string].
+	Categories interface{} `json:"categories,required"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Whether the rule should be executed.
@@ -294,6 +303,19 @@ func (r *VersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [VersionGetResponseRulesUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [rulesets.BlockRule],
+// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
+// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule],
+// [rulesets.VersionGetResponseRulesRulesetsLogCustomFieldRule],
+// [rulesets.VersionGetResponseRulesRulesetsDDoSDynamicRule],
+// [rulesets.VersionGetResponseRulesRulesetsForceConnectionCloseRule].
 func (r VersionGetResponseRule) AsUnion() VersionGetResponseRulesUnion {
 	return r.union
 }

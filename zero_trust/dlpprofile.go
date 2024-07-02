@@ -134,7 +134,9 @@ type Profile struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
-	Entries          interface{}      `json:"entries,required"`
+	// This field can have the runtime type of [[]PredefinedProfileEntry],
+	// [[]CustomProfileEntry], [[]ProfileDLPIntegrationProfileEntry].
+	Entries interface{} `json:"entries,required"`
 	// The ID for this profile
 	ID string `json:"id"`
 	// The name of the profile.
@@ -179,6 +181,11 @@ func (r *Profile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [ProfileUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.PredefinedProfile],
+// [zero_trust.CustomProfile], [zero_trust.ProfileDLPIntegrationProfile].
 func (r Profile) AsUnion() ProfileUnion {
 	return r.union
 }
@@ -355,7 +362,9 @@ type DLPProfileGetResponse struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
-	Entries          interface{}      `json:"entries,required"`
+	// This field can have the runtime type of [[]PredefinedProfileEntry],
+	// [[]CustomProfileEntry], [[]DLPProfileGetResponseDLPIntegrationProfileEntry].
+	Entries interface{} `json:"entries,required"`
 	// The ID for this profile
 	ID string `json:"id"`
 	// The name of the profile.
@@ -401,6 +410,12 @@ func (r *DLPProfileGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [DLPProfileGetResponseUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.PredefinedProfile],
+// [zero_trust.CustomProfile],
+// [zero_trust.DLPProfileGetResponseDLPIntegrationProfile].
 func (r DLPProfileGetResponse) AsUnion() DLPProfileGetResponseUnion {
 	return r.union
 }

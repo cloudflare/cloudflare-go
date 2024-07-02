@@ -3,11 +3,14 @@
 package stream
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -33,6 +36,31 @@ func NewCaptionLanguageService(opts ...option.RequestOption) (r *CaptionLanguage
 	r = &CaptionLanguageService{}
 	r.Options = opts
 	r.Vtt = NewCaptionLanguageVttService(opts...)
+	return
+}
+
+// Generate captions or subtitles for provided language via AI.
+func (r *CaptionLanguageService) New(ctx context.Context, identifier string, language string, body CaptionLanguageNewParams, opts ...option.RequestOption) (res *Caption, err error) {
+	opts = append(r.Options[:], opts...)
+	var env CaptionLanguageNewResponseEnvelope
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	if language == "" {
+		err = errors.New("missing required language parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s/generate", body.AccountID, identifier, language)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -112,6 +140,54 @@ func (r *CaptionLanguageService) Get(ctx context.Context, identifier string, lan
 	return
 }
 
+type CaptionLanguageNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type CaptionLanguageNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success CaptionLanguageNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Caption                                   `json:"result"`
+	JSON    captionLanguageNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// captionLanguageNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CaptionLanguageNewResponseEnvelope]
+type captionLanguageNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CaptionLanguageNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r captionLanguageNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type CaptionLanguageNewResponseEnvelopeSuccess bool
+
+const (
+	CaptionLanguageNewResponseEnvelopeSuccessTrue CaptionLanguageNewResponseEnvelopeSuccess = true
+)
+
+func (r CaptionLanguageNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CaptionLanguageNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CaptionLanguageUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -119,8 +195,19 @@ type CaptionLanguageUpdateParams struct {
 	File param.Field[string] `json:"file,required"`
 }
 
-func (r CaptionLanguageUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r CaptionLanguageUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 type CaptionLanguageUpdateResponseEnvelope struct {

@@ -214,7 +214,7 @@ type EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -346,7 +346,7 @@ type EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -478,7 +478,7 @@ type EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                           `json:"dataSource,required"`
 	Description     string                                                           `json:"description,required"`
 	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                           `json:"linkedUrl"`
 	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
@@ -610,7 +610,7 @@ type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                               `json:"dataSource,required"`
 	Description     string                                                               `json:"description,required"`
 	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                               `json:"linkedUrl"`
 	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
@@ -765,7 +765,7 @@ type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                               `json:"dataSource,required"`
 	Description     string                                                               `json:"description,required"`
 	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                               `json:"linkedUrl"`
 	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
@@ -920,7 +920,7 @@ type EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -980,7 +980,7 @@ type EmailRoutingSummaryARCParams struct {
 func (r EmailRoutingSummaryARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1159,7 +1159,7 @@ type EmailRoutingSummaryDKIMParams struct {
 func (r EmailRoutingSummaryDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1338,7 +1338,7 @@ type EmailRoutingSummaryDMARCParams struct {
 func (r EmailRoutingSummaryDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1517,7 +1517,7 @@ type EmailRoutingSummaryEncryptedParams struct {
 func (r EmailRoutingSummaryEncryptedParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1697,7 +1697,7 @@ type EmailRoutingSummaryIPVersionParams struct {
 func (r EmailRoutingSummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1877,7 +1877,7 @@ type EmailRoutingSummarySPFParams struct {
 func (r EmailRoutingSummarySPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

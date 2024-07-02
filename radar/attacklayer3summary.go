@@ -215,7 +215,7 @@ type AttackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                             `json:"dataSource,required"`
 	Description     string                                                             `json:"description,required"`
 	EventType       string                                                             `json:"eventType,required"`
-	IsInstantaneous interface{}                                                        `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                          `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                             `json:"linkedUrl"`
 	StartTime       time.Time                                                          `json:"startTime" format:"date-time"`
@@ -376,7 +376,7 @@ type AttackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                              `json:"dataSource,required"`
 	Description     string                                                              `json:"description,required"`
 	EventType       string                                                              `json:"eventType,required"`
-	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                              `json:"linkedUrl"`
 	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
@@ -535,7 +535,7 @@ type AttackLayer3SummaryGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -694,7 +694,7 @@ type AttackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                               `json:"dataSource,required"`
 	Description     string                                                               `json:"description,required"`
 	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                               `json:"linkedUrl"`
 	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
@@ -849,7 +849,7 @@ type AttackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                              `json:"dataSource,required"`
 	Description     string                                                              `json:"description,required"`
 	EventType       string                                                              `json:"eventType,required"`
-	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                              `json:"linkedUrl"`
 	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
@@ -1008,7 +1008,7 @@ type AttackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
@@ -1073,7 +1073,7 @@ type AttackLayer3SummaryBitrateParams struct {
 func (r AttackLayer3SummaryBitrateParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1228,7 +1228,7 @@ type AttackLayer3SummaryDurationParams struct {
 func (r AttackLayer3SummaryDurationParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1380,7 +1380,7 @@ type AttackLayer3SummaryGetParams struct {
 func (r AttackLayer3SummaryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1484,7 +1484,7 @@ type AttackLayer3SummaryIPVersionParams struct {
 func (r AttackLayer3SummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1622,7 +1622,7 @@ type AttackLayer3SummaryProtocolParams struct {
 func (r AttackLayer3SummaryProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1760,7 +1760,7 @@ type AttackLayer3SummaryVectorParams struct {
 func (r AttackLayer3SummaryVectorParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

@@ -472,6 +472,14 @@ func (r *BotManagementUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [BotManagementUpdateResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [bot_management.BotFightModeConfiguration],
+// [bot_management.SuperBotFightModeDefinitelyConfiguration],
+// [bot_management.SuperBotFightModeLikelyConfiguration],
+// [bot_management.SubscriptionConfiguration].
 func (r BotManagementUpdateResponse) AsUnion() BotManagementUpdateResponseUnion {
 	return r.union
 }
@@ -618,6 +626,14 @@ func (r *BotManagementGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [BotManagementGetResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [bot_management.BotFightModeConfiguration],
+// [bot_management.SuperBotFightModeDefinitelyConfiguration],
+// [bot_management.SuperBotFightModeLikelyConfiguration],
+// [bot_management.SubscriptionConfiguration].
 func (r BotManagementGetResponse) AsUnion() BotManagementGetResponseUnion {
 	return r.union
 }

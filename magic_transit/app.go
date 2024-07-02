@@ -191,9 +191,11 @@ func (r appUpdateResponseJSON) RawJSON() string {
 // Collection of Hostnames and/or IP Subnets to associate with traffic decisions.
 type AppListResponse struct {
 	// Magic account app ID.
-	AccountAppID string      `json:"account_app_id"`
-	Hostnames    interface{} `json:"hostnames,required"`
-	IPSubnets    interface{} `json:"ip_subnets,required"`
+	AccountAppID string `json:"account_app_id"`
+	// This field can have the runtime type of [[]string].
+	Hostnames interface{} `json:"hostnames,required"`
+	// This field can have the runtime type of [[]string].
+	IPSubnets interface{} `json:"ip_subnets,required"`
 	// Display name for the app.
 	Name string `json:"name"`
 	// Category of the app.
@@ -228,6 +230,12 @@ func (r *AppListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AppListResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [magic_transit.AppListResponseMagicAccountApp],
+// [magic_transit.AppListResponseMagicManagedApp].
 func (r AppListResponse) AsUnion() AppListResponseUnion {
 	return r.union
 }

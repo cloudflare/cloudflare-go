@@ -40,6 +40,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/healthchecks"
 	"github.com/cloudflare/cloudflare-go/v2/hostnames"
 	"github.com/cloudflare/cloudflare-go/v2/hyperdrive"
+	"github.com/cloudflare/cloudflare-go/v2/iam"
 	"github.com/cloudflare/cloudflare-go/v2/images"
 	"github.com/cloudflare/cloudflare-go/v2/intel"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -182,7 +183,7 @@ type Client struct {
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	EventNotifications          *event_notifications.EventNotificationService
 	AIGateway                   *ai_gateway.AIGatewayService
-	IAM                         *IAMService
+	IAM                         *iam.IAMService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -291,7 +292,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.EventNotifications = event_notifications.NewEventNotificationService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
-	r.IAM = NewIAMService(opts...)
+	r.IAM = iam.NewIAMService(opts...)
 
 	return
 }

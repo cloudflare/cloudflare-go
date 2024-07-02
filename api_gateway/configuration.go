@@ -123,6 +123,12 @@ func (r *ConfigurationAuthIDCharacteristic) UnmarshalJSON(data []byte) (err erro
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [ConfigurationAuthIDCharacteristicsUnion] interface which you
+// can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic],
+// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim].
 func (r ConfigurationAuthIDCharacteristic) AsUnion() ConfigurationAuthIDCharacteristicsUnion {
 	return r.union
 }
@@ -400,7 +406,7 @@ type ConfigurationGetParams struct {
 func (r ConfigurationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

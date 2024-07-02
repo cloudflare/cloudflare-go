@@ -155,7 +155,7 @@ type AS112TimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                  `json:"dataSource,required"`
 	Description     string                                                  `json:"description,required"`
 	EventType       string                                                  `json:"eventType,required"`
-	IsInstantaneous interface{}                                             `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
 	EndTime         time.Time                                               `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                  `json:"linkedUrl"`
 	StartTime       time.Time                                               `json:"startTime" format:"date-time"`
@@ -242,7 +242,7 @@ type AS112TimeseriesParams struct {
 func (r AS112TimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

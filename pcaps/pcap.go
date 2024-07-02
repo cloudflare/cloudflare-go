@@ -315,6 +315,11 @@ func (r *PCAPNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [PCAPNewResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [pcaps.PCAP],
+// [pcaps.PCAPNewResponseMagicVisibilityPCAPsResponseFull].
 func (r PCAPNewResponse) AsUnion() PCAPNewResponseUnion {
 	return r.union
 }
@@ -569,6 +574,11 @@ func (r *PCAPListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [PCAPListResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [pcaps.PCAP],
+// [pcaps.PCAPListResponseMagicVisibilityPCAPsResponseFull].
 func (r PCAPListResponse) AsUnion() PCAPListResponseUnion {
 	return r.union
 }
@@ -822,6 +832,11 @@ func (r *PCAPGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [PCAPGetResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [pcaps.PCAP],
+// [pcaps.PCAPGetResponseMagicVisibilityPCAPsResponseFull].
 func (r PCAPGetResponse) AsUnion() PCAPGetResponseUnion {
 	return r.union
 }

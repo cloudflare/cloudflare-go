@@ -194,7 +194,9 @@ type AccessTagNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
-	Name param.Field[string] `json:"name,required"`
+	Name      param.Field[string]    `json:"name,required"`
+	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
+	UpdatedAt param.Field[time.Time] `json:"updated_at" format:"date-time"`
 }
 
 func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
@@ -249,7 +251,9 @@ type AccessTagUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
-	Name param.Field[string] `json:"name,required"`
+	Name      param.Field[string]    `json:"name,required"`
+	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
+	UpdatedAt param.Field[time.Time] `json:"updated_at" format:"date-time"`
 }
 
 func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {

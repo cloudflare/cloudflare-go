@@ -59,7 +59,7 @@ func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLN
 }
 
 // Update a specific Site ACL.
-func (r *SiteACLService) Update(ctx context.Context, siteID string, aclIdentifier string, params SiteACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
+func (r *SiteACLService) Update(ctx context.Context, siteID string, aclID string, params SiteACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLUpdateResponseEnvelope
 	if params.AccountID.Value == "" {
@@ -70,11 +70,11 @@ func (r *SiteACLService) Update(ctx context.Context, siteID string, aclIdentifie
 		err = errors.New("missing required site_id parameter")
 		return
 	}
-	if aclIdentifier == "" {
-		err = errors.New("missing required acl_identifier parameter")
+	if aclID == "" {
+		err = errors.New("missing required acl_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -107,7 +107,7 @@ func (r *SiteACLService) ListAutoPaging(ctx context.Context, siteID string, quer
 }
 
 // Remove a specific Site ACL.
-func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, body SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
+func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclID string, body SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLDeleteResponseEnvelope
 	if body.AccountID.Value == "" {
@@ -118,11 +118,11 @@ func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifie
 		err = errors.New("missing required site_id parameter")
 		return
 	}
-	if aclIdentifier == "" {
-		err = errors.New("missing required acl_identifier parameter")
+	if aclID == "" {
+		err = errors.New("missing required acl_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", body.AccountID, siteID, aclIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", body.AccountID, siteID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -132,7 +132,7 @@ func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifie
 }
 
 // Patch a specific Site ACL.
-func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclIdentifier string, params SiteACLEditParams, opts ...option.RequestOption) (res *ACL, err error) {
+func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclID string, params SiteACLEditParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLEditResponseEnvelope
 	if params.AccountID.Value == "" {
@@ -143,11 +143,11 @@ func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclIdentifier 
 		err = errors.New("missing required site_id parameter")
 		return
 	}
-	if aclIdentifier == "" {
-		err = errors.New("missing required acl_identifier parameter")
+	if aclID == "" {
+		err = errors.New("missing required acl_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -157,7 +157,7 @@ func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclIdentifier 
 }
 
 // Get a specific Site ACL.
-func (r *SiteACLService) Get(ctx context.Context, siteID string, aclIdentifier string, query SiteACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
+func (r *SiteACLService) Get(ctx context.Context, siteID string, aclID string, query SiteACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLGetResponseEnvelope
 	if query.AccountID.Value == "" {
@@ -168,11 +168,11 @@ func (r *SiteACLService) Get(ctx context.Context, siteID string, aclIdentifier s
 		err = errors.New("missing required site_id parameter")
 		return
 	}
-	if aclIdentifier == "" {
-		err = errors.New("missing required acl_identifier parameter")
+	if aclID == "" {
+		err = errors.New("missing required acl_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", query.AccountID, siteID, aclIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", query.AccountID, siteID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

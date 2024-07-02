@@ -3,14 +3,17 @@
 package dns
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"reflect"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -273,12 +276,8 @@ type ARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string      `json:"zone_name" format:"hostname"`
-	JSON     aRecordJSON `json:"-"`
+	TTL  TTLNumber   `json:"ttl"`
+	JSON aRecordJSON `json:"-"`
 }
 
 // aRecordJSON contains the JSON metadata for the struct [ARecord]
@@ -296,8 +295,6 @@ type aRecordJSON struct {
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -334,6 +331,8 @@ type ARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[ARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -385,12 +384,8 @@ type AAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     aaaaRecordJSON `json:"-"`
+	TTL  TTLNumber      `json:"ttl"`
+	JSON aaaaRecordJSON `json:"-"`
 }
 
 // aaaaRecordJSON contains the JSON metadata for the struct [AAAARecord]
@@ -408,8 +403,6 @@ type aaaaRecordJSON struct {
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -446,6 +439,8 @@ type AAAARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[AAAARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -496,12 +491,8 @@ type CAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     caaRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON caaRecordJSON `json:"-"`
 }
 
 // caaRecordJSON contains the JSON metadata for the struct [CAARecord]
@@ -519,8 +510,6 @@ type caaRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -585,6 +574,8 @@ type CAARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CAARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -646,12 +637,8 @@ type CERTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     certRecordJSON `json:"-"`
+	TTL  TTLNumber      `json:"ttl"`
+	JSON certRecordJSON `json:"-"`
 }
 
 // certRecordJSON contains the JSON metadata for the struct [CERTRecord]
@@ -669,8 +656,6 @@ type certRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -738,6 +723,8 @@ type CERTRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CERTRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -802,12 +789,8 @@ type CNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     cnameRecordJSON `json:"-"`
+	TTL  TTLNumber       `json:"ttl"`
+	JSON cnameRecordJSON `json:"-"`
 }
 
 // cnameRecordJSON contains the JSON metadata for the struct [CNAMERecord]
@@ -825,8 +808,6 @@ type cnameRecordJSON struct {
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -863,6 +844,8 @@ type CNAMERecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CNAMERecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -913,12 +896,8 @@ type DNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string           `json:"zone_name" format:"hostname"`
-	JSON     dnskeyRecordJSON `json:"-"`
+	TTL  TTLNumber        `json:"ttl"`
+	JSON dnskeyRecordJSON `json:"-"`
 }
 
 // dnskeyRecordJSON contains the JSON metadata for the struct [DNSKEYRecord]
@@ -936,8 +915,6 @@ type dnskeyRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1006,6 +983,8 @@ type DNSKEYRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[DNSKEYRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1069,12 +1048,8 @@ type DSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     dsRecordJSON `json:"-"`
+	TTL  TTLNumber    `json:"ttl"`
+	JSON dsRecordJSON `json:"-"`
 }
 
 // dsRecordJSON contains the JSON metadata for the struct [DSRecord]
@@ -1092,8 +1067,6 @@ type dsRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1161,6 +1134,8 @@ type DSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[DSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1224,12 +1199,8 @@ type HTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     httpsRecordJSON `json:"-"`
+	TTL  TTLNumber       `json:"ttl"`
+	JSON httpsRecordJSON `json:"-"`
 }
 
 // httpsRecordJSON contains the JSON metadata for the struct [HTTPSRecord]
@@ -1247,8 +1218,6 @@ type httpsRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1313,6 +1282,8 @@ type HTTPSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[HTTPSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1374,12 +1345,8 @@ type LOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     locRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON locRecordJSON `json:"-"`
 }
 
 // locRecordJSON contains the JSON metadata for the struct [LOCRecord]
@@ -1397,8 +1364,6 @@ type locRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1522,6 +1487,8 @@ type LOCRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[LOCRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1602,12 +1569,8 @@ type MXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     mxRecordJSON `json:"-"`
+	TTL  TTLNumber    `json:"ttl"`
+	JSON mxRecordJSON `json:"-"`
 }
 
 // mxRecordJSON contains the JSON metadata for the struct [MXRecord]
@@ -1625,8 +1588,6 @@ type mxRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1666,6 +1627,8 @@ type MXRecordParam struct {
 	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[MXRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1713,12 +1676,8 @@ type NAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     naptrRecordJSON `json:"-"`
+	TTL  TTLNumber       `json:"ttl"`
+	JSON naptrRecordJSON `json:"-"`
 }
 
 // naptrRecordJSON contains the JSON metadata for the struct [NAPTRRecord]
@@ -1736,8 +1695,6 @@ type naptrRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1811,6 +1768,8 @@ type NAPTRRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[NAPTRRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1876,12 +1835,8 @@ type NSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     nsRecordJSON `json:"-"`
+	TTL  TTLNumber    `json:"ttl"`
+	JSON nsRecordJSON `json:"-"`
 }
 
 // nsRecordJSON contains the JSON metadata for the struct [NSRecord]
@@ -1898,8 +1853,6 @@ type nsRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1936,6 +1889,8 @@ type NSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[NSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1981,12 +1936,8 @@ type PTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     ptrRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON ptrRecordJSON `json:"-"`
 }
 
 // ptrRecordJSON contains the JSON metadata for the struct [PTRRecord]
@@ -2003,8 +1954,6 @@ type ptrRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2041,6 +1990,8 @@ type PTRRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[PTRRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2059,6 +2010,7 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
 
 type Record struct {
+	// This field can have the runtime type of [string], [interface{}].
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
@@ -2082,17 +2034,18 @@ type Record struct {
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool        `json:"proxiable"`
-	Tags      interface{} `json:"tags,required"`
+	Proxiable bool `json:"proxiable"`
+	// This field can have the runtime type of [[]RecordTags].
+	Tags interface{} `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string      `json:"zone_name" format:"hostname"`
-	Data     interface{} `json:"data,required"`
+	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
+	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
+	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
+	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
+	Data interface{} `json:"data,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64    `json:"priority"`
@@ -2115,8 +2068,6 @@ type recordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	Data        apijson.Field
 	Priority    apijson.Field
 	raw         string
@@ -2135,6 +2086,15 @@ func (r *Record) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [RecordUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
+// [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
+// [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.PTRRecord], [dns.SMIMEARecord],
+// [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord], [dns.TLSARecord],
+// [dns.TXTRecord], [dns.URIRecord].
 func (r Record) AsUnion() RecordUnion {
 	return r.union
 }
@@ -2301,8 +2261,10 @@ type RecordParam struct {
 	Type param.Field[RecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment param.Field[string]      `json:"comment"`
-	Tags    param.Field[interface{}] `json:"tags,required"`
+	Comment param.Field[string] `json:"comment"`
+	// Identifier
+	ID   param.Field[string]      `json:"id"`
+	Tags param.Field[interface{}] `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2431,12 +2393,8 @@ type SMIMEARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string           `json:"zone_name" format:"hostname"`
-	JSON     smimeaRecordJSON `json:"-"`
+	TTL  TTLNumber        `json:"ttl"`
+	JSON smimeaRecordJSON `json:"-"`
 }
 
 // smimeaRecordJSON contains the JSON metadata for the struct [SMIMEARecord]
@@ -2454,8 +2412,6 @@ type smimeaRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2524,6 +2480,8 @@ type SMIMEARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SMIMEARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2590,12 +2548,8 @@ type SRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     srvRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON srvRecordJSON `json:"-"`
 }
 
 // srvRecordJSON contains the JSON metadata for the struct [SRVRecord]
@@ -2613,8 +2567,6 @@ type srvRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2700,6 +2652,8 @@ type SRVRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SRVRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2776,12 +2730,8 @@ type SSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     sshfpRecordJSON `json:"-"`
+	TTL  TTLNumber       `json:"ttl"`
+	JSON sshfpRecordJSON `json:"-"`
 }
 
 // sshfpRecordJSON contains the JSON metadata for the struct [SSHFPRecord]
@@ -2799,8 +2749,6 @@ type sshfpRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2865,6 +2813,8 @@ type SSHFPRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SSHFPRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2926,12 +2876,8 @@ type SVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     svcbRecordJSON `json:"-"`
+	TTL  TTLNumber      `json:"ttl"`
+	JSON svcbRecordJSON `json:"-"`
 }
 
 // svcbRecordJSON contains the JSON metadata for the struct [SVCBRecord]
@@ -2949,8 +2895,6 @@ type svcbRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3015,6 +2959,8 @@ type SVCBRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SVCBRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3076,12 +3022,8 @@ type TLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     tlsaRecordJSON `json:"-"`
+	TTL  TTLNumber      `json:"ttl"`
+	JSON tlsaRecordJSON `json:"-"`
 }
 
 // tlsaRecordJSON contains the JSON metadata for the struct [TLSARecord]
@@ -3099,8 +3041,6 @@ type tlsaRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3168,6 +3108,8 @@ type TLSARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[TLSARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3215,6 +3157,8 @@ func (r TTLNumber) IsKnown() bool {
 	return false
 }
 
+func (r TTLNumber) ImplementsDNSTTLNumber() {}
+
 type TXTRecord struct {
 	// Text content for the record.
 	Content string `json:"content,required"`
@@ -3243,12 +3187,8 @@ type TXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     txtRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON txtRecordJSON `json:"-"`
 }
 
 // txtRecordJSON contains the JSON metadata for the struct [TXTRecord]
@@ -3265,8 +3205,6 @@ type txtRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3303,6 +3241,8 @@ type TXTRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[TXTRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3353,12 +3293,8 @@ type URIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     uriRecordJSON `json:"-"`
+	TTL  TTLNumber     `json:"ttl"`
+	JSON uriRecordJSON `json:"-"`
 }
 
 // uriRecordJSON contains the JSON metadata for the struct [URIRecord]
@@ -3377,8 +3313,6 @@ type uriRecordJSON struct {
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3443,6 +3377,8 @@ type URIRecordParam struct {
 	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[URIRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3694,7 +3630,7 @@ type RecordListParams struct {
 func (r RecordListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -3718,7 +3654,7 @@ type RecordListParamsComment struct {
 func (r RecordListParamsComment) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -3789,7 +3725,7 @@ type RecordListParamsTag struct {
 func (r RecordListParamsTag) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -3993,8 +3929,19 @@ type RecordImportParams struct {
 	Proxied param.Field[string] `json:"proxied"`
 }
 
-func (r RecordImportParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r RecordImportParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 type RecordImportResponseEnvelope struct {

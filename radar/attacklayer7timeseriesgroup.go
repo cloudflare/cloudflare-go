@@ -242,7 +242,7 @@ type AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                                 `json:"dataSource,required"`
 	Description     string                                                                 `json:"description,required"`
 	EventType       string                                                                 `json:"eventType,required"`
-	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                 `json:"linkedUrl"`
 	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
@@ -666,7 +666,7 @@ type AttackLayer7TimeseriesGroupGetParams struct {
 func (r AttackLayer7TimeseriesGroupGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -802,7 +802,7 @@ type AttackLayer7TimeseriesGroupHTTPMethodParams struct {
 func (r AttackLayer7TimeseriesGroupHTTPMethodParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1006,7 +1006,7 @@ type AttackLayer7TimeseriesGroupHTTPVersionParams struct {
 func (r AttackLayer7TimeseriesGroupHTTPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1258,7 +1258,7 @@ type AttackLayer7TimeseriesGroupIndustryParams struct {
 func (r AttackLayer7TimeseriesGroupIndustryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1521,7 +1521,7 @@ type AttackLayer7TimeseriesGroupIPVersionParams struct {
 func (r AttackLayer7TimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1771,7 +1771,7 @@ type AttackLayer7TimeseriesGroupManagedRulesParams struct {
 func (r AttackLayer7TimeseriesGroupManagedRulesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2035,7 +2035,7 @@ type AttackLayer7TimeseriesGroupMitigationProductParams struct {
 func (r AttackLayer7TimeseriesGroupMitigationProductParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2284,7 +2284,7 @@ type AttackLayer7TimeseriesGroupVerticalParams struct {
 func (r AttackLayer7TimeseriesGroupVerticalParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

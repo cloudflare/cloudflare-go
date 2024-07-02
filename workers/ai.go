@@ -67,9 +67,10 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 	return
 }
 
-// Union satisfied by [workers.AIRunResponseTextClassification],
-// [shared.UnionString], [workers.AIRunResponseSentenceSimilarity],
-// [workers.AIRunResponseTextEmbeddings], [workers.AIRunResponseSpeechRecognition],
+// Union satisfied by [workers.AIRunResponseDumbPipe],
+// [workers.AIRunResponseTextClassification], [shared.UnionString],
+// [workers.AIRunResponseTextEmbeddings],
+// [workers.AIRunResponseAutomaticSpeechRecognition],
 // [workers.AIRunResponseImageClassification],
 // [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
 // [shared.UnionString], [workers.AIRunResponseTranslation],
@@ -92,15 +93,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AIRunResponseSentenceSimilarity{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AIRunResponseTextEmbeddings{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AIRunResponseSpeechRecognition{}),
+			Type:       reflect.TypeOf(AIRunResponseAutomaticSpeechRecognition{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -137,10 +134,6 @@ type AIRunResponseTextClassification []AIRunResponseTextClassification
 
 func (r AIRunResponseTextClassification) ImplementsWorkersAIRunResponseUnion() {}
 
-type AIRunResponseSentenceSimilarity []float64
-
-func (r AIRunResponseSentenceSimilarity) ImplementsWorkersAIRunResponseUnion() {}
-
 type AIRunResponseTextEmbeddings struct {
 	Data  [][]float64                     `json:"data"`
 	Shape []float64                       `json:"shape"`
@@ -166,17 +159,17 @@ func (r aiRunResponseTextEmbeddingsJSON) RawJSON() string {
 
 func (r AIRunResponseTextEmbeddings) ImplementsWorkersAIRunResponseUnion() {}
 
-type AIRunResponseSpeechRecognition struct {
-	Text      string                               `json:"text,required"`
-	Vtt       string                               `json:"vtt"`
-	WordCount float64                              `json:"word_count"`
-	Words     []AIRunResponseSpeechRecognitionWord `json:"words"`
-	JSON      aiRunResponseSpeechRecognitionJSON   `json:"-"`
+type AIRunResponseAutomaticSpeechRecognition struct {
+	Text      string                                        `json:"text,required"`
+	Vtt       string                                        `json:"vtt"`
+	WordCount float64                                       `json:"word_count"`
+	Words     []AIRunResponseAutomaticSpeechRecognitionWord `json:"words"`
+	JSON      aiRunResponseAutomaticSpeechRecognitionJSON   `json:"-"`
 }
 
-// aiRunResponseSpeechRecognitionJSON contains the JSON metadata for the struct
-// [AIRunResponseSpeechRecognition]
-type aiRunResponseSpeechRecognitionJSON struct {
+// aiRunResponseAutomaticSpeechRecognitionJSON contains the JSON metadata for the
+// struct [AIRunResponseAutomaticSpeechRecognition]
+type aiRunResponseAutomaticSpeechRecognitionJSON struct {
 	Text        apijson.Field
 	Vtt         apijson.Field
 	WordCount   apijson.Field
@@ -185,26 +178,26 @@ type aiRunResponseSpeechRecognitionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIRunResponseSpeechRecognition) UnmarshalJSON(data []byte) (err error) {
+func (r *AIRunResponseAutomaticSpeechRecognition) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiRunResponseSpeechRecognitionJSON) RawJSON() string {
+func (r aiRunResponseAutomaticSpeechRecognitionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseSpeechRecognition) ImplementsWorkersAIRunResponseUnion() {}
+func (r AIRunResponseAutomaticSpeechRecognition) ImplementsWorkersAIRunResponseUnion() {}
 
-type AIRunResponseSpeechRecognitionWord struct {
-	End   float64                                `json:"end"`
-	Start float64                                `json:"start"`
-	Word  string                                 `json:"word"`
-	JSON  aiRunResponseSpeechRecognitionWordJSON `json:"-"`
+type AIRunResponseAutomaticSpeechRecognitionWord struct {
+	End   float64                                         `json:"end"`
+	Start float64                                         `json:"start"`
+	Word  string                                          `json:"word"`
+	JSON  aiRunResponseAutomaticSpeechRecognitionWordJSON `json:"-"`
 }
 
-// aiRunResponseSpeechRecognitionWordJSON contains the JSON metadata for the struct
-// [AIRunResponseSpeechRecognitionWord]
-type aiRunResponseSpeechRecognitionWordJSON struct {
+// aiRunResponseAutomaticSpeechRecognitionWordJSON contains the JSON metadata for
+// the struct [AIRunResponseAutomaticSpeechRecognitionWord]
+type aiRunResponseAutomaticSpeechRecognitionWordJSON struct {
 	End         apijson.Field
 	Start       apijson.Field
 	Word        apijson.Field
@@ -212,11 +205,11 @@ type aiRunResponseSpeechRecognitionWordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIRunResponseSpeechRecognitionWord) UnmarshalJSON(data []byte) (err error) {
+func (r *AIRunResponseAutomaticSpeechRecognitionWord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiRunResponseSpeechRecognitionWordJSON) RawJSON() string {
+func (r aiRunResponseAutomaticSpeechRecognitionWordJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -362,8 +355,6 @@ type AIRunParamsBody struct {
 	NumSteps    param.Field[int64]       `json:"num_steps"`
 	Prompt      param.Field[string]      `json:"prompt"`
 	Strength    param.Field[float64]     `json:"strength"`
-	Sentences   param.Field[interface{}] `json:"sentences,required"`
-	Source      param.Field[string]      `json:"source"`
 	Audio       param.Field[interface{}] `json:"audio,required"`
 	Lora        param.Field[string]      `json:"lora"`
 	MaxTokens   param.Field[int64]       `json:"max_tokens"`
@@ -383,11 +374,10 @@ func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r AIRunParamsBody) implementsWorkersAIRunParamsBodyUnion() {}
 
-// Satisfied by [workers.AIRunParamsBodyTextClassification],
-// [workers.AIRunParamsBodyTextToImage],
-// [workers.AIRunParamsBodySentenceSimilarity],
-// [workers.AIRunParamsBodyTextEmbeddings],
-// [workers.AIRunParamsBodySpeechRecognition],
+// Satisfied by [workers.AIRunParamsBodyDumbPipe],
+// [workers.AIRunParamsBodyTextClassification],
+// [workers.AIRunParamsBodyTextToImage], [workers.AIRunParamsBodyTextEmbeddings],
+// [workers.AIRunParamsBodyAutomaticSpeechRecognition],
 // [workers.AIRunParamsBodyImageClassification],
 // [workers.AIRunParamsBodyObjectDetection],
 // [workers.AIRunParamsBodyTextGeneration], [workers.AIRunParamsBodyTranslation],
@@ -422,17 +412,6 @@ func (r AIRunParamsBodyTextToImage) MarshalJSON() (data []byte, err error) {
 
 func (r AIRunParamsBodyTextToImage) implementsWorkersAIRunParamsBodyUnion() {}
 
-type AIRunParamsBodySentenceSimilarity struct {
-	Sentences param.Field[[]string] `json:"sentences,required"`
-	Source    param.Field[string]   `json:"source,required"`
-}
-
-func (r AIRunParamsBodySentenceSimilarity) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AIRunParamsBodySentenceSimilarity) implementsWorkersAIRunParamsBodyUnion() {}
-
 type AIRunParamsBodyTextEmbeddings struct {
 	Text param.Field[AIRunParamsBodyTextEmbeddingsTextUnion] `json:"text,required"`
 }
@@ -454,15 +433,15 @@ type AIRunParamsBodyTextEmbeddingsTextArray []string
 func (r AIRunParamsBodyTextEmbeddingsTextArray) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion() {
 }
 
-type AIRunParamsBodySpeechRecognition struct {
+type AIRunParamsBodyAutomaticSpeechRecognition struct {
 	Audio param.Field[[]float64] `json:"audio,required"`
 }
 
-func (r AIRunParamsBodySpeechRecognition) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyAutomaticSpeechRecognition) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodySpeechRecognition) implementsWorkersAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyAutomaticSpeechRecognition) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyImageClassification struct {
 	Image param.Field[[]float64] `json:"image,required"`

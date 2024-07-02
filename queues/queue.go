@@ -181,7 +181,7 @@ func (r queueJSON) RawJSON() string {
 type QueueCreated struct {
 	CreatedOn  interface{}      `json:"created_on"`
 	ModifiedOn interface{}      `json:"modified_on"`
-	QueueID    interface{}      `json:"queue_id"`
+	QueueID    string           `json:"queue_id"`
 	QueueName  string           `json:"queue_name"`
 	JSON       queueCreatedJSON `json:"-"`
 }
@@ -207,7 +207,7 @@ func (r queueCreatedJSON) RawJSON() string {
 type QueueUpdated struct {
 	CreatedOn  interface{}      `json:"created_on"`
 	ModifiedOn interface{}      `json:"modified_on"`
-	QueueID    interface{}      `json:"queue_id"`
+	QueueID    string           `json:"queue_id"`
 	QueueName  string           `json:"queue_name"`
 	JSON       queueUpdatedJSON `json:"-"`
 }

@@ -38,18 +38,18 @@ func NewCfInterconnectService(opts ...option.RequestOption) (r *CfInterconnectSe
 // Updates a specific interconnect associated with an account. Use
 // `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *CfInterconnectService) Update(ctx context.Context, tunnelIdentifier string, params CfInterconnectUpdateParams, opts ...option.RequestOption) (res *CfInterconnectUpdateResponse, err error) {
+func (r *CfInterconnectService) Update(ctx context.Context, cfInterconnectID string, params CfInterconnectUpdateParams, opts ...option.RequestOption) (res *CfInterconnectUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CfInterconnectUpdateResponseEnvelope
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if cfInterconnectID == "" {
+		err = errors.New("missing required cf_interconnect_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", params.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", params.AccountID, cfInterconnectID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -76,18 +76,18 @@ func (r *CfInterconnectService) List(ctx context.Context, query CfInterconnectLi
 }
 
 // Lists details for a specific interconnect.
-func (r *CfInterconnectService) Get(ctx context.Context, tunnelIdentifier string, query CfInterconnectGetParams, opts ...option.RequestOption) (res *CfInterconnectGetResponse, err error) {
+func (r *CfInterconnectService) Get(ctx context.Context, cfInterconnectID string, query CfInterconnectGetParams, opts ...option.RequestOption) (res *CfInterconnectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CfInterconnectGetResponseEnvelope
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if cfInterconnectID == "" {
+		err = errors.New("missing required cf_interconnect_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", query.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", query.AccountID, cfInterconnectID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

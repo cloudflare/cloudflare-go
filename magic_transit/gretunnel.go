@@ -55,18 +55,18 @@ func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, o
 
 // Updates a specific GRE tunnel. Use `?validate_only=true` as an optional query
 // parameter to only run validation without persisting changes.
-func (r *GRETunnelService) Update(ctx context.Context, tunnelIdentifier string, params GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
+func (r *GRETunnelService) Update(ctx context.Context, greTunnelID string, params GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelUpdateResponseEnvelope
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if greTunnelID == "" {
+		err = errors.New("missing required gre_tunnel_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, greTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -94,18 +94,18 @@ func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, 
 
 // Disables and removes a specific static GRE tunnel. Use `?validate_only=true` as
 // an optional query parameter to only run validation without persisting changes.
-func (r *GRETunnelService) Delete(ctx context.Context, tunnelIdentifier string, body GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
+func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, body GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelDeleteResponseEnvelope
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if greTunnelID == "" {
+		err = errors.New("missing required gre_tunnel_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", body.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", body.AccountID, greTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -115,18 +115,18 @@ func (r *GRETunnelService) Delete(ctx context.Context, tunnelIdentifier string, 
 }
 
 // Lists informtion for a specific GRE tunnel.
-func (r *GRETunnelService) Get(ctx context.Context, tunnelIdentifier string, query GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
+func (r *GRETunnelService) Get(ctx context.Context, greTunnelID string, query GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelGetResponseEnvelope
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if greTunnelID == "" {
+		err = errors.New("missing required gre_tunnel_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", query.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", query.AccountID, greTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

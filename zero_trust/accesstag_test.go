@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
@@ -14,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestAccessTagNew(t *testing.T) {
+func TestAccessTagNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,6 +31,8 @@ func TestAccessTagNew(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Tags.New(context.TODO(), zero_trust.AccessTagNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("engineers"),
+		CreatedAt: cloudflare.F(time.Now()),
+		UpdatedAt: cloudflare.F(time.Now()),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -40,7 +43,7 @@ func TestAccessTagNew(t *testing.T) {
 	}
 }
 
-func TestAccessTagUpdate(t *testing.T) {
+func TestAccessTagUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,6 +62,8 @@ func TestAccessTagUpdate(t *testing.T) {
 		zero_trust.AccessTagUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("engineers"),
+			CreatedAt: cloudflare.F(time.Now()),
+			UpdatedAt: cloudflare.F(time.Now()),
 		},
 	)
 	if err != nil {

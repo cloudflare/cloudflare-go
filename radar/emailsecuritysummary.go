@@ -253,7 +253,7 @@ type EmailSecuritySummaryARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -385,7 +385,7 @@ type EmailSecuritySummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                           `json:"dataSource,required"`
 	Description     string                                                           `json:"description,required"`
 	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                           `json:"linkedUrl"`
 	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
@@ -517,7 +517,7 @@ type EmailSecuritySummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
@@ -650,7 +650,7 @@ type EmailSecuritySummaryMaliciousResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                                `json:"dataSource,required"`
 	Description     string                                                                `json:"description,required"`
 	EventType       string                                                                `json:"eventType,required"`
-	IsInstantaneous interface{}                                                           `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                             `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                `json:"linkedUrl"`
 	StartTime       time.Time                                                             `json:"startTime" format:"date-time"`
@@ -805,7 +805,7 @@ type EmailSecuritySummarySpamResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                           `json:"dataSource,required"`
 	Description     string                                                           `json:"description,required"`
 	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                           `json:"linkedUrl"`
 	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
@@ -960,7 +960,7 @@ type EmailSecuritySummarySPFResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -1092,7 +1092,7 @@ type EmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
@@ -1249,7 +1249,7 @@ type EmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoAnnotation stru
 	DataSource      string                                                                     `json:"dataSource,required"`
 	Description     string                                                                     `json:"description,required"`
 	EventType       string                                                                     `json:"eventType,required"`
-	IsInstantaneous interface{}                                                                `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                       `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                                  `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                     `json:"linkedUrl"`
 	StartTime       time.Time                                                                  `json:"startTime" format:"date-time"`
@@ -1409,7 +1409,7 @@ type EmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                                 `json:"dataSource,required"`
 	Description     string                                                                 `json:"description,required"`
 	EventType       string                                                                 `json:"eventType,required"`
-	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                 `json:"linkedUrl"`
 	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
@@ -1494,7 +1494,7 @@ type EmailSecuritySummaryARCParams struct {
 func (r EmailSecuritySummaryARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1658,7 +1658,7 @@ type EmailSecuritySummaryDKIMParams struct {
 func (r EmailSecuritySummaryDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1822,7 +1822,7 @@ type EmailSecuritySummaryDMARCParams struct {
 func (r EmailSecuritySummaryDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1988,7 +1988,7 @@ type EmailSecuritySummaryMaliciousParams struct {
 func (r EmailSecuritySummaryMaliciousParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2170,7 +2170,7 @@ type EmailSecuritySummarySpamParams struct {
 func (r EmailSecuritySummarySpamParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2350,7 +2350,7 @@ type EmailSecuritySummarySPFParams struct {
 func (r EmailSecuritySummarySPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2516,7 +2516,7 @@ type EmailSecuritySummarySpoofParams struct {
 func (r EmailSecuritySummarySpoofParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2698,7 +2698,7 @@ type EmailSecuritySummaryThreatCategoryParams struct {
 func (r EmailSecuritySummaryThreatCategoryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2878,7 +2878,7 @@ type EmailSecuritySummaryTLSVersionParams struct {
 func (r EmailSecuritySummaryTLSVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

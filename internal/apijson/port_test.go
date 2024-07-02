@@ -22,14 +22,14 @@ type Card struct {
 }
 
 type cardJSON struct {
-	Processor Field
-	Data      Field
-	IsFoo     Field
-	IsBar     Field
-	Metadata  Field
-	Value     Field
-	Extras    map[string]Field
-	raw       string
+	Processor   Field
+	Data        Field
+	IsFoo       Field
+	IsBar       Field
+	Metadata    Field
+	Value       Field
+	ExtraFields map[string]Field
+	raw         string
 }
 
 func (r cardJSON) RawJSON() string { return r.raw }
@@ -48,13 +48,13 @@ type CardVisa struct {
 }
 
 type cardVisaJSON struct {
-	Processor Field
-	Data      Field
-	IsFoo     Field
-	Metadata  Field
-	Value     Field
-	Extras    map[string]Field
-	raw       string
+	Processor   Field
+	Data        Field
+	IsFoo       Field
+	Metadata    Field
+	Value       Field
+	ExtraFields map[string]Field
+	raw         string
 }
 
 func (r cardVisaJSON) RawJSON() string { return r.raw }
@@ -77,13 +77,13 @@ type CardMastercard struct {
 }
 
 type cardMastercardJSON struct {
-	Processor Field
-	Data      Field
-	IsBar     Field
-	Metadata  Field
-	Value     Field
-	Extras    map[string]Field
-	raw       string
+	Processor   Field
+	Data        Field
+	IsBar       Field
+	Metadata    Field
+	Value       Field
+	ExtraFields map[string]Field
+	raw         string
 }
 
 func (r cardMastercardJSON) RawJSON() string { return r.raw }
@@ -110,12 +110,12 @@ var portTests = map[string]struct {
 			},
 			Value: "value",
 			JSON: cardVisaJSON{
-				raw:       `{"processor":"visa","is_foo":true,"data":{"foo":"foo"}}`,
-				Processor: Field{raw: `"visa"`, status: valid},
-				IsFoo:     Field{raw: `true`, status: valid},
-				Data:      Field{raw: `{"foo":"foo"}`, status: valid},
-				Value:     Field{raw: `"value"`, status: valid},
-				Extras:    map[string]Field{"extra": {raw: `"yo"`, status: valid}},
+				raw:         `{"processor":"visa","is_foo":true,"data":{"foo":"foo"}}`,
+				Processor:   Field{raw: `"visa"`, status: valid},
+				IsFoo:       Field{raw: `true`, status: valid},
+				Data:        Field{raw: `{"foo":"foo"}`, status: valid},
+				Value:       Field{raw: `"value"`, status: valid},
+				ExtraFields: map[string]Field{"extra": {raw: `"yo"`, status: valid}},
 			},
 		},
 		Card{
@@ -130,12 +130,12 @@ var portTests = map[string]struct {
 			},
 			Value: "value",
 			JSON: cardJSON{
-				raw:       `{"processor":"visa","is_foo":true,"data":{"foo":"foo"}}`,
-				Processor: Field{raw: `"visa"`, status: valid},
-				IsFoo:     Field{raw: `true`, status: valid},
-				Data:      Field{raw: `{"foo":"foo"}`, status: valid},
-				Value:     Field{raw: `"value"`, status: valid},
-				Extras:    map[string]Field{"extra": {raw: `"yo"`, status: valid}},
+				raw:         `{"processor":"visa","is_foo":true,"data":{"foo":"foo"}}`,
+				Processor:   Field{raw: `"visa"`, status: valid},
+				IsFoo:       Field{raw: `true`, status: valid},
+				Data:        Field{raw: `{"foo":"foo"}`, status: valid},
+				Value:       Field{raw: `"value"`, status: valid},
+				ExtraFields: map[string]Field{"extra": {raw: `"yo"`, status: valid}},
 			},
 		},
 	},

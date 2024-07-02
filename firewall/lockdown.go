@@ -179,6 +179,11 @@ func (r *Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [ConfigurationUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [firewall.LockdownIPConfiguration],
+// [firewall.LockdownCIDRConfiguration].
 func (r Configuration) AsUnion() ConfigurationUnion {
 	return r.union
 }
@@ -515,7 +520,7 @@ type LockdownListParams struct {
 func (r LockdownListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
