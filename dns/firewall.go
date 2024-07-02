@@ -243,6 +243,8 @@ func (r firewallJSON) RawJSON() string {
 }
 
 type FirewallParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
 	// Deprecate the response to ANY requests.
 	DeprecateAnyRequests param.Field[bool]                    `json:"deprecate_any_requests,required"`
 	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
@@ -384,9 +386,9 @@ func (r FirewallNewParams) MarshalJSON() (data []byte, err error) {
 type FirewallNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Firewall                           `json:"result"`
 	JSON    firewallNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -395,8 +397,8 @@ type FirewallNewResponseEnvelope struct {
 type firewallNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -447,11 +449,11 @@ type FirewallDeleteParams struct {
 }
 
 type FirewallDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   FirewallDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FirewallDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  FirewallDeleteResponse                `json:"result"`
 	JSON    firewallDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -460,8 +462,8 @@ type FirewallDeleteResponseEnvelope struct {
 type firewallDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -502,9 +504,9 @@ func (r FirewallEditParams) MarshalJSON() (data []byte, err error) {
 type FirewallEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Firewall                            `json:"result"`
 	JSON    firewallEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -513,8 +515,8 @@ type FirewallEditResponseEnvelope struct {
 type firewallEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -550,9 +552,9 @@ type FirewallGetParams struct {
 type FirewallGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Firewall                           `json:"result"`
 	JSON    firewallGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -561,8 +563,8 @@ type FirewallGetResponseEnvelope struct {
 type firewallGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
