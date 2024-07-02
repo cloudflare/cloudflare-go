@@ -44,8 +44,8 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
 func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FilterNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -66,8 +66,8 @@ func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body Fil
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
 func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FilterUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -94,8 +94,12 @@ func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id st
 // for full details.
 func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallFilter], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/filters", zoneIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
@@ -127,8 +131,8 @@ func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier strin
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
 func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -153,8 +157,8 @@ func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id st
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
 func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FilterGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

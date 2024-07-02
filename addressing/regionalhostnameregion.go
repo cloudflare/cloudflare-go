@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -36,8 +37,12 @@ func NewRegionalHostnameRegionService(opts ...option.RequestOption) (r *Regional
 // List all Regional Services regions available for use by this account.
 func (r *RegionalHostnameRegionService) List(ctx context.Context, query RegionalHostnameRegionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RegionalHostnameRegionListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/regional_hostnames/regions", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {

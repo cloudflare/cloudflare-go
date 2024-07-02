@@ -41,8 +41,8 @@ func NewRankingService(opts ...option.RequestOption) (r *RankingService) {
 
 // Gets Domains Rank updates change over time. Raw values are returned.
 func (r *RankingService) TimeseriesGroups(ctx context.Context, query RankingTimeseriesGroupsParams, opts ...option.RequestOption) (res *RankingTimeseriesGroupsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RankingTimeseriesGroupsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/ranking/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -57,8 +57,8 @@ func (r *RankingService) TimeseriesGroups(ctx context.Context, query RankingTime
 // that are generating a surge in interest. For more information on top domains,
 // see https://blog.cloudflare.com/radar-domain-rankings/.
 func (r *RankingService) Top(ctx context.Context, query RankingTopParams, opts ...option.RequestOption) (res *RankingTopResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RankingTopResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/ranking/top"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

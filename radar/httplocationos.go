@@ -38,8 +38,8 @@ func NewHTTPLocationOSService(opts ...option.RequestOption) (r *HTTPLocationOSSe
 // Get the top locations, by HTTP traffic, of the requested operating systems.
 // Values are a percentage out of the total traffic.
 func (r *HTTPLocationOSService) Get(ctx context.Context, os HTTPLocationOSGetParamsOS, query HTTPLocationOSGetParams, opts ...option.RequestOption) (res *HTTPLocationOSGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationOSGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/os/%v", os)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

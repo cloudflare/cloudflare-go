@@ -37,8 +37,8 @@ func NewSmartTieredCacheService(opts ...option.RequestOption) (r *SmartTieredCac
 
 // Remvoves enablement of Smart Tiered Cache
 func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCacheDeleteParams, opts ...option.RequestOption) (res *SmartTieredCacheDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -54,8 +54,8 @@ func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCa
 
 // Updates enablement of Tiered Cache
 func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCacheEditParams, opts ...option.RequestOption) (res *SmartTieredCacheEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -71,8 +71,8 @@ func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCa
 
 // Get Smart Tiered Cache setting
 func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCacheGetParams, opts ...option.RequestOption) (res *SmartTieredCacheGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

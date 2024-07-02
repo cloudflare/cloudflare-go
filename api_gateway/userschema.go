@@ -48,8 +48,8 @@ func NewUserSchemaService(opts ...option.RequestOption) (r *UserSchemaService) {
 
 // Upload a schema to a zone
 func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams, opts ...option.RequestOption) (res *SchemaUpload, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UserSchemaNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -66,8 +66,12 @@ func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams,
 // Retrieve information about all schemas on a zone
 func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PublicSchema], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/api_gateway/user_schemas", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -88,8 +92,8 @@ func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchem
 
 // Delete a schema
 func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body UserSchemaDeleteParams, opts ...option.RequestOption) (res *UserSchemaDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UserSchemaDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -109,8 +113,8 @@ func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body Us
 
 // Enable validation for a schema
 func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UserSchemaEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -130,8 +134,8 @@ func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params Us
 
 // Retrieve information about a specific schema on a zone
 func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UserSchemaGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

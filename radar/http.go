@@ -46,8 +46,8 @@ func NewHTTPService(opts ...option.RequestOption) (r *HTTPService) {
 
 // Get HTTP requests over time.
 func (r *HTTPService) Timeseries(ctx context.Context, query HTTPTimeseriesParams, opts ...option.RequestOption) (res *HTTPTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

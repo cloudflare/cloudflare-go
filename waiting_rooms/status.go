@@ -52,8 +52,8 @@ func NewStatusService(opts ...option.RequestOption) (r *StatusService) {
 //  5. `max_estimated_time_minutes`: Integer of the maximum estimated time currently
 //     presented to the users.
 func (r *StatusService) Get(ctx context.Context, waitingRoomID string, query StatusGetParams, opts ...option.RequestOption) (res *StatusGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env StatusGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -52,8 +52,8 @@ func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 
 // Creates a new Argo Tunnel in an account.
 func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ...option.RequestOption) (res *TunnelNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -70,8 +70,12 @@ func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ..
 // Lists and filters all types of Tunnels in an account.
 func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TunnelListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/tunnels", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -92,8 +96,8 @@ func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListPar
 
 // Deletes an Argo Tunnel from an account.
 func (r *TunnelService) Delete(ctx context.Context, tunnelID string, body TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -113,8 +117,8 @@ func (r *TunnelService) Delete(ctx context.Context, tunnelID string, body Tunnel
 
 // Updates an existing Cloudflare Tunnel.
 func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params TunnelEditParams, opts ...option.RequestOption) (res *TunnelEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -134,8 +138,8 @@ func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params Tunnel
 
 // Fetches a single Argo Tunnel.
 func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGetParams, opts ...option.RequestOption) (res *TunnelGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

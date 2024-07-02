@@ -40,8 +40,8 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 
 // Upload a certificate that you want to use with mTLS-enabled Cloudflare services.
 func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,8 +58,12 @@ func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificate
 // Lists all mTLS certificates.
 func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MTLSCertificate], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -81,8 +85,8 @@ func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSC
 // Deletes the mTLS certificate unless the certificate is in use by one or more
 // Cloudflare services.
 func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -102,8 +106,8 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 
 // Fetches a single mTLS certificate.
 func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

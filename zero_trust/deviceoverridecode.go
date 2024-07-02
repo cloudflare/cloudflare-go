@@ -37,8 +37,8 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 // Fetches a one-time use admin override code for a device. This relies on the
 // **Admin Override** setting being enabled in your device configuration.
 func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *DeviceOverrideCodeListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DeviceOverrideCodeListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -53,8 +53,8 @@ func NewHTTPAseService(opts ...option.RequestOption) (r *HTTPAseService) {
 // Get the top autonomous systems by HTTP traffic. Values are a percentage out of
 // the total traffic.
 func (r *HTTPAseService) Get(ctx context.Context, query HTTPAseGetParams, opts ...option.RequestOption) (res *HTTPAseGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

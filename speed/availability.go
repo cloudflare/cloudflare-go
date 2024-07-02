@@ -35,8 +35,8 @@ func NewAvailabilityService(opts ...option.RequestOption) (r *AvailabilityServic
 
 // Retrieves quota for all plans, as well as the current zone quota.
 func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListParams, opts ...option.RequestOption) (res *Availability, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AvailabilityListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

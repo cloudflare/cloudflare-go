@@ -38,8 +38,8 @@ func NewHTTPAseHTTPMethodService(opts ...option.RequestOption) (r *HTTPAseHTTPMe
 // Get the top autonomous systems (AS), by HTTP traffic, of the requested HTTP
 // protocol version. Values are a percentage out of the total traffic.
 func (r *HTTPAseHTTPMethodService) Get(ctx context.Context, httpVersion HTTPAseHTTPMethodGetParamsHTTPVersion, query HTTPAseHTTPMethodGetParams, opts ...option.RequestOption) (res *HTTPAseHTTPMethodGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseHTTPMethodGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/http_version/%v", httpVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

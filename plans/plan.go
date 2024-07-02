@@ -37,8 +37,12 @@ func NewPlanService(opts ...option.RequestOption) (r *PlanService) {
 // Lists available plans the zone can subscribe to.
 func (r *PlanService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[AvailableRatePlan], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/available_plans", zoneIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -59,8 +63,8 @@ func (r *PlanService) ListAutoPaging(ctx context.Context, zoneIdentifier string,
 
 // Details of the available plan that the zone can subscribe to.
 func (r *PlanService) Get(ctx context.Context, zoneIdentifier string, planIdentifier string, opts ...option.RequestOption) (res *AvailableRatePlan, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PlanGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

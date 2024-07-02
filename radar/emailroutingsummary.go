@@ -36,8 +36,8 @@ func NewEmailRoutingSummaryService(opts ...option.RequestOption) (r *EmailRoutin
 
 // Percentage distribution of emails classified per ARC validation.
 func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRoutingSummaryARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRouting
 
 // Percentage distribution of emails classified per DKIM validation.
 func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutingSummaryDKIMParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDKIMResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryDKIMResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutin
 
 // Percentage distribution of emails classified per DMARC validation.
 func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRoutingSummaryDMARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDMARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryDMARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRouti
 
 // Percentage distribution of emails by Encrypted
 func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailRoutingSummaryEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingSummaryEncryptedResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryEncryptedResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/encrypted"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailR
 
 // Percentage distribution of emails by Ip Version.
 func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailRoutingSummaryIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingSummaryIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailR
 
 // Percentage distribution of emails classified per SPF validation.
 func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRoutingSummarySPFParams, opts ...option.RequestOption) (res *EmailRoutingSummarySPFResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummarySPFResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

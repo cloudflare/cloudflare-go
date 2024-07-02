@@ -37,8 +37,8 @@ func NewBGPIPService(opts ...option.RequestOption) (r *BGPIPService) {
 // Gets time-series data for the announced IP space count, represented as the
 // number of IPv4 /24s and IPv6 /48s, for a given ASN.
 func (r *BGPIPService) Timeseries(ctx context.Context, query BGPIPTimeseriesParams, opts ...option.RequestOption) (res *BgpipTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BgpipTimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/ips/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

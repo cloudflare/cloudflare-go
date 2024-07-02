@@ -70,8 +70,8 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 // `http://waitingrooms.dev/preview/<uuid>?waitTime=50` to configure the estimated
 // wait time as 50 minutes.
 func (r *PageService) Preview(ctx context.Context, params PagePreviewParams, opts ...option.RequestOption) (res *PagePreviewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PagePreviewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

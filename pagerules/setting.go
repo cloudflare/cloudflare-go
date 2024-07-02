@@ -37,8 +37,8 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 // Returns a list of settings (and their details) that Page Rules can apply to
 // matching requests.
 func (r *SettingService) List(ctx context.Context, query SettingListParams, opts ...option.RequestOption) (res *[]SettingListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SettingListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -42,8 +42,8 @@ func NewLockdownService(opts ...option.RequestOption) (r *LockdownService) {
 
 // Creates a new Zone Lockdown rule.
 func (r *LockdownService) New(ctx context.Context, zoneIdentifier string, body LockdownNewParams, opts ...option.RequestOption) (res *Lockdown, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LockdownNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -59,8 +59,8 @@ func (r *LockdownService) New(ctx context.Context, zoneIdentifier string, body L
 
 // Updates an existing Zone Lockdown rule.
 func (r *LockdownService) Update(ctx context.Context, zoneIdentifier string, id string, body LockdownUpdateParams, opts ...option.RequestOption) (res *Lockdown, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LockdownUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -82,8 +82,12 @@ func (r *LockdownService) Update(ctx context.Context, zoneIdentifier string, id 
 // parameters.
 func (r *LockdownService) List(ctx context.Context, zoneIdentifier string, query LockdownListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Lockdown], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/lockdowns", zoneIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
@@ -105,8 +109,8 @@ func (r *LockdownService) ListAutoPaging(ctx context.Context, zoneIdentifier str
 
 // Deletes an existing Zone Lockdown rule.
 func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LockdownDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -126,8 +130,8 @@ func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id 
 
 // Fetches the details of a Zone Lockdown rule.
 func (r *LockdownService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *Lockdown, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LockdownGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

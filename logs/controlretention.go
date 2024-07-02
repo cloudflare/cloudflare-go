@@ -36,8 +36,8 @@ func NewControlRetentionService(opts ...option.RequestOption) (r *ControlRetenti
 
 // Updates log retention flag for Logpull API.
 func (r *ControlRetentionService) New(ctx context.Context, zoneIdentifier string, body ControlRetentionNewParams, opts ...option.RequestOption) (res *ControlRetentionNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ControlRetentionNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -53,8 +53,8 @@ func (r *ControlRetentionService) New(ctx context.Context, zoneIdentifier string
 
 // Gets log retention flag for Logpull API.
 func (r *ControlRetentionService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ControlRetentionGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ControlRetentionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

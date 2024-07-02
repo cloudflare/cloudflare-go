@@ -42,8 +42,8 @@ func NewDispatchNamespaceScriptSettingService(opts ...option.RequestOption) (r *
 
 // Patch script metadata, such as bindings
 func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSettingEditParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptSettingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -67,8 +67,8 @@ func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispat
 
 // Get script settings from a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSettingGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptSettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

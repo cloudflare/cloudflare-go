@@ -38,8 +38,8 @@ func NewPrefixDelegationService(opts ...option.RequestOption) (r *PrefixDelegati
 
 // Create a new account delegation for a given IP prefix.
 func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, params PrefixDelegationNewParams, opts ...option.RequestOption) (res *Delegations, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PrefixDelegationNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,16 @@ func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, para
 // List all delegations for a given account IP prefix.
 func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Delegations], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", query.AccountID, prefixID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -82,8 +90,8 @@ func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID s
 
 // Delete an account delegation for a given IP prefix.
 func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, delegationID string, body PrefixDelegationDeleteParams, opts ...option.RequestOption) (res *PrefixDelegationDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PrefixDelegationDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

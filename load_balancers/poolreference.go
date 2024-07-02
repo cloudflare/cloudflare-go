@@ -36,8 +36,8 @@ func NewPoolReferenceService(opts ...option.RequestOption) (r *PoolReferenceServ
 
 // Get the list of resources that reference the provided pool.
 func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query PoolReferenceGetParams, opts ...option.RequestOption) (res *[]PoolReferenceGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PoolReferenceGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -36,8 +36,8 @@ func NewTunnelConnectorService(opts ...option.RequestOption) (r *TunnelConnector
 
 // Fetches connector and connection details for a Cloudflare Tunnel.
 func (r *TunnelConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelConnectorGetParams, opts ...option.RequestOption) (res *Client, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelConnectorGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

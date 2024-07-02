@@ -38,8 +38,8 @@ func NewHTTPAseDeviceTypeService(opts ...option.RequestOption) (r *HTTPAseDevice
 // Get the top autonomous systems (AS), by HTTP traffic, of the requested device
 // type. Values are a percentage out of the total traffic.
 func (r *HTTPAseDeviceTypeService) Get(ctx context.Context, deviceType HTTPAseDeviceTypeGetParamsDeviceType, query HTTPAseDeviceTypeGetParams, opts ...option.RequestOption) (res *HTTPAseDeviceTypeGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseDeviceTypeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/device_type/%v", deviceType)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -50,8 +50,8 @@ func (r *TURNKeyService) New(ctx context.Context, params TURNKeyNewParams, opts 
 
 // Edit details for a single TURN key.
 func (r *TURNKeyService) Update(ctx context.Context, keyID string, params TURNKeyUpdateParams, opts ...option.RequestOption) (res *string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TURNKeyUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -72,8 +72,12 @@ func (r *TURNKeyService) Update(ctx context.Context, keyID string, params TURNKe
 // Lists all TURN keys in the Cloudflare account
 func (r *TURNKeyService) List(ctx context.Context, query TURNKeyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -94,8 +98,8 @@ func (r *TURNKeyService) ListAutoPaging(ctx context.Context, query TURNKeyListPa
 
 // Deletes a TURN key from Cloudflare Calls
 func (r *TURNKeyService) Delete(ctx context.Context, keyID string, body TURNKeyDeleteParams, opts ...option.RequestOption) (res *string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TURNKeyDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -115,8 +119,8 @@ func (r *TURNKeyService) Delete(ctx context.Context, keyID string, body TURNKeyD
 
 // Fetches details for a single TURN key.
 func (r *TURNKeyService) Get(ctx context.Context, keyID string, query TURNKeyGetParams, opts ...option.RequestOption) (res *string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TURNKeyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

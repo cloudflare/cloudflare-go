@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -35,8 +36,16 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 // Fetches all items in a single Zero Trust list.
 func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]GatewayItem], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s/items", query.AccountID, listID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {

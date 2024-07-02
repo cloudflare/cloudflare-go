@@ -42,8 +42,8 @@ func NewAttackLayer3Service(opts ...option.RequestOption) (r *AttackLayer3Servic
 
 // Get attacks change over time by bytes.
 func (r *AttackLayer3Service) Timeseries(ctx context.Context, query AttackLayer3TimeseriesParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

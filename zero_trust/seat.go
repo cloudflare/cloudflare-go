@@ -38,8 +38,8 @@ func NewSeatService(opts ...option.RequestOption) (r *SeatService) {
 // Removes a user from a Zero Trust seat when both `access_seat` and `gateway_seat`
 // are set to false.
 func (r *SeatService) Edit(ctx context.Context, params SeatEditParams, opts ...option.RequestOption) (res *[]Seat, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SeatEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

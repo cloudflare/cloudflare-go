@@ -37,8 +37,8 @@ func NewRiskScoringIntegrationReferenceService(opts ...option.RequestOption) (r 
 
 // Get risk score integration by reference id.
 func (r *RiskScoringIntegrationReferenceService) Get(ctx context.Context, referenceID string, query RiskScoringIntegrationReferenceGetParams, opts ...option.RequestOption) (res *RiskScoringIntegrationReferenceGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationReferenceGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

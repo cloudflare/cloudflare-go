@@ -52,8 +52,8 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 
 // Fetches a predefined DLP profile.
 func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *PredefinedProfile, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPProfilePredefinedGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

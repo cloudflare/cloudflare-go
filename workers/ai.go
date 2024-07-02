@@ -48,8 +48,8 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 // Model specific inputs available in
 // [Cloudflare Docs](https://developers.cloudflare.com/workers-ai/models/).
 func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParams, opts ...option.RequestOption) (res *AIRunResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AIRunResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

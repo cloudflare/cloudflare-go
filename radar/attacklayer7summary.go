@@ -36,8 +36,8 @@ func NewAttackLayer7SummaryService(opts ...option.RequestOption) (r *AttackLayer
 
 // Percentage distribution of mitigation techniques in Layer 7 attacks.
 func (r *AttackLayer7SummaryService) Get(ctx context.Context, query AttackLayer7SummaryGetParams, opts ...option.RequestOption) (res *AttackLayer7SummaryGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7SummaryGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *AttackLayer7SummaryService) Get(ctx context.Context, query AttackLayer7
 
 // Percentage distribution of attacks by http method used.
 func (r *AttackLayer7SummaryService) HTTPMethod(ctx context.Context, query AttackLayer7SummaryHTTPMethodParams, opts ...option.RequestOption) (res *AttackLayer7SummaryHTTPMethodResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7SummaryHTTPMethodResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/summary/http_method"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *AttackLayer7SummaryService) HTTPMethod(ctx context.Context, query Attac
 
 // Percentage distribution of attacks by http version used.
 func (r *AttackLayer7SummaryService) HTTPVersion(ctx context.Context, query AttackLayer7SummaryHTTPVersionParams, opts ...option.RequestOption) (res *AttackLayer7SummaryHTTPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7SummaryHTTPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/summary/http_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *AttackLayer7SummaryService) HTTPVersion(ctx context.Context, query Atta
 
 // Percentage distribution of attacks by ip version used.
 func (r *AttackLayer7SummaryService) IPVersion(ctx context.Context, query AttackLayer7SummaryIPVersionParams, opts ...option.RequestOption) (res *AttackLayer7SummaryIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7SummaryIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *AttackLayer7SummaryService) IPVersion(ctx context.Context, query Attack
 
 // Percentage distribution of attacks by managed rules used.
 func (r *AttackLayer7SummaryService) ManagedRules(ctx context.Context, query AttackLayer7SummaryManagedRulesParams, opts ...option.RequestOption) (res *AttackLayer7SummaryManagedRulesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7SummaryManagedRulesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/summary/managed_rules"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *AttackLayer7SummaryService) ManagedRules(ctx context.Context, query Att
 
 // Percentage distribution of attacks by mitigation product used.
 func (r *AttackLayer7SummaryService) MitigationProduct(ctx context.Context, query AttackLayer7SummaryMitigationProductParams, opts ...option.RequestOption) (res *AttackLayer7SummaryMitigationProductResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7SummaryMitigationProductResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/summary/mitigation_product"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

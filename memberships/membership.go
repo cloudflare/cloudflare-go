@@ -40,8 +40,8 @@ func NewMembershipService(opts ...option.RequestOption) (r *MembershipService) {
 
 // Accept or reject this account invitation.
 func (r *MembershipService) Update(ctx context.Context, membershipID string, body MembershipUpdateParams, opts ...option.RequestOption) (res *MembershipUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MembershipUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if membershipID == "" {
 		err = errors.New("missing required membership_id parameter")
 		return
@@ -58,7 +58,7 @@ func (r *MembershipService) Update(ctx context.Context, membershipID string, bod
 // List memberships of accounts the user can access.
 func (r *MembershipService) List(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Membership], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "memberships"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -80,8 +80,8 @@ func (r *MembershipService) ListAutoPaging(ctx context.Context, query Membership
 
 // Remove the associated member from an account.
 func (r *MembershipService) Delete(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *MembershipDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MembershipDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if membershipID == "" {
 		err = errors.New("missing required membership_id parameter")
 		return
@@ -97,8 +97,8 @@ func (r *MembershipService) Delete(ctx context.Context, membershipID string, opt
 
 // Get a specific membership.
 func (r *MembershipService) Get(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *MembershipGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MembershipGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if membershipID == "" {
 		err = errors.New("missing required membership_id parameter")
 		return

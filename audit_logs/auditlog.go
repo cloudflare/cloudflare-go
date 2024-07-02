@@ -4,6 +4,7 @@ package audit_logs
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,8 +41,12 @@ func NewAuditLogService(opts ...option.RequestOption) (r *AuditLogService) {
 // change, on which zone, and the timeframe of the change.
 func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.AuditLog], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/audit_logs", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {

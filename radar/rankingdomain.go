@@ -40,8 +40,8 @@ func NewRankingDomainService(opts ...option.RequestOption) (r *RankingDomainServ
 // thousand, top one million, etc.. These are available through Radar datasets
 // endpoints.
 func (r *RankingDomainService) Get(ctx context.Context, domain string, query RankingDomainGetParams, opts ...option.RequestOption) (res *RankingDomainGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RankingDomainGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if domain == "" {
 		err = errors.New("missing required domain parameter")
 		return

@@ -38,8 +38,8 @@ func NewNamespaceMetadataService(opts ...option.RequestOption) (r *NamespaceMeta
 // URL-encoding to use special characters (for example, `:`, `!`, `%`) in the key
 // name.
 func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceMetadataGetParams, opts ...option.RequestOption) (res *NamespaceMetadataGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceMetadataGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

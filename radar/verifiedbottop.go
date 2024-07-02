@@ -36,8 +36,8 @@ func NewVerifiedBotTopService(opts ...option.RequestOption) (r *VerifiedBotTopSe
 
 // Get top verified bots by HTTP requests, with owner and category.
 func (r *VerifiedBotTopService) Bots(ctx context.Context, query VerifiedBotTopBotsParams, opts ...option.RequestOption) (res *VerifiedBotTopBotsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env VerifiedBotTopBotsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/verified_bots/top/bots"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,8 +50,8 @@ func (r *VerifiedBotTopService) Bots(ctx context.Context, query VerifiedBotTopBo
 // Get top verified bot categories by HTTP requests, along with their corresponding
 // percentage, over the total verified bot HTTP requests.
 func (r *VerifiedBotTopService) Categories(ctx context.Context, query VerifiedBotTopCategoriesParams, opts ...option.RequestOption) (res *VerifiedBotTopCategoriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env VerifiedBotTopCategoriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/verified_bots/top/categories"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

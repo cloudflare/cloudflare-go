@@ -4,6 +4,7 @@ package addressing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -39,8 +40,12 @@ func NewServiceService(opts ...option.RequestOption) (r *ServiceService) {
 // the Cloudflare network, and their service IDs.
 func (r *ServiceService) List(ctx context.Context, query ServiceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ServiceListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/services", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {

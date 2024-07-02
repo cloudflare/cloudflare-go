@@ -36,8 +36,8 @@ func NewAttackSurfaceReportIssueTypeService(opts ...option.RequestOption) (r *At
 
 // Get Security Center Issues Types
 func (r *AttackSurfaceReportIssueTypeService) Get(ctx context.Context, query AttackSurfaceReportIssueTypeGetParams, opts ...option.RequestOption) (res *[]string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueTypeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

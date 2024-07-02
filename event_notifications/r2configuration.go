@@ -39,8 +39,8 @@ func NewR2ConfigurationService(opts ...option.RequestOption) (r *R2Configuration
 // Returns all notification rules for each queue for which bucket notifications are
 // produced.
 func (r *R2ConfigurationService) Get(ctx context.Context, bucketName string, query R2ConfigurationGetParams, opts ...option.RequestOption) (res *R2ConfigurationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env R2ConfigurationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

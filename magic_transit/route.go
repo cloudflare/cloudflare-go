@@ -38,8 +38,8 @@ func NewRouteService(opts ...option.RequestOption) (r *RouteService) {
 // Creates a new Magic static route. Use `?validate_only=true` as an optional query
 // parameter to run validation only without persisting changes.
 func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RouteNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 // Update a specific Magic static route. Use `?validate_only=true` as an optional
 // query parameter to run validation only without persisting changes.
 func (r *RouteService) Update(ctx context.Context, routeID string, params RouteUpdateParams, opts ...option.RequestOption) (res *RouteUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RouteUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,8 +77,8 @@ func (r *RouteService) Update(ctx context.Context, routeID string, params RouteU
 
 // List all Magic static routes.
 func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *RouteListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RouteListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -94,8 +94,8 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 
 // Disable and remove a specific Magic static route.
 func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -115,8 +115,8 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 
 // Delete multiple Magic static routes.
 func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ...option.RequestOption) (res *RouteEmptyResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RouteEmptyResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -132,8 +132,8 @@ func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ..
 
 // Get a specific Magic static route.
 func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetParams, opts ...option.RequestOption) (res *RouteGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RouteGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

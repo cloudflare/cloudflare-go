@@ -39,8 +39,8 @@ func NewDevicePostureIntegrationService(opts ...option.RequestOption) (r *Device
 
 // Create a new device posture integration.
 func (r *DevicePostureIntegrationService) New(ctx context.Context, params DevicePostureIntegrationNewParams, opts ...option.RequestOption) (res *Integration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,12 @@ func (r *DevicePostureIntegrationService) New(ctx context.Context, params Device
 // Fetches the list of device posture integrations for an account.
 func (r *DevicePostureIntegrationService) List(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Integration], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -79,8 +83,8 @@ func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, qu
 
 // Delete a configured device posture integration.
 func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, body DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -100,8 +104,8 @@ func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integratio
 
 // Updates a configured device posture integration.
 func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationID string, params DevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *Integration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -121,8 +125,8 @@ func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationI
 
 // Fetches details for a single device posture integration.
 func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID string, query DevicePostureIntegrationGetParams, opts ...option.RequestOption) (res *Integration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

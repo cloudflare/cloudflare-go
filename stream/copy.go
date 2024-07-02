@@ -37,8 +37,8 @@ func NewCopyService(opts ...option.RequestOption) (r *CopyService) {
 
 // Uploads a video to Stream from a provided URL.
 func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...option.RequestOption) (res *Video, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CopyNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

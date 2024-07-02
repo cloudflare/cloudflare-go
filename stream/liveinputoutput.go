@@ -39,8 +39,8 @@ func NewLiveInputOutputService(opts ...option.RequestOption) (r *LiveInputOutput
 // other RTMP or SRT destinations. Outputs are always linked to a specific live
 // input — one live input can have many outputs.
 func (r *LiveInputOutputService) New(ctx context.Context, liveInputIdentifier string, params LiveInputOutputNewParams, opts ...option.RequestOption) (res *Output, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LiveInputOutputNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,8 @@ func (r *LiveInputOutputService) New(ctx context.Context, liveInputIdentifier st
 
 // Updates the state of an output.
 func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params LiveInputOutputUpdateParams, opts ...option.RequestOption) (res *Output, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LiveInputOutputUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -86,8 +86,16 @@ func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier
 // Retrieves all outputs associated with a specified live input.
 func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Output], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if liveInputIdentifier == "" {
+		err = errors.New("missing required live_input_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", query.AccountID, liveInputIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {

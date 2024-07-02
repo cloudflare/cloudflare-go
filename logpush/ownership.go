@@ -36,8 +36,8 @@ func NewOwnershipService(opts ...option.RequestOption) (r *OwnershipService) {
 
 // Gets a new ownership challenge sent to your destination.
 func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, opts ...option.RequestOption) (res *OwnershipNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OwnershipNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -67,8 +67,8 @@ func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, o
 
 // Validates ownership challenge of the destination.
 func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *OwnershipValidation, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OwnershipValidateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {

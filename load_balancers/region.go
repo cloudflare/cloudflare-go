@@ -40,8 +40,8 @@ func NewRegionService(opts ...option.RequestOption) (r *RegionService) {
 
 // List all region mappings.
 func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *RegionListResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RegionListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *RegionService) List(ctx context.Context, params RegionListParams, opts 
 
 // Get a single region mapping.
 func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionID, query RegionGetParams, opts ...option.RequestOption) (res *RegionGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RegionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

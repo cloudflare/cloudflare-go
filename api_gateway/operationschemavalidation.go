@@ -51,8 +51,8 @@ func (r *OperationSchemaValidationService) Update(ctx context.Context, operation
 
 // Updates multiple operation-level schema validation settings on the zone
 func (r *OperationSchemaValidationService) Edit(ctx context.Context, params OperationSchemaValidationEditParams, opts ...option.RequestOption) (res *SettingsMultipleRequest, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OperationSchemaValidationEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

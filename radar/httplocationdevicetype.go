@@ -38,8 +38,8 @@ func NewHTTPLocationDeviceTypeService(opts ...option.RequestOption) (r *HTTPLoca
 // Get the top locations, by HTTP traffic, of the requested device type. Values are
 // a percentage out of the total traffic.
 func (r *HTTPLocationDeviceTypeService) Get(ctx context.Context, deviceType HTTPLocationDeviceTypeGetParamsDeviceType, query HTTPLocationDeviceTypeGetParams, opts ...option.RequestOption) (res *HTTPLocationDeviceTypeGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationDeviceTypeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/device_type/%v", deviceType)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

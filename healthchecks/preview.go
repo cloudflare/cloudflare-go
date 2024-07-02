@@ -36,8 +36,8 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 
 // Create a new preview health check.
 func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PreviewNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts 
 
 // Delete a health check.
 func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body PreviewDeleteParams, opts ...option.RequestOption) (res *PreviewDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PreviewDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -74,8 +74,8 @@ func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body 
 
 // Fetch a single configured health check preview.
 func (r *PreviewService) Get(ctx context.Context, healthcheckID string, query PreviewGetParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

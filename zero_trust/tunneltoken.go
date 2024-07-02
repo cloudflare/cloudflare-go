@@ -38,8 +38,8 @@ func NewTunnelTokenService(opts ...option.RequestOption) (r *TunnelTokenService)
 
 // Gets the token used to associate cloudflared with a specific tunnel.
 func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query TunnelTokenGetParams, opts ...option.RequestOption) (res *TunnelTokenGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelTokenGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

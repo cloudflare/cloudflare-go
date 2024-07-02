@@ -36,8 +36,8 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 
 // Lists default sampling, router IPs, and rules for account.
 func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigFullGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

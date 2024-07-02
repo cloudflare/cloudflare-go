@@ -36,8 +36,8 @@ func NewAnnotationOutageService(opts ...option.RequestOption) (r *AnnotationOuta
 
 // Get latest Internet outages and anomalies.
 func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutageGetParams, opts ...option.RequestOption) (res *AnnotationOutageGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnnotationOutageGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/annotations/outages"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutag
 
 // Get the number of outages for locations.
 func (r *AnnotationOutageService) Locations(ctx context.Context, query AnnotationOutageLocationsParams, opts ...option.RequestOption) (res *AnnotationOutageLocationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnnotationOutageLocationsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/annotations/outages/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

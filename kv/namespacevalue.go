@@ -44,8 +44,8 @@ func NewNamespaceValueService(opts ...option.RequestOption) (r *NamespaceValueSe
 // `expiration` nor `expiration_ttl` is specified, the key-value pair will never
 // expire. If both are set, `expiration_ttl` is used and `expiration` is ignored.
 func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params NamespaceValueUpdateParams, opts ...option.RequestOption) (res *NamespaceValueUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceValueUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -70,8 +70,8 @@ func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, 
 // Remove a KV pair from the namespace. Use URL-encoding to use special characters
 // (for example, `:`, `!`, `%`) in the key name.
 func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, keyName string, body NamespaceValueDeleteParams, opts ...option.RequestOption) (res *NamespaceValueDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceValueDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

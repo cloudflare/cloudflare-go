@@ -37,8 +37,8 @@ func NewBGPTopAseService(opts ...option.RequestOption) (r *BGPTopAseService) {
 // Get the top autonomous systems (AS) by BGP updates (announcements only). Values
 // are a percentage out of the total updates.
 func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, opts ...option.RequestOption) (res *BGPTopAseGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPTopAseGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,8 +52,8 @@ func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, op
 // announced prefixes count. The data comes from public BGP MRT data archives and
 // updates every 2 hours.
 func (r *BGPTopAseService) Prefixes(ctx context.Context, query BGPTopAsePrefixesParams, opts ...option.RequestOption) (res *BGPTopAsePrefixesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPTopAsePrefixesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/top/ases/prefixes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

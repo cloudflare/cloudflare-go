@@ -38,8 +38,8 @@ func NewHTTPLocationIPVersionService(opts ...option.RequestOption) (r *HTTPLocat
 // Get the top locations, by HTTP traffic, of the requested IP protocol version.
 // Values are a percentage out of the total traffic.
 func (r *HTTPLocationIPVersionService) Get(ctx context.Context, ipVersion HTTPLocationIPVersionGetParamsIPVersion, query HTTPLocationIPVersionGetParams, opts ...option.RequestOption) (res *HTTPLocationIPVersionGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationIPVersionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/ip_version/%v", ipVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

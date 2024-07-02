@@ -39,8 +39,12 @@ func NewDiscoveryOperationService(opts ...option.RequestOption) (r *DiscoveryOpe
 // Retrieve the most up to date view of discovered operations
 func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DiscoveryOperation], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/api_gateway/discovery/operations", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -61,8 +65,8 @@ func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params D
 
 // Update the `state` on a discovered operation
 func (r *DiscoveryOperationService) Edit(ctx context.Context, operationID string, params DiscoveryOperationEditParams, opts ...option.RequestOption) (res *DiscoveryOperationEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DiscoveryOperationEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

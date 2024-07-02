@@ -36,8 +36,8 @@ func NewAS112TimeseriesGroupService(opts ...option.RequestOption) (r *AS112Times
 
 // Percentage distribution of DNS AS112 queries by DNSSEC support over time.
 func (r *AS112TimeseriesGroupService) DNSSEC(ctx context.Context, query AS112TimeseriesGroupDNSSECParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupDNSSECResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TimeseriesGroupDNSSECResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/timeseries_groups/dnssec"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *AS112TimeseriesGroupService) DNSSEC(ctx context.Context, query AS112Tim
 
 // Percentage distribution of AS112 DNS queries by EDNS support over time.
 func (r *AS112TimeseriesGroupService) Edns(ctx context.Context, query AS112TimeseriesGroupEdnsParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupEdnsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TimeseriesGroupEdnsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/timeseries_groups/edns"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *AS112TimeseriesGroupService) Edns(ctx context.Context, query AS112Times
 
 // Percentage distribution of AS112 DNS queries by IP Version over time.
 func (r *AS112TimeseriesGroupService) IPVersion(ctx context.Context, query AS112TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TimeseriesGroupIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *AS112TimeseriesGroupService) IPVersion(ctx context.Context, query AS112
 
 // Percentage distribution of AS112 dns requests classified per Protocol over time.
 func (r *AS112TimeseriesGroupService) Protocol(ctx context.Context, query AS112TimeseriesGroupProtocolParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupProtocolResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TimeseriesGroupProtocolResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/timeseries_groups/protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *AS112TimeseriesGroupService) Protocol(ctx context.Context, query AS112T
 
 // Percentage distribution of AS112 DNS queries by Query Type over time.
 func (r *AS112TimeseriesGroupService) QueryType(ctx context.Context, query AS112TimeseriesGroupQueryTypeParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupQueryTypeResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TimeseriesGroupQueryTypeResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/timeseries_groups/query_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -102,8 +102,8 @@ func (r *AS112TimeseriesGroupService) QueryType(ctx context.Context, query AS112
 // Percentage distribution of AS112 dns requests classified per Response Codes over
 // time.
 func (r *AS112TimeseriesGroupService) ResponseCodes(ctx context.Context, query AS112TimeseriesGroupResponseCodesParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupResponseCodesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TimeseriesGroupResponseCodesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/timeseries_groups/response_codes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

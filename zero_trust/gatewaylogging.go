@@ -36,8 +36,8 @@ func NewGatewayLoggingService(opts ...option.RequestOption) (r *GatewayLoggingSe
 
 // Updates logging settings for the current Zero Trust account.
 func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggingUpdateParams, opts ...option.RequestOption) (res *LoggingSetting, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggin
 
 // Fetches the current logging settings for Zero Trust account.
 func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGetParams, opts ...option.RequestOption) (res *LoggingSetting, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -41,8 +41,8 @@ func NewDevicePostureService(opts ...option.RequestOption) (r *DevicePostureServ
 
 // Creates a new device posture rule.
 func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePostureNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,8 +58,8 @@ func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewP
 
 // Updates a device posture rule.
 func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params DevicePostureUpdateParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePostureUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -80,8 +80,12 @@ func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params
 // Fetches device posture rules for a Zero Trust account.
 func (r *DevicePostureService) List(ctx context.Context, query DevicePostureListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DevicePostureRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/posture", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -102,8 +106,8 @@ func (r *DevicePostureService) ListAutoPaging(ctx context.Context, query DeviceP
 
 // Deletes a device posture rule.
 func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body DevicePostureDeleteParams, opts ...option.RequestOption) (res *DevicePostureDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePostureDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -123,8 +127,8 @@ func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body D
 
 // Fetches a single device posture rule.
 func (r *DevicePostureService) Get(ctx context.Context, ruleID string, query DevicePostureGetParams, opts ...option.RequestOption) (res *DevicePostureRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePostureGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

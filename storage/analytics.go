@@ -39,8 +39,8 @@ func NewAnalyticsService(opts ...option.RequestOption) (r *AnalyticsService) {
 
 // Retrieves Workers KV request metrics for the given account.
 func (r *AnalyticsService) List(ctx context.Context, params AnalyticsListParams, opts ...option.RequestOption) (res *Schema, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnalyticsListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *AnalyticsService) List(ctx context.Context, params AnalyticsListParams,
 
 // Retrieves Workers KV stored data metrics for the given account.
 func (r *AnalyticsService) Stored(ctx context.Context, params AnalyticsStoredParams, opts ...option.RequestOption) (res *Components, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnalyticsStoredResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

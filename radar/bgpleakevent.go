@@ -38,7 +38,7 @@ func NewBGPLeakEventService(opts ...option.RequestOption) (r *BGPLeakEventServic
 // Get the BGP route leak events (Beta).
 func (r *BGPLeakEventService) List(ctx context.Context, query BGPLeakEventListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[BGPLeakEventListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "radar/bgp/leaks/events"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)

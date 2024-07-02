@@ -35,8 +35,8 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 
 // Show the DNS records needed to configure your Email Routing zone.
 func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

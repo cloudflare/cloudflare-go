@@ -38,8 +38,8 @@ func NewHTTPAseTLSVersionService(opts ...option.RequestOption) (r *HTTPAseTLSVer
 // Get the top autonomous systems (AS), by HTTP traffic, of the requested TLS
 // protocol version. Values are a percentage out of the total traffic.
 func (r *HTTPAseTLSVersionService) Get(ctx context.Context, tlsVersion HTTPAseTLSVersionGetParamsTLSVersion, query HTTPAseTLSVersionGetParams, opts ...option.RequestOption) (res *HTTPAseTLSVersionGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseTLSVersionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/tls_version/%v", tlsVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

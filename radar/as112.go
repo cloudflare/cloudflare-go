@@ -42,8 +42,8 @@ func NewAS112Service(opts ...option.RequestOption) (r *AS112Service) {
 
 // Get AS112 queries change over time.
 func (r *AS112Service) Timeseries(ctx context.Context, query AS112TimeseriesParams, opts ...option.RequestOption) (res *AS112TimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

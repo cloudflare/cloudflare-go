@@ -39,8 +39,8 @@ func NewHostnameIPFSUniversalPathContentListService(opts ...option.RequestOption
 
 // Update IPFS Universal Path Gateway Content List
 func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListUpdateParams, opts ...option.RequestOption) (res *ContentList, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -60,8 +60,8 @@ func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context
 
 // IPFS Universal Path Gateway Content List Details
 func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ContentList, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

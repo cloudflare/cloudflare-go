@@ -36,8 +36,8 @@ func NewCertificatePackOrderService(opts ...option.RequestOption) (r *Certificat
 
 // For a given zone, order an advanced certificate pack.
 func (r *CertificatePackOrderService) New(ctx context.Context, params CertificatePackOrderNewParams, opts ...option.RequestOption) (res *CertificatePackOrderNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CertificatePackOrderNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

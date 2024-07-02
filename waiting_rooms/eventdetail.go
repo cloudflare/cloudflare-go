@@ -37,8 +37,8 @@ func NewEventDetailService(opts ...option.RequestOption) (r *EventDetailService)
 // Previews an event's configuration as if it was active. Inherited fields from the
 // waiting room will be displayed with their current values.
 func (r *EventDetailService) Get(ctx context.Context, waitingRoomID string, eventID string, query EventDetailGetParams, opts ...option.RequestOption) (res *EventDetailGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EventDetailGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

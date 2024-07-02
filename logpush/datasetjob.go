@@ -36,8 +36,8 @@ func NewDatasetJobService(opts ...option.RequestOption) (r *DatasetJobService) {
 
 // Lists Logpush jobs for an account or zone for a dataset.
 func (r *DatasetJobService) Get(ctx context.Context, datasetID string, query DatasetJobGetParams, opts ...option.RequestOption) (res *[]LogpushJob, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatasetJobGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

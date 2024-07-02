@@ -36,8 +36,8 @@ func NewScriptScheduleService(opts ...option.RequestOption) (r *ScriptScheduleSe
 
 // Updates Cron Triggers for a Worker.
 func (r *ScriptScheduleService) Update(ctx context.Context, scriptName string, params ScriptScheduleUpdateParams, opts ...option.RequestOption) (res *ScriptScheduleUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScriptScheduleUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *ScriptScheduleService) Update(ctx context.Context, scriptName string, p
 
 // Fetches Cron Triggers for a Worker.
 func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, query ScriptScheduleGetParams, opts ...option.RequestOption) (res *ScriptScheduleGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScriptScheduleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

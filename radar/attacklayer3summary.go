@@ -36,8 +36,8 @@ func NewAttackLayer3SummaryService(opts ...option.RequestOption) (r *AttackLayer
 
 // Percentage distribution of attacks by bitrate.
 func (r *AttackLayer3SummaryService) Bitrate(ctx context.Context, query AttackLayer3SummaryBitrateParams, opts ...option.RequestOption) (res *AttackLayer3SummaryBitrateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3SummaryBitrateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/summary/bitrate"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *AttackLayer3SummaryService) Bitrate(ctx context.Context, query AttackLa
 
 // Percentage distribution of attacks by duration.
 func (r *AttackLayer3SummaryService) Duration(ctx context.Context, query AttackLayer3SummaryDurationParams, opts ...option.RequestOption) (res *AttackLayer3SummaryDurationResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3SummaryDurationResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/summary/duration"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -63,8 +63,8 @@ func (r *AttackLayer3SummaryService) Duration(ctx context.Context, query AttackL
 // Percentage distribution of network protocols in layer 3/4 attacks over a given
 // time period.
 func (r *AttackLayer3SummaryService) Get(ctx context.Context, query AttackLayer3SummaryGetParams, opts ...option.RequestOption) (res *AttackLayer3SummaryGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3SummaryGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -76,8 +76,8 @@ func (r *AttackLayer3SummaryService) Get(ctx context.Context, query AttackLayer3
 
 // Percentage distribution of attacks by ip version used.
 func (r *AttackLayer3SummaryService) IPVersion(ctx context.Context, query AttackLayer3SummaryIPVersionParams, opts ...option.RequestOption) (res *AttackLayer3SummaryIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3SummaryIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -89,8 +89,8 @@ func (r *AttackLayer3SummaryService) IPVersion(ctx context.Context, query Attack
 
 // Percentage distribution of attacks by protocol used.
 func (r *AttackLayer3SummaryService) Protocol(ctx context.Context, query AttackLayer3SummaryProtocolParams, opts ...option.RequestOption) (res *AttackLayer3SummaryProtocolResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3SummaryProtocolResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/summary/protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -102,8 +102,8 @@ func (r *AttackLayer3SummaryService) Protocol(ctx context.Context, query AttackL
 
 // Percentage distribution of attacks by vector.
 func (r *AttackLayer3SummaryService) Vector(ctx context.Context, query AttackLayer3SummaryVectorParams, opts ...option.RequestOption) (res *AttackLayer3SummaryVectorResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3SummaryVectorResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/summary/vector"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

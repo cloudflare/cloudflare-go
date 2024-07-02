@@ -39,8 +39,12 @@ func NewPermissionGroupService(opts ...option.RequestOption) (r *PermissionGroup
 // List all the permissions groups for an account.
 func (r *PermissionGroupService) List(ctx context.Context, params PermissionGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PermissionGroupListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/iam/permission_groups", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {

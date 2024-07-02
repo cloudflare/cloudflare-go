@@ -38,8 +38,8 @@ func NewDispatchNamespaceScriptBindingService(opts ...option.RequestOption) (r *
 // Fetch script bindings from a script uploaded to a Workers for Platforms
 // namespace.
 func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *[]workers.Binding, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptBindingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

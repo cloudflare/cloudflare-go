@@ -38,8 +38,8 @@ func NewHTTPAseBrowserFamilyService(opts ...option.RequestOption) (r *HTTPAseBro
 // Get the top autonomous systems (AS), by HTTP traffic, of the requested browser
 // family. Values are a percentage out of the total traffic.
 func (r *HTTPAseBrowserFamilyService) Get(ctx context.Context, browserFamily HTTPAseBrowserFamilyGetParamsBrowserFamily, query HTTPAseBrowserFamilyGetParams, opts ...option.RequestOption) (res *HTTPAseBrowserFamilyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseBrowserFamilyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/browser_family/%v", browserFamily)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

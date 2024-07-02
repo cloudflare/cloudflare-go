@@ -37,8 +37,8 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 
 // Retrieve operations and features as OpenAPI schemas
 func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *SchemaListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SchemaListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -36,8 +36,8 @@ func NewRecommendationService(opts ...option.RequestOption) (r *RecommendationSe
 
 // Retrieve the SSL/TLS Recommender's recommendation for a zone.
 func (r *RecommendationService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *RecommendationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecommendationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

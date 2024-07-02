@@ -39,8 +39,8 @@ func NewAudioTrackService(opts ...option.RequestOption) (r *AudioTrackService) {
 // Deletes additional audio tracks on a video. Deleting a default audio track is
 // not allowed. You must assign another audio track as default prior to deletion.
 func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audioIdentifier string, body AudioTrackDeleteParams, opts ...option.RequestOption) (res *AudioTrackDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AudioTrackDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -64,8 +64,8 @@ func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audio
 
 // Adds an additional audio track to a video using the provided audio track URL.
 func (r *AudioTrackService) Copy(ctx context.Context, identifier string, params AudioTrackCopyParams, opts ...option.RequestOption) (res *Audio, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AudioTrackCopyResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -87,8 +87,8 @@ func (r *AudioTrackService) Copy(ctx context.Context, identifier string, params 
 // track to `true` will mark all other audio tracks on the video default status to
 // `false`.
 func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioIdentifier string, params AudioTrackEditParams, opts ...option.RequestOption) (res *Audio, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AudioTrackEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -113,8 +113,8 @@ func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioId
 // Lists additional audio tracks on a video. Note this API will not return
 // information for audio attached to the video upload.
 func (r *AudioTrackService) Get(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) (res *[]Audio, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AudioTrackGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

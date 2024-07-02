@@ -36,8 +36,8 @@ func NewForceAXFRService(opts ...option.RequestOption) (r *ForceAXFRService) {
 
 // Sends AXFR zone transfer request to primary nameserver(s).
 func (r *ForceAXFRService) New(ctx context.Context, params ForceAXFRNewParams, opts ...option.RequestOption) (res *ForceAXFR, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ForceAXFRNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

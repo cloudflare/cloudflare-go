@@ -42,8 +42,8 @@ func NewWARPConnectorService(opts ...option.RequestOption) (r *WARPConnectorServ
 
 // Creates a new Warp Connector Tunnel in an account.
 func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewParams, opts ...option.RequestOption) (res *WARPConnectorNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,12 @@ func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewP
 // Lists and filters Warp Connector Tunnels in an account.
 func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WARPConnectorListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/warp_connector", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -82,8 +86,8 @@ func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPCo
 
 // Deletes a Warp Connector Tunnel from an account.
 func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, body WARPConnectorDeleteParams, opts ...option.RequestOption) (res *WARPConnectorDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -103,8 +107,8 @@ func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, body
 
 // Updates an existing Warp Connector Tunnel.
 func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params WARPConnectorEditParams, opts ...option.RequestOption) (res *WARPConnectorEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -124,8 +128,8 @@ func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params
 
 // Fetches a single Warp Connector Tunnel.
 func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query WARPConnectorGetParams, opts ...option.RequestOption) (res *WARPConnectorGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -146,8 +150,8 @@ func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query W
 // Gets the token used to associate warp device with a specific Warp Connector
 // tunnel.
 func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query WARPConnectorTokenParams, opts ...option.RequestOption) (res *WARPConnectorTokenResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorTokenResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

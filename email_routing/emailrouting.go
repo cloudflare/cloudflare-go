@@ -43,8 +43,8 @@ func NewEmailRoutingService(opts ...option.RequestOption) (r *EmailRoutingServic
 // Disable your Email Routing zone. Also removes additional MX records previously
 // required for Email Routing to work.
 func (r *EmailRoutingService) Disable(ctx context.Context, zoneIdentifier string, body EmailRoutingDisableParams, opts ...option.RequestOption) (res *Settings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingDisableResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -60,8 +60,8 @@ func (r *EmailRoutingService) Disable(ctx context.Context, zoneIdentifier string
 
 // Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
 func (r *EmailRoutingService) Enable(ctx context.Context, zoneIdentifier string, body EmailRoutingEnableParams, opts ...option.RequestOption) (res *Settings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingEnableResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -77,8 +77,8 @@ func (r *EmailRoutingService) Enable(ctx context.Context, zoneIdentifier string,
 
 // Get information about the settings for your Email Routing zone.
 func (r *EmailRoutingService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *Settings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

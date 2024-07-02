@@ -48,8 +48,8 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 // and the domain is not already pointing to the Managed CNAME host, the PATCH
 // method must be used once it is (to complete validation).
 func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNewParams, opts ...option.RequestOption) (res *CustomHostnameNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomHostnameNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -66,8 +66,12 @@ func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNe
 // List, search, sort, and filter all of your custom hostnames.
 func (r *CustomHostnameService) List(ctx context.Context, params CustomHostnameListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CustomHostnameListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -107,8 +111,8 @@ func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID str
 // control validation (DCV). Can also be used to change validation type, e.g., from
 // 'http' to 'email'.
 func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID string, params CustomHostnameEditParams, opts ...option.RequestOption) (res *CustomHostnameEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomHostnameEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -128,8 +132,8 @@ func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID strin
 
 // Custom Hostname Details
 func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string, query CustomHostnameGetParams, opts ...option.RequestOption) (res *CustomHostnameGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomHostnameGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

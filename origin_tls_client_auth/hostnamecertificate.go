@@ -39,8 +39,8 @@ func NewHostnameCertificateService(opts ...option.RequestOption) (r *HostnameCer
 // Upload a certificate to be used for client authentication on a hostname. 10
 // hostname certificates per zone are allowed.
 func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCertificateNewParams, opts ...option.RequestOption) (res *HostnameCertificateNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -57,8 +57,12 @@ func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCer
 // List Certificates
 func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AuthenticatedOriginPull], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -79,8 +83,8 @@ func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query H
 
 // Delete Hostname Client Certificate
 func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, body HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *HostnameCertificateDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -100,8 +104,8 @@ func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID s
 
 // Get the certificate by ID to be used for client authentication on a hostname.
 func (r *HostnameCertificateService) Get(ctx context.Context, certificateID string, query HostnameCertificateGetParams, opts ...option.RequestOption) (res *HostnameCertificateGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

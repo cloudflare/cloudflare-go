@@ -37,8 +37,8 @@ func NewACLService(opts ...option.RequestOption) (r *ACLService) {
 
 // Create ACL.
 func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ACLNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,8 +54,8 @@ func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...optio
 
 // Modify ACL.
 func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ACLUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -76,8 +76,12 @@ func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateP
 // List ACLs.
 func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ACL], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -98,8 +102,8 @@ func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, op
 
 // Delete ACL.
 func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ACLDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -119,8 +123,8 @@ func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeletePar
 
 // Get ACL.
 func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ACLGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

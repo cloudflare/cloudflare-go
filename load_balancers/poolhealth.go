@@ -39,8 +39,8 @@ func NewPoolHealthService(opts ...option.RequestOption) (r *PoolHealthService) {
 // Preview pool health using provided monitor details. The returned preview_id can
 // be used in the preview endpoint to retrieve the results.
 func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolHealthNewParams, opts ...option.RequestOption) (res *PoolHealthNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PoolHealthNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,8 @@ func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolH
 
 // Fetch the latest pool health status for a single pool.
 func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHealthGetParams, opts ...option.RequestOption) (res *PoolHealthGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PoolHealthGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

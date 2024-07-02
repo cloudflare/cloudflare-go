@@ -37,8 +37,8 @@ func NewDirectUploadService(opts ...option.RequestOption) (r *DirectUploadServic
 
 // Creates a direct upload that allows video uploads without an API key.
 func (r *DirectUploadService) New(ctx context.Context, params DirectUploadNewParams, opts ...option.RequestOption) (res *DirectUploadNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DirectUploadNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

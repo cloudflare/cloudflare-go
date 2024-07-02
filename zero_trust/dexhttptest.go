@@ -41,8 +41,8 @@ func NewDEXHTTPTestService(opts ...option.RequestOption) (r *DEXHTTPTestService)
 // Get test details and aggregate performance metrics for an http test for a given
 // time period between 1 hour and 7 days.
 func (r *DEXHTTPTestService) Get(ctx context.Context, testID string, params DEXHTTPTestGetParams, opts ...option.RequestOption) (res *HTTPDetails, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DexhttpTestGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

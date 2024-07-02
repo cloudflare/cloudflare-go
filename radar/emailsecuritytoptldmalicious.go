@@ -37,8 +37,8 @@ func NewEmailSecurityTopTldMaliciousService(opts ...option.RequestOption) (r *Em
 
 // Get the TLDs by emails classified as malicious or not.
 func (r *EmailSecurityTopTldMaliciousService) Get(ctx context.Context, malicious EmailSecurityTopTldMaliciousGetParamsMalicious, query EmailSecurityTopTldMaliciousGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldMaliciousGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTopTldMaliciousGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/email/security/top/tlds/malicious/%v", malicious)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

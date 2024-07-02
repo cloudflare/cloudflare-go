@@ -38,8 +38,8 @@ func NewProjectDeploymentHistoryLogService(opts ...option.RequestOption) (r *Pro
 
 // Fetch deployment logs for a project.
 func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *ProjectDeploymentHistoryLogGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentHistoryLogGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

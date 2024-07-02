@@ -37,8 +37,8 @@ func NewTemporaryCredentialService(opts ...option.RequestOption) (r *TemporaryCr
 // Creates temporary access credentials on a bucket that can be optionally scoped
 // to prefixes or objects.
 func (r *TemporaryCredentialService) New(ctx context.Context, params TemporaryCredentialNewParams, opts ...option.RequestOption) (res *TemporaryCredentialNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TemporaryCredentialNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

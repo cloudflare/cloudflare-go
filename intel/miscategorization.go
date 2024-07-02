@@ -38,8 +38,8 @@ func NewMiscategorizationService(opts ...option.RequestOption) (r *Miscategoriza
 
 // Create Miscategorization
 func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *MiscategorizationNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MiscategorizationNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

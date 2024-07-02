@@ -53,8 +53,8 @@ func NewHTTPLocationService(opts ...option.RequestOption) (r *HTTPLocationServic
 // Get the top locations by HTTP traffic. Values are a percentage out of the total
 // traffic.
 func (r *HTTPLocationService) Get(ctx context.Context, query HTTPLocationGetParams, opts ...option.RequestOption) (res *HTTPLocationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

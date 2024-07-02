@@ -42,7 +42,7 @@ func NewVersionService(opts ...option.RequestOption) (r *VersionService) {
 // Fetches the versions of an account or zone ruleset.
 func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[VersionListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -61,6 +61,10 @@ func (r *VersionService) List(ctx context.Context, rulesetID string, query Versi
 	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions", accountOrZone, accountOrZoneID, rulesetID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -117,8 +121,8 @@ func (r *VersionService) Delete(ctx context.Context, rulesetID string, rulesetVe
 
 // Fetches a specific version of an account or zone ruleset.
 func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersion string, query VersionGetParams, opts ...option.RequestOption) (res *VersionGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env VersionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

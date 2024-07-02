@@ -38,8 +38,8 @@ func NewSiteLANService(opts ...option.RequestOption) (r *SiteLANService) {
 // Creates a new Site LAN. If the site is in high availability mode,
 // static_addressing is required along with secondary and virtual address.
 func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANNewParams, opts ...option.RequestOption) (res *[]LAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteLANNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANN
 
 // Update a specific Site LAN.
 func (r *SiteLANService) Update(ctx context.Context, siteID string, lanID string, params SiteLANUpdateParams, opts ...option.RequestOption) (res *LAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteLANUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -85,8 +85,16 @@ func (r *SiteLANService) Update(ctx context.Context, siteID string, lanID string
 // Lists Site LANs associated with an account.
 func (r *SiteLANService) List(ctx context.Context, siteID string, query SiteLANListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LAN], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", query.AccountID, siteID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -107,8 +115,8 @@ func (r *SiteLANService) ListAutoPaging(ctx context.Context, siteID string, quer
 
 // Remove a specific Site LAN.
 func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string, body SiteLANDeleteParams, opts ...option.RequestOption) (res *LAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteLANDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -132,8 +140,8 @@ func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string
 
 // Patch a specific Site LAN.
 func (r *SiteLANService) Edit(ctx context.Context, siteID string, lanID string, params SiteLANEditParams, opts ...option.RequestOption) (res *LAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteLANEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -157,8 +165,8 @@ func (r *SiteLANService) Edit(ctx context.Context, siteID string, lanID string, 
 
 // Get a specific Site LAN.
 func (r *SiteLANService) Get(ctx context.Context, siteID string, lanID string, query SiteLANGetParams, opts ...option.RequestOption) (res *LAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteLANGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

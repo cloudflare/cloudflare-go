@@ -39,8 +39,8 @@ func NewSiteACLService(opts ...option.RequestOption) (r *SiteACLService) {
 
 // Creates a new Site ACL.
 func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteACLNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,8 @@ func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLN
 
 // Update a specific Site ACL.
 func (r *SiteACLService) Update(ctx context.Context, siteID string, aclID string, params SiteACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteACLUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -86,8 +86,16 @@ func (r *SiteACLService) Update(ctx context.Context, siteID string, aclID string
 // Lists Site ACLs associated with an account.
 func (r *SiteACLService) List(ctx context.Context, siteID string, query SiteACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ACL], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", query.AccountID, siteID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -108,8 +116,8 @@ func (r *SiteACLService) ListAutoPaging(ctx context.Context, siteID string, quer
 
 // Remove a specific Site ACL.
 func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclID string, body SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteACLDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -133,8 +141,8 @@ func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclID string
 
 // Patch a specific Site ACL.
 func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclID string, params SiteACLEditParams, opts ...option.RequestOption) (res *ACL, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteACLEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -158,8 +166,8 @@ func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclID string, 
 
 // Get a specific Site ACL.
 func (r *SiteACLService) Get(ctx context.Context, siteID string, aclID string, query SiteACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteACLGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

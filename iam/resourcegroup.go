@@ -68,8 +68,12 @@ func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID strin
 // List all the resource groups for an account.
 func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ResourceGroupListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -90,8 +94,8 @@ func (r *ResourceGroupService) ListAutoPaging(ctx context.Context, params Resour
 
 // Remove a resource group from an account.
 func (r *ResourceGroupService) Delete(ctx context.Context, resourceGroupID string, body ResourceGroupDeleteParams, opts ...option.RequestOption) (res *ResourceGroupDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ResourceGroupDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -36,8 +36,8 @@ func NewDevicePolicyDefaultPolicyService(opts ...option.RequestOption) (r *Devic
 
 // Fetches the default device settings profile for an account.
 func (r *DevicePolicyDefaultPolicyService) Get(ctx context.Context, query DevicePolicyDefaultPolicyGetParams, opts ...option.RequestOption) (res *[]DevicePolicyDefaultPolicyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDefaultPolicyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -38,8 +38,8 @@ func NewTunnelConfigurationService(opts ...option.RequestOption) (r *TunnelConfi
 
 // Adds or updates the configuration for a remotely-managed tunnel.
 func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string
 
 // Gets the configuration for a remotely-managed tunnel
 func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *TunnelConfigurationGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

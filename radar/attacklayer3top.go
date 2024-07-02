@@ -41,8 +41,8 @@ func NewAttackLayer3TopService(opts ...option.RequestOption) (r *AttackLayer3Top
 // the number of attacks per origin/target location (useful if all the top attacks
 // are from or to the same location).
 func (r *AttackLayer3TopService) Attacks(ctx context.Context, query AttackLayer3TopAttacksParams, opts ...option.RequestOption) (res *AttackLayer3TopAttacksResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TopAttacksResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/top/attacks"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -54,8 +54,8 @@ func (r *AttackLayer3TopService) Attacks(ctx context.Context, query AttackLayer3
 
 // Get the Industry of attacks.
 func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer3TopIndustryParams, opts ...option.RequestOption) (res *AttackLayer3TopIndustryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TopIndustryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/top/industry"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -67,8 +67,8 @@ func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer
 
 // Get the Verticals of attacks.
 func (r *AttackLayer3TopService) Vertical(ctx context.Context, query AttackLayer3TopVerticalParams, opts ...option.RequestOption) (res *AttackLayer3TopVerticalResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TopVerticalResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/top/vertical"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
