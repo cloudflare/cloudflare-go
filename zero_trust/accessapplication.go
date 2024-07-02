@@ -586,6 +586,7 @@ type SAMLSaaSAppParam struct {
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]                           `json:"consumer_service_url"`
+	CreatedAt          param.Field[time.Time]                        `json:"created_at" format:"date-time"`
 	CustomAttributes   param.Field[SAMLSaaSAppCustomAttributesParam] `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
@@ -610,7 +611,8 @@ type SAMLSaaSAppParam struct {
 	// A globally unique name for an identity or service provider.
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
+	SSOEndpoint param.Field[string]    `json:"sso_endpoint"`
+	UpdatedAt   param.Field[time.Time] `json:"updated_at" format:"date-time"`
 }
 
 func (r SAMLSaaSAppParam) MarshalJSON() (data []byte, err error) {
@@ -20860,6 +20862,7 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
+	CreatedAt          param.Field[time.Time]   `json:"created_at" format:"date-time"`
 	CustomAttributes   param.Field[interface{}] `json:"custom_attributes,required"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
@@ -20884,7 +20887,8 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	// A globally unique name for an identity or service provider.
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
+	SSOEndpoint param.Field[string]    `json:"sso_endpoint"`
+	UpdatedAt   param.Field[time.Time] `json:"updated_at" format:"date-time"`
 	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
 	// be greater than or equal to 1m and less than or equal to 24h.
 	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
@@ -20937,6 +20941,7 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp struc
 	ClientID param.Field[string] `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret param.Field[string]                                                                            `json:"client_secret"`
+	CreatedAt    param.Field[time.Time]                                                                         `json:"created_at" format:"date-time"`
 	CustomClaims param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims] `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes param.Field[[]AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType] `json:"grant_types"`
@@ -20951,7 +20956,8 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp struc
 	RefreshTokenOptions param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions] `json:"refresh_token_options"`
 	// Define the user information shared with access, "offline_access" scope will be
 	// automatically enabled if refresh tokens are enabled
-	Scopes param.Field[[]AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppScope] `json:"scopes"`
+	Scopes    param.Field[[]AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppScope] `json:"scopes"`
+	UpdatedAt param.Field[time.Time]                                                                    `json:"updated_at" format:"date-time"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp) MarshalJSON() (data []byte, err error) {
@@ -24243,6 +24249,7 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
+	CreatedAt          param.Field[time.Time]   `json:"created_at" format:"date-time"`
 	CustomAttributes   param.Field[interface{}] `json:"custom_attributes,required"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
@@ -24267,7 +24274,8 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	// A globally unique name for an identity or service provider.
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
+	SSOEndpoint param.Field[string]    `json:"sso_endpoint"`
+	UpdatedAt   param.Field[time.Time] `json:"updated_at" format:"date-time"`
 	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
 	// be greater than or equal to 1m and less than or equal to 24h.
 	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
@@ -24320,6 +24328,7 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp st
 	ClientID param.Field[string] `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret param.Field[string]                                                                               `json:"client_secret"`
+	CreatedAt    param.Field[time.Time]                                                                            `json:"created_at" format:"date-time"`
 	CustomClaims param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppCustomClaims] `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppGrantType] `json:"grant_types"`
@@ -24334,7 +24343,8 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp st
 	RefreshTokenOptions param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppRefreshTokenOptions] `json:"refresh_token_options"`
 	// Define the user information shared with access, "offline_access" scope will be
 	// automatically enabled if refresh tokens are enabled
-	Scopes param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppScope] `json:"scopes"`
+	Scopes    param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSAppScope] `json:"scopes"`
+	UpdatedAt param.Field[time.Time]                                                                       `json:"updated_at" format:"date-time"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAccessOIDCSaaSApp) MarshalJSON() (data []byte, err error) {

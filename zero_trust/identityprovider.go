@@ -343,6 +343,8 @@ type AzureADParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1449,6 +1451,8 @@ func (r IdentityProviderAccessOnetimepin) implementsZeroTrustIdentityProvider() 
 
 type IdentityProviderParam struct {
 	Config param.Field[interface{}] `json:"config"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
@@ -1495,6 +1499,8 @@ type IdentityProviderAccessCentrifyParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1539,6 +1545,8 @@ type IdentityProviderAccessFacebookParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1561,6 +1569,8 @@ type IdentityProviderAccessGitHubParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1583,6 +1593,8 @@ type IdentityProviderAccessGoogleParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1623,6 +1635,8 @@ type IdentityProviderAccessGoogleAppsParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1665,6 +1679,8 @@ type IdentityProviderAccessLinkedinParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1687,6 +1703,8 @@ type IdentityProviderAccessOIDCParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1735,6 +1753,8 @@ type IdentityProviderAccessOktaParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1779,6 +1799,8 @@ type IdentityProviderAccessOneloginParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1821,6 +1843,8 @@ type IdentityProviderAccessPingoneParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1863,6 +1887,8 @@ type IdentityProviderAccessSAMLParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1923,6 +1949,8 @@ type IdentityProviderAccessYandexParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
@@ -1945,6 +1973,8 @@ type IdentityProviderAccessOnetimepinParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// UUID
+	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
