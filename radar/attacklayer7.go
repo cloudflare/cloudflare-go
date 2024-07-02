@@ -43,8 +43,8 @@ func NewAttackLayer7Service(opts ...option.RequestOption) (r *AttackLayer7Servic
 // Get a timeseries of Layer 7 attacks. Values represent HTTP requests and are
 // normalized using min-max by default.
 func (r *AttackLayer7Service) Timeseries(ctx context.Context, query AttackLayer7TimeseriesParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

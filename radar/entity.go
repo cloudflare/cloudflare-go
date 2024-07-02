@@ -39,8 +39,8 @@ func NewEntityService(opts ...option.RequestOption) (r *EntityService) {
 
 // Get IP address information.
 func (r *EntityService) Get(ctx context.Context, query EntityGetParams, opts ...option.RequestOption) (res *EntityGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EntityGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/entities/ip"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

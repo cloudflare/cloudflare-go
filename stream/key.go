@@ -41,8 +41,8 @@ func NewKeyService(opts ...option.RequestOption) (r *KeyService) {
 // once after creation. Keys are created, used, and deleted independently of
 // videos, and every key can sign any video.
 func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...option.RequestOption) (res *Keys, err error) {
-	opts = append(r.Options[:], opts...)
 	var env KeyNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,8 +58,8 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
 func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env KeyDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,8 +79,8 @@ func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDele
 
 // Lists the video ID and creation date and time when a signing key was created.
 func (r *KeyService) Get(ctx context.Context, query KeyGetParams, opts ...option.RequestOption) (res *[]KeyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env KeyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -38,8 +38,8 @@ func NewGatewayCertificateService(opts ...option.RequestOption) (r *GatewayCerti
 
 // Creates a new Zero Trust certificate.
 func (r *GatewayCertificateService) New(ctx context.Context, params GatewayCertificateNewParams, opts ...option.RequestOption) (res *GatewayCertificateNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayCertificateNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,12 @@ func (r *GatewayCertificateService) New(ctx context.Context, params GatewayCerti
 // Fetches all Zero Trust certificates for an account.
 func (r *GatewayCertificateService) List(ctx context.Context, query GatewayCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayCertificateListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/certificates", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -78,8 +82,8 @@ func (r *GatewayCertificateService) ListAutoPaging(ctx context.Context, query Ga
 
 // Deletes a gateway-managed Zero Trust certificate.
 func (r *GatewayCertificateService) Delete(ctx context.Context, certificateID string, body GatewayCertificateDeleteParams, opts ...option.RequestOption) (res *GatewayCertificateDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayCertificateDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -99,8 +103,8 @@ func (r *GatewayCertificateService) Delete(ctx context.Context, certificateID st
 
 // Fetches a single Zero Trust certificate.
 func (r *GatewayCertificateService) Get(ctx context.Context, certificateID string, query GatewayCertificateGetParams, opts ...option.RequestOption) (res *GatewayCertificateGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayCertificateGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -42,8 +42,8 @@ func NewV2Service(opts ...option.RequestOption) (r *V2Service) {
 // get a specific range of images. Endpoint returns continuation_token if more
 // images are present.
 func (r *V2Service) List(ctx context.Context, params V2ListParams, opts ...option.RequestOption) (res *V2ListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env V2ListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

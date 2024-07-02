@@ -38,8 +38,8 @@ func NewASNService(opts ...option.RequestOption) (r *ASNService) {
 
 // Get ASN Overview
 func (r *ASNService) Get(ctx context.Context, asn shared.ASNParam, query ASNGetParams, opts ...option.RequestOption) (res *shared.ASN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ASNGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

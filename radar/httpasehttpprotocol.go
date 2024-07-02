@@ -38,8 +38,8 @@ func NewHTTPAseHTTPProtocolService(opts ...option.RequestOption) (r *HTTPAseHTTP
 // Get the top autonomous systems (AS), by HTTP traffic, of the requested HTTP
 // protocol. Values are a percentage out of the total traffic.
 func (r *HTTPAseHTTPProtocolService) Get(ctx context.Context, httpProtocol HTTPAseHTTPProtocolGetParamsHTTPProtocol, query HTTPAseHTTPProtocolGetParams, opts ...option.RequestOption) (res *HTTPAseHTTPProtocolGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseHTTPProtocolGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/http_protocol/%v", httpProtocol)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

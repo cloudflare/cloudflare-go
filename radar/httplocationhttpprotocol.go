@@ -38,8 +38,8 @@ func NewHTTPLocationHTTPProtocolService(opts ...option.RequestOption) (r *HTTPLo
 // Get the top locations, by HTTP traffic, of the requested HTTP protocol. Values
 // are a percentage out of the total traffic.
 func (r *HTTPLocationHTTPProtocolService) Get(ctx context.Context, httpProtocol HTTPLocationHTTPProtocolGetParamsHTTPProtocol, query HTTPLocationHTTPProtocolGetParams, opts ...option.RequestOption) (res *HTTPLocationHTTPProtocolGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationHTTPProtocolGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/http_protocol/%v", httpProtocol)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -38,8 +38,8 @@ func NewOutgoingService(opts ...option.RequestOption) (r *OutgoingService) {
 
 // Create primary zone configuration for outgoing zone transfers.
 func (r *OutgoingService) New(ctx context.Context, params OutgoingNewParams, opts ...option.RequestOption) (res *OutgoingNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OutgoingNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *OutgoingService) New(ctx context.Context, params OutgoingNewParams, opt
 
 // Update primary zone configuration for outgoing zone transfers.
 func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParams, opts ...option.RequestOption) (res *OutgoingUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OutgoingUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -72,8 +72,8 @@ func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParam
 
 // Delete primary zone configuration for outgoing zone transfers.
 func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OutgoingDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -90,8 +90,8 @@ func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams,
 // Disable outgoing zone transfers for primary zone and clears IXFR backlog of
 // primary zone.
 func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisableParams, opts ...option.RequestOption) (res *DisableTransfer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -107,8 +107,8 @@ func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisablePar
 
 // Enable outgoing zone transfers for primary zone.
 func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -124,8 +124,8 @@ func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParam
 
 // Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
 func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -141,8 +141,8 @@ func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceN
 
 // Get primary zone configuration for outgoing zone transfers.
 func (r *OutgoingService) Get(ctx context.Context, query OutgoingGetParams, opts ...option.RequestOption) (res *OutgoingGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OutgoingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -39,8 +39,8 @@ func NewIdentityProviderService(opts ...option.RequestOption) (r *IdentityProvid
 
 // Adds a new identity provider to Access.
 func (r *IdentityProviderService) New(ctx context.Context, params IdentityProviderNewParams, opts ...option.RequestOption) (res *IdentityProvider, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IdentityProviderNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -70,8 +70,8 @@ func (r *IdentityProviderService) New(ctx context.Context, params IdentityProvid
 
 // Updates a configured identity provider.
 func (r *IdentityProviderService) Update(ctx context.Context, identityProviderID string, params IdentityProviderUpdateParams, opts ...option.RequestOption) (res *IdentityProvider, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IdentityProviderUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -106,7 +106,7 @@ func (r *IdentityProviderService) Update(ctx context.Context, identityProviderID
 // Lists all configured identity providers.
 func (r *IdentityProviderService) List(ctx context.Context, query IdentityProviderListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IdentityProviderListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -146,8 +146,8 @@ func (r *IdentityProviderService) ListAutoPaging(ctx context.Context, query Iden
 
 // Deletes an identity provider from Access.
 func (r *IdentityProviderService) Delete(ctx context.Context, identityProviderID string, body IdentityProviderDeleteParams, opts ...option.RequestOption) (res *IdentityProviderDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IdentityProviderDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -181,8 +181,8 @@ func (r *IdentityProviderService) Delete(ctx context.Context, identityProviderID
 
 // Fetches a configured identity provider.
 func (r *IdentityProviderService) Get(ctx context.Context, identityProviderID string, query IdentityProviderGetParams, opts ...option.RequestOption) (res *IdentityProvider, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IdentityProviderGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

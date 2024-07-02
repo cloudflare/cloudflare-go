@@ -39,8 +39,8 @@ func NewDevicePolicyFallbackDomainService(opts ...option.RequestOption) (r *Devi
 // use the specified local DNS resolver instead. This will only apply to the
 // specified device settings profile.
 func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID string, params DevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]FallbackDomain, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,8 +62,12 @@ func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID
 // use the specified local DNS resolver instead.
 func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[FallbackDomain], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/fallback_domains", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -87,8 +91,8 @@ func (r *DevicePolicyFallbackDomainService) ListAutoPaging(ctx context.Context, 
 // device settings profile. These domains will use the specified local DNS resolver
 // instead.
 func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, policyID string, query DevicePolicyFallbackDomainGetParams, opts ...option.RequestOption) (res *[]FallbackDomain, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

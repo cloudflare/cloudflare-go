@@ -38,8 +38,8 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 
 // Creates a download for a video when a video is ready to view.
 func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DownloadNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *DownloadService) New(ctx context.Context, identifier string, params Dow
 
 // Delete the downloads for a video.
 func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *DownloadDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DownloadDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -80,8 +80,8 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 
 // Lists the downloads created for a video.
 func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DownloadGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

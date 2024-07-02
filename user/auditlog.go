@@ -39,7 +39,7 @@ func NewAuditLogService(opts ...option.RequestOption) (r *AuditLogService) {
 // change, on which zone, and the timeframe of the change.
 func (r *AuditLogService) List(ctx context.Context, query AuditLogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.AuditLog], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/audit_logs"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)

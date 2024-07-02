@@ -37,8 +37,8 @@ func NewDevicePolicyIncludeService(opts ...option.RequestOption) (r *DevicePolic
 
 // Sets the list of routes included in the WARP client's tunnel.
 func (r *DevicePolicyIncludeService) Update(ctx context.Context, params DevicePolicyIncludeUpdateParams, opts ...option.RequestOption) (res *[]SplitTunnelInclude, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,8 +55,12 @@ func (r *DevicePolicyIncludeService) Update(ctx context.Context, params DevicePo
 // Fetches the list of routes included in the WARP client's tunnel.
 func (r *DevicePolicyIncludeService) List(ctx context.Context, query DevicePolicyIncludeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SplitTunnelInclude], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/include", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -78,8 +82,8 @@ func (r *DevicePolicyIncludeService) ListAutoPaging(ctx context.Context, query D
 // Fetches the list of routes included in the WARP client's tunnel for a specific
 // device settings profile.
 func (r *DevicePolicyIncludeService) Get(ctx context.Context, policyID string, query DevicePolicyIncludeGetParams, opts ...option.RequestOption) (res *[]SplitTunnelInclude, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

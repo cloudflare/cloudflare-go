@@ -44,8 +44,8 @@ func NewProjectService(opts ...option.RequestOption) (r *ProjectService) {
 
 // Create a new project.
 func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts ...option.RequestOption) (res *ProjectNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ProjectNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,8 +62,12 @@ func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts 
 // Fetch a list of all user projects.
 func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Deployment], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -101,8 +105,8 @@ func (r *ProjectService) Delete(ctx context.Context, projectName string, body Pr
 // Set new attributes for an existing project. Modify environment variables. To
 // delete an environment variable, set the key to null.
 func (r *ProjectService) Edit(ctx context.Context, projectName string, params ProjectEditParams, opts ...option.RequestOption) (res *ProjectEditResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ProjectEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -122,8 +126,8 @@ func (r *ProjectService) Edit(ctx context.Context, projectName string, params Pr
 
 // Fetch a project by name.
 func (r *ProjectService) Get(ctx context.Context, projectName string, query ProjectGetParams, opts ...option.RequestOption) (res *Project, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ProjectGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -43,8 +43,8 @@ func NewEmailSecurityTopTldService(opts ...option.RequestOption) (r *EmailSecuri
 // Get the top TLDs by email messages. Values are a percentage out of the total
 // emails.
 func (r *EmailSecurityTopTldService) Get(ctx context.Context, query EmailSecurityTopTldGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTopTldGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/top/tlds"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

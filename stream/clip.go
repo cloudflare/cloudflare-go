@@ -37,8 +37,8 @@ func NewClipService(opts ...option.RequestOption) (r *ClipService) {
 
 // Clips a video based on the specified start and end times provided in seconds.
 func (r *ClipService) New(ctx context.Context, params ClipNewParams, opts ...option.RequestOption) (res *Clip, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ClipNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

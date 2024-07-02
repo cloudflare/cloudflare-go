@@ -36,8 +36,8 @@ func NewIndicatorFeedPermissionService(opts ...option.RequestOption) (r *Indicat
 
 // Grant permission to indicator feed
 func (r *IndicatorFeedPermissionService) New(ctx context.Context, params IndicatorFeedPermissionNewParams, opts ...option.RequestOption) (res *IndicatorFeedPermissionNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedPermissionNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *IndicatorFeedPermissionService) New(ctx context.Context, params Indicat
 
 // List indicator feed permissions
 func (r *IndicatorFeedPermissionService) List(ctx context.Context, query IndicatorFeedPermissionListParams, opts ...option.RequestOption) (res *[]IndicatorFeedPermissionListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedPermissionListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -70,8 +70,8 @@ func (r *IndicatorFeedPermissionService) List(ctx context.Context, query Indicat
 
 // Revoke permission to indicator feed
 func (r *IndicatorFeedPermissionService) Delete(ctx context.Context, params IndicatorFeedPermissionDeleteParams, opts ...option.RequestOption) (res *IndicatorFeedPermissionDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedPermissionDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

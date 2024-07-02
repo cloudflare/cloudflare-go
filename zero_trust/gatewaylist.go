@@ -44,8 +44,8 @@ func NewGatewayListService(opts ...option.RequestOption) (r *GatewayListService)
 
 // Creates a new Zero Trust list.
 func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParams, opts ...option.RequestOption) (res *GatewayListNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayListNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParam
 
 // Updates a configured Zero Trust list.
 func (r *GatewayListService) Update(ctx context.Context, listID string, params GatewayListUpdateParams, opts ...option.RequestOption) (res *GatewayList, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayListUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -83,8 +83,12 @@ func (r *GatewayListService) Update(ctx context.Context, listID string, params G
 // Fetches all Zero Trust lists for an account.
 func (r *GatewayListService) List(ctx context.Context, params GatewayListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayList], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -105,8 +109,8 @@ func (r *GatewayListService) ListAutoPaging(ctx context.Context, params GatewayL
 
 // Deletes a Zero Trust list.
 func (r *GatewayListService) Delete(ctx context.Context, listID string, body GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayListDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -126,8 +130,8 @@ func (r *GatewayListService) Delete(ctx context.Context, listID string, body Gat
 
 // Appends or removes an item from a configured Zero Trust list.
 func (r *GatewayListService) Edit(ctx context.Context, listID string, params GatewayListEditParams, opts ...option.RequestOption) (res *GatewayList, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayListEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -147,8 +151,8 @@ func (r *GatewayListService) Edit(ctx context.Context, listID string, params Gat
 
 // Fetches a single Zero Trust list.
 func (r *GatewayListService) Get(ctx context.Context, listID string, query GatewayListGetParams, opts ...option.RequestOption) (res *GatewayList, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayListGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

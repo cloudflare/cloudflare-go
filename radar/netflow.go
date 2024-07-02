@@ -39,8 +39,8 @@ func NewNetflowService(opts ...option.RequestOption) (r *NetflowService) {
 // Get network traffic change over time. Visit
 // https://en.wikipedia.org/wiki/NetFlow for more information on NetFlows.
 func (r *NetflowService) Timeseries(ctx context.Context, query NetflowTimeseriesParams, opts ...option.RequestOption) (res *NetflowTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetflowTimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/netflows/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

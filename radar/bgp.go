@@ -48,8 +48,8 @@ func NewBGPService(opts ...option.RequestOption) (r *BGPService) {
 // updates of an autonomous system (AS), only BGP updates of type announcement are
 // returned.
 func (r *BGPService) Timeseries(ctx context.Context, query BGPTimeseriesParams, opts ...option.RequestOption) (res *BGPTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPTimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

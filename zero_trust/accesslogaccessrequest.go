@@ -39,8 +39,8 @@ func NewAccessLogAccessRequestService(opts ...option.RequestOption) (r *AccessLo
 
 // Gets a list of Access authentication audit logs for an account.
 func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessLogAccessRequestListParams, opts ...option.RequestOption) (res *[]AccessRequests, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessLogAccessRequestListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

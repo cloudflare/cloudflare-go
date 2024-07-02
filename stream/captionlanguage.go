@@ -41,8 +41,8 @@ func NewCaptionLanguageService(opts ...option.RequestOption) (r *CaptionLanguage
 
 // Generate captions or subtitles for provided language via AI.
 func (r *CaptionLanguageService) New(ctx context.Context, identifier string, language string, body CaptionLanguageNewParams, opts ...option.RequestOption) (res *Caption, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CaptionLanguageNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -67,8 +67,8 @@ func (r *CaptionLanguageService) New(ctx context.Context, identifier string, lan
 // Uploads the caption or subtitle file to the endpoint for a specific BCP47
 // language. One caption or subtitle file per language is allowed.
 func (r *CaptionLanguageService) Update(ctx context.Context, identifier string, language string, params CaptionLanguageUpdateParams, opts ...option.RequestOption) (res *Caption, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CaptionLanguageUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -92,8 +92,8 @@ func (r *CaptionLanguageService) Update(ctx context.Context, identifier string, 
 
 // Removes the captions or subtitles from a video.
 func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, language string, body CaptionLanguageDeleteParams, opts ...option.RequestOption) (res *string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CaptionLanguageDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -117,8 +117,8 @@ func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, 
 
 // Lists the captions or subtitles for provided language.
 func (r *CaptionLanguageService) Get(ctx context.Context, identifier string, language string, query CaptionLanguageGetParams, opts ...option.RequestOption) (res *Caption, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CaptionLanguageGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

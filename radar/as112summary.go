@@ -36,8 +36,8 @@ func NewAS112SummaryService(opts ...option.RequestOption) (r *AS112SummaryServic
 
 // Percentage distribution of DNS queries to AS112 by DNSSEC support.
 func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSSECParams, opts ...option.RequestOption) (res *AS112SummaryDNSSECResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryDNSSECResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/dnssec"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSS
 
 // Percentage distribution of DNS queries, to AS112, by EDNS support.
 func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsParams, opts ...option.RequestOption) (res *AS112SummaryEdnsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryEdnsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/edns"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsPa
 
 // Percentage distribution of DNS queries to AS112 per IP Version.
 func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryIPVersionParams, opts ...option.RequestOption) (res *AS112SummaryIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryI
 
 // Percentage distribution of DNS queries to AS112 per protocol.
 func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryProtocolParams, opts ...option.RequestOption) (res *AS112SummaryProtocolResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryProtocolResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryPr
 
 // Percentage distribution of DNS queries to AS112 by Query Type.
 func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQueryTypeParams, opts ...option.RequestOption) (res *AS112SummaryQueryTypeResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryQueryTypeResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/query_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQ
 
 // Percentage distribution of AS112 dns requests classified per Response Codes.
 func (r *AS112SummaryService) ResponseCodes(ctx context.Context, query AS112SummaryResponseCodesParams, opts ...option.RequestOption) (res *AS112SummaryResponseCodesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryResponseCodesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/response_codes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -41,8 +41,8 @@ func NewNamespaceBulkService(opts ...option.RequestOption) (r *NamespaceBulkServ
 // set, `expiration_ttl` is used and `expiration` is ignored. The entire request
 // size must be 100 megabytes or less.
 func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -63,8 +63,8 @@ func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, p
 // Remove multiple KV pairs from the namespace. Body should be an array of up to
 // 10,000 keys to be removed.
 func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, body NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

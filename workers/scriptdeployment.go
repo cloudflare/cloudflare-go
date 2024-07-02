@@ -39,8 +39,8 @@ func NewScriptDeploymentService(opts ...option.RequestOption) (r *ScriptDeployme
 // are deployed to traffic. A deployment can consist of one or two versions of a
 // Worker.
 func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, params ScriptDeploymentNewParams, opts ...option.RequestOption) (res *ScriptDeploymentNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScriptDeploymentNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, pa
 // List of Worker Deployments. The first deployment in the list is the latest
 // deployment actively serving traffic.
 func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, query ScriptDeploymentGetParams, opts ...option.RequestOption) (res *ScriptDeploymentGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScriptDeploymentGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

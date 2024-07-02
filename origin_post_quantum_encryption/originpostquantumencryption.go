@@ -43,8 +43,8 @@ func NewOriginPostQuantumEncryptionService(opts ...option.RequestOption) (r *Ori
 // algorithms are advertised but only used when requested by the origin, and off
 // means that PQ algorithms are not advertised
 func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params OriginPostQuantumEncryptionUpdateParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OriginPostQuantumEncryptionUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -65,8 +65,8 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params 
 // algorithms are advertised but only used when requested by the origin, and off
 // means that PQ algorithms are not advertised
 func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query OriginPostQuantumEncryptionGetParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OriginPostQuantumEncryptionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

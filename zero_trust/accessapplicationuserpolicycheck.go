@@ -36,8 +36,8 @@ func NewAccessApplicationUserPolicyCheckService(opts ...option.RequestOption) (r
 
 // Tests if a specific user has permission to access an application.
 func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AppIDUnionParam, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationUserPolicyCheckListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

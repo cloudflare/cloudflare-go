@@ -36,8 +36,8 @@ func NewRuleAdvertisementService(opts ...option.RequestOption) (r *RuleAdvertise
 
 // Update advertisement for rule.
 func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, params RuleAdvertisementEditParams, opts ...option.RequestOption) (res *Advertisement, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleAdvertisementEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

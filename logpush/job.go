@@ -38,8 +38,8 @@ func NewJobService(opts ...option.RequestOption) (r *JobService) {
 
 // Creates a new Logpush job for an account or zone.
 func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
-	opts = append(r.Options[:], opts...)
 	var env JobNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -69,8 +69,8 @@ func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...optio
 
 // Updates a Logpush job.
 func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
-	opts = append(r.Options[:], opts...)
 	var env JobUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -101,7 +101,7 @@ func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdatePa
 // Lists Logpush jobs for an account or zone.
 func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -141,8 +141,8 @@ func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, op
 
 // Deletes a Logpush job.
 func (r *JobService) Delete(ctx context.Context, jobID int64, body JobDeleteParams, opts ...option.RequestOption) (res *JobDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env JobDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -172,8 +172,8 @@ func (r *JobService) Delete(ctx context.Context, jobID int64, body JobDeletePara
 
 // Gets the details of a Logpush job.
 func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
-	opts = append(r.Options[:], opts...)
 	var env JobGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

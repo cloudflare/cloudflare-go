@@ -36,8 +36,8 @@ func NewAvailableAlertService(opts ...option.RequestOption) (r *AvailableAlertSe
 
 // Gets a list of all alert types for which an account is eligible.
 func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *AvailableAlertListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AvailableAlertListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -39,8 +39,8 @@ func NewGatewayProxyEndpointService(opts ...option.RequestOption) (r *GatewayPro
 
 // Creates a new Zero Trust Gateway proxy endpoint.
 func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayProxyEndpointNewParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayPro
 
 // Fetches all Zero Trust Gateway proxy endpoints for an account.
 func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -73,8 +73,8 @@ func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayPro
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.
 func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, body GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -94,8 +94,8 @@ func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointI
 
 // Updates a configured Zero Trust Gateway proxy endpoint.
 func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointEditParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -115,8 +115,8 @@ func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID 
 
 // Fetches a single Zero Trust Gateway proxy endpoint.
 func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID string, query GatewayProxyEndpointGetParams, opts ...option.RequestOption) (res *[]ProxyEndpoint, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

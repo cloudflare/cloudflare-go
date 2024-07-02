@@ -39,8 +39,8 @@ func NewCfInterconnectService(opts ...option.RequestOption) (r *CfInterconnectSe
 // `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
 func (r *CfInterconnectService) Update(ctx context.Context, cfInterconnectID string, params CfInterconnectUpdateParams, opts ...option.RequestOption) (res *CfInterconnectUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CfInterconnectUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,8 @@ func (r *CfInterconnectService) Update(ctx context.Context, cfInterconnectID str
 
 // Lists interconnects associated with an account.
 func (r *CfInterconnectService) List(ctx context.Context, query CfInterconnectListParams, opts ...option.RequestOption) (res *CfInterconnectListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CfInterconnectListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,8 +77,8 @@ func (r *CfInterconnectService) List(ctx context.Context, query CfInterconnectLi
 
 // Lists details for a specific interconnect.
 func (r *CfInterconnectService) Get(ctx context.Context, cfInterconnectID string, query CfInterconnectGetParams, opts ...option.RequestOption) (res *CfInterconnectGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CfInterconnectGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

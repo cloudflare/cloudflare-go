@@ -36,8 +36,8 @@ func NewAttackLayer3TopLocationService(opts ...option.RequestOption) (r *AttackL
 
 // Get the origin locations of attacks.
 func (r *AttackLayer3TopLocationService) Origin(ctx context.Context, query AttackLayer3TopLocationOriginParams, opts ...option.RequestOption) (res *AttackLayer3TopLocationOriginResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TopLocationOriginResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/top/locations/origin"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *AttackLayer3TopLocationService) Origin(ctx context.Context, query Attac
 
 // Get the target locations of attacks.
 func (r *AttackLayer3TopLocationService) Target(ctx context.Context, query AttackLayer3TopLocationTargetParams, opts ...option.RequestOption) (res *AttackLayer3TopLocationTargetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TopLocationTargetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/top/locations/target"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

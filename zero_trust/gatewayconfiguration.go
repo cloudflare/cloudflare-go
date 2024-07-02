@@ -37,8 +37,8 @@ func NewGatewayConfigurationService(opts ...option.RequestOption) (r *GatewayCon
 
 // Updates the current Zero Trust account configuration.
 func (r *GatewayConfigurationService) Update(ctx context.Context, params GatewayConfigurationUpdateParams, opts ...option.RequestOption) (res *GatewayConfigurationUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,8 +58,8 @@ func (r *GatewayConfigurationService) Update(ctx context.Context, params Gateway
 // `certificate`, without updating the entire configuration object. Returns an
 // error if any collection of settings is not properly configured.
 func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayConfigurationEditParams, opts ...option.RequestOption) (res *GatewayConfigurationEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -75,8 +75,8 @@ func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayCo
 
 // Fetches the current Zero Trust account configuration.
 func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConfigurationGetParams, opts ...option.RequestOption) (res *GatewayConfigurationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -40,8 +40,8 @@ func NewGatewayLocationService(opts ...option.RequestOption) (r *GatewayLocation
 
 // Creates a new Zero Trust Gateway location.
 func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocationNewParams, opts ...option.RequestOption) (res *Location, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayLocationNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocation
 
 // Updates a configured Zero Trust Gateway location.
 func (r *GatewayLocationService) Update(ctx context.Context, locationID string, params GatewayLocationUpdateParams, opts ...option.RequestOption) (res *Location, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayLocationUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,8 +79,12 @@ func (r *GatewayLocationService) Update(ctx context.Context, locationID string, 
 // Fetches Zero Trust Gateway locations for an account.
 func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Location], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/locations", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -101,8 +105,8 @@ func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query Gatew
 
 // Deletes a configured Zero Trust Gateway location.
 func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -122,8 +126,8 @@ func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, 
 
 // Fetches a single Zero Trust Gateway location.
 func (r *GatewayLocationService) Get(ctx context.Context, locationID string, query GatewayLocationGetParams, opts ...option.RequestOption) (res *Location, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayLocationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

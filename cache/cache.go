@@ -109,8 +109,8 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 // {"prefixes": ["www.example.com/foo", "images.example.com/bar/baz"]}
 // ```
 func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CachePurgeResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

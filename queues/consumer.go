@@ -38,8 +38,8 @@ func NewConsumerService(opts ...option.RequestOption) (r *ConsumerService) {
 
 // Creates a new consumer for a queue.
 func (r *ConsumerService) New(ctx context.Context, queueID string, params ConsumerNewParams, opts ...option.RequestOption) (res *ConsumerNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConsumerNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *ConsumerService) New(ctx context.Context, queueID string, params Consum
 
 // Updates the consumer for a queue, or creates one if it does not exist.
 func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID string, params ConsumerUpdateParams, opts ...option.RequestOption) (res *ConsumerUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConsumerUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -84,8 +84,8 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 
 // Deletes the consumer for a queue.
 func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConsumerDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -109,8 +109,8 @@ func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID
 
 // Returns the consumers for a queue.
 func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *[]Consumer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConsumerGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

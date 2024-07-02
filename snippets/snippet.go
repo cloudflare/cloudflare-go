@@ -44,8 +44,8 @@ func NewSnippetService(opts ...option.RequestOption) (r *SnippetService) {
 
 // Put Snippet
 func (r *SnippetService) Update(ctx context.Context, snippetName string, params SnippetUpdateParams, opts ...option.RequestOption) (res *Snippet, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SnippetUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -66,8 +66,12 @@ func (r *SnippetService) Update(ctx context.Context, snippetName string, params 
 // All Snippets
 func (r *SnippetService) List(ctx context.Context, query SnippetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Snippet], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/snippets", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -104,8 +108,8 @@ func (r *SnippetService) Delete(ctx context.Context, snippetName string, body Sn
 
 // Snippet
 func (r *SnippetService) Get(ctx context.Context, snippetName string, query SnippetGetParams, opts ...option.RequestOption) (res *Snippet, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SnippetGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

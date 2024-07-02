@@ -36,8 +36,8 @@ func NewV1StatService(opts ...option.RequestOption) (r *V1StatService) {
 
 // Fetch usage statistics details for Cloudflare Images.
 func (r *V1StatService) Get(ctx context.Context, query V1StatGetParams, opts ...option.RequestOption) (res *Stat, err error) {
-	opts = append(r.Options[:], opts...)
 	var env V1StatGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

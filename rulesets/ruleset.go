@@ -45,8 +45,8 @@ func NewRulesetService(opts ...option.RequestOption) (r *RulesetService) {
 
 // Creates a ruleset.
 func (r *RulesetService) New(ctx context.Context, params RulesetNewParams, opts ...option.RequestOption) (res *RulesetNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RulesetNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -76,8 +76,8 @@ func (r *RulesetService) New(ctx context.Context, params RulesetNewParams, opts 
 
 // Updates an account or zone ruleset, creating a new version.
 func (r *RulesetService) Update(ctx context.Context, rulesetID string, params RulesetUpdateParams, opts ...option.RequestOption) (res *RulesetUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RulesetUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -112,7 +112,7 @@ func (r *RulesetService) Update(ctx context.Context, rulesetID string, params Ru
 // Fetches all rulesets.
 func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RulesetListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -183,8 +183,8 @@ func (r *RulesetService) Delete(ctx context.Context, rulesetID string, body Rule
 
 // Fetches the latest version of an account or zone ruleset.
 func (r *RulesetService) Get(ctx context.Context, rulesetID string, query RulesetGetParams, opts ...option.RequestOption) (res *RulesetGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RulesetGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

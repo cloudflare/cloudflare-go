@@ -39,8 +39,8 @@ func NewIndicatorFeedSnapshotService(opts ...option.RequestOption) (r *Indicator
 
 // Update indicator feed data
 func (r *IndicatorFeedSnapshotService) Update(ctx context.Context, feedID int64, params IndicatorFeedSnapshotUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedSnapshotUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedSnapshotUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

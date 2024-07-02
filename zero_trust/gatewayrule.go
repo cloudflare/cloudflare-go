@@ -40,8 +40,8 @@ func NewGatewayRuleService(opts ...option.RequestOption) (r *GatewayRuleService)
 
 // Creates a new Zero Trust Gateway rule.
 func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayRuleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParam
 
 // Updates a configured Zero Trust Gateway rule.
 func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params GatewayRuleUpdateParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayRuleUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,8 +79,12 @@ func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params G
 // Fetches the Zero Trust Gateway rules for an account.
 func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -101,8 +105,8 @@ func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRu
 
 // Deletes a Zero Trust Gateway rule.
 func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayRuleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -122,8 +126,8 @@ func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body Gat
 
 // Fetches a single Zero Trust Gateway rule.
 func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query GatewayRuleGetParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayRuleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

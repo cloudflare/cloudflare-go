@@ -42,8 +42,8 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 
 // Update an existing account.
 func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccountUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -56,7 +56,7 @@ func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams,
 // List all accounts you have ownership or verified access to.
 func (r *AccountService) List(ctx context.Context, query AccountListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccountListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "accounts"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -78,8 +78,8 @@ func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListPa
 
 // Get information about a specific account that you are a member of.
 func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccountGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

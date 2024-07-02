@@ -36,8 +36,8 @@ func NewDestinationEligibleService(opts ...option.RequestOption) (r *Destination
 
 // Get a list of all delivery mechanism types for which an account is eligible.
 func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationEligibleGetParams, opts ...option.RequestOption) (res *DestinationEligibleGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DestinationEligibleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

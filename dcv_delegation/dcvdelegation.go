@@ -37,8 +37,8 @@ func NewDCVDelegationService(opts ...option.RequestOption) (r *DCVDelegationServ
 // Retrieve the account and zone specific unique identifier used as part of the
 // CNAME target for DCV Delegation.
 func (r *DCVDelegationService) Get(ctx context.Context, query DCVDelegationGetParams, opts ...option.RequestOption) (res *DCVDelegationUUID, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DCVDelegationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

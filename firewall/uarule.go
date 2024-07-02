@@ -41,8 +41,8 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 
 // Creates a new User Agent Blocking rule in a zone.
 func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *UARuleNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UARuleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -58,8 +58,8 @@ func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UAR
 
 // Updates an existing User Agent Blocking rule.
 func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *UARuleUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UARuleUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -81,8 +81,12 @@ func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id st
 // several optional parameters.
 func (r *UARuleService) List(ctx context.Context, zoneIdentifier string, query UARuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UARuleListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
@@ -104,8 +108,8 @@ func (r *UARuleService) ListAutoPaging(ctx context.Context, zoneIdentifier strin
 
 // Deletes an existing User Agent Blocking rule.
 func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UARuleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -125,8 +129,8 @@ func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches the details of a User Agent Blocking rule.
 func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UARuleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

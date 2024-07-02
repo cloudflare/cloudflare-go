@@ -36,8 +36,8 @@ func NewAccessCertificateSettingService(opts ...option.RequestOption) (r *Access
 
 // Updates an mTLS certificate's hostname settings.
 func (r *AccessCertificateSettingService) Update(ctx context.Context, params AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]CertificateSettings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -67,8 +67,8 @@ func (r *AccessCertificateSettingService) Update(ctx context.Context, params Acc
 
 // List all mTLS hostname settings for this account or zone.
 func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessCertificateSettingGetParams, opts ...option.RequestOption) (res *[]CertificateSettings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

@@ -41,8 +41,8 @@ func NewLOADocumentService(opts ...option.RequestOption) (r *LOADocumentService)
 
 // Submit LOA document (pdf format) under the account.
 func (r *LOADocumentService) New(ctx context.Context, params LOADocumentNewParams, opts ...option.RequestOption) (res *LOADocumentNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LOADocumentNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

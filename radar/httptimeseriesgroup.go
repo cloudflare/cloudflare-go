@@ -39,8 +39,8 @@ func NewHTTPTimeseriesGroupService(opts ...option.RequestOption) (r *HTTPTimeser
 // https://developers.cloudflare.com/radar/concepts/bot-classes/ for more
 // information.
 func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTimeseriesGroupBotClassParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBotClassResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupBotClassResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/bot_class"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,8 +53,8 @@ func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTim
 // Get a time series of the percentage distribution of traffic of the top user
 // agents.
 func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTimeseriesGroupBrowserParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupBrowserResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/browser"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -67,8 +67,8 @@ func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTime
 // Get a time series of the percentage distribution of traffic of the top user
 // agents aggregated in families.
 func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HTTPTimeseriesGroupBrowserFamilyParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserFamilyResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupBrowserFamilyResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/browser_family"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -80,8 +80,8 @@ func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HT
 
 // Get a time series of the percentage distribution of traffic per device type.
 func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPTimeseriesGroupDeviceTypeParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupDeviceTypeResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupDeviceTypeResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/device_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -93,8 +93,8 @@ func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPT
 
 // Get a time series of the percentage distribution of traffic per HTTP protocol.
 func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTTPTimeseriesGroupHTTPProtocolParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPProtocolResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupHTTPProtocolResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/http_protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -107,8 +107,8 @@ func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTT
 // Get a time series of the percentage distribution of traffic per HTTP protocol
 // version.
 func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTPTimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupHTTPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/http_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -121,8 +121,8 @@ func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTP
 // Get a time series of the percentage distribution of traffic per IP protocol
 // version.
 func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -135,8 +135,8 @@ func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTi
 // Get a time series of the percentage distribution of traffic of the top operating
 // systems.
 func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeseriesGroupOSParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupOSResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupOSResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/os"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,8 +149,8 @@ func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeserie
 // Get a time series of the percentage distribution of traffic per Post Quantum
 // suport.
 func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTPTimeseriesGroupPostQuantumParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupPostQuantumResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupPostQuantumResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/post_quantum"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -163,8 +163,8 @@ func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTP
 // Get a time series of the percentage distribution of traffic per TLS protocol
 // version.
 func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupTLSVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupTLSVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

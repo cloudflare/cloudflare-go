@@ -36,8 +36,8 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 
 // Update DNS settings for an account or zone
 func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opts ...option.RequestOption) (res *SettingEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SettingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -67,8 +67,8 @@ func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opt
 
 // Show DNS settings for an account or zone
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

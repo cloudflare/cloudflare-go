@@ -36,8 +36,8 @@ func NewConnectionTamperingService(opts ...option.RequestOption) (r *ConnectionT
 
 // Distribution of connection tampering types over a given time period.
 func (r *ConnectionTamperingService) Summary(ctx context.Context, query ConnectionTamperingSummaryParams, opts ...option.RequestOption) (res *ConnectionTamperingSummaryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConnectionTamperingSummaryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/connection_tampering/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *ConnectionTamperingService) Summary(ctx context.Context, query Connecti
 
 // Distribution of connection tampering types over time.
 func (r *ConnectionTamperingService) TimeseriesGroups(ctx context.Context, query ConnectionTamperingTimeseriesGroupsParams, opts ...option.RequestOption) (res *ConnectionTamperingTimeseriesGroupsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConnectionTamperingTimeseriesGroupsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/connection_tampering/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

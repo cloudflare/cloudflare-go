@@ -36,8 +36,8 @@ func NewOwnershipService(opts ...option.RequestOption) (r *OwnershipService) {
 
 // Adds an AWS or GCP bucket to use with full packet captures.
 func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, opts ...option.RequestOption) (res *Ownership, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OwnershipNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -70,8 +70,8 @@ func (r *OwnershipService) Delete(ctx context.Context, ownershipID string, body 
 
 // List all buckets configured for use with PCAPs API.
 func (r *OwnershipService) Get(ctx context.Context, query OwnershipGetParams, opts ...option.RequestOption) (res *[]Ownership, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OwnershipGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -87,8 +87,8 @@ func (r *OwnershipService) Get(ctx context.Context, query OwnershipGetParams, op
 
 // Validates buckets added to the packet captures API.
 func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *Ownership, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OwnershipValidateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

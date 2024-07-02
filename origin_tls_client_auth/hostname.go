@@ -43,8 +43,8 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 // certificate are allowed. Note: Use a null value for parameter _enabled_ to
 // invalidate the association.
 func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]AuthenticatedOriginPull, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -60,8 +60,8 @@ func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParam
 
 // Get the Hostname Status for Client Authentication
 func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *AuthenticatedOriginPull, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

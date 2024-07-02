@@ -40,8 +40,8 @@ func NewPhaseService(opts ...option.RequestOption) (r *PhaseService) {
 
 // Updates an account or zone entry point ruleset, creating a new version.
 func (r *PhaseService) Update(ctx context.Context, rulesetPhase Phase, params PhaseUpdateParams, opts ...option.RequestOption) (res *PhaseUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PhaseUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -72,8 +72,8 @@ func (r *PhaseService) Update(ctx context.Context, rulesetPhase Phase, params Ph
 // Fetches the latest version of the account or zone entry point ruleset for a
 // given phase.
 func (r *PhaseService) Get(ctx context.Context, rulesetPhase Phase, query PhaseGetParams, opts ...option.RequestOption) (res *PhaseGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PhaseGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

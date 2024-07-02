@@ -39,8 +39,8 @@ func NewAccessApplicationCAService(opts ...option.RequestOption) (r *AccessAppli
 
 // Generates a new short-lived certificate CA and public key.
 func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCANewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -75,7 +75,7 @@ func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body
 // Lists short-lived certificate CAs and their public keys.
 func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CA], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -115,8 +115,8 @@ func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, query A
 
 // Deletes a short-lived certificate CA.
 func (r *AccessApplicationCAService) Delete(ctx context.Context, appID string, body AccessApplicationCADeleteParams, opts ...option.RequestOption) (res *AccessApplicationCADeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCADeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -150,8 +150,8 @@ func (r *AccessApplicationCAService) Delete(ctx context.Context, appID string, b
 
 // Fetches a short-lived certificate CA and its public key.
 func (r *AccessApplicationCAService) Get(ctx context.Context, appID string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCAGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

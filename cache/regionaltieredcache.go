@@ -39,8 +39,8 @@ func NewRegionalTieredCacheService(opts ...option.RequestOption) (r *RegionalTie
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
 func (r *RegionalTieredCacheService) Edit(ctx context.Context, params RegionalTieredCacheEditParams, opts ...option.RequestOption) (res *RegionalTieredCacheEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RegionalTieredCacheEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -58,8 +58,8 @@ func (r *RegionalTieredCacheService) Edit(ctx context.Context, params RegionalTi
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
 func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTieredCacheGetParams, opts ...option.RequestOption) (res *RegionalTieredCacheGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RegionalTieredCacheGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

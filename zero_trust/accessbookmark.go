@@ -38,8 +38,8 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 
 // Create a new Bookmark application.
 func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, params AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmark, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, para
 
 // Updates a configured Bookmark application.
 func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, params AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmark, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -81,8 +81,12 @@ func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, p
 // Lists Bookmark applications.
 func (r *AccessBookmarkService) List(ctx context.Context, query AccessBookmarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Bookmark], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -103,8 +107,8 @@ func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, query Access
 
 // Deletes a Bookmark application.
 func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, body AccessBookmarkDeleteParams, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -124,8 +128,8 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, b
 
 // Fetches a single Bookmark application.
 func (r *AccessBookmarkService) Get(ctx context.Context, bookmarkID string, query AccessBookmarkGetParams, opts ...option.RequestOption) (res *Bookmark, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -40,8 +40,8 @@ func NewCacheReserveService(opts ...option.RequestOption) (r *CacheReserveServic
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
 func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CacheReserveClearResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -62,8 +62,8 @@ func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClea
 // [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
 // for more information.
 func (r *CacheReserveService) Edit(ctx context.Context, params CacheReserveEditParams, opts ...option.RequestOption) (res *CacheReserveEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CacheReserveEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -84,8 +84,8 @@ func (r *CacheReserveService) Edit(ctx context.Context, params CacheReserveEditP
 // [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
 // for more information.
 func (r *CacheReserveService) Get(ctx context.Context, query CacheReserveGetParams, opts ...option.RequestOption) (res *CacheReserveGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CacheReserveGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -104,8 +104,8 @@ func (r *CacheReserveService) Get(ctx context.Context, query CacheReserveGetPara
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
 func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStatusParams, opts ...option.RequestOption) (res *CacheReserveStatusResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CacheReserveStatusResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

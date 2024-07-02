@@ -37,8 +37,8 @@ func NewRuleCatchAllService(opts ...option.RequestOption) (r *RuleCatchAllServic
 // Enable or disable catch-all routing rule, or change action to forward to
 // specific destination address.
 func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string, body RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *RuleCatchAllUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleCatchAllUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -54,8 +54,8 @@ func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string,
 
 // Get information on the default catch-all routing rule.
 func (r *RuleCatchAllService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *RuleCatchAllGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleCatchAllGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

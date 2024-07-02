@@ -36,8 +36,8 @@ func NewEmailSecuritySummaryService(opts ...option.RequestOption) (r *EmailSecur
 
 // Percentage distribution of emails classified per ARC validation.
 func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuritySummaryARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuri
 
 // Percentage distribution of emails classified per DKIM validation.
 func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecuritySummaryDKIMParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDKIMResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryDKIMResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecur
 
 // Percentage distribution of emails classified per DMARC validation.
 func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecuritySummaryDMARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDMARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryDMARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecu
 
 // Percentage distribution of emails classified as MALICIOUS.
 func (r *EmailSecuritySummaryService) Malicious(ctx context.Context, query EmailSecuritySummaryMaliciousParams, opts ...option.RequestOption) (res *EmailSecuritySummaryMaliciousResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryMaliciousResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/malicious"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *EmailSecuritySummaryService) Malicious(ctx context.Context, query Email
 
 // Proportion of emails categorized as either spam or legitimate (non-spam).
 func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecuritySummarySpamParams, opts ...option.RequestOption) (res *EmailSecuritySummarySpamResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummarySpamResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/spam"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecur
 
 // Percentage distribution of emails classified per SPF validation.
 func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuritySummarySPFParams, opts ...option.RequestOption) (res *EmailSecuritySummarySPFResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummarySPFResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -114,8 +114,8 @@ func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuri
 
 // Proportion of emails categorized as either spoof or legitimate (non-spoof).
 func (r *EmailSecuritySummaryService) Spoof(ctx context.Context, query EmailSecuritySummarySpoofParams, opts ...option.RequestOption) (res *EmailSecuritySummarySpoofResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummarySpoofResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/spoof"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -127,8 +127,8 @@ func (r *EmailSecuritySummaryService) Spoof(ctx context.Context, query EmailSecu
 
 // Percentage distribution of emails classified in Threat Categories.
 func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query EmailSecuritySummaryThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecuritySummaryThreatCategoryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryThreatCategoryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/threat_category"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -140,8 +140,8 @@ func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query 
 
 // Percentage distribution of emails classified per TLS Version.
 func (r *EmailSecuritySummaryService) TLSVersion(ctx context.Context, query EmailSecuritySummaryTLSVersionParams, opts ...option.RequestOption) (res *EmailSecuritySummaryTLSVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryTLSVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

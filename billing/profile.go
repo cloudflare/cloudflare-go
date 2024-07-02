@@ -36,8 +36,8 @@ func NewProfileService(opts ...option.RequestOption) (r *ProfileService) {
 
 // Gets the current billing profile for the account.
 func (r *ProfileService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *ProfileGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ProfileGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/billing/profile", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

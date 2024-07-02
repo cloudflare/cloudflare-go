@@ -44,8 +44,8 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 // In addition to the content, a short title, type, priority, and releasability
 // should be provided. If one is not provided a default will be assigned.
 func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *Item, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -63,8 +63,8 @@ func (r *RequestService) New(ctx context.Context, accountIdentifier string, body
 // be used to update any attributes of the request after the initial submission.
 // Only fields that you choose to update need to be add to the request body
 func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -85,8 +85,12 @@ func (r *RequestService) Update(ctx context.Context, accountIdentifier string, r
 // List Requests
 func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ListItem], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests", accountIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, body, &res, opts...)
 	if err != nil {
@@ -123,8 +127,8 @@ func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, r
 
 // Get Request Priority, Status, and TLP constants
 func (r *RequestService) Constants(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestConstants, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestConstantsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -140,8 +144,8 @@ func (r *RequestService) Constants(ctx context.Context, accountIdentifier string
 
 // Get a Request
 func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *Item, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -161,8 +165,8 @@ func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requ
 
 // Get Request Quota
 func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *Quota, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestQuotaResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -178,8 +182,8 @@ func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, op
 
 // Get Request Types
 func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestTypes, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestTypesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return

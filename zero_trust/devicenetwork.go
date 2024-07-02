@@ -37,8 +37,8 @@ func NewDeviceNetworkService(opts ...option.RequestOption) (r *DeviceNetworkServ
 
 // Creates a new device managed network.
 func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,8 +54,8 @@ func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewP
 
 // Updates a configured device managed network.
 func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, params DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -76,8 +76,12 @@ func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, par
 // Fetches a list of managed networks for an account.
 func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceNetwork], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/networks", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -99,8 +103,8 @@ func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceN
 // Deletes a device managed network and fetches a list of the remaining device
 // managed networks for an account.
 func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]DeviceNetwork, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -120,8 +124,8 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, bod
 
 // Fetches details for a single managed network.
 func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query DeviceNetworkGetParams, opts ...option.RequestOption) (res *DeviceNetwork, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

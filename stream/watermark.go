@@ -44,8 +44,8 @@ func NewWatermarkService(opts ...option.RequestOption) (r *WatermarkService) {
 // Creates watermark profiles using a single `HTTP POST multipart/form-data`
 // request.
 func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *Watermark, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WatermarkNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,8 +62,12 @@ func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, o
 // Lists all watermark profiles for an account.
 func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Watermark], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -84,8 +88,8 @@ func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkLi
 
 // Deletes a watermark profile.
 func (r *WatermarkService) Delete(ctx context.Context, identifier string, body WatermarkDeleteParams, opts ...option.RequestOption) (res *WatermarkDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WatermarkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -105,8 +109,8 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, body W
 
 // Retrieves details for a single watermark profile.
 func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *Watermark, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WatermarkGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

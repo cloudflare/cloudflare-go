@@ -36,8 +36,8 @@ func NewDestinationPagerdutyService(opts ...option.RequestOption) (r *Destinatio
 
 // Creates a new token for integrating with PagerDuty.
 func (r *DestinationPagerdutyService) New(ctx context.Context, body DestinationPagerdutyNewParams, opts ...option.RequestOption) (res *DestinationPagerdutyNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DestinationPagerdutyNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -65,8 +65,8 @@ func (r *DestinationPagerdutyService) Delete(ctx context.Context, body Destinati
 
 // Get a list of all configured PagerDuty services.
 func (r *DestinationPagerdutyService) Get(ctx context.Context, query DestinationPagerdutyGetParams, opts ...option.RequestOption) (res *[]Pagerduty, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DestinationPagerdutyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,8 +82,8 @@ func (r *DestinationPagerdutyService) Get(ctx context.Context, query Destination
 
 // Links PagerDuty with the account using the integration token.
 func (r *DestinationPagerdutyService) Link(ctx context.Context, tokenID string, query DestinationPagerdutyLinkParams, opts ...option.RequestOption) (res *DestinationPagerdutyLinkResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DestinationPagerdutyLinkResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

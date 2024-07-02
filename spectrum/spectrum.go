@@ -126,15 +126,16 @@ func (r *EdgeIPs) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [EdgeIPsUnion] interface which you can cast to the specific
 // types for more type safety.
 //
-// Possible runtime types of the union are [spectrum.EdgeIPsObject],
-// [spectrum.EdgeIPsObject].
+// Possible runtime types of the union are [spectrum.EdgeIPsEyeballIPs],
+// [spectrum.EdgeIPsCustomerOwnedIPs].
 func (r EdgeIPs) AsUnion() EdgeIPsUnion {
 	return r.union
 }
 
 // The anycast edge IP configuration for the hostname of this application.
 //
-// Union satisfied by [spectrum.EdgeIPsObject] or [spectrum.EdgeIPsObject].
+// Union satisfied by [spectrum.EdgeIPsEyeballIPs] or
+// [spectrum.EdgeIPsCustomerOwnedIPs].
 type EdgeIPsUnion interface {
 	implementsSpectrumEdgeIPs()
 }
@@ -145,55 +146,56 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EdgeIPsObject{}),
+			Type:       reflect.TypeOf(EdgeIPsEyeballIPs{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EdgeIPsObject{}),
+			Type:       reflect.TypeOf(EdgeIPsCustomerOwnedIPs{}),
 		},
 	)
 }
 
-type EdgeIPsObject struct {
+type EdgeIPsEyeballIPs struct {
 	// The IP versions supported for inbound connections on Spectrum anycast IPs.
-	Connectivity EdgeIPsObjectConnectivity `json:"connectivity"`
+	Connectivity EdgeIPsEyeballIPsConnectivity `json:"connectivity"`
 	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
 	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 	// with CNAME DNS names.
-	Type EdgeIPsObjectType `json:"type"`
-	JSON edgeIPsObjectJSON `json:"-"`
+	Type EdgeIPsEyeballIPsType `json:"type"`
+	JSON edgeIPsEyeballIPsJSON `json:"-"`
 }
 
-// edgeIPsObjectJSON contains the JSON metadata for the struct [EdgeIPsObject]
-type edgeIPsObjectJSON struct {
+// edgeIPsEyeballIPsJSON contains the JSON metadata for the struct
+// [EdgeIPsEyeballIPs]
+type edgeIPsEyeballIPsJSON struct {
 	Connectivity apijson.Field
 	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *EdgeIPsObject) UnmarshalJSON(data []byte) (err error) {
+func (r *EdgeIPsEyeballIPs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r edgeIPsObjectJSON) RawJSON() string {
+func (r edgeIPsEyeballIPsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EdgeIPsObject) implementsSpectrumEdgeIPs() {}
+func (r EdgeIPsEyeballIPs) implementsSpectrumEdgeIPs() {}
 
 // The IP versions supported for inbound connections on Spectrum anycast IPs.
-type EdgeIPsObjectConnectivity string
+type EdgeIPsEyeballIPsConnectivity string
 
 const (
-	EdgeIPsObjectConnectivityAll  EdgeIPsObjectConnectivity = "all"
-	EdgeIPsObjectConnectivityIPV4 EdgeIPsObjectConnectivity = "ipv4"
-	EdgeIPsObjectConnectivityIPV6 EdgeIPsObjectConnectivity = "ipv6"
+	EdgeIPsEyeballIPsConnectivityAll  EdgeIPsEyeballIPsConnectivity = "all"
+	EdgeIPsEyeballIPsConnectivityIPV4 EdgeIPsEyeballIPsConnectivity = "ipv4"
+	EdgeIPsEyeballIPsConnectivityIPV6 EdgeIPsEyeballIPsConnectivity = "ipv6"
 )
 
-func (r EdgeIPsObjectConnectivity) IsKnown() bool {
+func (r EdgeIPsEyeballIPsConnectivity) IsKnown() bool {
 	switch r {
-	case EdgeIPsObjectConnectivityAll, EdgeIPsObjectConnectivityIPV4, EdgeIPsObjectConnectivityIPV6:
+	case EdgeIPsEyeballIPsConnectivityAll, EdgeIPsEyeballIPsConnectivityIPV4, EdgeIPsEyeballIPsConnectivityIPV6:
 		return true
 	}
 	return false
@@ -202,15 +204,62 @@ func (r EdgeIPsObjectConnectivity) IsKnown() bool {
 // The type of edge IP configuration specified. Dynamically allocated edge IPs use
 // Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 // with CNAME DNS names.
-type EdgeIPsObjectType string
+type EdgeIPsEyeballIPsType string
 
 const (
-	EdgeIPsObjectTypeDynamic EdgeIPsObjectType = "dynamic"
+	EdgeIPsEyeballIPsTypeDynamic EdgeIPsEyeballIPsType = "dynamic"
 )
 
-func (r EdgeIPsObjectType) IsKnown() bool {
+func (r EdgeIPsEyeballIPsType) IsKnown() bool {
 	switch r {
-	case EdgeIPsObjectTypeDynamic:
+	case EdgeIPsEyeballIPsTypeDynamic:
+		return true
+	}
+	return false
+}
+
+type EdgeIPsCustomerOwnedIPs struct {
+	// The array of customer owned IPs we broadcast via anycast for this hostname and
+	// application.
+	IPs []string `json:"ips"`
+	// The type of edge IP configuration specified. Statically allocated edge IPs use
+	// customer IPs in accordance with the ips array you specify. Only valid with
+	// ADDRESS DNS names.
+	Type EdgeIPsCustomerOwnedIPsType `json:"type"`
+	JSON edgeIPsCustomerOwnedIPsJSON `json:"-"`
+}
+
+// edgeIPsCustomerOwnedIPsJSON contains the JSON metadata for the struct
+// [EdgeIPsCustomerOwnedIPs]
+type edgeIPsCustomerOwnedIPsJSON struct {
+	IPs         apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EdgeIPsCustomerOwnedIPs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r edgeIPsCustomerOwnedIPsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r EdgeIPsCustomerOwnedIPs) implementsSpectrumEdgeIPs() {}
+
+// The type of edge IP configuration specified. Statically allocated edge IPs use
+// customer IPs in accordance with the ips array you specify. Only valid with
+// ADDRESS DNS names.
+type EdgeIPsCustomerOwnedIPsType string
+
+const (
+	EdgeIPsCustomerOwnedIPsTypeStatic EdgeIPsCustomerOwnedIPsType = "static"
+)
+
+func (r EdgeIPsCustomerOwnedIPsType) IsKnown() bool {
+	switch r {
+	case EdgeIPsCustomerOwnedIPsTypeStatic:
 		return true
 	}
 	return false
@@ -270,26 +319,42 @@ func (r EdgeIPsParam) implementsSpectrumEdgeIPsUnionParam() {}
 
 // The anycast edge IP configuration for the hostname of this application.
 //
-// Satisfied by [spectrum.EdgeIPsObjectParam], [spectrum.EdgeIPsObjectParam],
-// [EdgeIPsParam].
+// Satisfied by [spectrum.EdgeIPsEyeballIPsParam],
+// [spectrum.EdgeIPsCustomerOwnedIPsParam], [EdgeIPsParam].
 type EdgeIPsUnionParam interface {
 	implementsSpectrumEdgeIPsUnionParam()
 }
 
-type EdgeIPsObjectParam struct {
+type EdgeIPsEyeballIPsParam struct {
 	// The IP versions supported for inbound connections on Spectrum anycast IPs.
-	Connectivity param.Field[EdgeIPsObjectConnectivity] `json:"connectivity"`
+	Connectivity param.Field[EdgeIPsEyeballIPsConnectivity] `json:"connectivity"`
 	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
 	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 	// with CNAME DNS names.
-	Type param.Field[EdgeIPsObjectType] `json:"type"`
+	Type param.Field[EdgeIPsEyeballIPsType] `json:"type"`
 }
 
-func (r EdgeIPsObjectParam) MarshalJSON() (data []byte, err error) {
+func (r EdgeIPsEyeballIPsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EdgeIPsObjectParam) implementsSpectrumEdgeIPsUnionParam() {}
+func (r EdgeIPsEyeballIPsParam) implementsSpectrumEdgeIPsUnionParam() {}
+
+type EdgeIPsCustomerOwnedIPsParam struct {
+	// The array of customer owned IPs we broadcast via anycast for this hostname and
+	// application.
+	IPs param.Field[[]string] `json:"ips"`
+	// The type of edge IP configuration specified. Statically allocated edge IPs use
+	// customer IPs in accordance with the ips array you specify. Only valid with
+	// ADDRESS DNS names.
+	Type param.Field[EdgeIPsCustomerOwnedIPsType] `json:"type"`
+}
+
+func (r EdgeIPsCustomerOwnedIPsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r EdgeIPsCustomerOwnedIPsParam) implementsSpectrumEdgeIPsUnionParam() {}
 
 // The name and type of DNS record for the Spectrum application.
 type OriginDNS struct {

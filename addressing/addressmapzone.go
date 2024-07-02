@@ -36,8 +36,8 @@ func NewAddressMapZoneService(opts ...option.RequestOption) (r *AddressMapZoneSe
 
 // Add a zone as a member of a particular address map.
 func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string, params AddressMapZoneUpdateParams, opts ...option.RequestOption) (res *[]AddressMapZoneUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AddressMapZoneUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string,
 
 // Remove a zone as a member of a particular address map.
 func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string, body AddressMapZoneDeleteParams, opts ...option.RequestOption) (res *[]AddressMapZoneDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AddressMapZoneDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

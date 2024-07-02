@@ -45,8 +45,12 @@ func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 // Lists all DLP profiles in an account.
 func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Profile], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -67,8 +71,8 @@ func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfile
 
 // Fetches a DLP profile by ID. Supports both predefined and custom profiles
 func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *DLPProfileGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPProfileGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

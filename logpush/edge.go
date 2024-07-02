@@ -36,8 +36,8 @@ func NewEdgeService(opts ...option.RequestOption) (r *EdgeService) {
 
 // Creates a new Instant Logs job for a zone.
 func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...option.RequestOption) (res *InstantLogpushJob, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EdgeNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...opt
 
 // Lists Instant Logs jobs for a zone.
 func (r *EdgeService) Get(ctx context.Context, query EdgeGetParams, opts ...option.RequestOption) (res *[]InstantLogpushJob, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EdgeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

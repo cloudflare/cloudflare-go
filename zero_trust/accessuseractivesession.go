@@ -38,8 +38,16 @@ func NewAccessUserActiveSessionService(opts ...option.RequestOption) (r *AccessU
 // Get active sessions for a single user.
 func (r *AccessUserActiveSessionService) List(ctx context.Context, userID string, query AccessUserActiveSessionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserActiveSessionListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if userID == "" {
+		err = errors.New("missing required user_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions", query.AccountID, userID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -60,8 +68,8 @@ func (r *AccessUserActiveSessionService) ListAutoPaging(ctx context.Context, use
 
 // Get an active session for a single user.
 func (r *AccessUserActiveSessionService) Get(ctx context.Context, userID string, nonce string, query AccessUserActiveSessionGetParams, opts ...option.RequestOption) (res *AccessUserActiveSessionGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessUserActiveSessionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

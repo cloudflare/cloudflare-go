@@ -44,8 +44,8 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 
 // Updates Page Shield settings.
 func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageShieldUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateP
 
 // Fetches the Page Shield settings.
 func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, opts ...option.RequestOption) (res *Setting, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageShieldGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -38,8 +38,8 @@ func NewHTTPLocationTLSVersionService(opts ...option.RequestOption) (r *HTTPLoca
 // Get the top locations, by HTTP traffic, of the requested TLS protocol version.
 // Values are a percentage out of the total traffic.
 func (r *HTTPLocationTLSVersionService) Get(ctx context.Context, tlsVersion HTTPLocationTLSVersionGetParamsTLSVersion, query HTTPLocationTLSVersionGetParams, opts ...option.RequestOption) (res *HTTPLocationTLSVersionGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationTLSVersionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/tls_version/%v", tlsVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

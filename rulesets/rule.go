@@ -39,8 +39,8 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // Adds a new rule to an account or zone ruleset. The rule will be added to the end
 // of the existing list of rules in the ruleset by default.
 func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *RuleNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -74,8 +74,8 @@ func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewP
 
 // Deletes an existing rule from an account or zone ruleset.
 func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -113,8 +113,8 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 
 // Updates an existing rule in an account or zone ruleset.
 func (r *RuleService) Edit(ctx context.Context, rulesetID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *RuleEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {

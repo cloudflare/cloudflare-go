@@ -37,8 +37,8 @@ func NewDNSTopService(opts ...option.RequestOption) (r *DNSTopService) {
 // Get top autonomous systems by DNS queries made to Cloudflare's public DNS
 // resolver.
 func (r *DNSTopService) Ases(ctx context.Context, query DNSTopAsesParams, opts ...option.RequestOption) (res *DNSTopAsesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSTopAsesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/dns/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,8 +50,8 @@ func (r *DNSTopService) Ases(ctx context.Context, query DNSTopAsesParams, opts .
 
 // Get top locations by DNS queries made to Cloudflare's public DNS resolver.
 func (r *DNSTopService) Locations(ctx context.Context, query DNSTopLocationsParams, opts ...option.RequestOption) (res *DNSTopLocationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSTopLocationsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/dns/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

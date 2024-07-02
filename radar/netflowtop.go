@@ -37,8 +37,8 @@ func NewNetflowTopService(opts ...option.RequestOption) (r *NetflowTopService) {
 // Get the top autonomous systems (AS) by network traffic (NetFlows) over a given
 // time period. Visit https://en.wikipedia.org/wiki/NetFlow for more information.
 func (r *NetflowTopService) Ases(ctx context.Context, query NetflowTopAsesParams, opts ...option.RequestOption) (res *NetflowTopAsesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetflowTopAsesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/netflows/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -51,8 +51,8 @@ func (r *NetflowTopService) Ases(ctx context.Context, query NetflowTopAsesParams
 // Get the top locations by network traffic (NetFlows) over a given time period.
 // Visit https://en.wikipedia.org/wiki/NetFlow for more information.
 func (r *NetflowTopService) Locations(ctx context.Context, query NetflowTopLocationsParams, opts ...option.RequestOption) (res *NetflowTopLocationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetflowTopLocationsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/netflows/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

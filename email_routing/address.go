@@ -41,8 +41,8 @@ func NewAddressService(opts ...option.RequestOption) (r *AddressService) {
 // Create a destination address to forward your emails to. Destination addresses
 // need to be verified before they can be used.
 func (r *AddressService) New(ctx context.Context, accountIdentifier string, body AddressNewParams, opts ...option.RequestOption) (res *Address, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AddressNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -59,8 +59,12 @@ func (r *AddressService) New(ctx context.Context, accountIdentifier string, body
 // Lists existing destination addresses.
 func (r *AddressService) List(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Address], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses", accountIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
@@ -81,8 +85,8 @@ func (r *AddressService) ListAutoPaging(ctx context.Context, accountIdentifier s
 
 // Deletes a specific destination address.
 func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *Address, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AddressDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -102,8 +106,8 @@ func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, d
 
 // Gets information for a specific destination email already created.
 func (r *AddressService) Get(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *Address, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AddressGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
