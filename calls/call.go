@@ -41,8 +41,8 @@ func NewCallService(opts ...option.RequestOption) (r *CallService) {
 // Creates a new Cloudflare calls app. An app is an unique enviroment where each
 // Session can access all Tracks within the app.
 func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...option.RequestOption) (res *CallsAppWithSecret, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CallNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,8 +58,8 @@ func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...opt
 
 // Edit details for a single app.
 func (r *CallService) Update(ctx context.Context, appID string, params CallUpdateParams, opts ...option.RequestOption) (res *CallsApp, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CallUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -80,8 +80,12 @@ func (r *CallService) Update(ctx context.Context, appID string, params CallUpdat
 // Lists all apps in the Cloudflare account
 func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/calls/apps", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -102,8 +106,8 @@ func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, 
 
 // Deletes an app from Cloudflare Calls
 func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteParams, opts ...option.RequestOption) (res *CallsApp, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CallDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -123,8 +127,8 @@ func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteP
 
 // Fetches details for a single Calls app.
 func (r *CallService) Get(ctx context.Context, appID string, query CallGetParams, opts ...option.RequestOption) (res *CallsApp, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CallGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

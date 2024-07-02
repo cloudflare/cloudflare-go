@@ -40,8 +40,8 @@ func NewHTTPLocationBotClassService(opts ...option.RequestOption) (r *HTTPLocati
 // scores])https://developers.cloudflare.com/bots/concepts/bot-score). Values are a
 // percentage out of the total traffic.
 func (r *HTTPLocationBotClassService) Get(ctx context.Context, botClass HTTPLocationBotClassGetParamsBotClass, query HTTPLocationBotClassGetParams, opts ...option.RequestOption) (res *HTTPLocationBotClassGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationBotClassGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/bot_class/%v", botClass)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

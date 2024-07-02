@@ -37,8 +37,8 @@ func NewTieredCachingService(opts ...option.RequestOption) (r *TieredCachingServ
 
 // Updates enablement of Tiered Caching
 func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TieredCachingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -54,8 +54,8 @@ func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEdi
 
 // Get Tiered Caching setting
 func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TieredCachingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

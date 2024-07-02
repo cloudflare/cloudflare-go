@@ -36,8 +36,8 @@ func NewEmailSecurityTimeseriesGroupService(opts ...option.RequestOption) (r *Em
 
 // Percentage distribution of emails classified per Arc validation over time.
 func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query EmailSecurityTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query Ema
 
 // Percentage distribution of emails classified per DKIM validation over time.
 func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query EmailSecurityTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDKIMResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupDKIMResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query Em
 
 // Percentage distribution of emails classified per DMARC validation over time.
 func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query EmailSecurityTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDMARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupDMARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query E
 
 // Percentage distribution of emails classified as MALICIOUS over time.
 func (r *EmailSecurityTimeseriesGroupService) Malicious(ctx context.Context, query EmailSecurityTimeseriesGroupMaliciousParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupMaliciousResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupMaliciousResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/malicious"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *EmailSecurityTimeseriesGroupService) Malicious(ctx context.Context, que
 
 // Percentage distribution of emails classified as SPAM over time.
 func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query EmailSecurityTimeseriesGroupSpamParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSpamResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupSpamResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/spam"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query Em
 
 // Percentage distribution of emails classified per SPF validation over time.
 func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query EmailSecurityTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSPFResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupSPFResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -114,8 +114,8 @@ func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query Ema
 
 // Percentage distribution of emails classified as SPOOF over time.
 func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query EmailSecurityTimeseriesGroupSpoofParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSpoofResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupSpoofResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/spoof"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -127,8 +127,8 @@ func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query E
 
 // Percentage distribution of emails classified in Threat Categories over time.
 func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context, query EmailSecurityTimeseriesGroupThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupThreatCategoryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupThreatCategoryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/threat_category"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -140,8 +140,8 @@ func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context
 
 // Percentage distribution of emails classified per TLS Version over time.
 func (r *EmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, query EmailSecurityTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupTLSVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupTLSVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

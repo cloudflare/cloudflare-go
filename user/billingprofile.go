@@ -35,8 +35,8 @@ func NewBillingProfileService(opts ...option.RequestOption) (r *BillingProfileSe
 
 // Accesses your billing profile object.
 func (r *BillingProfileService) Get(ctx context.Context, opts ...option.RequestOption) (res *BillingProfileGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BillingProfileGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "user/billing/profile"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

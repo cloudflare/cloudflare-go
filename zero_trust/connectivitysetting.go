@@ -36,8 +36,8 @@ func NewConnectivitySettingService(opts ...option.RequestOption) (r *Connectivit
 
 // Updates the Zero Trust Connectivity Settings for the given account.
 func (r *ConnectivitySettingService) Edit(ctx context.Context, params ConnectivitySettingEditParams, opts ...option.RequestOption) (res *ConnectivitySettingEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConnectivitySettingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *ConnectivitySettingService) Edit(ctx context.Context, params Connectivi
 
 // Gets the Zero Trust Connectivity Settings for the given account.
 func (r *ConnectivitySettingService) Get(ctx context.Context, query ConnectivitySettingGetParams, opts ...option.RequestOption) (res *ConnectivitySettingGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConnectivitySettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

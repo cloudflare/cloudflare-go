@@ -48,8 +48,8 @@ func NewOperationService(opts ...option.RequestOption) (r *OperationService) {
 // existing one will return the record of the already existing operation and update
 // its last_updated date.
 func (r *OperationService) New(ctx context.Context, params OperationNewParams, opts ...option.RequestOption) (res *[]APIShield, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OperationNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -66,8 +66,12 @@ func (r *OperationService) New(ctx context.Context, params OperationNewParams, o
 // Retrieve information about all operations on a zone
 func (r *OperationService) List(ctx context.Context, params OperationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[APIShield], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -88,8 +92,8 @@ func (r *OperationService) ListAutoPaging(ctx context.Context, params OperationL
 
 // Delete an operation
 func (r *OperationService) Delete(ctx context.Context, operationID string, body OperationDeleteParams, opts ...option.RequestOption) (res *OperationDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OperationDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -109,8 +113,8 @@ func (r *OperationService) Delete(ctx context.Context, operationID string, body 
 
 // Retrieve information about an operation
 func (r *OperationService) Get(ctx context.Context, operationID string, params OperationGetParams, opts ...option.RequestOption) (res *APIShield, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OperationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

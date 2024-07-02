@@ -46,8 +46,8 @@ func NewAccessApplicationService(opts ...option.RequestOption) (r *AccessApplica
 
 // Adds a new application to Access.
 func (r *AccessApplicationService) New(ctx context.Context, params AccessApplicationNewParams, opts ...option.RequestOption) (res *AccessApplicationNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -77,8 +77,8 @@ func (r *AccessApplicationService) New(ctx context.Context, params AccessApplica
 
 // Updates an Access application.
 func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDUnionParam, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *AccessApplicationUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -109,7 +109,7 @@ func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDUnionP
 // Lists all Access applications in an account or zone.
 func (r *AccessApplicationService) List(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -149,8 +149,8 @@ func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, query Acc
 
 // Deletes an application from Access.
 func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDUnionParam, body AccessApplicationDeleteParams, opts ...option.RequestOption) (res *AccessApplicationDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -180,8 +180,8 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDUnionP
 
 // Fetches information about an Access application.
 func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDUnionParam, query AccessApplicationGetParams, opts ...option.RequestOption) (res *AccessApplicationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -211,8 +211,8 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDUnionPara
 
 // Revokes all tokens issued for an application.
 func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppIDUnionParam, body AccessApplicationRevokeTokensParams, opts ...option.RequestOption) (res *AccessApplicationRevokeTokensResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationRevokeTokensResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {

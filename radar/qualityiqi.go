@@ -37,8 +37,8 @@ func NewQualityIQIService(opts ...option.RequestOption) (r *QualityIQIService) {
 // Get a summary (percentiles) of bandwidth, latency or DNS response time from the
 // Radar Internet Quality Index (IQI).
 func (r *QualityIQIService) Summary(ctx context.Context, query QualityIQISummaryParams, opts ...option.RequestOption) (res *QualityIQISummaryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QualityIQISummaryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/quality/iqi/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -51,8 +51,8 @@ func (r *QualityIQIService) Summary(ctx context.Context, query QualityIQISummary
 // Get a time series (percentiles) of bandwidth, latency or DNS response time from
 // the Radar Internet Quality Index (IQI).
 func (r *QualityIQIService) TimeseriesGroups(ctx context.Context, query QualityIQITimeseriesGroupsParams, opts ...option.RequestOption) (res *QualityIQITimeseriesGroupsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QualityIQITimeseriesGroupsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/quality/iqi/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

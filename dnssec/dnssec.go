@@ -39,8 +39,8 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 
 // Delete DNSSEC.
 func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opts ...option.RequestOption) (res *DNSSECDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSSECDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opt
 
 // Enable or disable DNSSEC.
 func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts ...option.RequestOption) (res *DNSSEC, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSSECEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -73,8 +73,8 @@ func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts 
 
 // Details about DNSSEC status and configuration.
 func (r *DNSSECService) Get(ctx context.Context, query DNSSECGetParams, opts ...option.RequestOption) (res *DNSSEC, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSSECGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

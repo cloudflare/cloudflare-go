@@ -36,8 +36,8 @@ func NewEmailRoutingTimeseriesGroupService(opts ...option.RequestOption) (r *Ema
 
 // Percentage distribution of emails classified per Arc validation over time.
 func (r *EmailRoutingTimeseriesGroupService) ARC(ctx context.Context, query EmailRoutingTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *EmailRoutingTimeseriesGroupService) ARC(ctx context.Context, query Emai
 
 // Percentage distribution of emails classified per DKIM validation over time.
 func (r *EmailRoutingTimeseriesGroupService) DKIM(ctx context.Context, query EmailRoutingTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupDKIMResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupDKIMResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *EmailRoutingTimeseriesGroupService) DKIM(ctx context.Context, query Ema
 
 // Percentage distribution of emails classified per DMARC validation over time.
 func (r *EmailRoutingTimeseriesGroupService) DMARC(ctx context.Context, query EmailRoutingTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupDMARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupDMARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *EmailRoutingTimeseriesGroupService) DMARC(ctx context.Context, query Em
 
 // Percentage distribution of emails by Encrypted over time.
 func (r *EmailRoutingTimeseriesGroupService) Encrypted(ctx context.Context, query EmailRoutingTimeseriesGroupEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupEncryptedResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupEncryptedResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/encrypted"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *EmailRoutingTimeseriesGroupService) Encrypted(ctx context.Context, quer
 
 // Percentage distribution of emails by Ip Version over time.
 func (r *EmailRoutingTimeseriesGroupService) IPVersion(ctx context.Context, query EmailRoutingTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *EmailRoutingTimeseriesGroupService) IPVersion(ctx context.Context, quer
 
 // Percentage distribution of emails classified per SPF validation over time.
 func (r *EmailRoutingTimeseriesGroupService) SPF(ctx context.Context, query EmailRoutingTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupSPFResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupSPFResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

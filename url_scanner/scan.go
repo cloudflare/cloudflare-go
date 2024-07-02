@@ -41,8 +41,8 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 // and custom headers. Accounts are limited to 1 new scan every 10 seconds and 8000
 // per month. If you need more, please reach out.
 func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScanNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return
@@ -58,8 +58,8 @@ func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewPar
 
 // Get URL scan by uuid
 func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, query ScanGetParams, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScanGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return
@@ -80,8 +80,8 @@ func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, 
 // Get a URL scan's HAR file. See HAR spec at
 // http://www.softwareishard.com/blog/har-12-spec/.
 func (r *ScanService) Har(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *ScanHarResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScanHarResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return

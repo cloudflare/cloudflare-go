@@ -38,8 +38,8 @@ func NewGRETunnelService(opts ...option.RequestOption) (r *GRETunnelService) {
 // Creates new GRE tunnels. Use `?validate_only=true` as an optional query
 // parameter to only run validation without persisting changes.
 func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, opts ...option.RequestOption) (res *GRETunnelNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GRETunnelNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, o
 // Updates a specific GRE tunnel. Use `?validate_only=true` as an optional query
 // parameter to only run validation without persisting changes.
 func (r *GRETunnelService) Update(ctx context.Context, greTunnelID string, params GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GRETunnelUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,8 +77,8 @@ func (r *GRETunnelService) Update(ctx context.Context, greTunnelID string, param
 
 // Lists GRE tunnels associated with an account.
 func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, opts ...option.RequestOption) (res *GRETunnelListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GRETunnelListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -95,8 +95,8 @@ func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, 
 // Disables and removes a specific static GRE tunnel. Use `?validate_only=true` as
 // an optional query parameter to only run validation without persisting changes.
 func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, body GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GRETunnelDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -116,8 +116,8 @@ func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, body 
 
 // Lists informtion for a specific GRE tunnel.
 func (r *GRETunnelService) Get(ctx context.Context, greTunnelID string, query GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GRETunnelGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

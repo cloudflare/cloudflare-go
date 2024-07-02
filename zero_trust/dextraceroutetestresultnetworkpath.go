@@ -38,8 +38,8 @@ func NewDEXTracerouteTestResultNetworkPathService(opts ...option.RequestOption) 
 // Get a breakdown of hops and performance metrics for a specific traceroute test
 // run
 func (r *DEXTracerouteTestResultNetworkPathService) Get(ctx context.Context, testResultID string, query DEXTracerouteTestResultNetworkPathGetParams, opts ...option.RequestOption) (res *DEXTracerouteTestResultNetworkPathGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestResultNetworkPathGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

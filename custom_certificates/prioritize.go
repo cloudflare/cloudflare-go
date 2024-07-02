@@ -38,8 +38,8 @@ func NewPrioritizeService(opts ...option.RequestOption) (r *PrioritizeService) {
 // should be used during a request. The higher priority will break ties across
 // overlapping 'legacy_custom' certificates.
 func (r *PrioritizeService) Update(ctx context.Context, params PrioritizeUpdateParams, opts ...option.RequestOption) (res *[]CustomCertificate, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PrioritizeUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

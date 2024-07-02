@@ -40,8 +40,8 @@ func NewDLPPatternService(opts ...option.RequestOption) (r *DLPPatternService) {
 // regex will be rejected if it uses the Kleene Star -- be sure to bound the
 // maximum number of characters that can be matched.
 func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *logpush.OwnershipValidation, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPPatternValidateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

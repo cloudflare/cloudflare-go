@@ -43,8 +43,12 @@ func NewAttackSurfaceReportIssueService(opts ...option.RequestOption) (r *Attack
 // Get Security Center Issues
 func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[AttackSurfaceReportIssueListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/issues", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -65,8 +69,8 @@ func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, pa
 
 // Get Security Center Issue Counts by Class
 func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params AttackSurfaceReportIssueClassParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueClassResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueClassResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,8 +86,8 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 
 // Archive Security Center Insight
 func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueDismissResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -103,8 +107,8 @@ func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID s
 
 // Get Security Center Issue Counts by Severity
 func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params AttackSurfaceReportIssueSeverityParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueSeverityResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueSeverityResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -120,8 +124,8 @@ func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params A
 
 // Get Security Center Issue Counts by Type
 func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params AttackSurfaceReportIssueTypeParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueTypeResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueTypeResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

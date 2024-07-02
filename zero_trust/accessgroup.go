@@ -38,8 +38,8 @@ func NewAccessGroupService(opts ...option.RequestOption) (r *AccessGroupService)
 
 // Creates a new Access group.
 func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessGroupNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -69,8 +69,8 @@ func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParam
 
 // Updates a configured Access group.
 func (r *AccessGroupService) Update(ctx context.Context, groupID string, params AccessGroupUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessGroupUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -105,7 +105,7 @@ func (r *AccessGroupService) Update(ctx context.Context, groupID string, params 
 // Lists all Access groups.
 func (r *AccessGroupService) List(ctx context.Context, query AccessGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGroup], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -145,8 +145,8 @@ func (r *AccessGroupService) ListAutoPaging(ctx context.Context, query AccessGro
 
 // Deletes an Access group.
 func (r *AccessGroupService) Delete(ctx context.Context, groupID string, body AccessGroupDeleteParams, opts ...option.RequestOption) (res *AccessGroupDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessGroupDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -180,8 +180,8 @@ func (r *AccessGroupService) Delete(ctx context.Context, groupID string, body Ac
 
 // Fetches a single Access group.
 func (r *AccessGroupService) Get(ctx context.Context, groupID string, query AccessGroupGetParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessGroupGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

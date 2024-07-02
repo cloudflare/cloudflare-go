@@ -39,8 +39,8 @@ func NewProjectDomainService(opts ...option.RequestOption) (r *ProjectDomainServ
 
 // Add a new domain for the Pages project.
 func (r *ProjectDomainService) New(ctx context.Context, projectName string, params ProjectDomainNewParams, opts ...option.RequestOption) (res *ProjectDomainNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ProjectDomainNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,8 +61,16 @@ func (r *ProjectDomainService) New(ctx context.Context, projectName string, para
 // Fetch a list of all domains associated with a Pages project.
 func (r *ProjectDomainService) List(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ProjectDomainListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if projectName == "" {
+		err = errors.New("missing required project_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", query.AccountID, projectName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -103,8 +111,8 @@ func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, d
 
 // Retry the validation status of a single domain.
 func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, params ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ProjectDomainEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -128,8 +136,8 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 
 // Fetch a single domain.
 func (r *ProjectDomainService) Get(ctx context.Context, projectName string, domainName string, query ProjectDomainGetParams, opts ...option.RequestOption) (res *ProjectDomainGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ProjectDomainGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

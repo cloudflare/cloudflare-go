@@ -37,8 +37,8 @@ func NewSiteWANService(opts ...option.RequestOption) (r *SiteWANService) {
 
 // Creates a new Site WAN.
 func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANNewParams, opts ...option.RequestOption) (res *[]WAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteWANNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,8 +58,8 @@ func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANN
 
 // Update a specific Site WAN.
 func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string, params SiteWANUpdateParams, opts ...option.RequestOption) (res *WAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteWANUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -84,8 +84,16 @@ func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string
 // Lists Site WANs associated with an account.
 func (r *SiteWANService) List(ctx context.Context, siteID string, query SiteWANListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WAN], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if siteID == "" {
+		err = errors.New("missing required site_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", query.AccountID, siteID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -106,8 +114,8 @@ func (r *SiteWANService) ListAutoPaging(ctx context.Context, siteID string, quer
 
 // Remove a specific Site WAN.
 func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string, body SiteWANDeleteParams, opts ...option.RequestOption) (res *WAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteWANDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -131,8 +139,8 @@ func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string
 
 // Patch a specific Site WAN.
 func (r *SiteWANService) Edit(ctx context.Context, siteID string, wanID string, params SiteWANEditParams, opts ...option.RequestOption) (res *WAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteWANEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -156,8 +164,8 @@ func (r *SiteWANService) Edit(ctx context.Context, siteID string, wanID string, 
 
 // Get a specific Site WAN.
 func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, query SiteWANGetParams, opts ...option.RequestOption) (res *WAN, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteWANGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

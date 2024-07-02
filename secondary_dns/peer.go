@@ -37,8 +37,8 @@ func NewPeerService(opts ...option.RequestOption) (r *PeerService) {
 
 // Create Peer.
 func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *Peer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PeerNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,8 +54,8 @@ func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...opt
 
 // Modify Peer.
 func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpdateParams, opts ...option.RequestOption) (res *Peer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PeerUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -76,8 +76,12 @@ func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpda
 // List Peers.
 func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Peer], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -98,8 +102,8 @@ func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, 
 
 // Delete Peer.
 func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PeerDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -119,8 +123,8 @@ func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDelete
 
 // Get Peer.
 func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParams, opts ...option.RequestOption) (res *Peer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PeerGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

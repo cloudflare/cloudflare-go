@@ -37,8 +37,8 @@ func NewAttackLayer7TimeseriesGroupService(opts ...option.RequestOption) (r *Att
 // Get a time series of the percentual distribution of mitigation techniques, over
 // time.
 func (r *AttackLayer7TimeseriesGroupService) Get(ctx context.Context, query AttackLayer7TimeseriesGroupGetParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,8 +50,8 @@ func (r *AttackLayer7TimeseriesGroupService) Get(ctx context.Context, query Atta
 
 // Percentage distribution of attacks by http method used over time.
 func (r *AttackLayer7TimeseriesGroupService) HTTPMethod(ctx context.Context, query AttackLayer7TimeseriesGroupHTTPMethodParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupHTTPMethodResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/http_method"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -63,8 +63,8 @@ func (r *AttackLayer7TimeseriesGroupService) HTTPMethod(ctx context.Context, que
 
 // Percentage distribution of attacks by http version used over time.
 func (r *AttackLayer7TimeseriesGroupService) HTTPVersion(ctx context.Context, query AttackLayer7TimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupHTTPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/http_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -76,8 +76,8 @@ func (r *AttackLayer7TimeseriesGroupService) HTTPVersion(ctx context.Context, qu
 
 // Percentage distribution of attacks by industry used over time.
 func (r *AttackLayer7TimeseriesGroupService) Industry(ctx context.Context, query AttackLayer7TimeseriesGroupIndustryParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIndustryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupIndustryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/industry"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -89,8 +89,8 @@ func (r *AttackLayer7TimeseriesGroupService) Industry(ctx context.Context, query
 
 // Percentage distribution of attacks by ip version used over time.
 func (r *AttackLayer7TimeseriesGroupService) IPVersion(ctx context.Context, query AttackLayer7TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -102,8 +102,8 @@ func (r *AttackLayer7TimeseriesGroupService) IPVersion(ctx context.Context, quer
 
 // Percentage distribution of attacks by managed rules used over time.
 func (r *AttackLayer7TimeseriesGroupService) ManagedRules(ctx context.Context, query AttackLayer7TimeseriesGroupManagedRulesParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupManagedRulesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupManagedRulesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/managed_rules"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -115,8 +115,8 @@ func (r *AttackLayer7TimeseriesGroupService) ManagedRules(ctx context.Context, q
 
 // Percentage distribution of attacks by mitigation product used over time.
 func (r *AttackLayer7TimeseriesGroupService) MitigationProduct(ctx context.Context, query AttackLayer7TimeseriesGroupMitigationProductParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupMitigationProductResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupMitigationProductResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/mitigation_product"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -128,8 +128,8 @@ func (r *AttackLayer7TimeseriesGroupService) MitigationProduct(ctx context.Conte
 
 // Percentage distribution of attacks by vertical used over time.
 func (r *AttackLayer7TimeseriesGroupService) Vertical(ctx context.Context, query AttackLayer7TimeseriesGroupVerticalParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupVerticalResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupVerticalResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/vertical"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

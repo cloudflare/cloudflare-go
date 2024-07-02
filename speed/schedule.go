@@ -37,8 +37,8 @@ func NewScheduleService(opts ...option.RequestOption) (r *ScheduleService) {
 
 // Creates a scheduled test for a page.
 func (r *ScheduleService) New(ctx context.Context, url string, params ScheduleNewParams, opts ...option.RequestOption) (res *ScheduleNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScheduleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -58,8 +58,8 @@ func (r *ScheduleService) New(ctx context.Context, url string, params ScheduleNe
 
 // Deletes a scheduled test for a page.
 func (r *ScheduleService) Delete(ctx context.Context, url string, params ScheduleDeleteParams, opts ...option.RequestOption) (res *ScheduleDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScheduleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -79,8 +79,8 @@ func (r *ScheduleService) Delete(ctx context.Context, url string, params Schedul
 
 // Retrieves the test schedule for a page in a specific region.
 func (r *ScheduleService) Get(ctx context.Context, url string, params ScheduleGetParams, opts ...option.RequestOption) (res *Schedule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScheduleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -36,8 +36,8 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 
 // Updates the current device settings for a Zero Trust account.
 func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingUpdateParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DeviceSettingUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingU
 
 // Describes the current device settings for a Zero Trust account.
 func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingListParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DeviceSettingListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

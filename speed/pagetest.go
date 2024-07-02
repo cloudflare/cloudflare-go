@@ -39,8 +39,8 @@ func NewPageTestService(opts ...option.RequestOption) (r *PageTestService) {
 
 // Starts a test for a specific webpage, in a specific region.
 func (r *PageTestService) New(ctx context.Context, url string, params PageTestNewParams, opts ...option.RequestOption) (res *Test, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageTestNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -77,8 +77,8 @@ func (r *PageTestService) List(ctx context.Context, url string, params PageTestL
 // Deletes all tests for a specific webpage from a specific region. Deleted tests
 // are still counted as part of the quota.
 func (r *PageTestService) Delete(ctx context.Context, url string, params PageTestDeleteParams, opts ...option.RequestOption) (res *PageTestDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageTestDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -98,8 +98,8 @@ func (r *PageTestService) Delete(ctx context.Context, url string, params PageTes
 
 // Retrieves the result of a specific test.
 func (r *PageTestService) Get(ctx context.Context, url string, testID string, query PageTestGetParams, opts ...option.RequestOption) (res *Test, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageTestGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

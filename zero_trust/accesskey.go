@@ -39,8 +39,8 @@ func NewAccessKeyService(opts ...option.RequestOption) (r *AccessKeyService) {
 
 // Updates the Access key rotation settings for an account.
 func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessKeyUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdatePar
 
 // Gets the Access key rotation settings for an account.
 func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, opts ...option.RequestOption) (res *AccessKeyGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessKeyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -73,8 +73,8 @@ func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, op
 
 // Perfoms a key rotation for an account.
 func (r *AccessKeyService) Rotate(ctx context.Context, body AccessKeyRotateParams, opts ...option.RequestOption) (res *AccessKeyRotateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessKeyRotateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

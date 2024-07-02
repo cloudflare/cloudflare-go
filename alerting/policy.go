@@ -40,8 +40,8 @@ func NewPolicyService(opts ...option.RequestOption) (r *PolicyService) {
 
 // Creates a new Notification policy.
 func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *PolicyNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PolicyNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ..
 
 // Update a Notification policy.
 func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *PolicyUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PolicyUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,8 +79,12 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 // Get a list of all Notification policies.
 func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Policy], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -117,8 +121,8 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 
 // Get details for a single policy.
 func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *Policy, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PolicyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -4,6 +4,7 @@ package api_gateway
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -42,8 +43,16 @@ func NewUserSchemaOperationService(opts ...option.RequestOption) (r *UserSchemaO
 // Shield Endpoint Management will be returned as full operations.
 func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[UserSchemaOperationListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if schemaID == "" {
+		err = errors.New("missing required schema_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/api_gateway/user_schemas/%s/operations", params.ZoneID, schemaID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {

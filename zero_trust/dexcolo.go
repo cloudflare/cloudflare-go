@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -39,8 +40,12 @@ func NewDEXColoService(opts ...option.RequestOption) (r *DEXColoService) {
 // are also returned and sorted alphabetically.
 func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DEXColoListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dex/colos", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {

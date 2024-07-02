@@ -48,8 +48,8 @@ func NewPageruleService(opts ...option.RequestOption) (r *PageruleService) {
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
 func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opts ...option.RequestOption) (res *PageruleNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageruleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -71,8 +71,8 @@ func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opt
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
 func (r *PageruleService) Update(ctx context.Context, pageruleID string, params PageruleUpdateParams, opts ...option.RequestOption) (res *PageruleUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageruleUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -97,8 +97,8 @@ func (r *PageruleService) Update(ctx context.Context, pageruleID string, params 
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
 func (r *PageruleService) List(ctx context.Context, params PageruleListParams, opts ...option.RequestOption) (res *[]PageRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageruleListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -119,8 +119,8 @@ func (r *PageruleService) List(ctx context.Context, params PageruleListParams, o
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
 func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageruleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -145,8 +145,8 @@ func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body Pa
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
 func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params PageruleEditParams, opts ...option.RequestOption) (res *PageruleEditResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageruleEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -171,8 +171,8 @@ func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params Pa
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
 func (r *PageruleService) Get(ctx context.Context, pageruleID string, query PageruleGetParams, opts ...option.RequestOption) (res *PageruleGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PageruleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -4,6 +4,7 @@ package durable_objects
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,8 +39,12 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 // Returns the Durable Object namespaces owned by an account.
 func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Namespace], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {

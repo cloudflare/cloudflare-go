@@ -36,8 +36,8 @@ func NewScriptTailService(opts ...option.RequestOption) (r *ScriptTailService) {
 
 // Starts a tail that receives logs and exception from a Worker.
 func (r *ScriptTailService) New(ctx context.Context, scriptName string, params ScriptTailNewParams, opts ...option.RequestOption) (res *ScriptTailNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScriptTailNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,8 +77,8 @@ func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id st
 
 // Get list of tails currently deployed on a Worker.
 func (r *ScriptTailService) Get(ctx context.Context, scriptName string, query ScriptTailGetParams, opts ...option.RequestOption) (res *ScriptTailGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScriptTailGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

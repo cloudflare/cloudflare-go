@@ -39,8 +39,8 @@ func NewNetworkRouteNetworkService(opts ...option.RequestOption) (r *NetworkRout
 // Routes a private network through a Cloudflare Tunnel. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
 func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkNewParams, opts ...option.RequestOption) (res *Route, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -66,8 +66,8 @@ func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded s
 // it will delete the route from that tunnel, otherwise it will delete the route
 // based on the vnet and tun_type.
 func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -88,8 +88,8 @@ func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncode
 // Updates an existing private network route in an account. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
 func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body NetworkRouteNetworkEditParams, opts ...option.RequestOption) (res *Route, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -36,8 +36,8 @@ func NewOutgoingStatusService(opts ...option.RequestOption) (r *OutgoingStatusSe
 
 // Get primary zone transfer status.
 func (r *OutgoingStatusService) Get(ctx context.Context, query OutgoingStatusGetParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OutgoingStatusGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

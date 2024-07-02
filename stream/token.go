@@ -37,8 +37,8 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 // Creates a signed URL token for a video. If a body is not provided in the
 // request, a token is created with default values.
 func (r *TokenService) New(ctx context.Context, identifier string, params TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TokenNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

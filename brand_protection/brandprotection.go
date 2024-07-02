@@ -38,8 +38,8 @@ func NewBrandProtectionService(opts ...option.RequestOption) (r *BrandProtection
 
 // Submit suspicious URL for scanning
 func (r *BrandProtectionService) Submit(ctx context.Context, params BrandProtectionSubmitParams, opts ...option.RequestOption) (res *Submit, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BrandProtectionSubmitResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *BrandProtectionService) Submit(ctx context.Context, params BrandProtect
 
 // Get results for a URL scan
 func (r *BrandProtectionService) URLInfo(ctx context.Context, params BrandProtectionURLInfoParams, opts ...option.RequestOption) (res *Info, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BrandProtectionURLInfoResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

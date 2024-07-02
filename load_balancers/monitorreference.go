@@ -36,8 +36,8 @@ func NewMonitorReferenceService(opts ...option.RequestOption) (r *MonitorReferen
 
 // Get the list of resources that reference the provided monitor.
 func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, query MonitorReferenceGetParams, opts ...option.RequestOption) (res *[]MonitorReferenceGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MonitorReferenceGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

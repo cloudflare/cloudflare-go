@@ -36,8 +36,8 @@ func NewAssociationService(opts ...option.RequestOption) (r *AssociationService)
 
 // Lists all active associations between the certificate and Cloudflare services.
 func (r *AssociationService) Get(ctx context.Context, mtlsCertificateID string, query AssociationGetParams, opts ...option.RequestOption) (res *[]CertificateAsssociation, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AssociationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

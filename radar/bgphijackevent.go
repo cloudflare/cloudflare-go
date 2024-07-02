@@ -38,7 +38,7 @@ func NewBGPHijackEventService(opts ...option.RequestOption) (r *BGPHijackEventSe
 // Get the BGP hijack events. (Beta)
 func (r *BGPHijackEventService) List(ctx context.Context, query BGPHijackEventListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[BGPHijackEventListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "radar/bgp/hijacks/events"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)

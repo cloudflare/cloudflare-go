@@ -36,8 +36,8 @@ func NewSippyService(opts ...option.RequestOption) (r *SippyService) {
 
 // Sets configuration for Sippy for an existing R2 bucket.
 func (r *SippyService) Update(ctx context.Context, bucketName string, params SippyUpdateParams, opts ...option.RequestOption) (res *Sippy, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SippyUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *SippyService) Update(ctx context.Context, bucketName string, params Sip
 
 // Disables Sippy on this bucket
 func (r *SippyService) Delete(ctx context.Context, bucketName string, body SippyDeleteParams, opts ...option.RequestOption) (res *SippyDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SippyDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -78,8 +78,8 @@ func (r *SippyService) Delete(ctx context.Context, bucketName string, body Sippy
 
 // Gets configuration for Sippy for an existing R2 bucket.
 func (r *SippyService) Get(ctx context.Context, bucketName string, query SippyGetParams, opts ...option.RequestOption) (res *Sippy, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SippyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

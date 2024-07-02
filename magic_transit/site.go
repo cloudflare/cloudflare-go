@@ -45,8 +45,8 @@ func NewSiteService(opts ...option.RequestOption) (r *SiteService) {
 
 // Creates a new Site
 func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...option.RequestOption) (res *Site, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,8 +62,8 @@ func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...opt
 
 // Update a specific Site.
 func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpdateParams, opts ...option.RequestOption) (res *Site, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -86,8 +86,12 @@ func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpda
 // site.SecondaryConnectorID.
 func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Site], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/sites", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -110,8 +114,8 @@ func (r *SiteService) ListAutoPaging(ctx context.Context, params SiteListParams,
 
 // Remove a specific Site.
 func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDeleteParams, opts ...option.RequestOption) (res *Site, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -131,8 +135,8 @@ func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDelete
 
 // Patch a specific Site.
 func (r *SiteService) Edit(ctx context.Context, siteID string, params SiteEditParams, opts ...option.RequestOption) (res *Site, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -152,8 +156,8 @@ func (r *SiteService) Edit(ctx context.Context, siteID string, params SiteEditPa
 
 // Get a specific Site.
 func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParams, opts ...option.RequestOption) (res *Site, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SiteGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

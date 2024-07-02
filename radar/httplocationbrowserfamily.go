@@ -38,8 +38,8 @@ func NewHTTPLocationBrowserFamilyService(opts ...option.RequestOption) (r *HTTPL
 // Get the top locations, by HTTP traffic, of the requested browser family. Values
 // are a percentage out of the total traffic.
 func (r *HTTPLocationBrowserFamilyService) Get(ctx context.Context, browserFamily HTTPLocationBrowserFamilyGetParamsBrowserFamily, query HTTPLocationBrowserFamilyGetParams, opts ...option.RequestOption) (res *HTTPLocationBrowserFamilyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationBrowserFamilyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/browser_family/%v", browserFamily)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

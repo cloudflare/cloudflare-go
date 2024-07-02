@@ -39,8 +39,8 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 
 // Create a zone subscription, either plan or add-ons.
 func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SubscriptionNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
@@ -56,8 +56,8 @@ func (r *SubscriptionService) New(ctx context.Context, identifier string, body S
 
 // Updates an account subscription.
 func (r *SubscriptionService) Update(ctx context.Context, accountIdentifier string, subscriptionIdentifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SubscriptionUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -78,8 +78,12 @@ func (r *SubscriptionService) Update(ctx context.Context, accountIdentifier stri
 // Lists all of an account's subscriptions.
 func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[user.Subscription], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if accountIdentifier == "" {
+		err = errors.New("missing required account_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/subscriptions", accountIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -100,8 +104,8 @@ func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentif
 
 // Deletes an account's subscription.
 func (r *SubscriptionService) Delete(ctx context.Context, accountIdentifier string, subscriptionIdentifier string, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SubscriptionDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -121,8 +125,8 @@ func (r *SubscriptionService) Delete(ctx context.Context, accountIdentifier stri
 
 // Lists zone subscription details.
 func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SubscriptionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return

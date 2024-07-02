@@ -35,8 +35,8 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 
 // Lets you search for locations, autonomous systems (AS) and reports.
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SearchGlobalResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/search/global"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

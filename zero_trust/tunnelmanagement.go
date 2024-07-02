@@ -39,8 +39,8 @@ func NewTunnelManagementService(opts ...option.RequestOption) (r *TunnelManageme
 // Gets a management token used to access the management resources (i.e. Streaming
 // Logs) of a tunnel.
 func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, params TunnelManagementNewParams, opts ...option.RequestOption) (res *TunnelManagementNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelManagementNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

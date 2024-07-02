@@ -38,8 +38,8 @@ func NewFallbackOriginService(opts ...option.RequestOption) (r *FallbackOriginSe
 
 // Update Fallback Origin for Custom Hostnames
 func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FallbackOriginUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 
 // Delete Fallback Origin for Custom Hostnames
 func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FallbackOriginDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -72,8 +72,8 @@ func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginD
 
 // Get Fallback Origin for Custom Hostnames
 func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FallbackOriginGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

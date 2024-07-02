@@ -39,8 +39,8 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // Only available for the Waiting Room Advanced subscription. Creates a rule for a
 // waiting room.
 func (r *RuleService) New(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *RuleService) New(ctx context.Context, waitingRoomID string, params Rule
 // Only available for the Waiting Room Advanced subscription. Replaces all rules
 // for a waiting room.
 func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -83,8 +83,16 @@ func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params R
 // Lists rules for a waiting room.
 func (r *RuleService) List(ctx context.Context, waitingRoomID string, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if waitingRoomID == "" {
+		err = errors.New("missing required waiting_room_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", query.ZoneID, waitingRoomID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -105,8 +113,8 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, waitingRoomID string, 
 
 // Deletes a rule for a waiting room.
 func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -130,8 +138,8 @@ func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID s
 
 // Patches a rule for a waiting room.
 func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -49,8 +49,8 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 // already owns a namespace with this title. A namespace must be explicitly deleted
 // to be replaced.
 func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *Namespace, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -66,8 +66,8 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 
 // Modifies a namespace's title.
 func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -88,8 +88,12 @@ func (r *NamespaceService) Update(ctx context.Context, namespaceID string, param
 // Returns the namespaces owned by an account.
 func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Namespace], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -110,8 +114,8 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceL
 
 // Deletes the namespace corresponding to the given ID.
 func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -131,8 +135,8 @@ func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body 
 
 // Get the namespace corresponding to the given ID.
 func (r *NamespaceService) Get(ctx context.Context, namespaceID string, query NamespaceGetParams, opts ...option.RequestOption) (res *Namespace, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NamespaceGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -42,8 +42,16 @@ func NewPrefixBGPPrefixService(opts ...option.RequestOption) (r *PrefixBGPPrefix
 // Prefixes.
 func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) (res *pagination.SinglePage[BGPPrefix], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", query.AccountID, prefixID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -68,8 +76,8 @@ func (r *PrefixBGPPrefixService) ListAutoPaging(ctx context.Context, prefixID st
 // Update the properties of a BGP Prefix, such as the on demand advertisement
 // status (advertised or withdrawn).
 func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpPrefixID string, params PrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PrefixBGPPrefixEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -93,8 +101,8 @@ func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpP
 
 // Retrieve a single BGP Prefix according to its identifier
 func (r *PrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPrefixID string, query PrefixBGPPrefixGetParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PrefixBGPPrefixGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -52,8 +52,8 @@ func NewRecordService(opts ...option.RequestOption) (r *RecordService) {
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
 func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ...option.RequestOption) (res *Record, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -74,8 +74,8 @@ func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ..
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
 func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params RecordUpdateParams, opts ...option.RequestOption) (res *Record, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -96,8 +96,12 @@ func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params R
 // List, search, sort, and filter a zones' DNS records.
 func (r *RecordService) List(ctx context.Context, params RecordListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Record], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -118,8 +122,8 @@ func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListPar
 
 // Delete DNS Record
 func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -144,8 +148,8 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
 func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params RecordEditParams, opts ...option.RequestOption) (res *Record, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -184,8 +188,8 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 
 // DNS Record Details
 func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query RecordGetParams, opts ...option.RequestOption) (res *Record, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -212,8 +216,8 @@ func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query Recor
 // [the documentation](https://developers.cloudflare.com/dns/manage-dns-records/how-to/import-and-export/ "Import and export records")
 // for more information.
 func (r *RecordService) Import(ctx context.Context, params RecordImportParams, opts ...option.RequestOption) (res *RecordImportResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordImportResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -230,8 +234,8 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 // Scan for common DNS records on your domain and automatically add them to your
 // zone. Useful if you haven't updated your nameservers yet.
 func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordScanResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

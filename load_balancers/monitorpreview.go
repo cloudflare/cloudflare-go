@@ -37,8 +37,8 @@ func NewMonitorPreviewService(opts ...option.RequestOption) (r *MonitorPreviewSe
 // Preview pools using the specified monitor with provided monitor details. The
 // returned preview_id can be used in the preview endpoint to retrieve the results.
 func (r *MonitorPreviewService) New(ctx context.Context, monitorID string, params MonitorPreviewNewParams, opts ...option.RequestOption) (res *MonitorPreviewNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MonitorPreviewNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

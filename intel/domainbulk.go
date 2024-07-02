@@ -38,8 +38,8 @@ func NewDomainBulkService(opts ...option.RequestOption) (r *DomainBulkService) {
 
 // Get Multiple Domain Details
 func (r *DomainBulkService) Get(ctx context.Context, params DomainBulkGetParams, opts ...option.RequestOption) (res *[]DomainBulkGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DomainBulkGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

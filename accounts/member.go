@@ -39,8 +39,8 @@ func NewMemberService(opts ...option.RequestOption) (r *MemberService) {
 
 // Add a user to the list of members for this account.
 func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ...option.RequestOption) (res *MemberNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MemberNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 
 // Modify an account member.
 func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *MemberUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MemberUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -78,8 +78,12 @@ func (r *MemberService) Update(ctx context.Context, memberID string, params Memb
 // List all members of an account.
 func (r *MemberService) List(ctx context.Context, params MemberListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[MemberListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/members", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -100,8 +104,8 @@ func (r *MemberService) ListAutoPaging(ctx context.Context, params MemberListPar
 
 // Remove a member from an account.
 func (r *MemberService) Delete(ctx context.Context, memberID string, body MemberDeleteParams, opts ...option.RequestOption) (res *MemberDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MemberDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -121,8 +125,8 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, body Member
 
 // Get information about a specific member of an account.
 func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *MemberGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MemberGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

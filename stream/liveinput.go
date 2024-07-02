@@ -42,8 +42,8 @@ func NewLiveInputService(opts ...option.RequestOption) (r *LiveInputService) {
 // Creates a live input, and returns credentials that you or your users can use to
 // stream live video to Cloudflare Stream.
 func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, opts ...option.RequestOption) (res *LiveInput, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LiveInputNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, o
 
 // Updates a specified live input.
 func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier string, params LiveInputUpdateParams, opts ...option.RequestOption) (res *LiveInput, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LiveInputUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -81,8 +81,8 @@ func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier strin
 // Lists the live inputs created for an account. To get the credentials needed to
 // stream to a specific live input, request a single live input.
 func (r *LiveInputService) List(ctx context.Context, params LiveInputListParams, opts ...option.RequestOption) (res *LiveInputListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LiveInputListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -116,8 +116,8 @@ func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier strin
 
 // Retrieves details of an existing live input.
 func (r *LiveInputService) Get(ctx context.Context, liveInputIdentifier string, query LiveInputGetParams, opts ...option.RequestOption) (res *LiveInput, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LiveInputGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

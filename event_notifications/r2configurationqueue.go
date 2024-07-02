@@ -39,8 +39,8 @@ func NewR2ConfigurationQueueService(opts ...option.RequestOption) (r *R2Configur
 // Define the rules for a given queue which will determine event notification
 // production.
 func (r *R2ConfigurationQueueService) Update(ctx context.Context, bucketName string, queueID string, params R2ConfigurationQueueUpdateParams, opts ...option.RequestOption) (res *R2ConfigurationQueueUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env R2ConfigurationQueueUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -65,8 +65,8 @@ func (r *R2ConfigurationQueueService) Update(ctx context.Context, bucketName str
 // Turn off all event notifications configured for delivery to a given queue. No
 // further notifications will be produced for the queue once complete.
 func (r *R2ConfigurationQueueService) Delete(ctx context.Context, bucketName string, queueID string, body R2ConfigurationQueueDeleteParams, opts ...option.RequestOption) (res *R2ConfigurationQueueDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env R2ConfigurationQueueDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

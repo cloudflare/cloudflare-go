@@ -38,8 +38,8 @@ func NewAttackLayer7TopLocationService(opts ...option.RequestOption) (r *AttackL
 // out of the total layer 7 attacks. The origin location is determined by the
 // client IP.
 func (r *AttackLayer7TopLocationService) Origin(ctx context.Context, query AttackLayer7TopLocationOriginParams, opts ...option.RequestOption) (res *AttackLayer7TopLocationOriginResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TopLocationOriginResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/top/locations/origin"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,8 +53,8 @@ func (r *AttackLayer7TopLocationService) Origin(ctx context.Context, query Attac
 // out of the total layer 7 attacks. The target location is determined by the
 // attacked zone's billing country, when available.
 func (r *AttackLayer7TopLocationService) Target(ctx context.Context, query AttackLayer7TopLocationTargetParams, opts ...option.RequestOption) (res *AttackLayer7TopLocationTargetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TopLocationTargetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/top/locations/target"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

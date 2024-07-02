@@ -39,8 +39,8 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 
 // Attaches a Worker to a zone and hostname.
 func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *Domain, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,12 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 // Lists all Worker Domains for an account.
 func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Domain], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/domains", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -96,8 +100,8 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, body Domain
 
 // Gets a Worker domain.
 func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

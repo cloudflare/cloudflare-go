@@ -38,8 +38,8 @@ func NewScriptSettingService(opts ...option.RequestOption) (r *ScriptSettingServ
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions).
 // Includes Logpush and Tail Consumers.
 func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, params ScriptSettingEditParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScriptSettingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, para
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions).
 // Includes Logpush and Tail Consumers.
 func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query ScriptSettingGetParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScriptSettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -37,8 +37,8 @@ func NewTSIGService(opts ...option.RequestOption) (r *TSIGService) {
 
 // Create TSIG.
 func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *TSIG, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TSIGNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,8 +54,8 @@ func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...opt
 
 // Modify TSIG.
 func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpdateParams, opts ...option.RequestOption) (res *TSIG, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TSIGUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -76,8 +76,12 @@ func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpda
 // List TSIGs.
 func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TSIG], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -98,8 +102,8 @@ func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, 
 
 // Delete TSIG.
 func (r *TSIGService) Delete(ctx context.Context, tsigID string, body TSIGDeleteParams, opts ...option.RequestOption) (res *TSIGDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TSIGDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -119,8 +123,8 @@ func (r *TSIGService) Delete(ctx context.Context, tsigID string, body TSIGDelete
 
 // Get TSIG.
 func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParams, opts ...option.RequestOption) (res *TSIG, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TSIGGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

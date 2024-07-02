@@ -39,8 +39,8 @@ func NewDLPProfileCustomService(opts ...option.RequestOption) (r *DLPProfileCust
 
 // Creates a set of DLP custom profiles.
 func (r *DLPProfileCustomService) New(ctx context.Context, params DLPProfileCustomNewParams, opts ...option.RequestOption) (res *[]CustomProfile, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -72,8 +72,8 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 
 // Deletes a DLP custom profile.
 func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, body DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -93,8 +93,8 @@ func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, 
 
 // Fetches a custom DLP profile.
 func (r *DLPProfileCustomService) Get(ctx context.Context, profileID string, query DLPProfileCustomGetParams, opts ...option.RequestOption) (res *CustomProfile, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

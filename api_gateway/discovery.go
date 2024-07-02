@@ -39,8 +39,8 @@ func NewDiscoveryService(opts ...option.RequestOption) (r *DiscoveryService) {
 // Retrieve the most up to date view of discovered operations, rendered as OpenAPI
 // schemas
 func (r *DiscoveryService) Get(ctx context.Context, query DiscoveryGetParams, opts ...option.RequestOption) (res *DiscoveryGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DiscoveryGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

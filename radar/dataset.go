@@ -37,8 +37,8 @@ func NewDatasetService(opts ...option.RequestOption) (r *DatasetService) {
 
 // Get a list of datasets.
 func (r *DatasetService) List(ctx context.Context, query DatasetListParams, opts ...option.RequestOption) (res *DatasetListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatasetListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/datasets"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,8 +50,8 @@ func (r *DatasetService) List(ctx context.Context, query DatasetListParams, opts
 
 // Get a url to download a single dataset.
 func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadParams, opts ...option.RequestOption) (res *DatasetDownloadResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatasetDownloadResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/datasets/download"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {

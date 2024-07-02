@@ -33,8 +33,8 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 
 // Roll the token secret.
 func (r *TokenValueService) Update(ctx context.Context, tokenID interface{}, body TokenValueUpdateParams, opts ...option.RequestOption) (res *Value, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TokenValueUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/tokens/%v/value", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {

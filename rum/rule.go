@@ -36,8 +36,8 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Creates a new rule in a Web Analytics ruleset.
 func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *RUMRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewP
 
 // Updates a rule in a Web Analytics ruleset.
 func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RuleUpdateParams, opts ...option.RequestOption) (res *RUMRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,8 +82,8 @@ func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID strin
 
 // Lists all the rules in a Web Analytics ruleset.
 func (r *RuleService) List(ctx context.Context, rulesetID string, query RuleListParams, opts ...option.RequestOption) (res *RuleListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -103,8 +103,8 @@ func (r *RuleService) List(ctx context.Context, rulesetID string, query RuleList
 
 // Deletes an existing rule from a Web Analytics ruleset.
 func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

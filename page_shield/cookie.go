@@ -41,8 +41,12 @@ func NewCookieService(opts ...option.RequestOption) (r *CookieService) {
 // Lists all cookies collected by Page Shield.
 func (r *CookieService) List(ctx context.Context, params CookieListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CookieListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/page_shield/cookies", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -63,8 +67,8 @@ func (r *CookieService) ListAutoPaging(ctx context.Context, params CookieListPar
 
 // Fetches a cookie collected by Page Shield by cookie ID.
 func (r *CookieService) Get(ctx context.Context, cookieID string, query CookieGetParams, opts ...option.RequestOption) (res *CookieGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CookieGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -37,8 +37,8 @@ func NewPrefixBGPStatusService(opts ...option.RequestOption) (r *PrefixBGPStatus
 
 // Advertise or withdraw BGP route for a prefix.
 func (r *PrefixBGPStatusService) Edit(ctx context.Context, prefixID string, params PrefixBGPStatusEditParams, opts ...option.RequestOption) (res *PrefixBGPStatusEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PrefixBGPStatusEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,8 +58,8 @@ func (r *PrefixBGPStatusService) Edit(ctx context.Context, prefixID string, para
 
 // List the current advertisement state for a prefix.
 func (r *PrefixBGPStatusService) Get(ctx context.Context, prefixID string, query PrefixBGPStatusGetParams, opts ...option.RequestOption) (res *PrefixBGPStatusGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PrefixBGPStatusGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

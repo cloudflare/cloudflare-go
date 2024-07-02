@@ -4,6 +4,7 @@ package intel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -37,8 +38,12 @@ func NewSinkholeService(opts ...option.RequestOption) (r *SinkholeService) {
 // List sinkholes owned by this account
 func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Sinkhole], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/sinkholes", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {

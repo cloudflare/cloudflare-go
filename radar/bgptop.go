@@ -39,8 +39,8 @@ func NewBGPTopService(opts ...option.RequestOption) (r *BGPTopService) {
 // Get the top network prefixes by BGP updates. Values are a percentage out of the
 // total BGP updates.
 func (r *BGPTopService) Prefixes(ctx context.Context, query BGPTopPrefixesParams, opts ...option.RequestOption) (res *BGPTopPrefixesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPTopPrefixesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/top/prefixes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

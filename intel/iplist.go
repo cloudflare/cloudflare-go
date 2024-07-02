@@ -36,8 +36,8 @@ func NewIPListService(opts ...option.RequestOption) (r *IPListService) {
 
 // Get IP Lists
 func (r *IPListService) Get(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) (res *[]IPList, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IPListGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

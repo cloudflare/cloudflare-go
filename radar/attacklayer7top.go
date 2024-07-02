@@ -44,8 +44,8 @@ func NewAttackLayer7TopService(opts ...option.RequestOption) (r *AttackLayer7Top
 // You can optionally limit the number of attacks per origin/target location
 // (useful if all the top attacks are from or to the same location).
 func (r *AttackLayer7TopService) Attacks(ctx context.Context, query AttackLayer7TopAttacksParams, opts ...option.RequestOption) (res *AttackLayer7TopAttacksResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TopAttacksResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/top/attacks"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -57,8 +57,8 @@ func (r *AttackLayer7TopService) Attacks(ctx context.Context, query AttackLayer7
 
 // Get the Industry of attacks.
 func (r *AttackLayer7TopService) Industry(ctx context.Context, query AttackLayer7TopIndustryParams, opts ...option.RequestOption) (res *AttackLayer7TopIndustryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TopIndustryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/top/industry"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -70,8 +70,8 @@ func (r *AttackLayer7TopService) Industry(ctx context.Context, query AttackLayer
 
 // Get the Verticals of attacks.
 func (r *AttackLayer7TopService) Vertical(ctx context.Context, query AttackLayer7TopVerticalParams, opts ...option.RequestOption) (res *AttackLayer7TopVerticalResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TopVerticalResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/top/vertical"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -37,8 +37,8 @@ func NewDispatchNamespaceScriptTagService(opts ...option.RequestOption) (r *Disp
 
 // Put script tags for a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptTagUpdateParams, opts ...option.RequestOption) (res *[]string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptTagUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -63,8 +63,20 @@ func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatch
 // Fetch tags from a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptTagService) List(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptTagListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags", query.AccountID, dispatchNamespace, scriptName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -85,8 +97,8 @@ func (r *DispatchNamespaceScriptTagService) ListAutoPaging(ctx context.Context, 
 
 // Delete script tag for a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptTagService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, tag string, body DispatchNamespaceScriptTagDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptTagDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptTagDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

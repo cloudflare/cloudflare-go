@@ -37,8 +37,8 @@ func NewEmailSecurityTopTldSpoofService(opts ...option.RequestOption) (r *EmailS
 
 // Get the TLDs by emails classified as spoof or not.
 func (r *EmailSecurityTopTldSpoofService) Get(ctx context.Context, spoof EmailSecurityTopTldSpoofGetParamsSpoof, query EmailSecurityTopTldSpoofGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldSpoofGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTopTldSpoofGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/email/security/top/tlds/spoof/%v", spoof)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

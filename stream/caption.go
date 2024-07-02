@@ -38,8 +38,8 @@ func NewCaptionService(opts ...option.RequestOption) (r *CaptionService) {
 
 // Lists the available captions or subtitles for a specific video.
 func (r *CaptionService) Get(ctx context.Context, identifier string, query CaptionGetParams, opts ...option.RequestOption) (res *[]Caption, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CaptionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

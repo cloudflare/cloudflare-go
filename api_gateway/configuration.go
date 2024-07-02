@@ -40,8 +40,8 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 
 // Set configuration properties
 func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *ConfigurationUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigurationUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationU
 
 // Retrieve information about specific configuration properties
 func (r *ConfigurationService) Get(ctx context.Context, params ConfigurationGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigurationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

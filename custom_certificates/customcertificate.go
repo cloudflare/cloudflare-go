@@ -46,8 +46,8 @@ func NewCustomCertificateService(opts ...option.RequestOption) (r *CustomCertifi
 
 // Upload a new SSL certificate for a zone.
 func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomCertificateNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -66,8 +66,12 @@ func (r *CustomCertificateService) New(ctx context.Context, params CustomCertifi
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
 func (r *CustomCertificateService) List(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CustomCertificate], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -90,8 +94,8 @@ func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params Cu
 
 // Remove a SSL certificate from a zone.
 func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, body CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomCertificateDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -113,8 +117,8 @@ func (r *CustomCertificateService) Delete(ctx context.Context, customCertificate
 // a configuration for sni_custom certificates will result in a new resource id
 // being returned, and the previous one being deleted.
 func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomCertificateEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -134,8 +138,8 @@ func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID
 
 // SSL Configuration Details
 func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomCertificateGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

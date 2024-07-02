@@ -42,8 +42,8 @@ func NewIndicatorFeedService(opts ...option.RequestOption) (r *IndicatorFeedServ
 
 // Create new indicator feed
 func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewParams, opts ...option.RequestOption) (res *IndicatorFeedNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewP
 
 // Update indicator feed metadata
 func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params IndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,8 +77,12 @@ func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params 
 // Get indicator feeds owned by this account
 func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IndicatorFeedListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -112,8 +116,8 @@ func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query Ind
 
 // Get indicator feed metadata
 func (r *IndicatorFeedService) Get(ctx context.Context, feedID int64, query IndicatorFeedGetParams, opts ...option.RequestOption) (res *IndicatorFeedGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

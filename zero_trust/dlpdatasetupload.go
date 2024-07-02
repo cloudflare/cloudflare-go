@@ -36,8 +36,8 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 
 // Prepare to upload a new version of a dataset.
 func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *NewVersion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 
 // Upload a new version of a dataset.
 func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

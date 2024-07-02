@@ -38,8 +38,8 @@ func NewDeviceUnrevokeService(opts ...option.RequestOption) (r *DeviceUnrevokeSe
 
 // Unrevokes a list of devices.
 func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *DeviceUnrevokeNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DeviceUnrevokeNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

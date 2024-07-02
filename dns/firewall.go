@@ -44,8 +44,8 @@ func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
 
 // Create a configured DNS Firewall Cluster.
 func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opts ...option.RequestOption) (res *Firewall, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FirewallNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,8 +62,12 @@ func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opt
 // List configured DNS Firewall clusters for an account.
 func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Firewall], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -84,8 +88,8 @@ func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallLis
 
 // Delete a configured DNS Firewall Cluster.
 func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body FirewallDeleteParams, opts ...option.RequestOption) (res *FirewallDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FirewallDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -105,8 +109,8 @@ func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body
 
 // Modify a DNS Firewall Cluster configuration.
 func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params FirewallEditParams, opts ...option.RequestOption) (res *Firewall, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FirewallEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -126,8 +130,8 @@ func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params
 
 // Show a single configured DNS Firewall cluster for an account.
 func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query FirewallGetParams, opts ...option.RequestOption) (res *Firewall, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FirewallGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

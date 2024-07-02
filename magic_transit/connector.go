@@ -37,8 +37,8 @@ func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 
 // Replace Connector
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConnectorUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,12 @@ func (r *ConnectorService) Update(ctx context.Context, connectorID string, param
 // List Connectors
 func (r *ConnectorService) List(ctx context.Context, query ConnectorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConnectorListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -81,8 +85,8 @@ func (r *ConnectorService) ListAutoPaging(ctx context.Context, query ConnectorLi
 
 // Update Connector
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConnectorEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -102,8 +106,8 @@ func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params 
 
 // Fetch Connector
 func (r *ConnectorService) Get(ctx context.Context, connectorID string, query ConnectorGetParams, opts ...option.RequestOption) (res *ConnectorGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConnectorGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

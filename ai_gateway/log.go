@@ -4,6 +4,7 @@ package ai_gateway
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -39,8 +40,16 @@ func NewLogService(opts ...option.RequestOption) (r *LogService) {
 // List Gateway Logs
 func (r *LogService) List(ctx context.Context, id string, params LogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[LogListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs", params.AccountID, id)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {

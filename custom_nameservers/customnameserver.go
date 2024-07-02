@@ -36,8 +36,8 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 
 // Add Account Custom Nameserver
 func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserverNewParams, opts ...option.RequestOption) (res *CustomNameserver, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomNameserverNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 
 // Delete Account Custom Nameserver
 func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *[]CustomNameserverDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -74,8 +74,8 @@ func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string,
 
 // Get Eligible Zones for Account Custom Nameservers
 func (r *CustomNameserverService) Availabilty(ctx context.Context, query CustomNameserverAvailabiltyParams, opts ...option.RequestOption) (res *[]string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomNameserverAvailabiltyResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -91,8 +91,8 @@ func (r *CustomNameserverService) Availabilty(ctx context.Context, query CustomN
 
 // List an account's custom nameservers.
 func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *[]CustomNameserver, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

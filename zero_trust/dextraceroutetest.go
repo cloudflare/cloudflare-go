@@ -39,8 +39,8 @@ func NewDEXTracerouteTestService(opts ...option.RequestOption) (r *DEXTraceroute
 // Get test details and aggregate performance metrics for an traceroute test for a
 // given time period between 1 hour and 7 days.
 func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, params DEXTracerouteTestGetParams, opts ...option.RequestOption) (res *Traceroute, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,8 @@ func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, param
 
 // Get a breakdown of metrics by hop for individual traceroute test runs
 func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *NetworkPathResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestNetworkPathResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,8 +82,8 @@ func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID strin
 // Get percentiles for a traceroute test for a given time period between 1 hour and
 // 7 days.
 func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID string, params DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *DEXTracerouteTestPercentilesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestPercentilesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

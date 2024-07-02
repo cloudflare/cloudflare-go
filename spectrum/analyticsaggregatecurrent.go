@@ -39,8 +39,8 @@ func NewAnalyticsAggregateCurrentService(opts ...option.RequestOption) (r *Analy
 // Retrieves analytics aggregated from the last minute of usage on Spectrum
 // applications underneath a given zone.
 func (r *AnalyticsAggregateCurrentService) Get(ctx context.Context, zone string, query AnalyticsAggregateCurrentGetParams, opts ...option.RequestOption) (res *[]AnalyticsAggregateCurrentGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnalyticsAggregateCurrentGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zone == "" {
 		err = errors.New("missing required zone parameter")
 		return

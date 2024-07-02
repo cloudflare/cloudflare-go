@@ -37,8 +37,8 @@ func NewHTTPTopService(opts ...option.RequestOption) (r *HTTPTopService) {
 // Get the top user agents aggregated in families by HTTP traffic. Values are a
 // percentage out of the total traffic.
 func (r *HTTPTopService) BrowserFamilies(ctx context.Context, query HTTPTopBrowserFamiliesParams, opts ...option.RequestOption) (res *HTTPTopBrowserFamiliesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTopBrowserFamiliesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/top/browser_families"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -51,8 +51,8 @@ func (r *HTTPTopService) BrowserFamilies(ctx context.Context, query HTTPTopBrows
 // Get the top user agents by HTTP traffic. Values are a percentage out of the
 // total traffic.
 func (r *HTTPTopService) Browsers(ctx context.Context, query HTTPTopBrowsersParams, opts ...option.RequestOption) (res *HTTPTopBrowsersResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTopBrowsersResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/top/browsers"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

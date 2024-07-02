@@ -40,8 +40,8 @@ func NewAnalyzeService(opts ...option.RequestOption) (r *AnalyzeService) {
 // Returns the set of hostnames, the signature algorithm, and the expiration date
 // of the certificate.
 func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *AnalyzeNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnalyzeNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

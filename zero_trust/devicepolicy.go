@@ -46,8 +46,8 @@ func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyServic
 // Creates a device settings profile to be applied to certain devices matching the
 // criteria.
 func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -64,8 +64,12 @@ func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewPar
 // Fetches a list of the device settings profiles for an account.
 func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingsPolicy], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policies", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -87,8 +91,8 @@ func (r *DevicePolicyService) ListAutoPaging(ctx context.Context, query DevicePo
 // Deletes a device settings profile and fetches a list of the remaining profiles
 // for an account.
 func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]SettingsPolicy, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -108,8 +112,8 @@ func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body 
 
 // Updates a configured device settings profile.
 func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params DevicePolicyEditParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -129,8 +133,8 @@ func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params 
 
 // Fetches a device settings profile by ID.
 func (r *DevicePolicyService) Get(ctx context.Context, policyID string, query DevicePolicyGetParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

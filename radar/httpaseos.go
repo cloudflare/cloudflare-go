@@ -38,8 +38,8 @@ func NewHTTPAseOSService(opts ...option.RequestOption) (r *HTTPAseOSService) {
 // Get the top autonomous systems, by HTTP traffic, of the requested operating
 // systems. Values are a percentage out of the total traffic.
 func (r *HTTPAseOSService) Get(ctx context.Context, os HTTPAseOSGetParamsOS, query HTTPAseOSGetParams, opts ...option.RequestOption) (res *HTTPAseOSGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseOSGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/os/%v", os)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

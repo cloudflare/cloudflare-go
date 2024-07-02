@@ -37,8 +37,8 @@ func NewEmailSecurityTopTldSpamService(opts ...option.RequestOption) (r *EmailSe
 
 // Get the top TLDs by emails classified as Spam or not.
 func (r *EmailSecurityTopTldSpamService) Get(ctx context.Context, spam EmailSecurityTopTldSpamGetParamsSpam, query EmailSecurityTopTldSpamGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldSpamGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTopTldSpamGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/email/security/top/tlds/spam/%v", spam)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

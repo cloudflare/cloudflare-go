@@ -36,8 +36,8 @@ func NewRiskScoringBehaviourService(opts ...option.RequestOption) (r *RiskScorin
 
 // Update configuration for risk behaviors
 func (r *RiskScoringBehaviourService) Update(ctx context.Context, accountIdentifier string, body RiskScoringBehaviourUpdateParams, opts ...option.RequestOption) (res *RiskScoringBehaviourUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringBehaviourUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -53,8 +53,8 @@ func (r *RiskScoringBehaviourService) Update(ctx context.Context, accountIdentif
 
 // Get all behaviors and associated configuration
 func (r *RiskScoringBehaviourService) Get(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RiskScoringBehaviourGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringBehaviourGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return

@@ -40,8 +40,8 @@ func NewHTTPAseBotClassService(opts ...option.RequestOption) (r *HTTPAseBotClass
 // [Bot Scores](https://developers.cloudflare.com/bots/concepts/bot-score) for more
 // information. Values are a percentage out of the total traffic.
 func (r *HTTPAseBotClassService) Get(ctx context.Context, botClass HTTPAseBotClassGetParamsBotClass, query HTTPAseBotClassGetParams, opts ...option.RequestOption) (res *HTTPAseBotClassGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseBotClassGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/bot_class/%v", botClass)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -36,8 +36,8 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 
 // Get the result of a previous preview operation using the provided preview_id.
 func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *PreviewGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

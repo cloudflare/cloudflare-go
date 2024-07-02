@@ -39,8 +39,8 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 // In addition to the content, a short title, type, priority, and releasability
 // should be provided. If one is not provided a default will be assigned.
 func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *Message, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestMessageNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -60,8 +60,8 @@ func (r *RequestMessageService) New(ctx context.Context, accountIdentifier strin
 
 // Update a Request Message
 func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, body RequestMessageUpdateParams, opts ...option.RequestOption) (res *Message, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestMessageUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -97,8 +97,8 @@ func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier st
 
 // List Request Messages
 func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]Message, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestMessageGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return

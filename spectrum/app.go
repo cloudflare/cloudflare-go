@@ -43,8 +43,8 @@ func NewAppService(opts ...option.RequestOption) (r *AppService) {
 // Creates a new Spectrum application from a configuration using a name for the
 // origin.
 func (r *AppService) New(ctx context.Context, zone string, body AppNewParams, opts ...option.RequestOption) (res *AppNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AppNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zone == "" {
 		err = errors.New("missing required zone parameter")
 		return
@@ -61,8 +61,8 @@ func (r *AppService) New(ctx context.Context, zone string, body AppNewParams, op
 // Updates a previously existing application's configuration that uses a name for
 // the origin.
 func (r *AppService) Update(ctx context.Context, zone string, appID string, body AppUpdateParams, opts ...option.RequestOption) (res *AppUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AppUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zone == "" {
 		err = errors.New("missing required zone parameter")
 		return
@@ -83,8 +83,12 @@ func (r *AppService) Update(ctx context.Context, zone string, appID string, body
 // Retrieves a list of currently existing Spectrum applications inside a zone.
 func (r *AppService) List(ctx context.Context, zone string, query AppListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AppListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if zone == "" {
+		err = errors.New("missing required zone parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/spectrum/apps", zone)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
@@ -105,8 +109,8 @@ func (r *AppService) ListAutoPaging(ctx context.Context, zone string, query AppL
 
 // Deletes a previously existing application.
 func (r *AppService) Delete(ctx context.Context, zone string, appID string, opts ...option.RequestOption) (res *AppDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AppDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zone == "" {
 		err = errors.New("missing required zone parameter")
 		return
@@ -126,8 +130,8 @@ func (r *AppService) Delete(ctx context.Context, zone string, appID string, opts
 
 // Gets the application configuration of a specific application inside a zone.
 func (r *AppService) Get(ctx context.Context, zone string, appID string, opts ...option.RequestOption) (res *AppGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AppGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zone == "" {
 		err = errors.New("missing required zone parameter")
 		return

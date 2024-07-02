@@ -38,8 +38,8 @@ func NewDestinationWebhookService(opts ...option.RequestOption) (r *DestinationW
 
 // Creates a new webhook destination.
 func (r *DestinationWebhookService) New(ctx context.Context, params DestinationWebhookNewParams, opts ...option.RequestOption) (res *DestinationWebhookNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *DestinationWebhookService) New(ctx context.Context, params DestinationW
 
 // Update a webhook destination.
 func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string, params DestinationWebhookUpdateParams, opts ...option.RequestOption) (res *DestinationWebhookUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,8 +77,12 @@ func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string
 // Gets a list of all configured webhook destinations.
 func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Webhooks], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -115,8 +119,8 @@ func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string
 
 // Get details for a single webhooks destination.
 func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, query DestinationWebhookGetParams, opts ...option.RequestOption) (res *Webhooks, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

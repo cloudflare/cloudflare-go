@@ -47,8 +47,8 @@ func NewBotManagementService(opts ...option.RequestOption) (r *BotManagementServ
 // See [Bot Plans](https://developers.cloudflare.com/bots/plans/) for more
 // information on the different plans
 func (r *BotManagementService) Update(ctx context.Context, params BotManagementUpdateParams, opts ...option.RequestOption) (res *BotManagementUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BotManagementUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -64,8 +64,8 @@ func (r *BotManagementService) Update(ctx context.Context, params BotManagementU
 
 // Retrieve a zone's Bot Management Config
 func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetParams, opts ...option.RequestOption) (res *BotManagementGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BotManagementGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

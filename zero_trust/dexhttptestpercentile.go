@@ -39,8 +39,8 @@ func NewDEXHTTPTestPercentileService(opts ...option.RequestOption) (r *DEXHTTPTe
 // Get percentiles for an http test for a given time period between 1 hour and 7
 // days.
 func (r *DEXHTTPTestPercentileService) Get(ctx context.Context, testID string, params DEXHTTPTestPercentileGetParams, opts ...option.RequestOption) (res *HTTPDetailsPercentiles, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DexhttpTestPercentileGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

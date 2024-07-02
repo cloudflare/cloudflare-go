@@ -39,8 +39,8 @@ func NewDEXTestUniqueDeviceService(opts ...option.RequestOption) (r *DEXTestUniq
 // Returns unique count of devices that have run synthetic application monitoring
 // tests in the past 7 days.
 func (r *DEXTestUniqueDeviceService) List(ctx context.Context, params DEXTestUniqueDeviceListParams, opts ...option.RequestOption) (res *UniqueDevices, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DEXTestUniqueDeviceListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

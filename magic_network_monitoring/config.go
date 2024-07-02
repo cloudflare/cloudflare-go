@@ -38,8 +38,8 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 
 // Create a new network monitoring configuration.
 func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 // Update an existing network monitoring configuration, requires the entire
 // configuration to be updated at once.
 func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -73,8 +73,8 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 
 // Delete an existing network monitoring configuration.
 func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -90,8 +90,8 @@ func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opt
 
 // Update fields in an existing network monitoring configuration.
 func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -107,8 +107,8 @@ func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts 
 
 // Lists default sampling and router IPs for account.
 func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

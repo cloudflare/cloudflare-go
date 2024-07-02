@@ -40,8 +40,8 @@ func NewTrafficAnomalyService(opts ...option.RequestOption) (r *TrafficAnomalySe
 // alerts are automatically detected by Radar and then manually verified by our
 // team. This endpoint returns the latest alerts.
 func (r *TrafficAnomalyService) Get(ctx context.Context, query TrafficAnomalyGetParams, opts ...option.RequestOption) (res *TrafficAnomalyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TrafficAnomalyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/traffic_anomalies"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

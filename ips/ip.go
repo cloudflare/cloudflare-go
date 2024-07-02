@@ -41,8 +41,8 @@ func NewIPService(opts ...option.RequestOption) (r *IPService) {
 // https://developers.cloudflare.com/china-network/reference/infrastructure/ for JD
 // Cloud IPs.
 func (r *IPService) List(ctx context.Context, query IPListParams, opts ...option.RequestOption) (res *IPListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IPListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "ips"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

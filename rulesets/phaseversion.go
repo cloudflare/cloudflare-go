@@ -40,7 +40,7 @@ func NewPhaseVersionService(opts ...option.RequestOption) (r *PhaseVersionServic
 // Fetches the versions of an account or zone entry point ruleset.
 func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase Phase, query PhaseVersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PhaseVersionListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -80,8 +80,8 @@ func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase P
 
 // Fetches a specific version of an account or zone entry point ruleset.
 func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase Phase, rulesetVersion string, query PhaseVersionGetParams, opts ...option.RequestOption) (res *PhaseVersionGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PhaseVersionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
