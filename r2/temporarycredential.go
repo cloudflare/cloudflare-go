@@ -53,7 +53,7 @@ func (r *TemporaryCredentialService) New(ctx context.Context, params TemporaryCr
 }
 
 type TemporaryCredentialParam struct {
-	// Name of the GCS bucket
+	// Name of the R2 bucket
 	Bucket param.Field[string] `json:"bucket,required"`
 	// The parent access key id to use for signing
 	ParentAccessKeyID param.Field[string] `json:"parentAccessKeyId,required"`
