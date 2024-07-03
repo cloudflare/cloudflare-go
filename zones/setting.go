@@ -3986,7 +3986,9 @@ type SecurityHeadersValueStrictTransportSecurity struct {
 	// Max age in seconds of the strict transport security.
 	MaxAge float64 `json:"max_age"`
 	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
-	Nosniff bool                                            `json:"nosniff"`
+	Nosniff bool `json:"nosniff"`
+	// Enable automatic preload of the HSTS configuration.
+	Preload bool                                            `json:"preload"`
 	JSON    securityHeadersValueStrictTransportSecurityJSON `json:"-"`
 }
 
@@ -3997,6 +3999,7 @@ type securityHeadersValueStrictTransportSecurityJSON struct {
 	IncludeSubdomains apijson.Field
 	MaxAge            apijson.Field
 	Nosniff           apijson.Field
+	Preload           apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -4060,6 +4063,8 @@ type SecurityHeadersValueStrictTransportSecurityParam struct {
 	MaxAge param.Field[float64] `json:"max_age"`
 	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
 	Nosniff param.Field[bool] `json:"nosniff"`
+	// Enable automatic preload of the HSTS configuration.
+	Preload param.Field[bool] `json:"preload"`
 }
 
 func (r SecurityHeadersValueStrictTransportSecurityParam) MarshalJSON() (data []byte, err error) {
