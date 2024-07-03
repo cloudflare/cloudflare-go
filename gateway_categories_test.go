@@ -29,10 +29,10 @@ func TestListGatewayCategories(t *testing.T) {
 					"name": "Education",
 					"subcategories": [
 						{
-							"beta": false,
+							"beta": true,
 							"class": "premium",
 							"description": "Sites related to educational content.",
-							"id": 10,
+							"id": 0,
 							"name": "Education"
 						}
 					]
@@ -47,19 +47,21 @@ func TestListGatewayCategories(t *testing.T) {
 		}`)
 	}
 
+	falseValue := false
+	trueValue := true
 	want := []GatewayCategory{
 		{
-			Beta:        false,
+			Beta:        &falseValue,
 			Class:       "premium",
 			Description: "Sites related to educational content.",
 			ID:          0,
 			Name:        "Education",
 			Subcategories: []GatewayCategory{
 				{
-					Beta:        false,
+					Beta:        &trueValue,
 					Class:       "premium",
 					Description: "Sites related to educational content.",
-					ID:          10,
+					ID:          0,
 					Name:        "Education",
 				},
 			},
@@ -68,7 +70,12 @@ func TestListGatewayCategories(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/categories", handler)
 
-	actual, _, err := client.ListGatewayCategories(context.Background(), testAccountID, ListGatewayCategoriesParams{})
+	rc := &ResourceContainer{
+		Level:      AccountRouteLevel,
+		Identifier: testAccountID,
+	}
+
+	actual, _, err := client.ListGatewayCategories(context.Background(), rc, ListGatewayCategoriesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

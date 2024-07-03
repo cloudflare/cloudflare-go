@@ -10,7 +10,7 @@ import (
 
 // GatewayCategory represents a single gateway category.
 type GatewayCategory struct {
-	Beta          bool              `json:"beta"`
+	Beta          *bool             `json:"beta,omitempty"`
 	Class         string            `json:"class"`
 	Description   string            `json:"description"`
 	ID            int               `json:"id"`
@@ -36,8 +36,8 @@ type ListGatewayCategoriesParams struct {
 // ListGatewayCategories returns all gateway categories within an account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/zero-trust-gateway-categories-list-categories
-func (api *API) ListGatewayCategories(ctx context.Context, accountID string, params ListGatewayCategoriesParams) ([]GatewayCategory, ResultInfo, error) {
-	uri := fmt.Sprintf("/accounts/%s/gateway/categories", accountID)
+func (api *API) ListGatewayCategories(ctx context.Context, rc *ResourceContainer, params ListGatewayCategoriesParams) ([]GatewayCategory, ResultInfo, error) {
+	uri := fmt.Sprintf("/accounts/%s/gateway/categories", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
