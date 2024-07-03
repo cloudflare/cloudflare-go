@@ -351,6 +351,8 @@ type AIRunParamsBody struct {
 	Text        param.Field[interface{}] `json:"text,required"`
 	Guidance    param.Field[float64]     `json:"guidance"`
 	Image       param.Field[interface{}] `json:"image,required"`
+	LoraWeights param.Field[interface{}] `json:"lora_weights,required"`
+	Loras       param.Field[interface{}] `json:"loras,required"`
 	Mask        param.Field[interface{}] `json:"mask,required"`
 	NumSteps    param.Field[int64]       `json:"num_steps"`
 	Prompt      param.Field[string]      `json:"prompt"`
@@ -398,12 +400,14 @@ func (r AIRunParamsBodyTextClassification) MarshalJSON() (data []byte, err error
 func (r AIRunParamsBodyTextClassification) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextToImage struct {
-	Prompt   param.Field[string]    `json:"prompt,required"`
-	Guidance param.Field[float64]   `json:"guidance"`
-	Image    param.Field[[]float64] `json:"image"`
-	Mask     param.Field[[]float64] `json:"mask"`
-	NumSteps param.Field[int64]     `json:"num_steps"`
-	Strength param.Field[float64]   `json:"strength"`
+	Prompt      param.Field[string]    `json:"prompt,required"`
+	Guidance    param.Field[float64]   `json:"guidance"`
+	Image       param.Field[[]float64] `json:"image"`
+	LoraWeights param.Field[[]float64] `json:"lora_weights"`
+	Loras       param.Field[[]string]  `json:"loras"`
+	Mask        param.Field[[]float64] `json:"mask"`
+	NumSteps    param.Field[int64]     `json:"num_steps"`
+	Strength    param.Field[float64]   `json:"strength"`
 }
 
 func (r AIRunParamsBodyTextToImage) MarshalJSON() (data []byte, err error) {
