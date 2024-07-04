@@ -193,6 +193,46 @@ func TestListWorkerBindings_Wfp(t *testing.T) {
 	assert.Equal(t, WorkerD1DataseBindingType, res.BindingList[8].Binding.Type())
 }
 
+func TestListWorkerBindings_NullScriptName(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/my-script/bindings", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"result": [
+				{
+					"name": "MY_DURABLE_OBJECT",
+					"type": "durable_object_namespace",
+					"class_name": "MyClass",
+					"script_name": null
+				}
+			],
+			"success": true,
+			"errors": [],
+			"messages": []
+		}`)
+	})
+
+	res, err := client.ListWorkerBindings(context.Background(), AccountIdentifier(testAccountID), ListWorkerBindingsParams{
+		ScriptName: "my-script",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, successResponse, res.Response)
+	assert.Equal(t, 1, len(res.BindingList))
+
+	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
+		Name: "MY_DURABLE_OBJECT",
+		Binding: WorkerDurableObjectBinding{
+			ClassName:  "MyClass",
+			ScriptName: nil,
+		},
+	})
+	assert.Equal(t, WorkerDurableObjectBindingType, res.BindingList[0].Binding.Type())
+}
+
 func ExampleUnsafeBinding() {
 	pretty := func(meta workerBindingMeta) string {
 		buf := bytes.NewBufferString("")

@@ -1449,3 +1449,43 @@ func TestUploadWorker_UnsafeBinding(t *testing.T) {
 	})
 	assert.NoError(t, err)
 }
+
+func TestUploadWorker_WithNullScriptName(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name":       "b1",
+				"type":       "durable_object_namespace",
+				"class_name": "TheClass",
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, workersScriptResponse(t))
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+		ScriptName: "bar",
+		Script:     workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerDurableObjectBinding{
+				ClassName:  "TheClass",
+				ScriptName: nil,
+			},
+		},
+	})
+
+	assert.NoError(t, err)
+}

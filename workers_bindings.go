@@ -143,7 +143,7 @@ func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMe
 // https://api.cloudflare.com/#durable-objects-namespace-properties
 type WorkerDurableObjectBinding struct {
 	ClassName  string
-	ScriptName string
+	ScriptName *string
 }
 
 // Type returns the type of the binding.
@@ -156,12 +156,17 @@ func (b WorkerDurableObjectBinding) serialize(bindingName string) (workerBinding
 		return nil, nil, fmt.Errorf(`ClassName for binding "%s" cannot be empty`, bindingName)
 	}
 
-	return workerBindingMeta{
-		"name":        bindingName,
-		"type":        b.Type(),
-		"class_name":  b.ClassName,
-		"script_name": b.ScriptName,
-	}, nil, nil
+	meta := workerBindingMeta{
+		"name":       bindingName,
+		"type":       b.Type(),
+		"class_name": b.ClassName,
+	}
+
+	if b.ScriptName != nil {
+		meta["script_name"] = *b.ScriptName
+	}
+
+	return meta, nil, nil
 }
 
 // WorkerWebAssemblyBinding is a binding to a WebAssembly module.
@@ -507,7 +512,11 @@ func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, p
 		switch WorkerBindingType(bType) {
 		case WorkerDurableObjectBindingType:
 			class_name := jsonBinding["class_name"].(string)
-			script_name := jsonBinding["script_name"].(string)
+			var script_name *string
+			if jsonBinding["script_name"] != nil {
+				script_name_str := jsonBinding["script_name"].(string)
+				script_name = &script_name_str
+			}
 			bindingListItem.Binding = WorkerDurableObjectBinding{
 				ClassName:  class_name,
 				ScriptName: script_name,
