@@ -31,7 +31,7 @@ func TestBGPTopPrefixesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.BGP.Top.Prefixes(context.TODO(), radar.BGPTopPrefixesParams{
 		ASN:        cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.BGPTopPrefixesParamsDateRange{radar.BGPTopPrefixesParamsDateRange1d, radar.BGPTopPrefixesParamsDateRange2d, radar.BGPTopPrefixesParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:     cloudflare.F(radar.BGPTopPrefixesParamsFormatJson),
 		Limit:      cloudflare.F(int64(5)),

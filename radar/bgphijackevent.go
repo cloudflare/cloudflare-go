@@ -243,7 +243,7 @@ type BGPHijackEventListParams struct {
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[BGPHijackEventListParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// The unique identifier of a event
@@ -281,36 +281,6 @@ func (r BGPHijackEventListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type BGPHijackEventListParamsDateRange string
-
-const (
-	BGPHijackEventListParamsDateRange1d         BGPHijackEventListParamsDateRange = "1d"
-	BGPHijackEventListParamsDateRange2d         BGPHijackEventListParamsDateRange = "2d"
-	BGPHijackEventListParamsDateRange7d         BGPHijackEventListParamsDateRange = "7d"
-	BGPHijackEventListParamsDateRange14d        BGPHijackEventListParamsDateRange = "14d"
-	BGPHijackEventListParamsDateRange28d        BGPHijackEventListParamsDateRange = "28d"
-	BGPHijackEventListParamsDateRange12w        BGPHijackEventListParamsDateRange = "12w"
-	BGPHijackEventListParamsDateRange24w        BGPHijackEventListParamsDateRange = "24w"
-	BGPHijackEventListParamsDateRange52w        BGPHijackEventListParamsDateRange = "52w"
-	BGPHijackEventListParamsDateRange1dControl  BGPHijackEventListParamsDateRange = "1dControl"
-	BGPHijackEventListParamsDateRange2dControl  BGPHijackEventListParamsDateRange = "2dControl"
-	BGPHijackEventListParamsDateRange7dControl  BGPHijackEventListParamsDateRange = "7dControl"
-	BGPHijackEventListParamsDateRange14dControl BGPHijackEventListParamsDateRange = "14dControl"
-	BGPHijackEventListParamsDateRange28dControl BGPHijackEventListParamsDateRange = "28dControl"
-	BGPHijackEventListParamsDateRange12wControl BGPHijackEventListParamsDateRange = "12wControl"
-	BGPHijackEventListParamsDateRange24wControl BGPHijackEventListParamsDateRange = "24wControl"
-)
-
-func (r BGPHijackEventListParamsDateRange) IsKnown() bool {
-	switch r {
-	case BGPHijackEventListParamsDateRange1d, BGPHijackEventListParamsDateRange2d, BGPHijackEventListParamsDateRange7d, BGPHijackEventListParamsDateRange14d, BGPHijackEventListParamsDateRange28d, BGPHijackEventListParamsDateRange12w, BGPHijackEventListParamsDateRange24w, BGPHijackEventListParamsDateRange52w, BGPHijackEventListParamsDateRange1dControl, BGPHijackEventListParamsDateRange2dControl, BGPHijackEventListParamsDateRange7dControl, BGPHijackEventListParamsDateRange14dControl, BGPHijackEventListParamsDateRange28dControl, BGPHijackEventListParamsDateRange12wControl, BGPHijackEventListParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

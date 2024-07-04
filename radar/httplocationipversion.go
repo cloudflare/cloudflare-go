@@ -223,7 +223,7 @@ type HTTPLocationIPVersionGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPLocationIPVersionGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -300,34 +300,6 @@ const (
 func (r HTTPLocationIPVersionGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPLocationIPVersionGetParamsBrowserFamilyChrome, HTTPLocationIPVersionGetParamsBrowserFamilyEdge, HTTPLocationIPVersionGetParamsBrowserFamilyFirefox, HTTPLocationIPVersionGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPLocationIPVersionGetParamsDateRange string
-
-const (
-	HTTPLocationIPVersionGetParamsDateRange1d         HTTPLocationIPVersionGetParamsDateRange = "1d"
-	HTTPLocationIPVersionGetParamsDateRange2d         HTTPLocationIPVersionGetParamsDateRange = "2d"
-	HTTPLocationIPVersionGetParamsDateRange7d         HTTPLocationIPVersionGetParamsDateRange = "7d"
-	HTTPLocationIPVersionGetParamsDateRange14d        HTTPLocationIPVersionGetParamsDateRange = "14d"
-	HTTPLocationIPVersionGetParamsDateRange28d        HTTPLocationIPVersionGetParamsDateRange = "28d"
-	HTTPLocationIPVersionGetParamsDateRange12w        HTTPLocationIPVersionGetParamsDateRange = "12w"
-	HTTPLocationIPVersionGetParamsDateRange24w        HTTPLocationIPVersionGetParamsDateRange = "24w"
-	HTTPLocationIPVersionGetParamsDateRange52w        HTTPLocationIPVersionGetParamsDateRange = "52w"
-	HTTPLocationIPVersionGetParamsDateRange1dControl  HTTPLocationIPVersionGetParamsDateRange = "1dControl"
-	HTTPLocationIPVersionGetParamsDateRange2dControl  HTTPLocationIPVersionGetParamsDateRange = "2dControl"
-	HTTPLocationIPVersionGetParamsDateRange7dControl  HTTPLocationIPVersionGetParamsDateRange = "7dControl"
-	HTTPLocationIPVersionGetParamsDateRange14dControl HTTPLocationIPVersionGetParamsDateRange = "14dControl"
-	HTTPLocationIPVersionGetParamsDateRange28dControl HTTPLocationIPVersionGetParamsDateRange = "28dControl"
-	HTTPLocationIPVersionGetParamsDateRange12wControl HTTPLocationIPVersionGetParamsDateRange = "12wControl"
-	HTTPLocationIPVersionGetParamsDateRange24wControl HTTPLocationIPVersionGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPLocationIPVersionGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPLocationIPVersionGetParamsDateRange1d, HTTPLocationIPVersionGetParamsDateRange2d, HTTPLocationIPVersionGetParamsDateRange7d, HTTPLocationIPVersionGetParamsDateRange14d, HTTPLocationIPVersionGetParamsDateRange28d, HTTPLocationIPVersionGetParamsDateRange12w, HTTPLocationIPVersionGetParamsDateRange24w, HTTPLocationIPVersionGetParamsDateRange52w, HTTPLocationIPVersionGetParamsDateRange1dControl, HTTPLocationIPVersionGetParamsDateRange2dControl, HTTPLocationIPVersionGetParamsDateRange7dControl, HTTPLocationIPVersionGetParamsDateRange14dControl, HTTPLocationIPVersionGetParamsDateRange28dControl, HTTPLocationIPVersionGetParamsDateRange12wControl, HTTPLocationIPVersionGetParamsDateRange24wControl:
 		return true
 	}
 	return false

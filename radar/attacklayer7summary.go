@@ -1069,7 +1069,7 @@ type AttackLayer7SummaryGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7SummaryGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1089,34 +1089,6 @@ func (r AttackLayer7SummaryGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer7SummaryGetParamsDateRange string
-
-const (
-	AttackLayer7SummaryGetParamsDateRange1d         AttackLayer7SummaryGetParamsDateRange = "1d"
-	AttackLayer7SummaryGetParamsDateRange2d         AttackLayer7SummaryGetParamsDateRange = "2d"
-	AttackLayer7SummaryGetParamsDateRange7d         AttackLayer7SummaryGetParamsDateRange = "7d"
-	AttackLayer7SummaryGetParamsDateRange14d        AttackLayer7SummaryGetParamsDateRange = "14d"
-	AttackLayer7SummaryGetParamsDateRange28d        AttackLayer7SummaryGetParamsDateRange = "28d"
-	AttackLayer7SummaryGetParamsDateRange12w        AttackLayer7SummaryGetParamsDateRange = "12w"
-	AttackLayer7SummaryGetParamsDateRange24w        AttackLayer7SummaryGetParamsDateRange = "24w"
-	AttackLayer7SummaryGetParamsDateRange52w        AttackLayer7SummaryGetParamsDateRange = "52w"
-	AttackLayer7SummaryGetParamsDateRange1dControl  AttackLayer7SummaryGetParamsDateRange = "1dControl"
-	AttackLayer7SummaryGetParamsDateRange2dControl  AttackLayer7SummaryGetParamsDateRange = "2dControl"
-	AttackLayer7SummaryGetParamsDateRange7dControl  AttackLayer7SummaryGetParamsDateRange = "7dControl"
-	AttackLayer7SummaryGetParamsDateRange14dControl AttackLayer7SummaryGetParamsDateRange = "14dControl"
-	AttackLayer7SummaryGetParamsDateRange28dControl AttackLayer7SummaryGetParamsDateRange = "28dControl"
-	AttackLayer7SummaryGetParamsDateRange12wControl AttackLayer7SummaryGetParamsDateRange = "12wControl"
-	AttackLayer7SummaryGetParamsDateRange24wControl AttackLayer7SummaryGetParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7SummaryGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7SummaryGetParamsDateRange1d, AttackLayer7SummaryGetParamsDateRange2d, AttackLayer7SummaryGetParamsDateRange7d, AttackLayer7SummaryGetParamsDateRange14d, AttackLayer7SummaryGetParamsDateRange28d, AttackLayer7SummaryGetParamsDateRange12w, AttackLayer7SummaryGetParamsDateRange24w, AttackLayer7SummaryGetParamsDateRange52w, AttackLayer7SummaryGetParamsDateRange1dControl, AttackLayer7SummaryGetParamsDateRange2dControl, AttackLayer7SummaryGetParamsDateRange7dControl, AttackLayer7SummaryGetParamsDateRange14dControl, AttackLayer7SummaryGetParamsDateRange28dControl, AttackLayer7SummaryGetParamsDateRange12wControl, AttackLayer7SummaryGetParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1172,7 +1144,7 @@ type AttackLayer7SummaryHTTPMethodParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7SummaryHTTPMethodParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1198,34 +1170,6 @@ func (r AttackLayer7SummaryHTTPMethodParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer7SummaryHTTPMethodParamsDateRange string
-
-const (
-	AttackLayer7SummaryHTTPMethodParamsDateRange1d         AttackLayer7SummaryHTTPMethodParamsDateRange = "1d"
-	AttackLayer7SummaryHTTPMethodParamsDateRange2d         AttackLayer7SummaryHTTPMethodParamsDateRange = "2d"
-	AttackLayer7SummaryHTTPMethodParamsDateRange7d         AttackLayer7SummaryHTTPMethodParamsDateRange = "7d"
-	AttackLayer7SummaryHTTPMethodParamsDateRange14d        AttackLayer7SummaryHTTPMethodParamsDateRange = "14d"
-	AttackLayer7SummaryHTTPMethodParamsDateRange28d        AttackLayer7SummaryHTTPMethodParamsDateRange = "28d"
-	AttackLayer7SummaryHTTPMethodParamsDateRange12w        AttackLayer7SummaryHTTPMethodParamsDateRange = "12w"
-	AttackLayer7SummaryHTTPMethodParamsDateRange24w        AttackLayer7SummaryHTTPMethodParamsDateRange = "24w"
-	AttackLayer7SummaryHTTPMethodParamsDateRange52w        AttackLayer7SummaryHTTPMethodParamsDateRange = "52w"
-	AttackLayer7SummaryHTTPMethodParamsDateRange1dControl  AttackLayer7SummaryHTTPMethodParamsDateRange = "1dControl"
-	AttackLayer7SummaryHTTPMethodParamsDateRange2dControl  AttackLayer7SummaryHTTPMethodParamsDateRange = "2dControl"
-	AttackLayer7SummaryHTTPMethodParamsDateRange7dControl  AttackLayer7SummaryHTTPMethodParamsDateRange = "7dControl"
-	AttackLayer7SummaryHTTPMethodParamsDateRange14dControl AttackLayer7SummaryHTTPMethodParamsDateRange = "14dControl"
-	AttackLayer7SummaryHTTPMethodParamsDateRange28dControl AttackLayer7SummaryHTTPMethodParamsDateRange = "28dControl"
-	AttackLayer7SummaryHTTPMethodParamsDateRange12wControl AttackLayer7SummaryHTTPMethodParamsDateRange = "12wControl"
-	AttackLayer7SummaryHTTPMethodParamsDateRange24wControl AttackLayer7SummaryHTTPMethodParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7SummaryHTTPMethodParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7SummaryHTTPMethodParamsDateRange1d, AttackLayer7SummaryHTTPMethodParamsDateRange2d, AttackLayer7SummaryHTTPMethodParamsDateRange7d, AttackLayer7SummaryHTTPMethodParamsDateRange14d, AttackLayer7SummaryHTTPMethodParamsDateRange28d, AttackLayer7SummaryHTTPMethodParamsDateRange12w, AttackLayer7SummaryHTTPMethodParamsDateRange24w, AttackLayer7SummaryHTTPMethodParamsDateRange52w, AttackLayer7SummaryHTTPMethodParamsDateRange1dControl, AttackLayer7SummaryHTTPMethodParamsDateRange2dControl, AttackLayer7SummaryHTTPMethodParamsDateRange7dControl, AttackLayer7SummaryHTTPMethodParamsDateRange14dControl, AttackLayer7SummaryHTTPMethodParamsDateRange28dControl, AttackLayer7SummaryHTTPMethodParamsDateRange12wControl, AttackLayer7SummaryHTTPMethodParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1332,7 +1276,7 @@ type AttackLayer7SummaryHTTPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7SummaryHTTPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1358,34 +1302,6 @@ func (r AttackLayer7SummaryHTTPVersionParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer7SummaryHTTPVersionParamsDateRange string
-
-const (
-	AttackLayer7SummaryHTTPVersionParamsDateRange1d         AttackLayer7SummaryHTTPVersionParamsDateRange = "1d"
-	AttackLayer7SummaryHTTPVersionParamsDateRange2d         AttackLayer7SummaryHTTPVersionParamsDateRange = "2d"
-	AttackLayer7SummaryHTTPVersionParamsDateRange7d         AttackLayer7SummaryHTTPVersionParamsDateRange = "7d"
-	AttackLayer7SummaryHTTPVersionParamsDateRange14d        AttackLayer7SummaryHTTPVersionParamsDateRange = "14d"
-	AttackLayer7SummaryHTTPVersionParamsDateRange28d        AttackLayer7SummaryHTTPVersionParamsDateRange = "28d"
-	AttackLayer7SummaryHTTPVersionParamsDateRange12w        AttackLayer7SummaryHTTPVersionParamsDateRange = "12w"
-	AttackLayer7SummaryHTTPVersionParamsDateRange24w        AttackLayer7SummaryHTTPVersionParamsDateRange = "24w"
-	AttackLayer7SummaryHTTPVersionParamsDateRange52w        AttackLayer7SummaryHTTPVersionParamsDateRange = "52w"
-	AttackLayer7SummaryHTTPVersionParamsDateRange1dControl  AttackLayer7SummaryHTTPVersionParamsDateRange = "1dControl"
-	AttackLayer7SummaryHTTPVersionParamsDateRange2dControl  AttackLayer7SummaryHTTPVersionParamsDateRange = "2dControl"
-	AttackLayer7SummaryHTTPVersionParamsDateRange7dControl  AttackLayer7SummaryHTTPVersionParamsDateRange = "7dControl"
-	AttackLayer7SummaryHTTPVersionParamsDateRange14dControl AttackLayer7SummaryHTTPVersionParamsDateRange = "14dControl"
-	AttackLayer7SummaryHTTPVersionParamsDateRange28dControl AttackLayer7SummaryHTTPVersionParamsDateRange = "28dControl"
-	AttackLayer7SummaryHTTPVersionParamsDateRange12wControl AttackLayer7SummaryHTTPVersionParamsDateRange = "12wControl"
-	AttackLayer7SummaryHTTPVersionParamsDateRange24wControl AttackLayer7SummaryHTTPVersionParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7SummaryHTTPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7SummaryHTTPVersionParamsDateRange1d, AttackLayer7SummaryHTTPVersionParamsDateRange2d, AttackLayer7SummaryHTTPVersionParamsDateRange7d, AttackLayer7SummaryHTTPVersionParamsDateRange14d, AttackLayer7SummaryHTTPVersionParamsDateRange28d, AttackLayer7SummaryHTTPVersionParamsDateRange12w, AttackLayer7SummaryHTTPVersionParamsDateRange24w, AttackLayer7SummaryHTTPVersionParamsDateRange52w, AttackLayer7SummaryHTTPVersionParamsDateRange1dControl, AttackLayer7SummaryHTTPVersionParamsDateRange2dControl, AttackLayer7SummaryHTTPVersionParamsDateRange7dControl, AttackLayer7SummaryHTTPVersionParamsDateRange14dControl, AttackLayer7SummaryHTTPVersionParamsDateRange28dControl, AttackLayer7SummaryHTTPVersionParamsDateRange12wControl, AttackLayer7SummaryHTTPVersionParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1535,7 +1451,7 @@ type AttackLayer7SummaryIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7SummaryIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1561,34 +1477,6 @@ func (r AttackLayer7SummaryIPVersionParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer7SummaryIPVersionParamsDateRange string
-
-const (
-	AttackLayer7SummaryIPVersionParamsDateRange1d         AttackLayer7SummaryIPVersionParamsDateRange = "1d"
-	AttackLayer7SummaryIPVersionParamsDateRange2d         AttackLayer7SummaryIPVersionParamsDateRange = "2d"
-	AttackLayer7SummaryIPVersionParamsDateRange7d         AttackLayer7SummaryIPVersionParamsDateRange = "7d"
-	AttackLayer7SummaryIPVersionParamsDateRange14d        AttackLayer7SummaryIPVersionParamsDateRange = "14d"
-	AttackLayer7SummaryIPVersionParamsDateRange28d        AttackLayer7SummaryIPVersionParamsDateRange = "28d"
-	AttackLayer7SummaryIPVersionParamsDateRange12w        AttackLayer7SummaryIPVersionParamsDateRange = "12w"
-	AttackLayer7SummaryIPVersionParamsDateRange24w        AttackLayer7SummaryIPVersionParamsDateRange = "24w"
-	AttackLayer7SummaryIPVersionParamsDateRange52w        AttackLayer7SummaryIPVersionParamsDateRange = "52w"
-	AttackLayer7SummaryIPVersionParamsDateRange1dControl  AttackLayer7SummaryIPVersionParamsDateRange = "1dControl"
-	AttackLayer7SummaryIPVersionParamsDateRange2dControl  AttackLayer7SummaryIPVersionParamsDateRange = "2dControl"
-	AttackLayer7SummaryIPVersionParamsDateRange7dControl  AttackLayer7SummaryIPVersionParamsDateRange = "7dControl"
-	AttackLayer7SummaryIPVersionParamsDateRange14dControl AttackLayer7SummaryIPVersionParamsDateRange = "14dControl"
-	AttackLayer7SummaryIPVersionParamsDateRange28dControl AttackLayer7SummaryIPVersionParamsDateRange = "28dControl"
-	AttackLayer7SummaryIPVersionParamsDateRange12wControl AttackLayer7SummaryIPVersionParamsDateRange = "12wControl"
-	AttackLayer7SummaryIPVersionParamsDateRange24wControl AttackLayer7SummaryIPVersionParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7SummaryIPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7SummaryIPVersionParamsDateRange1d, AttackLayer7SummaryIPVersionParamsDateRange2d, AttackLayer7SummaryIPVersionParamsDateRange7d, AttackLayer7SummaryIPVersionParamsDateRange14d, AttackLayer7SummaryIPVersionParamsDateRange28d, AttackLayer7SummaryIPVersionParamsDateRange12w, AttackLayer7SummaryIPVersionParamsDateRange24w, AttackLayer7SummaryIPVersionParamsDateRange52w, AttackLayer7SummaryIPVersionParamsDateRange1dControl, AttackLayer7SummaryIPVersionParamsDateRange2dControl, AttackLayer7SummaryIPVersionParamsDateRange7dControl, AttackLayer7SummaryIPVersionParamsDateRange14dControl, AttackLayer7SummaryIPVersionParamsDateRange28dControl, AttackLayer7SummaryIPVersionParamsDateRange12wControl, AttackLayer7SummaryIPVersionParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1739,7 +1627,7 @@ type AttackLayer7SummaryManagedRulesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7SummaryManagedRulesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1767,34 +1655,6 @@ func (r AttackLayer7SummaryManagedRulesParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer7SummaryManagedRulesParamsDateRange string
-
-const (
-	AttackLayer7SummaryManagedRulesParamsDateRange1d         AttackLayer7SummaryManagedRulesParamsDateRange = "1d"
-	AttackLayer7SummaryManagedRulesParamsDateRange2d         AttackLayer7SummaryManagedRulesParamsDateRange = "2d"
-	AttackLayer7SummaryManagedRulesParamsDateRange7d         AttackLayer7SummaryManagedRulesParamsDateRange = "7d"
-	AttackLayer7SummaryManagedRulesParamsDateRange14d        AttackLayer7SummaryManagedRulesParamsDateRange = "14d"
-	AttackLayer7SummaryManagedRulesParamsDateRange28d        AttackLayer7SummaryManagedRulesParamsDateRange = "28d"
-	AttackLayer7SummaryManagedRulesParamsDateRange12w        AttackLayer7SummaryManagedRulesParamsDateRange = "12w"
-	AttackLayer7SummaryManagedRulesParamsDateRange24w        AttackLayer7SummaryManagedRulesParamsDateRange = "24w"
-	AttackLayer7SummaryManagedRulesParamsDateRange52w        AttackLayer7SummaryManagedRulesParamsDateRange = "52w"
-	AttackLayer7SummaryManagedRulesParamsDateRange1dControl  AttackLayer7SummaryManagedRulesParamsDateRange = "1dControl"
-	AttackLayer7SummaryManagedRulesParamsDateRange2dControl  AttackLayer7SummaryManagedRulesParamsDateRange = "2dControl"
-	AttackLayer7SummaryManagedRulesParamsDateRange7dControl  AttackLayer7SummaryManagedRulesParamsDateRange = "7dControl"
-	AttackLayer7SummaryManagedRulesParamsDateRange14dControl AttackLayer7SummaryManagedRulesParamsDateRange = "14dControl"
-	AttackLayer7SummaryManagedRulesParamsDateRange28dControl AttackLayer7SummaryManagedRulesParamsDateRange = "28dControl"
-	AttackLayer7SummaryManagedRulesParamsDateRange12wControl AttackLayer7SummaryManagedRulesParamsDateRange = "12wControl"
-	AttackLayer7SummaryManagedRulesParamsDateRange24wControl AttackLayer7SummaryManagedRulesParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7SummaryManagedRulesParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7SummaryManagedRulesParamsDateRange1d, AttackLayer7SummaryManagedRulesParamsDateRange2d, AttackLayer7SummaryManagedRulesParamsDateRange7d, AttackLayer7SummaryManagedRulesParamsDateRange14d, AttackLayer7SummaryManagedRulesParamsDateRange28d, AttackLayer7SummaryManagedRulesParamsDateRange12w, AttackLayer7SummaryManagedRulesParamsDateRange24w, AttackLayer7SummaryManagedRulesParamsDateRange52w, AttackLayer7SummaryManagedRulesParamsDateRange1dControl, AttackLayer7SummaryManagedRulesParamsDateRange2dControl, AttackLayer7SummaryManagedRulesParamsDateRange7dControl, AttackLayer7SummaryManagedRulesParamsDateRange14dControl, AttackLayer7SummaryManagedRulesParamsDateRange28dControl, AttackLayer7SummaryManagedRulesParamsDateRange12wControl, AttackLayer7SummaryManagedRulesParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1960,7 +1820,7 @@ type AttackLayer7SummaryMitigationProductParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7SummaryMitigationProductParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1986,34 +1846,6 @@ func (r AttackLayer7SummaryMitigationProductParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer7SummaryMitigationProductParamsDateRange string
-
-const (
-	AttackLayer7SummaryMitigationProductParamsDateRange1d         AttackLayer7SummaryMitigationProductParamsDateRange = "1d"
-	AttackLayer7SummaryMitigationProductParamsDateRange2d         AttackLayer7SummaryMitigationProductParamsDateRange = "2d"
-	AttackLayer7SummaryMitigationProductParamsDateRange7d         AttackLayer7SummaryMitigationProductParamsDateRange = "7d"
-	AttackLayer7SummaryMitigationProductParamsDateRange14d        AttackLayer7SummaryMitigationProductParamsDateRange = "14d"
-	AttackLayer7SummaryMitigationProductParamsDateRange28d        AttackLayer7SummaryMitigationProductParamsDateRange = "28d"
-	AttackLayer7SummaryMitigationProductParamsDateRange12w        AttackLayer7SummaryMitigationProductParamsDateRange = "12w"
-	AttackLayer7SummaryMitigationProductParamsDateRange24w        AttackLayer7SummaryMitigationProductParamsDateRange = "24w"
-	AttackLayer7SummaryMitigationProductParamsDateRange52w        AttackLayer7SummaryMitigationProductParamsDateRange = "52w"
-	AttackLayer7SummaryMitigationProductParamsDateRange1dControl  AttackLayer7SummaryMitigationProductParamsDateRange = "1dControl"
-	AttackLayer7SummaryMitigationProductParamsDateRange2dControl  AttackLayer7SummaryMitigationProductParamsDateRange = "2dControl"
-	AttackLayer7SummaryMitigationProductParamsDateRange7dControl  AttackLayer7SummaryMitigationProductParamsDateRange = "7dControl"
-	AttackLayer7SummaryMitigationProductParamsDateRange14dControl AttackLayer7SummaryMitigationProductParamsDateRange = "14dControl"
-	AttackLayer7SummaryMitigationProductParamsDateRange28dControl AttackLayer7SummaryMitigationProductParamsDateRange = "28dControl"
-	AttackLayer7SummaryMitigationProductParamsDateRange12wControl AttackLayer7SummaryMitigationProductParamsDateRange = "12wControl"
-	AttackLayer7SummaryMitigationProductParamsDateRange24wControl AttackLayer7SummaryMitigationProductParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7SummaryMitigationProductParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7SummaryMitigationProductParamsDateRange1d, AttackLayer7SummaryMitigationProductParamsDateRange2d, AttackLayer7SummaryMitigationProductParamsDateRange7d, AttackLayer7SummaryMitigationProductParamsDateRange14d, AttackLayer7SummaryMitigationProductParamsDateRange28d, AttackLayer7SummaryMitigationProductParamsDateRange12w, AttackLayer7SummaryMitigationProductParamsDateRange24w, AttackLayer7SummaryMitigationProductParamsDateRange52w, AttackLayer7SummaryMitigationProductParamsDateRange1dControl, AttackLayer7SummaryMitigationProductParamsDateRange2dControl, AttackLayer7SummaryMitigationProductParamsDateRange7dControl, AttackLayer7SummaryMitigationProductParamsDateRange14dControl, AttackLayer7SummaryMitigationProductParamsDateRange28dControl, AttackLayer7SummaryMitigationProductParamsDateRange12wControl, AttackLayer7SummaryMitigationProductParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

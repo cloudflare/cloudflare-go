@@ -117,7 +117,7 @@ type AttackLayer3TimeseriesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TimeseriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
@@ -166,34 +166,6 @@ const (
 func (r AttackLayer3TimeseriesParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer3TimeseriesParamsAggInterval15m, AttackLayer3TimeseriesParamsAggInterval1h, AttackLayer3TimeseriesParamsAggInterval1d, AttackLayer3TimeseriesParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer3TimeseriesParamsDateRange string
-
-const (
-	AttackLayer3TimeseriesParamsDateRange1d         AttackLayer3TimeseriesParamsDateRange = "1d"
-	AttackLayer3TimeseriesParamsDateRange2d         AttackLayer3TimeseriesParamsDateRange = "2d"
-	AttackLayer3TimeseriesParamsDateRange7d         AttackLayer3TimeseriesParamsDateRange = "7d"
-	AttackLayer3TimeseriesParamsDateRange14d        AttackLayer3TimeseriesParamsDateRange = "14d"
-	AttackLayer3TimeseriesParamsDateRange28d        AttackLayer3TimeseriesParamsDateRange = "28d"
-	AttackLayer3TimeseriesParamsDateRange12w        AttackLayer3TimeseriesParamsDateRange = "12w"
-	AttackLayer3TimeseriesParamsDateRange24w        AttackLayer3TimeseriesParamsDateRange = "24w"
-	AttackLayer3TimeseriesParamsDateRange52w        AttackLayer3TimeseriesParamsDateRange = "52w"
-	AttackLayer3TimeseriesParamsDateRange1dControl  AttackLayer3TimeseriesParamsDateRange = "1dControl"
-	AttackLayer3TimeseriesParamsDateRange2dControl  AttackLayer3TimeseriesParamsDateRange = "2dControl"
-	AttackLayer3TimeseriesParamsDateRange7dControl  AttackLayer3TimeseriesParamsDateRange = "7dControl"
-	AttackLayer3TimeseriesParamsDateRange14dControl AttackLayer3TimeseriesParamsDateRange = "14dControl"
-	AttackLayer3TimeseriesParamsDateRange28dControl AttackLayer3TimeseriesParamsDateRange = "28dControl"
-	AttackLayer3TimeseriesParamsDateRange12wControl AttackLayer3TimeseriesParamsDateRange = "12wControl"
-	AttackLayer3TimeseriesParamsDateRange24wControl AttackLayer3TimeseriesParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TimeseriesParamsDateRange1d, AttackLayer3TimeseriesParamsDateRange2d, AttackLayer3TimeseriesParamsDateRange7d, AttackLayer3TimeseriesParamsDateRange14d, AttackLayer3TimeseriesParamsDateRange28d, AttackLayer3TimeseriesParamsDateRange12w, AttackLayer3TimeseriesParamsDateRange24w, AttackLayer3TimeseriesParamsDateRange52w, AttackLayer3TimeseriesParamsDateRange1dControl, AttackLayer3TimeseriesParamsDateRange2dControl, AttackLayer3TimeseriesParamsDateRange7dControl, AttackLayer3TimeseriesParamsDateRange14dControl, AttackLayer3TimeseriesParamsDateRange28dControl, AttackLayer3TimeseriesParamsDateRange12wControl, AttackLayer3TimeseriesParamsDateRange24wControl:
 		return true
 	}
 	return false

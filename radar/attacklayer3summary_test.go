@@ -31,7 +31,7 @@ func TestAttackLayer3SummaryBitrateWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Summary.Bitrate(context.TODO(), radar.AttackLayer3SummaryBitrateParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.AttackLayer3SummaryBitrateParamsDateRange{radar.AttackLayer3SummaryBitrateParamsDateRange1d, radar.AttackLayer3SummaryBitrateParamsDateRange2d, radar.AttackLayer3SummaryBitrateParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Direction: cloudflare.F(radar.AttackLayer3SummaryBitrateParamsDirectionOrigin),
 		Format:    cloudflare.F(radar.AttackLayer3SummaryBitrateParamsFormatJson),
@@ -65,7 +65,7 @@ func TestAttackLayer3SummaryDurationWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Summary.Duration(context.TODO(), radar.AttackLayer3SummaryDurationParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.AttackLayer3SummaryDurationParamsDateRange{radar.AttackLayer3SummaryDurationParamsDateRange1d, radar.AttackLayer3SummaryDurationParamsDateRange2d, radar.AttackLayer3SummaryDurationParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Direction: cloudflare.F(radar.AttackLayer3SummaryDurationParamsDirectionOrigin),
 		Format:    cloudflare.F(radar.AttackLayer3SummaryDurationParamsFormatJson),
@@ -100,7 +100,7 @@ func TestAttackLayer3SummaryGetWithOptionalParams(t *testing.T) {
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.AttackLayer3SummaryGetParamsDateRange{radar.AttackLayer3SummaryGetParamsDateRange1d, radar.AttackLayer3SummaryGetParamsDateRange2d, radar.AttackLayer3SummaryGetParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(radar.AttackLayer3SummaryGetParamsFormatJson),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
@@ -131,7 +131,7 @@ func TestAttackLayer3SummaryIPVersionWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Summary.IPVersion(context.TODO(), radar.AttackLayer3SummaryIPVersionParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.AttackLayer3SummaryIPVersionParamsDateRange{radar.AttackLayer3SummaryIPVersionParamsDateRange1d, radar.AttackLayer3SummaryIPVersionParamsDateRange2d, radar.AttackLayer3SummaryIPVersionParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Direction: cloudflare.F(radar.AttackLayer3SummaryIPVersionParamsDirectionOrigin),
 		Format:    cloudflare.F(radar.AttackLayer3SummaryIPVersionParamsFormatJson),
@@ -164,7 +164,7 @@ func TestAttackLayer3SummaryProtocolWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Summary.Protocol(context.TODO(), radar.AttackLayer3SummaryProtocolParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.AttackLayer3SummaryProtocolParamsDateRange{radar.AttackLayer3SummaryProtocolParamsDateRange1d, radar.AttackLayer3SummaryProtocolParamsDateRange2d, radar.AttackLayer3SummaryProtocolParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Direction: cloudflare.F(radar.AttackLayer3SummaryProtocolParamsDirectionOrigin),
 		Format:    cloudflare.F(radar.AttackLayer3SummaryProtocolParamsFormatJson),
@@ -197,7 +197,7 @@ func TestAttackLayer3SummaryVectorWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Summary.Vector(context.TODO(), radar.AttackLayer3SummaryVectorParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.AttackLayer3SummaryVectorParamsDateRange{radar.AttackLayer3SummaryVectorParamsDateRange1d, radar.AttackLayer3SummaryVectorParamsDateRange2d, radar.AttackLayer3SummaryVectorParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Direction: cloudflare.F(radar.AttackLayer3SummaryVectorParamsDirectionOrigin),
 		Format:    cloudflare.F(radar.AttackLayer3SummaryVectorParamsFormatJson),

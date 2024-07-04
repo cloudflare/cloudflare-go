@@ -34,7 +34,7 @@ func TestEmailSecurityTopTldSpamGetWithOptionalParams(t *testing.T) {
 		radar.EmailSecurityTopTldSpamGetParams{
 			ARC:         cloudflare.F([]radar.EmailSecurityTopTldSpamGetParamsARC{radar.EmailSecurityTopTldSpamGetParamsARCPass, radar.EmailSecurityTopTldSpamGetParamsARCNone, radar.EmailSecurityTopTldSpamGetParamsARCFail}),
 			DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange:   cloudflare.F([]radar.EmailSecurityTopTldSpamGetParamsDateRange{radar.EmailSecurityTopTldSpamGetParamsDateRange1d, radar.EmailSecurityTopTldSpamGetParamsDateRange2d, radar.EmailSecurityTopTldSpamGetParamsDateRange7d}),
+			DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
 			DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DKIM:        cloudflare.F([]radar.EmailSecurityTopTldSpamGetParamsDKIM{radar.EmailSecurityTopTldSpamGetParamsDKIMPass, radar.EmailSecurityTopTldSpamGetParamsDKIMNone, radar.EmailSecurityTopTldSpamGetParamsDKIMFail}),
 			DMARC:       cloudflare.F([]radar.EmailSecurityTopTldSpamGetParamsDMARC{radar.EmailSecurityTopTldSpamGetParamsDMARCPass, radar.EmailSecurityTopTldSpamGetParamsDMARCNone, radar.EmailSecurityTopTldSpamGetParamsDMARCFail}),

@@ -30,7 +30,7 @@ func TestRankingTimeseriesGroupsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Ranking.TimeseriesGroups(context.TODO(), radar.RankingTimeseriesGroupsParams{
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]radar.RankingTimeseriesGroupsParamsDateRange{radar.RankingTimeseriesGroupsParamsDateRange1d, radar.RankingTimeseriesGroupsParamsDateRange2d, radar.RankingTimeseriesGroupsParamsDateRange7d}),
+		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Domains:     cloudflare.F([]string{"string", "string", "string"}),
 		Format:      cloudflare.F(radar.RankingTimeseriesGroupsParamsFormatJson),

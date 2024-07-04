@@ -223,7 +223,7 @@ type HTTPAseIPVersionGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseIPVersionGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -300,34 +300,6 @@ const (
 func (r HTTPAseIPVersionGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPAseIPVersionGetParamsBrowserFamilyChrome, HTTPAseIPVersionGetParamsBrowserFamilyEdge, HTTPAseIPVersionGetParamsBrowserFamilyFirefox, HTTPAseIPVersionGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPAseIPVersionGetParamsDateRange string
-
-const (
-	HTTPAseIPVersionGetParamsDateRange1d         HTTPAseIPVersionGetParamsDateRange = "1d"
-	HTTPAseIPVersionGetParamsDateRange2d         HTTPAseIPVersionGetParamsDateRange = "2d"
-	HTTPAseIPVersionGetParamsDateRange7d         HTTPAseIPVersionGetParamsDateRange = "7d"
-	HTTPAseIPVersionGetParamsDateRange14d        HTTPAseIPVersionGetParamsDateRange = "14d"
-	HTTPAseIPVersionGetParamsDateRange28d        HTTPAseIPVersionGetParamsDateRange = "28d"
-	HTTPAseIPVersionGetParamsDateRange12w        HTTPAseIPVersionGetParamsDateRange = "12w"
-	HTTPAseIPVersionGetParamsDateRange24w        HTTPAseIPVersionGetParamsDateRange = "24w"
-	HTTPAseIPVersionGetParamsDateRange52w        HTTPAseIPVersionGetParamsDateRange = "52w"
-	HTTPAseIPVersionGetParamsDateRange1dControl  HTTPAseIPVersionGetParamsDateRange = "1dControl"
-	HTTPAseIPVersionGetParamsDateRange2dControl  HTTPAseIPVersionGetParamsDateRange = "2dControl"
-	HTTPAseIPVersionGetParamsDateRange7dControl  HTTPAseIPVersionGetParamsDateRange = "7dControl"
-	HTTPAseIPVersionGetParamsDateRange14dControl HTTPAseIPVersionGetParamsDateRange = "14dControl"
-	HTTPAseIPVersionGetParamsDateRange28dControl HTTPAseIPVersionGetParamsDateRange = "28dControl"
-	HTTPAseIPVersionGetParamsDateRange12wControl HTTPAseIPVersionGetParamsDateRange = "12wControl"
-	HTTPAseIPVersionGetParamsDateRange24wControl HTTPAseIPVersionGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseIPVersionGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseIPVersionGetParamsDateRange1d, HTTPAseIPVersionGetParamsDateRange2d, HTTPAseIPVersionGetParamsDateRange7d, HTTPAseIPVersionGetParamsDateRange14d, HTTPAseIPVersionGetParamsDateRange28d, HTTPAseIPVersionGetParamsDateRange12w, HTTPAseIPVersionGetParamsDateRange24w, HTTPAseIPVersionGetParamsDateRange52w, HTTPAseIPVersionGetParamsDateRange1dControl, HTTPAseIPVersionGetParamsDateRange2dControl, HTTPAseIPVersionGetParamsDateRange7dControl, HTTPAseIPVersionGetParamsDateRange14dControl, HTTPAseIPVersionGetParamsDateRange28dControl, HTTPAseIPVersionGetParamsDateRange12wControl, HTTPAseIPVersionGetParamsDateRange24wControl:
 		return true
 	}
 	return false

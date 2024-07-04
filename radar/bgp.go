@@ -227,7 +227,7 @@ type BGPTimeseriesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]BGPTimeseriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -263,34 +263,6 @@ const (
 func (r BGPTimeseriesParamsAggInterval) IsKnown() bool {
 	switch r {
 	case BGPTimeseriesParamsAggInterval15m, BGPTimeseriesParamsAggInterval1h, BGPTimeseriesParamsAggInterval1d, BGPTimeseriesParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type BGPTimeseriesParamsDateRange string
-
-const (
-	BGPTimeseriesParamsDateRange1d         BGPTimeseriesParamsDateRange = "1d"
-	BGPTimeseriesParamsDateRange2d         BGPTimeseriesParamsDateRange = "2d"
-	BGPTimeseriesParamsDateRange7d         BGPTimeseriesParamsDateRange = "7d"
-	BGPTimeseriesParamsDateRange14d        BGPTimeseriesParamsDateRange = "14d"
-	BGPTimeseriesParamsDateRange28d        BGPTimeseriesParamsDateRange = "28d"
-	BGPTimeseriesParamsDateRange12w        BGPTimeseriesParamsDateRange = "12w"
-	BGPTimeseriesParamsDateRange24w        BGPTimeseriesParamsDateRange = "24w"
-	BGPTimeseriesParamsDateRange52w        BGPTimeseriesParamsDateRange = "52w"
-	BGPTimeseriesParamsDateRange1dControl  BGPTimeseriesParamsDateRange = "1dControl"
-	BGPTimeseriesParamsDateRange2dControl  BGPTimeseriesParamsDateRange = "2dControl"
-	BGPTimeseriesParamsDateRange7dControl  BGPTimeseriesParamsDateRange = "7dControl"
-	BGPTimeseriesParamsDateRange14dControl BGPTimeseriesParamsDateRange = "14dControl"
-	BGPTimeseriesParamsDateRange28dControl BGPTimeseriesParamsDateRange = "28dControl"
-	BGPTimeseriesParamsDateRange12wControl BGPTimeseriesParamsDateRange = "12wControl"
-	BGPTimeseriesParamsDateRange24wControl BGPTimeseriesParamsDateRange = "24wControl"
-)
-
-func (r BGPTimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case BGPTimeseriesParamsDateRange1d, BGPTimeseriesParamsDateRange2d, BGPTimeseriesParamsDateRange7d, BGPTimeseriesParamsDateRange14d, BGPTimeseriesParamsDateRange28d, BGPTimeseriesParamsDateRange12w, BGPTimeseriesParamsDateRange24w, BGPTimeseriesParamsDateRange52w, BGPTimeseriesParamsDateRange1dControl, BGPTimeseriesParamsDateRange2dControl, BGPTimeseriesParamsDateRange7dControl, BGPTimeseriesParamsDateRange14dControl, BGPTimeseriesParamsDateRange28dControl, BGPTimeseriesParamsDateRange12wControl, BGPTimeseriesParamsDateRange24wControl:
 		return true
 	}
 	return false

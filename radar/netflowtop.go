@@ -168,7 +168,7 @@ type NetflowTopAsesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]NetflowTopAsesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -189,34 +189,6 @@ func (r NetflowTopAsesParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type NetflowTopAsesParamsDateRange string
-
-const (
-	NetflowTopAsesParamsDateRange1d         NetflowTopAsesParamsDateRange = "1d"
-	NetflowTopAsesParamsDateRange2d         NetflowTopAsesParamsDateRange = "2d"
-	NetflowTopAsesParamsDateRange7d         NetflowTopAsesParamsDateRange = "7d"
-	NetflowTopAsesParamsDateRange14d        NetflowTopAsesParamsDateRange = "14d"
-	NetflowTopAsesParamsDateRange28d        NetflowTopAsesParamsDateRange = "28d"
-	NetflowTopAsesParamsDateRange12w        NetflowTopAsesParamsDateRange = "12w"
-	NetflowTopAsesParamsDateRange24w        NetflowTopAsesParamsDateRange = "24w"
-	NetflowTopAsesParamsDateRange52w        NetflowTopAsesParamsDateRange = "52w"
-	NetflowTopAsesParamsDateRange1dControl  NetflowTopAsesParamsDateRange = "1dControl"
-	NetflowTopAsesParamsDateRange2dControl  NetflowTopAsesParamsDateRange = "2dControl"
-	NetflowTopAsesParamsDateRange7dControl  NetflowTopAsesParamsDateRange = "7dControl"
-	NetflowTopAsesParamsDateRange14dControl NetflowTopAsesParamsDateRange = "14dControl"
-	NetflowTopAsesParamsDateRange28dControl NetflowTopAsesParamsDateRange = "28dControl"
-	NetflowTopAsesParamsDateRange12wControl NetflowTopAsesParamsDateRange = "12wControl"
-	NetflowTopAsesParamsDateRange24wControl NetflowTopAsesParamsDateRange = "24wControl"
-)
-
-func (r NetflowTopAsesParamsDateRange) IsKnown() bool {
-	switch r {
-	case NetflowTopAsesParamsDateRange1d, NetflowTopAsesParamsDateRange2d, NetflowTopAsesParamsDateRange7d, NetflowTopAsesParamsDateRange14d, NetflowTopAsesParamsDateRange28d, NetflowTopAsesParamsDateRange12w, NetflowTopAsesParamsDateRange24w, NetflowTopAsesParamsDateRange52w, NetflowTopAsesParamsDateRange1dControl, NetflowTopAsesParamsDateRange2dControl, NetflowTopAsesParamsDateRange7dControl, NetflowTopAsesParamsDateRange14dControl, NetflowTopAsesParamsDateRange28dControl, NetflowTopAsesParamsDateRange12wControl, NetflowTopAsesParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -272,7 +244,7 @@ type NetflowTopLocationsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]NetflowTopLocationsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -294,34 +266,6 @@ func (r NetflowTopLocationsParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type NetflowTopLocationsParamsDateRange string
-
-const (
-	NetflowTopLocationsParamsDateRange1d         NetflowTopLocationsParamsDateRange = "1d"
-	NetflowTopLocationsParamsDateRange2d         NetflowTopLocationsParamsDateRange = "2d"
-	NetflowTopLocationsParamsDateRange7d         NetflowTopLocationsParamsDateRange = "7d"
-	NetflowTopLocationsParamsDateRange14d        NetflowTopLocationsParamsDateRange = "14d"
-	NetflowTopLocationsParamsDateRange28d        NetflowTopLocationsParamsDateRange = "28d"
-	NetflowTopLocationsParamsDateRange12w        NetflowTopLocationsParamsDateRange = "12w"
-	NetflowTopLocationsParamsDateRange24w        NetflowTopLocationsParamsDateRange = "24w"
-	NetflowTopLocationsParamsDateRange52w        NetflowTopLocationsParamsDateRange = "52w"
-	NetflowTopLocationsParamsDateRange1dControl  NetflowTopLocationsParamsDateRange = "1dControl"
-	NetflowTopLocationsParamsDateRange2dControl  NetflowTopLocationsParamsDateRange = "2dControl"
-	NetflowTopLocationsParamsDateRange7dControl  NetflowTopLocationsParamsDateRange = "7dControl"
-	NetflowTopLocationsParamsDateRange14dControl NetflowTopLocationsParamsDateRange = "14dControl"
-	NetflowTopLocationsParamsDateRange28dControl NetflowTopLocationsParamsDateRange = "28dControl"
-	NetflowTopLocationsParamsDateRange12wControl NetflowTopLocationsParamsDateRange = "12wControl"
-	NetflowTopLocationsParamsDateRange24wControl NetflowTopLocationsParamsDateRange = "24wControl"
-)
-
-func (r NetflowTopLocationsParamsDateRange) IsKnown() bool {
-	switch r {
-	case NetflowTopLocationsParamsDateRange1d, NetflowTopLocationsParamsDateRange2d, NetflowTopLocationsParamsDateRange7d, NetflowTopLocationsParamsDateRange14d, NetflowTopLocationsParamsDateRange28d, NetflowTopLocationsParamsDateRange12w, NetflowTopLocationsParamsDateRange24w, NetflowTopLocationsParamsDateRange52w, NetflowTopLocationsParamsDateRange1dControl, NetflowTopLocationsParamsDateRange2dControl, NetflowTopLocationsParamsDateRange7dControl, NetflowTopLocationsParamsDateRange14dControl, NetflowTopLocationsParamsDateRange28dControl, NetflowTopLocationsParamsDateRange12wControl, NetflowTopLocationsParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

@@ -237,7 +237,7 @@ type HTTPAseGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -299,34 +299,6 @@ const (
 func (r HTTPAseGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPAseGetParamsBrowserFamilyChrome, HTTPAseGetParamsBrowserFamilyEdge, HTTPAseGetParamsBrowserFamilyFirefox, HTTPAseGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPAseGetParamsDateRange string
-
-const (
-	HTTPAseGetParamsDateRange1d         HTTPAseGetParamsDateRange = "1d"
-	HTTPAseGetParamsDateRange2d         HTTPAseGetParamsDateRange = "2d"
-	HTTPAseGetParamsDateRange7d         HTTPAseGetParamsDateRange = "7d"
-	HTTPAseGetParamsDateRange14d        HTTPAseGetParamsDateRange = "14d"
-	HTTPAseGetParamsDateRange28d        HTTPAseGetParamsDateRange = "28d"
-	HTTPAseGetParamsDateRange12w        HTTPAseGetParamsDateRange = "12w"
-	HTTPAseGetParamsDateRange24w        HTTPAseGetParamsDateRange = "24w"
-	HTTPAseGetParamsDateRange52w        HTTPAseGetParamsDateRange = "52w"
-	HTTPAseGetParamsDateRange1dControl  HTTPAseGetParamsDateRange = "1dControl"
-	HTTPAseGetParamsDateRange2dControl  HTTPAseGetParamsDateRange = "2dControl"
-	HTTPAseGetParamsDateRange7dControl  HTTPAseGetParamsDateRange = "7dControl"
-	HTTPAseGetParamsDateRange14dControl HTTPAseGetParamsDateRange = "14dControl"
-	HTTPAseGetParamsDateRange28dControl HTTPAseGetParamsDateRange = "28dControl"
-	HTTPAseGetParamsDateRange12wControl HTTPAseGetParamsDateRange = "12wControl"
-	HTTPAseGetParamsDateRange24wControl HTTPAseGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseGetParamsDateRange1d, HTTPAseGetParamsDateRange2d, HTTPAseGetParamsDateRange7d, HTTPAseGetParamsDateRange14d, HTTPAseGetParamsDateRange28d, HTTPAseGetParamsDateRange12w, HTTPAseGetParamsDateRange24w, HTTPAseGetParamsDateRange52w, HTTPAseGetParamsDateRange1dControl, HTTPAseGetParamsDateRange2dControl, HTTPAseGetParamsDateRange7dControl, HTTPAseGetParamsDateRange14dControl, HTTPAseGetParamsDateRange28dControl, HTTPAseGetParamsDateRange12wControl, HTTPAseGetParamsDateRange24wControl:
 		return true
 	}
 	return false

@@ -31,7 +31,7 @@ func TestBGPTopAseGetWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.BGP.Top.Ases.Get(context.TODO(), radar.BGPTopAseGetParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.BGPTopAseGetParamsDateRange{radar.BGPTopAseGetParamsDateRange1d, radar.BGPTopAseGetParamsDateRange2d, radar.BGPTopAseGetParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(radar.BGPTopAseGetParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),

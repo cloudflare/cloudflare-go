@@ -187,7 +187,7 @@ type EmailSecurityTopTldMaliciousGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTopTldMaliciousGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -244,34 +244,6 @@ const (
 func (r EmailSecurityTopTldMaliciousGetParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTopTldMaliciousGetParamsARCPass, EmailSecurityTopTldMaliciousGetParamsARCNone, EmailSecurityTopTldMaliciousGetParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTopTldMaliciousGetParamsDateRange string
-
-const (
-	EmailSecurityTopTldMaliciousGetParamsDateRange1d         EmailSecurityTopTldMaliciousGetParamsDateRange = "1d"
-	EmailSecurityTopTldMaliciousGetParamsDateRange2d         EmailSecurityTopTldMaliciousGetParamsDateRange = "2d"
-	EmailSecurityTopTldMaliciousGetParamsDateRange7d         EmailSecurityTopTldMaliciousGetParamsDateRange = "7d"
-	EmailSecurityTopTldMaliciousGetParamsDateRange14d        EmailSecurityTopTldMaliciousGetParamsDateRange = "14d"
-	EmailSecurityTopTldMaliciousGetParamsDateRange28d        EmailSecurityTopTldMaliciousGetParamsDateRange = "28d"
-	EmailSecurityTopTldMaliciousGetParamsDateRange12w        EmailSecurityTopTldMaliciousGetParamsDateRange = "12w"
-	EmailSecurityTopTldMaliciousGetParamsDateRange24w        EmailSecurityTopTldMaliciousGetParamsDateRange = "24w"
-	EmailSecurityTopTldMaliciousGetParamsDateRange52w        EmailSecurityTopTldMaliciousGetParamsDateRange = "52w"
-	EmailSecurityTopTldMaliciousGetParamsDateRange1dControl  EmailSecurityTopTldMaliciousGetParamsDateRange = "1dControl"
-	EmailSecurityTopTldMaliciousGetParamsDateRange2dControl  EmailSecurityTopTldMaliciousGetParamsDateRange = "2dControl"
-	EmailSecurityTopTldMaliciousGetParamsDateRange7dControl  EmailSecurityTopTldMaliciousGetParamsDateRange = "7dControl"
-	EmailSecurityTopTldMaliciousGetParamsDateRange14dControl EmailSecurityTopTldMaliciousGetParamsDateRange = "14dControl"
-	EmailSecurityTopTldMaliciousGetParamsDateRange28dControl EmailSecurityTopTldMaliciousGetParamsDateRange = "28dControl"
-	EmailSecurityTopTldMaliciousGetParamsDateRange12wControl EmailSecurityTopTldMaliciousGetParamsDateRange = "12wControl"
-	EmailSecurityTopTldMaliciousGetParamsDateRange24wControl EmailSecurityTopTldMaliciousGetParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTopTldMaliciousGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTopTldMaliciousGetParamsDateRange1d, EmailSecurityTopTldMaliciousGetParamsDateRange2d, EmailSecurityTopTldMaliciousGetParamsDateRange7d, EmailSecurityTopTldMaliciousGetParamsDateRange14d, EmailSecurityTopTldMaliciousGetParamsDateRange28d, EmailSecurityTopTldMaliciousGetParamsDateRange12w, EmailSecurityTopTldMaliciousGetParamsDateRange24w, EmailSecurityTopTldMaliciousGetParamsDateRange52w, EmailSecurityTopTldMaliciousGetParamsDateRange1dControl, EmailSecurityTopTldMaliciousGetParamsDateRange2dControl, EmailSecurityTopTldMaliciousGetParamsDateRange7dControl, EmailSecurityTopTldMaliciousGetParamsDateRange14dControl, EmailSecurityTopTldMaliciousGetParamsDateRange28dControl, EmailSecurityTopTldMaliciousGetParamsDateRange12wControl, EmailSecurityTopTldMaliciousGetParamsDateRange24wControl:
 		return true
 	}
 	return false
