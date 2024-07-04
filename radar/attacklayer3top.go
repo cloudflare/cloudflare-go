@@ -503,7 +503,7 @@ type AttackLayer3TopAttacksParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TopAttacksParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -539,34 +539,6 @@ func (r AttackLayer3TopAttacksParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer3TopAttacksParamsDateRange string
-
-const (
-	AttackLayer3TopAttacksParamsDateRange1d         AttackLayer3TopAttacksParamsDateRange = "1d"
-	AttackLayer3TopAttacksParamsDateRange2d         AttackLayer3TopAttacksParamsDateRange = "2d"
-	AttackLayer3TopAttacksParamsDateRange7d         AttackLayer3TopAttacksParamsDateRange = "7d"
-	AttackLayer3TopAttacksParamsDateRange14d        AttackLayer3TopAttacksParamsDateRange = "14d"
-	AttackLayer3TopAttacksParamsDateRange28d        AttackLayer3TopAttacksParamsDateRange = "28d"
-	AttackLayer3TopAttacksParamsDateRange12w        AttackLayer3TopAttacksParamsDateRange = "12w"
-	AttackLayer3TopAttacksParamsDateRange24w        AttackLayer3TopAttacksParamsDateRange = "24w"
-	AttackLayer3TopAttacksParamsDateRange52w        AttackLayer3TopAttacksParamsDateRange = "52w"
-	AttackLayer3TopAttacksParamsDateRange1dControl  AttackLayer3TopAttacksParamsDateRange = "1dControl"
-	AttackLayer3TopAttacksParamsDateRange2dControl  AttackLayer3TopAttacksParamsDateRange = "2dControl"
-	AttackLayer3TopAttacksParamsDateRange7dControl  AttackLayer3TopAttacksParamsDateRange = "7dControl"
-	AttackLayer3TopAttacksParamsDateRange14dControl AttackLayer3TopAttacksParamsDateRange = "14dControl"
-	AttackLayer3TopAttacksParamsDateRange28dControl AttackLayer3TopAttacksParamsDateRange = "28dControl"
-	AttackLayer3TopAttacksParamsDateRange12wControl AttackLayer3TopAttacksParamsDateRange = "12wControl"
-	AttackLayer3TopAttacksParamsDateRange24wControl AttackLayer3TopAttacksParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TopAttacksParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TopAttacksParamsDateRange1d, AttackLayer3TopAttacksParamsDateRange2d, AttackLayer3TopAttacksParamsDateRange7d, AttackLayer3TopAttacksParamsDateRange14d, AttackLayer3TopAttacksParamsDateRange28d, AttackLayer3TopAttacksParamsDateRange12w, AttackLayer3TopAttacksParamsDateRange24w, AttackLayer3TopAttacksParamsDateRange52w, AttackLayer3TopAttacksParamsDateRange1dControl, AttackLayer3TopAttacksParamsDateRange2dControl, AttackLayer3TopAttacksParamsDateRange7dControl, AttackLayer3TopAttacksParamsDateRange14dControl, AttackLayer3TopAttacksParamsDateRange28dControl, AttackLayer3TopAttacksParamsDateRange12wControl, AttackLayer3TopAttacksParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -685,7 +657,7 @@ type AttackLayer3TopIndustryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TopIndustryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -711,34 +683,6 @@ func (r AttackLayer3TopIndustryParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer3TopIndustryParamsDateRange string
-
-const (
-	AttackLayer3TopIndustryParamsDateRange1d         AttackLayer3TopIndustryParamsDateRange = "1d"
-	AttackLayer3TopIndustryParamsDateRange2d         AttackLayer3TopIndustryParamsDateRange = "2d"
-	AttackLayer3TopIndustryParamsDateRange7d         AttackLayer3TopIndustryParamsDateRange = "7d"
-	AttackLayer3TopIndustryParamsDateRange14d        AttackLayer3TopIndustryParamsDateRange = "14d"
-	AttackLayer3TopIndustryParamsDateRange28d        AttackLayer3TopIndustryParamsDateRange = "28d"
-	AttackLayer3TopIndustryParamsDateRange12w        AttackLayer3TopIndustryParamsDateRange = "12w"
-	AttackLayer3TopIndustryParamsDateRange24w        AttackLayer3TopIndustryParamsDateRange = "24w"
-	AttackLayer3TopIndustryParamsDateRange52w        AttackLayer3TopIndustryParamsDateRange = "52w"
-	AttackLayer3TopIndustryParamsDateRange1dControl  AttackLayer3TopIndustryParamsDateRange = "1dControl"
-	AttackLayer3TopIndustryParamsDateRange2dControl  AttackLayer3TopIndustryParamsDateRange = "2dControl"
-	AttackLayer3TopIndustryParamsDateRange7dControl  AttackLayer3TopIndustryParamsDateRange = "7dControl"
-	AttackLayer3TopIndustryParamsDateRange14dControl AttackLayer3TopIndustryParamsDateRange = "14dControl"
-	AttackLayer3TopIndustryParamsDateRange28dControl AttackLayer3TopIndustryParamsDateRange = "28dControl"
-	AttackLayer3TopIndustryParamsDateRange12wControl AttackLayer3TopIndustryParamsDateRange = "12wControl"
-	AttackLayer3TopIndustryParamsDateRange24wControl AttackLayer3TopIndustryParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TopIndustryParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TopIndustryParamsDateRange1d, AttackLayer3TopIndustryParamsDateRange2d, AttackLayer3TopIndustryParamsDateRange7d, AttackLayer3TopIndustryParamsDateRange14d, AttackLayer3TopIndustryParamsDateRange28d, AttackLayer3TopIndustryParamsDateRange12w, AttackLayer3TopIndustryParamsDateRange24w, AttackLayer3TopIndustryParamsDateRange52w, AttackLayer3TopIndustryParamsDateRange1dControl, AttackLayer3TopIndustryParamsDateRange2dControl, AttackLayer3TopIndustryParamsDateRange7dControl, AttackLayer3TopIndustryParamsDateRange14dControl, AttackLayer3TopIndustryParamsDateRange28dControl, AttackLayer3TopIndustryParamsDateRange12wControl, AttackLayer3TopIndustryParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -822,7 +766,7 @@ type AttackLayer3TopVerticalParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TopVerticalParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -848,34 +792,6 @@ func (r AttackLayer3TopVerticalParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer3TopVerticalParamsDateRange string
-
-const (
-	AttackLayer3TopVerticalParamsDateRange1d         AttackLayer3TopVerticalParamsDateRange = "1d"
-	AttackLayer3TopVerticalParamsDateRange2d         AttackLayer3TopVerticalParamsDateRange = "2d"
-	AttackLayer3TopVerticalParamsDateRange7d         AttackLayer3TopVerticalParamsDateRange = "7d"
-	AttackLayer3TopVerticalParamsDateRange14d        AttackLayer3TopVerticalParamsDateRange = "14d"
-	AttackLayer3TopVerticalParamsDateRange28d        AttackLayer3TopVerticalParamsDateRange = "28d"
-	AttackLayer3TopVerticalParamsDateRange12w        AttackLayer3TopVerticalParamsDateRange = "12w"
-	AttackLayer3TopVerticalParamsDateRange24w        AttackLayer3TopVerticalParamsDateRange = "24w"
-	AttackLayer3TopVerticalParamsDateRange52w        AttackLayer3TopVerticalParamsDateRange = "52w"
-	AttackLayer3TopVerticalParamsDateRange1dControl  AttackLayer3TopVerticalParamsDateRange = "1dControl"
-	AttackLayer3TopVerticalParamsDateRange2dControl  AttackLayer3TopVerticalParamsDateRange = "2dControl"
-	AttackLayer3TopVerticalParamsDateRange7dControl  AttackLayer3TopVerticalParamsDateRange = "7dControl"
-	AttackLayer3TopVerticalParamsDateRange14dControl AttackLayer3TopVerticalParamsDateRange = "14dControl"
-	AttackLayer3TopVerticalParamsDateRange28dControl AttackLayer3TopVerticalParamsDateRange = "28dControl"
-	AttackLayer3TopVerticalParamsDateRange12wControl AttackLayer3TopVerticalParamsDateRange = "12wControl"
-	AttackLayer3TopVerticalParamsDateRange24wControl AttackLayer3TopVerticalParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TopVerticalParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TopVerticalParamsDateRange1d, AttackLayer3TopVerticalParamsDateRange2d, AttackLayer3TopVerticalParamsDateRange7d, AttackLayer3TopVerticalParamsDateRange14d, AttackLayer3TopVerticalParamsDateRange28d, AttackLayer3TopVerticalParamsDateRange12w, AttackLayer3TopVerticalParamsDateRange24w, AttackLayer3TopVerticalParamsDateRange52w, AttackLayer3TopVerticalParamsDateRange1dControl, AttackLayer3TopVerticalParamsDateRange2dControl, AttackLayer3TopVerticalParamsDateRange7dControl, AttackLayer3TopVerticalParamsDateRange14dControl, AttackLayer3TopVerticalParamsDateRange28dControl, AttackLayer3TopVerticalParamsDateRange12wControl, AttackLayer3TopVerticalParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

@@ -223,7 +223,7 @@ type HTTPLocationHTTPProtocolGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPLocationHTTPProtocolGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -298,34 +298,6 @@ const (
 func (r HTTPLocationHTTPProtocolGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPLocationHTTPProtocolGetParamsBrowserFamilyChrome, HTTPLocationHTTPProtocolGetParamsBrowserFamilyEdge, HTTPLocationHTTPProtocolGetParamsBrowserFamilyFirefox, HTTPLocationHTTPProtocolGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPLocationHTTPProtocolGetParamsDateRange string
-
-const (
-	HTTPLocationHTTPProtocolGetParamsDateRange1d         HTTPLocationHTTPProtocolGetParamsDateRange = "1d"
-	HTTPLocationHTTPProtocolGetParamsDateRange2d         HTTPLocationHTTPProtocolGetParamsDateRange = "2d"
-	HTTPLocationHTTPProtocolGetParamsDateRange7d         HTTPLocationHTTPProtocolGetParamsDateRange = "7d"
-	HTTPLocationHTTPProtocolGetParamsDateRange14d        HTTPLocationHTTPProtocolGetParamsDateRange = "14d"
-	HTTPLocationHTTPProtocolGetParamsDateRange28d        HTTPLocationHTTPProtocolGetParamsDateRange = "28d"
-	HTTPLocationHTTPProtocolGetParamsDateRange12w        HTTPLocationHTTPProtocolGetParamsDateRange = "12w"
-	HTTPLocationHTTPProtocolGetParamsDateRange24w        HTTPLocationHTTPProtocolGetParamsDateRange = "24w"
-	HTTPLocationHTTPProtocolGetParamsDateRange52w        HTTPLocationHTTPProtocolGetParamsDateRange = "52w"
-	HTTPLocationHTTPProtocolGetParamsDateRange1dControl  HTTPLocationHTTPProtocolGetParamsDateRange = "1dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange2dControl  HTTPLocationHTTPProtocolGetParamsDateRange = "2dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange7dControl  HTTPLocationHTTPProtocolGetParamsDateRange = "7dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange14dControl HTTPLocationHTTPProtocolGetParamsDateRange = "14dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange28dControl HTTPLocationHTTPProtocolGetParamsDateRange = "28dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange12wControl HTTPLocationHTTPProtocolGetParamsDateRange = "12wControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange24wControl HTTPLocationHTTPProtocolGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPLocationHTTPProtocolGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPLocationHTTPProtocolGetParamsDateRange1d, HTTPLocationHTTPProtocolGetParamsDateRange2d, HTTPLocationHTTPProtocolGetParamsDateRange7d, HTTPLocationHTTPProtocolGetParamsDateRange14d, HTTPLocationHTTPProtocolGetParamsDateRange28d, HTTPLocationHTTPProtocolGetParamsDateRange12w, HTTPLocationHTTPProtocolGetParamsDateRange24w, HTTPLocationHTTPProtocolGetParamsDateRange52w, HTTPLocationHTTPProtocolGetParamsDateRange1dControl, HTTPLocationHTTPProtocolGetParamsDateRange2dControl, HTTPLocationHTTPProtocolGetParamsDateRange7dControl, HTTPLocationHTTPProtocolGetParamsDateRange14dControl, HTTPLocationHTTPProtocolGetParamsDateRange28dControl, HTTPLocationHTTPProtocolGetParamsDateRange12wControl, HTTPLocationHTTPProtocolGetParamsDateRange24wControl:
 		return true
 	}
 	return false

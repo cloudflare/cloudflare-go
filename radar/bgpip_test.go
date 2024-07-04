@@ -31,7 +31,7 @@ func TestBGPIPTimeseriesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.BGP.IPs.Timeseries(context.TODO(), radar.BGPIPTimeseriesParams{
 		ASN:          cloudflare.F("174,7922"),
 		DateEnd:      cloudflare.F(time.Now()),
-		DateRange:    cloudflare.F(radar.BgpipTimeseriesParamsDateRange7d),
+		DateRange:    cloudflare.F("7d"),
 		DateStart:    cloudflare.F(time.Now()),
 		Format:       cloudflare.F(radar.BgpipTimeseriesParamsFormatJson),
 		IncludeDelay: cloudflare.F(true),

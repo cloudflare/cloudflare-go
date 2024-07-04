@@ -34,7 +34,7 @@ func TestEmailSecurityTopTldSpoofGetWithOptionalParams(t *testing.T) {
 		radar.EmailSecurityTopTldSpoofGetParams{
 			ARC:         cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsARC{radar.EmailSecurityTopTldSpoofGetParamsARCPass, radar.EmailSecurityTopTldSpoofGetParamsARCNone, radar.EmailSecurityTopTldSpoofGetParamsARCFail}),
 			DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange:   cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsDateRange{radar.EmailSecurityTopTldSpoofGetParamsDateRange1d, radar.EmailSecurityTopTldSpoofGetParamsDateRange2d, radar.EmailSecurityTopTldSpoofGetParamsDateRange7d}),
+			DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
 			DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DKIM:        cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsDKIM{radar.EmailSecurityTopTldSpoofGetParamsDKIMPass, radar.EmailSecurityTopTldSpoofGetParamsDKIMNone, radar.EmailSecurityTopTldSpoofGetParamsDKIMFail}),
 			DMARC:       cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsDMARC{radar.EmailSecurityTopTldSpoofGetParamsDMARCPass, radar.EmailSecurityTopTldSpoofGetParamsDMARCNone, radar.EmailSecurityTopTldSpoofGetParamsDMARCFail}),

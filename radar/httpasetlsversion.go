@@ -223,7 +223,7 @@ type HTTPAseTLSVersionGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseTLSVersionGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -303,34 +303,6 @@ const (
 func (r HTTPAseTLSVersionGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPAseTLSVersionGetParamsBrowserFamilyChrome, HTTPAseTLSVersionGetParamsBrowserFamilyEdge, HTTPAseTLSVersionGetParamsBrowserFamilyFirefox, HTTPAseTLSVersionGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPAseTLSVersionGetParamsDateRange string
-
-const (
-	HTTPAseTLSVersionGetParamsDateRange1d         HTTPAseTLSVersionGetParamsDateRange = "1d"
-	HTTPAseTLSVersionGetParamsDateRange2d         HTTPAseTLSVersionGetParamsDateRange = "2d"
-	HTTPAseTLSVersionGetParamsDateRange7d         HTTPAseTLSVersionGetParamsDateRange = "7d"
-	HTTPAseTLSVersionGetParamsDateRange14d        HTTPAseTLSVersionGetParamsDateRange = "14d"
-	HTTPAseTLSVersionGetParamsDateRange28d        HTTPAseTLSVersionGetParamsDateRange = "28d"
-	HTTPAseTLSVersionGetParamsDateRange12w        HTTPAseTLSVersionGetParamsDateRange = "12w"
-	HTTPAseTLSVersionGetParamsDateRange24w        HTTPAseTLSVersionGetParamsDateRange = "24w"
-	HTTPAseTLSVersionGetParamsDateRange52w        HTTPAseTLSVersionGetParamsDateRange = "52w"
-	HTTPAseTLSVersionGetParamsDateRange1dControl  HTTPAseTLSVersionGetParamsDateRange = "1dControl"
-	HTTPAseTLSVersionGetParamsDateRange2dControl  HTTPAseTLSVersionGetParamsDateRange = "2dControl"
-	HTTPAseTLSVersionGetParamsDateRange7dControl  HTTPAseTLSVersionGetParamsDateRange = "7dControl"
-	HTTPAseTLSVersionGetParamsDateRange14dControl HTTPAseTLSVersionGetParamsDateRange = "14dControl"
-	HTTPAseTLSVersionGetParamsDateRange28dControl HTTPAseTLSVersionGetParamsDateRange = "28dControl"
-	HTTPAseTLSVersionGetParamsDateRange12wControl HTTPAseTLSVersionGetParamsDateRange = "12wControl"
-	HTTPAseTLSVersionGetParamsDateRange24wControl HTTPAseTLSVersionGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseTLSVersionGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseTLSVersionGetParamsDateRange1d, HTTPAseTLSVersionGetParamsDateRange2d, HTTPAseTLSVersionGetParamsDateRange7d, HTTPAseTLSVersionGetParamsDateRange14d, HTTPAseTLSVersionGetParamsDateRange28d, HTTPAseTLSVersionGetParamsDateRange12w, HTTPAseTLSVersionGetParamsDateRange24w, HTTPAseTLSVersionGetParamsDateRange52w, HTTPAseTLSVersionGetParamsDateRange1dControl, HTTPAseTLSVersionGetParamsDateRange2dControl, HTTPAseTLSVersionGetParamsDateRange7dControl, HTTPAseTLSVersionGetParamsDateRange14dControl, HTTPAseTLSVersionGetParamsDateRange28dControl, HTTPAseTLSVersionGetParamsDateRange12wControl, HTTPAseTLSVersionGetParamsDateRange24wControl:
 		return true
 	}
 	return false

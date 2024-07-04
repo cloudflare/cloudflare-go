@@ -221,7 +221,7 @@ type HTTPAseBrowserFamilyGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseBrowserFamilyGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -285,34 +285,6 @@ const (
 func (r HTTPAseBrowserFamilyGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPAseBrowserFamilyGetParamsBotClassLikelyAutomated, HTTPAseBrowserFamilyGetParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPAseBrowserFamilyGetParamsDateRange string
-
-const (
-	HTTPAseBrowserFamilyGetParamsDateRange1d         HTTPAseBrowserFamilyGetParamsDateRange = "1d"
-	HTTPAseBrowserFamilyGetParamsDateRange2d         HTTPAseBrowserFamilyGetParamsDateRange = "2d"
-	HTTPAseBrowserFamilyGetParamsDateRange7d         HTTPAseBrowserFamilyGetParamsDateRange = "7d"
-	HTTPAseBrowserFamilyGetParamsDateRange14d        HTTPAseBrowserFamilyGetParamsDateRange = "14d"
-	HTTPAseBrowserFamilyGetParamsDateRange28d        HTTPAseBrowserFamilyGetParamsDateRange = "28d"
-	HTTPAseBrowserFamilyGetParamsDateRange12w        HTTPAseBrowserFamilyGetParamsDateRange = "12w"
-	HTTPAseBrowserFamilyGetParamsDateRange24w        HTTPAseBrowserFamilyGetParamsDateRange = "24w"
-	HTTPAseBrowserFamilyGetParamsDateRange52w        HTTPAseBrowserFamilyGetParamsDateRange = "52w"
-	HTTPAseBrowserFamilyGetParamsDateRange1dControl  HTTPAseBrowserFamilyGetParamsDateRange = "1dControl"
-	HTTPAseBrowserFamilyGetParamsDateRange2dControl  HTTPAseBrowserFamilyGetParamsDateRange = "2dControl"
-	HTTPAseBrowserFamilyGetParamsDateRange7dControl  HTTPAseBrowserFamilyGetParamsDateRange = "7dControl"
-	HTTPAseBrowserFamilyGetParamsDateRange14dControl HTTPAseBrowserFamilyGetParamsDateRange = "14dControl"
-	HTTPAseBrowserFamilyGetParamsDateRange28dControl HTTPAseBrowserFamilyGetParamsDateRange = "28dControl"
-	HTTPAseBrowserFamilyGetParamsDateRange12wControl HTTPAseBrowserFamilyGetParamsDateRange = "12wControl"
-	HTTPAseBrowserFamilyGetParamsDateRange24wControl HTTPAseBrowserFamilyGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseBrowserFamilyGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseBrowserFamilyGetParamsDateRange1d, HTTPAseBrowserFamilyGetParamsDateRange2d, HTTPAseBrowserFamilyGetParamsDateRange7d, HTTPAseBrowserFamilyGetParamsDateRange14d, HTTPAseBrowserFamilyGetParamsDateRange28d, HTTPAseBrowserFamilyGetParamsDateRange12w, HTTPAseBrowserFamilyGetParamsDateRange24w, HTTPAseBrowserFamilyGetParamsDateRange52w, HTTPAseBrowserFamilyGetParamsDateRange1dControl, HTTPAseBrowserFamilyGetParamsDateRange2dControl, HTTPAseBrowserFamilyGetParamsDateRange7dControl, HTTPAseBrowserFamilyGetParamsDateRange14dControl, HTTPAseBrowserFamilyGetParamsDateRange28dControl, HTTPAseBrowserFamilyGetParamsDateRange12wControl, HTTPAseBrowserFamilyGetParamsDateRange24wControl:
 		return true
 	}
 	return false

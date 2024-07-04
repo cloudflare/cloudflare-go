@@ -303,7 +303,7 @@ type RankingTimeseriesGroupsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RankingTimeseriesGroupsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Array of comma separated list of domains names.
@@ -327,34 +327,6 @@ func (r RankingTimeseriesGroupsParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type RankingTimeseriesGroupsParamsDateRange string
-
-const (
-	RankingTimeseriesGroupsParamsDateRange1d         RankingTimeseriesGroupsParamsDateRange = "1d"
-	RankingTimeseriesGroupsParamsDateRange2d         RankingTimeseriesGroupsParamsDateRange = "2d"
-	RankingTimeseriesGroupsParamsDateRange7d         RankingTimeseriesGroupsParamsDateRange = "7d"
-	RankingTimeseriesGroupsParamsDateRange14d        RankingTimeseriesGroupsParamsDateRange = "14d"
-	RankingTimeseriesGroupsParamsDateRange28d        RankingTimeseriesGroupsParamsDateRange = "28d"
-	RankingTimeseriesGroupsParamsDateRange12w        RankingTimeseriesGroupsParamsDateRange = "12w"
-	RankingTimeseriesGroupsParamsDateRange24w        RankingTimeseriesGroupsParamsDateRange = "24w"
-	RankingTimeseriesGroupsParamsDateRange52w        RankingTimeseriesGroupsParamsDateRange = "52w"
-	RankingTimeseriesGroupsParamsDateRange1dControl  RankingTimeseriesGroupsParamsDateRange = "1dControl"
-	RankingTimeseriesGroupsParamsDateRange2dControl  RankingTimeseriesGroupsParamsDateRange = "2dControl"
-	RankingTimeseriesGroupsParamsDateRange7dControl  RankingTimeseriesGroupsParamsDateRange = "7dControl"
-	RankingTimeseriesGroupsParamsDateRange14dControl RankingTimeseriesGroupsParamsDateRange = "14dControl"
-	RankingTimeseriesGroupsParamsDateRange28dControl RankingTimeseriesGroupsParamsDateRange = "28dControl"
-	RankingTimeseriesGroupsParamsDateRange12wControl RankingTimeseriesGroupsParamsDateRange = "12wControl"
-	RankingTimeseriesGroupsParamsDateRange24wControl RankingTimeseriesGroupsParamsDateRange = "24wControl"
-)
-
-func (r RankingTimeseriesGroupsParamsDateRange) IsKnown() bool {
-	switch r {
-	case RankingTimeseriesGroupsParamsDateRange1d, RankingTimeseriesGroupsParamsDateRange2d, RankingTimeseriesGroupsParamsDateRange7d, RankingTimeseriesGroupsParamsDateRange14d, RankingTimeseriesGroupsParamsDateRange28d, RankingTimeseriesGroupsParamsDateRange12w, RankingTimeseriesGroupsParamsDateRange24w, RankingTimeseriesGroupsParamsDateRange52w, RankingTimeseriesGroupsParamsDateRange1dControl, RankingTimeseriesGroupsParamsDateRange2dControl, RankingTimeseriesGroupsParamsDateRange7dControl, RankingTimeseriesGroupsParamsDateRange14dControl, RankingTimeseriesGroupsParamsDateRange28dControl, RankingTimeseriesGroupsParamsDateRange12wControl, RankingTimeseriesGroupsParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
