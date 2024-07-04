@@ -386,7 +386,7 @@ type AttackLayer3TopLocationOriginParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TopLocationOriginParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -412,34 +412,6 @@ func (r AttackLayer3TopLocationOriginParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer3TopLocationOriginParamsDateRange string
-
-const (
-	AttackLayer3TopLocationOriginParamsDateRange1d         AttackLayer3TopLocationOriginParamsDateRange = "1d"
-	AttackLayer3TopLocationOriginParamsDateRange2d         AttackLayer3TopLocationOriginParamsDateRange = "2d"
-	AttackLayer3TopLocationOriginParamsDateRange7d         AttackLayer3TopLocationOriginParamsDateRange = "7d"
-	AttackLayer3TopLocationOriginParamsDateRange14d        AttackLayer3TopLocationOriginParamsDateRange = "14d"
-	AttackLayer3TopLocationOriginParamsDateRange28d        AttackLayer3TopLocationOriginParamsDateRange = "28d"
-	AttackLayer3TopLocationOriginParamsDateRange12w        AttackLayer3TopLocationOriginParamsDateRange = "12w"
-	AttackLayer3TopLocationOriginParamsDateRange24w        AttackLayer3TopLocationOriginParamsDateRange = "24w"
-	AttackLayer3TopLocationOriginParamsDateRange52w        AttackLayer3TopLocationOriginParamsDateRange = "52w"
-	AttackLayer3TopLocationOriginParamsDateRange1dControl  AttackLayer3TopLocationOriginParamsDateRange = "1dControl"
-	AttackLayer3TopLocationOriginParamsDateRange2dControl  AttackLayer3TopLocationOriginParamsDateRange = "2dControl"
-	AttackLayer3TopLocationOriginParamsDateRange7dControl  AttackLayer3TopLocationOriginParamsDateRange = "7dControl"
-	AttackLayer3TopLocationOriginParamsDateRange14dControl AttackLayer3TopLocationOriginParamsDateRange = "14dControl"
-	AttackLayer3TopLocationOriginParamsDateRange28dControl AttackLayer3TopLocationOriginParamsDateRange = "28dControl"
-	AttackLayer3TopLocationOriginParamsDateRange12wControl AttackLayer3TopLocationOriginParamsDateRange = "12wControl"
-	AttackLayer3TopLocationOriginParamsDateRange24wControl AttackLayer3TopLocationOriginParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TopLocationOriginParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TopLocationOriginParamsDateRange1d, AttackLayer3TopLocationOriginParamsDateRange2d, AttackLayer3TopLocationOriginParamsDateRange7d, AttackLayer3TopLocationOriginParamsDateRange14d, AttackLayer3TopLocationOriginParamsDateRange28d, AttackLayer3TopLocationOriginParamsDateRange12w, AttackLayer3TopLocationOriginParamsDateRange24w, AttackLayer3TopLocationOriginParamsDateRange52w, AttackLayer3TopLocationOriginParamsDateRange1dControl, AttackLayer3TopLocationOriginParamsDateRange2dControl, AttackLayer3TopLocationOriginParamsDateRange7dControl, AttackLayer3TopLocationOriginParamsDateRange14dControl, AttackLayer3TopLocationOriginParamsDateRange28dControl, AttackLayer3TopLocationOriginParamsDateRange12wControl, AttackLayer3TopLocationOriginParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -523,7 +495,7 @@ type AttackLayer3TopLocationTargetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TopLocationTargetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -549,34 +521,6 @@ func (r AttackLayer3TopLocationTargetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer3TopLocationTargetParamsDateRange string
-
-const (
-	AttackLayer3TopLocationTargetParamsDateRange1d         AttackLayer3TopLocationTargetParamsDateRange = "1d"
-	AttackLayer3TopLocationTargetParamsDateRange2d         AttackLayer3TopLocationTargetParamsDateRange = "2d"
-	AttackLayer3TopLocationTargetParamsDateRange7d         AttackLayer3TopLocationTargetParamsDateRange = "7d"
-	AttackLayer3TopLocationTargetParamsDateRange14d        AttackLayer3TopLocationTargetParamsDateRange = "14d"
-	AttackLayer3TopLocationTargetParamsDateRange28d        AttackLayer3TopLocationTargetParamsDateRange = "28d"
-	AttackLayer3TopLocationTargetParamsDateRange12w        AttackLayer3TopLocationTargetParamsDateRange = "12w"
-	AttackLayer3TopLocationTargetParamsDateRange24w        AttackLayer3TopLocationTargetParamsDateRange = "24w"
-	AttackLayer3TopLocationTargetParamsDateRange52w        AttackLayer3TopLocationTargetParamsDateRange = "52w"
-	AttackLayer3TopLocationTargetParamsDateRange1dControl  AttackLayer3TopLocationTargetParamsDateRange = "1dControl"
-	AttackLayer3TopLocationTargetParamsDateRange2dControl  AttackLayer3TopLocationTargetParamsDateRange = "2dControl"
-	AttackLayer3TopLocationTargetParamsDateRange7dControl  AttackLayer3TopLocationTargetParamsDateRange = "7dControl"
-	AttackLayer3TopLocationTargetParamsDateRange14dControl AttackLayer3TopLocationTargetParamsDateRange = "14dControl"
-	AttackLayer3TopLocationTargetParamsDateRange28dControl AttackLayer3TopLocationTargetParamsDateRange = "28dControl"
-	AttackLayer3TopLocationTargetParamsDateRange12wControl AttackLayer3TopLocationTargetParamsDateRange = "12wControl"
-	AttackLayer3TopLocationTargetParamsDateRange24wControl AttackLayer3TopLocationTargetParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TopLocationTargetParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TopLocationTargetParamsDateRange1d, AttackLayer3TopLocationTargetParamsDateRange2d, AttackLayer3TopLocationTargetParamsDateRange7d, AttackLayer3TopLocationTargetParamsDateRange14d, AttackLayer3TopLocationTargetParamsDateRange28d, AttackLayer3TopLocationTargetParamsDateRange12w, AttackLayer3TopLocationTargetParamsDateRange24w, AttackLayer3TopLocationTargetParamsDateRange52w, AttackLayer3TopLocationTargetParamsDateRange1dControl, AttackLayer3TopLocationTargetParamsDateRange2dControl, AttackLayer3TopLocationTargetParamsDateRange7dControl, AttackLayer3TopLocationTargetParamsDateRange14dControl, AttackLayer3TopLocationTargetParamsDateRange28dControl, AttackLayer3TopLocationTargetParamsDateRange12wControl, AttackLayer3TopLocationTargetParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

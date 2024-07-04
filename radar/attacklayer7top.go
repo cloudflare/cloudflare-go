@@ -514,11 +514,17 @@ type AttackLayer7TopAttacksParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TopAttacksParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AttackLayer7TopAttacksParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TopAttacksParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TopAttacksParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TopAttacksParamsIPVersion] `query:"ipVersion"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of attack origin/target location attack limits. Together with
@@ -535,6 +541,8 @@ type AttackLayer7TopAttacksParams struct {
 	// Attack magnitude can be defined by total requests mitigated or by total zones
 	// attacked.
 	Magnitude param.Field[AttackLayer7TopAttacksParamsMagnitude] `query:"magnitude"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TopAttacksParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
@@ -551,34 +559,6 @@ func (r AttackLayer7TopAttacksParams) URLQuery() (v url.Values) {
 	})
 }
 
-type AttackLayer7TopAttacksParamsDateRange string
-
-const (
-	AttackLayer7TopAttacksParamsDateRange1d         AttackLayer7TopAttacksParamsDateRange = "1d"
-	AttackLayer7TopAttacksParamsDateRange2d         AttackLayer7TopAttacksParamsDateRange = "2d"
-	AttackLayer7TopAttacksParamsDateRange7d         AttackLayer7TopAttacksParamsDateRange = "7d"
-	AttackLayer7TopAttacksParamsDateRange14d        AttackLayer7TopAttacksParamsDateRange = "14d"
-	AttackLayer7TopAttacksParamsDateRange28d        AttackLayer7TopAttacksParamsDateRange = "28d"
-	AttackLayer7TopAttacksParamsDateRange12w        AttackLayer7TopAttacksParamsDateRange = "12w"
-	AttackLayer7TopAttacksParamsDateRange24w        AttackLayer7TopAttacksParamsDateRange = "24w"
-	AttackLayer7TopAttacksParamsDateRange52w        AttackLayer7TopAttacksParamsDateRange = "52w"
-	AttackLayer7TopAttacksParamsDateRange1dControl  AttackLayer7TopAttacksParamsDateRange = "1dControl"
-	AttackLayer7TopAttacksParamsDateRange2dControl  AttackLayer7TopAttacksParamsDateRange = "2dControl"
-	AttackLayer7TopAttacksParamsDateRange7dControl  AttackLayer7TopAttacksParamsDateRange = "7dControl"
-	AttackLayer7TopAttacksParamsDateRange14dControl AttackLayer7TopAttacksParamsDateRange = "14dControl"
-	AttackLayer7TopAttacksParamsDateRange28dControl AttackLayer7TopAttacksParamsDateRange = "28dControl"
-	AttackLayer7TopAttacksParamsDateRange12wControl AttackLayer7TopAttacksParamsDateRange = "12wControl"
-	AttackLayer7TopAttacksParamsDateRange24wControl AttackLayer7TopAttacksParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TopAttacksParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopAttacksParamsDateRange1d, AttackLayer7TopAttacksParamsDateRange2d, AttackLayer7TopAttacksParamsDateRange7d, AttackLayer7TopAttacksParamsDateRange14d, AttackLayer7TopAttacksParamsDateRange28d, AttackLayer7TopAttacksParamsDateRange12w, AttackLayer7TopAttacksParamsDateRange24w, AttackLayer7TopAttacksParamsDateRange52w, AttackLayer7TopAttacksParamsDateRange1dControl, AttackLayer7TopAttacksParamsDateRange2dControl, AttackLayer7TopAttacksParamsDateRange7dControl, AttackLayer7TopAttacksParamsDateRange14dControl, AttackLayer7TopAttacksParamsDateRange28dControl, AttackLayer7TopAttacksParamsDateRange12wControl, AttackLayer7TopAttacksParamsDateRange24wControl:
-		return true
-	}
-	return false
-}
-
 // Format results are returned in.
 type AttackLayer7TopAttacksParamsFormat string
 
@@ -590,6 +570,96 @@ const (
 func (r AttackLayer7TopAttacksParamsFormat) IsKnown() bool {
 	switch r {
 	case AttackLayer7TopAttacksParamsFormatJson, AttackLayer7TopAttacksParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopAttacksParamsHTTPMethod string
+
+const (
+	AttackLayer7TopAttacksParamsHTTPMethodGet             AttackLayer7TopAttacksParamsHTTPMethod = "GET"
+	AttackLayer7TopAttacksParamsHTTPMethodPost            AttackLayer7TopAttacksParamsHTTPMethod = "POST"
+	AttackLayer7TopAttacksParamsHTTPMethodDelete          AttackLayer7TopAttacksParamsHTTPMethod = "DELETE"
+	AttackLayer7TopAttacksParamsHTTPMethodPut             AttackLayer7TopAttacksParamsHTTPMethod = "PUT"
+	AttackLayer7TopAttacksParamsHTTPMethodHead            AttackLayer7TopAttacksParamsHTTPMethod = "HEAD"
+	AttackLayer7TopAttacksParamsHTTPMethodPurge           AttackLayer7TopAttacksParamsHTTPMethod = "PURGE"
+	AttackLayer7TopAttacksParamsHTTPMethodOptions         AttackLayer7TopAttacksParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TopAttacksParamsHTTPMethodPropfind        AttackLayer7TopAttacksParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TopAttacksParamsHTTPMethodMkcol           AttackLayer7TopAttacksParamsHTTPMethod = "MKCOL"
+	AttackLayer7TopAttacksParamsHTTPMethodPatch           AttackLayer7TopAttacksParamsHTTPMethod = "PATCH"
+	AttackLayer7TopAttacksParamsHTTPMethodACL             AttackLayer7TopAttacksParamsHTTPMethod = "ACL"
+	AttackLayer7TopAttacksParamsHTTPMethodBcopy           AttackLayer7TopAttacksParamsHTTPMethod = "BCOPY"
+	AttackLayer7TopAttacksParamsHTTPMethodBdelete         AttackLayer7TopAttacksParamsHTTPMethod = "BDELETE"
+	AttackLayer7TopAttacksParamsHTTPMethodBmove           AttackLayer7TopAttacksParamsHTTPMethod = "BMOVE"
+	AttackLayer7TopAttacksParamsHTTPMethodBpropfind       AttackLayer7TopAttacksParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TopAttacksParamsHTTPMethodBproppatch      AttackLayer7TopAttacksParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TopAttacksParamsHTTPMethodCheckin         AttackLayer7TopAttacksParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TopAttacksParamsHTTPMethodCheckout        AttackLayer7TopAttacksParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TopAttacksParamsHTTPMethodConnect         AttackLayer7TopAttacksParamsHTTPMethod = "CONNECT"
+	AttackLayer7TopAttacksParamsHTTPMethodCopy            AttackLayer7TopAttacksParamsHTTPMethod = "COPY"
+	AttackLayer7TopAttacksParamsHTTPMethodLabel           AttackLayer7TopAttacksParamsHTTPMethod = "LABEL"
+	AttackLayer7TopAttacksParamsHTTPMethodLock            AttackLayer7TopAttacksParamsHTTPMethod = "LOCK"
+	AttackLayer7TopAttacksParamsHTTPMethodMerge           AttackLayer7TopAttacksParamsHTTPMethod = "MERGE"
+	AttackLayer7TopAttacksParamsHTTPMethodMkactivity      AttackLayer7TopAttacksParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TopAttacksParamsHTTPMethodMkworkspace     AttackLayer7TopAttacksParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TopAttacksParamsHTTPMethodMove            AttackLayer7TopAttacksParamsHTTPMethod = "MOVE"
+	AttackLayer7TopAttacksParamsHTTPMethodNotify          AttackLayer7TopAttacksParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TopAttacksParamsHTTPMethodOrderpatch      AttackLayer7TopAttacksParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TopAttacksParamsHTTPMethodPoll            AttackLayer7TopAttacksParamsHTTPMethod = "POLL"
+	AttackLayer7TopAttacksParamsHTTPMethodProppatch       AttackLayer7TopAttacksParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TopAttacksParamsHTTPMethodReport          AttackLayer7TopAttacksParamsHTTPMethod = "REPORT"
+	AttackLayer7TopAttacksParamsHTTPMethodSearch          AttackLayer7TopAttacksParamsHTTPMethod = "SEARCH"
+	AttackLayer7TopAttacksParamsHTTPMethodSubscribe       AttackLayer7TopAttacksParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TopAttacksParamsHTTPMethodTrace           AttackLayer7TopAttacksParamsHTTPMethod = "TRACE"
+	AttackLayer7TopAttacksParamsHTTPMethodUncheckout      AttackLayer7TopAttacksParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TopAttacksParamsHTTPMethodUnlock          AttackLayer7TopAttacksParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TopAttacksParamsHTTPMethodUnsubscribe     AttackLayer7TopAttacksParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TopAttacksParamsHTTPMethodUpdate          AttackLayer7TopAttacksParamsHTTPMethod = "UPDATE"
+	AttackLayer7TopAttacksParamsHTTPMethodVersioncontrol  AttackLayer7TopAttacksParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TopAttacksParamsHTTPMethodBaselinecontrol AttackLayer7TopAttacksParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TopAttacksParamsHTTPMethodXmsenumatts     AttackLayer7TopAttacksParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TopAttacksParamsHTTPMethodRpcOutData      AttackLayer7TopAttacksParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TopAttacksParamsHTTPMethodRpcInData       AttackLayer7TopAttacksParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TopAttacksParamsHTTPMethodJson            AttackLayer7TopAttacksParamsHTTPMethod = "JSON"
+	AttackLayer7TopAttacksParamsHTTPMethodCook            AttackLayer7TopAttacksParamsHTTPMethod = "COOK"
+	AttackLayer7TopAttacksParamsHTTPMethodTrack           AttackLayer7TopAttacksParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7TopAttacksParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAttacksParamsHTTPMethodGet, AttackLayer7TopAttacksParamsHTTPMethodPost, AttackLayer7TopAttacksParamsHTTPMethodDelete, AttackLayer7TopAttacksParamsHTTPMethodPut, AttackLayer7TopAttacksParamsHTTPMethodHead, AttackLayer7TopAttacksParamsHTTPMethodPurge, AttackLayer7TopAttacksParamsHTTPMethodOptions, AttackLayer7TopAttacksParamsHTTPMethodPropfind, AttackLayer7TopAttacksParamsHTTPMethodMkcol, AttackLayer7TopAttacksParamsHTTPMethodPatch, AttackLayer7TopAttacksParamsHTTPMethodACL, AttackLayer7TopAttacksParamsHTTPMethodBcopy, AttackLayer7TopAttacksParamsHTTPMethodBdelete, AttackLayer7TopAttacksParamsHTTPMethodBmove, AttackLayer7TopAttacksParamsHTTPMethodBpropfind, AttackLayer7TopAttacksParamsHTTPMethodBproppatch, AttackLayer7TopAttacksParamsHTTPMethodCheckin, AttackLayer7TopAttacksParamsHTTPMethodCheckout, AttackLayer7TopAttacksParamsHTTPMethodConnect, AttackLayer7TopAttacksParamsHTTPMethodCopy, AttackLayer7TopAttacksParamsHTTPMethodLabel, AttackLayer7TopAttacksParamsHTTPMethodLock, AttackLayer7TopAttacksParamsHTTPMethodMerge, AttackLayer7TopAttacksParamsHTTPMethodMkactivity, AttackLayer7TopAttacksParamsHTTPMethodMkworkspace, AttackLayer7TopAttacksParamsHTTPMethodMove, AttackLayer7TopAttacksParamsHTTPMethodNotify, AttackLayer7TopAttacksParamsHTTPMethodOrderpatch, AttackLayer7TopAttacksParamsHTTPMethodPoll, AttackLayer7TopAttacksParamsHTTPMethodProppatch, AttackLayer7TopAttacksParamsHTTPMethodReport, AttackLayer7TopAttacksParamsHTTPMethodSearch, AttackLayer7TopAttacksParamsHTTPMethodSubscribe, AttackLayer7TopAttacksParamsHTTPMethodTrace, AttackLayer7TopAttacksParamsHTTPMethodUncheckout, AttackLayer7TopAttacksParamsHTTPMethodUnlock, AttackLayer7TopAttacksParamsHTTPMethodUnsubscribe, AttackLayer7TopAttacksParamsHTTPMethodUpdate, AttackLayer7TopAttacksParamsHTTPMethodVersioncontrol, AttackLayer7TopAttacksParamsHTTPMethodBaselinecontrol, AttackLayer7TopAttacksParamsHTTPMethodXmsenumatts, AttackLayer7TopAttacksParamsHTTPMethodRpcOutData, AttackLayer7TopAttacksParamsHTTPMethodRpcInData, AttackLayer7TopAttacksParamsHTTPMethodJson, AttackLayer7TopAttacksParamsHTTPMethodCook, AttackLayer7TopAttacksParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopAttacksParamsHTTPVersion string
+
+const (
+	AttackLayer7TopAttacksParamsHTTPVersionHttPv1 AttackLayer7TopAttacksParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TopAttacksParamsHTTPVersionHttPv2 AttackLayer7TopAttacksParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TopAttacksParamsHTTPVersionHttPv3 AttackLayer7TopAttacksParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7TopAttacksParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAttacksParamsHTTPVersionHttPv1, AttackLayer7TopAttacksParamsHTTPVersionHttPv2, AttackLayer7TopAttacksParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopAttacksParamsIPVersion string
+
+const (
+	AttackLayer7TopAttacksParamsIPVersionIPv4 AttackLayer7TopAttacksParamsIPVersion = "IPv4"
+	AttackLayer7TopAttacksParamsIPVersionIPv6 AttackLayer7TopAttacksParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7TopAttacksParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAttacksParamsIPVersionIPv4, AttackLayer7TopAttacksParamsIPVersionIPv6:
 		return true
 	}
 	return false
@@ -625,6 +695,26 @@ const (
 func (r AttackLayer7TopAttacksParamsMagnitude) IsKnown() bool {
 	switch r {
 	case AttackLayer7TopAttacksParamsMagnitudeAffectedZones, AttackLayer7TopAttacksParamsMagnitudeMitigatedRequests:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopAttacksParamsMitigationProduct string
+
+const (
+	AttackLayer7TopAttacksParamsMitigationProductDDoS               AttackLayer7TopAttacksParamsMitigationProduct = "DDOS"
+	AttackLayer7TopAttacksParamsMitigationProductWAF                AttackLayer7TopAttacksParamsMitigationProduct = "WAF"
+	AttackLayer7TopAttacksParamsMitigationProductBotManagement      AttackLayer7TopAttacksParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TopAttacksParamsMitigationProductAccessRules        AttackLayer7TopAttacksParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TopAttacksParamsMitigationProductIPReputation       AttackLayer7TopAttacksParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TopAttacksParamsMitigationProductAPIShield          AttackLayer7TopAttacksParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TopAttacksParamsMitigationProductDataLossPrevention AttackLayer7TopAttacksParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7TopAttacksParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAttacksParamsMitigationProductDDoS, AttackLayer7TopAttacksParamsMitigationProductWAF, AttackLayer7TopAttacksParamsMitigationProductBotManagement, AttackLayer7TopAttacksParamsMitigationProductAccessRules, AttackLayer7TopAttacksParamsMitigationProductIPReputation, AttackLayer7TopAttacksParamsMitigationProductAPIShield, AttackLayer7TopAttacksParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -684,17 +774,25 @@ type AttackLayer7TopIndustryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TopIndustryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AttackLayer7TopIndustryParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TopIndustryParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TopIndustryParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TopIndustryParamsIPVersion] `query:"ipVersion"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TopIndustryParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 }
@@ -708,34 +806,6 @@ func (r AttackLayer7TopIndustryParams) URLQuery() (v url.Values) {
 	})
 }
 
-type AttackLayer7TopIndustryParamsDateRange string
-
-const (
-	AttackLayer7TopIndustryParamsDateRange1d         AttackLayer7TopIndustryParamsDateRange = "1d"
-	AttackLayer7TopIndustryParamsDateRange2d         AttackLayer7TopIndustryParamsDateRange = "2d"
-	AttackLayer7TopIndustryParamsDateRange7d         AttackLayer7TopIndustryParamsDateRange = "7d"
-	AttackLayer7TopIndustryParamsDateRange14d        AttackLayer7TopIndustryParamsDateRange = "14d"
-	AttackLayer7TopIndustryParamsDateRange28d        AttackLayer7TopIndustryParamsDateRange = "28d"
-	AttackLayer7TopIndustryParamsDateRange12w        AttackLayer7TopIndustryParamsDateRange = "12w"
-	AttackLayer7TopIndustryParamsDateRange24w        AttackLayer7TopIndustryParamsDateRange = "24w"
-	AttackLayer7TopIndustryParamsDateRange52w        AttackLayer7TopIndustryParamsDateRange = "52w"
-	AttackLayer7TopIndustryParamsDateRange1dControl  AttackLayer7TopIndustryParamsDateRange = "1dControl"
-	AttackLayer7TopIndustryParamsDateRange2dControl  AttackLayer7TopIndustryParamsDateRange = "2dControl"
-	AttackLayer7TopIndustryParamsDateRange7dControl  AttackLayer7TopIndustryParamsDateRange = "7dControl"
-	AttackLayer7TopIndustryParamsDateRange14dControl AttackLayer7TopIndustryParamsDateRange = "14dControl"
-	AttackLayer7TopIndustryParamsDateRange28dControl AttackLayer7TopIndustryParamsDateRange = "28dControl"
-	AttackLayer7TopIndustryParamsDateRange12wControl AttackLayer7TopIndustryParamsDateRange = "12wControl"
-	AttackLayer7TopIndustryParamsDateRange24wControl AttackLayer7TopIndustryParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TopIndustryParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopIndustryParamsDateRange1d, AttackLayer7TopIndustryParamsDateRange2d, AttackLayer7TopIndustryParamsDateRange7d, AttackLayer7TopIndustryParamsDateRange14d, AttackLayer7TopIndustryParamsDateRange28d, AttackLayer7TopIndustryParamsDateRange12w, AttackLayer7TopIndustryParamsDateRange24w, AttackLayer7TopIndustryParamsDateRange52w, AttackLayer7TopIndustryParamsDateRange1dControl, AttackLayer7TopIndustryParamsDateRange2dControl, AttackLayer7TopIndustryParamsDateRange7dControl, AttackLayer7TopIndustryParamsDateRange14dControl, AttackLayer7TopIndustryParamsDateRange28dControl, AttackLayer7TopIndustryParamsDateRange12wControl, AttackLayer7TopIndustryParamsDateRange24wControl:
-		return true
-	}
-	return false
-}
-
 // Format results are returned in.
 type AttackLayer7TopIndustryParamsFormat string
 
@@ -747,6 +817,116 @@ const (
 func (r AttackLayer7TopIndustryParamsFormat) IsKnown() bool {
 	switch r {
 	case AttackLayer7TopIndustryParamsFormatJson, AttackLayer7TopIndustryParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopIndustryParamsHTTPMethod string
+
+const (
+	AttackLayer7TopIndustryParamsHTTPMethodGet             AttackLayer7TopIndustryParamsHTTPMethod = "GET"
+	AttackLayer7TopIndustryParamsHTTPMethodPost            AttackLayer7TopIndustryParamsHTTPMethod = "POST"
+	AttackLayer7TopIndustryParamsHTTPMethodDelete          AttackLayer7TopIndustryParamsHTTPMethod = "DELETE"
+	AttackLayer7TopIndustryParamsHTTPMethodPut             AttackLayer7TopIndustryParamsHTTPMethod = "PUT"
+	AttackLayer7TopIndustryParamsHTTPMethodHead            AttackLayer7TopIndustryParamsHTTPMethod = "HEAD"
+	AttackLayer7TopIndustryParamsHTTPMethodPurge           AttackLayer7TopIndustryParamsHTTPMethod = "PURGE"
+	AttackLayer7TopIndustryParamsHTTPMethodOptions         AttackLayer7TopIndustryParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TopIndustryParamsHTTPMethodPropfind        AttackLayer7TopIndustryParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TopIndustryParamsHTTPMethodMkcol           AttackLayer7TopIndustryParamsHTTPMethod = "MKCOL"
+	AttackLayer7TopIndustryParamsHTTPMethodPatch           AttackLayer7TopIndustryParamsHTTPMethod = "PATCH"
+	AttackLayer7TopIndustryParamsHTTPMethodACL             AttackLayer7TopIndustryParamsHTTPMethod = "ACL"
+	AttackLayer7TopIndustryParamsHTTPMethodBcopy           AttackLayer7TopIndustryParamsHTTPMethod = "BCOPY"
+	AttackLayer7TopIndustryParamsHTTPMethodBdelete         AttackLayer7TopIndustryParamsHTTPMethod = "BDELETE"
+	AttackLayer7TopIndustryParamsHTTPMethodBmove           AttackLayer7TopIndustryParamsHTTPMethod = "BMOVE"
+	AttackLayer7TopIndustryParamsHTTPMethodBpropfind       AttackLayer7TopIndustryParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TopIndustryParamsHTTPMethodBproppatch      AttackLayer7TopIndustryParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TopIndustryParamsHTTPMethodCheckin         AttackLayer7TopIndustryParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TopIndustryParamsHTTPMethodCheckout        AttackLayer7TopIndustryParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TopIndustryParamsHTTPMethodConnect         AttackLayer7TopIndustryParamsHTTPMethod = "CONNECT"
+	AttackLayer7TopIndustryParamsHTTPMethodCopy            AttackLayer7TopIndustryParamsHTTPMethod = "COPY"
+	AttackLayer7TopIndustryParamsHTTPMethodLabel           AttackLayer7TopIndustryParamsHTTPMethod = "LABEL"
+	AttackLayer7TopIndustryParamsHTTPMethodLock            AttackLayer7TopIndustryParamsHTTPMethod = "LOCK"
+	AttackLayer7TopIndustryParamsHTTPMethodMerge           AttackLayer7TopIndustryParamsHTTPMethod = "MERGE"
+	AttackLayer7TopIndustryParamsHTTPMethodMkactivity      AttackLayer7TopIndustryParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TopIndustryParamsHTTPMethodMkworkspace     AttackLayer7TopIndustryParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TopIndustryParamsHTTPMethodMove            AttackLayer7TopIndustryParamsHTTPMethod = "MOVE"
+	AttackLayer7TopIndustryParamsHTTPMethodNotify          AttackLayer7TopIndustryParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TopIndustryParamsHTTPMethodOrderpatch      AttackLayer7TopIndustryParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TopIndustryParamsHTTPMethodPoll            AttackLayer7TopIndustryParamsHTTPMethod = "POLL"
+	AttackLayer7TopIndustryParamsHTTPMethodProppatch       AttackLayer7TopIndustryParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TopIndustryParamsHTTPMethodReport          AttackLayer7TopIndustryParamsHTTPMethod = "REPORT"
+	AttackLayer7TopIndustryParamsHTTPMethodSearch          AttackLayer7TopIndustryParamsHTTPMethod = "SEARCH"
+	AttackLayer7TopIndustryParamsHTTPMethodSubscribe       AttackLayer7TopIndustryParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TopIndustryParamsHTTPMethodTrace           AttackLayer7TopIndustryParamsHTTPMethod = "TRACE"
+	AttackLayer7TopIndustryParamsHTTPMethodUncheckout      AttackLayer7TopIndustryParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TopIndustryParamsHTTPMethodUnlock          AttackLayer7TopIndustryParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TopIndustryParamsHTTPMethodUnsubscribe     AttackLayer7TopIndustryParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TopIndustryParamsHTTPMethodUpdate          AttackLayer7TopIndustryParamsHTTPMethod = "UPDATE"
+	AttackLayer7TopIndustryParamsHTTPMethodVersioncontrol  AttackLayer7TopIndustryParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TopIndustryParamsHTTPMethodBaselinecontrol AttackLayer7TopIndustryParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TopIndustryParamsHTTPMethodXmsenumatts     AttackLayer7TopIndustryParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TopIndustryParamsHTTPMethodRpcOutData      AttackLayer7TopIndustryParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TopIndustryParamsHTTPMethodRpcInData       AttackLayer7TopIndustryParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TopIndustryParamsHTTPMethodJson            AttackLayer7TopIndustryParamsHTTPMethod = "JSON"
+	AttackLayer7TopIndustryParamsHTTPMethodCook            AttackLayer7TopIndustryParamsHTTPMethod = "COOK"
+	AttackLayer7TopIndustryParamsHTTPMethodTrack           AttackLayer7TopIndustryParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7TopIndustryParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopIndustryParamsHTTPMethodGet, AttackLayer7TopIndustryParamsHTTPMethodPost, AttackLayer7TopIndustryParamsHTTPMethodDelete, AttackLayer7TopIndustryParamsHTTPMethodPut, AttackLayer7TopIndustryParamsHTTPMethodHead, AttackLayer7TopIndustryParamsHTTPMethodPurge, AttackLayer7TopIndustryParamsHTTPMethodOptions, AttackLayer7TopIndustryParamsHTTPMethodPropfind, AttackLayer7TopIndustryParamsHTTPMethodMkcol, AttackLayer7TopIndustryParamsHTTPMethodPatch, AttackLayer7TopIndustryParamsHTTPMethodACL, AttackLayer7TopIndustryParamsHTTPMethodBcopy, AttackLayer7TopIndustryParamsHTTPMethodBdelete, AttackLayer7TopIndustryParamsHTTPMethodBmove, AttackLayer7TopIndustryParamsHTTPMethodBpropfind, AttackLayer7TopIndustryParamsHTTPMethodBproppatch, AttackLayer7TopIndustryParamsHTTPMethodCheckin, AttackLayer7TopIndustryParamsHTTPMethodCheckout, AttackLayer7TopIndustryParamsHTTPMethodConnect, AttackLayer7TopIndustryParamsHTTPMethodCopy, AttackLayer7TopIndustryParamsHTTPMethodLabel, AttackLayer7TopIndustryParamsHTTPMethodLock, AttackLayer7TopIndustryParamsHTTPMethodMerge, AttackLayer7TopIndustryParamsHTTPMethodMkactivity, AttackLayer7TopIndustryParamsHTTPMethodMkworkspace, AttackLayer7TopIndustryParamsHTTPMethodMove, AttackLayer7TopIndustryParamsHTTPMethodNotify, AttackLayer7TopIndustryParamsHTTPMethodOrderpatch, AttackLayer7TopIndustryParamsHTTPMethodPoll, AttackLayer7TopIndustryParamsHTTPMethodProppatch, AttackLayer7TopIndustryParamsHTTPMethodReport, AttackLayer7TopIndustryParamsHTTPMethodSearch, AttackLayer7TopIndustryParamsHTTPMethodSubscribe, AttackLayer7TopIndustryParamsHTTPMethodTrace, AttackLayer7TopIndustryParamsHTTPMethodUncheckout, AttackLayer7TopIndustryParamsHTTPMethodUnlock, AttackLayer7TopIndustryParamsHTTPMethodUnsubscribe, AttackLayer7TopIndustryParamsHTTPMethodUpdate, AttackLayer7TopIndustryParamsHTTPMethodVersioncontrol, AttackLayer7TopIndustryParamsHTTPMethodBaselinecontrol, AttackLayer7TopIndustryParamsHTTPMethodXmsenumatts, AttackLayer7TopIndustryParamsHTTPMethodRpcOutData, AttackLayer7TopIndustryParamsHTTPMethodRpcInData, AttackLayer7TopIndustryParamsHTTPMethodJson, AttackLayer7TopIndustryParamsHTTPMethodCook, AttackLayer7TopIndustryParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopIndustryParamsHTTPVersion string
+
+const (
+	AttackLayer7TopIndustryParamsHTTPVersionHttPv1 AttackLayer7TopIndustryParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TopIndustryParamsHTTPVersionHttPv2 AttackLayer7TopIndustryParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TopIndustryParamsHTTPVersionHttPv3 AttackLayer7TopIndustryParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7TopIndustryParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopIndustryParamsHTTPVersionHttPv1, AttackLayer7TopIndustryParamsHTTPVersionHttPv2, AttackLayer7TopIndustryParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopIndustryParamsIPVersion string
+
+const (
+	AttackLayer7TopIndustryParamsIPVersionIPv4 AttackLayer7TopIndustryParamsIPVersion = "IPv4"
+	AttackLayer7TopIndustryParamsIPVersionIPv6 AttackLayer7TopIndustryParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7TopIndustryParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopIndustryParamsIPVersionIPv4, AttackLayer7TopIndustryParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopIndustryParamsMitigationProduct string
+
+const (
+	AttackLayer7TopIndustryParamsMitigationProductDDoS               AttackLayer7TopIndustryParamsMitigationProduct = "DDOS"
+	AttackLayer7TopIndustryParamsMitigationProductWAF                AttackLayer7TopIndustryParamsMitigationProduct = "WAF"
+	AttackLayer7TopIndustryParamsMitigationProductBotManagement      AttackLayer7TopIndustryParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TopIndustryParamsMitigationProductAccessRules        AttackLayer7TopIndustryParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TopIndustryParamsMitigationProductIPReputation       AttackLayer7TopIndustryParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TopIndustryParamsMitigationProductAPIShield          AttackLayer7TopIndustryParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TopIndustryParamsMitigationProductDataLossPrevention AttackLayer7TopIndustryParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7TopIndustryParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopIndustryParamsMitigationProductDDoS, AttackLayer7TopIndustryParamsMitigationProductWAF, AttackLayer7TopIndustryParamsMitigationProductBotManagement, AttackLayer7TopIndustryParamsMitigationProductAccessRules, AttackLayer7TopIndustryParamsMitigationProductIPReputation, AttackLayer7TopIndustryParamsMitigationProductAPIShield, AttackLayer7TopIndustryParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -789,17 +969,25 @@ type AttackLayer7TopVerticalParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TopVerticalParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AttackLayer7TopVerticalParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TopVerticalParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TopVerticalParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TopVerticalParamsIPVersion] `query:"ipVersion"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TopVerticalParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 }
@@ -813,34 +1001,6 @@ func (r AttackLayer7TopVerticalParams) URLQuery() (v url.Values) {
 	})
 }
 
-type AttackLayer7TopVerticalParamsDateRange string
-
-const (
-	AttackLayer7TopVerticalParamsDateRange1d         AttackLayer7TopVerticalParamsDateRange = "1d"
-	AttackLayer7TopVerticalParamsDateRange2d         AttackLayer7TopVerticalParamsDateRange = "2d"
-	AttackLayer7TopVerticalParamsDateRange7d         AttackLayer7TopVerticalParamsDateRange = "7d"
-	AttackLayer7TopVerticalParamsDateRange14d        AttackLayer7TopVerticalParamsDateRange = "14d"
-	AttackLayer7TopVerticalParamsDateRange28d        AttackLayer7TopVerticalParamsDateRange = "28d"
-	AttackLayer7TopVerticalParamsDateRange12w        AttackLayer7TopVerticalParamsDateRange = "12w"
-	AttackLayer7TopVerticalParamsDateRange24w        AttackLayer7TopVerticalParamsDateRange = "24w"
-	AttackLayer7TopVerticalParamsDateRange52w        AttackLayer7TopVerticalParamsDateRange = "52w"
-	AttackLayer7TopVerticalParamsDateRange1dControl  AttackLayer7TopVerticalParamsDateRange = "1dControl"
-	AttackLayer7TopVerticalParamsDateRange2dControl  AttackLayer7TopVerticalParamsDateRange = "2dControl"
-	AttackLayer7TopVerticalParamsDateRange7dControl  AttackLayer7TopVerticalParamsDateRange = "7dControl"
-	AttackLayer7TopVerticalParamsDateRange14dControl AttackLayer7TopVerticalParamsDateRange = "14dControl"
-	AttackLayer7TopVerticalParamsDateRange28dControl AttackLayer7TopVerticalParamsDateRange = "28dControl"
-	AttackLayer7TopVerticalParamsDateRange12wControl AttackLayer7TopVerticalParamsDateRange = "12wControl"
-	AttackLayer7TopVerticalParamsDateRange24wControl AttackLayer7TopVerticalParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TopVerticalParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopVerticalParamsDateRange1d, AttackLayer7TopVerticalParamsDateRange2d, AttackLayer7TopVerticalParamsDateRange7d, AttackLayer7TopVerticalParamsDateRange14d, AttackLayer7TopVerticalParamsDateRange28d, AttackLayer7TopVerticalParamsDateRange12w, AttackLayer7TopVerticalParamsDateRange24w, AttackLayer7TopVerticalParamsDateRange52w, AttackLayer7TopVerticalParamsDateRange1dControl, AttackLayer7TopVerticalParamsDateRange2dControl, AttackLayer7TopVerticalParamsDateRange7dControl, AttackLayer7TopVerticalParamsDateRange14dControl, AttackLayer7TopVerticalParamsDateRange28dControl, AttackLayer7TopVerticalParamsDateRange12wControl, AttackLayer7TopVerticalParamsDateRange24wControl:
-		return true
-	}
-	return false
-}
-
 // Format results are returned in.
 type AttackLayer7TopVerticalParamsFormat string
 
@@ -852,6 +1012,116 @@ const (
 func (r AttackLayer7TopVerticalParamsFormat) IsKnown() bool {
 	switch r {
 	case AttackLayer7TopVerticalParamsFormatJson, AttackLayer7TopVerticalParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopVerticalParamsHTTPMethod string
+
+const (
+	AttackLayer7TopVerticalParamsHTTPMethodGet             AttackLayer7TopVerticalParamsHTTPMethod = "GET"
+	AttackLayer7TopVerticalParamsHTTPMethodPost            AttackLayer7TopVerticalParamsHTTPMethod = "POST"
+	AttackLayer7TopVerticalParamsHTTPMethodDelete          AttackLayer7TopVerticalParamsHTTPMethod = "DELETE"
+	AttackLayer7TopVerticalParamsHTTPMethodPut             AttackLayer7TopVerticalParamsHTTPMethod = "PUT"
+	AttackLayer7TopVerticalParamsHTTPMethodHead            AttackLayer7TopVerticalParamsHTTPMethod = "HEAD"
+	AttackLayer7TopVerticalParamsHTTPMethodPurge           AttackLayer7TopVerticalParamsHTTPMethod = "PURGE"
+	AttackLayer7TopVerticalParamsHTTPMethodOptions         AttackLayer7TopVerticalParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TopVerticalParamsHTTPMethodPropfind        AttackLayer7TopVerticalParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TopVerticalParamsHTTPMethodMkcol           AttackLayer7TopVerticalParamsHTTPMethod = "MKCOL"
+	AttackLayer7TopVerticalParamsHTTPMethodPatch           AttackLayer7TopVerticalParamsHTTPMethod = "PATCH"
+	AttackLayer7TopVerticalParamsHTTPMethodACL             AttackLayer7TopVerticalParamsHTTPMethod = "ACL"
+	AttackLayer7TopVerticalParamsHTTPMethodBcopy           AttackLayer7TopVerticalParamsHTTPMethod = "BCOPY"
+	AttackLayer7TopVerticalParamsHTTPMethodBdelete         AttackLayer7TopVerticalParamsHTTPMethod = "BDELETE"
+	AttackLayer7TopVerticalParamsHTTPMethodBmove           AttackLayer7TopVerticalParamsHTTPMethod = "BMOVE"
+	AttackLayer7TopVerticalParamsHTTPMethodBpropfind       AttackLayer7TopVerticalParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TopVerticalParamsHTTPMethodBproppatch      AttackLayer7TopVerticalParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TopVerticalParamsHTTPMethodCheckin         AttackLayer7TopVerticalParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TopVerticalParamsHTTPMethodCheckout        AttackLayer7TopVerticalParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TopVerticalParamsHTTPMethodConnect         AttackLayer7TopVerticalParamsHTTPMethod = "CONNECT"
+	AttackLayer7TopVerticalParamsHTTPMethodCopy            AttackLayer7TopVerticalParamsHTTPMethod = "COPY"
+	AttackLayer7TopVerticalParamsHTTPMethodLabel           AttackLayer7TopVerticalParamsHTTPMethod = "LABEL"
+	AttackLayer7TopVerticalParamsHTTPMethodLock            AttackLayer7TopVerticalParamsHTTPMethod = "LOCK"
+	AttackLayer7TopVerticalParamsHTTPMethodMerge           AttackLayer7TopVerticalParamsHTTPMethod = "MERGE"
+	AttackLayer7TopVerticalParamsHTTPMethodMkactivity      AttackLayer7TopVerticalParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TopVerticalParamsHTTPMethodMkworkspace     AttackLayer7TopVerticalParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TopVerticalParamsHTTPMethodMove            AttackLayer7TopVerticalParamsHTTPMethod = "MOVE"
+	AttackLayer7TopVerticalParamsHTTPMethodNotify          AttackLayer7TopVerticalParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TopVerticalParamsHTTPMethodOrderpatch      AttackLayer7TopVerticalParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TopVerticalParamsHTTPMethodPoll            AttackLayer7TopVerticalParamsHTTPMethod = "POLL"
+	AttackLayer7TopVerticalParamsHTTPMethodProppatch       AttackLayer7TopVerticalParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TopVerticalParamsHTTPMethodReport          AttackLayer7TopVerticalParamsHTTPMethod = "REPORT"
+	AttackLayer7TopVerticalParamsHTTPMethodSearch          AttackLayer7TopVerticalParamsHTTPMethod = "SEARCH"
+	AttackLayer7TopVerticalParamsHTTPMethodSubscribe       AttackLayer7TopVerticalParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TopVerticalParamsHTTPMethodTrace           AttackLayer7TopVerticalParamsHTTPMethod = "TRACE"
+	AttackLayer7TopVerticalParamsHTTPMethodUncheckout      AttackLayer7TopVerticalParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TopVerticalParamsHTTPMethodUnlock          AttackLayer7TopVerticalParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TopVerticalParamsHTTPMethodUnsubscribe     AttackLayer7TopVerticalParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TopVerticalParamsHTTPMethodUpdate          AttackLayer7TopVerticalParamsHTTPMethod = "UPDATE"
+	AttackLayer7TopVerticalParamsHTTPMethodVersioncontrol  AttackLayer7TopVerticalParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TopVerticalParamsHTTPMethodBaselinecontrol AttackLayer7TopVerticalParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TopVerticalParamsHTTPMethodXmsenumatts     AttackLayer7TopVerticalParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TopVerticalParamsHTTPMethodRpcOutData      AttackLayer7TopVerticalParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TopVerticalParamsHTTPMethodRpcInData       AttackLayer7TopVerticalParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TopVerticalParamsHTTPMethodJson            AttackLayer7TopVerticalParamsHTTPMethod = "JSON"
+	AttackLayer7TopVerticalParamsHTTPMethodCook            AttackLayer7TopVerticalParamsHTTPMethod = "COOK"
+	AttackLayer7TopVerticalParamsHTTPMethodTrack           AttackLayer7TopVerticalParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7TopVerticalParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopVerticalParamsHTTPMethodGet, AttackLayer7TopVerticalParamsHTTPMethodPost, AttackLayer7TopVerticalParamsHTTPMethodDelete, AttackLayer7TopVerticalParamsHTTPMethodPut, AttackLayer7TopVerticalParamsHTTPMethodHead, AttackLayer7TopVerticalParamsHTTPMethodPurge, AttackLayer7TopVerticalParamsHTTPMethodOptions, AttackLayer7TopVerticalParamsHTTPMethodPropfind, AttackLayer7TopVerticalParamsHTTPMethodMkcol, AttackLayer7TopVerticalParamsHTTPMethodPatch, AttackLayer7TopVerticalParamsHTTPMethodACL, AttackLayer7TopVerticalParamsHTTPMethodBcopy, AttackLayer7TopVerticalParamsHTTPMethodBdelete, AttackLayer7TopVerticalParamsHTTPMethodBmove, AttackLayer7TopVerticalParamsHTTPMethodBpropfind, AttackLayer7TopVerticalParamsHTTPMethodBproppatch, AttackLayer7TopVerticalParamsHTTPMethodCheckin, AttackLayer7TopVerticalParamsHTTPMethodCheckout, AttackLayer7TopVerticalParamsHTTPMethodConnect, AttackLayer7TopVerticalParamsHTTPMethodCopy, AttackLayer7TopVerticalParamsHTTPMethodLabel, AttackLayer7TopVerticalParamsHTTPMethodLock, AttackLayer7TopVerticalParamsHTTPMethodMerge, AttackLayer7TopVerticalParamsHTTPMethodMkactivity, AttackLayer7TopVerticalParamsHTTPMethodMkworkspace, AttackLayer7TopVerticalParamsHTTPMethodMove, AttackLayer7TopVerticalParamsHTTPMethodNotify, AttackLayer7TopVerticalParamsHTTPMethodOrderpatch, AttackLayer7TopVerticalParamsHTTPMethodPoll, AttackLayer7TopVerticalParamsHTTPMethodProppatch, AttackLayer7TopVerticalParamsHTTPMethodReport, AttackLayer7TopVerticalParamsHTTPMethodSearch, AttackLayer7TopVerticalParamsHTTPMethodSubscribe, AttackLayer7TopVerticalParamsHTTPMethodTrace, AttackLayer7TopVerticalParamsHTTPMethodUncheckout, AttackLayer7TopVerticalParamsHTTPMethodUnlock, AttackLayer7TopVerticalParamsHTTPMethodUnsubscribe, AttackLayer7TopVerticalParamsHTTPMethodUpdate, AttackLayer7TopVerticalParamsHTTPMethodVersioncontrol, AttackLayer7TopVerticalParamsHTTPMethodBaselinecontrol, AttackLayer7TopVerticalParamsHTTPMethodXmsenumatts, AttackLayer7TopVerticalParamsHTTPMethodRpcOutData, AttackLayer7TopVerticalParamsHTTPMethodRpcInData, AttackLayer7TopVerticalParamsHTTPMethodJson, AttackLayer7TopVerticalParamsHTTPMethodCook, AttackLayer7TopVerticalParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopVerticalParamsHTTPVersion string
+
+const (
+	AttackLayer7TopVerticalParamsHTTPVersionHttPv1 AttackLayer7TopVerticalParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TopVerticalParamsHTTPVersionHttPv2 AttackLayer7TopVerticalParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TopVerticalParamsHTTPVersionHttPv3 AttackLayer7TopVerticalParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7TopVerticalParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopVerticalParamsHTTPVersionHttPv1, AttackLayer7TopVerticalParamsHTTPVersionHttPv2, AttackLayer7TopVerticalParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopVerticalParamsIPVersion string
+
+const (
+	AttackLayer7TopVerticalParamsIPVersionIPv4 AttackLayer7TopVerticalParamsIPVersion = "IPv4"
+	AttackLayer7TopVerticalParamsIPVersionIPv6 AttackLayer7TopVerticalParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7TopVerticalParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopVerticalParamsIPVersionIPv4, AttackLayer7TopVerticalParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopVerticalParamsMitigationProduct string
+
+const (
+	AttackLayer7TopVerticalParamsMitigationProductDDoS               AttackLayer7TopVerticalParamsMitigationProduct = "DDOS"
+	AttackLayer7TopVerticalParamsMitigationProductWAF                AttackLayer7TopVerticalParamsMitigationProduct = "WAF"
+	AttackLayer7TopVerticalParamsMitigationProductBotManagement      AttackLayer7TopVerticalParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TopVerticalParamsMitigationProductAccessRules        AttackLayer7TopVerticalParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TopVerticalParamsMitigationProductIPReputation       AttackLayer7TopVerticalParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TopVerticalParamsMitigationProductAPIShield          AttackLayer7TopVerticalParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TopVerticalParamsMitigationProductDataLossPrevention AttackLayer7TopVerticalParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7TopVerticalParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopVerticalParamsMitigationProductDDoS, AttackLayer7TopVerticalParamsMitigationProductWAF, AttackLayer7TopVerticalParamsMitigationProductBotManagement, AttackLayer7TopVerticalParamsMitigationProductAccessRules, AttackLayer7TopVerticalParamsMitigationProductIPReputation, AttackLayer7TopVerticalParamsMitigationProductAPIShield, AttackLayer7TopVerticalParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false

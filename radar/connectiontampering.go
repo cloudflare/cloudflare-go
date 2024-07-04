@@ -416,7 +416,7 @@ type ConnectionTamperingSummaryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]ConnectionTamperingSummaryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -436,34 +436,6 @@ func (r ConnectionTamperingSummaryParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type ConnectionTamperingSummaryParamsDateRange string
-
-const (
-	ConnectionTamperingSummaryParamsDateRange1d         ConnectionTamperingSummaryParamsDateRange = "1d"
-	ConnectionTamperingSummaryParamsDateRange2d         ConnectionTamperingSummaryParamsDateRange = "2d"
-	ConnectionTamperingSummaryParamsDateRange7d         ConnectionTamperingSummaryParamsDateRange = "7d"
-	ConnectionTamperingSummaryParamsDateRange14d        ConnectionTamperingSummaryParamsDateRange = "14d"
-	ConnectionTamperingSummaryParamsDateRange28d        ConnectionTamperingSummaryParamsDateRange = "28d"
-	ConnectionTamperingSummaryParamsDateRange12w        ConnectionTamperingSummaryParamsDateRange = "12w"
-	ConnectionTamperingSummaryParamsDateRange24w        ConnectionTamperingSummaryParamsDateRange = "24w"
-	ConnectionTamperingSummaryParamsDateRange52w        ConnectionTamperingSummaryParamsDateRange = "52w"
-	ConnectionTamperingSummaryParamsDateRange1dControl  ConnectionTamperingSummaryParamsDateRange = "1dControl"
-	ConnectionTamperingSummaryParamsDateRange2dControl  ConnectionTamperingSummaryParamsDateRange = "2dControl"
-	ConnectionTamperingSummaryParamsDateRange7dControl  ConnectionTamperingSummaryParamsDateRange = "7dControl"
-	ConnectionTamperingSummaryParamsDateRange14dControl ConnectionTamperingSummaryParamsDateRange = "14dControl"
-	ConnectionTamperingSummaryParamsDateRange28dControl ConnectionTamperingSummaryParamsDateRange = "28dControl"
-	ConnectionTamperingSummaryParamsDateRange12wControl ConnectionTamperingSummaryParamsDateRange = "12wControl"
-	ConnectionTamperingSummaryParamsDateRange24wControl ConnectionTamperingSummaryParamsDateRange = "24wControl"
-)
-
-func (r ConnectionTamperingSummaryParamsDateRange) IsKnown() bool {
-	switch r {
-	case ConnectionTamperingSummaryParamsDateRange1d, ConnectionTamperingSummaryParamsDateRange2d, ConnectionTamperingSummaryParamsDateRange7d, ConnectionTamperingSummaryParamsDateRange14d, ConnectionTamperingSummaryParamsDateRange28d, ConnectionTamperingSummaryParamsDateRange12w, ConnectionTamperingSummaryParamsDateRange24w, ConnectionTamperingSummaryParamsDateRange52w, ConnectionTamperingSummaryParamsDateRange1dControl, ConnectionTamperingSummaryParamsDateRange2dControl, ConnectionTamperingSummaryParamsDateRange7dControl, ConnectionTamperingSummaryParamsDateRange14dControl, ConnectionTamperingSummaryParamsDateRange28dControl, ConnectionTamperingSummaryParamsDateRange12wControl, ConnectionTamperingSummaryParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -523,7 +495,7 @@ type ConnectionTamperingTimeseriesGroupsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]ConnectionTamperingTimeseriesGroupsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -560,34 +532,6 @@ const (
 func (r ConnectionTamperingTimeseriesGroupsParamsAggInterval) IsKnown() bool {
 	switch r {
 	case ConnectionTamperingTimeseriesGroupsParamsAggInterval15m, ConnectionTamperingTimeseriesGroupsParamsAggInterval1h, ConnectionTamperingTimeseriesGroupsParamsAggInterval1d, ConnectionTamperingTimeseriesGroupsParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type ConnectionTamperingTimeseriesGroupsParamsDateRange string
-
-const (
-	ConnectionTamperingTimeseriesGroupsParamsDateRange1d         ConnectionTamperingTimeseriesGroupsParamsDateRange = "1d"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange2d         ConnectionTamperingTimeseriesGroupsParamsDateRange = "2d"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange7d         ConnectionTamperingTimeseriesGroupsParamsDateRange = "7d"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange14d        ConnectionTamperingTimeseriesGroupsParamsDateRange = "14d"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange28d        ConnectionTamperingTimeseriesGroupsParamsDateRange = "28d"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange12w        ConnectionTamperingTimeseriesGroupsParamsDateRange = "12w"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange24w        ConnectionTamperingTimeseriesGroupsParamsDateRange = "24w"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange52w        ConnectionTamperingTimeseriesGroupsParamsDateRange = "52w"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange1dControl  ConnectionTamperingTimeseriesGroupsParamsDateRange = "1dControl"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange2dControl  ConnectionTamperingTimeseriesGroupsParamsDateRange = "2dControl"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange7dControl  ConnectionTamperingTimeseriesGroupsParamsDateRange = "7dControl"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange14dControl ConnectionTamperingTimeseriesGroupsParamsDateRange = "14dControl"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange28dControl ConnectionTamperingTimeseriesGroupsParamsDateRange = "28dControl"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange12wControl ConnectionTamperingTimeseriesGroupsParamsDateRange = "12wControl"
-	ConnectionTamperingTimeseriesGroupsParamsDateRange24wControl ConnectionTamperingTimeseriesGroupsParamsDateRange = "24wControl"
-)
-
-func (r ConnectionTamperingTimeseriesGroupsParamsDateRange) IsKnown() bool {
-	switch r {
-	case ConnectionTamperingTimeseriesGroupsParamsDateRange1d, ConnectionTamperingTimeseriesGroupsParamsDateRange2d, ConnectionTamperingTimeseriesGroupsParamsDateRange7d, ConnectionTamperingTimeseriesGroupsParamsDateRange14d, ConnectionTamperingTimeseriesGroupsParamsDateRange28d, ConnectionTamperingTimeseriesGroupsParamsDateRange12w, ConnectionTamperingTimeseriesGroupsParamsDateRange24w, ConnectionTamperingTimeseriesGroupsParamsDateRange52w, ConnectionTamperingTimeseriesGroupsParamsDateRange1dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange2dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange7dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange14dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange28dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange12wControl, ConnectionTamperingTimeseriesGroupsParamsDateRange24wControl:
 		return true
 	}
 	return false

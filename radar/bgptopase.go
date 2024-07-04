@@ -244,7 +244,7 @@ type BGPTopAseGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]BGPTopAseGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -265,34 +265,6 @@ func (r BGPTopAseGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type BGPTopAseGetParamsDateRange string
-
-const (
-	BGPTopAseGetParamsDateRange1d         BGPTopAseGetParamsDateRange = "1d"
-	BGPTopAseGetParamsDateRange2d         BGPTopAseGetParamsDateRange = "2d"
-	BGPTopAseGetParamsDateRange7d         BGPTopAseGetParamsDateRange = "7d"
-	BGPTopAseGetParamsDateRange14d        BGPTopAseGetParamsDateRange = "14d"
-	BGPTopAseGetParamsDateRange28d        BGPTopAseGetParamsDateRange = "28d"
-	BGPTopAseGetParamsDateRange12w        BGPTopAseGetParamsDateRange = "12w"
-	BGPTopAseGetParamsDateRange24w        BGPTopAseGetParamsDateRange = "24w"
-	BGPTopAseGetParamsDateRange52w        BGPTopAseGetParamsDateRange = "52w"
-	BGPTopAseGetParamsDateRange1dControl  BGPTopAseGetParamsDateRange = "1dControl"
-	BGPTopAseGetParamsDateRange2dControl  BGPTopAseGetParamsDateRange = "2dControl"
-	BGPTopAseGetParamsDateRange7dControl  BGPTopAseGetParamsDateRange = "7dControl"
-	BGPTopAseGetParamsDateRange14dControl BGPTopAseGetParamsDateRange = "14dControl"
-	BGPTopAseGetParamsDateRange28dControl BGPTopAseGetParamsDateRange = "28dControl"
-	BGPTopAseGetParamsDateRange12wControl BGPTopAseGetParamsDateRange = "12wControl"
-	BGPTopAseGetParamsDateRange24wControl BGPTopAseGetParamsDateRange = "24wControl"
-)
-
-func (r BGPTopAseGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case BGPTopAseGetParamsDateRange1d, BGPTopAseGetParamsDateRange2d, BGPTopAseGetParamsDateRange7d, BGPTopAseGetParamsDateRange14d, BGPTopAseGetParamsDateRange28d, BGPTopAseGetParamsDateRange12w, BGPTopAseGetParamsDateRange24w, BGPTopAseGetParamsDateRange52w, BGPTopAseGetParamsDateRange1dControl, BGPTopAseGetParamsDateRange2dControl, BGPTopAseGetParamsDateRange7dControl, BGPTopAseGetParamsDateRange14dControl, BGPTopAseGetParamsDateRange28dControl, BGPTopAseGetParamsDateRange12wControl, BGPTopAseGetParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

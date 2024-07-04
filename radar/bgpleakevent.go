@@ -208,7 +208,7 @@ type BGPLeakEventListParams struct {
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[BGPLeakEventListParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// The unique identifier of a event
@@ -237,36 +237,6 @@ func (r BGPLeakEventListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type BGPLeakEventListParamsDateRange string
-
-const (
-	BGPLeakEventListParamsDateRange1d         BGPLeakEventListParamsDateRange = "1d"
-	BGPLeakEventListParamsDateRange2d         BGPLeakEventListParamsDateRange = "2d"
-	BGPLeakEventListParamsDateRange7d         BGPLeakEventListParamsDateRange = "7d"
-	BGPLeakEventListParamsDateRange14d        BGPLeakEventListParamsDateRange = "14d"
-	BGPLeakEventListParamsDateRange28d        BGPLeakEventListParamsDateRange = "28d"
-	BGPLeakEventListParamsDateRange12w        BGPLeakEventListParamsDateRange = "12w"
-	BGPLeakEventListParamsDateRange24w        BGPLeakEventListParamsDateRange = "24w"
-	BGPLeakEventListParamsDateRange52w        BGPLeakEventListParamsDateRange = "52w"
-	BGPLeakEventListParamsDateRange1dControl  BGPLeakEventListParamsDateRange = "1dControl"
-	BGPLeakEventListParamsDateRange2dControl  BGPLeakEventListParamsDateRange = "2dControl"
-	BGPLeakEventListParamsDateRange7dControl  BGPLeakEventListParamsDateRange = "7dControl"
-	BGPLeakEventListParamsDateRange14dControl BGPLeakEventListParamsDateRange = "14dControl"
-	BGPLeakEventListParamsDateRange28dControl BGPLeakEventListParamsDateRange = "28dControl"
-	BGPLeakEventListParamsDateRange12wControl BGPLeakEventListParamsDateRange = "12wControl"
-	BGPLeakEventListParamsDateRange24wControl BGPLeakEventListParamsDateRange = "24wControl"
-)
-
-func (r BGPLeakEventListParamsDateRange) IsKnown() bool {
-	switch r {
-	case BGPLeakEventListParamsDateRange1d, BGPLeakEventListParamsDateRange2d, BGPLeakEventListParamsDateRange7d, BGPLeakEventListParamsDateRange14d, BGPLeakEventListParamsDateRange28d, BGPLeakEventListParamsDateRange12w, BGPLeakEventListParamsDateRange24w, BGPLeakEventListParamsDateRange52w, BGPLeakEventListParamsDateRange1dControl, BGPLeakEventListParamsDateRange2dControl, BGPLeakEventListParamsDateRange7dControl, BGPLeakEventListParamsDateRange14dControl, BGPLeakEventListParamsDateRange28dControl, BGPLeakEventListParamsDateRange12wControl, BGPLeakEventListParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

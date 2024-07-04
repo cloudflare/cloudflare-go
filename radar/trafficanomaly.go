@@ -187,7 +187,7 @@ type TrafficAnomalyGetParams struct {
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[TrafficAnomalyGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -208,36 +208,6 @@ func (r TrafficAnomalyGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type TrafficAnomalyGetParamsDateRange string
-
-const (
-	TrafficAnomalyGetParamsDateRange1d         TrafficAnomalyGetParamsDateRange = "1d"
-	TrafficAnomalyGetParamsDateRange2d         TrafficAnomalyGetParamsDateRange = "2d"
-	TrafficAnomalyGetParamsDateRange7d         TrafficAnomalyGetParamsDateRange = "7d"
-	TrafficAnomalyGetParamsDateRange14d        TrafficAnomalyGetParamsDateRange = "14d"
-	TrafficAnomalyGetParamsDateRange28d        TrafficAnomalyGetParamsDateRange = "28d"
-	TrafficAnomalyGetParamsDateRange12w        TrafficAnomalyGetParamsDateRange = "12w"
-	TrafficAnomalyGetParamsDateRange24w        TrafficAnomalyGetParamsDateRange = "24w"
-	TrafficAnomalyGetParamsDateRange52w        TrafficAnomalyGetParamsDateRange = "52w"
-	TrafficAnomalyGetParamsDateRange1dControl  TrafficAnomalyGetParamsDateRange = "1dControl"
-	TrafficAnomalyGetParamsDateRange2dControl  TrafficAnomalyGetParamsDateRange = "2dControl"
-	TrafficAnomalyGetParamsDateRange7dControl  TrafficAnomalyGetParamsDateRange = "7dControl"
-	TrafficAnomalyGetParamsDateRange14dControl TrafficAnomalyGetParamsDateRange = "14dControl"
-	TrafficAnomalyGetParamsDateRange28dControl TrafficAnomalyGetParamsDateRange = "28dControl"
-	TrafficAnomalyGetParamsDateRange12wControl TrafficAnomalyGetParamsDateRange = "12wControl"
-	TrafficAnomalyGetParamsDateRange24wControl TrafficAnomalyGetParamsDateRange = "24wControl"
-)
-
-func (r TrafficAnomalyGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case TrafficAnomalyGetParamsDateRange1d, TrafficAnomalyGetParamsDateRange2d, TrafficAnomalyGetParamsDateRange7d, TrafficAnomalyGetParamsDateRange14d, TrafficAnomalyGetParamsDateRange28d, TrafficAnomalyGetParamsDateRange12w, TrafficAnomalyGetParamsDateRange24w, TrafficAnomalyGetParamsDateRange52w, TrafficAnomalyGetParamsDateRange1dControl, TrafficAnomalyGetParamsDateRange2dControl, TrafficAnomalyGetParamsDateRange7dControl, TrafficAnomalyGetParamsDateRange14dControl, TrafficAnomalyGetParamsDateRange28dControl, TrafficAnomalyGetParamsDateRange12wControl, TrafficAnomalyGetParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

@@ -1410,7 +1410,7 @@ type HTTPSummaryBotClassParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPSummaryBotClassParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -1442,34 +1442,6 @@ func (r HTTPSummaryBotClassParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type HTTPSummaryBotClassParamsDateRange string
-
-const (
-	HTTPSummaryBotClassParamsDateRange1d         HTTPSummaryBotClassParamsDateRange = "1d"
-	HTTPSummaryBotClassParamsDateRange2d         HTTPSummaryBotClassParamsDateRange = "2d"
-	HTTPSummaryBotClassParamsDateRange7d         HTTPSummaryBotClassParamsDateRange = "7d"
-	HTTPSummaryBotClassParamsDateRange14d        HTTPSummaryBotClassParamsDateRange = "14d"
-	HTTPSummaryBotClassParamsDateRange28d        HTTPSummaryBotClassParamsDateRange = "28d"
-	HTTPSummaryBotClassParamsDateRange12w        HTTPSummaryBotClassParamsDateRange = "12w"
-	HTTPSummaryBotClassParamsDateRange24w        HTTPSummaryBotClassParamsDateRange = "24w"
-	HTTPSummaryBotClassParamsDateRange52w        HTTPSummaryBotClassParamsDateRange = "52w"
-	HTTPSummaryBotClassParamsDateRange1dControl  HTTPSummaryBotClassParamsDateRange = "1dControl"
-	HTTPSummaryBotClassParamsDateRange2dControl  HTTPSummaryBotClassParamsDateRange = "2dControl"
-	HTTPSummaryBotClassParamsDateRange7dControl  HTTPSummaryBotClassParamsDateRange = "7dControl"
-	HTTPSummaryBotClassParamsDateRange14dControl HTTPSummaryBotClassParamsDateRange = "14dControl"
-	HTTPSummaryBotClassParamsDateRange28dControl HTTPSummaryBotClassParamsDateRange = "28dControl"
-	HTTPSummaryBotClassParamsDateRange12wControl HTTPSummaryBotClassParamsDateRange = "12wControl"
-	HTTPSummaryBotClassParamsDateRange24wControl HTTPSummaryBotClassParamsDateRange = "24wControl"
-)
-
-func (r HTTPSummaryBotClassParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPSummaryBotClassParamsDateRange1d, HTTPSummaryBotClassParamsDateRange2d, HTTPSummaryBotClassParamsDateRange7d, HTTPSummaryBotClassParamsDateRange14d, HTTPSummaryBotClassParamsDateRange28d, HTTPSummaryBotClassParamsDateRange12w, HTTPSummaryBotClassParamsDateRange24w, HTTPSummaryBotClassParamsDateRange52w, HTTPSummaryBotClassParamsDateRange1dControl, HTTPSummaryBotClassParamsDateRange2dControl, HTTPSummaryBotClassParamsDateRange7dControl, HTTPSummaryBotClassParamsDateRange14dControl, HTTPSummaryBotClassParamsDateRange28dControl, HTTPSummaryBotClassParamsDateRange12wControl, HTTPSummaryBotClassParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 type HTTPSummaryBotClassParamsDeviceType string
@@ -1628,7 +1600,7 @@ type HTTPSummaryDeviceTypeParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPSummaryDeviceTypeParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1670,34 +1642,6 @@ const (
 func (r HTTPSummaryDeviceTypeParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryDeviceTypeParamsBotClassLikelyAutomated, HTTPSummaryDeviceTypeParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPSummaryDeviceTypeParamsDateRange string
-
-const (
-	HTTPSummaryDeviceTypeParamsDateRange1d         HTTPSummaryDeviceTypeParamsDateRange = "1d"
-	HTTPSummaryDeviceTypeParamsDateRange2d         HTTPSummaryDeviceTypeParamsDateRange = "2d"
-	HTTPSummaryDeviceTypeParamsDateRange7d         HTTPSummaryDeviceTypeParamsDateRange = "7d"
-	HTTPSummaryDeviceTypeParamsDateRange14d        HTTPSummaryDeviceTypeParamsDateRange = "14d"
-	HTTPSummaryDeviceTypeParamsDateRange28d        HTTPSummaryDeviceTypeParamsDateRange = "28d"
-	HTTPSummaryDeviceTypeParamsDateRange12w        HTTPSummaryDeviceTypeParamsDateRange = "12w"
-	HTTPSummaryDeviceTypeParamsDateRange24w        HTTPSummaryDeviceTypeParamsDateRange = "24w"
-	HTTPSummaryDeviceTypeParamsDateRange52w        HTTPSummaryDeviceTypeParamsDateRange = "52w"
-	HTTPSummaryDeviceTypeParamsDateRange1dControl  HTTPSummaryDeviceTypeParamsDateRange = "1dControl"
-	HTTPSummaryDeviceTypeParamsDateRange2dControl  HTTPSummaryDeviceTypeParamsDateRange = "2dControl"
-	HTTPSummaryDeviceTypeParamsDateRange7dControl  HTTPSummaryDeviceTypeParamsDateRange = "7dControl"
-	HTTPSummaryDeviceTypeParamsDateRange14dControl HTTPSummaryDeviceTypeParamsDateRange = "14dControl"
-	HTTPSummaryDeviceTypeParamsDateRange28dControl HTTPSummaryDeviceTypeParamsDateRange = "28dControl"
-	HTTPSummaryDeviceTypeParamsDateRange12wControl HTTPSummaryDeviceTypeParamsDateRange = "12wControl"
-	HTTPSummaryDeviceTypeParamsDateRange24wControl HTTPSummaryDeviceTypeParamsDateRange = "24wControl"
-)
-
-func (r HTTPSummaryDeviceTypeParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPSummaryDeviceTypeParamsDateRange1d, HTTPSummaryDeviceTypeParamsDateRange2d, HTTPSummaryDeviceTypeParamsDateRange7d, HTTPSummaryDeviceTypeParamsDateRange14d, HTTPSummaryDeviceTypeParamsDateRange28d, HTTPSummaryDeviceTypeParamsDateRange12w, HTTPSummaryDeviceTypeParamsDateRange24w, HTTPSummaryDeviceTypeParamsDateRange52w, HTTPSummaryDeviceTypeParamsDateRange1dControl, HTTPSummaryDeviceTypeParamsDateRange2dControl, HTTPSummaryDeviceTypeParamsDateRange7dControl, HTTPSummaryDeviceTypeParamsDateRange14dControl, HTTPSummaryDeviceTypeParamsDateRange28dControl, HTTPSummaryDeviceTypeParamsDateRange12wControl, HTTPSummaryDeviceTypeParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1843,7 +1787,7 @@ type HTTPSummaryHTTPProtocolParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPSummaryHTTPProtocolParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -1885,34 +1829,6 @@ const (
 func (r HTTPSummaryHTTPProtocolParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryHTTPProtocolParamsBotClassLikelyAutomated, HTTPSummaryHTTPProtocolParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPSummaryHTTPProtocolParamsDateRange string
-
-const (
-	HTTPSummaryHTTPProtocolParamsDateRange1d         HTTPSummaryHTTPProtocolParamsDateRange = "1d"
-	HTTPSummaryHTTPProtocolParamsDateRange2d         HTTPSummaryHTTPProtocolParamsDateRange = "2d"
-	HTTPSummaryHTTPProtocolParamsDateRange7d         HTTPSummaryHTTPProtocolParamsDateRange = "7d"
-	HTTPSummaryHTTPProtocolParamsDateRange14d        HTTPSummaryHTTPProtocolParamsDateRange = "14d"
-	HTTPSummaryHTTPProtocolParamsDateRange28d        HTTPSummaryHTTPProtocolParamsDateRange = "28d"
-	HTTPSummaryHTTPProtocolParamsDateRange12w        HTTPSummaryHTTPProtocolParamsDateRange = "12w"
-	HTTPSummaryHTTPProtocolParamsDateRange24w        HTTPSummaryHTTPProtocolParamsDateRange = "24w"
-	HTTPSummaryHTTPProtocolParamsDateRange52w        HTTPSummaryHTTPProtocolParamsDateRange = "52w"
-	HTTPSummaryHTTPProtocolParamsDateRange1dControl  HTTPSummaryHTTPProtocolParamsDateRange = "1dControl"
-	HTTPSummaryHTTPProtocolParamsDateRange2dControl  HTTPSummaryHTTPProtocolParamsDateRange = "2dControl"
-	HTTPSummaryHTTPProtocolParamsDateRange7dControl  HTTPSummaryHTTPProtocolParamsDateRange = "7dControl"
-	HTTPSummaryHTTPProtocolParamsDateRange14dControl HTTPSummaryHTTPProtocolParamsDateRange = "14dControl"
-	HTTPSummaryHTTPProtocolParamsDateRange28dControl HTTPSummaryHTTPProtocolParamsDateRange = "28dControl"
-	HTTPSummaryHTTPProtocolParamsDateRange12wControl HTTPSummaryHTTPProtocolParamsDateRange = "12wControl"
-	HTTPSummaryHTTPProtocolParamsDateRange24wControl HTTPSummaryHTTPProtocolParamsDateRange = "24wControl"
-)
-
-func (r HTTPSummaryHTTPProtocolParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPSummaryHTTPProtocolParamsDateRange1d, HTTPSummaryHTTPProtocolParamsDateRange2d, HTTPSummaryHTTPProtocolParamsDateRange7d, HTTPSummaryHTTPProtocolParamsDateRange14d, HTTPSummaryHTTPProtocolParamsDateRange28d, HTTPSummaryHTTPProtocolParamsDateRange12w, HTTPSummaryHTTPProtocolParamsDateRange24w, HTTPSummaryHTTPProtocolParamsDateRange52w, HTTPSummaryHTTPProtocolParamsDateRange1dControl, HTTPSummaryHTTPProtocolParamsDateRange2dControl, HTTPSummaryHTTPProtocolParamsDateRange7dControl, HTTPSummaryHTTPProtocolParamsDateRange14dControl, HTTPSummaryHTTPProtocolParamsDateRange28dControl, HTTPSummaryHTTPProtocolParamsDateRange12wControl, HTTPSummaryHTTPProtocolParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2059,7 +1975,7 @@ type HTTPSummaryHTTPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPSummaryHTTPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2101,34 +2017,6 @@ const (
 func (r HTTPSummaryHTTPVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryHTTPVersionParamsBotClassLikelyAutomated, HTTPSummaryHTTPVersionParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPSummaryHTTPVersionParamsDateRange string
-
-const (
-	HTTPSummaryHTTPVersionParamsDateRange1d         HTTPSummaryHTTPVersionParamsDateRange = "1d"
-	HTTPSummaryHTTPVersionParamsDateRange2d         HTTPSummaryHTTPVersionParamsDateRange = "2d"
-	HTTPSummaryHTTPVersionParamsDateRange7d         HTTPSummaryHTTPVersionParamsDateRange = "7d"
-	HTTPSummaryHTTPVersionParamsDateRange14d        HTTPSummaryHTTPVersionParamsDateRange = "14d"
-	HTTPSummaryHTTPVersionParamsDateRange28d        HTTPSummaryHTTPVersionParamsDateRange = "28d"
-	HTTPSummaryHTTPVersionParamsDateRange12w        HTTPSummaryHTTPVersionParamsDateRange = "12w"
-	HTTPSummaryHTTPVersionParamsDateRange24w        HTTPSummaryHTTPVersionParamsDateRange = "24w"
-	HTTPSummaryHTTPVersionParamsDateRange52w        HTTPSummaryHTTPVersionParamsDateRange = "52w"
-	HTTPSummaryHTTPVersionParamsDateRange1dControl  HTTPSummaryHTTPVersionParamsDateRange = "1dControl"
-	HTTPSummaryHTTPVersionParamsDateRange2dControl  HTTPSummaryHTTPVersionParamsDateRange = "2dControl"
-	HTTPSummaryHTTPVersionParamsDateRange7dControl  HTTPSummaryHTTPVersionParamsDateRange = "7dControl"
-	HTTPSummaryHTTPVersionParamsDateRange14dControl HTTPSummaryHTTPVersionParamsDateRange = "14dControl"
-	HTTPSummaryHTTPVersionParamsDateRange28dControl HTTPSummaryHTTPVersionParamsDateRange = "28dControl"
-	HTTPSummaryHTTPVersionParamsDateRange12wControl HTTPSummaryHTTPVersionParamsDateRange = "12wControl"
-	HTTPSummaryHTTPVersionParamsDateRange24wControl HTTPSummaryHTTPVersionParamsDateRange = "24wControl"
-)
-
-func (r HTTPSummaryHTTPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPSummaryHTTPVersionParamsDateRange1d, HTTPSummaryHTTPVersionParamsDateRange2d, HTTPSummaryHTTPVersionParamsDateRange7d, HTTPSummaryHTTPVersionParamsDateRange14d, HTTPSummaryHTTPVersionParamsDateRange28d, HTTPSummaryHTTPVersionParamsDateRange12w, HTTPSummaryHTTPVersionParamsDateRange24w, HTTPSummaryHTTPVersionParamsDateRange52w, HTTPSummaryHTTPVersionParamsDateRange1dControl, HTTPSummaryHTTPVersionParamsDateRange2dControl, HTTPSummaryHTTPVersionParamsDateRange7dControl, HTTPSummaryHTTPVersionParamsDateRange14dControl, HTTPSummaryHTTPVersionParamsDateRange28dControl, HTTPSummaryHTTPVersionParamsDateRange12wControl, HTTPSummaryHTTPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2274,7 +2162,7 @@ type HTTPSummaryIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPSummaryIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2316,34 +2204,6 @@ const (
 func (r HTTPSummaryIPVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryIPVersionParamsBotClassLikelyAutomated, HTTPSummaryIPVersionParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPSummaryIPVersionParamsDateRange string
-
-const (
-	HTTPSummaryIPVersionParamsDateRange1d         HTTPSummaryIPVersionParamsDateRange = "1d"
-	HTTPSummaryIPVersionParamsDateRange2d         HTTPSummaryIPVersionParamsDateRange = "2d"
-	HTTPSummaryIPVersionParamsDateRange7d         HTTPSummaryIPVersionParamsDateRange = "7d"
-	HTTPSummaryIPVersionParamsDateRange14d        HTTPSummaryIPVersionParamsDateRange = "14d"
-	HTTPSummaryIPVersionParamsDateRange28d        HTTPSummaryIPVersionParamsDateRange = "28d"
-	HTTPSummaryIPVersionParamsDateRange12w        HTTPSummaryIPVersionParamsDateRange = "12w"
-	HTTPSummaryIPVersionParamsDateRange24w        HTTPSummaryIPVersionParamsDateRange = "24w"
-	HTTPSummaryIPVersionParamsDateRange52w        HTTPSummaryIPVersionParamsDateRange = "52w"
-	HTTPSummaryIPVersionParamsDateRange1dControl  HTTPSummaryIPVersionParamsDateRange = "1dControl"
-	HTTPSummaryIPVersionParamsDateRange2dControl  HTTPSummaryIPVersionParamsDateRange = "2dControl"
-	HTTPSummaryIPVersionParamsDateRange7dControl  HTTPSummaryIPVersionParamsDateRange = "7dControl"
-	HTTPSummaryIPVersionParamsDateRange14dControl HTTPSummaryIPVersionParamsDateRange = "14dControl"
-	HTTPSummaryIPVersionParamsDateRange28dControl HTTPSummaryIPVersionParamsDateRange = "28dControl"
-	HTTPSummaryIPVersionParamsDateRange12wControl HTTPSummaryIPVersionParamsDateRange = "12wControl"
-	HTTPSummaryIPVersionParamsDateRange24wControl HTTPSummaryIPVersionParamsDateRange = "24wControl"
-)
-
-func (r HTTPSummaryIPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPSummaryIPVersionParamsDateRange1d, HTTPSummaryIPVersionParamsDateRange2d, HTTPSummaryIPVersionParamsDateRange7d, HTTPSummaryIPVersionParamsDateRange14d, HTTPSummaryIPVersionParamsDateRange28d, HTTPSummaryIPVersionParamsDateRange12w, HTTPSummaryIPVersionParamsDateRange24w, HTTPSummaryIPVersionParamsDateRange52w, HTTPSummaryIPVersionParamsDateRange1dControl, HTTPSummaryIPVersionParamsDateRange2dControl, HTTPSummaryIPVersionParamsDateRange7dControl, HTTPSummaryIPVersionParamsDateRange14dControl, HTTPSummaryIPVersionParamsDateRange28dControl, HTTPSummaryIPVersionParamsDateRange12wControl, HTTPSummaryIPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2490,7 +2350,7 @@ type HTTPSummaryOSParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPSummaryOSParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2531,34 +2391,6 @@ const (
 func (r HTTPSummaryOSParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryOSParamsBotClassLikelyAutomated, HTTPSummaryOSParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPSummaryOSParamsDateRange string
-
-const (
-	HTTPSummaryOSParamsDateRange1d         HTTPSummaryOSParamsDateRange = "1d"
-	HTTPSummaryOSParamsDateRange2d         HTTPSummaryOSParamsDateRange = "2d"
-	HTTPSummaryOSParamsDateRange7d         HTTPSummaryOSParamsDateRange = "7d"
-	HTTPSummaryOSParamsDateRange14d        HTTPSummaryOSParamsDateRange = "14d"
-	HTTPSummaryOSParamsDateRange28d        HTTPSummaryOSParamsDateRange = "28d"
-	HTTPSummaryOSParamsDateRange12w        HTTPSummaryOSParamsDateRange = "12w"
-	HTTPSummaryOSParamsDateRange24w        HTTPSummaryOSParamsDateRange = "24w"
-	HTTPSummaryOSParamsDateRange52w        HTTPSummaryOSParamsDateRange = "52w"
-	HTTPSummaryOSParamsDateRange1dControl  HTTPSummaryOSParamsDateRange = "1dControl"
-	HTTPSummaryOSParamsDateRange2dControl  HTTPSummaryOSParamsDateRange = "2dControl"
-	HTTPSummaryOSParamsDateRange7dControl  HTTPSummaryOSParamsDateRange = "7dControl"
-	HTTPSummaryOSParamsDateRange14dControl HTTPSummaryOSParamsDateRange = "14dControl"
-	HTTPSummaryOSParamsDateRange28dControl HTTPSummaryOSParamsDateRange = "28dControl"
-	HTTPSummaryOSParamsDateRange12wControl HTTPSummaryOSParamsDateRange = "12wControl"
-	HTTPSummaryOSParamsDateRange24wControl HTTPSummaryOSParamsDateRange = "24wControl"
-)
-
-func (r HTTPSummaryOSParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPSummaryOSParamsDateRange1d, HTTPSummaryOSParamsDateRange2d, HTTPSummaryOSParamsDateRange7d, HTTPSummaryOSParamsDateRange14d, HTTPSummaryOSParamsDateRange28d, HTTPSummaryOSParamsDateRange12w, HTTPSummaryOSParamsDateRange24w, HTTPSummaryOSParamsDateRange52w, HTTPSummaryOSParamsDateRange1dControl, HTTPSummaryOSParamsDateRange2dControl, HTTPSummaryOSParamsDateRange7dControl, HTTPSummaryOSParamsDateRange14dControl, HTTPSummaryOSParamsDateRange28dControl, HTTPSummaryOSParamsDateRange12wControl, HTTPSummaryOSParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2700,7 +2532,7 @@ type HTTPSummaryPostQuantumParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPSummaryPostQuantumParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2744,34 +2576,6 @@ const (
 func (r HTTPSummaryPostQuantumParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryPostQuantumParamsBotClassLikelyAutomated, HTTPSummaryPostQuantumParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPSummaryPostQuantumParamsDateRange string
-
-const (
-	HTTPSummaryPostQuantumParamsDateRange1d         HTTPSummaryPostQuantumParamsDateRange = "1d"
-	HTTPSummaryPostQuantumParamsDateRange2d         HTTPSummaryPostQuantumParamsDateRange = "2d"
-	HTTPSummaryPostQuantumParamsDateRange7d         HTTPSummaryPostQuantumParamsDateRange = "7d"
-	HTTPSummaryPostQuantumParamsDateRange14d        HTTPSummaryPostQuantumParamsDateRange = "14d"
-	HTTPSummaryPostQuantumParamsDateRange28d        HTTPSummaryPostQuantumParamsDateRange = "28d"
-	HTTPSummaryPostQuantumParamsDateRange12w        HTTPSummaryPostQuantumParamsDateRange = "12w"
-	HTTPSummaryPostQuantumParamsDateRange24w        HTTPSummaryPostQuantumParamsDateRange = "24w"
-	HTTPSummaryPostQuantumParamsDateRange52w        HTTPSummaryPostQuantumParamsDateRange = "52w"
-	HTTPSummaryPostQuantumParamsDateRange1dControl  HTTPSummaryPostQuantumParamsDateRange = "1dControl"
-	HTTPSummaryPostQuantumParamsDateRange2dControl  HTTPSummaryPostQuantumParamsDateRange = "2dControl"
-	HTTPSummaryPostQuantumParamsDateRange7dControl  HTTPSummaryPostQuantumParamsDateRange = "7dControl"
-	HTTPSummaryPostQuantumParamsDateRange14dControl HTTPSummaryPostQuantumParamsDateRange = "14dControl"
-	HTTPSummaryPostQuantumParamsDateRange28dControl HTTPSummaryPostQuantumParamsDateRange = "28dControl"
-	HTTPSummaryPostQuantumParamsDateRange12wControl HTTPSummaryPostQuantumParamsDateRange = "12wControl"
-	HTTPSummaryPostQuantumParamsDateRange24wControl HTTPSummaryPostQuantumParamsDateRange = "24wControl"
-)
-
-func (r HTTPSummaryPostQuantumParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPSummaryPostQuantumParamsDateRange1d, HTTPSummaryPostQuantumParamsDateRange2d, HTTPSummaryPostQuantumParamsDateRange7d, HTTPSummaryPostQuantumParamsDateRange14d, HTTPSummaryPostQuantumParamsDateRange28d, HTTPSummaryPostQuantumParamsDateRange12w, HTTPSummaryPostQuantumParamsDateRange24w, HTTPSummaryPostQuantumParamsDateRange52w, HTTPSummaryPostQuantumParamsDateRange1dControl, HTTPSummaryPostQuantumParamsDateRange2dControl, HTTPSummaryPostQuantumParamsDateRange7dControl, HTTPSummaryPostQuantumParamsDateRange14dControl, HTTPSummaryPostQuantumParamsDateRange28dControl, HTTPSummaryPostQuantumParamsDateRange12wControl, HTTPSummaryPostQuantumParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2933,7 +2737,7 @@ type HTTPSummaryTLSVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPSummaryTLSVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2975,34 +2779,6 @@ const (
 func (r HTTPSummaryTLSVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryTLSVersionParamsBotClassLikelyAutomated, HTTPSummaryTLSVersionParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPSummaryTLSVersionParamsDateRange string
-
-const (
-	HTTPSummaryTLSVersionParamsDateRange1d         HTTPSummaryTLSVersionParamsDateRange = "1d"
-	HTTPSummaryTLSVersionParamsDateRange2d         HTTPSummaryTLSVersionParamsDateRange = "2d"
-	HTTPSummaryTLSVersionParamsDateRange7d         HTTPSummaryTLSVersionParamsDateRange = "7d"
-	HTTPSummaryTLSVersionParamsDateRange14d        HTTPSummaryTLSVersionParamsDateRange = "14d"
-	HTTPSummaryTLSVersionParamsDateRange28d        HTTPSummaryTLSVersionParamsDateRange = "28d"
-	HTTPSummaryTLSVersionParamsDateRange12w        HTTPSummaryTLSVersionParamsDateRange = "12w"
-	HTTPSummaryTLSVersionParamsDateRange24w        HTTPSummaryTLSVersionParamsDateRange = "24w"
-	HTTPSummaryTLSVersionParamsDateRange52w        HTTPSummaryTLSVersionParamsDateRange = "52w"
-	HTTPSummaryTLSVersionParamsDateRange1dControl  HTTPSummaryTLSVersionParamsDateRange = "1dControl"
-	HTTPSummaryTLSVersionParamsDateRange2dControl  HTTPSummaryTLSVersionParamsDateRange = "2dControl"
-	HTTPSummaryTLSVersionParamsDateRange7dControl  HTTPSummaryTLSVersionParamsDateRange = "7dControl"
-	HTTPSummaryTLSVersionParamsDateRange14dControl HTTPSummaryTLSVersionParamsDateRange = "14dControl"
-	HTTPSummaryTLSVersionParamsDateRange28dControl HTTPSummaryTLSVersionParamsDateRange = "28dControl"
-	HTTPSummaryTLSVersionParamsDateRange12wControl HTTPSummaryTLSVersionParamsDateRange = "12wControl"
-	HTTPSummaryTLSVersionParamsDateRange24wControl HTTPSummaryTLSVersionParamsDateRange = "24wControl"
-)
-
-func (r HTTPSummaryTLSVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPSummaryTLSVersionParamsDateRange1d, HTTPSummaryTLSVersionParamsDateRange2d, HTTPSummaryTLSVersionParamsDateRange7d, HTTPSummaryTLSVersionParamsDateRange14d, HTTPSummaryTLSVersionParamsDateRange28d, HTTPSummaryTLSVersionParamsDateRange12w, HTTPSummaryTLSVersionParamsDateRange24w, HTTPSummaryTLSVersionParamsDateRange52w, HTTPSummaryTLSVersionParamsDateRange1dControl, HTTPSummaryTLSVersionParamsDateRange2dControl, HTTPSummaryTLSVersionParamsDateRange7dControl, HTTPSummaryTLSVersionParamsDateRange14dControl, HTTPSummaryTLSVersionParamsDateRange28dControl, HTTPSummaryTLSVersionParamsDateRange12wControl, HTTPSummaryTLSVersionParamsDateRange24wControl:
 		return true
 	}
 	return false

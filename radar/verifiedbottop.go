@@ -380,7 +380,7 @@ type VerifiedBotTopBotsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]VerifiedBotTopBotsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -402,34 +402,6 @@ func (r VerifiedBotTopBotsParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type VerifiedBotTopBotsParamsDateRange string
-
-const (
-	VerifiedBotTopBotsParamsDateRange1d         VerifiedBotTopBotsParamsDateRange = "1d"
-	VerifiedBotTopBotsParamsDateRange2d         VerifiedBotTopBotsParamsDateRange = "2d"
-	VerifiedBotTopBotsParamsDateRange7d         VerifiedBotTopBotsParamsDateRange = "7d"
-	VerifiedBotTopBotsParamsDateRange14d        VerifiedBotTopBotsParamsDateRange = "14d"
-	VerifiedBotTopBotsParamsDateRange28d        VerifiedBotTopBotsParamsDateRange = "28d"
-	VerifiedBotTopBotsParamsDateRange12w        VerifiedBotTopBotsParamsDateRange = "12w"
-	VerifiedBotTopBotsParamsDateRange24w        VerifiedBotTopBotsParamsDateRange = "24w"
-	VerifiedBotTopBotsParamsDateRange52w        VerifiedBotTopBotsParamsDateRange = "52w"
-	VerifiedBotTopBotsParamsDateRange1dControl  VerifiedBotTopBotsParamsDateRange = "1dControl"
-	VerifiedBotTopBotsParamsDateRange2dControl  VerifiedBotTopBotsParamsDateRange = "2dControl"
-	VerifiedBotTopBotsParamsDateRange7dControl  VerifiedBotTopBotsParamsDateRange = "7dControl"
-	VerifiedBotTopBotsParamsDateRange14dControl VerifiedBotTopBotsParamsDateRange = "14dControl"
-	VerifiedBotTopBotsParamsDateRange28dControl VerifiedBotTopBotsParamsDateRange = "28dControl"
-	VerifiedBotTopBotsParamsDateRange12wControl VerifiedBotTopBotsParamsDateRange = "12wControl"
-	VerifiedBotTopBotsParamsDateRange24wControl VerifiedBotTopBotsParamsDateRange = "24wControl"
-)
-
-func (r VerifiedBotTopBotsParamsDateRange) IsKnown() bool {
-	switch r {
-	case VerifiedBotTopBotsParamsDateRange1d, VerifiedBotTopBotsParamsDateRange2d, VerifiedBotTopBotsParamsDateRange7d, VerifiedBotTopBotsParamsDateRange14d, VerifiedBotTopBotsParamsDateRange28d, VerifiedBotTopBotsParamsDateRange12w, VerifiedBotTopBotsParamsDateRange24w, VerifiedBotTopBotsParamsDateRange52w, VerifiedBotTopBotsParamsDateRange1dControl, VerifiedBotTopBotsParamsDateRange2dControl, VerifiedBotTopBotsParamsDateRange7dControl, VerifiedBotTopBotsParamsDateRange14dControl, VerifiedBotTopBotsParamsDateRange28dControl, VerifiedBotTopBotsParamsDateRange12wControl, VerifiedBotTopBotsParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -485,7 +457,7 @@ type VerifiedBotTopCategoriesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]VerifiedBotTopCategoriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -507,34 +479,6 @@ func (r VerifiedBotTopCategoriesParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type VerifiedBotTopCategoriesParamsDateRange string
-
-const (
-	VerifiedBotTopCategoriesParamsDateRange1d         VerifiedBotTopCategoriesParamsDateRange = "1d"
-	VerifiedBotTopCategoriesParamsDateRange2d         VerifiedBotTopCategoriesParamsDateRange = "2d"
-	VerifiedBotTopCategoriesParamsDateRange7d         VerifiedBotTopCategoriesParamsDateRange = "7d"
-	VerifiedBotTopCategoriesParamsDateRange14d        VerifiedBotTopCategoriesParamsDateRange = "14d"
-	VerifiedBotTopCategoriesParamsDateRange28d        VerifiedBotTopCategoriesParamsDateRange = "28d"
-	VerifiedBotTopCategoriesParamsDateRange12w        VerifiedBotTopCategoriesParamsDateRange = "12w"
-	VerifiedBotTopCategoriesParamsDateRange24w        VerifiedBotTopCategoriesParamsDateRange = "24w"
-	VerifiedBotTopCategoriesParamsDateRange52w        VerifiedBotTopCategoriesParamsDateRange = "52w"
-	VerifiedBotTopCategoriesParamsDateRange1dControl  VerifiedBotTopCategoriesParamsDateRange = "1dControl"
-	VerifiedBotTopCategoriesParamsDateRange2dControl  VerifiedBotTopCategoriesParamsDateRange = "2dControl"
-	VerifiedBotTopCategoriesParamsDateRange7dControl  VerifiedBotTopCategoriesParamsDateRange = "7dControl"
-	VerifiedBotTopCategoriesParamsDateRange14dControl VerifiedBotTopCategoriesParamsDateRange = "14dControl"
-	VerifiedBotTopCategoriesParamsDateRange28dControl VerifiedBotTopCategoriesParamsDateRange = "28dControl"
-	VerifiedBotTopCategoriesParamsDateRange12wControl VerifiedBotTopCategoriesParamsDateRange = "12wControl"
-	VerifiedBotTopCategoriesParamsDateRange24wControl VerifiedBotTopCategoriesParamsDateRange = "24wControl"
-)
-
-func (r VerifiedBotTopCategoriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case VerifiedBotTopCategoriesParamsDateRange1d, VerifiedBotTopCategoriesParamsDateRange2d, VerifiedBotTopCategoriesParamsDateRange7d, VerifiedBotTopCategoriesParamsDateRange14d, VerifiedBotTopCategoriesParamsDateRange28d, VerifiedBotTopCategoriesParamsDateRange12w, VerifiedBotTopCategoriesParamsDateRange24w, VerifiedBotTopCategoriesParamsDateRange52w, VerifiedBotTopCategoriesParamsDateRange1dControl, VerifiedBotTopCategoriesParamsDateRange2dControl, VerifiedBotTopCategoriesParamsDateRange7dControl, VerifiedBotTopCategoriesParamsDateRange14dControl, VerifiedBotTopCategoriesParamsDateRange28dControl, VerifiedBotTopCategoriesParamsDateRange12wControl, VerifiedBotTopCategoriesParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

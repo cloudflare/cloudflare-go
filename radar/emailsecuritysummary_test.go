@@ -30,7 +30,7 @@ func TestEmailSecuritySummaryARCWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Email.Security.Summary.ARC(context.TODO(), radar.EmailSecuritySummaryARCParams{
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.EmailSecuritySummaryARCParamsDateRange{radar.EmailSecuritySummaryARCParamsDateRange1d, radar.EmailSecuritySummaryARCParamsDateRange2d, radar.EmailSecuritySummaryARCParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:       cloudflare.F([]radar.EmailSecuritySummaryARCParamsDKIM{radar.EmailSecuritySummaryARCParamsDKIMPass, radar.EmailSecuritySummaryARCParamsDKIMNone, radar.EmailSecuritySummaryARCParamsDKIMFail}),
 		DMARC:      cloudflare.F([]radar.EmailSecuritySummaryARCParamsDMARC{radar.EmailSecuritySummaryARCParamsDMARCPass, radar.EmailSecuritySummaryARCParamsDMARCNone, radar.EmailSecuritySummaryARCParamsDMARCFail}),
@@ -64,7 +64,7 @@ func TestEmailSecuritySummaryDKIMWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Email.Security.Summary.DKIM(context.TODO(), radar.EmailSecuritySummaryDKIMParams{
 		ARC:        cloudflare.F([]radar.EmailSecuritySummaryDKIMParamsARC{radar.EmailSecuritySummaryDKIMParamsARCPass, radar.EmailSecuritySummaryDKIMParamsARCNone, radar.EmailSecuritySummaryDKIMParamsARCFail}),
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.EmailSecuritySummaryDKIMParamsDateRange{radar.EmailSecuritySummaryDKIMParamsDateRange1d, radar.EmailSecuritySummaryDKIMParamsDateRange2d, radar.EmailSecuritySummaryDKIMParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DMARC:      cloudflare.F([]radar.EmailSecuritySummaryDKIMParamsDMARC{radar.EmailSecuritySummaryDKIMParamsDMARCPass, radar.EmailSecuritySummaryDKIMParamsDMARCNone, radar.EmailSecuritySummaryDKIMParamsDMARCFail}),
 		Format:     cloudflare.F(radar.EmailSecuritySummaryDKIMParamsFormatJson),
@@ -97,7 +97,7 @@ func TestEmailSecuritySummaryDMARCWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Email.Security.Summary.DMARC(context.TODO(), radar.EmailSecuritySummaryDMARCParams{
 		ARC:        cloudflare.F([]radar.EmailSecuritySummaryDMARCParamsARC{radar.EmailSecuritySummaryDMARCParamsARCPass, radar.EmailSecuritySummaryDMARCParamsARCNone, radar.EmailSecuritySummaryDMARCParamsARCFail}),
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.EmailSecuritySummaryDMARCParamsDateRange{radar.EmailSecuritySummaryDMARCParamsDateRange1d, radar.EmailSecuritySummaryDMARCParamsDateRange2d, radar.EmailSecuritySummaryDMARCParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:       cloudflare.F([]radar.EmailSecuritySummaryDMARCParamsDKIM{radar.EmailSecuritySummaryDMARCParamsDKIMPass, radar.EmailSecuritySummaryDMARCParamsDKIMNone, radar.EmailSecuritySummaryDMARCParamsDKIMFail}),
 		Format:     cloudflare.F(radar.EmailSecuritySummaryDMARCParamsFormatJson),
@@ -130,7 +130,7 @@ func TestEmailSecuritySummaryMaliciousWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Email.Security.Summary.Malicious(context.TODO(), radar.EmailSecuritySummaryMaliciousParams{
 		ARC:        cloudflare.F([]radar.EmailSecuritySummaryMaliciousParamsARC{radar.EmailSecuritySummaryMaliciousParamsARCPass, radar.EmailSecuritySummaryMaliciousParamsARCNone, radar.EmailSecuritySummaryMaliciousParamsARCFail}),
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.EmailSecuritySummaryMaliciousParamsDateRange{radar.EmailSecuritySummaryMaliciousParamsDateRange1d, radar.EmailSecuritySummaryMaliciousParamsDateRange2d, radar.EmailSecuritySummaryMaliciousParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:       cloudflare.F([]radar.EmailSecuritySummaryMaliciousParamsDKIM{radar.EmailSecuritySummaryMaliciousParamsDKIMPass, radar.EmailSecuritySummaryMaliciousParamsDKIMNone, radar.EmailSecuritySummaryMaliciousParamsDKIMFail}),
 		DMARC:      cloudflare.F([]radar.EmailSecuritySummaryMaliciousParamsDMARC{radar.EmailSecuritySummaryMaliciousParamsDMARCPass, radar.EmailSecuritySummaryMaliciousParamsDMARCNone, radar.EmailSecuritySummaryMaliciousParamsDMARCFail}),
@@ -164,7 +164,7 @@ func TestEmailSecuritySummarySpamWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Email.Security.Summary.Spam(context.TODO(), radar.EmailSecuritySummarySpamParams{
 		ARC:        cloudflare.F([]radar.EmailSecuritySummarySpamParamsARC{radar.EmailSecuritySummarySpamParamsARCPass, radar.EmailSecuritySummarySpamParamsARCNone, radar.EmailSecuritySummarySpamParamsARCFail}),
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.EmailSecuritySummarySpamParamsDateRange{radar.EmailSecuritySummarySpamParamsDateRange1d, radar.EmailSecuritySummarySpamParamsDateRange2d, radar.EmailSecuritySummarySpamParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:       cloudflare.F([]radar.EmailSecuritySummarySpamParamsDKIM{radar.EmailSecuritySummarySpamParamsDKIMPass, radar.EmailSecuritySummarySpamParamsDKIMNone, radar.EmailSecuritySummarySpamParamsDKIMFail}),
 		DMARC:      cloudflare.F([]radar.EmailSecuritySummarySpamParamsDMARC{radar.EmailSecuritySummarySpamParamsDMARCPass, radar.EmailSecuritySummarySpamParamsDMARCNone, radar.EmailSecuritySummarySpamParamsDMARCFail}),
@@ -198,7 +198,7 @@ func TestEmailSecuritySummarySPFWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Email.Security.Summary.SPF(context.TODO(), radar.EmailSecuritySummarySPFParams{
 		ARC:        cloudflare.F([]radar.EmailSecuritySummarySPFParamsARC{radar.EmailSecuritySummarySPFParamsARCPass, radar.EmailSecuritySummarySPFParamsARCNone, radar.EmailSecuritySummarySPFParamsARCFail}),
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.EmailSecuritySummarySPFParamsDateRange{radar.EmailSecuritySummarySPFParamsDateRange1d, radar.EmailSecuritySummarySPFParamsDateRange2d, radar.EmailSecuritySummarySPFParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:       cloudflare.F([]radar.EmailSecuritySummarySPFParamsDKIM{radar.EmailSecuritySummarySPFParamsDKIMPass, radar.EmailSecuritySummarySPFParamsDKIMNone, radar.EmailSecuritySummarySPFParamsDKIMFail}),
 		DMARC:      cloudflare.F([]radar.EmailSecuritySummarySPFParamsDMARC{radar.EmailSecuritySummarySPFParamsDMARCPass, radar.EmailSecuritySummarySPFParamsDMARCNone, radar.EmailSecuritySummarySPFParamsDMARCFail}),
@@ -231,7 +231,7 @@ func TestEmailSecuritySummarySpoofWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Email.Security.Summary.Spoof(context.TODO(), radar.EmailSecuritySummarySpoofParams{
 		ARC:        cloudflare.F([]radar.EmailSecuritySummarySpoofParamsARC{radar.EmailSecuritySummarySpoofParamsARCPass, radar.EmailSecuritySummarySpoofParamsARCNone, radar.EmailSecuritySummarySpoofParamsARCFail}),
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.EmailSecuritySummarySpoofParamsDateRange{radar.EmailSecuritySummarySpoofParamsDateRange1d, radar.EmailSecuritySummarySpoofParamsDateRange2d, radar.EmailSecuritySummarySpoofParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:       cloudflare.F([]radar.EmailSecuritySummarySpoofParamsDKIM{radar.EmailSecuritySummarySpoofParamsDKIMPass, radar.EmailSecuritySummarySpoofParamsDKIMNone, radar.EmailSecuritySummarySpoofParamsDKIMFail}),
 		DMARC:      cloudflare.F([]radar.EmailSecuritySummarySpoofParamsDMARC{radar.EmailSecuritySummarySpoofParamsDMARCPass, radar.EmailSecuritySummarySpoofParamsDMARCNone, radar.EmailSecuritySummarySpoofParamsDMARCFail}),
@@ -265,7 +265,7 @@ func TestEmailSecuritySummaryThreatCategoryWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Email.Security.Summary.ThreatCategory(context.TODO(), radar.EmailSecuritySummaryThreatCategoryParams{
 		ARC:        cloudflare.F([]radar.EmailSecuritySummaryThreatCategoryParamsARC{radar.EmailSecuritySummaryThreatCategoryParamsARCPass, radar.EmailSecuritySummaryThreatCategoryParamsARCNone, radar.EmailSecuritySummaryThreatCategoryParamsARCFail}),
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]radar.EmailSecuritySummaryThreatCategoryParamsDateRange{radar.EmailSecuritySummaryThreatCategoryParamsDateRange1d, radar.EmailSecuritySummaryThreatCategoryParamsDateRange2d, radar.EmailSecuritySummaryThreatCategoryParamsDateRange7d}),
+		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:       cloudflare.F([]radar.EmailSecuritySummaryThreatCategoryParamsDKIM{radar.EmailSecuritySummaryThreatCategoryParamsDKIMPass, radar.EmailSecuritySummaryThreatCategoryParamsDKIMNone, radar.EmailSecuritySummaryThreatCategoryParamsDKIMFail}),
 		DMARC:      cloudflare.F([]radar.EmailSecuritySummaryThreatCategoryParamsDMARC{radar.EmailSecuritySummaryThreatCategoryParamsDMARCPass, radar.EmailSecuritySummaryThreatCategoryParamsDMARCNone, radar.EmailSecuritySummaryThreatCategoryParamsDMARCFail}),
@@ -299,7 +299,7 @@ func TestEmailSecuritySummaryTLSVersionWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Email.Security.Summary.TLSVersion(context.TODO(), radar.EmailSecuritySummaryTLSVersionParams{
 		ARC:       cloudflare.F([]radar.EmailSecuritySummaryTLSVersionParamsARC{radar.EmailSecuritySummaryTLSVersionParamsARCPass, radar.EmailSecuritySummaryTLSVersionParamsARCNone, radar.EmailSecuritySummaryTLSVersionParamsARCFail}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.EmailSecuritySummaryTLSVersionParamsDateRange{radar.EmailSecuritySummaryTLSVersionParamsDateRange1d, radar.EmailSecuritySummaryTLSVersionParamsDateRange2d, radar.EmailSecuritySummaryTLSVersionParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:      cloudflare.F([]radar.EmailSecuritySummaryTLSVersionParamsDKIM{radar.EmailSecuritySummaryTLSVersionParamsDKIMPass, radar.EmailSecuritySummaryTLSVersionParamsDKIMNone, radar.EmailSecuritySummaryTLSVersionParamsDKIMFail}),
 		DMARC:     cloudflare.F([]radar.EmailSecuritySummaryTLSVersionParamsDMARC{radar.EmailSecuritySummaryTLSVersionParamsDMARCPass, radar.EmailSecuritySummaryTLSVersionParamsDMARCNone, radar.EmailSecuritySummaryTLSVersionParamsDMARCFail}),

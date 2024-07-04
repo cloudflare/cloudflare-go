@@ -223,7 +223,7 @@ type HTTPAseHTTPProtocolGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseHTTPProtocolGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -298,34 +298,6 @@ const (
 func (r HTTPAseHTTPProtocolGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPAseHTTPProtocolGetParamsBrowserFamilyChrome, HTTPAseHTTPProtocolGetParamsBrowserFamilyEdge, HTTPAseHTTPProtocolGetParamsBrowserFamilyFirefox, HTTPAseHTTPProtocolGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPAseHTTPProtocolGetParamsDateRange string
-
-const (
-	HTTPAseHTTPProtocolGetParamsDateRange1d         HTTPAseHTTPProtocolGetParamsDateRange = "1d"
-	HTTPAseHTTPProtocolGetParamsDateRange2d         HTTPAseHTTPProtocolGetParamsDateRange = "2d"
-	HTTPAseHTTPProtocolGetParamsDateRange7d         HTTPAseHTTPProtocolGetParamsDateRange = "7d"
-	HTTPAseHTTPProtocolGetParamsDateRange14d        HTTPAseHTTPProtocolGetParamsDateRange = "14d"
-	HTTPAseHTTPProtocolGetParamsDateRange28d        HTTPAseHTTPProtocolGetParamsDateRange = "28d"
-	HTTPAseHTTPProtocolGetParamsDateRange12w        HTTPAseHTTPProtocolGetParamsDateRange = "12w"
-	HTTPAseHTTPProtocolGetParamsDateRange24w        HTTPAseHTTPProtocolGetParamsDateRange = "24w"
-	HTTPAseHTTPProtocolGetParamsDateRange52w        HTTPAseHTTPProtocolGetParamsDateRange = "52w"
-	HTTPAseHTTPProtocolGetParamsDateRange1dControl  HTTPAseHTTPProtocolGetParamsDateRange = "1dControl"
-	HTTPAseHTTPProtocolGetParamsDateRange2dControl  HTTPAseHTTPProtocolGetParamsDateRange = "2dControl"
-	HTTPAseHTTPProtocolGetParamsDateRange7dControl  HTTPAseHTTPProtocolGetParamsDateRange = "7dControl"
-	HTTPAseHTTPProtocolGetParamsDateRange14dControl HTTPAseHTTPProtocolGetParamsDateRange = "14dControl"
-	HTTPAseHTTPProtocolGetParamsDateRange28dControl HTTPAseHTTPProtocolGetParamsDateRange = "28dControl"
-	HTTPAseHTTPProtocolGetParamsDateRange12wControl HTTPAseHTTPProtocolGetParamsDateRange = "12wControl"
-	HTTPAseHTTPProtocolGetParamsDateRange24wControl HTTPAseHTTPProtocolGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseHTTPProtocolGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseHTTPProtocolGetParamsDateRange1d, HTTPAseHTTPProtocolGetParamsDateRange2d, HTTPAseHTTPProtocolGetParamsDateRange7d, HTTPAseHTTPProtocolGetParamsDateRange14d, HTTPAseHTTPProtocolGetParamsDateRange28d, HTTPAseHTTPProtocolGetParamsDateRange12w, HTTPAseHTTPProtocolGetParamsDateRange24w, HTTPAseHTTPProtocolGetParamsDateRange52w, HTTPAseHTTPProtocolGetParamsDateRange1dControl, HTTPAseHTTPProtocolGetParamsDateRange2dControl, HTTPAseHTTPProtocolGetParamsDateRange7dControl, HTTPAseHTTPProtocolGetParamsDateRange14dControl, HTTPAseHTTPProtocolGetParamsDateRange28dControl, HTTPAseHTTPProtocolGetParamsDateRange12wControl, HTTPAseHTTPProtocolGetParamsDateRange24wControl:
 		return true
 	}
 	return false

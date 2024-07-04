@@ -186,7 +186,7 @@ type EmailSecurityTopTldSpoofGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTopTldSpoofGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -243,34 +243,6 @@ const (
 func (r EmailSecurityTopTldSpoofGetParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTopTldSpoofGetParamsARCPass, EmailSecurityTopTldSpoofGetParamsARCNone, EmailSecurityTopTldSpoofGetParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTopTldSpoofGetParamsDateRange string
-
-const (
-	EmailSecurityTopTldSpoofGetParamsDateRange1d         EmailSecurityTopTldSpoofGetParamsDateRange = "1d"
-	EmailSecurityTopTldSpoofGetParamsDateRange2d         EmailSecurityTopTldSpoofGetParamsDateRange = "2d"
-	EmailSecurityTopTldSpoofGetParamsDateRange7d         EmailSecurityTopTldSpoofGetParamsDateRange = "7d"
-	EmailSecurityTopTldSpoofGetParamsDateRange14d        EmailSecurityTopTldSpoofGetParamsDateRange = "14d"
-	EmailSecurityTopTldSpoofGetParamsDateRange28d        EmailSecurityTopTldSpoofGetParamsDateRange = "28d"
-	EmailSecurityTopTldSpoofGetParamsDateRange12w        EmailSecurityTopTldSpoofGetParamsDateRange = "12w"
-	EmailSecurityTopTldSpoofGetParamsDateRange24w        EmailSecurityTopTldSpoofGetParamsDateRange = "24w"
-	EmailSecurityTopTldSpoofGetParamsDateRange52w        EmailSecurityTopTldSpoofGetParamsDateRange = "52w"
-	EmailSecurityTopTldSpoofGetParamsDateRange1dControl  EmailSecurityTopTldSpoofGetParamsDateRange = "1dControl"
-	EmailSecurityTopTldSpoofGetParamsDateRange2dControl  EmailSecurityTopTldSpoofGetParamsDateRange = "2dControl"
-	EmailSecurityTopTldSpoofGetParamsDateRange7dControl  EmailSecurityTopTldSpoofGetParamsDateRange = "7dControl"
-	EmailSecurityTopTldSpoofGetParamsDateRange14dControl EmailSecurityTopTldSpoofGetParamsDateRange = "14dControl"
-	EmailSecurityTopTldSpoofGetParamsDateRange28dControl EmailSecurityTopTldSpoofGetParamsDateRange = "28dControl"
-	EmailSecurityTopTldSpoofGetParamsDateRange12wControl EmailSecurityTopTldSpoofGetParamsDateRange = "12wControl"
-	EmailSecurityTopTldSpoofGetParamsDateRange24wControl EmailSecurityTopTldSpoofGetParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTopTldSpoofGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTopTldSpoofGetParamsDateRange1d, EmailSecurityTopTldSpoofGetParamsDateRange2d, EmailSecurityTopTldSpoofGetParamsDateRange7d, EmailSecurityTopTldSpoofGetParamsDateRange14d, EmailSecurityTopTldSpoofGetParamsDateRange28d, EmailSecurityTopTldSpoofGetParamsDateRange12w, EmailSecurityTopTldSpoofGetParamsDateRange24w, EmailSecurityTopTldSpoofGetParamsDateRange52w, EmailSecurityTopTldSpoofGetParamsDateRange1dControl, EmailSecurityTopTldSpoofGetParamsDateRange2dControl, EmailSecurityTopTldSpoofGetParamsDateRange7dControl, EmailSecurityTopTldSpoofGetParamsDateRange14dControl, EmailSecurityTopTldSpoofGetParamsDateRange28dControl, EmailSecurityTopTldSpoofGetParamsDateRange12wControl, EmailSecurityTopTldSpoofGetParamsDateRange24wControl:
 		return true
 	}
 	return false
