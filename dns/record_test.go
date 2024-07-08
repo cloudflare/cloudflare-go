@@ -39,7 +39,7 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 			Comment: cloudflare.F("Domain verification record"),
 			ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-			TTL:     cloudflare.F(dns.TTLNumber(3600.000000)),
+			TTL:     cloudflare.F(dns.TTL(3600.000000)),
 		},
 	})
 	if err != nil {
@@ -78,7 +78,7 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 				Comment: cloudflare.F("Domain verification record"),
 				ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-				TTL:     cloudflare.F(dns.TTLNumber(3600.000000)),
+				TTL:     cloudflare.F(dns.TTL(3600.000000)),
 			},
 		},
 	)
@@ -199,7 +199,7 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 				Comment: cloudflare.F("Domain verification record"),
 				ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-				TTL:     cloudflare.F(dns.TTLNumber(3600.000000)),
+				TTL:     cloudflare.F(dns.TTL(3600.000000)),
 			},
 		},
 	)

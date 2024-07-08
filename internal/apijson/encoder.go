@@ -95,12 +95,19 @@ func marshalerEncoder(v reflect.Value) ([]byte, error) {
 	return v.Interface().(json.Marshaler).MarshalJSON()
 }
 
+func indirectMarshalerEncoder(v reflect.Value) ([]byte, error) {
+	return v.Addr().Interface().(json.Marshaler).MarshalJSON()
+}
+
 func (e *encoder) newTypeEncoder(t reflect.Type) encoderFunc {
 	if t.ConvertibleTo(reflect.TypeOf(time.Time{})) {
 		return e.newTimeTypeEncoder()
 	}
 	if !e.root && t.Implements(reflect.TypeOf((*json.Marshaler)(nil)).Elem()) {
 		return marshalerEncoder
+	}
+	if !e.root && reflect.PointerTo(t).Implements(reflect.TypeOf((*json.Marshaler)(nil)).Elem()) {
+		return indirectMarshalerEncoder
 	}
 	e.root = false
 	switch t.Kind() {
