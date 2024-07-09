@@ -235,8 +235,8 @@ func TestHyperdriveConfig_CreateCFAccess(t *testing.T) {
 					"host": "database.example.com",
 					"scheme": "postgres",
 					"user": "postgres",
-					"access_client_id": "a539ed18b8871f690c99d428f11fb785.access",
-					"access_client_secret": "732c2bbf71917e027c075212a72e07800e6989cc32223e4834999e12bda9703e"
+					"access_client_id": "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a.access",
+					"access_client_secret": "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a"
 				}
 			}
 		}`)
