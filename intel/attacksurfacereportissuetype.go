@@ -59,9 +59,9 @@ type AttackSurfaceReportIssueTypeGetParams struct {
 type AttackSurfaceReportIssueTypeGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []string              `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  []string                                               `json:"result"`
 	JSON    attackSurfaceReportIssueTypeGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -70,8 +70,8 @@ type AttackSurfaceReportIssueTypeGetResponseEnvelope struct {
 type attackSurfaceReportIssueTypeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
