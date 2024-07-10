@@ -174,11 +174,11 @@ func (r SeverityQueryParam) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueListResponse struct {
-	Errors   []shared.ResponseInfo                      `json:"errors,required"`
-	Messages []shared.ResponseInfo                      `json:"messages,required"`
-	Result   AttackSurfaceReportIssueListResponseResult `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueListResponseSuccess `json:"success,required"`
+	Result  AttackSurfaceReportIssueListResponseResult  `json:"result"`
 	JSON    attackSurfaceReportIssueListResponseJSON    `json:"-"`
 }
 
@@ -187,8 +187,8 @@ type AttackSurfaceReportIssueListResponse struct {
 type attackSurfaceReportIssueListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -199,6 +199,21 @@ func (r *AttackSurfaceReportIssueListResponse) UnmarshalJSON(data []byte) (err e
 
 func (r attackSurfaceReportIssueListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type AttackSurfaceReportIssueListResponseSuccess bool
+
+const (
+	AttackSurfaceReportIssueListResponseSuccessTrue AttackSurfaceReportIssueListResponseSuccess = true
+)
+
+func (r AttackSurfaceReportIssueListResponseSuccess) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type AttackSurfaceReportIssueListResponseResult struct {
@@ -283,21 +298,6 @@ const (
 func (r AttackSurfaceReportIssueListResponseResultIssuesSeverity) IsKnown() bool {
 	switch r {
 	case AttackSurfaceReportIssueListResponseResultIssuesSeverityLow, AttackSurfaceReportIssueListResponseResultIssuesSeverityModerate, AttackSurfaceReportIssueListResponseResultIssuesSeverityCritical:
-		return true
-	}
-	return false
-}
-
-// Whether the API call was successful
-type AttackSurfaceReportIssueListResponseSuccess bool
-
-const (
-	AttackSurfaceReportIssueListResponseSuccessTrue AttackSurfaceReportIssueListResponseSuccess = true
-)
-
-func (r AttackSurfaceReportIssueListResponseSuccess) IsKnown() bool {
-	switch r {
-	case AttackSurfaceReportIssueListResponseSuccessTrue:
 		return true
 	}
 	return false
@@ -444,11 +444,11 @@ func (r AttackSurfaceReportIssueClassParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueClassResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   []AttackSurfaceReportIssueClassResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueClassResponseEnvelopeSuccess `json:"success,required"`
+	Result  []AttackSurfaceReportIssueClassResponse              `json:"result"`
 	JSON    attackSurfaceReportIssueClassResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -457,8 +457,8 @@ type AttackSurfaceReportIssueClassResponseEnvelope struct {
 type attackSurfaceReportIssueClassResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -497,11 +497,11 @@ func (r AttackSurfaceReportIssueDismissParams) MarshalJSON() (data []byte, err e
 }
 
 type AttackSurfaceReportIssueDismissResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                        `json:"messages,required"`
-	Result   AttackSurfaceReportIssueDismissResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueDismissResponseEnvelopeSuccess `json:"success,required"`
+	Result  AttackSurfaceReportIssueDismissResponseUnion           `json:"result"`
 	JSON    attackSurfaceReportIssueDismissResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -510,8 +510,8 @@ type AttackSurfaceReportIssueDismissResponseEnvelope struct {
 type attackSurfaceReportIssueDismissResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -565,11 +565,11 @@ func (r AttackSurfaceReportIssueSeverityParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueSeverityResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                      `json:"errors,required"`
-	Messages []shared.ResponseInfo                      `json:"messages,required"`
-	Result   []AttackSurfaceReportIssueSeverityResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess `json:"success,required"`
+	Result  []AttackSurfaceReportIssueSeverityResponse              `json:"result"`
 	JSON    attackSurfaceReportIssueSeverityResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -578,8 +578,8 @@ type AttackSurfaceReportIssueSeverityResponseEnvelope struct {
 type attackSurfaceReportIssueSeverityResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -633,11 +633,11 @@ func (r AttackSurfaceReportIssueTypeParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueTypeResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   []AttackSurfaceReportIssueTypeResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueTypeResponseEnvelopeSuccess `json:"success,required"`
+	Result  []AttackSurfaceReportIssueTypeResponse              `json:"result"`
 	JSON    attackSurfaceReportIssueTypeResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -646,8 +646,8 @@ type AttackSurfaceReportIssueTypeResponseEnvelope struct {
 type attackSurfaceReportIssueTypeResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
