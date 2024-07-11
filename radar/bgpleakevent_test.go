@@ -35,7 +35,7 @@ func TestBGPLeakEventListWithOptionalParams(t *testing.T) {
 		EventID:         cloudflare.F(int64(0)),
 		Format:          cloudflare.F(radar.BGPLeakEventListParamsFormatJson),
 		InvolvedASN:     cloudflare.F(int64(0)),
-		InvolvedCountry: cloudflare.F("string"),
+		InvolvedCountry: cloudflare.F("involvedCountry"),
 		LeakASN:         cloudflare.F(int64(0)),
 		Page:            cloudflare.F(int64(0)),
 		PerPage:         cloudflare.F(int64(0)),

@@ -30,7 +30,7 @@ func TestJobNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Logpush.Jobs.New(context.TODO(), logpush.JobNewParams{
 		DestinationConf:          cloudflare.F("s3://mybucket/logs?region=us-west-2"),
-		AccountID:                cloudflare.F("string"),
+		AccountID:                cloudflare.F("account_id"),
 		Dataset:                  cloudflare.F("http_requests"),
 		Enabled:                  cloudflare.F(false),
 		Frequency:                cloudflare.F(logpush.JobNewParamsFrequencyHigh),
@@ -42,15 +42,15 @@ func TestJobNewWithOptionalParams(t *testing.T) {
 		Name:                     cloudflare.F("example.com"),
 		OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
 			Cve2021_4428:    cloudflare.F(true),
-			BatchPrefix:     cloudflare.F("string"),
-			BatchSuffix:     cloudflare.F("string"),
-			FieldDelimiter:  cloudflare.F("string"),
+			BatchPrefix:     cloudflare.F("batch_prefix"),
+			BatchSuffix:     cloudflare.F("batch_suffix"),
+			FieldDelimiter:  cloudflare.F("field_delimiter"),
 			FieldNames:      cloudflare.F([]string{"ClientIP", "EdgeStartTimestamp", "RayID"}),
 			OutputType:      cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),
-			RecordDelimiter: cloudflare.F("string"),
-			RecordPrefix:    cloudflare.F("string"),
-			RecordSuffix:    cloudflare.F("string"),
-			RecordTemplate:  cloudflare.F("string"),
+			RecordDelimiter: cloudflare.F("record_delimiter"),
+			RecordPrefix:    cloudflare.F("record_prefix"),
+			RecordSuffix:    cloudflare.F("record_suffix"),
+			RecordTemplate:  cloudflare.F("record_template"),
 			SampleRate:      cloudflare.F(0.000000),
 			TimestampFormat: cloudflare.F(logpush.OutputOptionsTimestampFormatUnixnano),
 		}),
@@ -83,7 +83,7 @@ func TestJobUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		int64(1),
 		logpush.JobUpdateParams{
-			AccountID:                cloudflare.F("string"),
+			AccountID:                cloudflare.F("account_id"),
 			DestinationConf:          cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 			Enabled:                  cloudflare.F(false),
 			Frequency:                cloudflare.F(logpush.JobUpdateParamsFrequencyHigh),
@@ -94,15 +94,15 @@ func TestJobUpdateWithOptionalParams(t *testing.T) {
 			MaxUploadRecords:         cloudflare.F(int64(1000)),
 			OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
 				Cve2021_4428:    cloudflare.F(true),
-				BatchPrefix:     cloudflare.F("string"),
-				BatchSuffix:     cloudflare.F("string"),
-				FieldDelimiter:  cloudflare.F("string"),
+				BatchPrefix:     cloudflare.F("batch_prefix"),
+				BatchSuffix:     cloudflare.F("batch_suffix"),
+				FieldDelimiter:  cloudflare.F("field_delimiter"),
 				FieldNames:      cloudflare.F([]string{"ClientIP", "EdgeStartTimestamp", "RayID"}),
 				OutputType:      cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),
-				RecordDelimiter: cloudflare.F("string"),
-				RecordPrefix:    cloudflare.F("string"),
-				RecordSuffix:    cloudflare.F("string"),
-				RecordTemplate:  cloudflare.F("string"),
+				RecordDelimiter: cloudflare.F("record_delimiter"),
+				RecordPrefix:    cloudflare.F("record_prefix"),
+				RecordSuffix:    cloudflare.F("record_suffix"),
+				RecordTemplate:  cloudflare.F("record_template"),
 				SampleRate:      cloudflare.F(0.000000),
 				TimestampFormat: cloudflare.F(logpush.OutputOptionsTimestampFormatUnixnano),
 			}),
@@ -133,7 +133,7 @@ func TestJobListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Logpush.Jobs.List(context.TODO(), logpush.JobListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -162,7 +162,7 @@ func TestJobDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		int64(1),
 		logpush.JobDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -192,7 +192,7 @@ func TestJobGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		int64(1),
 		logpush.JobGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

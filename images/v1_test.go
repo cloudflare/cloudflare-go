@@ -86,7 +86,7 @@ func TestV1Delete(t *testing.T) {
 	)
 	_, err := client.Images.V1.Delete(
 		context.TODO(),
-		"string",
+		"image_id",
 		images.V1DeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -115,7 +115,7 @@ func TestV1EditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Images.V1.Edit(
 		context.TODO(),
-		"string",
+		"image_id",
 		images.V1EditParams{
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Metadata:          cloudflare.F[any](map[string]interface{}{}),
@@ -146,7 +146,7 @@ func TestV1Get(t *testing.T) {
 	)
 	_, err := client.Images.V1.Get(
 		context.TODO(),
-		"string",
+		"image_id",
 		images.V1GetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

@@ -31,7 +31,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Organizations.New(context.TODO(), zero_trust.OrganizationNewParams{
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		Name:                     cloudflare.F("Widget Corps Internal Applications"),
-		AccountID:                cloudflare.F("string"),
+		AccountID:                cloudflare.F("account_id"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AutoRedirectToIdentity:   cloudflare.F(true),
 		IsUIReadOnly:             cloudflare.F(true),
@@ -71,7 +71,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.Update(context.TODO(), zero_trust.OrganizationUpdateParams{
-		AccountID:                cloudflare.F("string"),
+		AccountID:                cloudflare.F("account_id"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		AutoRedirectToIdentity:   cloudflare.F(true),
@@ -117,7 +117,7 @@ func TestOrganizationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.List(context.TODO(), zero_trust.OrganizationListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -144,7 +144,7 @@ func TestOrganizationRevokeUsersWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Organizations.RevokeUsers(context.TODO(), zero_trust.OrganizationRevokeUsersParams{
 		Email:     cloudflare.F("test@example.com"),
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -45,9 +45,9 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				AllowedOrigins:   cloudflare.F([]zero_trust.AllowedOriginsParam{"https://example.com"}),
 				MaxAge:           cloudflare.F(-1.000000),
 			}),
-			CustomDenyMessage:        cloudflare.F("string"),
-			CustomDenyURL:            cloudflare.F("string"),
-			CustomNonIdentityDenyURL: cloudflare.F("string"),
+			CustomDenyMessage:        cloudflare.F("custom_deny_message"),
+			CustomDenyURL:            cloudflare.F("custom_deny_url"),
+			CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			Domain:                   cloudflare.F("test.example.com/admin"),
 			EnableBindingCookie:      cloudflare.F(true),
@@ -75,13 +75,13 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			}}),
 			SCIMConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig{
 				Authentication: cloudflare.F[zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic{
-					Password: cloudflare.F("string"),
+					Password: cloudflare.F("password"),
 					Scheme:   cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
-					User:     cloudflare.F("string"),
+					User:     cloudflare.F("user"),
 				}),
 				DeactivateOnDelete: cloudflare.F(true),
 				Enabled:            cloudflare.F(true),
-				IdPUID:             cloudflare.F("string"),
+				IdPUID:             cloudflare.F("idp_uid"),
 				Mappings: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMapping{{
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
@@ -113,10 +113,10 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 					Schema:           cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 					TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 				}}),
-				RemoteURI: cloudflare.F("string"),
+				RemoteURI: cloudflare.F("remote_uri"),
 			}),
 		},
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -160,9 +160,9 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					AllowedOrigins:   cloudflare.F([]zero_trust.AllowedOriginsParam{"https://example.com"}),
 					MaxAge:           cloudflare.F(-1.000000),
 				}),
-				CustomDenyMessage:        cloudflare.F("string"),
-				CustomDenyURL:            cloudflare.F("string"),
-				CustomNonIdentityDenyURL: cloudflare.F("string"),
+				CustomDenyMessage:        cloudflare.F("custom_deny_message"),
+				CustomDenyURL:            cloudflare.F("custom_deny_url"),
+				CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 				CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 				Domain:                   cloudflare.F("test.example.com/admin"),
 				EnableBindingCookie:      cloudflare.F(true),
@@ -190,13 +190,13 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				SCIMConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig{
 					Authentication: cloudflare.F[zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic{
-						Password: cloudflare.F("string"),
+						Password: cloudflare.F("password"),
 						Scheme:   cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
-						User:     cloudflare.F("string"),
+						User:     cloudflare.F("user"),
 					}),
 					DeactivateOnDelete: cloudflare.F(true),
 					Enabled:            cloudflare.F(true),
-					IdPUID:             cloudflare.F("string"),
+					IdPUID:             cloudflare.F("idp_uid"),
 					Mappings: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMapping{{
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
@@ -228,10 +228,10 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 						Schema:           cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 						TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 					}}),
-					RemoteURI: cloudflare.F("string"),
+					RemoteURI: cloudflare.F("remote_uri"),
 				}),
 			},
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -258,7 +258,7 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.List(context.TODO(), zero_trust.AccessApplicationListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -287,7 +287,7 @@ func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -317,7 +317,7 @@ func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -347,7 +347,7 @@ func TestAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationRevokeTokensParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

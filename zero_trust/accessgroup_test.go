@@ -43,7 +43,7 @@ func TestAccessGroupNewWithOptionalParams(t *testing.T) {
 			}),
 		}}),
 		Name:      cloudflare.F("Allow devs"),
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 		Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
@@ -113,7 +113,7 @@ func TestAccessGroupUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}}),
 			Name:      cloudflare.F("Allow devs"),
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
@@ -167,7 +167,7 @@ func TestAccessGroupListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Groups.List(context.TODO(), zero_trust.AccessGroupListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -196,7 +196,7 @@ func TestAccessGroupDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessGroupDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -226,7 +226,7 @@ func TestAccessGroupGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessGroupGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

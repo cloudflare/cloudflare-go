@@ -31,7 +31,7 @@ func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Certificates.New(context.TODO(), zero_trust.AccessCertificateNewParams{
 		Certificate:         cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10\nDrUtmu/B\n-----END CERTIFICATE-----"),
 		Name:                cloudflare.F("Allow devs"),
-		AccountID:           cloudflare.F("string"),
+		AccountID:           cloudflare.F("account_id"),
 		AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com", "admin.example.com", "admin.example.com"}),
 	})
 	if err != nil {
@@ -62,7 +62,7 @@ func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessCertificateUpdateParams{
 			AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com", "admin.example.com", "admin.example.com"}),
-			AccountID:           cloudflare.F("string"),
+			AccountID:           cloudflare.F("account_id"),
 			Name:                cloudflare.F("Allow devs"),
 		},
 	)
@@ -90,7 +90,7 @@ func TestAccessCertificateListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.List(context.TODO(), zero_trust.AccessCertificateListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -119,7 +119,7 @@ func TestAccessCertificateDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessCertificateDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -149,7 +149,7 @@ func TestAccessCertificateGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessCertificateGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

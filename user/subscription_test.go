@@ -33,7 +33,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		user.SubscriptionUpdateParams{
 			Subscription: user.SubscriptionParam{
 				App: cloudflare.F(user.SubscriptionAppParam{
-					InstallID: cloudflare.F("string"),
+					InstallID: cloudflare.F("install_id"),
 				}),
 				ComponentValues: cloudflare.F([]user.SubscriptionComponentParam{{
 					Default: cloudflare.F(5.000000),
@@ -116,7 +116,7 @@ func TestSubscriptionEditWithOptionalParams(t *testing.T) {
 		user.SubscriptionEditParams{
 			Subscription: user.SubscriptionParam{
 				App: cloudflare.F(user.SubscriptionAppParam{
-					InstallID: cloudflare.F("string"),
+					InstallID: cloudflare.F("install_id"),
 				}),
 				ComponentValues: cloudflare.F([]user.SubscriptionComponentParam{{
 					Default: cloudflare.F(5.000000),

@@ -97,7 +97,7 @@ func TestAIGatewayListWithOptionalParams(t *testing.T) {
 	_, err := client.AIGateway.List(context.TODO(), ai_gateway.AIGatewayListParams{
 		AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 		ID:        cloudflare.F("my-gateway"),
-		OrderBy:   cloudflare.F("string"),
+		OrderBy:   cloudflare.F("order_by"),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(5)),
 	})
@@ -125,7 +125,7 @@ func TestAIGatewayDelete(t *testing.T) {
 	)
 	_, err := client.AIGateway.Delete(
 		context.TODO(),
-		"string",
+		"id",
 		ai_gateway.AIGatewayDeleteParams{
 			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 		},

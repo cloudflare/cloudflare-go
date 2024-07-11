@@ -32,7 +32,7 @@ func TestDestinationWebhookNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("Slack Webhook"),
 		URL:       cloudflare.F("https://hooks.slack.com/services/Ds3fdBFbV/456464Gdd"),
-		Secret:    cloudflare.F("string"),
+		Secret:    cloudflare.F("secret"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -64,7 +64,7 @@ func TestDestinationWebhookUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("Slack Webhook"),
 			URL:       cloudflare.F("https://hooks.slack.com/services/Ds3fdBFbV/456464Gdd"),
-			Secret:    cloudflare.F("string"),
+			Secret:    cloudflare.F("secret"),
 		},
 	)
 	if err != nil {

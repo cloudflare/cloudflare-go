@@ -84,7 +84,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			}),
 			Ref: cloudflare.F("my_ref"),
 		}}),
-		AccountID:   cloudflare.F("string"),
+		AccountID:   cloudflare.F("account_id"),
 		Description: cloudflare.F("My ruleset to execute managed rulesets"),
 	})
 	if err != nil {
@@ -166,7 +166,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}}),
-			AccountID:   cloudflare.F("string"),
+			AccountID:   cloudflare.F("account_id"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
 			Kind:        cloudflare.F(rulesets.KindRoot),
 			Name:        cloudflare.F("My ruleset"),
@@ -197,7 +197,7 @@ func TestRulesetListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.List(context.TODO(), rulesets.RulesetListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -226,7 +226,7 @@ func TestRulesetDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -256,7 +256,7 @@ func TestRulesetGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

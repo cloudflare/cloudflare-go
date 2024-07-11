@@ -35,7 +35,7 @@ func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
 			Annotations: cloudflare.F(workers.DeploymentParam{
 				WorkersMessage: cloudflare.F("Deploy bug fix."),
 			}),
-			Strategy: cloudflare.F("string"),
+			Strategy: cloudflare.F("strategy"),
 		},
 	)
 	if err != nil {
