@@ -12,8 +12,8 @@ import (
 const (
 	testHyperdriveConfigId   = "6b7efc370ea34ded8327fa20698dfe3a"
 	testHyperdriveConfigName = "example-hyperdrive"
-	testAccessClientID       = "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a.access"
-	testAccessClientSecret   = "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a"
+	testAccessClientID       = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.access"
+	testAccessClientSecret   = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 )
 
 func testHyperdriveHostAndPortConfig() HyperdriveConfig {
@@ -40,12 +40,11 @@ func testHyperdriveCFAccessConfig() HyperdriveConfig {
 		ID:   testHyperdriveConfigId,
 		Name: testHyperdriveConfigName,
 		Origin: HyperdriveConfigOrigin{
-			Database:           "postgres",
-			Host:               "database.example.com",
-			Scheme:             "postgres",
-			User:               "postgres",
-			AccessClientID:     testAccessClientID,
-			AccessClientSecret: testAccessClientSecret,
+			Database:       "postgres",
+			Host:           "database.example.com",
+			Scheme:         "postgres",
+			User:           "postgres",
+			AccessClientID: testAccessClientID,
 		},
 		Caching: HyperdriveConfigCaching{
 			Disabled:             BoolPtr(false),
@@ -188,7 +187,7 @@ func TestHyperdriveConfig_CreateHostAndPort(t *testing.T) {
 
 	result, err := client.CreateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), CreateHyperdriveConfigParams{
 		Name: "example-hyperdrive",
-		Origin: HyperdriveConfigOriginWithPassword{
+		Origin: HyperdriveConfigOriginWithSecrets{
 			HyperdriveConfigOrigin: HyperdriveConfigOrigin{
 				Database: "postgres",
 				Host:     "database.example.com",
@@ -235,8 +234,8 @@ func TestHyperdriveConfig_CreateCFAccess(t *testing.T) {
 					"host": "database.example.com",
 					"scheme": "postgres",
 					"user": "postgres",
-					"access_client_id": "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a.access",
-					"access_client_secret": "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a"
+					"access_client_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.access",
+					"access_client_secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 				}
 			}
 		}`)
@@ -254,16 +253,16 @@ func TestHyperdriveConfig_CreateCFAccess(t *testing.T) {
 
 	result, err := client.CreateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), CreateHyperdriveConfigParams{
 		Name: "example-hyperdrive",
-		Origin: HyperdriveConfigOriginWithPassword{
+		Origin: HyperdriveConfigOriginWithSecrets{
 			HyperdriveConfigOrigin: HyperdriveConfigOrigin{
-				Database:           "postgres",
-				Host:               "database.example.com",
-				Scheme:             "postgres",
-				User:               "postgres",
-				AccessClientID:     testAccessClientID,
-				AccessClientSecret: testAccessClientSecret,
+				Database:       "postgres",
+				Host:           "database.example.com",
+				Scheme:         "postgres",
+				User:           "postgres",
+				AccessClientID: testAccessClientID,
 			},
-			Password: "password",
+			Password:           "password",
+			AccessClientSecret: testAccessClientSecret,
 		},
 		Caching: HyperdriveConfigCaching{
 			Disabled:             BoolPtr(false),
@@ -350,7 +349,7 @@ func TestHyperdriveConfig_Update(t *testing.T) {
 	result, err := client.UpdateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), UpdateHyperdriveConfigParams{
 		HyperdriveID: "6b7efc370ea34ded8327fa20698dfe3a",
 		Name:         "example-hyperdrive",
-		Origin: HyperdriveConfigOriginWithPassword{
+		Origin: HyperdriveConfigOriginWithSecrets{
 			HyperdriveConfigOrigin: HyperdriveConfigOrigin{
 				Database: "postgres",
 				Host:     "database.example.com",
