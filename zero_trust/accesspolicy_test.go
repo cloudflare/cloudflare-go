@@ -47,7 +47,7 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 		ApprovalGroups: cloudflare.F([]zero_trust.ApprovalGroupParam{{
 			ApprovalsNeeded: cloudflare.F(1.000000),
 			EmailAddresses:  cloudflare.F([]string{"test1@cloudflare.com", "test2@cloudflare.com"}),
-			EmailListUUID:   cloudflare.F("string"),
+			EmailListUUID:   cloudflare.F("email_list_uuid"),
 		}, {
 			ApprovalsNeeded: cloudflare.F(3.000000),
 			EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
@@ -130,7 +130,7 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 			ApprovalGroups: cloudflare.F([]zero_trust.ApprovalGroupParam{{
 				ApprovalsNeeded: cloudflare.F(1.000000),
 				EmailAddresses:  cloudflare.F([]string{"test1@cloudflare.com", "test2@cloudflare.com"}),
-				EmailListUUID:   cloudflare.F("string"),
+				EmailListUUID:   cloudflare.F("email_list_uuid"),
 			}, {
 				ApprovalsNeeded: cloudflare.F(3.000000),
 				EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),

@@ -28,10 +28,10 @@ func TestRiskScoringIntegrationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.RiskScoring.Integrations.New(context.TODO(), zero_trust.RiskScoringIntegrationNewParams{
-		AccountID:       cloudflare.F("string"),
+		AccountID:       cloudflare.F("account_id"),
 		IntegrationType: cloudflare.F(zero_trust.RiskScoringIntegrationNewParamsIntegrationTypeOkta),
 		TenantURL:       cloudflare.F("https://example.com"),
-		ReferenceID:     cloudflare.F("string"),
+		ReferenceID:     cloudflare.F("reference_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -59,10 +59,10 @@ func TestRiskScoringIntegrationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.RiskScoringIntegrationUpdateParams{
-			AccountID:   cloudflare.F("string"),
+			AccountID:   cloudflare.F("account_id"),
 			Active:      cloudflare.F(true),
 			TenantURL:   cloudflare.F("https://example.com"),
-			ReferenceID: cloudflare.F("string"),
+			ReferenceID: cloudflare.F("reference_id"),
 		},
 	)
 	if err != nil {
@@ -89,7 +89,7 @@ func TestRiskScoringIntegrationList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.RiskScoring.Integrations.List(context.TODO(), zero_trust.RiskScoringIntegrationListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -117,7 +117,7 @@ func TestRiskScoringIntegrationDelete(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.RiskScoringIntegrationDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -146,7 +146,7 @@ func TestRiskScoringIntegrationGet(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.RiskScoringIntegrationGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

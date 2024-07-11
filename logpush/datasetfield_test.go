@@ -32,7 +32,7 @@ func TestDatasetFieldGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"http_requests",
 		logpush.DatasetFieldGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

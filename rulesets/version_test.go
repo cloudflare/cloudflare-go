@@ -32,7 +32,7 @@ func TestVersionListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.VersionListParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -63,7 +63,7 @@ func TestVersionDeleteWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		"1",
 		rulesets.VersionDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -94,7 +94,7 @@ func TestVersionGetWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		"1",
 		rulesets.VersionGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

@@ -29,7 +29,7 @@ func TestDomainGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Intel.Domains.Get(context.TODO(), intel.DomainGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Domain:    cloudflare.F("string"),
+		Domain:    cloudflare.F("domain"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

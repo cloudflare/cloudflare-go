@@ -39,7 +39,7 @@ func TestLogListWithOptionalParams(t *testing.T) {
 			OrderBy:   cloudflare.F(ai_gateway.LogListParamsOrderByCreatedAt),
 			Page:      cloudflare.F(int64(1)),
 			PerPage:   cloudflare.F(int64(5)),
-			Search:    cloudflare.F("string"),
+			Search:    cloudflare.F("search"),
 			StartDate: cloudflare.F(time.Now()),
 			Success:   cloudflare.F(true),
 		},

@@ -107,8 +107,8 @@ func TestRecordListWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Records.List(context.TODO(), dns.RecordListParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Comment: cloudflare.F(dns.RecordListParamsComment{
-			Present:    cloudflare.F("string"),
-			Absent:     cloudflare.F("string"),
+			Present:    cloudflare.F("present"),
+			Absent:     cloudflare.F("absent"),
 			Exact:      cloudflare.F("Hello, world"),
 			Contains:   cloudflare.F("ello, worl"),
 			Startswith: cloudflare.F("Hello, w"),

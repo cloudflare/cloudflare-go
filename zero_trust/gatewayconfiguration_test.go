@@ -39,12 +39,12 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				FailClosed:           cloudflare.F(false),
 				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("string"),
-					SupportURL: cloudflare.F("string"),
+					Msg:        cloudflare.F("msg"),
+					SupportURL: cloudflare.F("support_url"),
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
-				BackgroundColor: cloudflare.F("string"),
+				BackgroundColor: cloudflare.F("background_color"),
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
 				HeaderText:      cloudflare.F("--header--"),
@@ -116,12 +116,12 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				FailClosed:           cloudflare.F(false),
 				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("string"),
-					SupportURL: cloudflare.F("string"),
+					Msg:        cloudflare.F("msg"),
+					SupportURL: cloudflare.F("support_url"),
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
-				BackgroundColor: cloudflare.F("string"),
+				BackgroundColor: cloudflare.F("background_color"),
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
 				HeaderText:      cloudflare.F("--header--"),

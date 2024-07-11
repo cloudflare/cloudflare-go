@@ -58,12 +58,12 @@ func TestZoneListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.List(context.TODO(), zones.ZoneListParams{
 		Account: cloudflare.F(zones.ZoneListParamsAccount{
-			ID:   cloudflare.F("string"),
-			Name: cloudflare.F("string"),
+			ID:   cloudflare.F("id"),
+			Name: cloudflare.F("name"),
 		}),
 		Direction: cloudflare.F(zones.ZoneListParamsDirectionDesc),
 		Match:     cloudflare.F(zones.ZoneListParamsMatchAny),
-		Name:      cloudflare.F("string"),
+		Name:      cloudflare.F("name"),
 		Order:     cloudflare.F(zones.ZoneListParamsOrderStatus),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),

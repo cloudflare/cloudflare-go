@@ -46,12 +46,12 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
 				SeatDeprovision:        cloudflare.F(true),
-				Secret:                 cloudflare.F("string"),
+				Secret:                 cloudflare.F("secret"),
 				UserDeprovision:        cloudflare.F(true),
 			}),
 			Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 		},
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -97,12 +97,12 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 					Enabled:                cloudflare.F(true),
 					GroupMemberDeprovision: cloudflare.F(true),
 					SeatDeprovision:        cloudflare.F(true),
-					Secret:                 cloudflare.F("string"),
+					Secret:                 cloudflare.F("secret"),
 					UserDeprovision:        cloudflare.F(true),
 				}),
 				Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 			},
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -129,7 +129,7 @@ func TestIdentityProviderListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.List(context.TODO(), zero_trust.IdentityProviderListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -158,7 +158,7 @@ func TestIdentityProviderDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.IdentityProviderDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -188,7 +188,7 @@ func TestIdentityProviderGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.IdentityProviderGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

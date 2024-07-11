@@ -29,8 +29,8 @@ func TestIPGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Intel.IPs.Get(context.TODO(), intel.IPGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		IPV4:      cloudflare.F("string"),
-		IPV6:      cloudflare.F("string"),
+		IPV4:      cloudflare.F("ipv4"),
+		IPV6:      cloudflare.F("ipv6"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

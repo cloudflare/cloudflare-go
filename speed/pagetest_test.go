@@ -122,7 +122,7 @@ func TestPageTestGet(t *testing.T) {
 	_, err := client.Speed.Pages.Tests.Get(
 		context.TODO(),
 		"example.com",
-		"string",
+		"test_id",
 		speed.PageTestGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

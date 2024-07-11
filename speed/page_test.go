@@ -63,7 +63,7 @@ func TestPageTrendWithOptionalParams(t *testing.T) {
 			Metrics:    cloudflare.F("performanceScore,ttfb,fcp,si,lcp,tti,tbt,cls"),
 			Region:     cloudflare.F(speed.PageTrendParamsRegionUsCentral1),
 			Start:      cloudflare.F(time.Now()),
-			Tz:         cloudflare.F("string"),
+			Tz:         cloudflare.F("tz"),
 			End:        cloudflare.F(time.Now()),
 		},
 	)

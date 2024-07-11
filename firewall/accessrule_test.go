@@ -34,7 +34,7 @@ func TestAccessRuleNewWithOptionalParams(t *testing.T) {
 			Value:  cloudflare.F("198.51.100.4"),
 		}),
 		Mode:      cloudflare.F(firewall.AccessRuleNewParamsModeChallenge),
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 		Notes:     cloudflare.F("This rule is enabled because of an event that occurred on date X."),
 	})
 	if err != nil {
@@ -61,7 +61,7 @@ func TestAccessRuleListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.AccessRules.List(context.TODO(), firewall.AccessRuleListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 		Direction: cloudflare.F(firewall.AccessRuleListParamsDirectionDesc),
 		EgsPagination: cloudflare.F(firewall.AccessRuleListParamsEgsPagination{
 			Json: cloudflare.F(firewall.AccessRuleListParamsEgsPaginationJson{
@@ -107,7 +107,7 @@ func TestAccessRuleDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		firewall.AccessRuleDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -142,7 +142,7 @@ func TestAccessRuleEditWithOptionalParams(t *testing.T) {
 				Value:  cloudflare.F("198.51.100.4"),
 			}),
 			Mode:      cloudflare.F(firewall.AccessRuleEditParamsModeChallenge),
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 			Notes:     cloudflare.F("This rule is enabled because of an event that occurred on date X."),
 		},
 	)
@@ -173,7 +173,7 @@ func TestAccessRuleGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		firewall.AccessRuleGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

@@ -35,7 +35,7 @@ func TestDEXTracerouteTestGetWithOptionalParams(t *testing.T) {
 			From:      cloudflare.F("1689520412000"),
 			Interval:  cloudflare.F(zero_trust.DEXTracerouteTestGetParamsIntervalMinute),
 			To:        cloudflare.F("1689606812000"),
-			Colo:      cloudflare.F("string"),
+			Colo:      cloudflare.F("colo"),
 			DeviceID:  cloudflare.F([]string{"string", "string", "string"}),
 		},
 	)
@@ -66,7 +66,7 @@ func TestDEXTracerouteTestNetworkPath(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DEXTracerouteTestNetworkPathParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			DeviceID:  cloudflare.F("string"),
+			DeviceID:  cloudflare.F("deviceId"),
 			From:      cloudflare.F("1689520412000"),
 			Interval:  cloudflare.F(zero_trust.DEXTracerouteTestNetworkPathParamsIntervalMinute),
 			To:        cloudflare.F("1689606812000"),
@@ -101,7 +101,7 @@ func TestDEXTracerouteTestPercentilesWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			From:      cloudflare.F("2023-09-20T17:00:00Z"),
 			To:        cloudflare.F("2023-09-20T17:00:00Z"),
-			Colo:      cloudflare.F("string"),
+			Colo:      cloudflare.F("colo"),
 			DeviceID:  cloudflare.F([]string{"string", "string", "string"}),
 		},
 	)

@@ -33,7 +33,7 @@ func TestScanNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.URLScanner.Scans.New(
 		context.TODO(),
-		"string",
+		"accountId",
 		url_scanner.ScanNewParams{
 			URL: cloudflare.F("https://www.example.com"),
 			CustomHeaders: cloudflare.F(map[string]string{
@@ -67,7 +67,7 @@ func TestScanGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.URLScanner.Scans.Get(
 		context.TODO(),
-		"string",
+		"accountId",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		url_scanner.ScanGetParams{
 			Full: cloudflare.F(true),
@@ -97,7 +97,7 @@ func TestScanHar(t *testing.T) {
 	)
 	_, err := client.URLScanner.Scans.Har(
 		context.TODO(),
-		"string",
+		"accountId",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 	)
 	if err != nil {
@@ -123,7 +123,7 @@ func TestScanScreenshotWithOptionalParams(t *testing.T) {
 	)
 	resp, err := client.URLScanner.Scans.Screenshot(
 		context.TODO(),
-		"string",
+		"accountId",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		url_scanner.ScanScreenshotParams{
 			Resolution: cloudflare.F(url_scanner.ScanScreenshotParamsResolutionDesktop),

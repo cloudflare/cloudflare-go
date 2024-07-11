@@ -55,7 +55,7 @@ func TestDatabaseListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.D1.Database.List(context.TODO(), d1.DatabaseListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:      cloudflare.F("string"),
+		Name:      cloudflare.F("name"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(10.000000),
 	})

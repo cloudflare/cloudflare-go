@@ -30,7 +30,7 @@ func TestOwnershipNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Logpush.Ownership.New(context.TODO(), logpush.OwnershipNewParams{
 		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
-		AccountID:       cloudflare.F("string"),
+		AccountID:       cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -58,7 +58,7 @@ func TestOwnershipValidateWithOptionalParams(t *testing.T) {
 	_, err := client.Logpush.Ownership.Validate(context.TODO(), logpush.OwnershipValidateParams{
 		DestinationConf:    cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 		OwnershipChallenge: cloudflare.F("00000000000000000000"),
-		AccountID:          cloudflare.F("string"),
+		AccountID:          cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
