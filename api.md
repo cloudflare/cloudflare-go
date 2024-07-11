@@ -5757,16 +5757,6 @@ Methods:
 
 ## ConnectionTampering
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#ConnectionTamperingSummaryResponse">ConnectionTamperingSummaryResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#ConnectionTamperingTimeseriesGroupsResponse">ConnectionTamperingTimeseriesGroupsResponse</a>
-
-Methods:
-
-- <code title="get /radar/connection_tampering/summary">client.Radar.ConnectionTampering.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#ConnectionTamperingService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#ConnectionTamperingSummaryParams">ConnectionTamperingSummaryParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#ConnectionTamperingSummaryResponse">ConnectionTamperingSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /radar/connection_tampering/timeseries_groups">client.Radar.ConnectionTampering.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#ConnectionTamperingService.TimeseriesGroups">TimeseriesGroups</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#ConnectionTamperingTimeseriesGroupsParams">ConnectionTamperingTimeseriesGroupsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#ConnectionTamperingTimeseriesGroupsResponse">ConnectionTamperingTimeseriesGroupsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Email
 
 Response Types:
