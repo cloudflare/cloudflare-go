@@ -114,8 +114,8 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			}),
 			NotificationSettings: cloudflare.F(zero_trust.RuleSettingNotificationSettingsParam{
 				Enabled:    cloudflare.F(true),
-				Msg:        cloudflare.F("string"),
-				SupportURL: cloudflare.F("string"),
+				Msg:        cloudflare.F("msg"),
+				SupportURL: cloudflare.F("support_url"),
 			}),
 			OverrideHost: cloudflare.F("example.com"),
 			OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
@@ -251,8 +251,8 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				}),
 				NotificationSettings: cloudflare.F(zero_trust.RuleSettingNotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("string"),
-					SupportURL: cloudflare.F("string"),
+					Msg:        cloudflare.F("msg"),
+					SupportURL: cloudflare.F("support_url"),
 				}),
 				OverrideHost: cloudflare.F("example.com"),
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),

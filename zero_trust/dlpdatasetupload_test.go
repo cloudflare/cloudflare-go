@@ -31,7 +31,7 @@ func TestDLPDatasetUploadNew(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPDatasetUploadNewParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -62,8 +62,8 @@ func TestDLPDatasetUploadEdit(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		int64(0),
 		zero_trust.DLPDatasetUploadEditParams{
-			AccountID: cloudflare.F("string"),
-			Body:      "string",
+			AccountID: cloudflare.F("account_id"),
+			Body:      "body",
 		},
 	)
 	if err != nil {

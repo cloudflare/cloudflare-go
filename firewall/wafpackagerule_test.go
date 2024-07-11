@@ -40,7 +40,7 @@ func TestWAFPackageRuleListWithOptionalParams(t *testing.T) {
 			Order:       cloudflare.F(firewall.WAFPackageRuleListParamsOrderPriority),
 			Page:        cloudflare.F(1.000000),
 			PerPage:     cloudflare.F(5.000000),
-			Priority:    cloudflare.F("string"),
+			Priority:    cloudflare.F("priority"),
 		},
 	)
 	if err != nil {

@@ -28,7 +28,7 @@ func TestIPListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.IPs.List(context.TODO(), ips.IPListParams{
-		Networks: cloudflare.F("string"),
+		Networks: cloudflare.F("networks"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

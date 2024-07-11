@@ -47,11 +47,11 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 				}),
 			}}),
 			Name:      cloudflare.F("Allow devs"),
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 			ApprovalGroups: cloudflare.F([]zero_trust.ApprovalGroupParam{{
 				ApprovalsNeeded: cloudflare.F(1.000000),
 				EmailAddresses:  cloudflare.F([]string{"test1@cloudflare.com", "test2@cloudflare.com"}),
-				EmailListUUID:   cloudflare.F("string"),
+				EmailListUUID:   cloudflare.F("email_list_uuid"),
 			}, {
 				ApprovalsNeeded: cloudflare.F(3.000000),
 				EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
@@ -134,11 +134,11 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}}),
 			Name:      cloudflare.F("Allow devs"),
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 			ApprovalGroups: cloudflare.F([]zero_trust.ApprovalGroupParam{{
 				ApprovalsNeeded: cloudflare.F(1.000000),
 				EmailAddresses:  cloudflare.F([]string{"test1@cloudflare.com", "test2@cloudflare.com"}),
-				EmailListUUID:   cloudflare.F("string"),
+				EmailListUUID:   cloudflare.F("email_list_uuid"),
 			}, {
 				ApprovalsNeeded: cloudflare.F(3.000000),
 				EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
@@ -205,7 +205,7 @@ func TestAccessApplicationPolicyListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessApplicationPolicyListParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -236,7 +236,7 @@ func TestAccessApplicationPolicyDeleteWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessApplicationPolicyDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -267,7 +267,7 @@ func TestAccessApplicationPolicyGetWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessApplicationPolicyGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

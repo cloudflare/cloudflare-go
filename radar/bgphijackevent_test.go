@@ -36,7 +36,7 @@ func TestBGPHijackEventListWithOptionalParams(t *testing.T) {
 		Format:          cloudflare.F(radar.BGPHijackEventListParamsFormatJson),
 		HijackerASN:     cloudflare.F(int64(0)),
 		InvolvedASN:     cloudflare.F(int64(0)),
-		InvolvedCountry: cloudflare.F("string"),
+		InvolvedCountry: cloudflare.F("involvedCountry"),
 		MaxConfidence:   cloudflare.F(int64(0)),
 		MinConfidence:   cloudflare.F(int64(0)),
 		Page:            cloudflare.F(int64(0)),

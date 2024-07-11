@@ -29,7 +29,7 @@ func TestV2ListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Images.V2.List(context.TODO(), images.V2ListParams{
 		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ContinuationToken: cloudflare.F("string"),
+		ContinuationToken: cloudflare.F("continuation_token"),
 		PerPage:           cloudflare.F(10.000000),
 		SortOrder:         cloudflare.F(images.V2ListParamsSortOrderAsc),
 	})

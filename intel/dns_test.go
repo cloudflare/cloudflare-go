@@ -30,7 +30,7 @@ func TestDNSListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Intel.DNS.List(context.TODO(), intel.DNSListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		IPV4:      cloudflare.F("string"),
+		IPV4:      cloudflare.F("ipv4"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(20.000000),
 		StartEndParams: cloudflare.F(intel.DNSListParamsStartEndParams{

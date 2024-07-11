@@ -29,7 +29,7 @@ func TestSettingEditWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Settings.Edit(context.TODO(), dns.SettingEditParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 		ZoneDefaults: cloudflare.F(dns.DNSSettingParam{
 			FoundationDNS: cloudflare.F(false),
 			MultiProvider: cloudflare.F(false),
@@ -74,7 +74,7 @@ func TestSettingGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Settings.Get(context.TODO(), dns.SettingGetParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

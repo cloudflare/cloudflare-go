@@ -103,7 +103,7 @@ func TestAttackSurfaceReportIssueDismissWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Intel.AttackSurfaceReport.Issues.Dismiss(
 		context.TODO(),
-		"string",
+		"issue_id",
 		intel.AttackSurfaceReportIssueDismissParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Dismiss:   cloudflare.F(true),

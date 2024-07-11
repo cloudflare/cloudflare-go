@@ -35,7 +35,7 @@ func TestMiscategorizationNewWithOptionalParams(t *testing.T) {
 		IP:              cloudflare.F[any](map[string]interface{}{}),
 		SecurityAdds:    cloudflare.F([]float64{117.000000, 131.000000}),
 		SecurityRemoves: cloudflare.F([]float64{83.000000}),
-		URL:             cloudflare.F("string"),
+		URL:             cloudflare.F("url"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

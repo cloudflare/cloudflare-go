@@ -57,27 +57,27 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 						NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
 						RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
-							From: cloudflare.F("string"),
-							To:   cloudflare.F("string"),
+							From: cloudflare.F("from"),
+							To:   cloudflare.F("to"),
 						}, {
-							From: cloudflare.F("string"),
-							To:   cloudflare.F("string"),
+							From: cloudflare.F("from"),
+							To:   cloudflare.F("to"),
 						}, {
-							From: cloudflare.F("string"),
-							To:   cloudflare.F("string"),
+							From: cloudflare.F("from"),
+							To:   cloudflare.F("to"),
 						}}),
 						TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
-							From:       cloudflare.F("string"),
-							FromScript: cloudflare.F("string"),
-							To:         cloudflare.F("string"),
+							From:       cloudflare.F("from"),
+							FromScript: cloudflare.F("from_script"),
+							To:         cloudflare.F("to"),
 						}, {
-							From:       cloudflare.F("string"),
-							FromScript: cloudflare.F("string"),
-							To:         cloudflare.F("string"),
+							From:       cloudflare.F("from"),
+							FromScript: cloudflare.F("from_script"),
+							To:         cloudflare.F("to"),
 						}, {
-							From:       cloudflare.F("string"),
-							FromScript: cloudflare.F("string"),
-							To:         cloudflare.F("string"),
+							From:       cloudflare.F("from"),
+							FromScript: cloudflare.F("from_script"),
+							To:         cloudflare.F("to"),
 						}}),
 					}),
 					Placement: cloudflare.F(workers.PlacementConfigurationParam{

@@ -28,9 +28,9 @@ func TestDLPDatasetNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Datasets.New(context.TODO(), zero_trust.DLPDatasetNewParams{
-		AccountID:   cloudflare.F("string"),
-		Name:        cloudflare.F("string"),
-		Description: cloudflare.F("string"),
+		AccountID:   cloudflare.F("account_id"),
+		Name:        cloudflare.F("name"),
+		Description: cloudflare.F("description"),
 		Secret:      cloudflare.F(true),
 	})
 	if err != nil {
@@ -59,9 +59,9 @@ func TestDLPDatasetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPDatasetUpdateParams{
-			AccountID:   cloudflare.F("string"),
-			Description: cloudflare.F("string"),
-			Name:        cloudflare.F("string"),
+			AccountID:   cloudflare.F("account_id"),
+			Description: cloudflare.F("description"),
+			Name:        cloudflare.F("name"),
 		},
 	)
 	if err != nil {
@@ -87,7 +87,7 @@ func TestDLPDatasetList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Datasets.List(context.TODO(), zero_trust.DLPDatasetListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -115,7 +115,7 @@ func TestDLPDatasetDelete(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPDatasetDeleteParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -144,7 +144,7 @@ func TestDLPDatasetGet(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPDatasetGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

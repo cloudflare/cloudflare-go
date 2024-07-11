@@ -34,7 +34,7 @@ func TestSiteWANNewWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Physport:  cloudflare.F(int64(1)),
 			VlanTag:   cloudflare.F(int64(0)),
-			Name:      cloudflare.F("string"),
+			Name:      cloudflare.F("name"),
 			Priority:  cloudflare.F(int64(0)),
 			StaticAddressing: cloudflare.F(magic_transit.WANStaticAddressingParam{
 				Address:          cloudflare.F("192.0.2.0/24"),
@@ -71,7 +71,7 @@ func TestSiteWANUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteWANUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("string"),
+			Name:      cloudflare.F("name"),
 			Physport:  cloudflare.F(int64(1)),
 			Priority:  cloudflare.F(int64(0)),
 			StaticAddressing: cloudflare.F(magic_transit.WANStaticAddressingParam{
@@ -169,7 +169,7 @@ func TestSiteWANEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteWANEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("string"),
+			Name:      cloudflare.F("name"),
 			Physport:  cloudflare.F(int64(1)),
 			Priority:  cloudflare.F(int64(0)),
 			StaticAddressing: cloudflare.F(magic_transit.WANStaticAddressingParam{
