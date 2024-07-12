@@ -23,6 +23,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/certificate_authorities"
 	"github.com/cloudflare/cloudflare-go/v2/challenges"
 	"github.com/cloudflare/cloudflare-go/v2/client_certificates"
+	"github.com/cloudflare/cloudflare-go/v2/cloud_connector"
 	"github.com/cloudflare/cloudflare-go/v2/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v2/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/custom_hostnames"
@@ -184,6 +185,7 @@ type Client struct {
 	EventNotifications          *event_notifications.EventNotificationService
 	AIGateway                   *ai_gateway.AIGatewayService
 	IAM                         *iam.IAMService
+	CloudConnector              *cloud_connector.CloudConnectorService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -293,6 +295,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.EventNotifications = event_notifications.NewEventNotificationService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
 	r.IAM = iam.NewIAMService(opts...)
+	r.CloudConnector = cloud_connector.NewCloudConnectorService(opts...)
 
 	return
 }
