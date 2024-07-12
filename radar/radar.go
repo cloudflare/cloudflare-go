@@ -30,6 +30,7 @@ type RadarService struct {
 	Quality             *QualityService
 	Ranking             *RankingService
 	TrafficAnomalies    *TrafficAnomalyService
+	TCPResetsTimeouts   *TCPResetsTimeoutService
 }
 
 // NewRadarService generates a new service that applies the given options to each
@@ -54,5 +55,6 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r.Quality = NewQualityService(opts...)
 	r.Ranking = NewRankingService(opts...)
 	r.TrafficAnomalies = NewTrafficAnomalyService(opts...)
+	r.TCPResetsTimeouts = NewTCPResetsTimeoutService(opts...)
 	return
 }
