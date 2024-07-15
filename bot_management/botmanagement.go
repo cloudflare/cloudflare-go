@@ -465,6 +465,7 @@ func (r botManagementUpdateResponseJSON) RawJSON() string {
 }
 
 func (r *BotManagementUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = BotManagementUpdateResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -619,6 +620,7 @@ func (r botManagementGetResponseJSON) RawJSON() string {
 }
 
 func (r *BotManagementGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = BotManagementGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

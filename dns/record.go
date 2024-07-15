@@ -2083,6 +2083,7 @@ func (r recordJSON) RawJSON() string {
 }
 
 func (r *Record) UnmarshalJSON(data []byte) (err error) {
+	*r = Record{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

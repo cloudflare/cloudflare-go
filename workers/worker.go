@@ -99,6 +99,7 @@ func (r bindingJSON) RawJSON() string {
 }
 
 func (r *Binding) UnmarshalJSON(data []byte) (err error) {
+	*r = Binding{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

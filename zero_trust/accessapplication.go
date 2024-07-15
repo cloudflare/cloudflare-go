@@ -780,6 +780,7 @@ func (r accessApplicationNewResponseJSON) RawJSON() string {
 }
 
 func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1141,6 +1142,7 @@ func (r accessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticatio
 }
 
 func (r *AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1676,6 +1678,7 @@ func (r accessApplicationNewResponseSaaSApplicationSaaSAppJSON) RawJSON() string
 }
 
 func (r *AccessApplicationNewResponseSaaSApplicationSaaSApp) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseSaaSApplicationSaaSApp{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -2072,6 +2075,7 @@ func (r accessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationJSON)
 }
 
 func (r *AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -2652,6 +2656,7 @@ func (r accessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 }
 
 func (r *AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -3232,6 +3237,7 @@ func (r accessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticatio
 }
 
 func (r *AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -3750,6 +3756,7 @@ func (r accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticati
 }
 
 func (r *AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -4269,6 +4276,7 @@ func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 }
 
 func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -4788,6 +4796,7 @@ func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMCo
 }
 
 func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -5232,6 +5241,7 @@ func (r accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationJ
 }
 
 func (r *AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -5661,6 +5671,7 @@ func (r accessApplicationUpdateResponseJSON) RawJSON() string {
 }
 
 func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -6022,6 +6033,7 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentica
 }
 
 func (r *AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -6557,6 +6569,7 @@ func (r accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON) RawJSON() str
 }
 
 func (r *AccessApplicationUpdateResponseSaaSApplicationSaaSApp) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseSaaSApplicationSaaSApp{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -6954,6 +6967,7 @@ func (r accessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationJS
 }
 
 func (r *AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -7534,6 +7548,7 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentica
 }
 
 func (r *AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -8114,6 +8129,7 @@ func (r accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentica
 }
 
 func (r *AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -8632,6 +8648,7 @@ func (r accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentic
 }
 
 func (r *AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -9151,6 +9168,7 @@ func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCI
 }
 
 func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -9670,6 +9688,7 @@ func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCI
 }
 
 func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -10114,6 +10133,7 @@ func (r accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticati
 }
 
 func (r *AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -10543,6 +10563,7 @@ func (r accessApplicationListResponseJSON) RawJSON() string {
 }
 
 func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -10904,6 +10925,7 @@ func (r accessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticati
 }
 
 func (r *AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -11439,6 +11461,7 @@ func (r accessApplicationListResponseSaaSApplicationSaaSAppJSON) RawJSON() strin
 }
 
 func (r *AccessApplicationListResponseSaaSApplicationSaaSApp) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseSaaSApplicationSaaSApp{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -11835,6 +11858,7 @@ func (r accessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationJSON
 }
 
 func (r *AccessApplicationListResponseSaaSApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseSaaSApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -12415,6 +12439,7 @@ func (r accessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticati
 }
 
 func (r *AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -12995,6 +13020,7 @@ func (r accessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticati
 }
 
 func (r *AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -13513,6 +13539,7 @@ func (r accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticat
 }
 
 func (r *AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -14032,6 +14059,7 @@ func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMC
 }
 
 func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -14551,6 +14579,7 @@ func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMC
 }
 
 func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -14995,6 +15024,7 @@ func (r accessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication
 }
 
 func (r *AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -15446,6 +15476,7 @@ func (r accessApplicationGetResponseJSON) RawJSON() string {
 }
 
 func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -15807,6 +15838,7 @@ func (r accessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticatio
 }
 
 func (r *AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -16342,6 +16374,7 @@ func (r accessApplicationGetResponseSaaSApplicationSaaSAppJSON) RawJSON() string
 }
 
 func (r *AccessApplicationGetResponseSaaSApplicationSaaSApp) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseSaaSApplicationSaaSApp{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -16738,6 +16771,7 @@ func (r accessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationJSON)
 }
 
 func (r *AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -17318,6 +17352,7 @@ func (r accessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 }
 
 func (r *AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -17898,6 +17933,7 @@ func (r accessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticatio
 }
 
 func (r *AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -18416,6 +18452,7 @@ func (r accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticati
 }
 
 func (r *AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -18935,6 +18972,7 @@ func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 }
 
 func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -19454,6 +19492,7 @@ func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMCo
 }
 
 func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -19898,6 +19937,7 @@ func (r accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationJ
 }
 
 func (r *AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

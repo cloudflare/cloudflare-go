@@ -231,6 +231,7 @@ func (r apiShieldFeaturesJSON) RawJSON() string {
 }
 
 func (r *APIShieldFeatures) UnmarshalJSON(data []byte) (err error) {
+	*r = APIShieldFeatures{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
