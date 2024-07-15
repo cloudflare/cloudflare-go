@@ -67,9 +67,8 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 	return
 }
 
-// Union satisfied by [workers.AIRunResponseDumbPipe],
-// [workers.AIRunResponseTextClassification], [shared.UnionString],
-// [workers.AIRunResponseTextEmbeddings],
+// Union satisfied by [workers.AIRunResponseTextClassification],
+// [shared.UnionString], [workers.AIRunResponseTextEmbeddings],
 // [workers.AIRunResponseAutomaticSpeechRecognition],
 // [workers.AIRunResponseImageClassification],
 // [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
@@ -387,8 +386,7 @@ func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r AIRunParamsBody) implementsWorkersAIRunParamsBodyUnion() {}
 
-// Satisfied by [workers.AIRunParamsBodyDumbPipe],
-// [workers.AIRunParamsBodyTextClassification],
+// Satisfied by [workers.AIRunParamsBodyTextClassification],
 // [workers.AIRunParamsBodyTextToImage], [workers.AIRunParamsBodyTextEmbeddings],
 // [workers.AIRunParamsBodyAutomaticSpeechRecognition],
 // [workers.AIRunParamsBodyImageClassification],
