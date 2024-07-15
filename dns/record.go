@@ -263,9 +263,6 @@ type ARecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -292,7 +289,6 @@ type aRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -371,9 +367,6 @@ type AAAARecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -400,7 +393,6 @@ type aaaaRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -481,9 +473,6 @@ type CAARecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -508,7 +497,6 @@ type caaRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -627,9 +615,6 @@ type CERTRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -654,7 +639,6 @@ type certRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -776,9 +760,6 @@ type CNAMERecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -805,7 +786,6 @@ type cnameRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -886,9 +866,6 @@ type DNSKEYRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -913,7 +890,6 @@ type dnskeyRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -1038,9 +1014,6 @@ type DSRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1065,7 +1038,6 @@ type dsRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -1189,9 +1161,6 @@ type HTTPSRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1216,7 +1185,6 @@ type httpsRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -1335,9 +1303,6 @@ type LOCRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1362,7 +1327,6 @@ type locRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -1559,9 +1523,6 @@ type MXRecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1586,7 +1547,6 @@ type mxRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -1666,9 +1626,6 @@ type NAPTRRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1693,7 +1650,6 @@ type naptrRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -1825,9 +1781,6 @@ type NSRecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1851,7 +1804,6 @@ type nsRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -1926,9 +1878,6 @@ type PTRRecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1952,7 +1901,6 @@ type ptrRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -2030,9 +1978,6 @@ type Record struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Identifier
 	ID string `json:"id"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2066,7 +2011,6 @@ type recordJSON struct {
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
 	ID          apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -2384,9 +2328,6 @@ type SMIMEARecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2411,7 +2352,6 @@ type smimeaRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -2539,9 +2479,6 @@ type SRVRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2566,7 +2503,6 @@ type srvRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -2721,9 +2657,6 @@ type SSHFPRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2748,7 +2681,6 @@ type sshfpRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -2867,9 +2799,6 @@ type SVCBRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2894,7 +2823,6 @@ type svcbRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -3013,9 +2941,6 @@ type TLSARecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -3040,7 +2965,6 @@ type tlsaRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -3178,9 +3102,6 @@ type TXTRecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -3204,7 +3125,6 @@ type txtRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
@@ -3284,9 +3204,6 @@ type URIRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -3312,7 +3229,6 @@ type uriRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
