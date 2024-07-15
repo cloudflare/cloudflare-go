@@ -231,6 +231,7 @@ func (r warpConnectorNewResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorNewResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorNewResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -521,6 +522,7 @@ func (r warpConnectorListResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -811,6 +813,7 @@ func (r warpConnectorDeleteResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorDeleteResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1101,6 +1104,7 @@ func (r warpConnectorEditResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorEditResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorEditResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1391,6 +1395,7 @@ func (r warpConnectorGetResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

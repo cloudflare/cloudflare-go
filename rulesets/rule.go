@@ -1669,6 +1669,7 @@ func (r redirectRuleActionParametersFromValueTargetURLJSON) RawJSON() string {
 }
 
 func (r *RedirectRuleActionParametersFromValueTargetURL) UnmarshalJSON(data []byte) (err error) {
+	*r = RedirectRuleActionParametersFromValueTargetURL{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -2018,6 +2019,7 @@ func (r rewriteRuleActionParametersHeaderJSON) RawJSON() string {
 }
 
 func (r *RewriteRuleActionParametersHeader) UnmarshalJSON(data []byte) (err error) {
+	*r = RewriteRuleActionParametersHeader{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -2369,6 +2371,7 @@ func (r rewriteURIPartJSON) RawJSON() string {
 }
 
 func (r *RewriteURIPart) UnmarshalJSON(data []byte) (err error) {
+	*r = RewriteURIPart{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -4693,6 +4696,7 @@ func (r ruleNewResponseRuleJSON) RawJSON() string {
 }
 
 func (r *RuleNewResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -5270,6 +5274,7 @@ func (r ruleDeleteResponseRuleJSON) RawJSON() string {
 }
 
 func (r *RuleDeleteResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -5849,6 +5854,7 @@ func (r ruleEditResponseRuleJSON) RawJSON() string {
 }
 
 func (r *RuleEditResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

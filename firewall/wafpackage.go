@@ -130,6 +130,7 @@ func (r wafPackageListResponseJSON) RawJSON() string {
 }
 
 func (r *WAFPackageListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -350,6 +351,7 @@ func (r wafPackageListResponseObjectResultJSON) RawJSON() string {
 }
 
 func (r *WAFPackageListResponseObjectResult) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageListResponseObjectResult{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -718,6 +720,7 @@ func (r wafPackageGetResponseJSON) RawJSON() string {
 }
 
 func (r *WAFPackageGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

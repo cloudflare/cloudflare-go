@@ -141,6 +141,7 @@ func (r ipListResponseJSON) RawJSON() string {
 }
 
 func (r *IPListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = IPListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

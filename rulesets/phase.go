@@ -202,6 +202,7 @@ func (r phaseUpdateResponseRuleJSON) RawJSON() string {
 }
 
 func (r *PhaseUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = PhaseUpdateResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -782,6 +783,7 @@ func (r phaseGetResponseRuleJSON) RawJSON() string {
 }
 
 func (r *PhaseGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = PhaseGetResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

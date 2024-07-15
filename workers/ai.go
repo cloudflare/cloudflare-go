@@ -348,31 +348,37 @@ func (r AIRunParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AIRunParamsBody struct {
-	Text           param.Field[interface{}] `json:"text,required"`
-	Guidance       param.Field[float64]     `json:"guidance"`
-	Height         param.Field[int64]       `json:"height"`
-	Image          param.Field[interface{}] `json:"image,required"`
-	ImageB64       param.Field[string]      `json:"image_b64"`
-	LoraWeights    param.Field[interface{}] `json:"lora_weights,required"`
-	Loras          param.Field[interface{}] `json:"loras,required"`
-	Mask           param.Field[interface{}] `json:"mask,required"`
-	NegativePrompt param.Field[string]      `json:"negative_prompt"`
-	NumSteps       param.Field[int64]       `json:"num_steps"`
-	Prompt         param.Field[string]      `json:"prompt"`
-	Seed           param.Field[int64]       `json:"seed"`
-	Strength       param.Field[float64]     `json:"strength"`
-	Width          param.Field[int64]       `json:"width"`
-	Audio          param.Field[interface{}] `json:"audio,required"`
-	Lora           param.Field[string]      `json:"lora"`
-	MaxTokens      param.Field[int64]       `json:"max_tokens"`
-	Raw            param.Field[bool]        `json:"raw"`
-	Stream         param.Field[bool]        `json:"stream"`
-	Messages       param.Field[interface{}] `json:"messages,required"`
-	SourceLang     param.Field[string]      `json:"source_lang"`
-	TargetLang     param.Field[string]      `json:"target_lang"`
-	InputText      param.Field[string]      `json:"input_text"`
-	MaxLength      param.Field[int64]       `json:"max_length"`
-	Temperature    param.Field[float64]     `json:"temperature"`
+	Text              param.Field[interface{}] `json:"text,required"`
+	Guidance          param.Field[float64]     `json:"guidance"`
+	Height            param.Field[int64]       `json:"height"`
+	Image             param.Field[interface{}] `json:"image,required"`
+	ImageB64          param.Field[string]      `json:"image_b64"`
+	LoraWeights       param.Field[interface{}] `json:"lora_weights,required"`
+	Loras             param.Field[interface{}] `json:"loras,required"`
+	Mask              param.Field[interface{}] `json:"mask,required"`
+	NegativePrompt    param.Field[string]      `json:"negative_prompt"`
+	NumSteps          param.Field[int64]       `json:"num_steps"`
+	Prompt            param.Field[string]      `json:"prompt"`
+	Seed              param.Field[int64]       `json:"seed"`
+	Strength          param.Field[float64]     `json:"strength"`
+	Width             param.Field[int64]       `json:"width"`
+	Audio             param.Field[interface{}] `json:"audio,required"`
+	FrequencyPenalty  param.Field[float64]     `json:"frequency_penalty"`
+	Lora              param.Field[string]      `json:"lora"`
+	MaxTokens         param.Field[int64]       `json:"max_tokens"`
+	PresencePenalty   param.Field[float64]     `json:"presence_penalty"`
+	Raw               param.Field[bool]        `json:"raw"`
+	RepetitionPenalty param.Field[float64]     `json:"repetition_penalty"`
+	Stream            param.Field[bool]        `json:"stream"`
+	Temperature       param.Field[float64]     `json:"temperature"`
+	TopK              param.Field[int64]       `json:"top_k"`
+	TopP              param.Field[float64]     `json:"top_p"`
+	Messages          param.Field[interface{}] `json:"messages,required"`
+	Tools             param.Field[interface{}] `json:"tools,required"`
+	SourceLang        param.Field[string]      `json:"source_lang"`
+	TargetLang        param.Field[string]      `json:"target_lang"`
+	InputText         param.Field[string]      `json:"input_text"`
+	MaxLength         param.Field[int64]       `json:"max_length"`
 }
 
 func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
@@ -386,8 +392,8 @@ func (r AIRunParamsBody) implementsWorkersAIRunParamsBodyUnion() {}
 // [workers.AIRunParamsBodyTextToImage], [workers.AIRunParamsBodyTextEmbeddings],
 // [workers.AIRunParamsBodyAutomaticSpeechRecognition],
 // [workers.AIRunParamsBodyImageClassification],
-// [workers.AIRunParamsBodyObjectDetection],
-// [workers.AIRunParamsBodyTextGeneration], [workers.AIRunParamsBodyTranslation],
+// [workers.AIRunParamsBodyObjectDetection], [workers.AIRunParamsBodyObject],
+// [workers.AIRunParamsBodyObject], [workers.AIRunParamsBodyTranslation],
 // [workers.AIRunParamsBodySummarization], [workers.AIRunParamsBodyImageToText],
 // [AIRunParamsBody].
 type AIRunParamsBodyUnion interface {
@@ -477,29 +483,26 @@ func (r AIRunParamsBodyObjectDetection) MarshalJSON() (data []byte, err error) {
 
 func (r AIRunParamsBodyObjectDetection) implementsWorkersAIRunParamsBodyUnion() {}
 
-type AIRunParamsBodyTextGeneration struct {
-	Lora      param.Field[string]                                 `json:"lora"`
-	MaxTokens param.Field[int64]                                  `json:"max_tokens"`
-	Messages  param.Field[[]AIRunParamsBodyTextGenerationMessage] `json:"messages"`
-	Prompt    param.Field[string]                                 `json:"prompt"`
-	Raw       param.Field[bool]                                   `json:"raw"`
-	Stream    param.Field[bool]                                   `json:"stream"`
+type AIRunParamsBodyObject struct {
+	Prompt            param.Field[string]  `json:"prompt,required"`
+	FrequencyPenalty  param.Field[float64] `json:"frequency_penalty"`
+	Lora              param.Field[string]  `json:"lora"`
+	MaxTokens         param.Field[int64]   `json:"max_tokens"`
+	PresencePenalty   param.Field[float64] `json:"presence_penalty"`
+	Raw               param.Field[bool]    `json:"raw"`
+	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	Seed              param.Field[int64]   `json:"seed"`
+	Stream            param.Field[bool]    `json:"stream"`
+	Temperature       param.Field[float64] `json:"temperature"`
+	TopK              param.Field[int64]   `json:"top_k"`
+	TopP              param.Field[float64] `json:"top_p"`
 }
 
-func (r AIRunParamsBodyTextGeneration) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextGeneration) implementsWorkersAIRunParamsBodyUnion() {}
-
-type AIRunParamsBodyTextGenerationMessage struct {
-	Content param.Field[string] `json:"content,required"`
-	Role    param.Field[string] `json:"role,required"`
-}
-
-func (r AIRunParamsBodyTextGenerationMessage) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
+func (r AIRunParamsBodyObject) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTranslation struct {
 	TargetLang param.Field[string] `json:"target_lang,required"`

@@ -116,6 +116,7 @@ func (r edgeIPsJSON) RawJSON() string {
 }
 
 func (r *EdgeIPs) UnmarshalJSON(data []byte) (err error) {
+	*r = EdgeIPs{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

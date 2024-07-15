@@ -312,6 +312,7 @@ func (r pcapNewResponseJSON) RawJSON() string {
 }
 
 func (r *PCAPNewResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = PCAPNewResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -571,6 +572,7 @@ func (r pcapListResponseJSON) RawJSON() string {
 }
 
 func (r *PCAPListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = PCAPListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -829,6 +831,7 @@ func (r pcapGetResponseJSON) RawJSON() string {
 }
 
 func (r *PCAPGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = PCAPGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

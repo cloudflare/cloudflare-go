@@ -5377,6 +5377,7 @@ func (r settingEditResponseJSON) RawJSON() string {
 }
 
 func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = SettingEditResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -6402,6 +6403,7 @@ func (r settingGetResponseJSON) RawJSON() string {
 }
 
 func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = SettingGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

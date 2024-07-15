@@ -203,6 +203,7 @@ func (r dispatchNamespaceScriptSettingEditResponseMigrationsJSON) RawJSON() stri
 }
 
 func (r *DispatchNamespaceScriptSettingEditResponseMigrations) UnmarshalJSON(data []byte) (err error) {
+	*r = DispatchNamespaceScriptSettingEditResponseMigrations{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -354,6 +355,7 @@ func (r dispatchNamespaceScriptSettingGetResponseMigrationsJSON) RawJSON() strin
 }
 
 func (r *DispatchNamespaceScriptSettingGetResponseMigrations) UnmarshalJSON(data []byte) (err error) {
+	*r = DispatchNamespaceScriptSettingGetResponseMigrations{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

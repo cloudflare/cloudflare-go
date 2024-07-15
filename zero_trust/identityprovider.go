@@ -465,6 +465,7 @@ func (r identityProviderJSON) RawJSON() string {
 }
 
 func (r *IdentityProvider) UnmarshalJSON(data []byte) (err error) {
+	*r = IdentityProvider{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -2127,6 +2128,7 @@ func (r identityProviderListResponseJSON) RawJSON() string {
 }
 
 func (r *IdentityProviderListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = IdentityProviderListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

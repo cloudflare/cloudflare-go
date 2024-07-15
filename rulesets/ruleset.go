@@ -372,6 +372,7 @@ func (r rulesetNewResponseRuleJSON) RawJSON() string {
 }
 
 func (r *RulesetNewResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = RulesetNewResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -951,6 +952,7 @@ func (r rulesetUpdateResponseRuleJSON) RawJSON() string {
 }
 
 func (r *RulesetUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = RulesetUpdateResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1572,6 +1574,7 @@ func (r rulesetGetResponseRuleJSON) RawJSON() string {
 }
 
 func (r *RulesetGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = RulesetGetResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
