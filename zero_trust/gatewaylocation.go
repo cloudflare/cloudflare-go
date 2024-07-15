@@ -154,9 +154,9 @@ type Location struct {
 	DNSDestinationIPsID string `json:"dns_destination_ips_id"`
 	// The DNS over HTTPS domain to send DNS requests to. This field is auto-generated
 	// by Gateway.
-	DohSubdomain string `json:"doh_subdomain"`
+	DOHSubdomain string `json:"doh_subdomain"`
 	// True if the location needs to resolve EDNS queries.
-	EcsSupport bool `json:"ecs_support"`
+	ECSSupport bool `json:"ecs_support"`
 	// The destination endpoints configured for this location. When updating a
 	// location, if this field is absent or set with null, the endpoints configuration
 	// remains unchanged.
@@ -187,8 +187,8 @@ type locationJSON struct {
 	ClientDefault         apijson.Field
 	CreatedAt             apijson.Field
 	DNSDestinationIPsID   apijson.Field
-	DohSubdomain          apijson.Field
-	EcsSupport            apijson.Field
+	DOHSubdomain          apijson.Field
+	ECSSupport            apijson.Field
 	Endpoints             apijson.Field
 	IP                    apijson.Field
 	IPV4Destination       apijson.Field
@@ -212,8 +212,8 @@ func (r locationJSON) RawJSON() string {
 // location, if this field is absent or set with null, the endpoints configuration
 // remains unchanged.
 type LocationEndpoints struct {
-	Doh  LocationEndpointsDoh  `json:"doh"`
-	Dot  LocationEndpointsDot  `json:"dot"`
+	DOH  LocationEndpointsDOH  `json:"doh"`
+	DOT  LocationEndpointsDOT  `json:"dot"`
 	IPV4 LocationEndpointsIPV4 `json:"ipv4"`
 	IPV6 LocationEndpointsIPV6 `json:"ipv6"`
 	JSON locationEndpointsJSON `json:"-"`
@@ -222,8 +222,8 @@ type LocationEndpoints struct {
 // locationEndpointsJSON contains the JSON metadata for the struct
 // [LocationEndpoints]
 type locationEndpointsJSON struct {
-	Doh         apijson.Field
-	Dot         apijson.Field
+	DOH         apijson.Field
+	DOT         apijson.Field
 	IPV4        apijson.Field
 	IPV6        apijson.Field
 	raw         string
@@ -238,23 +238,23 @@ func (r locationEndpointsJSON) RawJSON() string {
 	return r.raw
 }
 
-type LocationEndpointsDoh struct {
+type LocationEndpointsDOH struct {
 	// True if the endpoint is enabled for this location.
 	Enabled bool `json:"enabled"`
 	// A list of allowed source IP network ranges for this endpoint. When empty, all
 	// source IPs are allowed. A non-empty list is only effective if the endpoint is
 	// enabled for this location.
-	Networks []LocationEndpointsDohNetwork `json:"networks"`
+	Networks []LocationEndpointsDOHNetwork `json:"networks"`
 	// True if the endpoint requires
 	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
 	// authentication.
 	RequireToken bool                     `json:"require_token"`
-	JSON         locationEndpointsDohJSON `json:"-"`
+	JSON         locationEndpointsDOHJSON `json:"-"`
 }
 
-// locationEndpointsDohJSON contains the JSON metadata for the struct
-// [LocationEndpointsDoh]
-type locationEndpointsDohJSON struct {
+// locationEndpointsDOHJSON contains the JSON metadata for the struct
+// [LocationEndpointsDOH]
+type locationEndpointsDOHJSON struct {
 	Enabled      apijson.Field
 	Networks     apijson.Field
 	RequireToken apijson.Field
@@ -262,82 +262,82 @@ type locationEndpointsDohJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *LocationEndpointsDoh) UnmarshalJSON(data []byte) (err error) {
+func (r *LocationEndpointsDOH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r locationEndpointsDohJSON) RawJSON() string {
+func (r locationEndpointsDOHJSON) RawJSON() string {
 	return r.raw
 }
 
-type LocationEndpointsDohNetwork struct {
+type LocationEndpointsDOHNetwork struct {
 	// The IP address or IP CIDR.
 	Network string                          `json:"network,required"`
-	JSON    locationEndpointsDohNetworkJSON `json:"-"`
+	JSON    locationEndpointsDOHNetworkJSON `json:"-"`
 }
 
-// locationEndpointsDohNetworkJSON contains the JSON metadata for the struct
-// [LocationEndpointsDohNetwork]
-type locationEndpointsDohNetworkJSON struct {
+// locationEndpointsDOHNetworkJSON contains the JSON metadata for the struct
+// [LocationEndpointsDOHNetwork]
+type locationEndpointsDOHNetworkJSON struct {
 	Network     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LocationEndpointsDohNetwork) UnmarshalJSON(data []byte) (err error) {
+func (r *LocationEndpointsDOHNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r locationEndpointsDohNetworkJSON) RawJSON() string {
+func (r locationEndpointsDOHNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
-type LocationEndpointsDot struct {
+type LocationEndpointsDOT struct {
 	// True if the endpoint is enabled for this location.
 	Enabled bool `json:"enabled"`
 	// A list of allowed source IP network ranges for this endpoint. When empty, all
 	// source IPs are allowed. A non-empty list is only effective if the endpoint is
 	// enabled for this location.
-	Networks []LocationEndpointsDotNetwork `json:"networks"`
-	JSON     locationEndpointsDotJSON      `json:"-"`
+	Networks []LocationEndpointsDOTNetwork `json:"networks"`
+	JSON     locationEndpointsDOTJSON      `json:"-"`
 }
 
-// locationEndpointsDotJSON contains the JSON metadata for the struct
-// [LocationEndpointsDot]
-type locationEndpointsDotJSON struct {
+// locationEndpointsDOTJSON contains the JSON metadata for the struct
+// [LocationEndpointsDOT]
+type locationEndpointsDOTJSON struct {
 	Enabled     apijson.Field
 	Networks    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LocationEndpointsDot) UnmarshalJSON(data []byte) (err error) {
+func (r *LocationEndpointsDOT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r locationEndpointsDotJSON) RawJSON() string {
+func (r locationEndpointsDOTJSON) RawJSON() string {
 	return r.raw
 }
 
-type LocationEndpointsDotNetwork struct {
+type LocationEndpointsDOTNetwork struct {
 	// The IP address or IP CIDR.
 	Network string                          `json:"network,required"`
-	JSON    locationEndpointsDotNetworkJSON `json:"-"`
+	JSON    locationEndpointsDOTNetworkJSON `json:"-"`
 }
 
-// locationEndpointsDotNetworkJSON contains the JSON metadata for the struct
-// [LocationEndpointsDotNetwork]
-type locationEndpointsDotNetworkJSON struct {
+// locationEndpointsDOTNetworkJSON contains the JSON metadata for the struct
+// [LocationEndpointsDOTNetwork]
+type locationEndpointsDOTNetworkJSON struct {
 	Network     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LocationEndpointsDotNetwork) UnmarshalJSON(data []byte) (err error) {
+func (r *LocationEndpointsDOTNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r locationEndpointsDotNetworkJSON) RawJSON() string {
+func (r locationEndpointsDOTNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -463,7 +463,7 @@ type GatewayLocationNewParams struct {
 	// pre-assigned pair remains unchanged.
 	DNSDestinationIPsID param.Field[string] `json:"dns_destination_ips_id"`
 	// True if the location needs to resolve EDNS queries.
-	EcsSupport param.Field[bool] `json:"ecs_support"`
+	ECSSupport param.Field[bool] `json:"ecs_support"`
 	// A list of network ranges that requests from this location would originate from.
 	// A non-empty list is only effective if the ipv4 endpoint is enabled for this
 	// location.
@@ -539,7 +539,7 @@ type GatewayLocationUpdateParams struct {
 	// pre-assigned pair remains unchanged.
 	DNSDestinationIPsID param.Field[string] `json:"dns_destination_ips_id"`
 	// True if the location needs to resolve EDNS queries.
-	EcsSupport param.Field[bool] `json:"ecs_support"`
+	ECSSupport param.Field[bool] `json:"ecs_support"`
 	// A list of network ranges that requests from this location would originate from.
 	// A non-empty list is only effective if the ipv4 endpoint is enabled for this
 	// location.
