@@ -28,11 +28,12 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Locations.New(context.TODO(), zero_trust.GatewayLocationNewParams{
-		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Name:          cloudflare.F("Austin Office Location"),
-		ClientDefault: cloudflare.F(false),
-		EcsSupport:    cloudflare.F(false),
-		Networks: cloudflare.F([]zero_trust.LocationNetworkParam{{
+		AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Name:                cloudflare.F("Austin Office Location"),
+		ClientDefault:       cloudflare.F(false),
+		DNSDestinationIPsID: cloudflare.F("0e4a32c6-6fb8-4858-9296-98f51631e8e6"),
+		EcsSupport:          cloudflare.F(false),
+		Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsNetwork{{
 			Network: cloudflare.F("192.0.2.1/32"),
 		}, {
 			Network: cloudflare.F("192.0.2.1/32"),
@@ -66,11 +67,12 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayLocationUpdateParams{
-			AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Name:          cloudflare.F("Austin Office Location"),
-			ClientDefault: cloudflare.F(false),
-			EcsSupport:    cloudflare.F(false),
-			Networks: cloudflare.F([]zero_trust.LocationNetworkParam{{
+			AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Name:                cloudflare.F("Austin Office Location"),
+			ClientDefault:       cloudflare.F(false),
+			DNSDestinationIPsID: cloudflare.F("0e4a32c6-6fb8-4858-9296-98f51631e8e6"),
+			EcsSupport:          cloudflare.F(false),
+			Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsNetwork{{
 				Network: cloudflare.F("192.0.2.1/32"),
 			}, {
 				Network: cloudflare.F("192.0.2.1/32"),
