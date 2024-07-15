@@ -222,6 +222,7 @@ func (r wafPackageRuleListResponseJSON) RawJSON() string {
 }
 
 func (r *WAFPackageRuleListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageRuleListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -579,6 +580,7 @@ func (r wafPackageRuleEditResponseJSON) RawJSON() string {
 }
 
 func (r *WAFPackageRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageRuleEditResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

@@ -116,6 +116,7 @@ func (r configurationAuthIDCharacteristicJSON) RawJSON() string {
 }
 
 func (r *ConfigurationAuthIDCharacteristic) UnmarshalJSON(data []byte) (err error) {
+	*r = ConfigurationAuthIDCharacteristic{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

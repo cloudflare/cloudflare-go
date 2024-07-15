@@ -227,6 +227,7 @@ func (r appListResponseJSON) RawJSON() string {
 }
 
 func (r *AppListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = AppListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

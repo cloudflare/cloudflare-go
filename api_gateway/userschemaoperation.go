@@ -109,6 +109,7 @@ func (r userSchemaOperationListResponseJSON) RawJSON() string {
 }
 
 func (r *UserSchemaOperationListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = UserSchemaOperationListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

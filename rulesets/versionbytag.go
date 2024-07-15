@@ -166,6 +166,7 @@ func (r versionByTagGetResponseRuleJSON) RawJSON() string {
 }
 
 func (r *VersionByTagGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionByTagGetResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

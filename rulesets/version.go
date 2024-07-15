@@ -300,6 +300,7 @@ func (r versionGetResponseRuleJSON) RawJSON() string {
 }
 
 func (r *VersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

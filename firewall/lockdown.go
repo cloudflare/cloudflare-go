@@ -176,6 +176,7 @@ func (r configurationJSON) RawJSON() string {
 }
 
 func (r *Configuration) UnmarshalJSON(data []byte) (err error) {
+	*r = Configuration{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

@@ -95,6 +95,7 @@ func (r appTypeJSON) RawJSON() string {
 }
 
 func (r *AppType) UnmarshalJSON(data []byte) (err error) {
+	*r = AppType{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

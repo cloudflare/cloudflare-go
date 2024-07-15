@@ -285,6 +285,7 @@ func (r firewallRuleFilterJSON) RawJSON() string {
 }
 
 func (r *FirewallRuleFilter) UnmarshalJSON(data []byte) (err error) {
+	*r = FirewallRuleFilter{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

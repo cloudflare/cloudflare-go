@@ -284,6 +284,7 @@ func (r tunnelListResponseJSON) RawJSON() string {
 }
 
 func (r *TunnelListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = TunnelListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -607,6 +608,7 @@ func (r tunnelEditResponseJSON) RawJSON() string {
 }
 
 func (r *TunnelEditResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = TunnelEditResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

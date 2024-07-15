@@ -178,6 +178,7 @@ func (r profileJSON) RawJSON() string {
 }
 
 func (r *Profile) UnmarshalJSON(data []byte) (err error) {
+	*r = Profile{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -407,6 +408,7 @@ func (r dlpProfileGetResponseJSON) RawJSON() string {
 }
 
 func (r *DLPProfileGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = DLPProfileGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

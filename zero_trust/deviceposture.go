@@ -443,6 +443,7 @@ func (r deviceInputJSON) RawJSON() string {
 }
 
 func (r *DeviceInput) UnmarshalJSON(data []byte) (err error) {
+	*r = DeviceInput{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err

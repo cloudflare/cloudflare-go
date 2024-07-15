@@ -194,6 +194,7 @@ func (r accessRuleJSON) RawJSON() string {
 }
 
 func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
