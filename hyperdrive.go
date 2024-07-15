@@ -26,13 +26,21 @@ type HyperdriveConfig struct {
 	Caching HyperdriveConfigCaching `json:"caching,omitempty"`
 }
 
+type HyperdriveOriginType string
+
 type HyperdriveConfigOrigin struct {
-	Database string `json:"database,omitempty"`
-	Password string `json:"password"`
-	Host     string `json:"host,omitempty"`
-	Port     int    `json:"port,omitempty"`
-	Scheme   string `json:"scheme,omitempty"`
-	User     string `json:"user,omitempty"`
+	Database       string `json:"database,omitempty"`
+	Host           string `json:"host,omitempty"`
+	Port           int    `json:"port,omitempty"`
+	Scheme         string `json:"scheme,omitempty"`
+	User           string `json:"user,omitempty"`
+	AccessClientID string `json:"access_client_id,omitempty"`
+}
+
+type HyperdriveConfigOriginWithSecrets struct {
+	HyperdriveConfigOrigin
+	Password           string `json:"password"`
+	AccessClientSecret string `json:"access_client_secret,omitempty"`
 }
 
 type HyperdriveConfigCaching struct {
@@ -47,9 +55,9 @@ type HyperdriveConfigListResponse struct {
 }
 
 type CreateHyperdriveConfigParams struct {
-	Name    string                  `json:"name"`
-	Origin  HyperdriveConfigOrigin  `json:"origin"`
-	Caching HyperdriveConfigCaching `json:"caching,omitempty"`
+	Name    string                            `json:"name"`
+	Origin  HyperdriveConfigOriginWithSecrets `json:"origin"`
+	Caching HyperdriveConfigCaching           `json:"caching,omitempty"`
 }
 
 type HyperdriveConfigResponse struct {
@@ -58,10 +66,10 @@ type HyperdriveConfigResponse struct {
 }
 
 type UpdateHyperdriveConfigParams struct {
-	HyperdriveID string                  `json:"-"`
-	Name         string                  `json:"name"`
-	Origin       HyperdriveConfigOrigin  `json:"origin"`
-	Caching      HyperdriveConfigCaching `json:"caching,omitempty"`
+	HyperdriveID string                            `json:"-"`
+	Name         string                            `json:"name"`
+	Origin       HyperdriveConfigOriginWithSecrets `json:"origin"`
+	Caching      HyperdriveConfigCaching           `json:"caching,omitempty"`
 }
 
 type ListHyperdriveConfigParams struct{}

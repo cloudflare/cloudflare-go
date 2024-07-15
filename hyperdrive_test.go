@@ -12,9 +12,11 @@ import (
 const (
 	testHyperdriveConfigId   = "6b7efc370ea34ded8327fa20698dfe3a"
 	testHyperdriveConfigName = "example-hyperdrive"
+	testAccessClientID       = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.access"
+	testAccessClientSecret   = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 )
 
-func testHyperdriveConfig() HyperdriveConfig {
+func testHyperdriveHostAndPortConfig() HyperdriveConfig {
 	return HyperdriveConfig{
 		ID:   testHyperdriveConfigId,
 		Name: testHyperdriveConfigName,
@@ -24,6 +26,25 @@ func testHyperdriveConfig() HyperdriveConfig {
 			Port:     5432,
 			Scheme:   "postgres",
 			User:     "postgres",
+		},
+		Caching: HyperdriveConfigCaching{
+			Disabled:             BoolPtr(false),
+			MaxAge:               30,
+			StaleWhileRevalidate: 15,
+		},
+	}
+}
+
+func testHyperdriveCFAccessConfig() HyperdriveConfig {
+	return HyperdriveConfig{
+		ID:   testHyperdriveConfigId,
+		Name: testHyperdriveConfigName,
+		Origin: HyperdriveConfigOrigin{
+			Database:       "postgres",
+			Host:           "database.example.com",
+			Scheme:         "postgres",
+			User:           "postgres",
+			AccessClientID: testAccessClientID,
 		},
 		Caching: HyperdriveConfigCaching{
 			Disabled:             BoolPtr(false),
@@ -72,7 +93,7 @@ func TestHyperdriveConfig_List(t *testing.T) {
 	result, err := client.ListHyperdriveConfigs(context.Background(), AccountIdentifier(testAccountID), ListHyperdriveConfigParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(result))
-		assert.Equal(t, testHyperdriveConfig(), result[0])
+		assert.Equal(t, testHyperdriveHostAndPortConfig(), result[0])
 	}
 }
 
@@ -119,11 +140,11 @@ func TestHyperdriveConfig_Get(t *testing.T) {
 
 	result, err := client.GetHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), testHyperdriveConfigId)
 	if assert.NoError(t, err) {
-		assert.Equal(t, testHyperdriveConfig(), result)
+		assert.Equal(t, testHyperdriveHostAndPortConfig(), result)
 	}
 }
 
-func TestHyperdriveConfig_Create(t *testing.T) {
+func TestHyperdriveConfig_CreateHostAndPort(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -166,13 +187,15 @@ func TestHyperdriveConfig_Create(t *testing.T) {
 
 	result, err := client.CreateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), CreateHyperdriveConfigParams{
 		Name: "example-hyperdrive",
-		Origin: HyperdriveConfigOrigin{
-			Database: "postgres",
+		Origin: HyperdriveConfigOriginWithSecrets{
+			HyperdriveConfigOrigin: HyperdriveConfigOrigin{
+				Database: "postgres",
+				Host:     "database.example.com",
+				Port:     5432,
+				Scheme:   "postgres",
+				User:     "postgres",
+			},
 			Password: "password",
-			Host:     "database.example.com",
-			Port:     5432,
-			Scheme:   "postgres",
-			User:     "postgres",
 		},
 		Caching: HyperdriveConfigCaching{
 			Disabled:             BoolPtr(false),
@@ -182,7 +205,74 @@ func TestHyperdriveConfig_Create(t *testing.T) {
 	})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, testHyperdriveConfig(), result)
+		assert.Equal(t, testHyperdriveHostAndPortConfig(), result)
+	}
+}
+
+func TestHyperdriveConfig_CreateCFAccess(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/%s/hyperdrive/configs", testAccountID), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "6b7efc370ea34ded8327fa20698dfe3a",
+				"caching": {
+					"disabled": false,
+					"max_age": 30,
+					"stale_while_revalidate": 15
+				},
+				"name": "example-hyperdrive",
+				"origin": {
+					"database": "postgres",
+					"host": "database.example.com",
+					"scheme": "postgres",
+					"user": "postgres",
+					"access_client_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.access",
+					"access_client_secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				}
+			}
+		}`)
+	})
+
+	_, err := client.CreateHyperdriveConfig(context.Background(), AccountIdentifier(""), CreateHyperdriveConfigParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	_, err = client.CreateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), CreateHyperdriveConfigParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingHyperdriveConfigName, err)
+	}
+
+	result, err := client.CreateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), CreateHyperdriveConfigParams{
+		Name: "example-hyperdrive",
+		Origin: HyperdriveConfigOriginWithSecrets{
+			HyperdriveConfigOrigin: HyperdriveConfigOrigin{
+				Database:       "postgres",
+				Host:           "database.example.com",
+				Scheme:         "postgres",
+				User:           "postgres",
+				AccessClientID: testAccessClientID,
+			},
+			Password:           "password",
+			AccessClientSecret: testAccessClientSecret,
+		},
+		Caching: HyperdriveConfigCaching{
+			Disabled:             BoolPtr(false),
+			MaxAge:               30,
+			StaleWhileRevalidate: 15,
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, testHyperdriveCFAccessConfig(), result)
 	}
 }
 
@@ -259,13 +349,15 @@ func TestHyperdriveConfig_Update(t *testing.T) {
 	result, err := client.UpdateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), UpdateHyperdriveConfigParams{
 		HyperdriveID: "6b7efc370ea34ded8327fa20698dfe3a",
 		Name:         "example-hyperdrive",
-		Origin: HyperdriveConfigOrigin{
-			Database: "postgres",
+		Origin: HyperdriveConfigOriginWithSecrets{
+			HyperdriveConfigOrigin: HyperdriveConfigOrigin{
+				Database: "postgres",
+				Host:     "database.example.com",
+				Port:     5432,
+				Scheme:   "postgres",
+				User:     "postgres",
+			},
 			Password: "password",
-			Host:     "database.example.com",
-			Port:     5432,
-			Scheme:   "postgres",
-			User:     "postgres",
 		},
 		Caching: HyperdriveConfigCaching{
 			Disabled:             BoolPtr(false),
@@ -275,6 +367,6 @@ func TestHyperdriveConfig_Update(t *testing.T) {
 	})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, testHyperdriveConfig(), result)
+		assert.Equal(t, testHyperdriveHostAndPortConfig(), result)
 	}
 }
