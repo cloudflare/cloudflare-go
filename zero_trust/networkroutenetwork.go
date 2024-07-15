@@ -110,6 +110,8 @@ func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded 
 type NetworkRouteNetworkNewParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// UUID of the tunnel.
+	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
 	// UUID of the virtual network.

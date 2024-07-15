@@ -242,6 +242,8 @@ type NetworkRouteNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network param.Field[string] `json:"network,required"`
+	// UUID of the tunnel.
+	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
 	// UUID of the virtual network.
@@ -387,6 +389,8 @@ type NetworkRouteEditParams struct {
 	Comment param.Field[string] `json:"comment"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network param.Field[string] `json:"network"`
+	// UUID of the tunnel.
+	TunnelID param.Field[string] `json:"tunnel_id" format:"uuid"`
 	// UUID of the virtual network.
 	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }

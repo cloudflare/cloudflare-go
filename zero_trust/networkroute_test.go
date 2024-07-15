@@ -31,6 +31,7 @@ func TestNetworkRouteNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Networks.Routes.New(context.TODO(), zero_trust.NetworkRouteNewParams{
 		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Network:          cloudflare.F("172.16.0.0/16"),
+		TunnelID:         cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		Comment:          cloudflare.F("Example comment for this route."),
 		VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 	})
@@ -128,6 +129,7 @@ func TestNetworkRouteEditWithOptionalParams(t *testing.T) {
 			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Comment:          cloudflare.F("Example comment for this route."),
 			Network:          cloudflare.F("172.16.0.0/16"),
+			TunnelID:         cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 			VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		},
 	)
