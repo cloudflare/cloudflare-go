@@ -32,7 +32,7 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 		Name:                cloudflare.F("Austin Office Location"),
 		ClientDefault:       cloudflare.F(false),
 		DNSDestinationIPsID: cloudflare.F("0e4a32c6-6fb8-4858-9296-98f51631e8e6"),
-		EcsSupport:          cloudflare.F(false),
+		ECSSupport:          cloudflare.F(false),
 		Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsNetwork{{
 			Network: cloudflare.F("192.0.2.1/32"),
 		}, {
@@ -71,7 +71,7 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 			Name:                cloudflare.F("Austin Office Location"),
 			ClientDefault:       cloudflare.F(false),
 			DNSDestinationIPsID: cloudflare.F("0e4a32c6-6fb8-4858-9296-98f51631e8e6"),
-			EcsSupport:          cloudflare.F(false),
+			ECSSupport:          cloudflare.F(false),
 			Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsNetwork{{
 				Network: cloudflare.F("192.0.2.1/32"),
 			}, {

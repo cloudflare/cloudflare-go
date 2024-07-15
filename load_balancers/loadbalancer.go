@@ -610,7 +610,7 @@ type LocationStrategy struct {
 	// - `"never"`: Never prefer ECS.
 	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs LocationStrategyPreferEcs `json:"prefer_ecs"`
+	PreferECS LocationStrategyPreferECS `json:"prefer_ecs"`
 	JSON      locationStrategyJSON      `json:"-"`
 }
 
@@ -618,7 +618,7 @@ type LocationStrategy struct {
 // [LocationStrategy]
 type locationStrategyJSON struct {
 	Mode        apijson.Field
-	PreferEcs   apijson.Field
+	PreferECS   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -659,18 +659,18 @@ func (r LocationStrategyMode) IsKnown() bool {
 // - `"never"`: Never prefer ECS.
 // - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 // - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-type LocationStrategyPreferEcs string
+type LocationStrategyPreferECS string
 
 const (
-	LocationStrategyPreferEcsAlways    LocationStrategyPreferEcs = "always"
-	LocationStrategyPreferEcsNever     LocationStrategyPreferEcs = "never"
-	LocationStrategyPreferEcsProximity LocationStrategyPreferEcs = "proximity"
-	LocationStrategyPreferEcsGeo       LocationStrategyPreferEcs = "geo"
+	LocationStrategyPreferECSAlways    LocationStrategyPreferECS = "always"
+	LocationStrategyPreferECSNever     LocationStrategyPreferECS = "never"
+	LocationStrategyPreferECSProximity LocationStrategyPreferECS = "proximity"
+	LocationStrategyPreferECSGeo       LocationStrategyPreferECS = "geo"
 )
 
-func (r LocationStrategyPreferEcs) IsKnown() bool {
+func (r LocationStrategyPreferECS) IsKnown() bool {
 	switch r {
-	case LocationStrategyPreferEcsAlways, LocationStrategyPreferEcsNever, LocationStrategyPreferEcsProximity, LocationStrategyPreferEcsGeo:
+	case LocationStrategyPreferECSAlways, LocationStrategyPreferECSNever, LocationStrategyPreferECSProximity, LocationStrategyPreferECSGeo:
 		return true
 	}
 	return false
@@ -693,7 +693,7 @@ type LocationStrategyParam struct {
 	// - `"never"`: Never prefer ECS.
 	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs param.Field[LocationStrategyPreferEcs] `json:"prefer_ecs"`
+	PreferECS param.Field[LocationStrategyPreferECS] `json:"prefer_ecs"`
 }
 
 func (r LocationStrategyParam) MarshalJSON() (data []byte, err error) {

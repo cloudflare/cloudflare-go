@@ -196,7 +196,7 @@ type Firewall struct {
 	DeprecateAnyRequests bool               `json:"deprecate_any_requests,required"`
 	DNSFirewallIPs       []FirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback bool `json:"ecs_fallback,required"`
+	ECSFallback bool `json:"ecs_fallback,required"`
 	// Maximum DNS Cache TTL.
 	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
 	// Minimum DNS Cache TTL.
@@ -224,7 +224,7 @@ type firewallJSON struct {
 	ID                   apijson.Field
 	DeprecateAnyRequests apijson.Field
 	DNSFirewallIPs       apijson.Field
-	EcsFallback          apijson.Field
+	ECSFallback          apijson.Field
 	MaximumCacheTTL      apijson.Field
 	MinimumCacheTTL      apijson.Field
 	ModifiedOn           apijson.Field
@@ -253,7 +253,7 @@ type FirewallParam struct {
 	DeprecateAnyRequests param.Field[bool]                    `json:"deprecate_any_requests,required"`
 	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback param.Field[bool] `json:"ecs_fallback,required"`
+	ECSFallback param.Field[bool] `json:"ecs_fallback,required"`
 	// Maximum DNS Cache TTL.
 	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl,required"`
 	// Minimum DNS Cache TTL.
@@ -368,7 +368,7 @@ type FirewallNewParams struct {
 	// Deprecate the response to ANY requests.
 	DeprecateAnyRequests param.Field[bool] `json:"deprecate_any_requests"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback param.Field[bool] `json:"ecs_fallback"`
+	ECSFallback param.Field[bool] `json:"ecs_fallback"`
 	// Maximum DNS Cache TTL.
 	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl"`
 	// Minimum DNS Cache TTL.

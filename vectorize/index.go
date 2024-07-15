@@ -343,12 +343,12 @@ type IndexDimensionConfigurationMetric string
 const (
 	IndexDimensionConfigurationMetricCosine     IndexDimensionConfigurationMetric = "cosine"
 	IndexDimensionConfigurationMetricEuclidean  IndexDimensionConfigurationMetric = "euclidean"
-	IndexDimensionConfigurationMetricDotProduct IndexDimensionConfigurationMetric = "dot-product"
+	IndexDimensionConfigurationMetricDOTProduct IndexDimensionConfigurationMetric = "dot-product"
 )
 
 func (r IndexDimensionConfigurationMetric) IsKnown() bool {
 	switch r {
-	case IndexDimensionConfigurationMetricCosine, IndexDimensionConfigurationMetricEuclidean, IndexDimensionConfigurationMetricDotProduct:
+	case IndexDimensionConfigurationMetricCosine, IndexDimensionConfigurationMetricEuclidean, IndexDimensionConfigurationMetricDOTProduct:
 		return true
 	}
 	return false
@@ -562,12 +562,12 @@ type IndexNewParamsConfigMetric string
 const (
 	IndexNewParamsConfigMetricCosine     IndexNewParamsConfigMetric = "cosine"
 	IndexNewParamsConfigMetricEuclidean  IndexNewParamsConfigMetric = "euclidean"
-	IndexNewParamsConfigMetricDotProduct IndexNewParamsConfigMetric = "dot-product"
+	IndexNewParamsConfigMetricDOTProduct IndexNewParamsConfigMetric = "dot-product"
 )
 
 func (r IndexNewParamsConfigMetric) IsKnown() bool {
 	switch r {
-	case IndexNewParamsConfigMetricCosine, IndexNewParamsConfigMetricEuclidean, IndexNewParamsConfigMetricDotProduct:
+	case IndexNewParamsConfigMetricCosine, IndexNewParamsConfigMetricEuclidean, IndexNewParamsConfigMetricDOTProduct:
 		return true
 	}
 	return false
