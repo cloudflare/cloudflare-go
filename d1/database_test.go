@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestDatabaseNew(t *testing.T) {
+func TestDatabaseNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,8 +28,9 @@ func TestDatabaseNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.D1.Database.New(context.TODO(), d1.DatabaseNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:      cloudflare.F("my-database"),
+		AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:                cloudflare.F("my-database"),
+		PrimaryLocationHint: cloudflare.F(d1.DatabaseNewParamsPrimaryLocationHintWnam),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

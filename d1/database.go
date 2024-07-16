@@ -402,10 +402,34 @@ type DatabaseNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Name      param.Field[string] `json:"name,required"`
+	// Specify the region to create the D1 primary, if available. If this option is
+	// omitted, the D1 will be created as close as possible to the current user.
+	PrimaryLocationHint param.Field[DatabaseNewParamsPrimaryLocationHint] `json:"primary_location_hint"`
 }
 
 func (r DatabaseNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Specify the region to create the D1 primary, if available. If this option is
+// omitted, the D1 will be created as close as possible to the current user.
+type DatabaseNewParamsPrimaryLocationHint string
+
+const (
+	DatabaseNewParamsPrimaryLocationHintWnam DatabaseNewParamsPrimaryLocationHint = "wnam"
+	DatabaseNewParamsPrimaryLocationHintEnam DatabaseNewParamsPrimaryLocationHint = "enam"
+	DatabaseNewParamsPrimaryLocationHintWeur DatabaseNewParamsPrimaryLocationHint = "weur"
+	DatabaseNewParamsPrimaryLocationHintEeur DatabaseNewParamsPrimaryLocationHint = "eeur"
+	DatabaseNewParamsPrimaryLocationHintApac DatabaseNewParamsPrimaryLocationHint = "apac"
+	DatabaseNewParamsPrimaryLocationHintOc   DatabaseNewParamsPrimaryLocationHint = "oc"
+)
+
+func (r DatabaseNewParamsPrimaryLocationHint) IsKnown() bool {
+	switch r {
+	case DatabaseNewParamsPrimaryLocationHintWnam, DatabaseNewParamsPrimaryLocationHintEnam, DatabaseNewParamsPrimaryLocationHintWeur, DatabaseNewParamsPrimaryLocationHintEeur, DatabaseNewParamsPrimaryLocationHintApac, DatabaseNewParamsPrimaryLocationHintOc:
+		return true
+	}
+	return false
 }
 
 type DatabaseNewResponseEnvelope struct {
@@ -568,9 +592,11 @@ func (r DatabaseGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseQueryParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Sql       param.Field[string]   `json:"sql,required"`
-	Params    param.Field[[]string] `json:"params"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql    param.Field[string]   `json:"sql,required"`
+	Params param.Field[[]string] `json:"params"`
 }
 
 func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
@@ -622,9 +648,11 @@ func (r DatabaseQueryResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseRawParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Sql       param.Field[string]   `json:"sql,required"`
-	Params    param.Field[[]string] `json:"params"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql    param.Field[string]   `json:"sql,required"`
+	Params param.Field[[]string] `json:"params"`
 }
 
 func (r DatabaseRawParams) MarshalJSON() (data []byte, err error) {
