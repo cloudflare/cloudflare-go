@@ -36,8 +36,8 @@ func TestDiscoveryOperationListWithOptionalParams(t *testing.T) {
 		Method:    cloudflare.F([]string{"GET"}),
 		Order:     cloudflare.F(api_gateway.DiscoveryOperationListParamsOrderMethod),
 		Origin:    cloudflare.F(api_gateway.DiscoveryOperationListParamsOriginMl),
-		Page:      cloudflare.F[any](map[string]interface{}{}),
-		PerPage:   cloudflare.F[any](map[string]interface{}{}),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(5)),
 		State:     cloudflare.F(api_gateway.DiscoveryOperationListParamsStateReview),
 	})
 	if err != nil {
@@ -64,7 +64,7 @@ func TestDiscoveryOperationEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.APIGateway.Discovery.Operations.Edit(
 		context.TODO(),
-		"0d9bf70c-92e1-4bb3-9411-34a3bcc59003",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.DiscoveryOperationEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			State:  cloudflare.F(api_gateway.DiscoveryOperationEditParamsStateReview),

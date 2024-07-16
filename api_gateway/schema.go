@@ -111,14 +111,21 @@ func (r SchemaListParamsFeature) IsKnown() bool {
 }
 
 type SchemaListResponseEnvelope struct {
-	Result SchemaListResponse             `json:"result,required"`
-	JSON   schemaListResponseEnvelopeJSON `json:"-"`
+	Errors   Message            `json:"errors,required"`
+	Messages Message            `json:"messages,required"`
+	Result   SchemaListResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success SchemaListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    schemaListResponseEnvelopeJSON    `json:"-"`
 }
 
 // schemaListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SchemaListResponseEnvelope]
 type schemaListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -129,4 +136,19 @@ func (r *SchemaListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r schemaListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type SchemaListResponseEnvelopeSuccess bool
+
+const (
+	SchemaListResponseEnvelopeSuccessTrue SchemaListResponseEnvelopeSuccess = true
+)
+
+func (r SchemaListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SchemaListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

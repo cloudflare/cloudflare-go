@@ -37,7 +37,7 @@ func NewDiscoveryOperationService(opts ...option.RequestOption) (r *DiscoveryOpe
 }
 
 // Retrieve the most up to date view of discovered operations
-func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DiscoveryOperation], err error) {
+func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DiscoveryOperation], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -59,8 +59,8 @@ func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOp
 }
 
 // Retrieve the most up to date view of discovered operations
-func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DiscoveryOperation] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DiscoveryOperation] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Update the `state` on a discovered operation
@@ -155,9 +155,9 @@ type DiscoveryOperationListParams struct {
 	//     Identifier API Discovery
 	Origin param.Field[DiscoveryOperationListParamsOrigin] `query:"origin"`
 	// Page number of paginated results.
-	Page param.Field[interface{}] `query:"page"`
+	Page param.Field[int64] `query:"page"`
 	// Maximum number of results per page.
-	PerPage param.Field[interface{}] `query:"per_page"`
+	PerPage param.Field[int64] `query:"per_page"`
 	// Filter results to only include discovery results in a particular state. States
 	// are as follows
 	//
@@ -296,8 +296,8 @@ type DiscoveryOperationEditResponseEnvelope struct {
 	Messages Message                        `json:"messages,required"`
 	Result   DiscoveryOperationEditResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                                       `json:"success,required"`
-	JSON    discoveryOperationEditResponseEnvelopeJSON `json:"-"`
+	Success DiscoveryOperationEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    discoveryOperationEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // discoveryOperationEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -317,4 +317,19 @@ func (r *DiscoveryOperationEditResponseEnvelope) UnmarshalJSON(data []byte) (err
 
 func (r discoveryOperationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type DiscoveryOperationEditResponseEnvelopeSuccess bool
+
+const (
+	DiscoveryOperationEditResponseEnvelopeSuccessTrue DiscoveryOperationEditResponseEnvelopeSuccess = true
+)
+
+func (r DiscoveryOperationEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DiscoveryOperationEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
