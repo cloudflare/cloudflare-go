@@ -141,7 +141,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			ExtendedEmailMatching: &TeamsExtendedEmailMatching{
 				Enabled: BoolPtr(true),
 			},
-			Certificate: &TeamsCertificate{
+			Certificate: &TeamsCertificateSetting{
 				ID: "7559a944-3dd7-41bf-b183-360a814a8c36",
 			},
 		})
