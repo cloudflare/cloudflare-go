@@ -1,3 +1,0 @@
-```release-note:breaking-change
-teams: gateway: rename TeamsCertificate in TeamsAccountConfiguration to TeamsCertificateSetting
-```

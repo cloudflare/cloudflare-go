@@ -47,7 +47,7 @@ type TeamsAccountSettings struct {
 	BodyScanning          *TeamsBodyScanning          `json:"body_scanning,omitempty"`
 	ExtendedEmailMatching *TeamsExtendedEmailMatching `json:"extended_email_matching,omitempty"`
 	CustomCertificate     *TeamsCustomCertificate     `json:"custom_certificate,omitempty"`
-	Certificate           *TeamsCertificateSetting           `json:"certificate,omitempty"`
+	Certificate           *TeamsCertificateSetting    `json:"certificate,omitempty"`
 }
 
 type BrowserIsolation struct {
