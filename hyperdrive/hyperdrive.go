@@ -34,27 +34,24 @@ type Configuration struct {
 	Database string `json:"database,required"`
 	// The host (hostname or IP) of your origin database.
 	Host string `json:"host,required"`
+	// The port (default: 5432 for Postgres) of your origin database.
+	Port int64 `json:"port,required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme ConfigurationScheme `json:"scheme,required"`
 	// The user of your origin database.
-	User string `json:"user,required"`
-	// The Client ID of the Access token to use when connecting to the origin database
-	AccessClientID string `json:"access_client_id"`
-	// The port (default: 5432 for Postgres) of your origin database.
-	Port int64             `json:"port"`
+	User string            `json:"user,required"`
 	JSON configurationJSON `json:"-"`
 }
 
 // configurationJSON contains the JSON metadata for the struct [Configuration]
 type configurationJSON struct {
-	Database       apijson.Field
-	Host           apijson.Field
-	Scheme         apijson.Field
-	User           apijson.Field
-	AccessClientID apijson.Field
-	Port           apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	Database    apijson.Field
+	Host        apijson.Field
+	Port        apijson.Field
+	Scheme      apijson.Field
+	User        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *Configuration) UnmarshalJSON(data []byte) (err error) {
@@ -87,14 +84,12 @@ type ConfigurationParam struct {
 	Database param.Field[string] `json:"database,required"`
 	// The host (hostname or IP) of your origin database.
 	Host param.Field[string] `json:"host,required"`
+	// The port (default: 5432 for Postgres) of your origin database.
+	Port param.Field[int64] `json:"port,required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[ConfigurationScheme] `json:"scheme,required"`
 	// The user of your origin database.
 	User param.Field[string] `json:"user,required"`
-	// The Client ID of the Access token to use when connecting to the origin database
-	AccessClientID param.Field[string] `json:"access_client_id"`
-	// The port (default: 5432 for Postgres) of your origin database.
-	Port param.Field[int64] `json:"port"`
 }
 
 func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
