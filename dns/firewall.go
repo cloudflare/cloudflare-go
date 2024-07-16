@@ -197,9 +197,13 @@ type Firewall struct {
 	DNSFirewallIPs       []FirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	ECSFallback bool `json:"ecs_fallback,required"`
-	// Maximum DNS Cache TTL.
+	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
 	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
-	// Minimum DNS Cache TTL.
+	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
 	// Last modification of DNS Firewall cluster.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
@@ -208,7 +212,8 @@ type Firewall struct {
 	UpstreamIPs []UpstreamIPsUnion `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation AttackMitigation `json:"attack_mitigation,nullable"`
-	// Negative DNS Cache TTL.
+	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
 	NegativeCacheTTL float64 `json:"negative_cache_ttl,nullable"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
@@ -254,16 +259,21 @@ type FirewallParam struct {
 	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	ECSFallback param.Field[bool] `json:"ecs_fallback,required"`
-	// Maximum DNS Cache TTL.
+	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
 	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl,required"`
-	// Minimum DNS Cache TTL.
+	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
 	// DNS Firewall Cluster Name.
 	Name        param.Field[string]                  `json:"name,required"`
 	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
-	// Negative DNS Cache TTL.
+	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
@@ -369,11 +379,16 @@ type FirewallNewParams struct {
 	DeprecateAnyRequests param.Field[bool] `json:"deprecate_any_requests"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	ECSFallback param.Field[bool] `json:"ecs_fallback"`
-	// Maximum DNS Cache TTL.
+	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
 	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl"`
-	// Minimum DNS Cache TTL.
+	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl"`
-	// Negative DNS Cache TTL.
+	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
