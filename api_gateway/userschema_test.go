@@ -61,8 +61,8 @@ func TestUserSchemaListWithOptionalParams(t *testing.T) {
 	_, err := client.APIGateway.UserSchemas.List(context.TODO(), api_gateway.UserSchemaListParams{
 		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		OmitSource:        cloudflare.F(true),
-		Page:              cloudflare.F[any](map[string]interface{}{}),
-		PerPage:           cloudflare.F[any](map[string]interface{}{}),
+		Page:              cloudflare.F(int64(1)),
+		PerPage:           cloudflare.F(int64(5)),
 		ValidationEnabled: cloudflare.F(true),
 	})
 	if err != nil {

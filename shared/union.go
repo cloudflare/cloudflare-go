@@ -62,8 +62,6 @@ func (UnionString) ImplementsWorkersAIRunResponseUnion()                        
 func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                     {}
 func (UnionString) ImplementsQueuesQueueDeleteResponseUnion()                                    {}
 func (UnionString) ImplementsQueuesConsumerDeleteResponseUnion()                                 {}
-func (UnionString) ImplementsAPIGatewayConfigurationUpdateResponseUnion()                        {}
-func (UnionString) ImplementsAPIGatewayOperationDeleteResponseUnion()                            {}
 func (UnionString) ImplementsAPIGatewayUserSchemaDeleteResponseUnion()                           {}
 func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                      {}
 func (UnionString) ImplementsSpectrumOriginPortUnion()                                           {}
